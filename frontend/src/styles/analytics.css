@@ -1,0 +1,20 @@
+.analytics-page {
+  padding: 30px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, 1fr);
+  gap: 25px;
+}
+
+.chart-card {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.full-width {
+  grid-column: span 2;
+}

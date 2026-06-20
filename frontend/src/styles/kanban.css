@@ -1,0 +1,51 @@
+.kanban-page {
+  padding: 30px;
+  min-height: 100vh;
+}
+
+.kanban-page h1 {
+  margin-bottom: 25px;
+}
+
+.kanban-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 20px;
+}
+
+.kanban-column {
+  background: #0f172a;
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.kanban-column h3 {
+  margin-bottom: 15px;
+}
+
+.column-body {
+  min-height: 500px;
+}
+
+.task-card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: grab;
+}
+
+.task-card h4 {
+  margin-bottom: 8px;
+}
+
+.task-footer {
+  display: flex;
+  justify-content:
+    space-between;
+
+  margin-top: 12px;
+  font-size: 12px;
+}
