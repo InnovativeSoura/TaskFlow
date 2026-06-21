@@ -37,15 +37,16 @@ const taskSchema = new mongoose.Schema(
     },
 
     dueDate: Date,
-  
+
     workspace: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Workspace",
     },
-
-      timestamps: true,
-    },
-  );
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model(
   "Task",

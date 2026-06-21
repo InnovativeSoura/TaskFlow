@@ -23,7 +23,7 @@ const subscriptionSchema = new mongoose.Schema(
     stripeCustomerId: String,
     stripeSubscriptionId: String,
   },
-  { timestamps: true }
+  { timestamps: true, }
 );
 
 module.exports = mongoose.model(

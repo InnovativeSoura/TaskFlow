@@ -1,4 +1,4 @@
-const Stripe = require("stripe");
+const Razorpay = require("razorpay");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createCheckoutSession = async (req, res) => {
