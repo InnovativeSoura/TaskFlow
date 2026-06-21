@@ -1,6 +1,6 @@
 import { Bell, Search } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import logo from "../assets/logo.png";
+import logo from "../assets/Logo.png";
 
 function Navbar() {
   const { user } = useAuth();
