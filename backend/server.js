@@ -68,12 +68,12 @@ require("./routes/analyticsRoutes")
 );
 
 // Razorpay routes can be added later
-// app.use("/api/payment", require("./routes/paymentRoutes"));
+app.use("/api/payment", require("./routes/paymentRoutes"));
 
-app.use(
-"/api/webhook",
-require("./routes/webhookRoutes")
-);
+// app.use(
+// "/api/webhook",
+// require("./routes/webhookRoutes")
+// );
 
 app.use(
 "/api/workspaces",

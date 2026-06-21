@@ -1,8 +1,15 @@
 const express = require("express");
-const { createCheckoutSession } = require("../controllers/paymentController");
-
 const router = express.Router();
 
-router.post("/create-checkout", createCheckoutSession);
+const {
+  createOrder,
+  verifyPayment,
+} = require("../controllers/paymentController");
+
+// Create Razorpay order
+router.post("/create-order", createOrder);
+
+// Verify payment after success
+router.post("/verify", verifyPayment);
 
 module.exports = router;

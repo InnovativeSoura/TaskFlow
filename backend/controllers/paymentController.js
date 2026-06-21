@@ -1,81 +1,83 @@
 const Razorpay = require("razorpay");
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const crypto = require("crypto");
 
-const createCheckoutSession = async (req, res) => {
+// Initialize Razorpay instance
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+
+// Create Order (Checkout Session equivalent)
+const createOrder = async (req, res) => {
   try {
-    const { userId, plan } = req.body;
+    const { amount, currency = "INR", plan, userId } = req.body;
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      payment_method_types: ["card"],
-
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: plan === "team" ? "TaskFlow Team" : "TaskFlow Pro",
-            },
-            unit_amount: plan === "team" ? 1999 : 999,
-            recurring: { interval: "month" },
-          },
-          quantity: 1,
-        },
-      ],
-
-      metadata: {
-        userId,
+    const options = {
+      amount: amount * 100, // Razorpay uses paise
+      currency,
+      receipt: `receipt_order_${Date.now()}`,
+      payment_capture: 1,
+      notes: {
         plan,
+        userId,
       },
+    };
 
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+    const order = await razorpay.orders.create(options);
+
+    res.status(200).json({
+      success: true,
+      order,
+      key: process.env.RAZORPAY_KEY_ID,
     });
-
-    res.json({ url: session.url });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error("Razorpay order error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Order creation failed",
+    });
   }
 };
 
-module.exports = { createCheckoutSession };const Stripe = require("stripe");
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-
-const createCheckoutSession = async (req, res) => {
+// Verify Payment Signature
+const verifyPayment = async (req, res) => {
   try {
-    const { userId, plan } = req.body;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+    } = req.body;
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      payment_method_types: ["card"],
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: plan === "team" ? "TaskFlow Team" : "TaskFlow Pro",
-            },
-            unit_amount: plan === "team" ? 1999 : 999,
-            recurring: { interval: "month" },
-          },
-          quantity: 1,
-        },
-      ],
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
 
-      metadata: {
-        userId,
-        plan,
-      },
+    const isValid = expectedSignature === razorpay_signature;
 
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+    if (!isValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment signature",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Payment verified successfully",
     });
-
-    res.json({ url: session.url });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Payment verification failed",
+    });
   }
 };
 
-module.exports = { createCheckoutSession };
+module.exports = {
+  createOrder,
+  verifyPayment,
+};
