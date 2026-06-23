@@ -21,6 +21,16 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    isPro: {
+    type: Boolean,
+    default: false,
+  },
+
+  subscriptionPlan: {
+    type: String,
+    default: "FREE",
+  },
+
     profileImage: {
       type: String,
       default: "",

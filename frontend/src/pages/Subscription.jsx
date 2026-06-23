@@ -12,7 +12,7 @@ function Subscription() {
       localStorage.getItem("user")
     );
 
-    const res = await axios.post(
+    const { data } = await axios.post(
       `${API_URL}/api/payment/create-order`,
       {
         amount: 499,
@@ -22,18 +22,67 @@ function Subscription() {
       }
     );
 
-    console.log("Order:", res.data);
+    const options = {
+      key: data.key,
 
-    alert("Order Created Successfully");
+      amount: data.order.amount,
+
+      currency: data.order.currency,
+
+      name: "TaskFlow Pro",
+
+      description:
+        "Premium Subscription",
+
+      order_id: data.order.id,
+
+      handler: async function (
+        response
+      ) {
+        try {
+          const verifyRes =
+            await axios.post(
+              `${API_URL}/api/payment/verify`,
+              {
+                  response,
+                  userId: user._id,
+              }
+            );
+
+          if (
+            verifyRes.data.success
+          ) {
+            alert(
+              "Payment Successful 🎉"
+            );
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
+      prefill: {
+        name:
+          user?.name || "",
+        email:
+          user?.email || "",
+      },
+
+      theme: {
+        color: "#4f46e5",
+      },
+    };
+
+    const razorpay =
+      new window.Razorpay(
+        options
+      );
+
+    razorpay.open();
   } catch (error) {
     console.error(
       "Payment Error:",
       error
-    );
-
-    alert(
-      error.response?.data?.message ||
-      "Payment Failed"
     );
   }
 };
