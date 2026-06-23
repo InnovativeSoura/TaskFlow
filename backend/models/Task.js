@@ -2,17 +2,21 @@ const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema(
   {
-    title: String,
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-    description: String,
+    description: {
+      type: String,
+      default: "",
+    },
 
     priority: {
       type: String,
-      enum: [
-        "Low",
-        "Medium",
-        "High",
-      ],
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
     },
 
     status: {
@@ -29,18 +33,24 @@ const taskSchema = new mongoose.Schema(
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
+      default: null,
     },
 
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      default: null,
     },
 
-    dueDate: Date,
+    dueDate: {
+      type: Date,
+      default: null,
+    },
 
     workspace: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Workspace",
+      default: null,
     },
   },
   {
@@ -52,3 +62,4 @@ module.exports = mongoose.model(
   "Task",
   taskSchema
 );
+
