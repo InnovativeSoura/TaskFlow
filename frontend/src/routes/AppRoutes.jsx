@@ -11,6 +11,7 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AIInsights from "../pages/AIInsights";
 import Pricing from "../pages/Pricing";
 import Subscription from "../pages/Subscription";
+import Projects from "../pages/Projects";
 
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
@@ -24,6 +25,7 @@ return ( <BrowserRouter> <Routes>
 <Route path="/admin" element={<AdminDashboard />} />
 <Route path="/ai-insights" element={<AIInsights />} />
 <Route path="/subscription" element={<Subscription />}/>
+<Route path="/projects" element={<Projects />} />
 <Route path="/pricing" element={<Pricing />} /> </Routes> </BrowserRouter>
 );
 }
