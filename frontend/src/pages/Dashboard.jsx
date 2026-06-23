@@ -62,36 +62,27 @@ const fetchDashboardData = async () => {
       `${API_URL}/api/tasks`
     );
 
-    const projectData =
-      projectRes.data.projects || projectRes.data || [];
-
-    const taskData =
-      taskRes.data.tasks || taskRes.data || [];
+    const projectData = projectRes.data.projects || [];
+    const taskData = taskRes.data.tasks || [];
 
     setProjects(projectData);
     setTasks(taskData);
 
     setStats({
       totalProjects: projectData.length,
-
       totalTasks: taskData.length,
-
       completedTasks: taskData.filter(
         (task) => task.status === "Completed"
       ).length,
-
       inProgressTasks: taskData.filter(
         (task) => task.status === "In Progress"
       ).length,
     });
+
   } catch (error) {
-    console.error(
-      "Dashboard Error:",
-      error.response?.data || error.message
-    );
+    console.error("Dashboard Error:", error.response?.data || error.message);
   }
 };
-
 
 
   return (
