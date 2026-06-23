@@ -36,14 +36,12 @@ function AuthPage() {
         );
       }
 
-      const res = await axios.post(
-        `${API_URL}/api/auth/register`,
-        formData,
+     const res = await axios.post(
+          `${API_URL}/api/auth/register`,
         {
-          headers: {
-            "Content-Type":
-              "multipart/form-data",
-          },
+          name,
+          email,
+          password,
         }
       );
 

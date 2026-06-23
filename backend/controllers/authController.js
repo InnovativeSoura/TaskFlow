@@ -10,6 +10,7 @@ const generateToken = (id) => {
   );
 };
 
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -19,6 +20,8 @@ const registerUser = async (req, res) => {
         message: "Please provide all fields",
       });
     }
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
     const existingUser = await User.findOne({ email });
 
