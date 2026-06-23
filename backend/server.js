@@ -81,6 +81,10 @@ app.use(
 require("./routes/workspaceRoutes")
 );
 
+app.use("/api/projects", require("./routes/projectRoutes"));
+
+app.use("/api/tasks", require("./routes/taskRoutes"));
+
 // Health Check
 app.get("/", (req, res) => {
 res.send("TaskFlow API Running...");

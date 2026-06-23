@@ -51,47 +51,48 @@ function Dashboard() {
     };
   }, []);
 
-  const fetchDashboardData = async () => {
-    try {
-      const projectRes = await axios.get(
-        `${API_URL}/projects`
-      );
+  
+const fetchDashboardData = async () => {
+  try {
+    const projectRes = await axios.get(
+      `${API_URL}/api/projects`
+    );
 
-      const taskRes = await axios.get(
-        `${API_URL}/tasks`
-      );
+    const taskRes = await axios.get(
+      `${API_URL}/api/tasks`
+    );
 
-      const projectData =
-        projectRes.data.projects || [];
+    const projectData =
+      projectRes.data.projects || projectRes.data || [];
 
-      const taskData =
-        taskRes.data.tasks || [];
+    const taskData =
+      taskRes.data.tasks || taskRes.data || [];
 
-      setProjects(projectData);
-      setTasks(taskData);
+    setProjects(projectData);
+    setTasks(taskData);
 
-      setStats({
-        totalProjects: projectData.length,
+    setStats({
+      totalProjects: projectData.length,
 
-        totalTasks: taskData.length,
+      totalTasks: taskData.length,
 
-        completedTasks: taskData.filter(
-          (task) =>
-            task.status === "Completed"
-        ).length,
+      completedTasks: taskData.filter(
+        (task) => task.status === "Completed"
+      ).length,
 
-        inProgressTasks: taskData.filter(
-          (task) =>
-            task.status === "In Progress"
-        ).length,
-      });
-    } catch (error) {
-      console.error(
-        "Dashboard Error:",
-        error
-      );
-    }
-  };
+      inProgressTasks: taskData.filter(
+        (task) => task.status === "In Progress"
+      ).length,
+    });
+  } catch (error) {
+    console.error(
+      "Dashboard Error:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+
 
   return (
     <div className="dashboard-container">

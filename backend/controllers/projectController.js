@@ -1,5 +1,19 @@
 const Project = require("../models/Project");
 
+const getProjects = async (req, res) => {
+  try {
+    const projects = await Project.find();
+
+    res.status(200).json({
+      projects,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 const addMember = async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -40,5 +54,6 @@ const addMember = async (req, res) => {
 };
 
 module.exports = {
+  getProjects,
   addMember,
 };
