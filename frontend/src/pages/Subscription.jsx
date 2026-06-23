@@ -11,7 +11,7 @@ function Subscription() {
       setLoading(true);
 
       const res = await axios.post(
-        `${API_URL}/api/payment/create-checkout`
+        `${API_URL}/api/payment/create-order`
       );
 
       if (res.data.url) {
