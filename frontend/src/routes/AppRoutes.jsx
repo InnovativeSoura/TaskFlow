@@ -10,6 +10,7 @@ import TeamChat from "../pages/TeamChat";
 import AdminDashboard from "../pages/AdminDashboard";
 import AIInsights from "../pages/AIInsights";
 import Pricing from "../pages/Pricing";
+import Subscription from "../pages/Subscription";
 
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
@@ -22,6 +23,7 @@ return ( <BrowserRouter> <Routes>
 <Route path="/chat" element={<TeamChat />} />
 <Route path="/admin" element={<AdminDashboard />} />
 <Route path="/ai-insights" element={<AIInsights />} />
+<Route path="/subscription" element={<Subscription />}/>
 <Route path="/pricing" element={<Pricing />} /> </Routes> </BrowserRouter>
 );
 }

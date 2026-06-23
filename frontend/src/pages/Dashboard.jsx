@@ -106,9 +106,9 @@ const fetchDashboardData = async () => {
         </p>
 
         <button
-          onClick={() => navigate("/pricing")}
+          onClick={() => navigate("/subscription")}
           className="upgrade-btn"
-        >
+          >
           Upgrade to Pro 🚀
         </button>
       </div>
