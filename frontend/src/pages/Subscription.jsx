@@ -7,29 +7,36 @@ function Subscription() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const handleUpgrade = async () => {
-    try {
-      setLoading(true);
+  try {
+    const user = JSON.parse(
+      localStorage.getItem("user")
+    );
 
-      const res = await axios.post(
-        `${API_URL}/api/payment/create-order`
-      );
-
-      if (res.data.url) {
-        window.location.href = res.data.url;
-      } else {
-        alert("Payment URL not received");
+    const res = await axios.post(
+      `${API_URL}/api/payment/create-order`,
+      {
+        amount: 499,
+        currency: "INR",
+        plan: "PRO",
+        userId: user?._id,
       }
-    } catch (error) {
-      console.error("Payment Error:", error);
+    );
 
-      alert(
-        error.response?.data?.message ||
-          "Unable to start payment process"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log("Order:", res.data);
+
+    alert("Order Created Successfully");
+  } catch (error) {
+    console.error(
+      "Payment Error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+      "Payment Failed"
+    );
+  }
+};
 
   return (
     <div

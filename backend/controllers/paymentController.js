@@ -10,6 +10,7 @@ const razorpay = new Razorpay({
 // Create Order (Checkout Session equivalent)
 const createOrder = async (req, res) => {
   try {
+    console.log("Payment Request:", req.body);
     const { amount, currency = "INR", plan, userId } = req.body;
 
     const options = {
@@ -24,7 +25,7 @@ const createOrder = async (req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
-
+    
     res.status(200).json({
       success: true,
       order,
