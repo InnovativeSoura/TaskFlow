@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import socket from "../socket/socket";
 import "../styles/dashboard.css";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
 
@@ -14,7 +17,7 @@ function Dashboard() {
     inProgressTasks: 0,
   });
 
-  const API_URL = "http://localhost:5000/api";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchDashboardData();
@@ -100,7 +103,11 @@ function Dashboard() {
           Welcome to TaskFlow Project
           Management System
         </p>
-        <button onClick={handleUpgrade}>
+
+        <button
+          onClick={() => navigate("/pricing")}
+          className="upgrade-btn"
+        >
           Upgrade to Pro 🚀
         </button>
       </div>
@@ -109,34 +116,22 @@ function Dashboard() {
       <div className="stats-grid">
         <div className="stat-card">
           <h3>Total Projects</h3>
-
-          <h2>
-            {stats.totalProjects}
-          </h2>
+          <h2>{stats.totalProjects}</h2>
         </div>
 
         <div className="stat-card">
           <h3>Total Tasks</h3>
-
-          <h2>
-            {stats.totalTasks}
-          </h2>
+          <h2>{stats.totalTasks}</h2>
         </div>
 
         <div className="stat-card">
           <h3>Completed</h3>
-
-          <h2>
-            {stats.completedTasks}
-          </h2>
+          <h2>{stats.completedTasks}</h2>
         </div>
 
         <div className="stat-card">
           <h3>In Progress</h3>
-
-          <h2>
-            {stats.inProgressTasks}
-          </h2>
+          <h2>{stats.inProgressTasks}</h2>
         </div>
       </div>
 
@@ -152,71 +147,42 @@ function Dashboard() {
                 key={task._id}
               >
                 <div>
-                  <h4>
-                    {task.title}
-                  </h4>
-
-                  <p>
-                    {
-                      task.description
-                    }
-                  </p>
+                  <h4>{task.title}</h4>
+                  <p>{task.description}</p>
                 </div>
 
                 <span
                   className={`status ${task.status
                     ?.toLowerCase()
-                    .replace(
-                      " ",
-                      "-"
-                    )}`}
+                    .replace(" ", "-")}`}
                 >
                   {task.status}
                 </span>
               </div>
             ))
           ) : (
-            <p>
-              No tasks found.
-            </p>
+            <p>No tasks found.</p>
           )}
         </div>
       </div>
 
-      {/* Recent Projects */}
+      {/* Active Projects */}
       <div className="dashboard-section">
-        <h2>
-          Active Projects
-        </h2>
+        <h2>Active Projects</h2>
 
         <div className="project-grid">
           {projects.length > 0 ? (
-            projects.map(
-              (project) => (
-                <div
-                  key={
-                    project._id
-                  }
-                  className="project-card"
-                >
-                  <h3>
-                    {
-                      project.title
-                    }
-                  </h3>
-
-                  <p>
-                    {
-                      project.description
-                    }
-                  </p>
-                </div>
-              )
-            )
+            projects.map((project) => (
+              <div
+                key={project._id}
+                className="project-card"
+              >
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+              </div>
+            ))
           ) : (
-            <p>
-              No projects found.
-            </p>
+            <p>No projects found.</p>
           )}
         </div>
       </div>
@@ -225,3 +191,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
