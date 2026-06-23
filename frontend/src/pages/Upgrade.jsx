@@ -1,12 +1,17 @@
-const handleUpgrade = async () => {
-  const res = await axios.post("http://localhost:5000/api/payment/create-checkout");
-  window.location.href = res.data.url;
-};const handleUpgrade = async () => {
-  const res = await axios.post(
-    "http://localhost:5000/api/payment/create-checkout"
-  );
+const API_URL = import.meta.env.VITE_API_URL;
 
-  window.location.href = res.data.url;
+const handleUpgrade = async () => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/api/payment/create-checkout`
+    );
+
+    window.location.href = res.data.url;
+  } catch (error) {
+    console.error("Payment Error:", error);
+
+    alert("Unable to start payment process");
+  }
 };
 
 return (

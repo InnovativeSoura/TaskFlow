@@ -149,7 +149,7 @@ Choose Your Plan </h1>
             <h3>
               {price === 0
                 ? "Free"
-                : `$${price}`}
+                : `₹${price}`}
               <span>
                 /
                 {isYearly
