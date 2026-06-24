@@ -3,14 +3,15 @@ import axios from "axios";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
-
+  const API_URL = import.meta.env.VITE_API_URL;
+  
   useEffect(() => {
     loadNotifications();
   }, []);
 
   const loadNotifications = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/notifications"
+      `${API_URL}/api/notifications`
     );
 
     setNotifications(res.data.notifications);
@@ -18,7 +19,7 @@ function Notifications() {
 
   const markRead = async (id) => {
     await axios.put(
-      `http://localhost:5000/api/notifications/${id}/read`
+      `${API_URL}/api/notifications/${id}/read`
     );
 
     loadNotifications();
