@@ -12,14 +12,14 @@ assignTask,
 
 router.get("/", getTasks);
 
-router.get("/", getTaskById);
+router.get("/:taskId", getTaskById);
 
 router.post("/", createTask);
 
-router.put("/", updateTask);
+router.put("/:taskId", updateTask);
 
-router.delete("/", deleteTask);
+router.delete("/:taskId", deleteTask);
 
-router.put("//assign", assignTask);
+router.put("/:taskId/assign", assignTask);
 
 module.exports = router;
