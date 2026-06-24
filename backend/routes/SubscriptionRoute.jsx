@@ -16,17 +16,17 @@ function Subscription() {
       );
 
       // Later:
-      // const options = {
-      //   key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      //   amount: res.data.amount,
-      //   currency: res.data.currency,
-      //   order_id: res.data.id,
-      //   name: "TaskFlow Pro",
-      //   description: "Premium Subscription",
-      // };
-      //
-      // const razor = new window.Razorpay(options);
-      // razor.open();
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: res.data.amount,
+        currency: res.data.currency,
+        order_id: res.data.id,
+        name: "TaskFlow Pro",
+        description: "Premium Subscription",
+      };
+      
+      const razor = new window.Razorpay(options);
+      razor.open();
 
     } catch (error) {
       console.error(
