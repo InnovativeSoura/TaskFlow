@@ -2,84 +2,109 @@ const Project = require("../models/Project");
 
 // CREATE PROJECT
 const createProject = async (req, res) => {
-  try {
-    const project = await Project.create({
-      title: req.body.title,
-      description: req.body.description,
-      status: req.body.status || "Planning",
-      deadline: req.body.deadline || null,
-      owner: req.body.owner || null,
-      members: req.body.members || [],
-    });
+try {
+const { title, description } = req.body;
 
-    res.status(201).json({
-      success: true,
-      project,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+
+if (!title || !description) {
+  return res.status(400).json({
+    success: false,
+    message: "Title and description are required",
+  });
+}
+
+const project = await Project.create({
+  title,
+  description,
+});
+
+res.status(201).json({
+  success: true,
+  project,
+});
+
+
+} catch (error) {
+console.error("Create Project Error:", error);
+
+
+res.status(500).json({
+  success: false,
+  message: error.message,
+});
+
+
+}
 };
 
 // GET ALL PROJECTS
 const getProjects = async (req, res) => {
-  try {
-    const projects = await Project.find()
-      .populate("owner", "name email")
-      .populate("members.user", "name email");
+try {
+const projects = await Project.find();
 
-    res.status(200).json({
-      success: true,
-      projects,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+
+res.status(200).json({
+  success: true,
+  projects,
+});
+
+
+} catch (error) {
+console.error("Get Projects Error:", error);
+
+
+res.status(500).json({
+  success: false,
+  message: error.message,
+});
+
+
+}
 };
 
-// ADD MEMBER (FIXED)
+// ADD MEMBER
 const addMember = async (req, res) => {
-  try {
-    const project = await Project.findById(
-      req.params.projectId
-    );
+try {
+const project = await Project.findById(
+req.params.projectId
+);
 
-    if (!project) {
-      return res.status(404).json({
-        success: false,
-        message: "Project not found",
-      });
-    }
 
-    project.members.push({
-      user: req.body.userId,
-      role: req.body.role || "Member",
-      workspace: req.body.workspace || null,
-    });
+if (!project) {
+  return res.status(404).json({
+    success: false,
+    message: "Project not found",
+  });
+}
 
-    await project.save();
+project.members.push({
+  user: req.body.userId,
+  role: req.body.role || "Member",
+});
 
-    res.status(200).json({
-      success: true,
-      project,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+await project.save();
+
+res.status(200).json({
+  success: true,
+  project,
+});
+
+
+} catch (error) {
+console.error("Add Member Error:", error);
+
+
+res.status(500).json({
+  success: false,
+  message: error.message,
+});
+
+
+}
 };
 
 module.exports = {
-  createProject,
-  getProjects,
-  addMember,
+createProject,
+getProjects,
+addMember,
 };
-

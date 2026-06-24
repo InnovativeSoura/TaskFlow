@@ -1,3 +1,8 @@
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  return <Navigate to="/" />;
+}
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AuthPage from "../pages/AuthPage";
@@ -12,6 +17,7 @@ import AIInsights from "../pages/AIInsights";
 import Pricing from "../pages/Pricing";
 import Subscription from "../pages/Subscription";
 import Projects from "../pages/Projects";
+import Tasks from "../pages/Tasks";
 
 function AppRoutes() {
 return ( <BrowserRouter> <Routes>
@@ -26,6 +32,7 @@ return ( <BrowserRouter> <Routes>
 <Route path="/ai-insights" element={<AIInsights />} />
 <Route path="/subscription" element={<Subscription />}/>
 <Route path="/projects" element={<Projects />} />
+<Route path="/tasks" element={<Tasks />} />
 <Route path="/pricing" element={<Pricing />} /> </Routes> </BrowserRouter>
 );
 }
