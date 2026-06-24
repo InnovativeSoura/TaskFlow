@@ -58,7 +58,7 @@ team: {
 const handleUpgrade = async (planKey) => {
 try {
 const res = await axios.post(
-  `${API_URL}/api/payment/create-checkout`,
+  `${API_URL}/api/payment/create-order`,
 {
 userId: user?._id,
 plan: planKey,
