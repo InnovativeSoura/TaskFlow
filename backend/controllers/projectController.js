@@ -29,8 +29,7 @@ const { title, description } = req.body || {};
 if (!title || !description) {
   return res.status(400).json({
     success: false,
-    message:
-      "Title and description are required",
+    message: "Title and description are required",
   });
 }
 
@@ -46,10 +45,7 @@ res.status(201).json({
 
 
 } catch (error) {
-console.error(
-"Create Project Error:",
-error
-);
+console.error("Create Project Error:", error);
 
 
 res.status(500).json({
@@ -64,8 +60,7 @@ res.status(500).json({
 // ADD MEMBER
 const addMember = async (req, res) => {
 try {
-const project =
-await Project.findById(
+const project = await Project.findById(
 req.params.projectId
 );
 
@@ -79,9 +74,7 @@ if (!project) {
 
 project.members.push({
   user: req.body.userId,
-  role:
-    req.body.role ||
-    "Member",
+  role: req.body.role || "Member",
 });
 
 await project.save();
