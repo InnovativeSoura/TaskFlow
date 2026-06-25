@@ -20,9 +20,11 @@ import Projects from "../pages/Projects";
 import Tasks from "../pages/Tasks";
 
 function AppRoutes() {
-const user = JSON.parse(
-localStorage.getItem("user")
-);
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  return <Navigate to="/" />;
+}
 
 return ( <BrowserRouter> <Routes>
 <Route
@@ -99,8 +101,20 @@ element={<AuthPage />}
   </Routes>
 </BrowserRouter>
 
-
 );
 }
+
+function ProtectedRoute({ children }) {
+const user = JSON.parse(
+localStorage.getItem("user")
+);
+
+if (!user) {
+return <Navigate to="/" />;
+}
+
+return children;
+}
+
 
 export default AppRoutes;
