@@ -7,6 +7,8 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
+console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log("SECRET_EXISTS:",!!process.env.RAZORPAY_KEY_SECRET);
 
 // Create Order (Checkout Session equivalent)
 const createOrder = async (req, res) => {
@@ -102,8 +104,7 @@ const verifyPayment = async (req, res) => {
 
 
 //Razorpay
-console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
-console.log("SECRET_EXISTS:",!!process.env.RAZORPAY_KEY_SECRET);
+
 const razorpay = new Razorpay({
 key_id: process.env.RAZORPAY_KEY_ID,
 key_secret: process.env.RAZORPAY_KEY_SECRET,
