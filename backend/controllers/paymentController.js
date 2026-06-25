@@ -91,15 +91,21 @@ const verifyPayment = async (req, res) => {
       message:
         "Payment verified successfully",
     });
-  } catch (error) {
-    console.error(error);
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Payment verification failed",
-    });
+
+  } catch (error) {
+  console.error("Create Order Error:", error);
+
+  if (error.error) {
+    console.error("Razorpay Error:", error.error);
   }
+
+  res.status(500).json({
+    success: false,
+    message: error.error?.description || error.message,
+  });
+  }
+
 };
 
 module.exports = {
