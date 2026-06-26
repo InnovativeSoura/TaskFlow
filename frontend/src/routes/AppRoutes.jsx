@@ -1,8 +1,9 @@
+
 import {
-BrowserRouter,
-Routes,
-Route,
-Navigate,
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
 } from "react-router-dom";
 
 import AuthPage from "../pages/AuthPage";
@@ -19,102 +20,133 @@ import Subscription from "../pages/Subscription";
 import Projects from "../pages/Projects";
 import Tasks from "../pages/Tasks";
 
-function AppRoutes() {
-const user = JSON.parse(localStorage.getItem("user"));
-
-if (!user) {
-  return <Navigate to="/" />;
-}
-
-return ( <BrowserRouter> <Routes>
-<Route
-path="/"
-element={<AuthPage />}
-/>
-
-
-    <Route
-      path="/dashboard"
-      element={
-        user ? (
-          <Dashboard />
-        ) : (
-          <Navigate to="/" />
-        )
-      }
-    />
-
-    <Route
-      path="/board"
-      element={<KanbanBoard />}
-    />
-
-    <Route
-      path="/analytics"
-      element={<Analytics />}
-    />
-
-    <Route
-      path="/profile"
-      element={<Profile />}
-    />
-
-    <Route
-      path="/activity"
-      element={<ActivityFeed />}
-    />
-
-    <Route
-      path="/chat"
-      element={<TeamChat />}
-    />
-
-    <Route
-      path="/admin"
-      element={<AdminDashboard />}
-    />
-
-    <Route
-      path="/ai-insights"
-      element={<AIInsights />}
-    />
-
-    <Route
-      path="/pricing"
-      element={<Pricing />}
-    />
-
-    <Route
-      path="/subscription"
-      element={<Subscription />}
-    />
-
-    <Route
-      path="/projects"
-      element={<Projects />}
-    />
-
-    <Route
-      path="/tasks"
-      element={<Tasks />}
-    />
-  </Routes>
-</BrowserRouter>
-
-);
-}
-
 function ProtectedRoute({ children }) {
-const user = JSON.parse(
-localStorage.getItem("user")
-);
+  const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-return <Navigate to="/" />;
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 }
 
-return children;
+export default function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AuthPage />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/board"
+          element={
+            <ProtectedRoute>
+              <KanbanBoard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/activity"
+          element={
+            <ProtectedRoute>
+              <ActivityFeed />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <TeamChat />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/ai-insights"
+          element={
+            <ProtectedRoute>
+              <AIInsights />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <Pricing />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/subscription"
+          element={
+            <ProtectedRoute>
+              <Subscription />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <Tasks />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-
-export default AppRoutes;
