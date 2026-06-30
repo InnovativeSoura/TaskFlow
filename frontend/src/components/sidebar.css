@@ -1,0 +1,163 @@
+/* ===========================
+   Sidebar
+=========================== */
+
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.logo {
+  margin-bottom: 30px;
+}
+
+.logo h2 {
+  color: #2563eb;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ===========================
+   Navigation
+=========================== */
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.25s;
+}
+
+.nav-item:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-btn,
+.logout-btn {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.25s;
+}
+
+.theme-btn {
+  background: #f3f4f6;
+}
+
+.theme-btn:hover {
+  background: #e5e7eb;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* ===========================
+   Dark Mode
+=========================== */
+
+body.dark {
+  background: #0f172a;
+  color: white;
+}
+
+body.dark .sidebar {
+  background: #111827;
+  border-right: 1px solid #1f2937;
+}
+
+body.dark .nav-item {
+  color: #d1d5db;
+}
+
+body.dark .nav-item:hover {
+  background: #1f2937;
+  color: white;
+}
+
+body.dark .nav-item.active {
+  background: #2563eb;
+}
+
+body.dark .theme-btn {
+  background: #1f2937;
+  color: white;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 900px) {
+
+  .sidebar {
+    width: 75px;
+    padding: 15px;
+  }
+
+  .logo h2 {
+    display: none;
+  }
+
+  .nav-item span,
+  .theme-btn span,
+  .logout-btn span {
+    display: none;
+  }
+
+  .nav-item,
+  .theme-btn,
+  .logout-btn {
+    justify-content: center;
+  }
+
+}

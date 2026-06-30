@@ -1,0 +1,547 @@
+/* ===========================
+   PAGE LAYOUT
+=========================== */
+
+.kanban-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+.kanban-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.kanban-container {
+  padding: 30px;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.kanban-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.kanban-header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #222;
+}
+
+.kanban-header p {
+  margin-top: 5px;
+  color: #777;
+}
+
+.create-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.create-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ===========================
+   FILTER BAR
+=========================== */
+
+.kanban-toolbar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.kanban-toolbar input,
+.kanban-toolbar select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+}
+
+.kanban-toolbar input {
+  width: 280px;
+}
+
+/* ===========================
+   BOARD
+=========================== */
+
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.board-column {
+  background: #eef2f7;
+  border-radius: 12px;
+  padding: 15px;
+  min-height: 600px;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(0,0,0,.08);
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.column-header span {
+  background: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* Column Colors */
+
+.todo h2 {
+  color: #2563eb;
+}
+
+.progress h2 {
+  color: #f59e0b;
+}
+
+.review h2 {
+  color: #8b5cf6;
+}
+
+.completed h2 {
+  color: #16a34a;
+}
+/* ===========================
+   TASK CARD
+=========================== */
+
+.task-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  cursor: grab;
+}
+
+.task-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: #222;
+}
+
+.task-card p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ===========================
+   PROJECT
+=========================== */
+
+.task-project {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  background: #f5f5f5;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.due-date {
+  font-size: 13px;
+  color: #777;
+}
+
+/* ===========================
+   PRIORITY BADGES
+=========================== */
+
+.priority {
+  padding: 5px 12px;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority.low {
+  background: #22c55e;
+}
+
+.priority.medium {
+  background: #f59e0b;
+}
+
+.priority.high {
+  background: #ef4444;
+}
+
+/* ===========================
+   USER
+=========================== */
+
+.task-user {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* ===========================
+   ACTION BUTTONS
+=========================== */
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.edit-btn,
+.delete-btn {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.edit-btn {
+  background: #2563eb;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}
+
+.delete-btn {
+  background: #ef4444;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* ===========================
+   DRAGGING EFFECTS
+=========================== */
+
+.task-card[data-rbd-draggable-context-id] {
+  user-select: none;
+}
+
+.board-column.dragging-over {
+  background: #e0e7ff;
+}
+
+.task-card.dragging {
+  transform: rotate(2deg);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+/* ===========================
+   MODAL
+=========================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.task-modal {
+  width: 100%;
+  max-width: 650px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  animation: modalFade .25s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-modal h2 {
+  margin: 0 0 25px;
+  color: #222;
+}
+
+/* ===========================
+   FORM
+=========================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: .25s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* ===========================
+   MODAL BUTTONS
+=========================== */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-btn,
+.cancel-btn {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: .25s;
+}
+
+.save-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #222;
+}
+
+.cancel-btn:hover {
+  background: #d1d5db;
+}
+
+/* ===========================
+   LOADING
+=========================== */
+
+.loading-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f7fb;
+}
+
+.loading-screen h2 {
+  color: #2563eb;
+  font-size: 30px;
+}
+
+/* ===========================
+   SCROLLBAR
+=========================== */
+
+.board-column {
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+}
+
+.board-column::-webkit-scrollbar {
+  width: 8px;
+}
+
+.board-column::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.board-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 1200px) {
+
+  .board-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .kanban-container {
+    padding: 20px;
+  }
+
+  .kanban-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .kanban-toolbar {
+    flex-direction: column;
+  }
+
+  .kanban-toolbar input,
+  .kanban-toolbar select {
+    width: 100%;
+  }
+
+  .board-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .task-modal {
+    padding: 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .kanban-header h1 {
+    font-size: 24px;
+  }
+
+  .task-card {
+    padding: 14px;
+  }
+
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .task-actions {
+    flex-direction: column;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+  }
+
+}

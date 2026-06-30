@@ -1,0 +1,250 @@
+/* ==============================
+   Projects Page
+============================== */
+
+.projects-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.projects-main {
+  flex: 1;
+  margin-left: 260px;
+}
+
+.projects-content {
+  padding: 30px;
+}
+
+/* ==============================
+   Header
+============================== */
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.projects-header h1 {
+  font-size: 34px;
+  color: #1f2937;
+}
+
+.projects-header input {
+  width: 320px;
+  padding: 12px 18px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+.projects-header input:focus {
+  border-color: #2563eb;
+}
+
+/* ==============================
+   Create Form
+============================== */
+
+.project-form {
+  display: grid;
+  grid-template-columns: 2fr 3fr 180px 180px;
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.project-form input,
+.project-form select {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.project-form input:focus,
+.project-form select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.project-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.project-form button:hover {
+  background: #1d4ed8;
+}
+
+/* ==============================
+   Project Grid
+============================== */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px,1fr));
+  gap: 25px;
+}
+
+/* ==============================
+   Card
+============================== */
+
+.project-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+  transition: .3s;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(0,0,0,.12);
+}
+
+.project-card h2 {
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.project-card p {
+  color: #6b7280;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+/* ==============================
+   Status Badge
+============================== */
+
+.badge {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.badge.planning {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge.active {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* ==============================
+   Delete Button
+============================== */
+
+.delete-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: .3s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* ==============================
+   Dark Mode
+============================== */
+
+body.dark .projects-page {
+  background: #0f172a;
+}
+
+body.dark .projects-header h1 {
+  color: white;
+}
+
+body.dark .project-card {
+  background: #1e293b;
+}
+
+body.dark .project-card h2 {
+  color: white;
+}
+
+body.dark .project-card p {
+  color: #cbd5e1;
+}
+
+body.dark .project-form input,
+body.dark .project-form select,
+body.dark .projects-header input {
+  background: #111827;
+  color: white;
+  border: 1px solid #374151;
+}
+
+/* ==============================
+   Responsive
+============================== */
+
+@media(max-width:1200px){
+
+.project-form{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:900px){
+
+.projects-main{
+margin-left:75px;
+}
+
+.projects-header{
+flex-direction:column;
+align-items:flex-start;
+gap:20px;
+}
+
+.projects-header input{
+width:100%;
+}
+
+}
+
+@media(max-width:600px){
+
+.projects-main{
+margin-left:0;
+}
+
+.projects-content{
+padding:20px;
+}
+
+.project-grid{
+grid-template-columns:1fr;
+}
+
+}

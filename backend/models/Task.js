@@ -4,19 +4,15 @@ const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Task title is required"],
       trim: true,
+      maxlength: 100,
     },
 
     description: {
       type: String,
+      trim: true,
       default: "",
-    },
-
-    priority: {
-      type: String,
-      enum: ["Low", "Medium", "High"],
-      default: "Medium",
     },
 
     status: {
@@ -24,10 +20,23 @@ const taskSchema = new mongoose.Schema(
       enum: [
         "Todo",
         "In Progress",
-        "Review",
         "Completed",
       ],
       default: "Todo",
+    },
+
+    priority: {
+      type: String,
+      enum: [
+        "Low",
+        "Medium",
+        "High",
+      ],
+      default: "Medium",
+    },
+
+    dueDate: {
+      type: Date,
     },
 
     project: {
@@ -42,14 +51,39 @@ const taskSchema = new mongoose.Schema(
       default: null,
     },
 
-    dueDate: {
-      type: Date,
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       default: null,
     },
 
-    workspace: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Workspace",
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+
+        message: {
+          type: String,
+        },
+
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    attachments: [
+      {
+        fileName: String,
+        fileUrl: String,
+      },
+    ],
+
+    completedAt: {
+      type: Date,
       default: null,
     },
   },
@@ -58,8 +92,4 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(
-  "Task",
-  taskSchema
-);
-
+module.exports = mongoose.model("Task", taskSchema);

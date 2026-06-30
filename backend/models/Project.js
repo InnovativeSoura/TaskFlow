@@ -4,53 +4,102 @@ const projectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Project title is required"],
+      trim: true,
+      maxlength: 100,
     },
 
     description: {
       type: String,
-      required: true,
+      default: "",
+      trim: true,
     },
 
     status: {
       type: String,
       enum: [
         "Planning",
-        "In Progress",
+        "Active",
         "Completed",
+        "Archived",
       ],
       default: "Planning",
     },
 
-    deadline: Date,
+    priority: {
+      type: String,
+      enum: [
+        "Low",
+        "Medium",
+        "High",
+      ],
+      default: "Medium",
+    },
 
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      default: null,
     },
 
-    members: [{
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    dueDate: {
+      type: Date,
+      default: null,
     },
-    role: {
+
+    progress: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+
+    tags: [
+      {
+        type: String,
+      },
+    ],
+
+    color: {
       type: String,
-      enum: ["Admin", "Manager", "Member"],
-      default: "Member",
+      default: "#2563eb",
     },
-    workspace: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Workspace",
+
+    archived: {
+      type: Boolean,
+      default: false,
     },
-  }],
+
+    totalTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    completedTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    taskCompletion: {
+      type: Number,
+      default: 0,
+    },
+
+    lastActivity: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model(
-  "Project",
-  projectSchema
-);
+module.exports = mongoose.model("Project", projectSchema);

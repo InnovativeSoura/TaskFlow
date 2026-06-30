@@ -1,10 +1,4 @@
-
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import AuthPage from "../pages/AuthPage";
 import Dashboard from "../pages/Dashboard";
@@ -20,6 +14,7 @@ import Subscription from "../pages/Subscription";
 import Projects from "../pages/Projects";
 import Tasks from "../pages/Tasks";
 
+// Protected Route Component
 function ProtectedRoute({ children }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -30,123 +25,147 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-export default function AppRoutes() {
+function AppRoutes() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AuthPage />} />
+    <Routes>
+      {/* Login */}
+      <Route
+        path="/"
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <AuthPage />
+          )
+        }
+      />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+      {/* Dashboard */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/board"
-          element={
-            <ProtectedRoute>
-              <KanbanBoard />
-            </ProtectedRoute>
-          }
-        />
+      {/* Projects */}
+      <Route
+        path="/projects"
+        element={
+          <ProtectedRoute>
+            <Projects />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/analytics"
-          element={
-            <ProtectedRoute>
-              <Analytics />
-            </ProtectedRoute>
-          }
-        />
+      {/* Tasks */}
+      <Route
+        path="/tasks"
+        element={
+          <ProtectedRoute>
+            <Tasks />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+      {/* Kanban */}
+      <Route
+        path="/board"
+        element={
+          <ProtectedRoute>
+            <KanbanBoard />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/activity"
-          element={
-            <ProtectedRoute>
-              <ActivityFeed />
-            </ProtectedRoute>
-          }
-        />
+      {/* Analytics */}
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <TeamChat />
-            </ProtectedRoute>
-          }
-        />
+      {/* Activity */}
+      <Route
+        path="/activity"
+        element={
+          <ProtectedRoute>
+            <ActivityFeed />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+      {/* Chat */}
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <TeamChat />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/ai-insights"
-          element={
-            <ProtectedRoute>
-              <AIInsights />
-            </ProtectedRoute>
-          }
-        />
+      {/* AI */}
+      <Route
+        path="/ai-insights"
+        element={
+          <ProtectedRoute>
+            <AIInsights />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/pricing"
-          element={
-            <ProtectedRoute>
-              <Pricing />
-            </ProtectedRoute>
-          }
-        />
+      {/* Profile */}
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/subscription"
-          element={
-            <ProtectedRoute>
-              <Subscription />
-            </ProtectedRoute>
-          }
-        />
+      {/* Admin */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/projects"
-          element={
-            <ProtectedRoute>
-              <Projects />
-            </ProtectedRoute>
-          }
-        />
+      {/* Pricing */}
+      <Route
+        path="/pricing"
+        element={
+          <ProtectedRoute>
+            <Pricing />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/tasks"
-          element={
-            <ProtectedRoute>
-              <Tasks />
-            </ProtectedRoute>
-          }
-        />
+      {/* Subscription */}
+      <Route
+        path="/subscription"
+        element={
+          <ProtectedRoute>
+            <Subscription />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+      {/* 404 */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
+export default AppRoutes;

@@ -1,25 +1,42 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
-createTask,
-getTasks,
-getTaskById,
-updateTask,
-deleteTask,
-assignTask,
+  createTask,
+  getTasks,
+  getTask,
+  updateTask,
+  deleteTask,
+  taskStats,
+  searchTasks,
 } = require("../controllers/taskController");
 
-router.get("/", getTasks);
+/*
+=====================================
+Task CRUD Routes
+=====================================
+*/
 
-router.get("/:taskId", getTaskById);
-
+// Create Task
 router.post("/", createTask);
 
-router.put("/:taskId", updateTask);
+// Get All Tasks
+router.get("/", getTasks);
 
-router.delete("/:taskId", deleteTask);
+// Dashboard Statistics
+router.get("/stats", taskStats);
 
-router.put("/:taskId/assign", assignTask);
+// Search Tasks
+router.get("/search", searchTasks);
+
+// Get Single Task
+router.get("/:id", getTask);
+
+// Update Task
+router.put("/:id", updateTask);
+
+// Delete Task
+router.delete("/:id", deleteTask);
 
 module.exports = router;

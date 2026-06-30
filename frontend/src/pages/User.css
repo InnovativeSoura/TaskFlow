@@ -1,0 +1,676 @@
+/* ===========================================
+   PAGE LAYOUT
+=========================================== */
+
+.user-page{
+    display:flex;
+    min-height:100vh;
+    background:#f4f7fc;
+}
+
+.user-main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.user-container{
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* ===========================================
+   HEADER
+=========================================== */
+
+.user-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.user-header h1{
+    font-size:32px;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:6px;
+}
+
+.user-header p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* ===========================================
+   BUTTONS
+=========================================== */
+
+.create-btn,
+.refresh-btn{
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.create-btn{
+    background:#2563eb;
+    color:#fff;
+}
+
+.create-btn:hover{
+    background:#1d4ed8;
+}
+
+.refresh-btn{
+    background:#10b981;
+    color:#fff;
+}
+
+.refresh-btn:hover{
+    background:#059669;
+}
+
+/* ===========================================
+   TOOLBAR
+=========================================== */
+
+.user-toolbar{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.user-toolbar input,
+.user-toolbar select{
+    padding:12px 16px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+}
+
+.user-toolbar input{
+    flex:1;
+    min-width:260px;
+}
+
+.user-toolbar input:focus,
+.user-toolbar select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+/* ===========================================
+   STATISTICS GRID
+=========================================== */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:16px;
+    padding:25px;
+    color:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-6px);
+}
+
+.stat-card h2{
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.stat-card p{
+    font-size:15px;
+    opacity:.95;
+}
+
+.stat-card.blue{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+
+.stat-card.red{
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+.stat-card.purple{
+    background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+}
+
+.stat-card.green{
+    background:linear-gradient(135deg,#10b981,#059669);
+}
+
+/* ===========================================
+   USERS GRID
+=========================================== */
+
+.users-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:25px;
+}
+
+/* ===========================================
+   USER CARD
+=========================================== */
+
+.user-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.user-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+}
+
+/* ===========================================
+   USER AVATAR
+=========================================== */
+
+.user-avatar{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:700;
+    margin:auto;
+}
+
+/* ===========================================
+   USER DETAILS
+=========================================== */
+
+.user-details{
+    text-align:center;
+}
+
+.user-details h2{
+    color:#1f2937;
+    font-size:22px;
+    margin-bottom:8px;
+}
+
+.user-details p{
+    color:#6b7280;
+    font-size:15px;
+    word-break:break-word;
+}
+/* ===========================================
+   ROLE BADGES
+=========================================== */
+
+.user-role{
+    display:flex;
+    justify-content:center;
+}
+
+.role-badge{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:30px;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.role-badge.admin{
+    background:#ef4444;
+}
+
+.role-badge.manager{
+    background:#8b5cf6;
+}
+
+.role-badge.member{
+    background:#10b981;
+}
+
+/* ===========================================
+   USER INFO
+=========================================== */
+
+.user-info{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:5px;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    background:#f8fafc;
+    border-radius:10px;
+}
+
+.info-row strong{
+    color:#374151;
+    font-size:14px;
+}
+
+.info-row span{
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* ===========================================
+   ACTION BUTTONS
+=========================================== */
+
+.user-actions{
+    display:flex;
+    gap:12px;
+    margin-top:10px;
+}
+
+.edit-btn,
+.delete-btn{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.edit-btn{
+    background:#2563eb;
+}
+
+.edit-btn:hover{
+    background:#1d4ed8;
+}
+
+.delete-btn{
+    background:#ef4444;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+/* ===========================================
+   EMPTY STATE
+=========================================== */
+
+.empty-state{
+    grid-column:1/-1;
+    background:#fff;
+    padding:60px 30px;
+    text-align:center;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.empty-state h2{
+    color:#1f2937;
+    margin-bottom:10px;
+    font-size:28px;
+}
+
+.empty-state p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* ===========================================
+   LOADING SCREEN
+=========================================== */
+
+.loading-screen{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f4f7fc;
+}
+
+.loading-screen h2{
+    color:#2563eb;
+    font-size:30px;
+    font-weight:700;
+}
+/* ===========================================
+   MODAL OVERLAY
+=========================================== */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+/* ===========================================
+   MODAL
+=========================================== */
+
+.modal{
+    width:95%;
+    max-width:650px;
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+    animation:modalFade .3s ease;
+}
+
+@keyframes modalFade{
+
+    from{
+        opacity:0;
+        transform:scale(.9);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.modal-header h2{
+    font-size:28px;
+    color:#1f2937;
+}
+
+.close-btn{
+    background:transparent;
+    border:none;
+    font-size:30px;
+    cursor:pointer;
+    color:#6b7280;
+    transition:.3s;
+}
+
+.close-btn:hover{
+    color:#ef4444;
+}
+
+/* ===========================================
+   USER FORM
+=========================================== */
+
+.user-form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.user-form label{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    color:#374151;
+    font-size:15px;
+    font-weight:600;
+}
+
+.user-form input,
+.user-form select{
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+    transition:.3s;
+    box-sizing:border-box;
+}
+
+.user-form input:focus,
+.user-form select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+
+/* ===========================================
+   MODAL ACTIONS
+=========================================== */
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-top:20px;
+}
+
+.save-btn,
+.cancel-btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.save-btn{
+    background:#2563eb;
+}
+
+.save-btn:hover{
+    background:#1d4ed8;
+}
+
+.cancel-btn{
+    background:#6b7280;
+}
+
+.cancel-btn:hover{
+    background:#4b5563;
+}
+/* ===========================================
+   RESPONSIVE DESIGN
+=========================================== */
+
+@media (max-width: 1024px) {
+
+    .user-container{
+        padding:20px;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .users-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media (max-width:768px){
+
+    .user-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .user-toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .user-toolbar input,
+    .user-toolbar select,
+    .refresh-btn,
+    .create-btn{
+        width:100%;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .users-grid{
+        grid-template-columns:1fr;
+    }
+
+    .user-actions{
+        flex-direction:column;
+    }
+
+    .modal{
+        width:95%;
+        padding:22px;
+    }
+
+    .modal-actions{
+        flex-direction:column;
+    }
+
+    .save-btn,
+    .cancel-btn{
+        width:100%;
+    }
+
+}
+
+@media (max-width:480px){
+
+    .user-container{
+        padding:15px;
+    }
+
+    .user-header h1{
+        font-size:28px;
+    }
+
+    .user-header p{
+        font-size:14px;
+    }
+
+    .user-card{
+        padding:20px;
+    }
+
+    .user-avatar{
+        width:60px;
+        height:60px;
+        font-size:24px;
+    }
+
+    .user-details h2{
+        font-size:20px;
+    }
+
+    .modal{
+        padding:18px;
+    }
+
+}
+
+/* ===========================================
+   CUSTOM SCROLLBAR
+=========================================== */
+
+.user-container::-webkit-scrollbar{
+    width:10px;
+}
+
+.user-container::-webkit-scrollbar-track{
+    background:#f3f4f6;
+}
+
+.user-container::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+.user-container::-webkit-scrollbar-thumb:hover{
+    background:#94a3b8;
+}
+
+/* ===========================================
+   BUTTON ACTIVE EFFECT
+=========================================== */
+
+.create-btn:active,
+.refresh-btn:active,
+.edit-btn:active,
+.delete-btn:active,
+.save-btn:active,
+.cancel-btn:active{
+    transform:scale(.97);
+}
+
+/* ===========================================
+   PLACEHOLDER
+=========================================== */
+
+.user-form input::placeholder,
+.user-toolbar input::placeholder{
+    color:#9ca3af;
+}
+
+/* ===========================================
+   TEXT SELECTION
+=========================================== */
+
+::selection{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* ===========================================
+   GLOBAL TRANSITIONS
+=========================================== */
+
+*{
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}

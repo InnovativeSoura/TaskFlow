@@ -1,59 +1,117 @@
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   LayoutDashboard,
   FolderKanban,
   CheckSquare,
+  BarChart3,
+  BrainCircuit,
   Users,
-  Settings
+  CreditCard,
+  User,
+  LogOut,
+  Moon,
+  Sun,
 } from "lucide-react";
 
+import "./Sidebar.css";
+
 function Sidebar() {
+  const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    navigate("/");
+  };
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+
+    document.body.classList.toggle("dark");
+  };
+
   return (
-    <aside className="w-72 bg-slate-900 border-r border-slate-800 hidden lg:flex flex-col">
+    <aside className="sidebar">
 
-      <div className="p-6">
-        <h1 className="text-3xl font-bold">
-          TaskFlow
-        </h1>
-
-        <p className="text-slate-400 text-sm mt-2">
-          Project Management
-        </p>
+      <div className="logo">
+        <h2>TaskFlow</h2>
       </div>
 
-      <nav className="px-4 space-y-2">
+      <nav>
 
-        <button className="sidebar-btn">
-          <LayoutDashboard size={20}/>
-          Dashboard
-        </button>
+        <NavLink to="/dashboard" className="nav-item">
+          <LayoutDashboard size={20} />
+          <span>Dashboard</span>
+        </NavLink>
 
-        <button className="sidebar-btn">
-          <FolderKanban size={20}/>
-          Projects
-        </button>
+        <NavLink to="/projects" className="nav-item">
+          <FolderKanban size={20} />
+          <span>Projects</span>
+        </NavLink>
 
-        <button className="sidebar-btn">
-          <CheckSquare size={20}/>
-          Tasks
-        </button>
+        <NavLink to="/tasks" className="nav-item">
+          <CheckSquare size={20} />
+          <span>Tasks</span>
+        </NavLink>
 
-        <button className="sidebar-btn">
-          <Users size={20}/>
-          Team
-        </button>
+        <NavLink to="/analytics" className="nav-item">
+          <BarChart3 size={20} />
+          <span>Analytics</span>
+        </NavLink>
 
-        <button className="sidebar-btn">
-          <Settings size={20}/>
-          Settings
-        </button>
-        <button className="upgrade-btn">
-          Go Pro
-        </button>
-        <button onClick={() => navigate("/pricing")}>
-          Upgrade
-        </button>
+        <NavLink to="/ai-insights" className="nav-item">
+          <BrainCircuit size={20} />
+          <span>AI Insights</span>
+        </NavLink>
+
+        <NavLink to="/chat" className="nav-item">
+          <Users size={20} />
+          <span>Team Chat</span>
+        </NavLink>
+
+        <NavLink to="/subscription" className="nav-item">
+          <CreditCard size={20} />
+          <span>Subscription</span>
+        </NavLink>
+
+        <NavLink to="/profile" className="nav-item">
+          <User size={20} />
+          <span>Profile</span>
+        </NavLink>
 
       </nav>
+
+      <div className="sidebar-footer">
+
+        <button
+          className="theme-btn"
+          onClick={toggleTheme}
+        >
+          {darkMode ? (
+            <>
+              <Sun size={18} />
+              <span>Light Mode</span>
+            </>
+          ) : (
+            <>
+              <Moon size={18} />
+              <span>Dark Mode</span>
+            </>
+          )}
+        </button>
+
+        <button
+          className="logout-btn"
+          onClick={logout}
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
+        </button>
+
+      </div>
 
     </aside>
   );

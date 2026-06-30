@@ -1,98 +1,228 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+
+import "./Tasks.css";
+
 function Tasks() {
-const [title, setTitle] = useState("");
-const [description, setDescription] = useState("");
-const [tasks, setTasks] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
-const API_URL = import.meta.env.VITE_API_URL;
+  const [tasks, setTasks] = useState([]);
 
-const fetchTasks = async () => {
-try {
-const res = await axios.get(
-`${API_URL}/api/tasks`
-);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    status: "Todo",
+    priority: "Medium",
+  });
 
-  setTasks(res.data.tasks || []);
-} catch (err) {
-  console.error(err);
-}
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
-
-};
-
-useEffect(() => {
-fetchTasks();
-}, []);
-
-const handleCreateTask = async (e) => {
-e.preventDefault();
-
-
-try {
-  await axios.post(
-    `${API_URL}/api/tasks`,
-    {
-      title,
-      description,
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/tasks`);
+      setTasks(res.data.tasks || []);
+    } catch (err) {
+      console.error(err);
     }
-  );
+  };
 
-  setTitle("");
-  setDescription("");
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  fetchTasks();
-} catch (err) {
-  console.error(err);
-}
+  const createTask = async (e) => {
+    e.preventDefault();
 
+    try {
+      await axios.post(`${API_URL}/api/tasks`, form);
 
-};
+      setForm({
+        title: "",
+        description: "",
+        status: "Todo",
+        priority: "Medium",
+      });
 
-return (
+      fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  <div style={{ padding: "20px" }}> <h2>Create Task</h2>
+  const deleteTask = async (id) => {
+    if (!window.confirm("Delete this task?")) return;
 
+    try {
+      await axios.delete(`${API_URL}/api/tasks/${id}`);
+      fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    <form onSubmit={handleCreateTask}>
-      <input
-        type="text"
-        placeholder="Task Title"
-        value={title}
-        onChange={(e) =>
-          setTitle(e.target.value)
-        }
-      />
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.title
+      ?.toLowerCase()
+      .includes(search.toLowerCase());
 
-    <input
-      type="text"
-      placeholder="Description"
-      value={description}
-      onChange={(e) =>
-        setDescription(e.target.value)
-      }
-    />
+    const matchesStatus =
+      statusFilter === "All"
+        ? true
+        : task.status === statusFilter;
 
-    <button type="submit">
-      Create Task
-    </button>
-  </form>
+    return matchesSearch && matchesStatus;
+  });
 
-  <h3>All Tasks</h3>
+  return (
+    <div className="tasks-page">
 
-  {tasks.map((task) => (
-    <div key={task._id}>
-      <h4>{task.title}</h4>
-      <p>{task.description}</p>
-      <p>Status: {task.status}</p>
+      <Sidebar />
+
+      <div className="tasks-main">
+
+        <Navbar />
+
+        <div className="tasks-content">
+
+          <div className="tasks-header">
+
+            <h1>Tasks</h1>
+
+            <div className="task-filters">
+
+              <input
+                type="text"
+                placeholder="Search Task..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value)
+                }
+              >
+                <option>All</option>
+                <option>Todo</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <form
+            className="task-form"
+            onSubmit={createTask}
+          >
+
+            <input
+              name="title"
+              placeholder="Task Title"
+              value={form.title}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              name="description"
+              placeholder="Description"
+              value={form.description}
+              onChange={handleChange}
+              required
+            />
+
+            <select
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+            >
+              <option>Todo</option>
+              <option>In Progress</option>
+              <option>Completed</option>
+            </select>
+
+            <select
+              name="priority"
+              value={form.priority}
+              onChange={handleChange}
+            >
+              <option>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+
+            <button>Create Task</button>
+
+          </form>
+
+          <div className="task-grid">
+
+            {filteredTasks.length === 0 ? (
+              <p>No Tasks Found</p>
+            ) : (
+              filteredTasks.map((task) => (
+                <div
+                  className="task-card"
+                  key={task._id}
+                >
+
+                  <h2>{task.title}</h2>
+
+                  <p>{task.description}</p>
+
+                  <div className="task-tags">
+
+                    <span
+                      className={`status ${task.status
+                        .replace(/\s/g, "")
+                        .toLowerCase()}`}
+                    >
+                      {task.status}
+                    </span>
+
+                    <span
+                      className={`priority ${task.priority.toLowerCase()}`}
+                    >
+                      {task.priority}
+                    </span>
+
+                  </div>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() =>
+                      deleteTask(task._id)
+                    }
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              ))
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-  ))}
-</div>
-
-
-);
+  );
 }
 
 export default Tasks;
