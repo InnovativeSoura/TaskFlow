@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import AuthPage from "../pages/AuthPage";
+import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import KanbanBoard from "../pages/KanbanBoard";
 import Analytics from "../pages/Analytics";
@@ -31,7 +32,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-    
+
       {/* Login */}
       <Route path="/" element={<Login />} />
 
