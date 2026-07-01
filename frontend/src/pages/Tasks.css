@@ -1,295 +1,45 @@
-/* ===================================
-   Tasks Page
-=================================== */
-
 .tasks-page {
   display: flex;
-  min-height: 100vh;
-  background: #f5f7fb;
 }
 
 .tasks-main {
   flex: 1;
-  margin-left: 260px;
 }
 
 .tasks-content {
-  padding: 30px;
+  padding: 20px;
 }
 
-/* ===================================
-   Header
-=================================== */
-
-.tasks-header {
+.kanban-board {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+  gap: 20px;
 }
 
-.tasks-header h1 {
-  font-size: 34px;
-  color: #1f2937;
+.kanban-column {
+  flex: 1;
+  background: #f4f4f4;
+  padding: 10px;
+  min-height: 500px;
+  border-radius: 8px;
 }
-
-.task-filters {
-  display: flex;
-  gap: 15px;
-}
-
-.task-filters input,
-.task-filters select {
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 15px;
-  outline: none;
-}
-
-.task-filters input {
-  width: 260px;
-}
-
-.task-filters input:focus,
-.task-filters select:focus {
-  border-color: #2563eb;
-}
-
-/* ===================================
-   Create Task Form
-=================================== */
-
-.task-form {
-  display: grid;
-  grid-template-columns: 2fr 3fr 180px 180px 180px;
-  gap: 15px;
-  margin-bottom: 35px;
-}
-
-.task-form input,
-.task-form select {
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 15px;
-}
-
-.task-form input:focus,
-.task-form select:focus {
-  outline: none;
-  border-color: #2563eb;
-}
-
-.task-form button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: .3s;
-}
-
-.task-form button:hover {
-  background: #1d4ed8;
-}
-
-/* ===================================
-   Task Grid
-=================================== */
-
-.task-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px,1fr));
-  gap: 25px;
-}
-
-/* ===================================
-   Task Card
-=================================== */
 
 .task-card {
   background: white;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0,0,0,.08);
-  transition: .3s;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: grab;
+  border: 1px solid #ddd;
 }
-
-.task-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 40px rgba(0,0,0,.12);
-}
-
-.task-card h2 {
-  color: #111827;
-  margin-bottom: 12px;
-  font-size: 22px;
-}
-
-.task-card p {
-  color: #6b7280;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-/* ===================================
-   Badges
-=================================== */
-
-.task-tags {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.status,
-.priority {
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Status */
-
-.status.todo {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-.status.inprogress {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-.status.completed {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-/* Priority */
 
 .priority.low {
-  background: #dbeafe;
-  color: #2563eb;
+  color: green;
 }
 
 .priority.medium {
-  background: #ede9fe;
-  color: #7c3aed;
+  color: orange;
 }
 
 .priority.high {
-  background: #fecaca;
-  color: #b91c1c;
-}
-
-/* ===================================
-   Delete Button
-=================================== */
-
-.delete-btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  background: #ef4444;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: .3s;
-  font-size: 15px;
-}
-
-.delete-btn:hover {
-  background: #dc2626;
-}
-
-/* ===================================
-   Dark Mode
-=================================== */
-
-body.dark {
-  background: #0f172a;
-}
-
-body.dark .tasks-page {
-  background: #0f172a;
-}
-
-body.dark .tasks-header h1 {
-  color: white;
-}
-
-body.dark .task-card {
-  background: #1e293b;
-}
-
-body.dark .task-card h2 {
-  color: white;
-}
-
-body.dark .task-card p {
-  color: #cbd5e1;
-}
-
-body.dark .task-form input,
-body.dark .task-form select,
-body.dark .task-filters input,
-body.dark .task-filters select {
-  background: #111827;
-  color: white;
-  border: 1px solid #374151;
-}
-
-/* ===================================
-   Responsive
-=================================== */
-
-@media (max-width:1200px){
-
-.task-form{
-grid-template-columns:1fr;
-}
-
-}
-
-@media (max-width:900px){
-
-.tasks-main{
-margin-left:75px;
-}
-
-.tasks-header{
-flex-direction:column;
-align-items:flex-start;
-gap:20px;
-}
-
-.task-filters{
-width:100%;
-flex-direction:column;
-}
-
-.task-filters input{
-width:100%;
-}
-
-}
-
-@media (max-width:600px){
-
-.tasks-main{
-margin-left:0;
-}
-
-.tasks-content{
-padding:20px;
-}
-
-.task-grid{
-grid-template-columns:1fr;
-}
-
+  color: red;
 }

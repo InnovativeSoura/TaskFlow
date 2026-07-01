@@ -13,7 +13,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-import "./Sidebar.css";
+import "../styles/Sidebar.css";
 
 function Sidebar() {
 

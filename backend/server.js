@@ -3,6 +3,9 @@ import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
+
+import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,6 +21,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 
 app.use("/api/tasks", taskRoutes);
+app.use(cors({origin: ["http://localhost:5173","https://taskflow-1-73qh.onrender.com",],
+    credentials: true,
+  })
+)
 
 
 const PORT = process.env.PORT || 5000;

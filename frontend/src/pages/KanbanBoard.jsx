@@ -8,8 +8,9 @@ import {
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import "../styles/KanbanBoard.css";
 
-import "./KanbanBoard.css";
+
 
 function KanbanBoard() {
   const API_URL = import.meta.env.VITE_API_URL;

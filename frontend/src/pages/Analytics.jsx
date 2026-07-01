@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "../styles/Analytics.css";
 
 import {
   Bar,
@@ -22,7 +23,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "./Analytics.css";
+import "../styles/Analytics.css";
 
 ChartJS.register(
   CategoryScale,

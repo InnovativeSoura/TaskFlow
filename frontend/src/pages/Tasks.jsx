@@ -4,223 +4,189 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
+import {
+  DndContext,
+  closestCenter,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+
+import { CSS } from "@dnd-kit/utilities";
+
 import "./Tasks.css";
 
+/* ===========================
+   TASK CARD (DRAGGABLE)
+=========================== */
+function TaskCard({ task }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: task._id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="task-card"
+    >
+      <h3>{task.title}</h3>
+      <p>{task.description}</p>
+
+      <span className={`priority ${task.priority.toLowerCase()}`}>
+        {task.priority}
+      </span>
+    </div>
+  );
+}
+
+/* ===========================
+   COLUMN
+=========================== */
+function Column({ title, tasks }) {
+  return (
+    <div className="kanban-column">
+      <h2>{title}</h2>
+
+      <SortableContext
+        items={tasks.map((t) => t._id)}
+        strategy={verticalListSortingStrategy}
+      >
+        {tasks.map((task) => (
+          <TaskCard key={task._id} task={task} />
+        ))}
+      </SortableContext>
+    </div>
+  );
+}
+
+/* ===========================
+   MAIN COMPONENT
+=========================== */
 function Tasks() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [tasks, setTasks] = useState([]);
 
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
-
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    status: "Todo",
-    priority: "Medium",
-  });
-
   useEffect(() => {
     fetchTasks();
   }, []);
 
+  const token = localStorage.getItem("token");
+
+  /* ===========================
+     FETCH TASKS
+  =========================== */
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/tasks`);
+      const res = await axios.get(`${API_URL}/api/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       setTasks(res.data.tasks || []);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const createTask = async (e) => {
-    e.preventDefault();
-
+  /* ===========================
+     UPDATE STATUS API
+  =========================== */
+  const updateStatus = async (id, status) => {
     try {
-      await axios.post(`${API_URL}/api/tasks`, form);
-
-      setForm({
-        title: "",
-        description: "",
-        status: "Todo",
-        priority: "Medium",
-      });
-
-      fetchTasks();
+      await axios.patch(
+        `${API_URL}/api/tasks/${id}/status`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } catch (err) {
       console.error(err);
     }
   };
 
-  const deleteTask = async (id) => {
-    if (!window.confirm("Delete this task?")) return;
+  /* ===========================
+     DRAG END
+  =========================== */
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
 
-    try {
-      await axios.delete(`${API_URL}/api/tasks/${id}`);
-      fetchTasks();
-    } catch (err) {
-      console.error(err);
-    }
+    if (!over) return;
+
+    const taskId = active.id;
+    const newStatus = over.id;
+
+    setTasks((prev) =>
+      prev.map((task) =>
+        task._id === taskId
+          ? { ...task, status: newStatus }
+          : task
+      )
+    );
+
+    updateStatus(taskId, newStatus);
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    const matchesSearch = task.title
-      ?.toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesStatus =
-      statusFilter === "All"
-        ? true
-        : task.status === statusFilter;
-
-    return matchesSearch && matchesStatus;
-  });
+  /* ===========================
+     GROUP TASKS
+  =========================== */
+  const pending = tasks.filter((t) => t.status === "Pending");
+  const inProgress = tasks.filter((t) => t.status === "In Progress");
+  const completed = tasks.filter((t) => t.status === "Completed");
 
   return (
     <div className="tasks-page">
-
       <Sidebar />
 
       <div className="tasks-main">
-
         <Navbar />
 
         <div className="tasks-content">
+          <h1>Kanban Board</h1>
 
-          <div className="tasks-header">
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="kanban-board">
 
-            <h1>Tasks</h1>
+              <div id="Pending">
+                <Column title="Pending" tasks={pending} />
+              </div>
 
-            <div className="task-filters">
+              <div id="In Progress">
+                <Column title="In Progress" tasks={inProgress} />
+              </div>
 
-              <input
-                type="text"
-                placeholder="Search Task..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-
-              <select
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(e.target.value)
-                }
-              >
-                <option>All</option>
-                <option>Todo</option>
-                <option>In Progress</option>
-                <option>Completed</option>
-              </select>
+              <div id="Completed">
+                <Column title="Completed" tasks={completed} />
+              </div>
 
             </div>
-
-          </div>
-
-          <form
-            className="task-form"
-            onSubmit={createTask}
-          >
-
-            <input
-              name="title"
-              placeholder="Task Title"
-              value={form.title}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              name="description"
-              placeholder="Description"
-              value={form.description}
-              onChange={handleChange}
-              required
-            />
-
-            <select
-              name="status"
-              value={form.status}
-              onChange={handleChange}
-            >
-              <option>Todo</option>
-              <option>In Progress</option>
-              <option>Completed</option>
-            </select>
-
-            <select
-              name="priority"
-              value={form.priority}
-              onChange={handleChange}
-            >
-              <option>Low</option>
-              <option>Medium</option>
-              <option>High</option>
-            </select>
-
-            <button>Create Task</button>
-
-          </form>
-
-          <div className="task-grid">
-
-            {filteredTasks.length === 0 ? (
-              <p>No Tasks Found</p>
-            ) : (
-              filteredTasks.map((task) => (
-                <div
-                  className="task-card"
-                  key={task._id}
-                >
-
-                  <h2>{task.title}</h2>
-
-                  <p>{task.description}</p>
-
-                  <div className="task-tags">
-
-                    <span
-                      className={`status ${task.status
-                        .replace(/\s/g, "")
-                        .toLowerCase()}`}
-                    >
-                      {task.status}
-                    </span>
-
-                    <span
-                      className={`priority ${task.priority.toLowerCase()}`}
-                    >
-                      {task.priority}
-                    </span>
-
-                  </div>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() =>
-                      deleteTask(task._id)
-                    }
-                  >
-                    Delete
-                  </button>
-
-                </div>
-              ))
-            )}
-
-          </div>
+          </DndContext>
 
         </div>
-
       </div>
-
     </div>
   );
 }
