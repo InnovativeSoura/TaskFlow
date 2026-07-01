@@ -1,42 +1,44 @@
-const express = require("express");
+import express from "express";
+
+import {
+  createTask,
+  getTasks,
+  getTaskById,
+  updateTask,
+  deleteTask,
+  updateTaskStatus,
+} from "../controllers/taskController.js";
+
+import { protect } from "../middleware/authMiddleware.js";
+import { isAdmin, isAdminOrManager } from "../middleware/permissions.js";
 
 const router = express.Router();
 
-const {
-  createTask,
-  getTasks,
-  getTask,
-  updateTask,
-  deleteTask,
-  taskStats,
-  searchTasks,
-} = require("../controllers/taskController");
+/* ==========================================
+   GLOBAL PROTECTION
+========================================== */
+router.use(protect);
 
-/*
-=====================================
-Task CRUD Routes
-=====================================
-*/
+/* ==========================================
+   TASK ROUTES
+========================================== */
 
-// Create Task
-router.post("/", createTask);
+// Create task
+router.post("/", isAdminOrManager, createTask);
 
-// Get All Tasks
-router.get("/", getTasks);
+// Get all tasks (filterable)
+router.get("/", isAdminOrManager, getTasks);
 
-// Dashboard Statistics
-router.get("/stats", taskStats);
+// Get task by ID
+router.get("/:id", isAdminOrManager, getTaskById);
 
-// Search Tasks
-router.get("/search", searchTasks);
+// Update task details
+router.put("/:id", isAdminOrManager, updateTask);
 
-// Get Single Task
-router.get("/:id", getTask);
+// Update task status
+router.patch("/:id/status", isAdminOrManager, updateTaskStatus);
 
-// Update Task
-router.put("/:id", updateTask);
+// Delete task (Admin only)
+router.delete("/:id", isAdmin, deleteTask);
 
-// Delete Task
-router.delete("/:id", deleteTask);
-
-module.exports = router;
+export default router;

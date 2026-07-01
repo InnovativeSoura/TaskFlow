@@ -4,14 +4,15 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-API.interceptors.request.use((req) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+// Attach token automatically
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
 
-  if (user?.token) {
-    req.headers.Authorization = `Bearer ${user.token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  return req;
+  return config;
 });
 
-export default API;
+export default api;

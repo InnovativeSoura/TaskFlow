@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -12,45 +13,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true,
       lowercase: true,
+      trim: true,
     },
 
     password: {
       type: String,
       required: true,
+      minlength: 6,
     },
 
-    isPro: {
-    type: Boolean,
-    default: false,
-  },
-
-  subscriptionPlan: {
-    type: String,
-    default: "FREE",
-  },
-
-    profileImage: {
+    avatar: {
       type: String,
       default: "",
-    },
-
-    role: {
-      type: String,
-      enum: ["admin", "manager", "member"],
-      default: "member",
-    },
-
-    designation: {
-      type: String,
-      default: "",
-    },
-
-    bio: {
-      type: String,
-      default: "",
-      maxlength: 500,
     },
 
     phone: {
@@ -58,35 +33,58 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    location: {
+    designation: {
+      type: String,
+      default: "Team Member",
+    },
+
+    department: {
       type: String,
       default: "",
     },
 
-    skills: [
-      {
-        type: String,
-      },
-    ],
-
-    github: {
+    bio: {
       type: String,
       default: "",
     },
 
-    linkedin: {
+    role: {
       type: String,
-      default: "",
+      enum: [
+        "Admin",
+        "Manager",
+        "Team Member",
+      ],
+      default: "Team Member",
     },
 
-    isActive: {
-    type: Boolean,
-    default: true,
+    status: {
+      type: String,
+      enum: [
+        "Active",
+        "Inactive",
+      ],
+      default: "Active",
     },
 
-    lastActive: {
+    lastLogin: {
       type: Date,
-      default: Date.now,
+      default: null,
+    },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    resetPasswordToken: {
+      type: String,
+      default: "",
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+      default: null,
     },
   },
   {
@@ -94,7 +92,36 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+
+  this.password = await bcrypt.hash(
+    this.password,
+    salt
+  );
+
+  next();
+
+});
+
+// Compare password
+userSchema.methods.matchPassword =
+  async function (enteredPassword) {
+
+    return await bcrypt.compare(
+      enteredPassword,
+      this.password
+    );
+
+  };
+
+export default mongoose.model(
   "User",
   userSchema
 );

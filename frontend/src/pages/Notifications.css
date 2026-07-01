@@ -1,0 +1,572 @@
+/* ===========================================
+   PAGE LAYOUT
+=========================================== */
+
+.notification-page{
+    display:flex;
+    min-height:100vh;
+    background:#f4f7fc;
+}
+
+.notification-main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.notification-container{
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* ===========================================
+   HEADER
+=========================================== */
+
+.notification-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.notification-header h1{
+    font-size:32px;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:8px;
+}
+
+.notification-header p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* ===========================================
+   REFRESH BUTTON
+=========================================== */
+
+.refresh-btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.refresh-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* ===========================================
+   TOOLBAR
+=========================================== */
+
+.notification-toolbar{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.notification-toolbar input,
+.notification-toolbar select{
+    padding:12px 15px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.3s;
+}
+
+.notification-toolbar input{
+    flex:1;
+    min-width:260px;
+}
+
+.notification-toolbar input:focus,
+.notification-toolbar select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+/* ===========================================
+   STATISTICS GRID
+=========================================== */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.stat-card{
+    background:#ffffff;
+    border-radius:16px;
+    padding:25px;
+    color:#fff;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+}
+
+.stat-card h2{
+    font-size:36px;
+    margin-bottom:8px;
+    font-weight:700;
+}
+
+.stat-card p{
+    font-size:15px;
+    opacity:.95;
+}
+
+.stat-card.blue{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.stat-card.green{
+    background:linear-gradient(135deg,#10b981,#34d399);
+}
+
+.stat-card.orange{
+    background:linear-gradient(135deg,#f59e0b,#fbbf24);
+}
+
+/* ===========================================
+   NOTIFICATION CARD
+=========================================== */
+
+.notification-card{
+    background:#ffffff;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.card-header{
+    margin-bottom:20px;
+}
+
+.card-header h2{
+    color:#1f2937;
+    font-size:24px;
+    font-weight:700;
+}
+
+/* ===========================================
+   NOTIFICATION ITEM
+=========================================== */
+
+.notification-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    padding:20px;
+    margin-bottom:15px;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    transition:.3s;
+}
+
+.notification-item:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.notification-item.unread{
+    border-left:6px solid #2563eb;
+    background:#eff6ff;
+}
+
+.notification-item.read{
+    border-left:6px solid #10b981;
+    background:#f9fafb;
+}
+
+.notification-content{
+    flex:1;
+}
+
+.notification-content h3{
+    color:#111827;
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.notification-content p{
+    color:#4b5563;
+    line-height:1.6;
+    margin-bottom:10px;
+}
+
+.notification-content small{
+    color:#9ca3af;
+    font-size:13px;
+}
+
+/* ===========================================
+   BADGES
+=========================================== */
+
+.badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:50px;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:12px;
+}
+
+.badge.completed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge.pending{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+/* ===========================================
+   ACTIONS
+=========================================== */
+
+.notification-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:12px;
+}
+
+.notification-actions{
+    display:flex;
+    gap:10px;
+}
+
+.read-btn,
+.delete-btn{
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.read-btn{
+    background:#2563eb;
+    color:#ffffff;
+}
+
+.read-btn:hover{
+    background:#1d4ed8;
+}
+
+.delete-btn{
+    background:#ef4444;
+    color:#ffffff;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+/* ===========================================
+   FOOTER
+=========================================== */
+
+.notification-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+/* ===========================================
+   MARK ALL BUTTON
+=========================================== */
+
+.mark-all-btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:#ffffff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.mark-all-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.mark-all-btn:active{
+    transform:scale(.97);
+}
+
+/* ===========================================
+   SUMMARY
+=========================================== */
+
+.notification-summary{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.notification-summary span{
+    background:#ffffff;
+    padding:10px 18px;
+    border-radius:10px;
+    border:1px solid #e5e7eb;
+    color:#374151;
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+/* ===========================================
+   EMPTY STATE
+=========================================== */
+
+.empty{
+    text-align:center;
+    padding:60px 20px;
+    color:#6b7280;
+    font-size:16px;
+    border:2px dashed #d1d5db;
+    border-radius:14px;
+    background:#f9fafb;
+}
+
+/* ===========================================
+   LOADING SCREEN
+=========================================== */
+
+.loading-screen{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#f4f7fc;
+}
+
+.loading-screen h2{
+    font-size:30px;
+    color:#2563eb;
+    font-weight:700;
+}
+
+/* ===========================================
+   INPUT PLACEHOLDER
+=========================================== */
+
+.notification-toolbar input::placeholder{
+    color:#9ca3af;
+}
+
+/* ===========================================
+   TEXT SELECTION
+=========================================== */
+
+::selection{
+    background:#2563eb;
+    color:#ffffff;
+}
+
+/* ===========================================
+   CARD ANIMATION
+=========================================== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.notification-card,
+.stat-card,
+.notification-item{
+
+    animation:fadeIn .4s ease;
+
+}
+/* ===========================================
+   RESPONSIVE DESIGN
+=========================================== */
+
+@media (max-width:1024px){
+
+    .notification-container{
+        padding:20px;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media (max-width:768px){
+
+    .notification-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .notification-toolbar{
+        flex-direction:column;
+    }
+
+    .notification-toolbar input,
+    .notification-toolbar select,
+    .refresh-btn{
+        width:100%;
+    }
+
+    .notification-item{
+        flex-direction:column;
+    }
+
+    .notification-right{
+        width:100%;
+        align-items:flex-start;
+    }
+
+    .notification-actions{
+        width:100%;
+        flex-wrap:wrap;
+    }
+
+    .read-btn,
+    .delete-btn{
+        flex:1;
+        min-width:140px;
+    }
+
+    .notification-footer{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .notification-summary{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:480px){
+
+    .notification-container{
+        padding:15px;
+    }
+
+    .notification-header h1{
+        font-size:28px;
+    }
+
+    .notification-header p{
+        font-size:14px;
+    }
+
+    .notification-card{
+        padding:18px;
+    }
+
+    .notification-item{
+        padding:16px;
+    }
+
+    .notification-content h3{
+        font-size:16px;
+    }
+
+    .notification-content p{
+        font-size:14px;
+    }
+
+    .notification-summary{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .notification-summary span{
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+/* ===========================================
+   CUSTOM SCROLLBAR
+=========================================== */
+
+.notification-container::-webkit-scrollbar{
+    width:10px;
+}
+
+.notification-container::-webkit-scrollbar-track{
+    background:#f3f4f6;
+}
+
+.notification-container::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+.notification-container::-webkit-scrollbar-thumb:hover{
+    background:#94a3b8;
+}
+
+/* ===========================================
+   GLOBAL TRANSITIONS
+=========================================== */
+
+*{
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+/* ===========================================
+   BUTTON ACTIVE EFFECTS
+=========================================== */
+
+.refresh-btn:active,
+.read-btn:active,
+.delete-btn:active,
+.mark-all-btn:active{
+    transform:scale(.97);
+}

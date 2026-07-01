@@ -1,37 +1,34 @@
-const Project = require("../models/Project");
+import Project from "../models/Project.js";
+import User from "../models/User.js";
 
-/*
-=====================================
-Create Project
-=====================================
-*/
+/* ==========================================
+   CREATE PROJECT
+========================================== */
 
-exports.createProject = async (req, res) => {
+export const createProject = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      status,
-      priority,
-      deadline,
-      members,
-    } = req.body;
+    const { title, description, status, startDate, endDate, members } = req.body;
 
-    if (!title) {
-      return res.status(400).json({
-        success: false,
-        message: "Project title is required",
-      });
+    // Validate members exist
+    if (members && members.length > 0) {
+      const users = await User.find({ _id: { $in: members } });
+
+      if (users.length !== members.length) {
+        return res.status(400).json({
+          success: false,
+          message: "One or more members are invalid",
+        });
+      }
     }
 
     const project = await Project.create({
       title,
       description,
-      status,
-      priority,
-      deadline,
+      status: status || "Active",
+      startDate,
+      endDate,
       members,
-      owner: req.user?._id,
+      createdBy: req.user.id,
     });
 
     res.status(201).json({
@@ -39,25 +36,31 @@ exports.createProject = async (req, res) => {
       message: "Project created successfully",
       project,
     });
-  } catch (err) {
-    console.error(err);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to create project",
+      message: error.message,
     });
   }
 };
 
-/*
-=====================================
-Get All Projects
-=====================================
-*/
+/* ==========================================
+   GET ALL PROJECTS
+========================================== */
 
-exports.getProjects = async (req, res) => {
+export const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find()
+    const filter = {};
+
+    // Optional filters
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    const projects = await Project.find(filter)
+      .populate("members", "name email role")
+      .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
     res.json({
@@ -65,23 +68,50 @@ exports.getProjects = async (req, res) => {
       count: projects.length,
       projects,
     });
-  } catch (err) {
-    console.error(err);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to fetch projects",
+      message: error.message,
     });
   }
 };
 
-/*
-=====================================
-Get Single Project
-=====================================
-*/
+/* ==========================================
+   GET PROJECT BY ID
+========================================== */
 
-exports.getProject = async (req, res) => {
+export const getProjectById = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id)
+      .populate("members", "name email role")
+      .populate("createdBy", "name email");
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      project,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+/* ==========================================
+   UPDATE PROJECT
+========================================== */
+
+export const updateProject = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
 
@@ -92,66 +122,41 @@ exports.getProject = async (req, res) => {
       });
     }
 
-    res.json({
-      success: true,
-      project,
-    });
-  } catch (err) {
-    console.error(err);
+    const fields = [
+      "title",
+      "description",
+      "status",
+      "startDate",
+      "endDate",
+    ];
 
-    res.status(500).json({
-      success: false,
-      message: "Unable to fetch project",
-    });
-  }
-};
-
-/*
-=====================================
-Update Project
-=====================================
-*/
-
-exports.updateProject = async (req, res) => {
-  try {
-    const project = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        project[field] = req.body[field];
       }
-    );
+    });
 
-    if (!project) {
-      return res.status(404).json({
-        success: false,
-        message: "Project not found",
-      });
-    }
+    await project.save();
 
     res.json({
       success: true,
       message: "Project updated successfully",
       project,
     });
-  } catch (err) {
-    console.error(err);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to update project",
+      message: error.message,
     });
   }
 };
 
-/*
-=====================================
-Delete Project
-=====================================
-*/
+/* ==========================================
+   DELETE PROJECT
+========================================== */
 
-exports.deleteProject = async (req, res) => {
+export const deleteProject = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
 
@@ -168,53 +173,61 @@ exports.deleteProject = async (req, res) => {
       success: true,
       message: "Project deleted successfully",
     });
-  } catch (err) {
-    console.error(err);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to delete project",
+      message: error.message,
     });
   }
 };
 
-/*
-=====================================
-Dashboard Statistics
-=====================================
-*/
+/* ==========================================
+   ADD MEMBER TO PROJECT
+========================================== */
 
-exports.projectStats = async (req, res) => {
+export const addMember = async (req, res) => {
   try {
-    const totalProjects = await Project.countDocuments();
+    const { userId } = req.body;
 
-    const activeProjects = await Project.countDocuments({
-      status: "Active",
-    });
+    const project = await Project.findById(req.params.id);
 
-    const completedProjects = await Project.countDocuments({
-      status: "Completed",
-    });
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
 
-    const planningProjects = await Project.countDocuments({
-      status: "Planning",
-    });
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (project.members.includes(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "User already in project",
+      });
+    }
+
+    project.members.push(userId);
+    await project.save();
 
     res.json({
       success: true,
-      stats: {
-        totalProjects,
-        activeProjects,
-        completedProjects,
-        planningProjects,
-      },
+      message: "Member added successfully",
+      project,
     });
-  } catch (err) {
-    console.error(err);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to fetch project statistics",
+      message: error.message,
     });
   }
 };

@@ -1,42 +1,24 @@
-import { useEffect } from "react";
-
-import AppRoutes from "./routes/AppRoutes";
-import NotificationListener from "./components/NotificationListener";
-
-import {
-connectSocket,
-disconnectSocket,
-} from "./socket/socket";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Users from "./pages/Users";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Projects from "./pages/Projects";
 
 function App() {
-const user = JSON.parse(
-localStorage.getItem("user")
-);
-
-useEffect(() => {
-if (user) {
-connectSocket();
-}
-
-
-return () => {
-  disconnectSocket();
-};
-
-
-}, [user]);
-
-return (
-<> <NotificationListener
-     userId={user?._id}
-   />
-
-
-  <AppRoutes />
-</>
-
-
-);
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
+          <Route path="/users" element={  <ProtectedRoute><Users /></ProtectedRoute>}/>
+          <Route path="/projects" element={<ProtectedRoute> <Projects /> </ProtectedRoute>}/>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
 export default App;

@@ -1,32 +1,44 @@
-const express = require("express");
+import express from "express";
+
+import {
+  createProject,
+  getProjects,
+  getProjectById,
+  updateProject,
+  deleteProject,
+  addMember,
+} from "../controllers/projectController.js";
+
+import { protect } from "../middleware/authMiddleware.js";
+import { isAdmin, isAdminOrManager } from "../middleware/permissions.js";
 
 const router = express.Router();
 
-const {
-  createProject,
-  getProjects,
-  getProject,
-  updateProject,
-  deleteProject,
-  projectStats,
-} = require("../controllers/projectController");
+/* ==========================================
+   GLOBAL PROTECTION
+========================================== */
+router.use(protect);
 
-// Create Project
-router.post("/", createProject);
+/* ==========================================
+   PROJECT ROUTES
+========================================== */
 
-// Get All Projects
-router.get("/", getProjects);
+// Create project (Admin + Manager)
+router.post("/", isAdminOrManager, createProject);
 
-// Dashboard Statistics
-router.get("/stats", projectStats);
+// Get all projects
+router.get("/", isAdminOrManager, getProjects);
 
-// Get Single Project
-router.get("/:id", getProject);
+// Get single project
+router.get("/:id", isAdminOrManager, getProjectById);
 
-// Update Project
-router.put("/:id", updateProject);
+// Update project
+router.put("/:id", isAdminOrManager, updateProject);
 
-// Delete Project
-router.delete("/:id", deleteProject);
+// Add member to project
+router.patch("/:id/add-member", isAdminOrManager, addMember);
 
-module.exports = router;
+// Delete project (Admin only)
+router.delete("/:id", isAdmin, deleteProject);
+
+export default router;

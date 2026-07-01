@@ -1,120 +1,186 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+
 import {
-  LayoutDashboard,
-  FolderKanban,
-  CheckSquare,
-  BarChart3,
-  BrainCircuit,
-  Users,
-  CreditCard,
-  User,
-  LogOut,
-  Moon,
-  Sun,
-} from "lucide-react";
+  FaTachometerAlt,
+  FaProjectDiagram,
+  FaTasks,
+  FaColumns,
+  FaUsers,
+  FaChartBar,
+  FaUserCircle,
+  FaCog,
+  FaBell,
+  FaSignOutAlt,
+} from "react-icons/fa";
 
 import "./Sidebar.css";
 
 function Sidebar() {
+
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
 
   const logout = () => {
-    localStorage.removeItem("user");
+
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
     navigate("/");
-  };
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-
-    document.body.classList.toggle("dark");
   };
 
   return (
+
     <aside className="sidebar">
 
-      <div className="logo">
+      <div className="sidebar-logo">
+
         <h2>TaskFlow</h2>
+
       </div>
 
-      <nav>
+      <nav className="sidebar-menu">
 
-        <NavLink to="/dashboard" className="nav-item">
-          <LayoutDashboard size={20} />
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaTachometerAlt />
+
           <span>Dashboard</span>
+
         </NavLink>
 
-        <NavLink to="/projects" className="nav-item">
-          <FolderKanban size={20} />
+        <NavLink
+          to="/projects"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaProjectDiagram />
+
           <span>Projects</span>
+
         </NavLink>
 
-        <NavLink to="/tasks" className="nav-item">
-          <CheckSquare size={20} />
+        <NavLink
+          to="/tasks"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaTasks />
+
           <span>Tasks</span>
+
         </NavLink>
 
-        <NavLink to="/analytics" className="nav-item">
-          <BarChart3 size={20} />
-          <span>Analytics</span>
+        <NavLink
+          to="/kanban"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaColumns />
+
+          <span>Kanban Board</span>
+
+        </NavLink>
+                <NavLink
+          to="/users"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaUsers />
+
+          <span>Users</span>
+
         </NavLink>
 
-        <NavLink to="/ai-insights" className="nav-item">
-          <BrainCircuit size={20} />
-          <span>AI Insights</span>
+        <NavLink
+          to="/reports"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaChartBar />
+
+          <span>Reports</span>
+
         </NavLink>
 
-        <NavLink to="/chat" className="nav-item">
-          <Users size={20} />
-          <span>Team Chat</span>
-        </NavLink>
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
 
-        <NavLink to="/subscription" className="nav-item">
-          <CreditCard size={20} />
-          <span>Subscription</span>
-        </NavLink>
+          <FaUserCircle />
 
-        <NavLink to="/profile" className="nav-item">
-          <User size={20} />
           <span>Profile</span>
+
+        </NavLink>
+
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaCog />
+
+          <span>Settings</span>
+
+        </NavLink>
+
+        <NavLink
+          to="/notifications"
+          className={({ isActive }) =>
+            isActive ? "active" : ""
+          }
+        >
+
+          <FaBell />
+
+          <span>Notifications</span>
+
         </NavLink>
 
       </nav>
 
-      <div className="sidebar-footer">
+      {/* ==========================
+          LOGOUT
+      ========================== */}
 
-        <button
-          className="theme-btn"
-          onClick={toggleTheme}
-        >
-          {darkMode ? (
-            <>
-              <Sun size={18} />
-              <span>Light Mode</span>
-            </>
-          ) : (
-            <>
-              <Moon size={18} />
-              <span>Dark Mode</span>
-            </>
-          )}
-        </button>
+      <div className="sidebar-footer">
 
         <button
           className="logout-btn"
           onClick={logout}
         >
-          <LogOut size={18} />
+
+          <FaSignOutAlt />
+
           <span>Logout</span>
+
         </button>
 
       </div>
 
     </aside>
+
   );
+
 }
 
 export default Sidebar;

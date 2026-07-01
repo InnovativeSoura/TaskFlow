@@ -1,12 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Project title is required"],
+      required: true,
       trim: true,
-      maxlength: 100,
     },
 
     description: {
@@ -15,13 +14,27 @@ const projectSchema = new mongoose.Schema(
       trim: true,
     },
 
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
     status: {
       type: String,
       enum: [
         "Planning",
-        "Active",
+        "In Progress",
+        "On Hold",
         "Completed",
-        "Archived",
+        "Cancelled",
       ],
       default: "Planning",
     },
@@ -32,24 +45,22 @@ const projectSchema = new mongoose.Schema(
         "Low",
         "Medium",
         "High",
+        "Critical",
       ],
       default: "Medium",
     },
 
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
+    startDate: {
+      type: Date,
+      default: Date.now,
     },
 
-    members: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-
     dueDate: {
+      type: Date,
+      required: true,
+    },
+
+    completionDate: {
       type: Date,
       default: null,
     },
@@ -61,40 +72,32 @@ const projectSchema = new mongoose.Schema(
       max: 100,
     },
 
+    budget: {
+      type: Number,
+      default: 0,
+    },
+
     tags: [
       {
         type: String,
+        trim: true,
       },
     ],
 
-    color: {
-      type: String,
-      default: "#2563eb",
-    },
+    attachments: [
+      {
+        fileName: String,
+        fileUrl: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
 
-    archived: {
+    isArchived: {
       type: Boolean,
       default: false,
-    },
-
-    totalTasks: {
-      type: Number,
-      default: 0,
-    },
-
-    completedTasks: {
-      type: Number,
-      default: 0,
-    },
-
-    taskCompletion: {
-      type: Number,
-      default: 0,
-    },
-
-    lastActivity: {
-      type: Date,
-      default: Date.now,
     },
   },
   {
@@ -102,4 +105,30 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Project", projectSchema);
+/* ==========================================
+   Virtual Task Count
+========================================== */
+
+projectSchema.virtual("taskCount", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "project",
+  count: true,
+});
+
+/* ==========================================
+   Include Virtuals
+========================================== */
+
+projectSchema.set("toJSON", {
+  virtuals: true,
+});
+
+projectSchema.set("toObject", {
+  virtuals: true,
+});
+
+export default mongoose.model(
+  "Project",
+  projectSchema
+);
