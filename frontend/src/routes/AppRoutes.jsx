@@ -14,6 +14,7 @@ import Subscription from "../pages/Subscription";
 import Projects from "../pages/Projects";
 import Tasks from "../pages/Tasks";
 
+
 // Protected Route Component
 function ProtectedRoute({ children }) {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -30,17 +31,9 @@ function AppRoutes() {
 
   return (
     <Routes>
+    
       {/* Login */}
-      <Route
-        path="/"
-        element={
-          user ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <AuthPage />
-          )
-        }
-      />
+      <Route path="/" element={<Login />} />
 
       {/* Dashboard */}
       <Route
