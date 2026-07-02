@@ -27,14 +27,11 @@ export const getUsers = async (req, res) => {
       count: users.length,
       users,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -43,36 +40,28 @@ export const getUsers = async (req, res) => {
 ========================================== */
 
 export const getUserById = async (req, res) => {
-
   try {
-
-    const user = await User.findById(req.params.id)
-      .select("-password");
+    const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
-
       return res.status(404).json({
         success: false,
         message: "User not found.",
       });
-
     }
 
-    const projectCount =
-      await Project.countDocuments({
-        members: user._id,
-      });
+    const projectCount = await Project.countDocuments({
+      members: user._id,
+    });
 
-    const assignedTasks =
-      await Task.countDocuments({
-        assignedTo: user._id,
-      });
+    const assignedTasks = await Task.countDocuments({
+      assignedTo: user._id,
+    });
 
-    const completedTasks =
-      await Task.countDocuments({
-        assignedTo: user._id,
-        status: "Completed",
-      });
+    const completedTasks = await Task.countDocuments({
+      assignedTo: user._id,
+      status: "Completed",
+    });
 
     res.json({
       success: true,
@@ -83,14 +72,11 @@ export const getUserById = async (req, res) => {
         completedTasks,
       },
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
@@ -99,18 +85,14 @@ export const getUserById = async (req, res) => {
 ========================================== */
 
 export const updateUser = async (req, res) => {
-
   try {
-
     const user = await User.findById(req.params.id);
 
     if (!user) {
-
       return res.status(404).json({
         success: false,
         message: "User not found.",
       });
-
     }
 
     const fields = [
@@ -135,163 +117,14 @@ export const updateUser = async (req, res) => {
       message: "Profile updated successfully.",
       user,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
-  }
-};
-import User from "../models/User.js";
-import Project from "../models/Project.js";
-import Task from "../models/Task.js";
-
-/* ==========================================
-   GET ALL USERS
-========================================== */
-
-export const getUsers = async (req, res) => {
-  try {
-    const filter = {};
-
-    if (req.query.role) {
-      filter.role = req.query.role;
-    }
-
-    if (req.query.status) {
-      filter.status = req.query.status;
-    }
-
-    const users = await User.find(filter)
-      .select("-password")
-      .sort({ createdAt: -1 });
-
-    res.json({
-      success: true,
-      count: users.length,
-      users,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
   }
 };
 
-/* ==========================================
-   GET USER BY ID
-========================================== */
-
-export const getUserById = async (req, res) => {
-
-  try {
-
-    const user = await User.findById(req.params.id)
-      .select("-password");
-
-    if (!user) {
-
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-
-    }
-
-    const projectCount =
-      await Project.countDocuments({
-        members: user._id,
-      });
-
-    const assignedTasks =
-      await Task.countDocuments({
-        assignedTo: user._id,
-      });
-
-    const completedTasks =
-      await Task.countDocuments({
-        assignedTo: user._id,
-        status: "Completed",
-      });
-
-    res.json({
-      success: true,
-      user,
-      statistics: {
-        projectCount,
-        assignedTasks,
-        completedTasks,
-      },
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-};
-
-/* ==========================================
-   UPDATE USER PROFILE
-========================================== */
-
-export const updateUser = async (req, res) => {
-
-  try {
-
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-
-    }
-
-    const fields = [
-      "name",
-      "phone",
-      "designation",
-      "department",
-      "bio",
-      "avatar",
-    ];
-
-    fields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        user[field] = req.body[field];
-      }
-    });
-
-    await user.save();
-
-    res.json({
-      success: true,
-      message: "Profile updated successfully.",
-      user,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-};
 /* ==========================================
    DELETE USER
 ========================================== */
@@ -313,7 +146,6 @@ export const deleteUser = async (req, res) => {
       success: true,
       message: "User deleted successfully.",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -335,7 +167,7 @@ export const changeUserRole = async (req, res) => {
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid role provided.",
+        message: "Invalid role.",
       });
     }
 
@@ -353,10 +185,9 @@ export const changeUserRole = async (req, res) => {
 
     res.json({
       success: true,
-      message: "User role updated successfully.",
+      message: "Role updated successfully.",
       user,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -366,7 +197,7 @@ export const changeUserRole = async (req, res) => {
 };
 
 /* ==========================================
-   ACTIVATE / DEACTIVATE USER
+   TOGGLE USER STATUS
 ========================================== */
 
 export const toggleUserStatus = async (req, res) => {
@@ -380,16 +211,16 @@ export const toggleUserStatus = async (req, res) => {
       });
     }
 
-    user.status = user.status === "Active" ? "Inactive" : "Active";
+    user.status =
+      user.status === "Active" ? "Inactive" : "Active";
 
     await user.save();
 
     res.json({
       success: true,
-      message: `User ${user.status === "Active" ? "activated" : "deactivated"} successfully.`,
+      message: "User status updated successfully.",
       user,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -415,9 +246,24 @@ export const searchUsers = async (req, res) => {
 
     const users = await User.find({
       $or: [
-        { name: { $regex: query, $options: "i" } },
-        { email: { $regex: query, $options: "i" } },
-        { designation: { $regex: query, $options: "i" } },
+        {
+          name: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+        {
+          email: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+        {
+          designation: {
+            $regex: query,
+            $options: "i",
+          },
+        },
       ],
     }).select("-password");
 
@@ -426,7 +272,6 @@ export const searchUsers = async (req, res) => {
       count: users.length,
       users,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -436,7 +281,7 @@ export const searchUsers = async (req, res) => {
 };
 
 /* ==========================================
-   USER DASHBOARD SUMMARY
+   USER SUMMARY
 ========================================== */
 
 export const getUserSummary = async (req, res) => {
@@ -460,10 +305,21 @@ export const getUserSummary = async (req, res) => {
       pendingTasks,
     ] = await Promise.all([
       Project.countDocuments({ members: userId }),
-      Project.countDocuments({ members: userId, status: "Active" }),
-      Task.countDocuments({ assignedTo: userId }),
-      Task.countDocuments({ assignedTo: userId, status: "Completed" }),
-      Task.countDocuments({ assignedTo: userId, status: "Pending" }),
+      Project.countDocuments({
+        members: userId,
+        status: "Active",
+      }),
+      Task.countDocuments({
+        assignedTo: userId,
+      }),
+      Task.countDocuments({
+        assignedTo: userId,
+        status: "Completed",
+      }),
+      Task.countDocuments({
+        assignedTo: userId,
+        status: "Pending",
+      }),
     ]);
 
     res.json({
@@ -477,7 +333,6 @@ export const getUserSummary = async (req, res) => {
         pendingTasks,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
