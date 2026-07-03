@@ -14,19 +14,19 @@ import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
 /* ==========================================
-   CONNECT DATABASE
+CONNECT DATABASE
 ========================================== */
 
 connectDB();
 
 /* ==========================================
-   PORT
+PORT
 ========================================== */
 
 const PORT = process.env.PORT || 5000;
 
 /* ==========================================
-   MIDDLEWARE
+MIDDLEWARE
 ========================================== */
 
 app.use(
@@ -40,7 +40,7 @@ app.use(
 );
 
 /* ==========================================
-   API ROUTES
+API ROUTES
 ========================================== */
 
 app.use("/api/auth", authRoutes);
@@ -49,7 +49,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 
 /* ==========================================
-   ROOT ROUTE
+ROOT ROUTE
 ========================================== */
 
 app.get("/", (req, res) => {
@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 });
 
 /* ==========================================
-   404 HANDLER
+404 HANDLER
 ========================================== */
 
 app.use((req, res) => {
@@ -71,13 +71,13 @@ app.use((req, res) => {
 });
 
 /* ==========================================
-   HTTP SERVER
+HTTP SERVER
 ========================================== */
 
 const server = http.createServer(app);
 
 /* ==========================================
-   SOCKET.IO
+SOCKET.IO
 ========================================== */
 
 export const io = new Server(server, {
@@ -92,20 +92,24 @@ export const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("✅ Socket Connected:", socket.id);
-
+  
   socket.on("join-user", (userId) => {
     socket.join(userId);
     console.log(`User ${userId} joined room`);
   });
-
+  
   socket.on("disconnect", () => {
     console.log("❌ Socket Disconnected:", socket.id);
   });
 });
 
 /* ==========================================
-   START SERVER
+START SERVER
 ========================================== */
+
+import connectDB from "./config/db.js";
+
+connectDB();
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
