@@ -1,5 +1,12 @@
+import dns from "dns";
 import dotenv from "dotenv";
 dotenv.config();
+
+// Force Node.js to use Google Public DNS
+dns.setServers([
+  "8.8.8.8",
+  "8.8.4.4",
+]);
 
 import http from "http";
 import { Server } from "socket.io";
