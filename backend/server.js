@@ -92,12 +92,12 @@ export const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("✅ Socket Connected:", socket.id);
-  
+
   socket.on("join-user", (userId) => {
     socket.join(userId);
     console.log(`User ${userId} joined room`);
   });
-  
+
   socket.on("disconnect", () => {
     console.log("❌ Socket Disconnected:", socket.id);
   });
@@ -106,10 +106,6 @@ io.on("connection", (socket) => {
 /* ==========================================
 START SERVER
 ========================================== */
-
-import connectDB from "./config/db.js";
-
-connectDB();
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
