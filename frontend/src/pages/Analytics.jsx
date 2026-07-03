@@ -23,7 +23,6 @@ import {
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "../styles/Analytics.css";
 
 ChartJS.register(
   CategoryScale,
