@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "../styles/pricing.css";
+import "../styles/Pricing.css";
 
 function Pricing() {
 const [isYearly, setIsYearly] = useState(false);
