@@ -46,42 +46,33 @@ export const registerUser = async (req, res) => {
 };
 export const loginUser = async (req, res) => {
   try {
+    console.log("========== LOGIN ==========");
+    console.log("Request Body:", req.body);
 
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
+    console.log("User found:", user);
+
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "User not found",
       });
     }
 
     const isMatch = await user.matchPassword(password);
 
+    console.log("Password match:", isMatch);
+
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Wrong password",
       });
     }
 
-    user.lastLogin = new Date();
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-      token: generateToken(user._id),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-      },
-    });
 
   } catch (error) {
     console.error(error);
