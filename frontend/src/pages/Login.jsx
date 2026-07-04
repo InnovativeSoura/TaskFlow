@@ -7,16 +7,20 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const data = await loginUser({ email, password });
       setUser(data.user);
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
