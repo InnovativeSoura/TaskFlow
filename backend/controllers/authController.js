@@ -1,26 +1,7 @@
-import User from "../models/User.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-
-/* ==========================================
-   GENERATE JWT TOKEN
-========================================== */
-
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-};
-
-/* ==========================================
-   REGISTER USER
-========================================== */
-
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -30,22 +11,21 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // DON'T HASH PASSWORD HERE
+    // User model will hash automatically
 
-    // Create user
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
-      role: role || "Member",
+      password,
+      role: role || "Team Member",
       status: "Active",
     });
 
     res.status(201).json({
       success: true,
       message: "User registered successfully",
+      token: generateToken(user._id),
       user: {
         _id: user._id,
         name: user.name,
@@ -53,26 +33,22 @@ export const registerUser = async (req, res) => {
         role: user.role,
         status: user.status,
       },
-      token: generateToken(user._id),
     });
 
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
-
-/* ==========================================
-   LOGIN USER
-========================================== */
-
 export const loginUser = async (req, res) => {
   try {
+
     const { email, password } = req.body;
 
-    // Find user
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -82,8 +58,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -92,9 +67,13 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    res.json({
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
       success: true,
       message: "Login successful",
+      token: generateToken(user._id),
       user: {
         _id: user._id,
         name: user.name,
@@ -102,38 +81,11 @@ export const loginUser = async (req, res) => {
         role: user.role,
         status: user.status,
       },
-      token: generateToken(user._id),
     });
 
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+    console.error(error);
 
-/* ==========================================
-   GET CURRENT USER (PROFILE)
-========================================== */
-
-export const getMe = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      user,
-    });
-
-  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
