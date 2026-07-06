@@ -1,12 +1,22 @@
-import API from "./api";
+import {
+  getUsers,
+} from "./userService";
+
+import {
+  getProjects,
+} from "./projectService";
+
+import {
+  getTasks,
+} from "./taskService";
 
 export const getDashboardStats = async () => {
 
   const [users, projects, tasks] =
     await Promise.all([
-      API.get("/users"),
-      API.get("/projects"),
-      API.get("/tasks"),
+      getUsers(),
+      getProjects(),
+      getTasks(),
     ]);
 
   return {
@@ -14,4 +24,5 @@ export const getDashboardStats = async () => {
     projects: projects.data,
     tasks: tasks.data,
   };
+
 };

@@ -1,0 +1,268 @@
+/* ==========================
+   NAVBAR
+========================== */
+
+.navbar{
+height:72px;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+border-bottom:1px solid #e5e7eb;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.navbar-left h2{
+font-size:24px;
+font-weight:700;
+color:#111827;
+}
+
+/* ==========================
+   SEARCH
+========================== */
+
+.navbar-search{
+display:flex;
+align-items:center;
+gap:12px;
+background:#f3f4f6;
+padding:10px 18px;
+border-radius:10px;
+width:360px;
+}
+
+.navbar-search svg{
+color:#6b7280;
+}
+
+.navbar-search input{
+border:none;
+background:transparent;
+outline:none;
+width:100%;
+font-size:15px;
+}
+
+/* ==========================
+   RIGHT
+========================== */
+
+.navbar-right{
+display:flex;
+align-items:center;
+gap:18px;
+}
+
+.icon-btn{
+width:42px;
+height:42px;
+border:none;
+background:#f3f4f6;
+border-radius:50%;
+cursor:pointer;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:18px;
+position:relative;
+transition:.3s;
+}
+
+.icon-btn:hover{
+background:#2563eb;
+color:#fff;
+}
+
+.notification-badge{
+position:absolute;
+top:-5px;
+right:-3px;
+width:18px;
+height:18px;
+background:#ef4444;
+color:#fff;
+border-radius:50%;
+font-size:11px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* ==========================
+   PROFILE
+========================== */
+
+.profile-wrapper{
+position:relative;
+}
+
+.profile-card{
+display:flex;
+align-items:center;
+gap:12px;
+cursor:pointer;
+}
+
+.avatar{
+width:46px;
+height:46px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.initials{
+display:flex;
+justify-content:center;
+align-items:center;
+background:#2563eb;
+color:#fff;
+font-weight:700;
+font-size:16px;
+}
+
+.profile-info h4{
+font-size:15px;
+color:#111827;
+margin-bottom:2px;
+}
+
+.profile-info p{
+font-size:13px;
+color:#6b7280;
+}
+
+/* ==========================
+   DROPDOWN
+========================== */
+
+.profile-dropdown{
+position:absolute;
+right:0;
+top:65px;
+background:#fff;
+width:220px;
+border-radius:12px;
+box-shadow:0 15px 35px rgba(0,0,0,.12);
+overflow:hidden;
+animation:fade .25s;
+}
+
+.profile-dropdown button{
+width:100%;
+padding:14px 18px;
+border:none;
+background:#fff;
+display:flex;
+align-items:center;
+gap:12px;
+cursor:pointer;
+font-size:15px;
+transition:.25s;
+}
+
+.profile-dropdown button:hover{
+background:#f3f4f6;
+}
+
+.logout-menu-btn{
+color:#ef4444;
+}
+
+.profile-dropdown hr{
+border:none;
+border-top:1px solid #ececec;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(-10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* ==========================
+   DARK MODE
+========================== */
+
+body.dark-theme{
+background:#111827;
+color:#fff;
+}
+
+body.dark-theme .navbar{
+background:#1f2937;
+border-color:#374151;
+}
+
+body.dark-theme .navbar-left h2{
+color:#fff;
+}
+
+body.dark-theme .navbar-search{
+background:#374151;
+}
+
+body.dark-theme .navbar-search input{
+color:#fff;
+}
+
+body.dark-theme .icon-btn{
+background:#374151;
+color:#fff;
+}
+
+body.dark-theme .profile-dropdown{
+background:#1f2937;
+}
+
+body.dark-theme .profile-dropdown button{
+background:#1f2937;
+color:#fff;
+}
+
+body.dark-theme .profile-dropdown button:hover{
+background:#374151;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:900px){
+
+.navbar{
+padding:15px;
+}
+
+.navbar-search{
+display:none;
+}
+
+.profile-info{
+display:none;
+}
+
+}
+
+@media(max-width:600px){
+
+.navbar-left h2{
+font-size:20px;
+}
+
+.navbar-right{
+gap:10px;
+}
+
+}

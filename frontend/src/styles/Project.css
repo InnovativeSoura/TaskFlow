@@ -1,0 +1,855 @@
+/* ======================================================
+   PROJECT PAGE
+====================================================== */
+
+.projects-page{
+    min-height:100vh;
+    background:#f5f7fb;
+}
+
+.projects-main{
+    width:100%;
+}
+
+.projects-container{
+    max-width:1400px;
+    margin:0 auto;
+    padding:30px;
+}
+
+/* ======================================================
+   PAGE HEADER
+====================================================== */
+
+.projects-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.projects-header-left h1{
+    font-size:32px;
+    font-weight:700;
+    color:#111827;
+    margin-bottom:6px;
+}
+
+.projects-header-left p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+.create-project-btn{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    padding:14px 24px;
+    border-radius:12px;
+    background:#2563eb;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.create-project-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* ======================================================
+   STATISTICS
+====================================================== */
+
+.project-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:22px;
+    margin-bottom:35px;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+}
+
+.stat-card h3{
+    font-size:15px;
+    color:#6b7280;
+    margin-bottom:12px;
+}
+
+.stat-card h2{
+    font-size:34px;
+    font-weight:700;
+}
+
+.blue{
+    border-left:6px solid #2563eb;
+}
+
+.green{
+    border-left:6px solid #16a34a;
+}
+
+.orange{
+    border-left:6px solid #f59e0b;
+}
+
+.purple{
+    border-left:6px solid #8b5cf6;
+}
+
+.dark{
+    border-left:6px solid #374151;
+}
+
+/* ======================================================
+   FILTERS
+====================================================== */
+
+.project-filters{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:30px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    align-items:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.07);
+}
+
+.project-search{
+    flex:1;
+    min-width:280px;
+}
+
+.project-search input{
+    width:100%;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    padding:13px 18px;
+    font-size:15px;
+    transition:.3s;
+}
+
+.project-search input:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+
+.project-filter-select{
+    min-width:180px;
+}
+
+.project-filter-select select{
+    width:100%;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    padding:13px;
+    background:#fff;
+    font-size:15px;
+    cursor:pointer;
+}
+
+.project-filter-select select:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+/* ======================================================
+   PROJECT TABLE
+====================================================== */
+
+.project-table-wrapper{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    margin-bottom:30px;
+}
+
+.project-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.project-table thead{
+    background:#f9fafb;
+}
+
+.project-table th{
+    padding:18px 20px;
+    text-align:left;
+    color:#374151;
+    font-size:14px;
+    font-weight:700;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.project-table td{
+    padding:18px 20px;
+    border-bottom:1px solid #f1f5f9;
+    color:#4b5563;
+    font-size:15px;
+    vertical-align:middle;
+}
+
+.project-table tbody tr{
+    transition:.25s;
+}
+
+.project-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.project-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+/* ======================================================
+   PROJECT TITLE
+====================================================== */
+
+.project-title{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.project-title h4{
+    font-size:16px;
+    font-weight:600;
+    color:#111827;
+    margin:0;
+}
+
+.project-title p{
+    margin:0;
+    font-size:13px;
+    color:#6b7280;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    max-width:280px;
+}
+
+/* ======================================================
+   STATUS BADGES
+====================================================== */
+
+.status-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 16px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.status-planning{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.status-active{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.status-completed{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+.status-archived{
+    background:#f3f4f6;
+    color:#4b5563;
+}
+
+/* ======================================================
+   PRIORITY BADGES
+====================================================== */
+
+.priority-low{
+    color:#2563eb;
+    font-weight:600;
+}
+
+.priority-medium{
+    color:#d97706;
+    font-weight:600;
+}
+
+.priority-high{
+    color:#dc2626;
+    font-weight:700;
+}
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+
+.table-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.table-btn{
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.edit-btn{
+    background:#2563eb;
+    color:#fff;
+}
+
+.edit-btn:hover{
+    background:#1d4ed8;
+}
+
+.delete-btn{
+    background:#ef4444;
+    color:#fff;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+.view-btn{
+    background:#10b981;
+    color:#fff;
+}
+
+.view-btn:hover{
+    background:#059669;
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-projects{
+    background:#fff;
+    border-radius:18px;
+    padding:60px 20px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.06);
+}
+
+.empty-projects h2{
+    font-size:24px;
+    color:#111827;
+    margin-bottom:10px;
+}
+
+.empty-projects p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* ======================================================
+   LOADING
+====================================================== */
+
+.project-loading{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:80px;
+    font-size:18px;
+    color:#2563eb;
+    font-weight:600;
+}
+/* ======================================================
+   MODAL OVERLAY
+====================================================== */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(17,24,39,.55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+    padding:20px;
+    animation:fadeIn .25s ease;
+}
+
+.modal{
+    width:100%;
+    max-width:650px;
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 25px 60px rgba(0,0,0,.18);
+    animation:modalShow .25s ease;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+@keyframes modalShow{
+
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+/* ======================================================
+   MODAL HEADER
+====================================================== */
+
+.modal h2{
+    margin-bottom:25px;
+    font-size:28px;
+    font-weight:700;
+    color:#111827;
+}
+
+/* ======================================================
+   FORM
+====================================================== */
+
+.modal form{
+    display:flex;
+    flex-direction:column;
+}
+
+.modal form > div{
+    margin-bottom:20px;
+}
+
+.modal label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+    color:#374151;
+}
+
+.modal input,
+.modal textarea,
+.modal select{
+    width:100%;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:15px;
+    background:#fff;
+    transition:.25s;
+}
+
+.modal textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+/* ======================================================
+   VALIDATION
+====================================================== */
+
+.error{
+    display:block;
+    margin-top:6px;
+    font-size:13px;
+    color:#ef4444;
+    font-weight:500;
+}
+
+/* ======================================================
+   MODAL ACTIONS
+====================================================== */
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-top:10px;
+}
+
+.modal-actions button{
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.modal-actions button:first-child{
+    background:#e5e7eb;
+    color:#374151;
+}
+
+.modal-actions button:first-child:hover{
+    background:#d1d5db;
+}
+
+.modal-actions button:last-child{
+    background:#2563eb;
+    color:#fff;
+}
+
+.modal-actions button:last-child:hover{
+    background:#1d4ed8;
+}
+
+.modal button:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+/* ======================================================
+   DELETE MODAL
+====================================================== */
+
+.delete-modal{
+    max-width:500px;
+    text-align:center;
+}
+
+.delete-modal h2{
+    color:#dc2626;
+    margin-bottom:15px;
+}
+
+.delete-modal p{
+    color:#6b7280;
+    margin-bottom:25px;
+    line-height:1.7;
+}
+
+.delete-actions{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.delete-actions button{
+    border:none;
+    cursor:pointer;
+    border-radius:10px;
+    padding:12px 22px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.delete-cancel{
+    background:#e5e7eb;
+}
+
+.delete-confirm{
+    background:#dc2626;
+    color:#fff;
+}
+
+.delete-confirm:hover{
+    background:#b91c1c;
+}
+/* ======================================================
+   PAGINATION
+====================================================== */
+
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin:40px 0;
+    flex-wrap:wrap;
+}
+
+.pagination button{
+    min-width:42px;
+    height:42px;
+    border:none;
+    border-radius:10px;
+    background:#ffffff;
+    color:#374151;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.pagination button:hover:not(:disabled){
+    background:#2563eb;
+    color:#fff;
+}
+
+.pagination button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.pagination .active-page{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* ======================================================
+   UTILITIES
+====================================================== */
+
+.text-center{
+    text-align:center;
+}
+
+.mt-1{margin-top:8px;}
+.mt-2{margin-top:16px;}
+.mt-3{margin-top:24px;}
+.mt-4{margin-top:32px;}
+
+.mb-1{margin-bottom:8px;}
+.mb-2{margin-bottom:16px;}
+.mb-3{margin-bottom:24px;}
+.mb-4{margin-bottom:32px;}
+
+.w-100{
+    width:100%;
+}
+
+.flex{
+    display:flex;
+}
+
+.align-center{
+    align-items:center;
+}
+
+.justify-between{
+    justify-content:space-between;
+}
+
+.gap-10{
+    gap:10px;
+}
+
+.gap-20{
+    gap:20px;
+}
+
+/* ======================================================
+   SCROLLBAR
+====================================================== */
+
+.project-table-wrapper::-webkit-scrollbar{
+    height:8px;
+}
+
+.project-table-wrapper::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+.project-table-wrapper::-webkit-scrollbar-track{
+    background:#f1f5f9;
+}
+
+/* ======================================================
+   TABLE RESPONSIVE
+====================================================== */
+
+@media (max-width:1024px){
+
+.project-table-wrapper{
+    overflow-x:auto;
+}
+
+.project-table{
+    min-width:900px;
+}
+
+.project-stats{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/* ======================================================
+   TABLET
+====================================================== */
+
+@media (max-width:768px){
+
+.projects-container{
+    padding:20px;
+}
+
+.projects-header{
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.project-filters{
+    flex-direction:column;
+    align-items:stretch;
+}
+
+.project-search{
+    width:100%;
+}
+
+.project-filter-select{
+    width:100%;
+}
+
+.project-filter-select select{
+    width:100%;
+}
+
+.create-project-btn{
+    width:100%;
+}
+
+.project-stats{
+    grid-template-columns:1fr;
+}
+
+.modal{
+    padding:24px;
+}
+
+.modal-actions{
+    flex-direction:column;
+}
+
+.modal-actions button{
+    width:100%;
+}
+
+.delete-actions{
+    flex-direction:column;
+}
+
+.delete-actions button{
+    width:100%;
+}
+
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width:576px){
+
+.projects-container{
+    padding:15px;
+}
+
+.projects-header-left h1{
+    font-size:26px;
+}
+
+.projects-header-left p{
+    font-size:14px;
+}
+
+.modal{
+    padding:18px;
+    border-radius:16px;
+}
+
+.modal h2{
+    font-size:22px;
+}
+
+.modal input,
+.modal textarea,
+.modal select{
+    font-size:14px;
+    padding:12px;
+}
+
+.pagination{
+    gap:6px;
+}
+
+.pagination button{
+    min-width:38px;
+    height:38px;
+    font-size:14px;
+}
+
+.stat-card{
+    padding:18px;
+}
+
+.stat-card h2{
+    font-size:28px;
+}
+
+.table-actions{
+    flex-direction:column;
+    align-items:stretch;
+}
+
+.table-btn{
+    width:100%;
+}
+
+}
+
+/* ======================================================
+   LARGE DESKTOP
+====================================================== */
+
+@media (min-width:1600px){
+
+.projects-container{
+    max-width:1600px;
+}
+
+.project-stats{
+    grid-template-columns:repeat(5,1fr);
+}
+
+}

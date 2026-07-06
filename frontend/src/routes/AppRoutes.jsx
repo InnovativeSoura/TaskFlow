@@ -1,42 +1,133 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import { useAuth } from "../context/AuthContext";
+
+import ProtectedRoute from "../components/ProtectedRoute";
+
+/* ===========================
+   AUTH
+=========================== */
+
 import AuthPage from "../pages/AuthPage";
-import Login from "../pages/Login";
+
+/* ===========================
+   DASHBOARD
+=========================== */
+
 import Dashboard from "../pages/Dashboard";
-import KanbanBoard from "../pages/KanbanBoard";
-import Analytics from "../pages/Analytics";
-import Profile from "../pages/Profile";
-import ActivityFeed from "../pages/ActivityFeed";
-import TeamChat from "../pages/TeamChat";
 import AdminDashboard from "../pages/AdminDashboard";
-import AIInsights from "../pages/AIInsights";
-import Pricing from "../pages/Pricing";
-import Subscription from "../pages/Subscription";
+
+/* ===========================
+   PROJECTS
+=========================== */
+
 import Projects from "../pages/Projects";
+import ProjectList from "../pages/ProjectList";
+
+/* ===========================
+   TASKS
+=========================== */
+
 import Tasks from "../pages/Tasks";
+import TaskList from "../pages/TaskList";
 
+/* ===========================
+   USERS
+=========================== */
 
-// Protected Route Component
-function ProtectedRoute({ children }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+import Users from "../pages/Users";
+import Team from "../pages/Team";
 
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
+/* ===========================
+   PROFILE
+=========================== */
 
-  return children;
-}
+import Profile from "../pages/Profile";
+
+/* ===========================
+   REPORTS
+=========================== */
+
+import Reports from "../pages/Reports";
+import Analytics from "../pages/Analytics";
+
+/* ===========================
+   KANBAN
+=========================== */
+
+import KanbanBoard from "../pages/KanbanBoard";
+
+/* ===========================
+   CALENDAR
+=========================== */
+
+import CalendarPage from "../pages/CalendarPage";
+
+/* ===========================
+   CHAT
+=========================== */
+
+import TeamChat from "../pages/TeamChat";
+
+/* ===========================
+   AI
+=========================== */
+
+import AIInsights from "../pages/AIInsights";
+
+/* ===========================
+   GANTT
+=========================== */
+
+import GanttPage from "../pages/GanttPage";
+
+/* ===========================
+   SETTINGS
+=========================== */
+
+import Settings from "../pages/Settings";
+
+/* ===========================
+   NOTIFICATIONS
+=========================== */
+
+import Notifications from "../pages/Notifications";
+
+/* ===========================
+   OTHERS
+=========================== */
+
+import ActivityFeed from "../pages/ActivityFeed";
+import Workspaces from "../pages/Workspaces";
+import Subscription from "../pages/Subscription";
+import Pricing from "../pages/Pricing";
+import Upgrade from "../pages/Upgrade";
+import Home from "../pages/Home";
 
 function AppRoutes() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { loading, isAuthenticated } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="page-loader">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <Routes>
 
-      {/* Login */}
-      <Route path="/" element={<Login />} />
+      {/* Public */}
 
-      {/* Dashboard */}
+      <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
+
+      <Route path="/login" element={<AuthPage />} />
+
+      <Route path="/pricing" element={<Pricing />} />
+
+      {/* Protected */}
+
       <Route
         path="/dashboard"
         element={
@@ -46,7 +137,15 @@ function AppRoutes() {
         }
       />
 
-      {/* Projects */}
+      <Route
+        path="/admin-dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/projects"
         element={
@@ -56,7 +155,15 @@ function AppRoutes() {
         }
       />
 
-      {/* Tasks */}
+      <Route
+        path="/project-list"
+        element={
+          <ProtectedRoute>
+            <ProjectList />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/tasks"
         element={
@@ -66,57 +173,33 @@ function AppRoutes() {
         }
       />
 
-      {/* Kanban */}
       <Route
-        path="/board"
+        path="/task-list"
         element={
           <ProtectedRoute>
-            <KanbanBoard />
+            <TaskList />
           </ProtectedRoute>
         }
       />
 
-      {/* Analytics */}
       <Route
-        path="/analytics"
+        path="/users"
         element={
           <ProtectedRoute>
-            <Analytics />
+            <Users />
           </ProtectedRoute>
         }
       />
 
-      {/* Activity */}
       <Route
-        path="/activity"
+        path="/team"
         element={
           <ProtectedRoute>
-            <ActivityFeed />
+            <Team />
           </ProtectedRoute>
         }
       />
 
-      {/* Chat */}
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <TeamChat />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* AI */}
-      <Route
-        path="/ai-insights"
-        element={
-          <ProtectedRoute>
-            <AIInsights />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Profile */}
       <Route
         path="/profile"
         element={
@@ -126,27 +209,87 @@ function AppRoutes() {
         }
       />
 
-      {/* Admin */}
       <Route
-        path="/admin"
+        path="/kanban"
         element={
           <ProtectedRoute>
-            <AdminDashboard />
+            <KanbanBoard />
           </ProtectedRoute>
         }
       />
 
-      {/* Pricing */}
       <Route
-        path="/pricing"
+        path="/reports"
         element={
           <ProtectedRoute>
-            <Pricing />
+            <Reports />
           </ProtectedRoute>
         }
       />
 
-      {/* Subscription */}
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/calendar"
+        element={
+          <ProtectedRoute>
+            <CalendarPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <TeamChat />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/activity"
+        element={
+          <ProtectedRoute>
+            <ActivityFeed />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ai"
+        element={
+          <ProtectedRoute>
+            <AIInsights />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/gantt"
+        element={
+          <ProtectedRoute>
+            <GanttPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/workspaces"
+        element={
+          <ProtectedRoute>
+            <Workspaces />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/subscription"
         element={
@@ -156,8 +299,44 @@ function AppRoutes() {
         }
       />
 
-      {/* 404 */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/upgrade"
+        element={
+          <ProtectedRoute>
+            <Upgrade />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
     </Routes>
   );
 }

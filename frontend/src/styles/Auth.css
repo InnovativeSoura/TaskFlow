@@ -1,0 +1,398 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.auth-container {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #111827 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.18),
+    0 5px 12px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.45s ease;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h1 {
+  color: #2563eb;
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-header p {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* ==========================================
+   TOGGLE
+========================================== */
+
+.toggle-container {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s ease;
+  color: #4b5563;
+}
+
+.toggle-btn:hover {
+  background: rgba(37, 99, 235, .08);
+}
+
+.toggle-btn.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* ==========================================
+   FORM
+========================================== */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  margin-top: 18px;
+}
+
+.auth-form label:first-child {
+  margin-top: 0;
+}
+/* ==========================================
+   INPUTS
+========================================== */
+
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+  background: #fff;
+  transition: all 0.25s ease;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.auth-form input::placeholder {
+  color: #9ca3af;
+}
+
+/* ==========================================
+   PASSWORD
+========================================== */
+
+.password-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-box input {
+  padding-right: 90px;
+}
+
+.show-btn {
+  position: absolute;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background .2s ease;
+}
+
+.show-btn:hover {
+  background: rgba(37,99,235,.08);
+}
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.auth-error {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ==========================================
+   SUBMIT BUTTON
+========================================== */
+
+.auth-submit-btn {
+  margin-top: 28px;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: scale(.98);
+}
+
+.auth-submit-btn:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.auth-footer {
+  margin-top: 24px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.footer-link {
+  margin-left: 6px;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+/* ==========================================
+   PAGE LOADER
+========================================== */
+
+.page-loader {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.spinner {
+  width: 55px;
+  height: 55px;
+  border: 5px solid #dbeafe;
+  border-top: 5px solid #2563eb;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   INPUT STATES
+========================================== */
+
+.auth-form input:disabled,
+.auth-form select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  outline: none;
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+  .auth-container {
+    padding: 20px;
+  }
+
+  .auth-card {
+    padding: 30px 24px;
+    border-radius: 16px;
+  }
+
+  .auth-header h1 {
+    font-size: 28px;
+  }
+
+  .auth-header p {
+    font-size: 14px;
+  }
+
+  .toggle-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .auth-form input,
+  .auth-form select {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+
+  .auth-submit-btn {
+    padding: 13px;
+    font-size: 15px;
+  }
+
+  .show-btn {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .auth-card {
+    padding: 24px 18px;
+  }
+
+  .auth-header h1 {
+    font-size: 24px;
+  }
+
+  .auth-header p {
+    font-size: 13px;
+  }
+
+  .toggle-btn {
+    font-size: 13px;
+  }
+
+  .auth-form label {
+    font-size: 13px;
+  }
+
+  .auth-form input,
+  .auth-form select {
+    font-size: 13px;
+  }
+
+  .auth-submit-btn {
+    font-size: 14px;
+  }
+
+}
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+.text-center {
+  text-align: center;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}

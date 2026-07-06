@@ -50,10 +50,10 @@ app.use(
 API ROUTES
 ========================================== */
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/tasks", taskRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use("/api/users", userRoutes);
+// app.use("/api/projects", projectRoutes);
+// app.use("/api/tasks", taskRoutes);
 
 /* ==========================================
 ROOT ROUTE

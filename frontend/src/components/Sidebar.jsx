@@ -1,5 +1,4 @@
 import { NavLink, useNavigate } from "react-router-dom";
-
 import {
   FaTachometerAlt,
   FaProjectDiagram,
@@ -13,44 +12,49 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
+import { useAuth } from "../context/AuthContext";
 import "../styles/Sidebar.css";
 
-function Sidebar() {
-
+const Sidebar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  const logout = () => {
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    navigate("/");
+  const handleLogout = () => {
+    if (logout) {
+      logout();
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
 
   };
 
   return (
-
     <aside className="sidebar">
+      {/* Logo */}
 
       <div className="sidebar-logo">
-
         <h2>TaskFlow</h2>
 
+        {user && (
+          <div className="sidebar-user">
+            <p className="sidebar-name">{user.name}</p>
+            <span className="sidebar-role">{user.role}</span>
+          </div>
+        )}
       </div>
 
-      <nav className="sidebar-menu">
+      {/* Navigation */}
 
+      <nav className="sidebar-menu">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
             isActive ? "active" : ""
           }
         >
-
           <FaTachometerAlt />
-
           <span>Dashboard</span>
-
         </NavLink>
 
         <NavLink
@@ -59,11 +63,8 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaProjectDiagram />
-
           <span>Projects</span>
-
         </NavLink>
 
         <NavLink
@@ -72,11 +73,8 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaTasks />
-
           <span>Tasks</span>
-
         </NavLink>
 
         <NavLink
@@ -85,23 +83,18 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaColumns />
-
           <span>Kanban Board</span>
-
         </NavLink>
-                <NavLink
+
+        <NavLink
           to="/users"
           className={({ isActive }) =>
             isActive ? "active" : ""
           }
         >
-
           <FaUsers />
-
           <span>Users</span>
-
         </NavLink>
 
         <NavLink
@@ -110,11 +103,8 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaChartBar />
-
           <span>Reports</span>
-
         </NavLink>
 
         <NavLink
@@ -123,11 +113,8 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaUserCircle />
-
           <span>Profile</span>
-
         </NavLink>
 
         <NavLink
@@ -136,11 +123,8 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaCog />
-
           <span>Settings</span>
-
         </NavLink>
 
         <NavLink
@@ -149,38 +133,24 @@ function Sidebar() {
             isActive ? "active" : ""
           }
         >
-
           <FaBell />
-
           <span>Notifications</span>
-
         </NavLink>
-
       </nav>
 
-      {/* ==========================
-          LOGOUT
-      ========================== */}
+      {/* Footer */}
 
       <div className="sidebar-footer">
-
         <button
           className="logout-btn"
-          onClick={logout}
+          onClick={handleLogout}
         >
-
           <FaSignOutAlt />
-
           <span>Logout</span>
-
         </button>
-
       </div>
-
     </aside>
-
   );
-
-}
+};
 
 export default Sidebar;

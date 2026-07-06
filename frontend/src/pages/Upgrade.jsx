@@ -1,25 +1,31 @@
-const API_URL = import.meta.env.VITE_API_URL;
+import axios from "axios";
+import React from "react";
 
-const handleUpgrade = async () => {
-  try {
-    const res = await axios.post(
-      `${API_URL}/api/payment/create-checkout`
-    );
+const Upgrade = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
 
-    window.location.href = res.data.url;
-  } catch (error) {
-    console.error("Payment Error:", error);
+  const handleUpgrade = async () => {
+    try {
+      const res = await axios.post(
+        `${API_URL}/api/payment/create-checkout`
+      );
 
-    alert("Unable to start payment process");
-  }
+      window.location.href = res.data.url;
+    } catch (error) {
+      console.error("Payment Error:", error);
+      alert("Unable to start payment process");
+    }
+  };
+
+  return (
+    <div>
+      <h1>Upgrade to TaskFlow Pro</h1>
+
+      <button onClick={handleUpgrade}>
+        Upgrade Now 💳
+      </button>
+    </div>
+  );
 };
 
-return (
-  <div>
-    <h1>Upgrade to TaskFlow Pro</h1>
-
-    <button onClick={handleUpgrade}>
-      Upgrade Now 💳
-    </button>
-  </div>
-);
+export default Upgrade;
