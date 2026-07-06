@@ -10,7 +10,7 @@ import { ProjectProvider } from "./context/ProjectContext";
 import { TaskProvider } from "./context/TaskContext";
 
 import "./styles/Global.css";
-import "./styles/auth.css";
+import "./styles/Auth.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
