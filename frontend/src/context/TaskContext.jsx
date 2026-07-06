@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext"; 
 
 import {
   getTasks,
@@ -7,28 +8,14 @@ import {
   deleteTask,
 } from "../services/taskService";
 
-const TaskContext = createContext();
-
 export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-
-      const res = await getTasks();
-
-      setTasks(res.data.tasks || []);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { token } = useAuth();
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (token) {
+      fetchTasks();
+    }
+  }, [token]);
 
   const addTask = async (data) => {
     const res = await createTask(data);

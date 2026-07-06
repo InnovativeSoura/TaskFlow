@@ -1,9 +1,14 @@
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_API_URL, {
+const SERVER_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+).replace("/api", "");
+
+const socket = io(SERVER_URL, {
   transports: ["websocket"],
   withCredentials: true,
 });
+
 
 socket.on("connect", () => {
   console.log("✅ Socket Connected:", socket.id);

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 import {
   getProjects,
@@ -9,27 +10,15 @@ import {
 
 const ProjectContext = createContext();
 
-export const ProjectProvider = ({ children }) => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-
-      const res = await getProjects();
-
-      setProjects(res.data.projects || []);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+export const TaskProvider = ({ children }) => {
+  const { token } = useAuth();
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    if (token) {
+      fetchTasks();
+    }
+  }, [token]);
+
 
   const addProject = async (data) => {
     const res = await createProject(data);
