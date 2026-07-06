@@ -4,7 +4,7 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "./ProjectList.css";
+import "../styles/Projectlist.css";
 
 function ProjectList() {
 
