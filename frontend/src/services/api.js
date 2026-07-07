@@ -1,15 +1,15 @@
 import axios from "axios";
 
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-console.log("Base URL:", API.defaults.baseURL);
-console.log("API URL:", import.meta.env.VITE_API_URL);
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-API.interceptors.request.use((config) => {
+console.log("API URL:", API_URL);
+
+const api = axios.create({
+  baseURL: API_URL,
+});
+
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
   if (token) {
@@ -19,4 +19,4 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-export default API;
+export default api;
