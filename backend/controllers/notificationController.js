@@ -1,11 +1,11 @@
-const Notification = require("../models/Notification");
+import Notification from "../models/Notification.js";
 
 /*
 =====================================
 GET USER NOTIFICATIONS
 =====================================
 */
-const getNotifications = async (req, res) => {
+export const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({
       user: req.user.id,
@@ -28,7 +28,7 @@ const getNotifications = async (req, res) => {
 MARK AS READ
 =====================================
 */
-const markAsRead = async (req, res) => {
+export const markAsRead = async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
 
@@ -39,12 +39,13 @@ const markAsRead = async (req, res) => {
       });
     }
 
-    notification.isRead = true;
+    notification.read = true;
+
     await notification.save();
 
     res.status(200).json({
       success: true,
-      message: "Marked as read",
+      message: "Notification marked as read",
     });
   } catch (error) {
     res.status(500).json({
@@ -54,7 +55,32 @@ const markAsRead = async (req, res) => {
   }
 };
 
-module.exports = {
-  getNotifications,
-  markAsRead,
+/*
+=====================================
+DELETE NOTIFICATION
+=====================================
+*/
+export const deleteNotification = async (req, res) => {
+  try {
+    const notification = await Notification.findById(req.params.id);
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: "Notification not found",
+      });
+    }
+
+    await Notification.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Notification deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
