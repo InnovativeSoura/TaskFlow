@@ -19,8 +19,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
-import settingsRoutes from "./routes/settingsRoutes.js";
-import notificationRoutes from "./routes/notificationRoutes.js";
+
 
 /* ==========================================
 CONNECT DATABASE
