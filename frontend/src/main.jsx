@@ -13,15 +13,17 @@ import "./styles/Global.css";
 import "./styles/Auth.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <UserProvider>
-      <ProjectProvider>
-        <TaskProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </TaskProvider>
-      </ProjectProvider>
-    </UserProvider>
-  </AuthProvider>
+  <React.StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <UserProvider>
+          <ProjectProvider>
+            <TaskProvider>
+              <App />
+            </TaskProvider>
+          </ProjectProvider>
+        </UserProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

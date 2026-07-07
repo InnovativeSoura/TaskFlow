@@ -1,4 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useAuth } from "./AuthContext";
 
 import {
@@ -10,35 +15,51 @@ import {
 
 const ProjectContext = createContext();
 
-export const TaskProvider = ({ children }) => {
+export const ProjectProvider = ({ children }) => {
   const { token } = useAuth();
 
-  useEffect(() => {
-    if (token) {
-      fetchTasks();
-    }
-  }, [token]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const fetchProjects = async () => {
+    if (!token) {
+      setProjects([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await getProjects();
+
+      setProjects(res.data.projects || []);
+    } catch (error) {
+      console.error("Fetch Projects Error:", error);
+      setProjects([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [token]);
 
   const addProject = async (data) => {
     const res = await createProject(data);
-
     await fetchProjects();
-
     return res.data;
   };
 
   const editProject = async (id, data) => {
     const res = await updateProject(id, data);
-
     await fetchProjects();
-
     return res.data;
   };
 
   const removeProject = async (id) => {
     await deleteProject(id);
-
     await fetchProjects();
   };
 
