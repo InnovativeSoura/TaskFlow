@@ -17,11 +17,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
         <UserProvider>
+         <NotificationProvider>
           <ProjectProvider>
             <TaskProvider>
               <App />
             </TaskProvider>
           </ProjectProvider>
+          </NotificationProvider>
         </UserProvider>
       </AuthProvider>
     </BrowserRouter>
