@@ -54,40 +54,42 @@ const AuthPage = () => {
     return "";
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const validationError = validate();
+  console.log("✅ Submit clicked");
 
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+  const validationError = validate();
 
-    setLoading(true);
+  if (validationError) {
+    console.log(validationError);
+    setError(validationError);
+    return;
+  }
 
-    let response;
+  console.log("✅ Calling login/register");
 
-    if (isLogin) {
-      response = await login(email, password);
-    } else {
-      response = await register(
-        name,
-        email,
-        password,
-        role
-      );
-    }
+  setLoading(true);
 
-    setLoading(false);
+  let response;
 
-    if (!response.success) {
-      setError(response.message);
-      return;
-    }
+  if (isLogin) {
+    response = await login(email, password);
+  } else {
+    response = await register(name, email, password, role);
+  }
 
-    navigate("/dashboard");
-  };
+  console.log("Response:", response);
+
+  setLoading(false);
+
+  if (!response.success) {
+    setError(response.message);
+    return;
+  }
+
+  navigate("/dashboard");
+};
 
   return (
     <div className="auth-container">
