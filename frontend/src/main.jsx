@@ -10,7 +10,7 @@ import { UserProvider } from "./context/UserContext";
 import { ProjectProvider } from "./context/ProjectContext";
 import { TaskProvider } from "./context/TaskContext";
 
-import "./index.css";
+import "./styles/index.css";
 import "./styles/Global.css";
 import "./styles/Auth.css";
 
