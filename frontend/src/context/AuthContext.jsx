@@ -5,41 +5,18 @@ import {
   useEffect,
 } from "react";
 
-import axios from "axios";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
-  const [token, setToken] = useState(
-    localStorage.getItem("token") || null
-  );
-
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
-  /* ==========================================
-      SET TOKEN
-  ========================================== */
-
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common[
-        "Authorization"
-      ];
-    }
-  }, [token]);
-
-  /* ==========================================
-      LOAD USER
-  ========================================== */
+  /* ==========================
+     LOAD USER
+  ========================== */
 
   useEffect(() => {
     const loadUser = async () => {
@@ -49,9 +26,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-
-        const res = await axios.get(`${API_URL}/auth/me`);
+        const res = await api.get("/auth/me");
 
         if (res.data.success) {
           setUser(res.data.user);
@@ -67,37 +42,24 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, [token]);
 
-  /* ==========================================
-      LOGIN
-  ========================================== */
+  /* ==========================
+     LOGIN
+  ========================== */
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(
-        `${API_URL}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
       if (res.data.success) {
-        localStorage.setItem(
-          "token",
-          res.data.token
-        );
+        localStorage.setItem("token", res.data.token);
 
         setToken(res.data.token);
-
         setUser(res.data.user);
 
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.token}`;
-
-        return {
-          success: true,
-        };
+        return { success: true };
       }
 
       return {
@@ -108,15 +70,14 @@ export const AuthProvider = ({ children }) => {
       return {
         success: false,
         message:
-          err.response?.data?.message ||
-          "Login failed",
+          err.response?.data?.message || "Login failed",
       };
     }
   };
 
-  /* ==========================================
-      REGISTER
-  ========================================== */
+  /* ==========================
+     REGISTER
+  ========================== */
 
   const register = async (
     name,
@@ -125,33 +86,20 @@ export const AuthProvider = ({ children }) => {
     role = "Team Member"
   ) => {
     try {
-      const res = await axios.post(
-        `${API_URL}/auth/register`,
-        {
-          name,
-          email,
-          password,
-          role,
-        }
-      );
+      const res = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+        role,
+      });
 
       if (res.data.success) {
-        localStorage.setItem(
-          "token",
-          res.data.token
-        );
+        localStorage.setItem("token", res.data.token);
 
         setToken(res.data.token);
-
         setUser(res.data.user);
 
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.token}`;
-
-        return {
-          success: true,
-        };
+        return { success: true };
       }
 
       return {
@@ -168,33 +116,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /* ==========================================
-      LOGOUT
-  ========================================== */
+  /* ==========================
+     LOGOUT
+  ========================== */
 
   const logout = () => {
     localStorage.removeItem("token");
-
-    delete axios.defaults.headers.common[
-      "Authorization"
-    ];
+    localStorage.removeItem("user");
 
     setToken(null);
-
     setUser(null);
   };
-
-  /* ==========================================
-      UPDATE USER
-  ========================================== */
 
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
   };
-
-  /* ==========================================
-      VALUE
-  ========================================== */
 
   return (
     <AuthContext.Provider
@@ -214,12 +150,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-/* ==========================================
-    HOOK
-========================================== */
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthContext;
