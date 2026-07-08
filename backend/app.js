@@ -14,9 +14,9 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 
 const app = express();
 
-/* ==========================================
+/* =========================
    MIDDLEWARE
-========================================== */
+========================= */
 
 app.use(helmet());
 
@@ -31,46 +31,39 @@ app.use(
 );
 
 app.use(compression());
-
 app.use(morgan("dev"));
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
 
-/* ==========================================
+/* =========================
    ROOT
-========================================== */
+========================= */
 
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "TaskFlow Backend API Running 🚀",
+    message: "TaskFlow Backend Running 🚀",
   });
 });
 
-/* ==========================================
+/* =========================
    API ROUTES
-========================================== */
+========================= */
 
 app.use("/api/auth", authRoutes);
-
 app.use("/api/users", userRoutes);
-
 app.use("/api/projects", projectRoutes);
-
 app.use("/api/tasks", taskRoutes);
-
 app.use("/api/settings", settingsRoutes);
-
 app.use("/api/notifications", notificationRoutes);
-/* ==========================================
-   404
-========================================== */
 
-app.use((req, res) => {
+/* =========================
+   404
+========================= */
+
+app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
     message: "Route Not Found",
