@@ -55,18 +55,17 @@ app.get("/", (req, res) => {
    API ROUTES
 ========================================== */
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
-app.use("/users", userRoutes);
+app.use("/api/users", userRoutes);
 
-app.use("/projects", projectRoutes);
+app.use("/api/projects", projectRoutes);
 
-app.use("/tasks", taskRoutes);
+app.use("/api/tasks", taskRoutes);
 
-app.use("/settings", settingsRoutes);
+app.use("/api/settings", settingsRoutes);
 
-app.use("/notifications", notificationRoutes);
-
+app.use("/api/notifications", notificationRoutes);
 /* ==========================================
    404
 ========================================== */
