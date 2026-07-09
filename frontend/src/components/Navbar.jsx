@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 import {
-  FaBell,
   FaCog,
   FaSearch,
   FaSignOutAlt,
@@ -11,6 +11,7 @@ import {
   FaSun,
 } from "react-icons/fa";
 
+import NotificationBell from "./NotificationBell";
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Navbar.css";
@@ -148,22 +149,7 @@ const Navbar = () => {
 
         </button>
 
-        <button
-          className="icon-btn"
-          onClick={() =>
-            navigate("/notifications")
-          }
-        >
-
-          <FaBell />
-
-          <span className="notification-badge">
-
-            3
-
-          </span>
-
-        </button>
+        <NotificationBell />
 
         <button
           className="icon-btn"

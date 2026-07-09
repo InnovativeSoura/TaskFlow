@@ -41,50 +41,72 @@ const Dashboard = () => {
   }, []);
 
   const loadDashboard = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const data = await getDashboardStats();
+    const data = await getDashboardStats();
 
-      const usersData = data.users.users || [];
-      const projectsData = data.projects.projects || [];
-      const tasksData = data.tasks.tasks || [];
+    const usersData =
+      data?.users?.users ||
+      data?.users ||
+      [];
 
-      setUsers(usersData);
-      setProjects(projectsData);
-      setTasks(tasksData);
+    const projectsData =
+      data?.projects?.projects ||
+      data?.projects ||
+      [];
 
-      const completed = tasksData.filter(
-        (task) =>
-          task.status === "Completed"
-      ).length;
+    const tasksData =
+      data?.tasks?.tasks ||
+      data?.tasks ||
+      [];
 
-      const pending = tasksData.filter(
-        (task) =>
-          task.status === "To Do" ||
-          task.status === "Pending"
-      ).length;
+    setUsers(usersData);
+    setProjects(projectsData);
+    setTasks(tasksData);
 
-      const active = projectsData.filter(
-        (project) =>
-          project.status === "Active"
-      ).length;
+    const completed = tasksData.filter(
+      (task) => task.status === "Completed"
+    ).length;
 
-      setStats({
-        users: usersData.length,
-        projects: projectsData.length,
-        tasks: tasksData.length,
-        completed,
-        pending,
-        active,
-      });
+    const pending = tasksData.filter(
+      (task) =>
+        task.status === "Pending" ||
+        task.status === "To Do"
+    ).length;
 
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const active = projectsData.filter(
+      (project) =>
+        project.status === "Active"
+    ).length;
+
+    setStats({
+      users: usersData.length,
+      projects: projectsData.length,
+      tasks: tasksData.length,
+      completed,
+      pending,
+      active,
+    });
+  } catch (err) {
+    console.error("Dashboard Error:", err);
+
+    setUsers([]);
+    setProjects([]);
+    setTasks([]);
+
+    setStats({
+      users: 0,
+      projects: 0,
+      tasks: 0,
+      completed: 0,
+      pending: 0,
+      active: 0,
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const filteredProjects = useMemo(() => {
 
