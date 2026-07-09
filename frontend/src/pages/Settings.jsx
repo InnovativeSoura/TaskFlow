@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "./Settings.css";
+import "../styles/Settings.css";
 
 function Settings() {
 
@@ -40,27 +40,18 @@ function Settings() {
   //---------------------------------
 
   const fetchSettings = async () => {
-
     try {
-
       setLoading(true);
 
-      const res = await axios.get(
+      const res = await api.get("/settings");
 
-        `${API_URL}/api/settings`
-
-      );
-
-      setSettings(res.data);
+      setSettings(res.data.settings || res.data);
 
     } catch (err) {
-
-      console.error(err);
-
+      console.error("Settings Error:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-
   };
 
   useEffect(() => {
@@ -74,34 +65,25 @@ function Settings() {
   //---------------------------------
 
   const saveSettings = async (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  try {
+    setSaving(true);
 
-    try {
+    await api.put("/settings", settings);
 
-      setSaving(true);
+    alert("Settings saved successfully.");
 
-      await axios.put(
-
-        `${API_URL}/api/settings`,
-
-        settings
-
-      );
-
-      alert("Settings saved successfully.");
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert("Unable to save settings.");
-
-    }
-
+  } catch (err) {
+    console.error("Save Settings Error:", err);
+    alert(
+      err.response?.data?.message ||
+      "Unable to save settings."
+    );
+  } finally {
     setSaving(false);
-
-  };
+  }
+};
 
   //---------------------------------
 
