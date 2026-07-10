@@ -10,7 +10,8 @@ function ActivityFeed() {
 
   const loadActivities = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/activities"
+      "http://localhost:5000/api/activities",
+    
     );
 
     setActivities(res.data.activities);

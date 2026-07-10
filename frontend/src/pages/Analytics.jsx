@@ -36,7 +36,7 @@ ChartJS.register(
 );
 
 function Analytics() {
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.CLIENT_API_URL;
 
   const [loading, setLoading] = useState(true);
 
