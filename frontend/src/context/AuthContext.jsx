@@ -47,81 +47,48 @@ export const AuthProvider = ({ children }) => {
   ========================== */
 
   const login = async (email, password) => {
-     console.log("🚀 login() called");
+  console.log("🚀 login() called");
 
-    try {
-      console.log("🚀 Sending request");
+  try {
+    const res = await api.post("/auth/login", {
+      email,
+      password,
+    });
 
-      const res = await api.post("/auth/login", {
-        email,
-        password,
-      });
+    console.log("✅ Login Response:", res.data);
 
-      console.log(res.data);
+    if (res.data.success) {
+      localStorage.setItem("token", res.data.token);
 
-
-      if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
-
-        setToken(res.data.token);
-        setUser(res.data.user);
-
-        return { success: true };
-      }
+      setToken(res.data.token);
+      setUser(res.data.user);
 
       return {
-        success: false,
-        message: res.data.message,
-      };
-    } catch (err) {
-      return {
-        success: false,
-        message:
-          err.response?.data?.message || "Login failed",
+        success: true,
+        user: res.data.user,
       };
     }
-  };
 
-  /* ==========================
-     REGISTER
-  ========================== */
+    return {
+      success: false,
+      message: res.data.message || "Login failed",
+    };
+  } catch (err) {
+    console.error("❌ Login Error");
 
-  const register = async (
-    name,
-    email,
-    password,
-    role = "Team Member"
-  ) => {
-    try {
-      const res = await api.post("/auth/register", {
-        name,
-        email,
-        password,
-        role,
-      });
+    console.error("Status:", err.response?.status);
 
-      if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
+    console.error("Response:", err.response?.data);
 
-        setToken(res.data.token);
-        setUser(res.data.user);
-
-        return { success: true };
-      }
-
-      return {
-        success: false,
-        message: res.data.message,
-      };
-    } catch (err) {
-      return {
-        success: false,
-        message:
-          err.response?.data?.message ||
-          "Registration failed",
-      };
-    }
-  };
+    return {
+      success: false,
+      message:
+        err.response?.data?.message ||
+        err.message ||
+        "Login failed",
+    };
+  }
+};
 
   /* ==========================
      LOGOUT

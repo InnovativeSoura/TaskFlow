@@ -4,24 +4,19 @@ import api from "../api/axios";
    AUTH
 =========================== */
 
-export const login = (data) =>
-  api.post("/auth/login", data);
+export const login = (data) => api.post("/auth/login", data);
 
-export const register = (data) =>
-  api.post("/auth/register", data);
+export const register = (data) => api.post("/auth/register", data);
 
-export const getProfile = () =>
-  api.get("/users/profile");
+export const getProfile = () => api.get("/auth/me");
 
 /* ===========================
    USERS
 =========================== */
 
-export const getUsers = () =>
-  api.get("/users");
+export const getUsers = () => api.get("/users");
 
-export const getUserById = (id) =>
-  api.get(`/users/${id}`);
+export const getUserById = (id) => api.get(`/users/${id}`);
 
 export const updateUser = (id, data) =>
   api.put(`/users/${id}`, data);
@@ -33,8 +28,7 @@ export const deleteUser = (id) =>
    PROJECTS
 =========================== */
 
-export const getProjects = () =>
-  api.get("/projects");
+export const getProjects = () => api.get("/projects");
 
 export const getProject = (id) =>
   api.get(`/projects/${id}`);
@@ -52,8 +46,7 @@ export const deleteProject = (id) =>
    TASKS
 =========================== */
 
-export const getTasks = () =>
-  api.get("/tasks");
+export const getTasks = () => api.get("/tasks");
 
 export const getTask = (id) =>
   api.get(`/tasks/${id}`);

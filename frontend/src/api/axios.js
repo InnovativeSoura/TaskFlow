@@ -4,8 +4,10 @@ import axios from "axios";
    AXIOS INSTANCE
 ========================================== */
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `${API_URL}/api`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -24,6 +26,10 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    console.log(
+      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+    );
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -36,6 +42,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error("❌ API Error:", error.response?.data || error.message);
+
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
