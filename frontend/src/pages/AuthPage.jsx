@@ -1,20 +1,40 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+import {
+  FaEye,
+  FaEyeSlash,
+  FaEnvelope,
+  FaLock,
+  FaUser,
+  FaUserTie,
+  FaArrowRight,
+} from "react-icons/fa";
+
 import { useAuth } from "../context/AuthContext";
+
+import LandingNavbar from "../components/LandingNavbar";
+import Hero from "../components/Hero";
+import BackgroundAnimation from "../components/BackgroundAnimation";
+
 import "../styles/Auth.css";
 
 const AuthPage = () => {
   const navigate = useNavigate();
 
-  // Get auth object first
   const auth = useAuth();
 
   const login = auth?.login;
   const register = auth?.register;
 
   const [isLogin, setIsLogin] = useState(true);
+
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -38,9 +58,11 @@ const AuthPage = () => {
   const validate = () => {
     if (!email.trim()) return "Email is required";
 
-    if (!password.trim()) return "Password is required";
+    if (!password.trim())
+      return "Password is required";
 
-    if (!isLogin && !name.trim()) return "Name is required";
+    if (!isLogin && !name.trim())
+      return "Name is required";
 
     if (password.length < 6)
       return "Password must contain at least 6 characters";
@@ -51,8 +73,6 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("✅ Submit clicked");
-
     const validationError = validate();
 
     if (validationError) {
@@ -60,12 +80,9 @@ const AuthPage = () => {
       return;
     }
 
-    // Verify AuthContext
     if (!login || !register) {
-      console.error("AuthContext:", auth);
-
       setError(
-        "Authentication service is unavailable. Check AuthContext."
+        "Authentication service unavailable."
       );
 
       return;
@@ -78,10 +95,8 @@ const AuthPage = () => {
 
     try {
       if (isLogin) {
-        console.log("🚀 Calling login()");
         response = await login(email, password);
       } else {
-        console.log("🚀 Calling register()");
         response = await register(
           name,
           email,
@@ -90,171 +105,262 @@ const AuthPage = () => {
         );
       }
 
-      console.log("Response:", response);
-
       if (!response.success) {
-        setError(response.message || "Operation failed");
+        setError(response.message);
         return;
       }
 
       navigate("/dashboard");
     } catch (err) {
-      console.error(err);
-
-      setError(err.message || "Something went wrong");
+      setError(
+        err.message || "Something went wrong"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-  <div className="auth-container">
-    <div className="auth-card">
+    <>
+      <BackgroundAnimation />
 
-      <div className="auth-header">
-        <h1>TaskFlow</h1>
-        <p>Project Management System</p>
-      </div>
+      <LandingNavbar />
 
-      <div className="toggle-container">
-        <button
-          className={isLogin ? "toggle-btn active" : "toggle-btn"}
-          onClick={() => {
-            setIsLogin(true);
-            setError("");
+      <div className="auth-page">
+
+        <Hero />
+
+        <motion.div
+          className="auth-wrapper"
+          initial={{
+            opacity: 0,
+            y: 60,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.8,
           }}
         >
-          Login
-        </button>
+          <div className="auth-card">
 
-        <button
-          className={!isLogin ? "toggle-btn active" : "toggle-btn"}
-          onClick={() => {
-            setIsLogin(false);
-            setError("");
-          }}
-        >
-          Register
-        </button>
-      </div>
+            <div className="auth-header">
 
-      <form onSubmit={handleSubmit} className="auth-form">
+              <h2>
+                {isLogin
+                  ? "Welcome Back 👋"
+                  : "Create Account"}
+              </h2>
 
-        {!isLogin && (
-          <>
-            <label>Name</label>
+              <p>
+                Manage your projects with
+                TaskFlow
+              </p>
 
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={handleChange}
-              placeholder="Enter your name"
-            />
+            </div>
 
-            <label>Role</label>
+            <div className="toggle-container">
 
-            <select
-              name="role"
-              value={role}
-              onChange={handleChange}
+              <button
+                className={
+                  isLogin
+                    ? "toggle-btn active"
+                    : "toggle-btn"
+                }
+                onClick={() => {
+                  setIsLogin(true);
+                  setError("");
+                }}
+              >
+                Login
+              </button>
+
+              <button
+                className={
+                  !isLogin
+                    ? "toggle-btn active"
+                    : "toggle-btn"
+                }
+                onClick={() => {
+                  setIsLogin(false);
+                  setError("");
+                }}
+              >
+                Register
+              </button>
+
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              className="auth-form"
             >
-              <option>Team Member</option>
-              <option>Manager</option>
-              <option>Admin</option>
-            </select>
-          </>
-        )}
+                            {!isLogin && (
+                <>
+                  <label>Full Name</label>
 
-        <label>Email</label>
+                  <div className="input-group">
+                    <FaUser className="input-icon" />
 
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-          placeholder="Enter email"
-        />
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Enter your full name"
+                      value={name}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-        <label>Password</label>
+                  <label>Role</label>
 
-        <div className="password-box">
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={password}
-            onChange={handleChange}
-            placeholder="Enter password"
-          />
+                  <div className="input-group">
+                    <FaUserTie className="input-icon" />
 
-          <button
-            type="button"
-            className="show-btn"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </button>
-        </div>
+                    <select
+                      name="role"
+                      value={role}
+                      onChange={handleChange}
+                    >
+                      <option>Team Member</option>
+                      <option>Manager</option>
+                      <option>Admin</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
-        {error && (
-          <div className="auth-error">
-            {error}
+              <label>Email Address</label>
+
+              <div className="input-group">
+                <FaEnvelope className="input-icon" />
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <label>Password</label>
+
+              <div className="input-group password-group">
+                <FaLock className="input-icon" />
+
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  name="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={handleChange}
+                />
+
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                >
+                  {showPassword ? (
+                    <FaEyeSlash />
+                  ) : (
+                    <FaEye />
+                  )}
+                </button>
+              </div>
+
+              {error && (
+                <div className="auth-error">
+                  {error}
+                </div>
+              )}
+
+              <motion.button
+                whileHover={{
+                  scale: 1.03,
+                }}
+                whileTap={{
+                  scale: 0.98,
+                }}
+                type="submit"
+                disabled={loading}
+                className="auth-submit-btn"
+              >
+                {loading ? (
+                  isLogin ? (
+                    "Signing In..."
+                  ) : (
+                    "Creating Account..."
+                  )
+                ) : (
+                  <>
+                    {isLogin
+                      ? "Login"
+                      : "Register"}
+
+                    <FaArrowRight />
+                  </>
+                )}
+              </motion.button>
+            </form>
+
+            <div className="divider">
+
+              <span>or</span>
+
+            </div>
+
+            <div className="auth-footer">
+
+              {isLogin ? (
+                <>
+                  <span>
+                    Don't have an account?
+                  </span>
+
+                  <button
+                    className="footer-link"
+                    onClick={() => {
+                      setIsLogin(false);
+                      setError("");
+                    }}
+                  >
+                    Create One
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>
+                    Already have an account?
+                  </span>
+
+                  <button
+                    className="footer-link"
+                    onClick={() => {
+                      setIsLogin(true);
+                      setError("");
+                    }}
+                  >
+                    Login
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        )}
-
-        <button
-          type="submit"
-          className="auth-submit-btn"
-          disabled={loading}
-        >
-          {loading
-            ? isLogin
-              ? "Signing In..."
-              : "Creating Account..."
-            : isLogin
-            ? "Login"
-            : "Register"}
-        </button>
-
-      </form>
-
-      <div className="auth-footer">
-        {isLogin ? (
-          <>
-            <span>Don't have an account?</span>
-
-            <button
-              type="button"
-              className="footer-link"
-              onClick={() => {
-                setError("");
-                setIsLogin(false);
-              }}
-            >
-              Create one
-            </button>
-          </>
-        ) : (
-          <>
-            <span>Already have an account?</span>
-
-            <button
-              type="button"
-              className="footer-link"
-              onClick={() => {
-                setError("");
-                setIsLogin(true);
-              }}
-            >
-              Login
-            </button>
-          </>
-        )}
+        </motion.div>
       </div>
-
-    </div>
-  </div>
-);
+    </>
+  );
 };
 
 export default AuthPage;

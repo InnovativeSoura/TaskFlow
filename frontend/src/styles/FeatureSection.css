@@ -1,0 +1,356 @@
+/* ==========================================
+   FEATURES SECTION
+========================================== */
+
+.features-section{
+    position:relative;
+
+    padding:120px 8%;
+
+    overflow:hidden;
+}
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:70px;
+
+}
+
+.section-title h2{
+
+    color:#ffffff;
+
+    font-size:46px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+}
+
+.section-title p{
+
+    color:#9ca3af;
+
+    max-width:720px;
+
+    margin:auto;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+}
+
+/* ==========================================
+   GRID
+========================================== */
+
+.features-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:35px;
+
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.feature-card{
+
+    position:relative;
+
+    padding:40px 35px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.4s;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+}
+
+/* glowing border */
+
+.feature-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-2px;
+
+    border-radius:28px;
+
+    padding:2px;
+
+    background:linear-gradient(
+        135deg,
+        #7c4dff,
+        #3b82f6,
+        #00d4ff
+    );
+
+    opacity:0;
+
+    transition:.4s;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite:xor;
+
+    mask-composite:exclude;
+
+}
+
+.feature-card:hover::before{
+
+    opacity:1;
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-12px);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.45),
+        0 0 40px rgba(124,77,255,.25);
+
+}
+
+/* ==========================================
+   ICON
+========================================== */
+
+.feature-icon{
+
+    width:75px;
+
+    height:75px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:32px;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #7c4dff,
+        #3b82f6
+    );
+
+    margin-bottom:25px;
+
+    transition:.35s;
+
+}
+
+.feature-card:hover .feature-icon{
+
+    transform:rotate(-12deg) scale(1.1);
+
+}
+
+/* ==========================================
+   TEXT
+========================================== */
+
+.feature-card h3{
+
+    color:white;
+
+    font-size:24px;
+
+    margin-bottom:15px;
+
+}
+
+.feature-card p{
+
+    color:#aab4c8;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+/* ==========================================
+   HOVER GLOW
+========================================== */
+
+.feature-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    background:radial-gradient(
+        rgba(124,77,255,.25),
+        transparent
+    );
+
+    top:-120px;
+    right:-120px;
+
+    opacity:0;
+
+    transition:.4s;
+
+}
+
+.feature-card:hover::after{
+
+    opacity:1;
+
+}
+
+/* ==========================================
+   FLOATING ANIMATION
+========================================== */
+
+.feature-card:nth-child(2){
+
+    animation:float1 6s ease-in-out infinite;
+
+}
+
+.feature-card:nth-child(4){
+
+    animation:float2 7s ease-in-out infinite;
+
+}
+
+.feature-card:nth-child(6){
+
+    animation:float3 8s ease-in-out infinite;
+
+}
+
+@keyframes float1{
+
+0%{transform:translateY(0);}
+50%{transform:translateY(-6px);}
+100%{transform:translateY(0);}
+
+}
+
+@keyframes float2{
+
+0%{transform:translateY(0);}
+50%{transform:translateY(8px);}
+100%{transform:translateY(0);}
+
+}
+
+@keyframes float3{
+
+0%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+100%{transform:translateY(0);}
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1100px){
+
+.features-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.features-section{
+
+padding:90px 25px;
+
+}
+
+.section-title h2{
+
+font-size:38px;
+
+}
+
+.features-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.feature-card{
+
+padding:35px 28px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.section-title h2{
+
+font-size:30px;
+
+}
+
+.section-title p{
+
+font-size:15px;
+
+}
+
+.feature-icon{
+
+width:65px;
+height:65px;
+
+font-size:28px;
+
+}
+
+.feature-card h3{
+
+font-size:20px;
+
+}
+
+}
