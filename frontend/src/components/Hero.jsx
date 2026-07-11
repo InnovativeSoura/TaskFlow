@@ -8,7 +8,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-import "./Hero.css";
+import "../styles/Hero.css";
 
 const Hero = () => {
   return (
