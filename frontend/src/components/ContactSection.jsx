@@ -67,7 +67,7 @@ const ContactSection = () => {
 
           <div className="contact-item">
             <FaPhoneAlt />
-            <span>+91 98765 43210</span>
+            <span>+91 8100181321</span>
           </div>
 
           <div className="contact-item">
