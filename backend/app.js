@@ -16,6 +16,16 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 const app = express();
 
 /* =========================
+   CORS
+========================= */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+/* =========================
    MIDDLEWARE
 ========================= */
 
@@ -23,10 +33,16 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://taskflow-1-73qh.onrender.com",
-    ],
+    origin(origin, callback) {
+      // Allow Postman, Thunder Client, curl, etc.
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS Not Allowed"));
+    },
     credentials: true,
   })
 );
@@ -43,9 +59,20 @@ app.use(cookieParser());
 ========================= */
 
 app.get("/", (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
     message: "TaskFlow Backend Running 🚀",
+  });
+});
+
+/* =========================
+   API HEALTH CHECK
+========================= */
+
+app.get("/api", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "TaskFlow API Working 🚀",
   });
 });
 
@@ -62,13 +89,13 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 /* =========================
-   404
+   404 HANDLER
 ========================= */
 
-app.use("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route Not Found",
+    message: `Route Not Found: ${req.method} ${req.originalUrl}`,
   });
 });
 
