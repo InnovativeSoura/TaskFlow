@@ -1,22 +1,16 @@
 import axios from "axios";
 
-/* ==========================================
-   AXIOS INSTANCE
-========================================== */
-
 const API_URL = import.meta.env.VITE_API_URL;
+
 console.log("API URL:", API_URL);
+
 const api = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: API_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
-/* ==========================================
-   REQUEST INTERCEPTOR
-========================================== */
 
 api.interceptors.request.use(
   (config) => {
@@ -34,10 +28,6 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-/* ==========================================
-   RESPONSE INTERCEPTOR
-========================================== */
 
 api.interceptors.response.use(
   (response) => response,
