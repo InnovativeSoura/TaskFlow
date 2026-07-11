@@ -1,7 +1,7 @@
 import express from "express";
 import {
-  registerUser,
-  loginUser,
+  register,
+  login,
   getMe,
 } from "../controllers/authController.js";
 
@@ -15,11 +15,11 @@ const router = express.Router();
 
 // POST /api/auth/register
 // Register new user
-router.post("/register", registerUser);
+router.post("/register", register);
 
 // POST /api/auth/login
 // Login user
-router.post("/login", loginUser);
+router.post("/login", login);
 
 // GET /api/auth/me
 // Get logged-in user profile
