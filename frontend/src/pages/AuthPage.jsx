@@ -124,11 +124,11 @@ const AuthPage = () => {
 
       navigate("/dashboard");
     }
-  } catch (err) {
+    } catch (err) {
     setError(err.message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
+    } finally {
+      setLoading(false);
+    }
 
   return (
     <>
@@ -150,7 +150,6 @@ const AuthPage = () => {
       </div>
     </>
   );
-}
 };
 
 export default AuthPage;
