@@ -90,6 +90,59 @@ export const AuthProvider = ({ children }) => {
   }
 };
 
+/* ==========================
+   REGISTER
+========================== */
+
+const register = async (
+  name,
+  email,
+  password,
+  role = "Team Member"
+) => {
+  try {
+    const res = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+      role,
+    });
+
+    console.log("✅ Register Response:", res.data);
+
+    if (res.data.success) {
+      localStorage.setItem("token", res.data.token);
+
+      setToken(res.data.token);
+      setUser(res.data.user);
+
+      return {
+        success: true,
+        user: res.data.user,
+      };
+    }
+
+    return {
+      success: false,
+      message: res.data.message || "Registration failed",
+    };
+  } catch (err) {
+    console.error("❌ Register Error");
+
+    console.error("Status:", err.response?.status);
+
+    console.error("Response:", err.response?.data);
+
+    return {
+      success: false,
+      message:
+        err.response?.data?.message ||
+        err.message ||
+        "Registration failed",
+    };
+  }
+};
+
   /* ==========================
      LOGOUT
   ========================== */
