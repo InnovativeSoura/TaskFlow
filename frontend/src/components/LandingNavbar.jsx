@@ -80,16 +80,13 @@ const LandingNavbar = () => {
         </Link>
 
         <button
-          className="register-btn"
-          onClick={() => {
-            document
-              .querySelector(".toggle-container button:last-child")
-              ?.click();
-          }}
+            className="register-btn"
+            onClick={() =>
+                navigate("/login?mode=register")
+            }
         >
-          Register
+            Register
         </button>
-
       </div>
 
       {/* Mobile */}

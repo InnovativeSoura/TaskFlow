@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { motion } from "framer-motion";
 
 import {
@@ -14,8 +17,6 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 
-import LandingNavbar from "../components/LandingNavbar";
-import Hero from "../components/Hero";
 import BackgroundAnimation from "../components/BackgroundAnimation";
 
 import "../styles/Auth.css";
@@ -28,7 +29,11 @@ const AuthPage = () => {
   const login = auth?.login;
   const register = auth?.register;
 
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+
+  const [isLogin, setIsLogin] = useState(
+    searchParams.get("mode") !== "register"
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -96,6 +101,14 @@ const AuthPage = () => {
     try {
       if (isLogin) {
         response = await login(email, password);
+
+      if (!response.success) {
+        setError(response.message);
+        return;
+      }
+
+        navigate("/dashboard");
+
       } else {
         response = await register(
           name,
@@ -103,7 +116,6 @@ const AuthPage = () => {
           password,
           role
         );
-      }
 
       if (!response.success) {
         setError(response.message);
@@ -111,256 +123,34 @@ const AuthPage = () => {
       }
 
       navigate("/dashboard");
-    } catch (err) {
-      setError(
-        err.message || "Something went wrong"
-      );
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    setError(err.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
 
   return (
     <>
       <BackgroundAnimation />
 
-      <LandingNavbar />
-
       <div className="auth-page">
-
-        <Hero />
 
         <motion.div
           className="auth-wrapper"
-          initial={{
-            opacity: 0,
-            y: 60,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.8,
-          }}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="auth-card">
 
-            <div className="auth-header">
+          {/* Auth Card */}
 
-              <h2>
-                {isLogin
-                  ? "Welcome Back 👋"
-                  : "Create Account"}
-              </h2>
-
-              <p>
-                Manage your projects with
-                TaskFlow
-              </p>
-
-            </div>
-
-            <div className="toggle-container">
-
-              <button
-                className={
-                  isLogin
-                    ? "toggle-btn active"
-                    : "toggle-btn"
-                }
-                onClick={() => {
-                  setIsLogin(true);
-                  setError("");
-                }}
-              >
-                Login
-              </button>
-
-              <button
-                className={
-                  !isLogin
-                    ? "toggle-btn active"
-                    : "toggle-btn"
-                }
-                onClick={() => {
-                  setIsLogin(false);
-                  setError("");
-                }}
-              >
-                Register
-              </button>
-
-            </div>
-
-            <form
-              onSubmit={handleSubmit}
-              className="auth-form"
-            >
-                            {!isLogin && (
-                <>
-                  <label>Full Name</label>
-
-                  <div className="input-group">
-                    <FaUser className="input-icon" />
-
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Enter your full name"
-                      value={name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <label>Role</label>
-
-                  <div className="input-group">
-                    <FaUserTie className="input-icon" />
-
-                    <select
-                      name="role"
-                      value={role}
-                      onChange={handleChange}
-                    >
-                      <option>Team Member</option>
-                      <option>Manager</option>
-                      <option>Admin</option>
-                    </select>
-                  </div>
-                </>
-              )}
-
-              <label>Email Address</label>
-
-              <div className="input-group">
-                <FaEnvelope className="input-icon" />
-
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <label>Password</label>
-
-              <div className="input-group password-group">
-                <FaLock className="input-icon" />
-
-                <input
-                  type={
-                    showPassword
-                      ? "text"
-                      : "password"
-                  }
-                  name="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={handleChange}
-                />
-
-                <button
-                  type="button"
-                  className="eye-btn"
-                  onClick={() =>
-                    setShowPassword(
-                      !showPassword
-                    )
-                  }
-                >
-                  {showPassword ? (
-                    <FaEyeSlash />
-                  ) : (
-                    <FaEye />
-                  )}
-                </button>
-              </div>
-
-              {error && (
-                <div className="auth-error">
-                  {error}
-                </div>
-              )}
-
-              <motion.button
-                whileHover={{
-                  scale: 1.03,
-                }}
-                whileTap={{
-                  scale: 0.98,
-                }}
-                type="submit"
-                disabled={loading}
-                className="auth-submit-btn"
-              >
-                {loading ? (
-                  isLogin ? (
-                    "Signing In..."
-                  ) : (
-                    "Creating Account..."
-                  )
-                ) : (
-                  <>
-                    {isLogin
-                      ? "Login"
-                      : "Register"}
-
-                    <FaArrowRight />
-                  </>
-                )}
-              </motion.button>
-            </form>
-
-            <div className="divider">
-
-              <span>or</span>
-
-            </div>
-
-            <div className="auth-footer">
-
-              {isLogin ? (
-                <>
-                  <span>
-                    Don't have an account?
-                  </span>
-
-                  <button
-                    className="footer-link"
-                    onClick={() => {
-                      setIsLogin(false);
-                      setError("");
-                    }}
-                  >
-                    Create One
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span>
-                    Already have an account?
-                  </span>
-
-                  <button
-                    className="footer-link"
-                    onClick={() => {
-                      setIsLogin(true);
-                      setError("");
-                    }}
-                  >
-                    Login
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
         </motion.div>
+
       </div>
     </>
   );
+}
 };
 
 export default AuthPage;

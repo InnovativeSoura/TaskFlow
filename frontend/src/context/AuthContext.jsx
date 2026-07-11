@@ -98,7 +98,7 @@ const register = async (
   name,
   email,
   password,
-  role = "Team Member"
+  role 
 ) => {
   try {
     const res = await api.post("/auth/register", {
