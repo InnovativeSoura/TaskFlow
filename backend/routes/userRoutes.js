@@ -5,8 +5,10 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  getProfile,
-  updateProfile,
+  changeUserRole,
+  toggleUserStatus,
+  searchUsers,
+  getUserSummary,
 } from "../controllers/userController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -21,33 +23,24 @@ const router = express.Router();
    AUTHENTICATION
 ========================================== */
 
-// All routes require login
 router.use(protect);
-
-/* ==========================================
-   PROFILE ROUTES
-========================================== */
-
-// Logged-in user profile
-router.get("/profile", getProfile);
-
-// Update own profile
-router.put("/profile", updateProfile);
 
 /* ==========================================
    USER ROUTES
 ========================================== */
 
-// All authenticated users can view users
+// All authenticated users
 router.get("/", getUsers);
-
-// Get single user
+router.get("/search", searchUsers);
 router.get("/:id", getUserById);
+router.get("/:id/summary", getUserSummary);
 
-// Admin & Manager can update users
+// Admin & Manager
 router.put("/:id", isAdminOrManager, updateUser);
+router.patch("/:id/role", isAdmin, changeUserRole);
+router.patch("/:id/status", isAdmin, toggleUserStatus);
 
-// Only Admin can delete users
+// Admin only
 router.delete("/:id", isAdmin, deleteUser);
 
 export default router;

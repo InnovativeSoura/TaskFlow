@@ -1,8 +1,12 @@
 import dns from "dns";
 import dotenv from "dotenv";
+
 dotenv.config();
 
-// Fix MongoDB Atlas DNS resolution
+/* ==========================================
+   FIX MONGODB DNS
+========================================== */
+
 dns.setServers([
   "8.8.8.8",
   "8.8.4.4",
@@ -16,36 +20,50 @@ import app from "./app.js";
 
 const PORT = process.env.PORT || 5000;
 
-/* ===========================
+/* ==========================================
    CREATE HTTP SERVER
-=========================== */
+========================================== */
 
 const server = http.createServer(app);
 
-/* ===========================
-   SOCKET.IO
-=========================== */
+/* ==========================================
+   ALLOWED ORIGINS
+========================================== */
 
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  process.env.CLIENT_API_URL,
+  process.env.CLIENT_URL,
 ].filter(Boolean);
+
+/* ==========================================
+   SOCKET.IO
+========================================== */
 
 export const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Socket CORS Not Allowed"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   },
 });
+
+/* ==========================================
+   SOCKET EVENTS
+========================================== */
 
 io.on("connection", (socket) => {
   console.log(`✅ Socket Connected: ${socket.id}`);
 
   socket.on("join-user", (userId) => {
     socket.join(userId);
-    console.log(`👤 User ${userId} joined room`);
+    console.log(`👤 User Joined: ${userId}`);
   });
 
   socket.on("disconnect", () => {
@@ -53,25 +71,25 @@ io.on("connection", (socket) => {
   });
 });
 
-/* ===========================
+/* ==========================================
    START SERVER
-=========================== */
+========================================== */
 
 const startServer = async () => {
   try {
     await connectDB();
 
     server.listen(PORT, "0.0.0.0", () => {
-      console.log("====================================");
-      console.log(`🚀 Server Running`);
-      console.log(`🌍 Environment : ${process.env.NODE_ENV}`);
+      console.log("=======================================");
+      console.log("🚀 TaskFlow Backend Started");
+      console.log(`🌍 Environment : ${process.env.NODE_ENV || "development"}`);
       console.log(`📡 Port        : ${PORT}`);
-      console.log(`🔗 Client URL  : ${process.env.CLIENT_URL}`);
-      console.log("====================================");
+      console.log(`🌐 Client URL  : ${process.env.CLIENT_URL}`);
+      console.log("=======================================");
     });
-  } catch (err) {
+  } catch (error) {
     console.error("❌ Server Startup Failed");
-    console.error(err);
+    console.error(error);
     process.exit(1);
   }
 };
