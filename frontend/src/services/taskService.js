@@ -1,13 +1,13 @@
-import API from "./api";
+import api from "../api/axios";
 
 export const getTasks = () =>
-  API.get("/tasks");
+  api.get("/tasks");
 
 export const createTask = (data) =>
-  API.post("/tasks", data);
+  api.post("/tasks", data);
 
 export const updateTask = (id, data) =>
-  API.put(`/tasks/${id}`, data);
+  api.put(`/tasks/${id}`, data);
 
 export const deleteTask = (id) =>
-  API.delete(`/tasks/${id}`);
+  api.delete(`/tasks/${id}`);
