@@ -357,21 +357,40 @@ export const getUserSummary = async (req, res) => {
       message: "Server error",
     });
   }
+};
+
+/* ==========================================
+   GET LOGGED-IN USER PROFILE
+========================================== */
+
 export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
     res.status(200).json({
       success: true,
       user,
     });
   } catch (error) {
+    console.error("Get Profile Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
+
+/* ==========================================
+   UPDATE LOGGED-IN USER PROFILE
+========================================== */
 
 export const updateProfile = async (req, res) => {
   try {
@@ -384,14 +403,16 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    [
+    const fields = [
       "name",
       "phone",
       "designation",
       "department",
       "bio",
       "avatar",
-    ].forEach((field) => {
+    ];
+
+    fields.forEach((field) => {
       if (req.body[field] !== undefined) {
         user[field] = req.body[field];
       }
@@ -401,13 +422,15 @@ export const updateProfile = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message: "Profile updated successfully",
       user,
     });
   } catch (error) {
+    console.error("Update Profile Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
-};
 };
