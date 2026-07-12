@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
         "Manager",
         "Team Member",
       ],
-      default: "Team Member",
+      default: "Admin",
     },
 
     status: {

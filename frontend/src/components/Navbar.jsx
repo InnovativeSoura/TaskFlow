@@ -70,14 +70,14 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login", { replace: true });
   };
 
   return (
     <header className="navbar">
       {/* LOGO */}
 
-      <div className="navbar-logo" onClick={() => navigate("/")}>
+      <div className="navbar-logo" onClick={() => navigate("/dashboard")}>
         <div className="logo-circle">TF</div>
 
         <div>

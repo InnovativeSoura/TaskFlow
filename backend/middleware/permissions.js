@@ -8,7 +8,7 @@ import { authorizeRoles } from "./roleMiddleware.js";
 export const isAdmin = authorizeRoles("Admin");
 
 // Admin + Manager
-export const isAdminOrManager = authorizeRoles("Admin", "Manager");
+export const isAdminOrManager = authorizeRoles("Admin", "Manager", "Team Member");
 
 // All authenticated users (role already validated separately if needed)
-export const isAnyRole = authorizeRoles("Admin", "Manager", "Member");
+export const isAnyRole = authorizeRoles("Admin", "Manager", "Team Member");
