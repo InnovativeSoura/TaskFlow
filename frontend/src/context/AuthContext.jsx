@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
      LOGIN
   ========================== */
 
-  const login = async (email, password) => {
+  const login = async ({ email, password }) => {
   console.log("🚀 login() called");
 
   try {
@@ -75,9 +75,7 @@ export const AuthProvider = ({ children }) => {
     };
   } catch (err) {
     console.error("❌ Login Error");
-
     console.error("Status:", err.response?.status);
-
     console.error("Response:", err.response?.data);
 
     return {
@@ -94,12 +92,12 @@ export const AuthProvider = ({ children }) => {
    REGISTER
 ========================== */
 
-const register = async (
+const register = async ({
   name,
   email,
   password,
-  role 
-) => {
+  role = "member",
+}) => {
   try {
     const res = await api.post("/auth/register", {
       name,
@@ -128,9 +126,7 @@ const register = async (
     };
   } catch (err) {
     console.error("❌ Register Error");
-
     console.error("Status:", err.response?.status);
-
     console.error("Response:", err.response?.data);
 
     return {
