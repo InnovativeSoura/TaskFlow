@@ -165,7 +165,7 @@ const register = async ({
         register,
         logout,
         updateUser,
-        isAuthenticated: !!user,
+        isAuthenticated: !!token,
       }}
     >
       {children}

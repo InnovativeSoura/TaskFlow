@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -14,10 +15,10 @@ import "../styles/AuthCard.css";
 
 const AuthCard = () => {
   const { login, register } = useAuth();
+  const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,26 +33,41 @@ const AuthCard = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (isLogin) {
-      await login({
-        email: formData.email,
-        password: formData.password,
-      });
+  let result;
+
+  if (isLogin) {
+    result = await login({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (result.success) {
+      navigate("/dashboard");
     } else {
-      if (formData.password !== formData.confirmPassword) {
-        return alert("Passwords do not match");
-      }
-
-      await register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
+      alert(result.message);
     }
-  };
+  } else {
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    result = await register({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (result.success) {
+      navigate("/dashboard");
+    } else {
+      alert(result.message);
+    }
+  }
+};
 
   return (
     <div className="auth-card">
