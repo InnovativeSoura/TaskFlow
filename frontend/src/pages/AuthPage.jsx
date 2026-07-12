@@ -55,7 +55,7 @@ const AuthPage = () => {
     if (!password.trim()) return "Password is required.";
 
     if (!isLogin && !name.trim()) {
-      return "Name is required.";
+      return "Full Name is required.";
     }
 
     if (password.length < 6) {
@@ -120,135 +120,159 @@ const AuthPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-        <h2 className="auth-title">
-  {isLogin ? "Welcome Back 👋" : "Create Account"}
-</h2>
+          <h2 className="auth-title">
+            {isLogin ? "Welcome Back 👋" : "Create Account"}
+          </h2>
 
-<p className="auth-subtitle">
-  {isLogin
-    ? "Login to continue managing your projects."
-    : "Join TaskFlow and start managing your work."}
-</p>
+          <p className="auth-subtitle">
+            {isLogin
+              ? "Login to continue managing your projects."
+              : "Join TaskFlow and start managing your work."}
+          </p>
 
-{error && <div className="auth-error">{error}</div>}
+          {error && (
+            <div className="auth-error">
+              {error}
+            </div>
+          )}
 
-<form onSubmit={handleSubmit} className="auth-form">
+          <form
+            onSubmit={handleSubmit}
+            className="auth-form"
+          >
+            {!isLogin && (
+              <>
+                <div className="input-group">
+                  <FaUser className="input-icon" />
 
-  {!isLogin && (
-    <>
-      <div className="input-group">
-        <FaUser className="input-icon" />
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={name}
-          onChange={handleChange}
-          required
-        />
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="input-group">
+                  <FaUserTie className="input-icon" />
+
+                  <select
+                    name="role"
+                    value={role}
+                    onChange={handleChange}
+                  >
+                    <option value="Team Member">
+                      Team Member
+                    </option>
+
+                    <option value="Project Manager">
+                      Project Manager
+                    </option>
+
+                    <option value="Admin">
+                      Admin
+                    </option>
+                  </select>
+                </div>
+              </>
+            )}
+
+            <div className="input-group">
+              <FaEnvelope className="input-icon" />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="input-group password-group">
+              <FaLock className="input-icon" />
+
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handleChange}
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+              >
+                {showPassword ? (
+                  <FaEyeSlash />
+                ) : (
+                  <FaEye />
+                )}
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className="auth-btn"
+              disabled={loading}
+            >
+              {loading ? (
+                "Please Wait..."
+              ) : (
+                <>
+                  {isLogin
+                    ? "Login"
+                    : "Register"}
+
+                  <FaArrowRight />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            {isLogin ? (
+              <>
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => {
+                    setError("");
+                    setIsLogin(false);
+                  }}
+                >
+                  Register
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => {
+                    setError("");
+                    setIsLogin(true);
+                  }}
+                >
+                  Login
+                </button>
+              </>
+            )}
+          </div>
+        </motion.div>
       </div>
-
-      <div className="input-group">
-        <FaUserTie className="input-icon" />
-        <select
-          name="role"
-          value={role}
-          onChange={handleChange}
-        >
-          <option>Team Member</option>
-          <option>Project Manager</option>
-          <option>Admin</option>
-        </select>
-      </div>
     </>
-  )}
-
-  <div className="input-group">
-    <FaEnvelope className="input-icon" />
-    <input
-      type="email"
-      name="email"
-      placeholder="Email Address"
-      value={email}
-      onChange={handleChange}
-      required
-    />
-  </div>
-
-  <div className="input-group password-group">
-    <FaLock className="input-icon" />
-
-    <input
-      type={showPassword ? "text" : "password"}
-      name="password"
-      placeholder="Password"
-      value={password}
-      onChange={handleChange}
-      required
-    />
-
-    <button
-      type="button"
-      className="password-toggle"
-      onClick={() =>
-        setShowPassword(!showPassword)
-      }
-    >
-      {showPassword ? <FaEyeSlash /> : <FaEye />}
-    </button>
-  </div>
-
-  <button
-    type="submit"
-    className="auth-btn"
-    disabled={loading}
-  >
-    {loading ? (
-      "Please Wait..."
-    ) : (
-      <>
-        {isLogin ? "Login" : "Register"}
-        <FaArrowRight />
-      </>
-    )}
-  </button>
-</form>
-
-<div className="auth-footer">
-  {isLogin ? (
-    <>
-      Don't have an account?{" "}
-      <button
-        type="button"
-        className="link-btn"
-        onClick={() => {
-          setError("");
-          setIsLogin(false);
-        }}
-      >
-        Register
-      </button>
-    </>
-  ) : (
-    <>
-      Already have an account?{" "}
-      <button
-        type="button"
-        className="link-btn"
-        onClick={() => {
-          setError("");
-          setIsLogin(true);
-        }}
-      >
-        Login
-      </button>
-    </>
-  )}
-</div>
-</motion.div>
-  </div>
-</>
-);
+  );
 };
 
 export default AuthPage;
