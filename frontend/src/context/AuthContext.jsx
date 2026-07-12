@@ -10,8 +10,15 @@ import api from "../api/axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+  );
+
   const [loading, setLoading] = useState(true);
 
   /* ==========================
@@ -30,10 +37,19 @@ export const AuthProvider = ({ children }) => {
 
         if (res.data.success) {
           setUser(res.data.user);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(res.data.user)
+          );
         }
       } catch (err) {
-        console.error(err);
-        logout();
+        console.error("Load User Error:", err);
+
+        // Logout ONLY if token is actually invalid
+        if (err.response?.status === 401) {
+          logout();
+        }
       } finally {
         setLoading(false);
       }
@@ -47,97 +63,108 @@ export const AuthProvider = ({ children }) => {
   ========================== */
 
   const login = async ({ email, password }) => {
-  console.log("🚀 login() called");
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-  try {
-    const res = await api.post("/auth/login", {
-      email,
-      password,
-    });
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
 
-    console.log("✅ Login Response:", res.data);
+        localStorage.setItem(
+          "user",
+          JSON.stringify(res.data.user)
+        );
 
-    if (res.data.success) {
-      localStorage.setItem("token", res.data.token);
+        setToken(res.data.token);
+        setUser(res.data.user);
 
-      setToken(res.data.token);
-      setUser(res.data.user);
-
-      return {
-        success: true,
-        user: res.data.user,
-      };
-    }
-
-    return {
-      success: false,
-      message: res.data.message || "Login failed",
-    };
-  } catch (err) {
-    console.error("❌ Login Error");
-    console.error("Status:", err.response?.status);
-    console.error("Response:", err.response?.data);
-
-    return {
-      success: false,
-      message:
-        err.response?.data?.message ||
-        err.message ||
-        "Login failed",
-    };
-  }
-};
-
-/* ==========================
-   REGISTER
-========================== */
-
-const register = async ({
-  name,
-  email,
-  password,
-  role = "member",
-}) => {
-  try {
-    const res = await api.post("/auth/register", {
-      name,
-      email,
-      password,
-      role,
-    });
-
-    console.log("✅ Register Response:", res.data);
-
-    if (res.data.success) {
-      localStorage.setItem("token", res.data.token);
-
-      setToken(res.data.token);
-      setUser(res.data.user);
+        return {
+          success: true,
+          user: res.data.user,
+        };
+      }
 
       return {
-        success: true,
-        user: res.data.user,
+        success: false,
+        message: res.data.message,
+      };
+    } catch (err) {
+      console.error("Login Error:", err);
+
+      return {
+        success: false,
+        message:
+          err.response?.data?.message ||
+          "Login failed",
       };
     }
+  };
 
-    return {
-      success: false,
-      message: res.data.message || "Registration failed",
-    };
-  } catch (err) {
-    console.error("❌ Register Error");
-    console.error("Status:", err.response?.status);
-    console.error("Response:", err.response?.data);
+  /* ==========================
+     REGISTER
+  ========================== */
 
-    return {
-      success: false,
-      message:
-        err.response?.data?.message ||
-        err.message ||
-        "Registration failed",
-    };
-  }
-};
+  const register = async ({
+    name,
+    email,
+    password,
+    role = "member",
+  }) => {
+    try {
+      const res = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+        role,
+      });
+
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(res.data.user)
+        );
+
+        setToken(res.data.token);
+        setUser(res.data.user);
+
+        return {
+          success: true,
+          user: res.data.user,
+        };
+      }
+
+      return {
+        success: false,
+        message: res.data.message,
+      };
+    } catch (err) {
+      console.error("Register Error:", err);
+
+      return {
+        success: false,
+        message:
+          err.response?.data?.message ||
+          "Registration failed",
+      };
+    }
+  };
+
+  /* ==========================
+     UPDATE USER
+  ========================== */
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(updatedUser)
+    );
+  };
 
   /* ==========================
      LOGOUT
@@ -147,12 +174,8 @@ const register = async ({
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    setToken(null);
     setUser(null);
-  };
-
-  const updateUser = (updatedUser) => {
-    setUser(updatedUser);
+    setToken(null);
   };
 
   return (
