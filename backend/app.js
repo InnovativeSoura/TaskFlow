@@ -15,25 +15,17 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 
 const app = express();
 
-/* =========================
-   CORS
-========================= */
+app.use(helmet());
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://127.0.0.1:5173",
   process.env.CLIENT_URL,
 ].filter(Boolean);
-
-/* =========================
-   MIDDLEWARE
-========================= */
-
-app.use(helmet());
 
 app.use(
   cors({
     origin(origin, callback) {
-      // Allow Postman, Thunder Client, curl, etc.
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -43,41 +35,26 @@ app.use(
       return callback(new Error("CORS Not Allowed"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+    ],
   })
 );
-
-app.use(compression());
-app.use(morgan("dev"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-/* =========================
-   ROOT
-========================= */
+app.use(compression());
+app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.status(200).json({
+  res.json({
     success: true,
     message: "TaskFlow Backend Running 🚀",
   });
 });
-
-/* =========================
-   API HEALTH CHECK
-========================= */
-
-app.get("/api", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "TaskFlow API Working 🚀",
-  });
-});
-
-/* =========================
-   API ROUTES
-========================= */
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -86,10 +63,6 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/notifications", notificationRoutes);
-
-/* =========================
-   404 HANDLER
-========================= */
 
 app.use((req, res) => {
   res.status(404).json({
