@@ -21,21 +21,35 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   process.env.CLIENT_URL,
-].filter(Boolean);
+];
 
 app.use(
   cors({
-    origin(origin, callback) {
+    origin: function (origin, callback) {
+
+      // Allow Postman, curl
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      return callback(new Error("CORS Not Allowed"));
+      console.log("Blocked Origin:", origin);
+
+      callback(new Error("Not allowed by CORS"));
     },
+
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+    ],
+
     allowedHeaders: [
       "Content-Type",
       "Authorization",
@@ -56,6 +70,7 @@ app.get("/", (req, res) => {
   });
 });
 
+app.options("*", cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
@@ -70,5 +85,8 @@ app.use((req, res) => {
     message: `Route Not Found: ${req.method} ${req.originalUrl}`,
   });
 });
+
+console.log("Allowed Origins:");
+console.log(allowedOrigins);
 
 export default app;
