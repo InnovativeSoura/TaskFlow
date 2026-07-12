@@ -10,20 +10,27 @@ import api from "../api/axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  /* ==========================================
+      INITIAL STATE
+  ========================================== */
 
   const [token, setToken] = useState(
     localStorage.getItem("token")
   );
 
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+
+    return storedUser
+      ? JSON.parse(storedUser)
+      : null;
+  });
+
   const [loading, setLoading] = useState(true);
 
-  /* ==========================
-     LOAD USER
-  ========================== */
+  /* ==========================================
+      LOAD CURRENT USER
+  ========================================== */
 
   useEffect(() => {
     const loadUser = async () => {
@@ -46,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       } catch (err) {
         console.error("Load User Error:", err);
 
-        // Logout ONLY if token is actually invalid
+        // Logout ONLY if token is invalid
         if (err.response?.status === 401) {
           logout();
         }
@@ -58,9 +65,9 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, [token]);
 
-  /* ==========================
-     LOGIN
-  ========================== */
+  /* ==========================================
+      LOGIN
+  ========================================== */
 
   const login = async ({ email, password }) => {
     try {
@@ -70,25 +77,29 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
+        const loggedInUser = res.data.user;
+        const jwtToken = res.data.token;
+
+        localStorage.setItem("token", jwtToken);
 
         localStorage.setItem(
           "user",
-          JSON.stringify(res.data.user)
+          JSON.stringify(loggedInUser)
         );
 
-        setToken(res.data.token);
-        setUser(res.data.user);
+        setToken(jwtToken);
+        setUser(loggedInUser);
 
         return {
           success: true,
-          user: res.data.user,
+          user: loggedInUser,
         };
       }
 
       return {
         success: false,
-        message: res.data.message,
+        message:
+          res.data.message || "Login failed",
       };
     } catch (err) {
       console.error("Login Error:", err);
@@ -97,49 +108,58 @@ export const AuthProvider = ({ children }) => {
         success: false,
         message:
           err.response?.data?.message ||
+          err.message ||
           "Login failed",
       };
     }
   };
 
-  /* ==========================
-     REGISTER
-  ========================== */
+  /* ==========================================
+      REGISTER
+  ========================================== */
 
   const register = async ({
     name,
     email,
     password,
-    role = "member",
+    role = "Team Member",
   }) => {
     try {
-      const res = await api.post("/auth/register", {
-        name,
-        email,
-        password,
-        role,
-      });
+      const res = await api.post(
+        "/auth/register",
+        {
+          name,
+          email,
+          password,
+          role,
+        }
+      );
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
+        const newUser = res.data.user;
+        const jwtToken = res.data.token;
+
+        localStorage.setItem("token", jwtToken);
 
         localStorage.setItem(
           "user",
-          JSON.stringify(res.data.user)
+          JSON.stringify(newUser)
         );
 
-        setToken(res.data.token);
-        setUser(res.data.user);
+        setToken(jwtToken);
+        setUser(newUser);
 
         return {
           success: true,
-          user: res.data.user,
+          user: newUser,
         };
       }
 
       return {
         success: false,
-        message: res.data.message,
+        message:
+          res.data.message ||
+          "Registration failed",
       };
     } catch (err) {
       console.error("Register Error:", err);
@@ -148,14 +168,15 @@ export const AuthProvider = ({ children }) => {
         success: false,
         message:
           err.response?.data?.message ||
+          err.message ||
           "Registration failed",
       };
     }
   };
 
-  /* ==========================
-     UPDATE USER
-  ========================== */
+  /* ==========================================
+      UPDATE USER
+  ========================================== */
 
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
@@ -166,17 +187,21 @@ export const AuthProvider = ({ children }) => {
     );
   };
 
-  /* ==========================
-     LOGOUT
-  ========================== */
+  /* ==========================================
+      LOGOUT
+  ========================================== */
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    setUser(null);
     setToken(null);
+    setUser(null);
   };
+
+  /* ==========================================
+      PROVIDER
+  ========================================== */
 
   return (
     <AuthContext.Provider
@@ -188,7 +213,8 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         updateUser,
-        isAuthenticated: !!token,
+        isAuthenticated:
+          !!token && !!user,
       }}
     >
       {children}
@@ -196,6 +222,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () =>
+  useContext(AuthContext);
 
 export default AuthContext;

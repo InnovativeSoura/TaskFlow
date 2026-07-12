@@ -23,22 +23,16 @@ router.use(protect);
    PROJECT ROUTES
 ========================================== */
 
-// Create project (Admin + Manager)
+// Everyone can view
+router.get("/", getProjects);
+router.get("/:id", getProjectById);
+
+// Only Admin & Manager
 router.post("/", isAdminOrManager, createProject);
-
-// Get all projects
-router.get("/", isAdminOrManager, getProjects);
-
-// Get single project
-router.get("/:id", isAdminOrManager, getProjectById);
-
-// Update project
 router.put("/:id", isAdminOrManager, updateProject);
-
-// Add member to project
 router.patch("/:id/add-member", isAdminOrManager, addMember);
 
-// Delete project (Admin only)
+// Admin only
 router.delete("/:id", isAdmin, deleteProject);
 
 export default router;

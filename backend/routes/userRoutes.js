@@ -22,28 +22,16 @@ const router = express.Router();
 
 router.use(protect);
 
-/* ==========================================
-   USER ACCESS ROUTES
-========================================== */
+// Everyone can view
+router.get("/", getProjects);
+router.get("/:id", getProjectById);
 
-router.get("/", isAdminOrManager, getUsers);
+// Only Admin & Manager
+router.post("/", isAdminOrManager, createProject);
+router.put("/:id", isAdminOrManager, updateProject);
+router.patch("/:id/add-member", isAdminOrManager, addMember);
 
-router.get("/search", isAdminOrManager, searchUsers);
-
-router.get("/:id", isAdminOrManager, getUserById);
-
-router.get("/:id/summary", isAdminOrManager, getUserSummary);
-
-router.put("/:id", isAdminOrManager, updateUser);
-
-/* ==========================================
-   ADMIN ONLY ACTIONS
-========================================== */
-
-router.delete("/:id", isAdmin, deleteUser);
-
-router.patch("/:id/role", isAdmin, changeUserRole);
-
-router.patch("/:id/toggle-status", isAdmin, toggleUserStatus);
+// Admin only
+router.delete("/:id", isAdmin, deleteProject);
 
 export default router;

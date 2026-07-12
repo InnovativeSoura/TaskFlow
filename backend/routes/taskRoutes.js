@@ -23,22 +23,16 @@ router.use(protect);
    TASK ROUTES
 ========================================== */
 
-// Create task
-router.post("/", isAdminOrManager, createTask);
+// Everyone can view
+router.get("/", getProjects);
+router.get("/:id", getProjectById);
 
-// Get all tasks (filterable)
-router.get("/", isAdminOrManager, getTasks);
+// Only Admin & Manager
+router.post("/", isAdminOrManager, createProject);
+router.put("/:id", isAdminOrManager, updateProject);
+router.patch("/:id/add-member", isAdminOrManager, addMember);
 
-// Get task by ID
-router.get("/:id", isAdminOrManager, getTaskById);
-
-// Update task details
-router.put("/:id", isAdminOrManager, updateTask);
-
-// Update task status
-router.patch("/:id/status", isAdminOrManager, updateTaskStatus);
-
-// Delete task (Admin only)
-router.delete("/:id", isAdmin, deleteTask);
+// Admin only
+router.delete("/:id", isAdmin, deleteProject);
 
 export default router;
