@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-
 import {
   FaBars,
   FaTimes,
@@ -23,33 +21,20 @@ const LandingNavbar = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Logo */}
-
       <div className="landing-logo">
-
         <div className="landing-logo-icon">
-
           <FaTasks />
-
         </div>
 
         <div className="landing-logo-text">
-
           <h2>TaskFlow</h2>
-
           <span>Project Management</span>
-
         </div>
-
       </div>
 
       {/* Navigation */}
-
       <nav
-        className={
-          mobileMenu
-            ? "landing-nav active"
-            : "landing-nav"
-        }
+        className={`landing-nav ${mobileMenu ? "active" : ""}`}
       >
         <a href="#home" onClick={closeMenu}>
           Home
@@ -68,40 +53,13 @@ const LandingNavbar = () => {
         </a>
       </nav>
 
-      {/* Buttons */}
-
-      <div className="landing-actions">
-
-        <Link
-          to="/login"
-          className="login-btn"
-        >
-          Login
-        </Link>
-
-        <button
-            className="register-btn"
-            onClick={() =>
-                navigate("/login?mode=register")
-            }
-        >
-            Register
-        </button>
-      </div>
-
-      {/* Mobile */}
-
+      {/* Mobile Menu Button */}
       <button
         className="mobile-menu-btn"
-        onClick={() =>
-          setMobileMenu(!mobileMenu)
-        }
+        onClick={() => setMobileMenu((prev) => !prev)}
+        aria-label="Toggle navigation menu"
       >
-        {mobileMenu ? (
-          <FaTimes />
-        ) : (
-          <FaBars />
-        )}
+        {mobileMenu ? <FaTimes /> : <FaBars />}
       </button>
     </motion.header>
   );
