@@ -17,7 +17,13 @@ export const createTask = async (req, res) => {
       dueDate,
     } = req.body;
 
-    // Validate project
+    if (!title || !project || !assignedTo) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, project and assigned user are required.",
+      });
+    }
+
     const projectExists = await Project.findById(project);
 
     if (!projectExists) {
@@ -27,7 +33,6 @@ export const createTask = async (req, res) => {
       });
     }
 
-    // Validate user
     const userExists = await User.findById(assignedTo);
 
     if (!userExists) {
@@ -45,7 +50,7 @@ export const createTask = async (req, res) => {
       priority: priority || "Medium",
       dueDate,
       status: "Pending",
-      createdBy: req.user.id,
+      createdBy: req.user._id,
     });
 
     res.status(201).json({
@@ -53,11 +58,12 @@ export const createTask = async (req, res) => {
       message: "Task created successfully",
       task,
     });
-
   } catch (error) {
+    console.error("Create Task:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };
@@ -70,12 +76,13 @@ export const getTasks = async (req, res) => {
   try {
     const filter = {};
 
-    if (req.query.project) {
-      filter.project = req.query.project;
+    // Team Members can only see their own tasks
+    if (req.user.role === "Team Member") {
+      filter.assignedTo = req.user._id;
     }
 
-    if (req.query.assignedTo) {
-      filter.assignedTo = req.query.assignedTo;
+    if (req.query.project) {
+      filter.project = req.query.project;
     }
 
     if (req.query.status) {
@@ -88,16 +95,17 @@ export const getTasks = async (req, res) => {
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: tasks.length,
       tasks,
     });
-
   } catch (error) {
+    console.error("Get Tasks:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };
@@ -120,15 +128,16 @@ export const getTaskById = async (req, res) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       task,
     });
-
   } catch (error) {
+    console.error("Get Task:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };
@@ -139,7 +148,17 @@ export const getTaskById = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+      .populate("project", "title status")
+      .populate("assignedTo", "name email role")
+      .populate("createdBy", "name email");
 
     if (!task) {
       return res.status(404).json({
@@ -148,32 +167,17 @@ export const updateTask = async (req, res) => {
       });
     }
 
-    const fields = [
-      "title",
-      "description",
-      "priority",
-      "dueDate",
-      "status",
-    ];
-
-    fields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        task[field] = req.body[field];
-      }
-    });
-
-    await task.save();
-
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Task updated successfully",
       task,
     });
-
   } catch (error) {
+    console.error("Update Task:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };
@@ -195,37 +199,49 @@ export const deleteTask = async (req, res) => {
 
     await task.deleteOne();
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Task deleted successfully",
     });
-
   } catch (error) {
+    console.error("Delete Task:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };
 
 /* ==========================================
-   CHANGE TASK STATUS
+   UPDATE TASK STATUS
 ========================================== */
 
 export const updateTaskStatus = async (req, res) => {
   try {
     const { status } = req.body;
 
-    const allowedStatus = ["Pending", "In Progress", "Completed"];
+    const allowed = [
+      "Pending",
+      "In Progress",
+      "Completed",
+    ];
 
-    if (!allowedStatus.includes(status)) {
+    if (!allowed.includes(status)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid status",
+        message: "Invalid task status",
       });
     }
 
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!task) {
       return res.status(404).json({
@@ -234,19 +250,17 @@ export const updateTaskStatus = async (req, res) => {
       });
     }
 
-    task.status = status;
-    await task.save();
-
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Task status updated successfully",
       task,
     });
-
   } catch (error) {
+    console.error("Update Task Status:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server Error",
     });
   }
 };

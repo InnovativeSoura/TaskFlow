@@ -10,27 +10,24 @@ export const getUsers = async (req, res) => {
   try {
     const filter = {};
 
-    if (req.query.role) {
-      filter.role = req.query.role;
-    }
-
-    if (req.query.status) {
-      filter.status = req.query.status;
-    }
+    if (req.query.role) filter.role = req.query.role;
+    if (req.query.status) filter.status = req.query.status;
 
     const users = await User.find(filter)
       .select("-password")
       .sort({ createdAt: -1 });
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: users.length,
       users,
     });
   } catch (error) {
+    console.error("Get Users Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -46,24 +43,24 @@ export const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
-    const projectCount = await Project.countDocuments({
-      members: user._id,
-    });
+    const [
+      projectCount,
+      assignedTasks,
+      completedTasks,
+    ] = await Promise.all([
+      Project.countDocuments({ members: user._id }),
+      Task.countDocuments({ assignedTo: user._id }),
+      Task.countDocuments({
+        assignedTo: user._id,
+        status: "Completed",
+      }),
+    ]);
 
-    const assignedTasks = await Task.countDocuments({
-      assignedTo: user._id,
-    });
-
-    const completedTasks = await Task.countDocuments({
-      assignedTo: user._id,
-      status: "Completed",
-    });
-
-    res.json({
+    res.status(200).json({
       success: true,
       user,
       statistics: {
@@ -73,15 +70,17 @@ export const getUserById = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("Get User Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
 
 /* ==========================================
-   UPDATE USER PROFILE
+   UPDATE USER
 ========================================== */
 
 export const updateUser = async (req, res) => {
@@ -91,7 +90,7 @@ export const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
@@ -112,15 +111,17 @@ export const updateUser = async (req, res) => {
 
     await user.save();
 
-    res.json({
+    res.status(200).json({
       success: true,
-      message: "Profile updated successfully.",
+      message: "Profile updated successfully",
       user,
     });
   } catch (error) {
+    console.error("Update User Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -136,20 +137,22 @@ export const deleteUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
     await user.deleteOne();
 
-    res.json({
+    res.status(200).json({
       success: true,
-      message: "User deleted successfully.",
+      message: "User deleted successfully",
     });
   } catch (error) {
+    console.error("Delete User Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -162,12 +165,16 @@ export const changeUserRole = async (req, res) => {
   try {
     const { role } = req.body;
 
-    const allowedRoles = ["Admin", "Manager", "Member"];
+    const allowedRoles = [
+      "Admin",
+      "Manager",
+      "Team Member",
+    ];
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid role.",
+        message: "Invalid role",
       });
     }
 
@@ -176,22 +183,25 @@ export const changeUserRole = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
     user.role = role;
+
     await user.save();
 
-    res.json({
+    res.status(200).json({
       success: true,
-      message: "Role updated successfully.",
+      message: "Role updated successfully",
       user,
     });
   } catch (error) {
+    console.error("Change Role Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -207,24 +217,28 @@ export const toggleUserStatus = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
     user.status =
-      user.status === "Active" ? "Inactive" : "Active";
+      user.status === "Active"
+        ? "Inactive"
+        : "Active";
 
     await user.save();
 
-    res.json({
+    res.status(200).json({
       success: true,
-      message: "User status updated successfully.",
+      message: "User status updated successfully",
       user,
     });
   } catch (error) {
+    console.error("Toggle Status Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -240,7 +254,7 @@ export const searchUsers = async (req, res) => {
     if (!query) {
       return res.status(400).json({
         success: false,
-        message: "Search query is required.",
+        message: "Search query is required",
       });
     }
 
@@ -267,15 +281,17 @@ export const searchUsers = async (req, res) => {
       ],
     }).select("-password");
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: users.length,
       users,
     });
   } catch (error) {
+    console.error("Search Users Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -293,7 +309,7 @@ export const getUserSummary = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
@@ -322,7 +338,7 @@ export const getUserSummary = async (req, res) => {
       }),
     ]);
 
-    res.json({
+    res.status(200).json({
       success: true,
       user,
       summary: {
@@ -334,9 +350,11 @@ export const getUserSummary = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("User Summary Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };

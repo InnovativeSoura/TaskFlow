@@ -5,33 +5,49 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  changeUserRole,
-  toggleUserStatus,
-  searchUsers,
-  getUserSummary,
+  getProfile,
+  updateProfile,
 } from "../controllers/userController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
-import { isAdmin, isAdminOrManager } from "../middleware/permissions.js";
+import {
+  isAdmin,
+  isAdminOrManager,
+} from "../middleware/permissions.js";
 
 const router = express.Router();
 
 /* ==========================================
-   PROTECTED USER ROUTES
+   AUTHENTICATION
 ========================================== */
 
+// All routes require login
 router.use(protect);
 
-// Everyone can view
-router.get("/", getProjects);
-router.get("/:id", getProjectById);
+/* ==========================================
+   PROFILE ROUTES
+========================================== */
 
-// Only Admin & Manager
-router.post("/", isAdminOrManager, createProject);
-router.put("/:id", isAdminOrManager, updateProject);
-router.patch("/:id/add-member", isAdminOrManager, addMember);
+// Logged-in user profile
+router.get("/profile", getProfile);
 
-// Admin only
-router.delete("/:id", isAdmin, deleteProject);
+// Update own profile
+router.put("/profile", updateProfile);
+
+/* ==========================================
+   USER ROUTES
+========================================== */
+
+// All authenticated users can view users
+router.get("/", getUsers);
+
+// Get single user
+router.get("/:id", getUserById);
+
+// Admin & Manager can update users
+router.put("/:id", isAdminOrManager, updateUser);
+
+// Only Admin can delete users
+router.delete("/:id", isAdmin, deleteUser);
 
 export default router;
