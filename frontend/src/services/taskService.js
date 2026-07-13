@@ -1,13 +1,64 @@
 import api from "../api/axios";
 
-export const getTasks = () =>
-  api.get("/tasks");
+/* ==========================================
+   GET TASKS
+========================================== */
 
-export const createTask = (data) =>
-  api.post("/tasks", data);
+export const getTasks = async () => {
+  const res = await api.get("/tasks");
 
-export const updateTask = (id, data) =>
-  api.put(`/tasks/${id}`, data);
+  return {
+    success: true,
+    data:
+      res.data.tasks ??
+      res.data.data ??
+      res.data ??
+      [],
+  };
+};
 
-export const deleteTask = (id) =>
-  api.delete(`/tasks/${id}`);
+/* ==========================================
+   CREATE TASK
+========================================== */
+
+export const createTask = async (data) => {
+  const res = await api.post("/tasks", data);
+
+  return {
+    success: true,
+    data:
+      res.data.task ??
+      res.data.data ??
+      res.data,
+  };
+};
+
+/* ==========================================
+   UPDATE TASK
+========================================== */
+
+export const updateTask = async (
+  id,
+  data
+) => {
+  const res = await api.put(
+    `/tasks/${id}`,
+    data
+  );
+
+  return {
+    success: true,
+    data:
+      res.data.task ??
+      res.data.data ??
+      res.data,
+  };
+};
+
+/* ==========================================
+   DELETE TASK
+========================================== */
+
+export const deleteTask = async (id) => {
+  return await api.delete(`/tasks/${id}`);
+};

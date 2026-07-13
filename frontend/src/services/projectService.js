@@ -1,40 +1,52 @@
 import api from "../api/axios";
 
 /* ==========================================
-   GET ALL PROJECTS
+   GET PROJECTS
 ========================================== */
 
 export const getProjects = async () => {
-  const response = await api.get("/projects");
+  const res = await api.get("/projects");
 
-  return response;
+  return {
+    success: true,
+    data:
+      res.data.projects ??
+      res.data.data ??
+      res.data ??
+      [],
+  };
 };
 
 /* ==========================================
-   GET PROJECT BY ID
+   GET PROJECT
 ========================================== */
 
 export const getProject = async (id) => {
-  if (!id) {
-    throw new Error("Project ID is required");
-  }
+  const res = await api.get(`/projects/${id}`);
 
-  const response = await api.get(`/projects/${id}`);
-
-  return response;
+  return {
+    success: true,
+    data:
+      res.data.project ??
+      res.data.data ??
+      res.data,
+  };
 };
 
 /* ==========================================
    CREATE PROJECT
 ========================================== */
 
-export const createProject = async (projectData) => {
-  const response = await api.post(
-    "/projects",
-    projectData
-  );
+export const createProject = async (data) => {
+  const res = await api.post("/projects", data);
 
-  return response;
+  return {
+    success: true,
+    data:
+      res.data.project ??
+      res.data.data ??
+      res.data,
+  };
 };
 
 /* ==========================================
@@ -43,18 +55,20 @@ export const createProject = async (projectData) => {
 
 export const updateProject = async (
   id,
-  projectData
+  data
 ) => {
-  if (!id) {
-    throw new Error("Project ID is required");
-  }
-
-  const response = await api.put(
+  const res = await api.put(
     `/projects/${id}`,
-    projectData
+    data
   );
 
-  return response;
+  return {
+    success: true,
+    data:
+      res.data.project ??
+      res.data.data ??
+      res.data,
+  };
 };
 
 /* ==========================================
@@ -62,13 +76,5 @@ export const updateProject = async (
 ========================================== */
 
 export const deleteProject = async (id) => {
-  if (!id) {
-    throw new Error("Project ID is required");
-  }
-
-  const response = await api.delete(
-    `/projects/${id}`
-  );
-
-  return response;
+  return await api.delete(`/projects/${id}`);
 };
