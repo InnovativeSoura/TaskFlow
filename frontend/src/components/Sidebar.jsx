@@ -19,15 +19,16 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    if (logout) {
-      logout();
-    } else {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-    }
+  const handleLogout = async () => {
+  if (logout) {
+    await logout();
+  } else {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
 
-  };
+  navigate("/login", { replace: true });
+};
 
   return (
     <aside className="sidebar">
