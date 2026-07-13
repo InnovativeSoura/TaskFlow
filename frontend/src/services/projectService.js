@@ -1,14 +1,74 @@
 import api from "../api/axios";
 
-export const getProjects = () => api.get("/projects");
+/* ==========================================
+   GET ALL PROJECTS
+========================================== */
 
-export const getProject = (id) => api.get(`/projects/${id}`);
+export const getProjects = async () => {
+  const response = await api.get("/projects");
 
-export const createProject = (data) =>
-  api.post("/projects", data);
+  return response;
+};
 
-export const updateProject = (id, data) =>
-  api.put(`/projects/${id}`, data);
+/* ==========================================
+   GET PROJECT BY ID
+========================================== */
 
-export const deleteProject = (id) =>
-  api.delete(`/projects/${id}`);
+export const getProject = async (id) => {
+  if (!id) {
+    throw new Error("Project ID is required");
+  }
+
+  const response = await api.get(`/projects/${id}`);
+
+  return response;
+};
+
+/* ==========================================
+   CREATE PROJECT
+========================================== */
+
+export const createProject = async (projectData) => {
+  const response = await api.post(
+    "/projects",
+    projectData
+  );
+
+  return response;
+};
+
+/* ==========================================
+   UPDATE PROJECT
+========================================== */
+
+export const updateProject = async (
+  id,
+  projectData
+) => {
+  if (!id) {
+    throw new Error("Project ID is required");
+  }
+
+  const response = await api.put(
+    `/projects/${id}`,
+    projectData
+  );
+
+  return response;
+};
+
+/* ==========================================
+   DELETE PROJECT
+========================================== */
+
+export const deleteProject = async (id) => {
+  if (!id) {
+    throw new Error("Project ID is required");
+  }
+
+  const response = await api.delete(
+    `/projects/${id}`
+  );
+
+  return response;
+};

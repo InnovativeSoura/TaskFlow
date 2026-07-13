@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import {
   getProjects,
@@ -8,11 +8,8 @@ import {
 } from "../services/projectService";
 
 const useProjects = () => {
-
   const [projects, setProjects] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState(null);
 
   /* ==========================
@@ -20,38 +17,30 @@ const useProjects = () => {
   ========================== */
 
   const fetchProjects = useCallback(async () => {
-
     try {
-
       setLoading(true);
+      setError(null);
 
       const res = await getProjects();
 
       const data =
-        res.data.projects ||
-        res.data.data ||
-        res.data ||
+        res?.data?.projects ||
+        res?.data?.data ||
         [];
 
-      setProjects(data);
-
-      setError(null);
-
+      setProjects(Array.isArray(data) ? data : []);
     } catch (err) {
-
-      console.error(err);
+      console.error("Fetch Projects Error:", err);
 
       setError(
         err.response?.data?.message ||
-        "Failed to load projects."
+          "Unable to load projects."
       );
 
+      setProjects([]);
     } finally {
-
       setLoading(false);
-
     }
-
   }, []);
 
   /* ==========================
@@ -59,42 +48,25 @@ const useProjects = () => {
   ========================== */
 
   useEffect(() => {
-
     fetchProjects();
-
   }, [fetchProjects]);
 
   /* ==========================
-      ADD PROJECT
+      CREATE PROJECT
   ========================== */
 
   const addProject = async (projectData) => {
+    const res = await createProject(projectData);
 
-    try {
+    const project =
+      res?.data?.project ||
+      res?.data?.data;
 
-      const res =
-        await createProject(projectData);
-
-      const newProject =
-        res.data.project ||
-        res.data.data ||
-        res.data;
-
-      setProjects((prev) => [
-        newProject,
-        ...prev,
-      ]);
-
-      return newProject;
-
-    } catch (err) {
-
-      console.error(err);
-
-      throw err;
-
+    if (project) {
+      setProjects((prev) => [project, ...prev]);
     }
 
+    return project;
   };
 
   /* ==========================
@@ -105,42 +77,24 @@ const useProjects = () => {
     id,
     projectData
   ) => {
+    const res = await updateProject(
+      id,
+      projectData
+    );
 
-    try {
+    const updated =
+      res?.data?.project ||
+      res?.data?.data;
 
-      const res =
-        await updateProject(
-          id,
-          projectData
-        );
-
-      const updatedProject =
-        res.data.project ||
-        res.data.data ||
-        res.data;
-
+    if (updated) {
       setProjects((prev) =>
-
-        prev.map((project) =>
-
-          project._id === id
-            ? updatedProject
-            : project
-
+        prev.map((item) =>
+          item._id === id ? updated : item
         )
-
       );
-
-      return updatedProject;
-
-    } catch (err) {
-
-      console.error(err);
-
-      throw err;
-
     }
 
+    return updated;
   };
 
   /* ==========================
@@ -148,62 +102,31 @@ const useProjects = () => {
   ========================== */
 
   const removeProject = async (id) => {
+    await deleteProject(id);
 
-    try {
-
-      await deleteProject(id);
-
-      setProjects((prev) =>
-
-        prev.filter(
-
-          (project) =>
-            project._id !== id
-
-        )
-
-      );
-
-    } catch (err) {
-
-      console.error(err);
-
-      throw err;
-
-    }
-
+    setProjects((prev) =>
+      prev.filter((item) => item._id !== id)
+    );
   };
 
   /* ==========================
       REFRESH
   ========================== */
 
-  const refreshProjects = async () => {
-
-    await fetchProjects();
-
-  };
+  const refreshProjects = () => fetchProjects();
 
   return {
-
     projects,
-
     loading,
-
     error,
 
     fetchProjects,
-
     refreshProjects,
 
     addProject,
-
     editProject,
-
     removeProject,
-
   };
-
 };
 
 export default useProjects;

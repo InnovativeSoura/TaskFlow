@@ -3,7 +3,9 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react";
+
 import { useAuth } from "./AuthContext";
 
 import {
@@ -16,12 +18,16 @@ import {
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
-  const { token } = useAuth();
+  const { token, loading: authLoading } = useAuth();
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProjects = async () => {
+  /* ==========================================
+      FETCH PROJECTS
+  ========================================== */
+
+  const fetchProjects = useCallback(async () => {
     if (!token) {
       setProjects([]);
       setLoading(false);
@@ -33,33 +39,91 @@ export const ProjectProvider = ({ children }) => {
 
       const res = await getProjects();
 
-      setProjects(res.data.projects || []);
+      const data =
+        res.data.projects ||
+        res.data.data ||
+        res.data ||
+        [];
+
+      setProjects(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Fetch Projects Error:", error);
+
       setProjects([]);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchProjects();
   }, [token]);
 
-  const addProject = async (data) => {
-    const res = await createProject(data);
-    await fetchProjects();
-    return res.data;
+  /* ==========================================
+      LOAD PROJECTS
+  ========================================== */
+
+  useEffect(() => {
+    if (!authLoading) {
+      fetchProjects();
+    }
+  }, [fetchProjects, authLoading]);
+
+  /* ==========================================
+      CREATE PROJECT
+  ========================================== */
+
+  const addProject = async (projectData) => {
+    const res = await createProject(projectData);
+
+    const project =
+      res.data.project ||
+      res.data.data ||
+      res.data;
+
+    setProjects((prev) => [project, ...prev]);
+
+    return project;
   };
 
-  const editProject = async (id, data) => {
-    const res = await updateProject(id, data);
-    await fetchProjects();
-    return res.data;
+  /* ==========================================
+      UPDATE PROJECT
+  ========================================== */
+
+  const editProject = async (id, projectData) => {
+    const res = await updateProject(id, projectData);
+
+    const updatedProject =
+      res.data.project ||
+      res.data.data ||
+      res.data;
+
+    setProjects((prev) =>
+      prev.map((project) =>
+        project._id === id
+          ? updatedProject
+          : project
+      )
+    );
+
+    return updatedProject;
   };
+
+  /* ==========================================
+      DELETE PROJECT
+  ========================================== */
 
   const removeProject = async (id) => {
     await deleteProject(id);
+
+    setProjects((prev) =>
+      prev.filter(
+        (project) => project._id !== id
+      )
+    );
+  };
+
+  /* ==========================================
+      REFRESH
+  ========================================== */
+
+  const refreshProjects = async () => {
     await fetchProjects();
   };
 
@@ -69,6 +133,7 @@ export const ProjectProvider = ({ children }) => {
         projects,
         loading,
         fetchProjects,
+        refreshProjects,
         addProject,
         editProject,
         removeProject,
@@ -79,4 +144,7 @@ export const ProjectProvider = ({ children }) => {
   );
 };
 
-export const useProjects = () => useContext(ProjectContext);
+export const useProjects = () =>
+  useContext(ProjectContext);
+
+export default ProjectContext;

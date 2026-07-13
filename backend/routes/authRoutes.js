@@ -13,16 +13,13 @@ const router = express.Router();
    AUTH ROUTES
 ========================================== */
 
-// POST /api/auth/register
-// Register new user
+// Register
 router.post("/register", register);
 
-// POST /api/auth/login
-// Login user
+// Login
 router.post("/login", login);
 
-// GET /api/auth/me
-// Get logged-in user profile
+// Get current logged in user
 router.get("/me", protect, getMe);
 
 export default router;

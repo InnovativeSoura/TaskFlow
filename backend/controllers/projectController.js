@@ -10,37 +10,36 @@ export const createProject = async (req, res) => {
     const {
       title,
       description,
-      status,
+      status = "Active",
       startDate,
       endDate,
       members = [],
     } = req.body;
 
-    if (!title) {
+    if (!title || !title.trim()) {
       return res.status(400).json({
         success: false,
         message: "Project title is required.",
       });
     }
 
-    // Validate members
-    if (members.length > 0) {
-      const users = await User.find({
+    if (members.length) {
+      const existingUsers = await User.find({
         _id: { $in: members },
       });
 
-      if (users.length !== members.length) {
+      if (existingUsers.length !== members.length) {
         return res.status(400).json({
           success: false,
-          message: "One or more members are invalid.",
+          message: "One or more selected members are invalid.",
         });
       }
     }
 
     const project = await Project.create({
-      title,
+      title: title.trim(),
       description,
-      status: status || "Active",
+      status,
       startDate,
       endDate,
       members,
@@ -51,7 +50,7 @@ export const createProject = async (req, res) => {
       .populate("members", "name email role")
       .populate("createdBy", "name email role");
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Project created successfully.",
       project: populatedProject,
@@ -59,7 +58,7 @@ export const createProject = async (req, res) => {
   } catch (error) {
     console.error("Create Project:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -72,11 +71,12 @@ export const createProject = async (req, res) => {
 
 export const getProjects = async (req, res) => {
   try {
-    const filter = {};
+    let filter = {};
 
-    // Team Members only see projects assigned to them
     if (req.user.role === "Team Member") {
-      filter.members = req.user._id;
+      filter = {
+        members: req.user._id,
+      };
     }
 
     if (req.query.status) {
@@ -88,7 +88,7 @@ export const getProjects = async (req, res) => {
       .populate("createdBy", "name email role")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: projects.length,
       projects,
@@ -96,7 +96,7 @@ export const getProjects = async (req, res) => {
   } catch (error) {
     console.error("Get Projects:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -120,7 +120,6 @@ export const getProjectById = async (req, res) => {
       });
     }
 
-    // Team Members can only access their own projects
     if (
       req.user.role === "Team Member" &&
       !project.members.some(
@@ -133,14 +132,14 @@ export const getProjectById = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       project,
     });
   } catch (error) {
     console.error("Get Project:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -171,7 +170,7 @@ export const updateProject = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Project updated successfully.",
       project,
@@ -179,7 +178,7 @@ export const updateProject = async (req, res) => {
   } catch (error) {
     console.error("Update Project:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -203,14 +202,14 @@ export const deleteProject = async (req, res) => {
 
     await project.deleteOne();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Project deleted successfully.",
     });
   } catch (error) {
     console.error("Delete Project:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -218,7 +217,7 @@ export const deleteProject = async (req, res) => {
 };
 
 /* ==========================================
-   ADD MEMBER TO PROJECT
+   ADD MEMBER
 ========================================== */
 
 export const addMember = async (req, res) => {
@@ -250,7 +249,7 @@ export const addMember = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        message: "User is already a project member.",
+        message: "User is already a member.",
       });
     }
 
@@ -262,7 +261,7 @@ export const addMember = async (req, res) => {
       .populate("members", "name email role")
       .populate("createdBy", "name email role");
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Member added successfully.",
       project: updatedProject,
@@ -270,7 +269,7 @@ export const addMember = async (req, res) => {
   } catch (error) {
     console.error("Add Member:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });

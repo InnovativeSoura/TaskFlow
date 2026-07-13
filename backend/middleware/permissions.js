@@ -1,14 +1,21 @@
 import { authorizeRoles } from "./roleMiddleware.js";
 
 /* ==========================================
-   PREDEFINED ROLE GUARDS
+   ROLE-BASED ACCESS CONTROL
 ========================================== */
 
-// Only Admin
+// Admin only
 export const isAdmin = authorizeRoles("Admin");
 
-// Admin + Manager
-export const isAdminOrManager = authorizeRoles("Admin", "Manager", "Team Member");
+// Admin and Manager only
+export const isAdminOrManager = authorizeRoles(
+  "Admin",
+  "Manager"
+);
 
-// All authenticated users (role already validated separately if needed)
-export const isAnyRole = authorizeRoles("Admin", "Manager", "Team Member");
+// Any authenticated user
+export const isAnyRole = authorizeRoles(
+  "Admin",
+  "Manager",
+  "Team Member"
+);

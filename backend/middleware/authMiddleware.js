@@ -2,46 +2,92 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 /* ==========================================
-   AUTH MIDDLEWARE (VERIFY TOKEN)
+   VERIFY AUTH TOKEN
 ========================================== */
 
 export const protect = async (req, res, next) => {
   try {
-    let token;
+    let token = null;
 
-    // Read token from header
+    /* ==========================================
+       GET TOKEN FROM AUTH HEADER
+    ========================================== */
+
+    const authHeader = req.headers.authorization;
+
     if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
+      authHeader &&
+      authHeader.startsWith("Bearer ")
     ) {
-      token = req.headers.authorization.split(" ")[1];
+      token = authHeader.split(" ")[1];
+    }
+
+    /* ==========================================
+       GET TOKEN FROM COOKIE (OPTIONAL)
+    ========================================== */
+
+    if (!token && req.cookies?.token) {
+      token = req.cookies.token;
     }
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authorized, no token provided",
+        message: "Authentication token missing",
       });
     }
 
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    /* ==========================================
+       VERIFY TOKEN
+    ========================================== */
 
-    // Attach user to request (excluding password)
-    req.user = await User.findById(decoded.id).select("-password");
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
 
-    if (!req.user) {
+    /* ==========================================
+       FIND USER
+    ========================================== */
+
+    const user = await User.findById(decoded.id).select(
+      "-password"
+    );
+
+    if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: "User no longer exists",
       });
     }
+
+    /* ==========================================
+       ATTACH USER
+    ========================================== */
+
+    req.user = user;
 
     next();
   } catch (error) {
+    console.error("Auth Middleware Error:", error);
+
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Token expired",
+      });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token",
+      });
+    }
+
     return res.status(401).json({
       success: false,
-      message: "Not authorized, token failed",
+      message: "Authentication failed",
     });
   }
 };

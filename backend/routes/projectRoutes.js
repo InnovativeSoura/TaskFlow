@@ -18,48 +18,47 @@ import {
 const router = express.Router();
 
 /* ==========================================
-   AUTHENTICATION
+   ALL PROJECT ROUTES REQUIRE AUTHENTICATION
 ========================================== */
 
-// All routes require login
 router.use(protect);
 
 /* ==========================================
    PROJECT ROUTES
 ========================================== */
 
-// =============================
-// View Projects (All users)
-// =============================
-
 // Get all projects
 router.get("/", getProjects);
 
-// Get project by ID
+// Get single project
 router.get("/:id", getProjectById);
 
-// =============================
-// Admin + Manager
-// =============================
+// Create project (Admin / Manager)
+router.post(
+  "/",
+  isAdminOrManager,
+  createProject
+);
 
-// Create project
-router.post("/", isAdminOrManager, createProject);
+// Update project (Admin / Manager)
+router.put(
+  "/:id",
+  isAdminOrManager,
+  updateProject
+);
 
-// Update project
-router.put("/:id", isAdminOrManager, updateProject);
-
-// Add member
+// Add member (Admin / Manager)
 router.patch(
   "/:id/add-member",
   isAdminOrManager,
   addMember
 );
 
-// =============================
-// Admin only
-// =============================
-
-// Delete project
-router.delete("/:id", isAdmin, deleteProject);
+// Delete project (Admin only)
+router.delete(
+  "/:id",
+  isAdmin,
+  deleteProject
+);
 
 export default router;

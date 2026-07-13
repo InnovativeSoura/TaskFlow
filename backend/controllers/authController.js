@@ -1,14 +1,14 @@
-// backend/controllers/authController.js
-
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+/* ==========================================
+   GENERATE JWT TOKEN
+========================================== */
 
-// Generate JWT Token
-const generateToken = (id) => {
+const generateToken = (userId) => {
   return jwt.sign(
-    { id },
+    { id: userId },
     process.env.JWT_SECRET,
     {
       expiresIn: "7d",
@@ -16,11 +16,9 @@ const generateToken = (id) => {
   );
 };
 
-
-
-// =========================
-// REGISTER USER
-// =========================
+/* ==========================================
+   REGISTER USER
+========================================== */
 
 export const register = async (req, res) => {
   try {
@@ -28,7 +26,7 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      role = "member",
+      role = "Team Member",
     } = req.body;
 
     name = name?.trim();
@@ -61,34 +59,32 @@ export const register = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Registration successful",
       token,
       user: {
+        _id: user._id,
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
     console.error("Register Error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error",
     });
   }
 };
 
-
-
-
-
-// =========================
-// LOGIN USER
-// =========================
+/* ==========================================
+   LOGIN USER
+========================================== */
 
 export const login = async (req, res) => {
   try {
@@ -126,88 +122,56 @@ export const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Login successful",
       token,
       user: {
+        _id: user._id,
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
     console.error("Login Error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error",
     });
   }
 };
 
-
-
-
-
-// =========================
-// GET CURRENT USER
-// =========================
+/* ==========================================
+   GET CURRENT USER
+========================================== */
 
 export const getMe = async (req, res) => {
-
   try {
-
-
-    const user = await User.findById(
-      req.user.id
-    ).select("-password");
-
-
-
-    if (!user) {
-
-      return res.status(404).json({
-
-        success:false,
-
-        message:"User not found",
-
-      });
-
-    }
-
-
-
-    res.status(200).json({
-
-      success:true,
-
-      user,
-
-    });
-
-
-
-  } catch(error){
-
-
-    console.error(
-      "GetMe Error:",
-      error.message
+    const user = await User.findById(req.user._id).select(
+      "-password"
     );
 
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    res.status(500).json({
-
-      success:false,
-
-      message:"Server error",
-
+    return res.status(200).json({
+      success: true,
+      user,
     });
+  } catch (error) {
+    console.error("GetMe Error:", error);
 
-
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
-
 };

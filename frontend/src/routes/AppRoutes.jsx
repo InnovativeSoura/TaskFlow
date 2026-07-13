@@ -1,101 +1,41 @@
+// src/routes/AppRoutes.jsx
+
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
-
 import ProtectedRoute from "../components/ProtectedRoute";
 
-/* ===========================
-   AUTH
-=========================== */
-
 import AuthPage from "../pages/AuthPage";
-
-/* ===========================
-   DASHBOARD
-=========================== */
 
 import Dashboard from "../pages/Dashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 
-/* ===========================
-   PROJECTS
-=========================== */
-
 import Projects from "../pages/Projects";
 import ProjectList from "../pages/ProjectList";
-
-/* ===========================
-   TASKS
-=========================== */
 
 import Tasks from "../pages/Tasks";
 import TaskList from "../pages/TaskList";
 
-/* ===========================
-   USERS
-=========================== */
-
 import Users from "../pages/Users";
 import Team from "../pages/Team";
 
-/* ===========================
-   PROFILE
-=========================== */
-
 import Profile from "../pages/Profile";
-
-/* ===========================
-   REPORTS
-=========================== */
 
 import Reports from "../pages/Reports";
 import Analytics from "../pages/Analytics";
 
-/* ===========================
-   KANBAN
-=========================== */
-
 import KanbanBoard from "../pages/KanbanBoard";
-
-/* ===========================
-   CALENDAR
-=========================== */
 
 import CalendarPage from "../pages/CalendarPage";
 
-/* ===========================
-   CHAT
-=========================== */
-
 import TeamChat from "../pages/TeamChat";
-
-/* ===========================
-   AI
-=========================== */
 
 import AIInsights from "../pages/AIInsights";
 
-/* ===========================
-   GANTT
-=========================== */
-
 import GanttPage from "../pages/GanttPage";
-
-/* ===========================
-   SETTINGS
-=========================== */
 
 import Settings from "../pages/Settings";
 
-/* ===========================
-   NOTIFICATIONS
-=========================== */
-
 import Notifications from "../pages/Notifications";
-
-/* ===========================
-   OTHERS
-=========================== */
 
 import ActivityFeed from "../pages/ActivityFeed";
 import Workspaces from "../pages/Workspaces";
@@ -105,7 +45,10 @@ import Upgrade from "../pages/Upgrade";
 import Home from "../pages/Home";
 
 function AppRoutes() {
-  const { loading, isAuthenticated } = useAuth();
+  const {
+    loading,
+    isAuthenticated,
+  } = useAuth();
 
   if (loading) {
     return (
@@ -118,15 +61,35 @@ function AppRoutes() {
   return (
     <Routes>
 
+      {/* Root */}
+
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
       {/* Public */}
 
-      <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
-
-      <Route path="/login" element={<AuthPage />} />
+      <Route
+        path="/login"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <AuthPage />
+          )
+        }
+      />
 
       <Route path="/pricing" element={<Pricing />} />
 
-      {/* Protected */}
+      {/* Dashboard */}
 
       <Route
         path="/dashboard"
@@ -146,6 +109,8 @@ function AppRoutes() {
         }
       />
 
+      {/* Projects */}
+
       <Route
         path="/projects"
         element={
@@ -163,6 +128,8 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      {/* Tasks */}
 
       <Route
         path="/tasks"
@@ -182,6 +149,8 @@ function AppRoutes() {
         }
       />
 
+      {/* Users */}
+
       <Route
         path="/users"
         element={
@@ -200,6 +169,8 @@ function AppRoutes() {
         }
       />
 
+      {/* Profile */}
+
       <Route
         path="/profile"
         element={
@@ -209,14 +180,7 @@ function AppRoutes() {
         }
       />
 
-      <Route
-        path="/kanban"
-        element={
-          <ProtectedRoute>
-            <KanbanBoard />
-          </ProtectedRoute>
-        }
-      />
+      {/* Reports */}
 
       <Route
         path="/reports"
@@ -236,6 +200,19 @@ function AppRoutes() {
         }
       />
 
+      {/* Kanban */}
+
+      <Route
+        path="/kanban"
+        element={
+          <ProtectedRoute>
+            <KanbanBoard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Calendar */}
+
       <Route
         path="/calendar"
         element={
@@ -244,6 +221,8 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      {/* Chat */}
 
       <Route
         path="/chat"
@@ -254,14 +233,7 @@ function AppRoutes() {
         }
       />
 
-      <Route
-        path="/activity"
-        element={
-          <ProtectedRoute>
-            <ActivityFeed />
-          </ProtectedRoute>
-        }
-      />
+      {/* AI */}
 
       <Route
         path="/ai"
@@ -272,11 +244,24 @@ function AppRoutes() {
         }
       />
 
+      {/* Gantt */}
+
       <Route
         path="/gantt"
         element={
           <ProtectedRoute>
             <GanttPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Others */}
+
+      <Route
+        path="/activity"
+        element={
+          <ProtectedRoute>
+            <ActivityFeed />
           </ProtectedRoute>
         }
       />
@@ -335,7 +320,18 @@ function AppRoutes() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Fallback */}
+
+      <Route
+        path="*"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
 
     </Routes>
   );

@@ -1,15 +1,27 @@
-import mongoose from "mongoose";
+// backend/config/db.js
 
-console.log("MONGODB_URL =", process.env.MONGODB_URL);
-console.log("MONGODB_URL =", process.env.MONGODB_URL);
+import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URL);
+    if (!process.env.MONGODB_URL) {
+      throw new Error("MONGODB_URL environment variable is missing.");
+    }
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    const conn = await mongoose.connect(process.env.MONGODB_URL, {
+      autoIndex: true,
+    });
+
+    console.log("======================================");
+    console.log("✅ MongoDB Connected");
+    console.log(`🌍 Host     : ${conn.connection.host}`);
+    console.log(`📂 Database : ${conn.connection.name}`);
+    console.log("======================================");
   } catch (error) {
-    console.error("MongoDB Error:", error);
+    console.error("======================================");
+    console.error("❌ MongoDB Connection Failed");
+    console.error(error.message);
+    console.error("======================================");
     process.exit(1);
   }
 };
