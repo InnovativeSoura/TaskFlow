@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 import PageHeader from "../components/PageHeader";
@@ -393,15 +393,9 @@ const Projects = () => {
       RESET PAGE WHEN FILTER CHANGES
   =========================== */
 
-  useMemo(() => {
-
-    setCurrentPage(1);
-
-  }, [
-    search,
-    statusFilter,
-    sortBy,
-  ]);
+  useEffect(() => {
+  setCurrentPage(1);
+  }, [search, statusFilter, sortBy]);
     return (
 
     <MainLayout>

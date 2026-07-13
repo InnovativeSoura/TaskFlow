@@ -33,37 +33,39 @@ export const AuthProvider = ({ children }) => {
   ========================================== */
 
   useEffect(() => {
-    const loadUser = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
+  const loadUser = async () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { data } = await api.get("/auth/me");
+
+      if (data.success) {
+        setUser(data.user);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
       }
+    } catch (err) {
+      console.error(err);
 
-      try {
-        const res = await api.get("/auth/me");
-
-        if (res.data.success) {
-          setUser(res.data.user);
-
-          localStorage.setItem(
-            "user",
-            JSON.stringify(res.data.user)
-          );
-        }
-      } catch (err) {
-        console.error("Load User Error:", err);
-
-        // Logout ONLY if token is invalid
-        if (err.response?.status === 401) {
-          logout();
-        }
-      } finally {
-        setLoading(false);
+      // Keep existing user if already available
+      if (!user) {
+        logout();
       }
-    };
+    }
 
-    loadUser();
-  }, [token]);
+    setLoading(false);
+  };
+
+  loadUser();
+
+// eslint-disable-next-line
+}, []);
 
   /* ==========================================
       LOGIN
