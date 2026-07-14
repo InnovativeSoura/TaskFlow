@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const PublicRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { token, user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -12,11 +12,11 @@ const PublicRoute = ({ children }) => {
     );
   }
 
-  return user ? (
-    <Navigate to="/dashboard" replace />
-  ) : (
-    children
-  );
+  if (token && user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
 };
 
 export default PublicRoute;

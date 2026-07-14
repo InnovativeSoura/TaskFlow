@@ -27,7 +27,7 @@ const Sidebar = () => {
     localStorage.removeItem("user");
   }
 
-  navigate("/login", { replace: true });
+  navigate("/", { replace: true });
 };
 
   return (

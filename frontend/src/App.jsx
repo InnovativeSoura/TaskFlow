@@ -6,7 +6,10 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Tasks from "./pages/Tasks";
 
-// Temporary placeholders until you build these pages
+import PublicRoute from "./components/PublicRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// Temporary pages
 const Users = () => <h1>Users</h1>;
 const Profile = () => <h1>Profile</h1>;
 const Settings = () => <h1>Settings</h1>;
@@ -15,17 +18,14 @@ const Reports = () => <h1>Reports</h1>;
 const Kanban = () => <h1>Kanban</h1>;
 const About = () => <h1>About</h1>;
 
-import PublicRoute from "./components/PublicRoute";
-import ProtectedRoute from "./components/ProtectedRoute";
-
 function App() {
   return (
     <Routes>
+      {/* =========================
+          PUBLIC ROUTES
+      ========================= */}
 
-      <Route
-        path="/"
-        element={<LandingPage />}
-      />
+      <Route path="/" element={<LandingPage />} />
 
       <Route
         path="/login"
@@ -35,6 +35,12 @@ function App() {
           </PublicRoute>
         }
       />
+
+      <Route path="/about" element={<About />} />
+
+      {/* =========================
+          PROTECTED ROUTES
+      ========================= */}
 
       <Route
         path="/dashboard"
@@ -117,16 +123,14 @@ function App() {
         }
       />
 
-      <Route
-        path="/about"
-        element={<About />}
-      />
+      {/* =========================
+          404
+      ========================= */}
 
       <Route
         path="*"
         element={<Navigate to="/" replace />}
       />
-
     </Routes>
   );
 }
