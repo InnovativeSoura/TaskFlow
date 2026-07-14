@@ -1,17 +1,19 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
+import "../styles/MainLayout.css";
+
 const MainLayout = ({ children }) => {
   return (
-    <div className="dashboard-layout">
+     <div className="layout">
       <Sidebar />
 
-      <div className="dashboard-main">
+      <div className="main-content">
         <Navbar />
 
-        <div className="dashboard-container">
+        <main className="page-content">
           {children}
-        </div>
+        </main>
       </div>
     </div>
   );
