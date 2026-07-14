@@ -1,91 +1,32 @@
 import { useEffect, useState } from "react";
-import {
-  fetchUsers,
-  searchUsers,
-  updateUserRole,
-  toggleUserStatus,
-  deleteUser,
-} from "../api/usersApi";
-import { useAuth } from "../context/AuthContext";
+import MainLayout from "../layouts/MainLayout";
+import Loader from "../components/Loader";
+import EmptyState from "../components/EmptyState";
+import api from "../api/axios";
+
+import "../styles/User.css";
 
 const Users = () => {
-  const { user } = useAuth();
-
   const [users, setUsers] = useState([]);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const isAdmin = user?.role === "Admin";
-
-  /* ==========================================
-     LOAD USERS
-  ========================================== */
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const data = await fetchUsers();
-      setUsers(data.users || []);
+
+      const res = await api.get("/users");
+
+      setUsers(
+        res.data.users ||
+        res.data.data ||
+        res.data ||
+        []
+      );
     } catch (err) {
       console.error(err);
+      setUsers([]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  /* ==========================================
-     SEARCH USERS
-  ========================================== */
-  const handleSearch = async (value) => {
-    setSearch(value);
-
-    if (!value.trim()) {
-      loadUsers();
-      return;
-    }
-
-    try {
-      const data = await searchUsers(value);
-      setUsers(data.users || []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  /* ==========================================
-     ROLE CHANGE
-  ========================================== */
-  const handleRoleChange = async (id, role) => {
-    try {
-      await updateUserRole(id, role);
-      loadUsers();
-    } catch (err) {
-      alert(err.response?.data?.message);
-    }
-  };
-
-  /* ==========================================
-     STATUS TOGGLE
-  ========================================== */
-  const handleToggleStatus = async (id) => {
-    try {
-      await toggleUserStatus(id);
-      loadUsers();
-    } catch (err) {
-      alert(err.response?.data?.message);
-    }
-  };
-
-  /* ==========================================
-     DELETE USER
-  ========================================== */
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
-
-    try {
-      await deleteUser(id);
-      loadUsers();
-    } catch (err) {
-      alert(err.response?.data?.message);
     }
   };
 
@@ -93,87 +34,74 @@ const Users = () => {
     loadUsers();
   }, []);
 
+  if (loading) return <Loader />;
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Users Management</h2>
+    <MainLayout>
+      <div className="page-header">
+        <h1>Team Members</h1>
 
-      {/* SEARCH */}
-      <input
-        type="text"
-        placeholder="Search users..."
-        value={search}
-        onChange={(e) => handleSearch(e.target.value)}
-        style={{ padding: "8px", marginBottom: "15px", width: "300px" }}
-      />
+        <button className="primary-btn">
+          + Invite Member
+        </button>
+      </div>
 
-      {loading ? (
-        <p>Loading...</p>
+      {users.length === 0 ? (
+        <EmptyState title="No Members Found" />
       ) : (
-        <table border="1" cellPadding="10" width="100%">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              {isAdmin && <th>Actions</th>}
-            </tr>
-          </thead>
+        <div className="users-grid">
 
-          <tbody>
-            {users.map((u) => (
-              <tr key={u._id}>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
+          {users.map((user) => (
 
-                {/* ROLE */}
-                <td>
-                  {isAdmin ? (
-                    <select
-                      value={u.role}
-                      onChange={(e) =>
-                        handleRoleChange(u._id, e.target.value)
-                      }
-                    >
-                      <option>Admin</option>
-                      <option>Manager</option>
-                      <option>Member</option>
-                    </select>
-                  ) : (
-                    u.role
-                  )}
-                </td>
+            <div
+              className="user-card"
+              key={user._id}
+            >
 
-                {/* STATUS */}
-                <td>
-                  <span
-                    style={{
-                      color: u.status === "Active" ? "green" : "red",
-                      cursor: isAdmin ? "pointer" : "default",
-                    }}
-                    onClick={() => isAdmin && handleToggleStatus(u._id)}
-                  >
-                    {u.status}
-                  </span>
-                </td>
+              <div className="avatar">
 
-                {/* ACTIONS */}
-                {isAdmin && (
-                  <td>
-                    <button
-                      onClick={() => handleDelete(u._id)}
-                      style={{ background: "red", color: "white" }}
-                    >
-                      Delete
-                    </button>
-                  </td>
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                  />
+                ) : (
+                  user.name
+                    ?.substring(0, 2)
+                    .toUpperCase()
                 )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+              </div>
+
+              <h3>{user.name}</h3>
+
+              <p>{user.email}</p>
+
+              <span className="role">
+                {user.role}
+              </span>
+
+              <div className="status">
+
+                <span
+                  className={
+                    user.status === "Active"
+                      ? "active"
+                      : "inactive"
+                  }
+                >
+                  {user.status}
+                </span>
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
       )}
-    </div>
+    </MainLayout>
   );
 };
 

@@ -1,539 +1,197 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import MainLayout from "../layouts/MainLayout";
+import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
-
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
 
 import "../styles/Settings.css";
 
-function Settings() {
+const Settings = () => {
+  const { user } = useAuth();
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
 
-  const [loading, setLoading] =
-    useState(true);
+  const [notifications, setNotifications] = useState(true);
 
-  const [saving, setSaving] =
-    useState(false);
+  const [password, setPassword] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
-  const [settings, setSettings] =
-    useState({
+  const changeTheme = () => {
+    const value = !darkMode;
 
-      darkMode: false,
+    setDarkMode(value);
 
-      emailNotifications: true,
+    localStorage.setItem(
+      "theme",
+      value ? "dark" : "light"
+    );
 
-      pushNotifications: true,
+    document.body.classList.toggle(
+      "dark-theme",
+      value
+    );
+  };
 
-      profileVisibility: "Public",
+  const savePassword = async () => {
+    if (password.newPassword !== password.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
-      language: "English",
-
-      timezone: "Asia/Kolkata",
-
-      autoSave: true,
-
-    });
-
-  //---------------------------------
-  // FETCH SETTINGS
-  //---------------------------------
-
-  const fetchSettings = async () => {
     try {
-      setLoading(true);
+      await api.put("/users/change-password", password);
 
-      const res = await api.get("/settings");
+      alert("Password Updated");
 
-      setSettings(res.data.settings || res.data);
+      setPassword({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
 
     } catch (err) {
-      console.error("Settings Error:", err);
-    } finally {
-      setLoading(false);
+      console.error(err);
+
+      alert(
+        err.response?.data?.message ||
+        "Unable to update password"
+      );
     }
   };
 
-  useEffect(() => {
-
-    fetchSettings();
-
-  }, []);
-
-  //---------------------------------
-  // SAVE SETTINGS
-  //---------------------------------
-
-  const saveSettings = async (e) => {
-  e.preventDefault();
-
-  try {
-    setSaving(true);
-
-    await api.put("/settings", settings);
-
-    alert("Settings saved successfully.");
-
-  } catch (err) {
-    console.error("Save Settings Error:", err);
-    alert(
-      err.response?.data?.message ||
-      "Unable to save settings."
-    );
-  } finally {
-    setSaving(false);
-  }
-};
-
-  //---------------------------------
-
-  if (loading) {
-
-    return (
-
-      <div className="loading-screen">
-
-        <h2>
-          Loading Settings...
-        </h2>
-
-      </div>
-
-    );
-
-  }
-
-  //---------------------------------
-
   return (
+    <MainLayout>
 
-    <div className="settings-page">
+      <div className="settings-page">
 
-      <Sidebar />
+        <h1>Settings</h1>
 
-      <div className="settings-main">
+        <div className="settings-grid">
 
-        <Navbar />
+          <div className="settings-card">
 
-        <div className="settings-container">
-
-          <div className="settings-header">
-
-            <h1>
-              Settings
-            </h1>
+            <h2>Account</h2>
 
             <p>
+              Logged in as
+            </p>
 
-              Customize your TaskFlow
-              experience.
+            <h3>{user?.name}</h3>
 
+            <span>{user?.email}</span>
+
+          </div>
+
+          <div className="settings-card">
+
+            <h2>Appearance</h2>
+
+            <label className="switch-row">
+
+              <span>Dark Mode</span>
+
+              <input
+                type="checkbox"
+                checked={darkMode}
+                onChange={changeTheme}
+              />
+
+            </label>
+
+          </div>
+
+          <div className="settings-card">
+
+            <h2>Notifications</h2>
+
+            <label className="switch-row">
+
+              <span>Email Notifications</span>
+
+              <input
+                type="checkbox"
+                checked={notifications}
+                onChange={() =>
+                  setNotifications(!notifications)
+                }
+              />
+
+            </label>
+
+          </div>
+
+          <div className="settings-card">
+
+            <h2>Change Password</h2>
+
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={password.currentPassword}
+              onChange={(e)=>
+                setPassword({
+                  ...password,
+                  currentPassword:e.target.value
+                })
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="New Password"
+              value={password.newPassword}
+              onChange={(e)=>
+                setPassword({
+                  ...password,
+                  newPassword:e.target.value
+                })
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={password.confirmPassword}
+              onChange={(e)=>
+                setPassword({
+                  ...password,
+                  confirmPassword:e.target.value
+                })
+              }
+            />
+
+            <button onClick={savePassword}>
+              Update Password
+            </button>
+
+          </div>
+
+          <div className="settings-card">
+
+            <h2>Application</h2>
+
+            <p>
+              <strong>Version</strong>
+            </p>
+
+            <span>TaskFlow v1.0</span>
+
+            <p>
+              MERN Stack • React • Node • MongoDB
             </p>
 
           </div>
 
-          <form
-            className="settings-form"
-            onSubmit={saveSettings}
-          >
-                        {/* ======================================
-                    APPEARANCE SETTINGS
-            ====================================== */}
-
-            <div className="settings-card">
-
-              <h2>Appearance</h2>
-
-              <div className="setting-item">
-
-                <div>
-
-                  <h3>Dark Mode</h3>
-
-                  <p>
-                    Enable dark theme for the application.
-                  </p>
-
-                </div>
-
-                <label className="switch">
-
-                  <input
-                    type="checkbox"
-                    checked={settings.darkMode}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        darkMode: e.target.checked,
-                      })
-                    }
-                  />
-
-                  <span className="slider"></span>
-
-                </label>
-
-              </div>
-
-            </div>
-
-            {/* ======================================
-                  NOTIFICATION SETTINGS
-            ====================================== */}
-
-            <div className="settings-card">
-
-              <h2>Notifications</h2>
-
-              <div className="setting-item">
-
-                <div>
-
-                  <h3>Email Notifications</h3>
-
-                  <p>
-                    Receive updates via email.
-                  </p>
-
-                </div>
-
-                <label className="switch">
-
-                  <input
-                    type="checkbox"
-                    checked={settings.emailNotifications}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        emailNotifications:
-                          e.target.checked,
-                      })
-                    }
-                  />
-
-                  <span className="slider"></span>
-
-                </label>
-
-              </div>
-
-              <div className="setting-item">
-
-                <div>
-
-                  <h3>Push Notifications</h3>
-
-                  <p>
-                    Receive browser notifications.
-                  </p>
-
-                </div>
-
-                <label className="switch">
-
-                  <input
-                    type="checkbox"
-                    checked={settings.pushNotifications}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        pushNotifications:
-                          e.target.checked,
-                      })
-                    }
-                  />
-
-                  <span className="slider"></span>
-
-                </label>
-
-              </div>
-
-            </div>
-
-            {/* ======================================
-                    PRIVACY SETTINGS
-            ====================================== */}
-
-            <div className="settings-card">
-
-              <h2>Privacy</h2>
-
-              <label>
-
-                Profile Visibility
-
-                <select
-                  value={settings.profileVisibility}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      profileVisibility:
-                        e.target.value,
-                    })
-                  }
-                >
-
-                  <option value="Public">
-                    Public
-                  </option>
-
-                  <option value="Private">
-                    Private
-                  </option>
-
-                  <option value="Team Only">
-                    Team Only
-                  </option>
-
-                </select>
-
-              </label>
-
-            </div>
-
-            {/* ======================================
-                LANGUAGE & TIMEZONE
-            ====================================== */}
-
-            <div className="settings-card">
-
-              <h2>
-                Regional Settings
-              </h2>
-
-              <label>
-
-                Language
-
-                <select
-                  value={settings.language}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      language:
-                        e.target.value,
-                    })
-                  }
-                >
-
-                  <option>
-                    English
-                  </option>
-
-                  <option>
-                    Hindi
-                  </option>
-
-                  <option>
-                    Bengali
-                  </option>
-
-                </select>
-
-              </label>
-
-              <label>
-
-                Time Zone
-
-                <select
-                  value={settings.timezone}
-                  onChange={(e) =>
-                    setSettings({
-                      ...settings,
-                      timezone:
-                        e.target.value,
-                    })
-                  }
-                >
-
-                  <option>
-                    Asia/Kolkata
-                  </option>
-
-                  <option>
-                    UTC
-                  </option>
-
-                  <option>
-                    America/New_York
-                  </option>
-
-                  <option>
-                    Europe/London
-                  </option>
-
-                </select>
-
-              </label>
-
-            </div>
-
-            {/* ======================================
-                  AUTO SAVE
-            ====================================== */}
-
-            <div className="settings-card">
-
-              <div className="setting-item">
-
-                <div>
-
-                  <h3>
-                    Auto Save
-                  </h3>
-
-                  <p>
-
-                    Automatically save changes while editing.
-
-                  </p>
-
-                </div>
-
-                <label className="switch">
-
-                  <input
-                    type="checkbox"
-                    checked={settings.autoSave}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        autoSave:
-                          e.target.checked,
-                      })
-                    }
-                  />
-
-                  <span className="slider"></span>
-
-                </label>
-
-              </div>
-
-            </div>
-                        {/* ======================================
-                    ACTION BUTTONS
-            ====================================== */}
-
-            <div className="settings-actions">
-
-              <button
-                type="submit"
-                className="save-btn"
-                disabled={saving}
-              >
-                {saving
-                  ? "Saving..."
-                  : "Save Settings"}
-              </button>
-
-              <button
-                type="button"
-                className="reset-btn"
-                onClick={fetchSettings}
-              >
-                Reset Changes
-              </button>
-
-            </div>
-
-          </form>
-
-          {/* ======================================
-                  SETTINGS SUMMARY
-          ====================================== */}
-
-          <div className="settings-card">
-
-            <h2>
-              Current Preferences
-            </h2>
-
-            <div className="summary-grid">
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.darkMode
-                    ? "Enabled"
-                    : "Disabled"}
-                </h3>
-
-                <p>Dark Mode</p>
-
-              </div>
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.emailNotifications
-                    ? "Enabled"
-                    : "Disabled"}
-                </h3>
-
-                <p>Email Alerts</p>
-
-              </div>
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.profileVisibility}
-                </h3>
-
-                <p>Profile Visibility</p>
-
-              </div>
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.language}
-                </h3>
-
-                <p>Language</p>
-
-              </div>
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.timezone}
-                </h3>
-
-                <p>Time Zone</p>
-
-              </div>
-
-              <div className="summary-item">
-
-                <h3>
-                  {settings.autoSave
-                    ? "Enabled"
-                    : "Disabled"}
-                </h3>
-
-                <p>Auto Save</p>
-
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
-        {/* settings-container */}
 
       </div>
-      {/* settings-main */}
 
-    </div>
-    // settings-page 
-
+    </MainLayout>
   );
-
-}
+};
 
 export default Settings;

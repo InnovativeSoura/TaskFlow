@@ -4,7 +4,7 @@ const projectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Project title is required"],
       trim: true,
     },
 
@@ -14,27 +14,13 @@ const projectSchema = new mongoose.Schema(
       trim: true,
     },
 
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-
-    members: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-
     status: {
       type: String,
       enum: [
         "Planning",
-        "In Progress",
-        "On Hold",
+        "Active",
         "Completed",
-        "Cancelled",
+        "Archived",
       ],
       default: "Planning",
     },
@@ -50,21 +36,6 @@ const projectSchema = new mongoose.Schema(
       default: "Medium",
     },
 
-    startDate: {
-      type: Date,
-      default: Date.now,
-    },
-
-    dueDate: {
-      type: Date,
-      required: true,
-    },
-
-    completionDate: {
-      type: Date,
-      default: null,
-    },
-
     progress: {
       type: Number,
       default: 0,
@@ -72,30 +43,35 @@ const projectSchema = new mongoose.Schema(
       max: 100,
     },
 
-    budget: {
-      type: Number,
-      default: 0,
+    startDate: {
+      type: Date,
+      default: Date.now,
     },
 
-    tags: [
+    endDate: {
+      type: Date,
+      default: null,
+    },
+
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    members: [
       {
-        type: String,
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
 
-    attachments: [
-      {
-        fileName: String,
-        fileUrl: String,
-        uploadedAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+    color: {
+      type: String,
+      default: "#2563eb",
+    },
 
-    isArchived: {
+    archived: {
       type: Boolean,
       default: false,
     },
@@ -105,20 +81,9 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-/* ==========================================
-   Virtual Task Count
-========================================== */
-
-projectSchema.virtual("taskCount", {
-  ref: "Task",
-  localField: "_id",
-  foreignField: "project",
-  count: true,
+projectSchema.virtual("completion").get(function () {
+  return `${this.progress}%`;
 });
-
-/* ==========================================
-   Include Virtuals
-========================================== */
 
 projectSchema.set("toJSON", {
   virtuals: true,
@@ -128,7 +93,4 @@ projectSchema.set("toObject", {
   virtuals: true,
 });
 
-export default mongoose.model(
-  "Project",
-  projectSchema
-);
+export default mongoose.model("Project", projectSchema);

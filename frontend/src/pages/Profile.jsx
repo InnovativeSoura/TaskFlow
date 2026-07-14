@@ -1,636 +1,152 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import { useState } from "react";
+import MainLayout from "../layouts/MainLayout";
+import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
 
 import "../styles/Profile.css";
 
-function Profile() {
+const Profile = () => {
+  const { user, updateUser } = useAuth();
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const [form, setForm] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    designation: user?.designation || "",
+    department: user?.department || "",
+    bio: user?.bio || "",
+  });
 
-  //----------------------------------
-  // STATES
-  //----------------------------------
+  const [saving, setSaving] = useState(false);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [saving, setSaving] =
-    useState(false);
-
-  const [profile, setProfile] =
-    useState({
-
-      name: "",
-
-      email: "",
-
-      phone: "",
-
-      role: "",
-
-      address: "",
-
-      joinedAt: "",
-
-      avatar: "",
-
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
-
-  const [passwords, setPasswords] =
-    useState({
-
-      currentPassword: "",
-
-      newPassword: "",
-
-      confirmPassword: "",
-
-    });
-
-  //----------------------------------
-  // FETCH PROFILE
-  //----------------------------------
-
-  const fetchProfile = async () => {
-
-    try {
-
-      setLoading(true);
-
-      const res = await axios.get(
-
-        `${API_URL}/api/profile`
-
-      );
-
-      setProfile(res.data);
-
-    } catch (err) {
-
-      console.error(err);
-
-    }
-
-    setLoading(false);
-
   };
 
-  useEffect(() => {
-
-    fetchProfile();
-
-  }, []);
-
-  //----------------------------------
-  // UPDATE PROFILE
-  //----------------------------------
-
-  const updateProfile = async (e) => {
-
-    e.preventDefault();
-
+  const saveProfile = async () => {
     try {
-
       setSaving(true);
 
-      await axios.put(
-
-        `${API_URL}/api/profile`,
-
-        profile
-
+      const res = await api.put(
+        `/users/${user._id}`,
+        form
       );
 
-      alert("Profile updated successfully.");
+      const updated =
+        res.data.user ||
+        res.data.data ||
+        res.data;
 
+      updateUser(updated);
+
+      alert("Profile Updated Successfully");
     } catch (err) {
-
       console.error(err);
-
-      alert("Unable to update profile.");
-
+      alert("Unable to update profile");
+    } finally {
+      setSaving(false);
     }
-
-    setSaving(false);
-
   };
-
-  //----------------------------------
-  // CHANGE PASSWORD
-  //----------------------------------
-
-  const changePassword = async (e) => {
-
-    e.preventDefault();
-
-    if (
-      passwords.newPassword !==
-      passwords.confirmPassword
-    ) {
-
-      alert("Passwords do not match.");
-
-      return;
-
-    }
-
-    try {
-
-      await axios.put(
-
-        `${API_URL}/api/profile/password`,
-
-        passwords
-
-      );
-
-      alert("Password updated.");
-
-      setPasswords({
-
-        currentPassword: "",
-
-        newPassword: "",
-
-        confirmPassword: "",
-
-      });
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert("Unable to update password.");
-
-    }
-
-  };
-
-  //----------------------------------
-
-  if (loading) {
-
-    return (
-
-      <div className="loading-screen">
-
-        <h2>Loading Profile...</h2>
-
-      </div>
-
-    );
-
-  }
-
-  //----------------------------------
 
   return (
+    <MainLayout>
 
-    <div className="profile-page">
+      <div className="profile-page">
 
-      <Sidebar />
+        <div className="profile-card">
 
-      <div className="profile-main">
+          <div className="profile-top">
 
-        <Navbar />
+            <div className="profile-avatar">
 
-        <div className="profile-container">
-
-          {/* HEADER */}
-
-          <div className="profile-header">
-
-            <h1>My Profile</h1>
-
-            <p>
-
-              Manage your account information.
-
-            </p>
-
-          </div>
-                    {/* ===============================
-                  PROFILE INFORMATION
-          =============================== */}
-
-          <div className="profile-grid">
-
-            <div className="profile-card">
-
-              <div className="avatar-section">
-
-                <div className="avatar">
-
-                  {profile.avatar ? (
-
-                    <img
-                      src={profile.avatar}
-                      alt={profile.name}
-                    />
-
-                  ) : (
-
-                    <span>
-
-                      {profile.name
-                        ?.charAt(0)
-                        .toUpperCase()}
-
-                    </span>
-
-                  )}
-
-                </div>
-
-                <h2>{profile.name}</h2>
-
-                <p>{profile.role}</p>
-
-              </div>
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt=""
+                />
+              ) : (
+                user?.name
+                  ?.substring(0,2)
+                  .toUpperCase()
+              )}
 
             </div>
 
-            {/* ===============================
-                    PROFILE FORM
-            =============================== */}
+            <div>
 
-            <div className="profile-card">
+              <h2>{user?.name}</h2>
 
-              <h2>
-                Personal Information
-              </h2>
-
-              <form
-                className="profile-form"
-                onSubmit={updateProfile}
-              >
-
-                <label>
-
-                  Full Name
-
-                  <input
-                    type="text"
-                    value={profile.name}
-                    onChange={(e) =>
-                      setProfile({
-                        ...profile,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-
-                </label>
-
-                <label>
-
-                  Email Address
-
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) =>
-                      setProfile({
-                        ...profile,
-                        email: e.target.value,
-                      })
-                    }
-                  />
-
-                </label>
-
-                <label>
-
-                  Phone Number
-
-                  <input
-                    type="text"
-                    value={profile.phone}
-                    onChange={(e) =>
-                      setProfile({
-                        ...profile,
-                        phone: e.target.value,
-                      })
-                    }
-                  />
-
-                </label>
-
-                <label>
-
-                  Address
-
-                  <textarea
-                    rows="4"
-                    value={profile.address}
-                    onChange={(e) =>
-                      setProfile({
-                        ...profile,
-                        address:
-                          e.target.value,
-                      })
-                    }
-                  />
-
-                </label>
-
-                <label>
-
-                  Role
-
-                  <input
-                    type="text"
-                    value={profile.role}
-                    disabled
-                  />
-
-                </label>
-
-                <label>
-
-                  Joined Date
-
-                  <input
-                    type="text"
-                    value={
-                      profile.joinedAt
-                        ? new Date(
-                            profile.joinedAt
-                          ).toLocaleDateString()
-                        : ""
-                    }
-                    disabled
-                  />
-
-                </label>
-
-                <button
-                  type="submit"
-                  className="save-btn"
-                  disabled={saving}
-                >
-
-                  {saving
-                    ? "Saving..."
-                    : "Save Changes"}
-
-                </button>
-
-              </form>
+              <p>{user?.role}</p>
 
             </div>
 
           </div>
-                    {/* ===============================
-                  CHANGE PASSWORD
-          =============================== */}
 
-          <div className="profile-grid">
-
-            <div className="profile-card">
-
-              <h2>
-                Change Password
-              </h2>
-
-              <form
-                className="profile-form"
-                onSubmit={changePassword}
-              >
-
-                <label>
-
-                  Current Password
-
-                  <input
-                    type="password"
-                    value={passwords.currentPassword}
-                    onChange={(e) =>
-                      setPasswords({
-                        ...passwords,
-                        currentPassword:
-                          e.target.value,
-                      })
-                    }
-                    required
-                  />
-
-                </label>
-
-                <label>
-
-                  New Password
-
-                  <input
-                    type="password"
-                    value={passwords.newPassword}
-                    onChange={(e) =>
-                      setPasswords({
-                        ...passwords,
-                        newPassword:
-                          e.target.value,
-                      })
-                    }
-                    required
-                  />
-
-                </label>
-
-                <label>
-
-                  Confirm Password
-
-                  <input
-                    type="password"
-                    value={
-                      passwords.confirmPassword
-                    }
-                    onChange={(e) =>
-                      setPasswords({
-                        ...passwords,
-                        confirmPassword:
-                          e.target.value,
-                      })
-                    }
-                    required
-                  />
-
-                </label>
-
-                <button
-                  type="submit"
-                  className="save-btn"
-                >
-
-                  Update Password
-
-                </button>
-
-              </form>
-
-            </div>
-
-            {/* ===============================
-                    ACCOUNT SUMMARY
-            =============================== */}
-
-            <div className="profile-card">
-
-              <h2>
-                Account Summary
-              </h2>
-
-              <div className="summary-grid">
-
-                <div className="summary-item">
-
-                  <h3>
-                    {profile.role || "Member"}
-                  </h3>
-
-                  <p>
-                    Current Role
-                  </p>
-
-                </div>
-
-                <div className="summary-item">
-
-                  <h3>
-
-                    {profile.email
-                      ? "Verified"
-                      : "Unknown"}
-
-                  </h3>
-
-                  <p>
-                    Email Status
-                  </p>
-
-                </div>
-
-                <div className="summary-item">
-
-                  <h3>
-
-                    {profile.phone
-                      ? "Added"
-                      : "Not Added"}
-
-                  </h3>
-
-                  <p>
-                    Phone Number
-                  </p>
-
-                </div>
-
-                <div className="summary-item">
-
-                  <h3>
-
-                    {profile.address
-                      ? "Updated"
-                      : "Missing"}
-
-                  </h3>
-
-                  <p>
-                    Address
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-                    {/* ===============================
-                  ACCOUNT INFORMATION
-          =============================== */}
-
-          <div className="profile-card">
-
-            <h2>
-              Account Information
-            </h2>
-
-            <div className="info-list">
-
-              <div className="info-item">
-
-                <span>
-                  Account Type
-                </span>
-
-                <strong>
-                  {profile.role || "Member"}
-                </strong>
-
-              </div>
-
-              <div className="info-item">
-
-                <span>
-                  Registered Email
-                </span>
-
-                <strong>
-                  {profile.email}
-                </strong>
-
-              </div>
-
-              <div className="info-item">
-
-                <span>
-                  Phone
-                </span>
-
-                <strong>
-                  {profile.phone || "Not Provided"}
-                </strong>
-
-              </div>
-
-              <div className="info-item">
-
-                <span>
-                  Member Since
-                </span>
-
-                <strong>
-
-                  {profile.joinedAt
-                    ? new Date(
-                        profile.joinedAt
-                      ).toLocaleDateString()
-                    : "N/A"}
-
-                </strong>
-
-              </div>
-
-            </div>
+          <div className="profile-form">
+
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Name"
+            />
+
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email"
+            />
+
+            <input
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Phone"
+            />
+
+            <input
+              name="designation"
+              value={form.designation}
+              onChange={handleChange}
+              placeholder="Designation"
+            />
+
+            <input
+              name="department"
+              value={form.department}
+              onChange={handleChange}
+              placeholder="Department"
+            />
+
+            <textarea
+              rows="5"
+              name="bio"
+              value={form.bio}
+              onChange={handleChange}
+              placeholder="Bio"
+            />
+
+            <button
+              onClick={saveProfile}
+              disabled={saving}
+            >
+              {saving
+                ? "Saving..."
+                : "Save Changes"}
+            </button>
 
           </div>
 
         </div>
-        {/* profile-container */}
 
       </div>
-      {/* profile-main */}
 
-    </div>
-    // profile-page 
-
+    </MainLayout>
   );
-
-}
+};
 
 export default Profile;
