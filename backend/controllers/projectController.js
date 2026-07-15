@@ -337,7 +337,9 @@ export const deleteProject = async (req, res) => {
 
 export const archiveProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findById(
+      req.params.id
+    );
 
     if (!project) {
       return res.status(404).json({
@@ -354,30 +356,40 @@ export const archiveProject = async (req, res) => {
       success: true,
       message: "Project archived successfully",
     });
+
   } catch (error) {
-    console.error(error);
+    console.error("Archive Project:", error);
 
     res.status(500).json({
       success: false,
       message: "Archive failed",
     });
   }
+};
 
-  export const getProjectById = async (
+
+/* ==========================================
+   GET PROJECT BY ID
+   (Alias for route compatibility)
+========================================== */
+
+export const getProjectById = async (
   req,
   res
 ) => {
   try {
+
     const project =
       await Project.findById(req.params.id)
         .populate(
           "owner",
-          "name email"
+          "name email avatar"
         )
         .populate(
           "members",
-          "name email"
+          "name email avatar"
         );
+
 
     if (!project) {
       return res.status(404).json({
@@ -386,16 +398,25 @@ export const archiveProject = async (req, res) => {
       });
     }
 
+
     res.status(200).json({
       success: true,
       project,
     });
 
+
   } catch (error) {
+
+    console.error(
+      "Get Project By ID:",
+      error
+    );
+
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to fetch project",
     });
+
   }
-};
 };
