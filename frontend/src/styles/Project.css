@@ -853,3 +853,224 @@
 }
 
 }
+
+
+/* ======================================================
+   PROJECT TABLE ENHANCEMENTS
+====================================================== */
+
+/* Project Name */
+
+.project-name{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+}
+
+.project-name svg{
+    font-size:22px;
+    color:#2563eb;
+    margin-top:2px;
+}
+
+.project-name strong{
+    display:block;
+    color:#111827;
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.project-description{
+    color:#6b7280;
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* ======================================================
+   PROJECT MANAGER
+====================================================== */
+
+.project-manager{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#374151;
+    font-weight:500;
+}
+
+.project-manager svg{
+    color:#2563eb;
+}
+
+/* ======================================================
+   PROJECT DATE
+====================================================== */
+
+.project-date{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#4b5563;
+}
+
+.project-date svg{
+    color:#2563eb;
+}
+
+/* ======================================================
+   PROGRESS BAR
+====================================================== */
+
+.progress-wrapper{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.progress-bar{
+    width:120px;
+    height:10px;
+    background:#e5e7eb;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #3b82f6
+    );
+    transition:width .35s ease;
+}
+
+.progress-text{
+    min-width:42px;
+    font-size:13px;
+    font-weight:600;
+    color:#374151;
+}
+
+/* ======================================================
+   PRIORITY BADGES
+====================================================== */
+
+.priority-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.priority-high{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.priority-medium{
+    background:#fef3c7;
+    color:#d97706;
+}
+
+.priority-low{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+/* ======================================================
+   BADGES
+====================================================== */
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 16px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.badge.planning{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.badge.active{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.badge.completed{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+.badge.archived{
+    background:#f3f4f6;
+    color:#4b5563;
+}
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+
+.table-actions button{
+    width:38px;
+    height:38px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.table-actions button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+/* ======================================================
+   VIEW ONLY
+====================================================== */
+
+.view-only{
+    color:#6b7280;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width:1024px){
+
+    .progress-bar{
+        width:100px;
+    }
+
+    .project-manager,
+    .project-date{
+        white-space:nowrap;
+    }
+}
+
+@media (max-width:768px){
+
+    .progress-wrapper{
+        min-width:140px;
+    }
+
+    .project-name{
+        min-width:220px;
+    }
+}

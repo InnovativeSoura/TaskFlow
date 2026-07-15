@@ -1,36 +1,30 @@
 import api from "../api/axios";
 
 /* ==========================================
-   GET TASKS
+   GET ALL TASKS
 ========================================== */
 
 export const getTasks = async () => {
   const res = await api.get("/tasks");
+  return res;
+};
 
-  return {
-    success: true,
-    data:
-      res.data.tasks ??
-      res.data.data ??
-      res.data ??
-      [],
-  };
+/* ==========================================
+   GET SINGLE TASK
+========================================== */
+
+export const getTask = async (id) => {
+  const res = await api.get(`/tasks/${id}`);
+  return res;
 };
 
 /* ==========================================
    CREATE TASK
 ========================================== */
 
-export const createTask = async (data) => {
-  const res = await api.post("/tasks", data);
-
-  return {
-    success: true,
-    data:
-      res.data.task ??
-      res.data.data ??
-      res.data,
-  };
+export const createTask = async (taskData) => {
+  const res = await api.post("/tasks", taskData);
+  return res;
 };
 
 /* ==========================================
@@ -39,20 +33,30 @@ export const createTask = async (data) => {
 
 export const updateTask = async (
   id,
-  data
+  taskData
 ) => {
   const res = await api.put(
     `/tasks/${id}`,
-    data
+    taskData
   );
 
-  return {
-    success: true,
-    data:
-      res.data.task ??
-      res.data.data ??
-      res.data,
-  };
+  return res;
+};
+
+/* ==========================================
+   UPDATE TASK STATUS
+========================================== */
+
+export const updateTaskStatus = async (
+  id,
+  status
+) => {
+  const res = await api.patch(
+    `/tasks/${id}/status`,
+    { status }
+  );
+
+  return res;
 };
 
 /* ==========================================
@@ -60,5 +64,9 @@ export const updateTask = async (
 ========================================== */
 
 export const deleteTask = async (id) => {
-  return await api.delete(`/tasks/${id}`);
+  const res = await api.delete(
+    `/tasks/${id}`
+  );
+
+  return res;
 };

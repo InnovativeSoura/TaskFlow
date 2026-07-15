@@ -2,6 +2,8 @@ import {
   FaEdit,
   FaTrash,
   FaFolderOpen,
+  FaUserTie,
+  FaCalendarAlt,
 } from "react-icons/fa";
 
 import Loader from "../Loader";
@@ -14,7 +16,6 @@ const ProjectTable = ({
   onDelete,
   canManage = true,
 }) => {
-
   if (loading) {
     return <Loader />;
   }
@@ -28,9 +29,12 @@ const ProjectTable = ({
     );
   }
 
+  /* ==========================================
+     STATUS BADGE
+  ========================================== */
+
   const getBadgeClass = (status) => {
     switch (status?.toLowerCase()) {
-
       case "planning":
         return "planning";
 
@@ -48,149 +52,218 @@ const ProjectTable = ({
     }
   };
 
+  /* ==========================================
+     PRIORITY BADGE
+  ========================================== */
+
+  const getPriorityClass = (priority) => {
+    switch (priority?.toLowerCase()) {
+      case "high":
+        return "priority-high";
+
+      case "medium":
+        return "priority-medium";
+
+      case "low":
+        return "priority-low";
+
+      default:
+        return "priority-medium";
+    }
+  };
+
   return (
-
     <div className="project-table-wrapper">
-
       <table className="project-table">
-
         <thead>
-
           <tr>
-
             <th>Project</th>
 
-            <th>Description</th>
+            <th>Manager</th>
 
             <th>Status</th>
 
+            <th>Priority</th>
+
+            <th>Progress</th>
+
+            <th>Due Date</th>
+
             <th>Created</th>
 
-            <th align="center">Actions</th>
-
+            <th align="center">
+              Actions
+            </th>
           </tr>
-
         </thead>
 
         <tbody>
-
           {projects.map((project) => (
-
             <tr key={project._id}>
-
-              {/* Project */}
+              {/* ===========================
+                  PROJECT
+              =========================== */}
 
               <td>
-
                 <div className="project-name">
-
                   <FaFolderOpen />
 
-                  <span>
+                  <div>
+                    <strong>{project.title}</strong>
 
-                    {project.title}
-
-                  </span>
-
+                    <div className="project-description">
+                      {project.description
+                        ? project.description.length > 45
+                          ? `${project.description.substring(
+                              0,
+                              45
+                            )}...`
+                          : project.description
+                        : "No description"}
+                    </div>
+                  </div>
                 </div>
-
               </td>
 
-              {/* Description */}
+              {/* ===========================
+                  PROJECT MANAGER
+              =========================== */}
 
               <td>
+                <div className="project-manager">
+                  <FaUserTie />
 
-                {project.description
-                  ? project.description.length > 60
-                    ? `${project.description.substring(
-                        0,
-                        60
-                      )}...`
-                    : project.description
-                  : "-"}
-
+                  <span>
+                    {project.manager?.name ||
+                      project.owner?.name ||
+                      "Unassigned"}
+                  </span>
+                </div>
               </td>
 
-              {/* Status */}
+              {/* ===========================
+                  STATUS
+              =========================== */}
 
               <td>
-
                 <span
                   className={`badge ${getBadgeClass(
                     project.status
                   )}`}
                 >
-
-                  {project.status}
-
+                  {project.status || "Planning"}
                 </span>
-
               </td>
 
-              {/* Created */}
+              {/* ===========================
+                  PRIORITY
+              =========================== */}
 
               <td>
+                <span
+                  className={`priority-badge ${getPriorityClass(
+                    project.priority
+                  )}`}
+                >
+                  {project.priority || "Medium"}
+                </span>
+              </td>
 
+              {/* ===========================
+                  PROGRESS
+              =========================== */}
+
+              <td style={{ minWidth: "170px" }}>
+                <div className="progress-wrapper">
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${
+                          project.progress || 0
+                        }%`,
+                      }}
+                    />
+                  </div>
+
+                  <span className="progress-text">
+                    {project.progress || 0}%
+                  </span>
+                </div>
+              </td>
+
+              {/* ===========================
+                  DUE DATE
+              =========================== */}
+
+              <td>
+                <div className="project-date">
+                  <FaCalendarAlt />
+
+                  <span>
+                    {project.dueDate
+                      ? new Date(
+                          project.dueDate
+                        ).toLocaleDateString()
+                      : "--"}
+                  </span>
+                </div>
+              </td>
+
+              {/* ===========================
+                  CREATED DATE
+              =========================== */}
+
+              <td>
                 {project.createdAt
                   ? new Date(
                       project.createdAt
                     ).toLocaleDateString()
-                  : "-"}
-
+                  : "--"}
               </td>
 
-              {/* Actions */}
+              {/* ===========================
+                  ACTIONS
+              =========================== */}
 
               <td>
-
                 {canManage ? (
-
                   <div className="table-actions">
-
                     <button
                       className="edit-btn"
-                      onClick={() => onEdit(project)}
+                      title="Edit Project"
+                      onClick={() =>
+                        onEdit(project)
+                      }
                     >
-
                       <FaEdit />
-
                     </button>
 
                     <button
                       className="delete-btn"
-                      onClick={() => onDelete(project)}
+                      title="Delete Project"
+                      onClick={() =>
+                        onDelete(project)
+                      }
                     >
-
                       <FaTrash />
-
                     </button>
-
                   </div>
-
                 ) : (
-
                   <span className="view-only">
-
                     View Only
-
                   </span>
-
                 )}
-
               </td>
-
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
-
     </div>
-
   );
-
 };
 
 export default ProjectTable;
+
+
+

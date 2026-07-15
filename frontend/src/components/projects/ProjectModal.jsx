@@ -5,6 +5,8 @@ const initialForm = {
   description: "",
   status: "Planning",
   priority: "Medium",
+  progress: 0,
+  category: "",
   dueDate: "",
   manager: "",
 };
@@ -15,123 +17,169 @@ const ProjectModal = ({
   onSave,
   onClose,
 }) => {
+  /* ==========================================
+     STATE
+  ========================================== */
 
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] =
+    useState(initialForm);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] =
+    useState({});
+
+  /* ==========================================
+     LOAD PROJECT
+  ========================================== */
 
   useEffect(() => {
+    if (!open) return;
 
     if (project) {
-
       setForm({
         title: project.title || "",
-        description: project.description || "",
-        status: project.status || "Planning",
-        priority: project.priority || "Medium",
+        description:
+          project.description || "",
+        status:
+          project.status || "Planning",
+        priority:
+          project.priority || "Medium",
+        progress:
+          project.progress ?? 0,
+        category:
+          project.category || "",
         dueDate: project.dueDate
           ? project.dueDate.substring(0, 10)
           : "",
-        manager: project.manager || "",
+        manager:
+          project.manager || "",
       });
-
     } else {
-
       setForm(initialForm);
-
     }
 
     setErrors({});
-
   }, [project, open]);
 
-  if (!open) return null;
-
-  /* ===========================
-      INPUT CHANGE
-  =========================== */
+  /* ==========================================
+     INPUT CHANGE
+  ========================================== */
 
   const handleChange = (e) => {
-
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+      type,
+    } = e.target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]:
+        type === "range"
+          ? Number(value)
+          : value,
     }));
 
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
-  /* ===========================
-      VALIDATION
-  =========================== */
+  /* ==========================================
+     VALIDATION
+  ========================================== */
 
   const validate = () => {
-
     const newErrors = {};
 
     if (!form.title.trim()) {
-      newErrors.title = "Project title is required.";
+      newErrors.title =
+        "Project title is required.";
+    } else if (
+      form.title.length > 100
+    ) {
+      newErrors.title =
+        "Maximum 100 characters.";
     }
 
     if (!form.description.trim()) {
-      newErrors.description = "Description is required.";
+      newErrors.description =
+        "Description is required.";
+    } else if (
+      form.description.length > 500
+    ) {
+      newErrors.description =
+        "Maximum 500 characters.";
+    }
+
+    if (
+      form.progress < 0 ||
+      form.progress > 100
+    ) {
+      newErrors.progress =
+        "Progress must be between 0 and 100.";
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
-
+    return (
+      Object.keys(newErrors)
+        .length === 0
+    );
   };
 
-  /* ===========================
-      SUBMIT
-  =========================== */
+  /* ==========================================
+     SUBMIT
+  ========================================== */
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     if (!validate()) return;
 
     try {
-
       setLoading(true);
 
-      await onSave(form);
+      await onSave({
+        ...form,
+        progress: Number(
+          form.progress
+        ),
+      });
 
       setForm(initialForm);
-
+      setErrors({});
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
+  if (!open) return null;
+
   return (
-
     <div className="modal-overlay">
-
       <div className="modal">
-
         <h2>
-
           {project
             ? "Edit Project"
             : "Create Project"}
-
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+        >
 
-          {/* Title */}
+
+          {/* ==========================================
+              TITLE
+          ========================================== */}
 
           <div>
-
             <label>Project Title</label>
 
             <input
@@ -140,6 +188,7 @@ const ProjectModal = ({
               value={form.title}
               onChange={handleChange}
               placeholder="Enter project title"
+              maxLength={100}
             />
 
             {errors.title && (
@@ -147,13 +196,13 @@ const ProjectModal = ({
                 {errors.title}
               </small>
             )}
-
           </div>
 
-          {/* Description */}
+          {/* ==========================================
+              DESCRIPTION
+          ========================================== */}
 
           <div>
-
             <label>Description</label>
 
             <textarea
@@ -162,6 +211,7 @@ const ProjectModal = ({
               value={form.description}
               onChange={handleChange}
               placeholder="Describe the project..."
+              maxLength={500}
             />
 
             {errors.description && (
@@ -169,13 +219,13 @@ const ProjectModal = ({
                 {errors.description}
               </small>
             )}
-
           </div>
 
-          {/* Status */}
+          {/* ==========================================
+              STATUS
+          ========================================== */}
 
           <div>
-
             <label>Status</label>
 
             <select
@@ -183,7 +233,6 @@ const ProjectModal = ({
               value={form.status}
               onChange={handleChange}
             >
-
               <option value="Planning">
                 Planning
               </option>
@@ -199,15 +248,14 @@ const ProjectModal = ({
               <option value="Archived">
                 Archived
               </option>
-
             </select>
-
           </div>
 
-          {/* Priority */}
+          {/* ==========================================
+              PRIORITY
+          ========================================== */}
 
           <div>
-
             <label>Priority</label>
 
             <select
@@ -215,7 +263,6 @@ const ProjectModal = ({
               value={form.priority}
               onChange={handleChange}
             >
-
               <option value="Low">
                 Low
               </option>
@@ -227,15 +274,65 @@ const ProjectModal = ({
               <option value="High">
                 High
               </option>
-
             </select>
-
           </div>
 
-          {/* Due Date */}
+          {/* ==========================================
+              PROGRESS
+          ========================================== */}
 
           <div>
+            <label>
+              Progress ({form.progress}%)
+            </label>
 
+            <input
+              type="range"
+              name="progress"
+              min="0"
+              max="100"
+              step="1"
+              value={form.progress}
+              onChange={handleChange}
+            />
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${form.progress}%`,
+                }}
+              />
+            </div>
+
+            {errors.progress && (
+              <small className="error">
+                {errors.progress}
+              </small>
+            )}
+          </div>
+
+          {/* ==========================================
+              CATEGORY
+          ========================================== */}
+
+          <div>
+            <label>Category</label>
+
+            <input
+              type="text"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              placeholder="Web App, Mobile App, AI, CRM..."
+            />
+          </div>
+
+          {/* ==========================================
+              DUE DATE
+          ========================================== */}
+
+          <div>
             <label>Due Date</label>
 
             <input
@@ -244,13 +341,13 @@ const ProjectModal = ({
               value={form.dueDate}
               onChange={handleChange}
             />
-
           </div>
 
-          {/* Manager */}
+          {/* ==========================================
+              PROJECT MANAGER
+          ========================================== */}
 
           <div>
-
             <label>Project Manager</label>
 
             <input
@@ -260,45 +357,41 @@ const ProjectModal = ({
               onChange={handleChange}
               placeholder="Manager name"
             />
-
           </div>
 
-          {/* Buttons */}
+          {/* ==========================================
+              ACTIONS
+          ========================================== */}
 
           <div className="modal-actions">
-
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                setForm(initialForm);
+                setErrors({});
+                onClose();
+              }}
+              disabled={loading}
             >
-
               Cancel
-
             </button>
 
             <button
               type="submit"
               disabled={loading}
             >
-
               {loading
                 ? "Saving..."
                 : project
                 ? "Update Project"
                 : "Create Project"}
-
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
-
   );
-
 };
 
 export default ProjectModal;
+

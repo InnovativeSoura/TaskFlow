@@ -1,4 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 import {
   getProjects,
@@ -8,120 +12,243 @@ import {
 } from "../services/projectService";
 
 const useProjects = () => {
+  /* ==========================================
+     STATE
+  ========================================== */
+
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  /* ==========================
-      FETCH PROJECTS
-  ========================== */
+  const [loading, setLoading] =
+    useState(true);
 
-  const fetchProjects = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const [saving, setSaving] =
+    useState(false);
 
-      const res = await getProjects();
+  const [error, setError] =
+    useState(null);
 
-      const data =
-        res?.data?.projects ||
-        res?.data?.data ||
-        [];
+  /* ==========================================
+     FETCH PROJECTS
+  ========================================== */
 
-      setProjects(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Fetch Projects Error:", err);
+  const fetchProjects = useCallback(
+    async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      setError(
-        err.response?.data?.message ||
-          "Unable to load projects."
-      );
+        const res = await getProjects();
 
-      setProjects([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        const data =
+          res?.data?.projects ||
+          res?.data?.data ||
+          [];
 
-  /* ==========================
-      INITIAL LOAD
-  ========================== */
+        const sortedProjects = Array.isArray(
+          data
+        )
+          ? [...data].sort(
+              (a, b) =>
+                new Date(
+                  b.createdAt || 0
+                ) -
+                new Date(
+                  a.createdAt || 0
+                )
+            )
+          : [];
+
+        setProjects(sortedProjects);
+
+        return sortedProjects;
+      } catch (err) {
+        console.error(
+          "Fetch Projects Error:",
+          err
+        );
+
+        const message =
+          err.response?.data?.message ||
+          "Unable to load projects.";
+
+        setError(message);
+        setProjects([]);
+
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  /* ==========================================
+     INITIAL LOAD
+  ========================================== */
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
 
-  /* ==========================
-      CREATE PROJECT
-  ========================== */
+  /* ==========================================
+     CLEAR ERROR
+  ========================================== */
 
-  const addProject = async (projectData) => {
-    const res = await createProject(projectData);
-
-    const project =
-      res?.data?.project ||
-      res?.data?.data;
-
-    if (project) {
-      setProjects((prev) => [project, ...prev]);
-    }
-
-    return project;
+  const clearError = () => {
+    setError(null);
   };
 
-  /* ==========================
-      UPDATE PROJECT
-  ========================== */
+  /* ==========================================
+     GET PROJECT BY ID
+  ========================================== */
+
+  const getProjectById = (id) => {
+    return (
+      projects.find(
+        (project) =>
+          project._id === id
+      ) || null
+    );
+  };
+
+  /* ==========================================
+     REFRESH PROJECTS
+  ========================================== */
+
+  const refreshProjects = async () => {
+    return fetchProjects();
+  };
+
+
+  /* ==========================================
+     CREATE PROJECT
+  ========================================== */
+
+  const addProject = async (projectData) => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      const res = await createProject(projectData);
+
+      const project =
+        res?.data?.project ||
+        res?.data?.data;
+
+      if (project) {
+        setProjects((prev) => {
+          const exists = prev.some(
+            (item) => item._id === project._id
+          );
+
+          if (exists) return prev;
+
+          return [project, ...prev];
+        });
+      }
+
+      return project;
+    } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Unable to create project.";
+
+      setError(message);
+      throw err;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /* ==========================================
+     UPDATE PROJECT
+  ========================================== */
 
   const editProject = async (
     id,
     projectData
   ) => {
-    const res = await updateProject(
-      id,
-      projectData
-    );
+    try {
+      setSaving(true);
+      setError(null);
 
-    const updated =
-      res?.data?.project ||
-      res?.data?.data;
-
-    if (updated) {
-      setProjects((prev) =>
-        prev.map((item) =>
-          item._id === id ? updated : item
-        )
+      const res = await updateProject(
+        id,
+        projectData
       );
-    }
 
-    return updated;
+      const updated =
+        res?.data?.project ||
+        res?.data?.data;
+
+      if (updated) {
+        setProjects((prev) =>
+          prev.map((project) =>
+            project._id === id
+              ? updated
+              : project
+          )
+        );
+      }
+
+      return updated;
+    } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Unable to update project.";
+
+      setError(message);
+      throw err;
+    } finally {
+      setSaving(false);
+    }
   };
 
-  /* ==========================
-      DELETE PROJECT
-  ========================== */
+  /* ==========================================
+     DELETE PROJECT
+  ========================================== */
 
   const removeProject = async (id) => {
-    await deleteProject(id);
+    try {
+      setSaving(true);
+      setError(null);
 
-    setProjects((prev) =>
-      prev.filter((item) => item._id !== id)
-    );
+      await deleteProject(id);
+
+      setProjects((prev) =>
+        prev.filter(
+          (project) =>
+            project._id !== id
+        )
+      );
+
+      return true;
+    } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Unable to delete project.";
+
+      setError(message);
+      throw err;
+    } finally {
+      setSaving(false);
+    }
   };
 
-  /* ==========================
-      REFRESH
-  ========================== */
-
-  const refreshProjects = () => fetchProjects();
+  /* ==========================================
+     RETURN
+  ========================================== */
 
   return {
     projects,
     loading,
+    saving,
     error,
 
     fetchProjects,
     refreshProjects,
+    clearError,
+    getProjectById,
 
     addProject,
     editProject,
@@ -130,3 +257,4 @@ const useProjects = () => {
 };
 
 export default useProjects;
+

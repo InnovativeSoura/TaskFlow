@@ -319,9 +319,9 @@ const Projects = () => {
 
       console.error(error);
 
-      alert(
+      toast.error(
         error?.response?.data?.message ||
-        "Unable to delete project."
+        "Unable to save project."
       );
 
     } finally {
@@ -419,9 +419,10 @@ const Projects = () => {
 
                 <button
                   className="create-project-btn"
+                  disabled={loading}
                   onClick={handleCreateProject}
                 >
-                  + Create Project
+                    + Create Project
                 </button>
 
               )}

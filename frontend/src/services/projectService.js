@@ -1,52 +1,58 @@
 import api from "../api/axios";
 
 /* ==========================================
-   GET PROJECTS
+   GET ALL PROJECTS
 ========================================== */
 
-export const getProjects = async () => {
-  const res = await api.get("/projects");
-
-  return {
-    success: true,
-    data:
-      res.data.projects ??
-      res.data.data ??
-      res.data ??
-      [],
-  };
+export const getProjects = async (params = {}) => {
+  try {
+    return await api.get("/projects", {
+      params,
+    });
+  } catch (error) {
+    console.error(
+      "Get Projects Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 /* ==========================================
-   GET PROJECT
+   GET SINGLE PROJECT
 ========================================== */
 
 export const getProject = async (id) => {
-  const res = await api.get(`/projects/${id}`);
-
-  return {
-    success: true,
-    data:
-      res.data.project ??
-      res.data.data ??
-      res.data,
-  };
+  try {
+    return await api.get(`/projects/${id}`);
+  } catch (error) {
+    console.error(
+      "Get Project Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 /* ==========================================
    CREATE PROJECT
 ========================================== */
 
-export const createProject = async (data) => {
-  const res = await api.post("/projects", data);
-
-  return {
-    success: true,
-    data:
-      res.data.project ??
-      res.data.data ??
-      res.data,
-  };
+export const createProject = async (
+  projectData
+) => {
+  try {
+    return await api.post(
+      "/projects",
+      projectData
+    );
+  } catch (error) {
+    console.error(
+      "Create Project Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 /* ==========================================
@@ -55,20 +61,20 @@ export const createProject = async (data) => {
 
 export const updateProject = async (
   id,
-  data
+  projectData
 ) => {
-  const res = await api.put(
-    `/projects/${id}`,
-    data
-  );
-
-  return {
-    success: true,
-    data:
-      res.data.project ??
-      res.data.data ??
-      res.data,
-  };
+  try {
+    return await api.put(
+      `/projects/${id}`,
+      projectData
+    );
+  } catch (error) {
+    console.error(
+      "Update Project Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
 
 /* ==========================================
@@ -76,5 +82,36 @@ export const updateProject = async (
 ========================================== */
 
 export const deleteProject = async (id) => {
-  return await api.delete(`/projects/${id}`);
+  try {
+    return await api.delete(
+      `/projects/${id}`
+    );
+  } catch (error) {
+    console.error(
+      "Delete Project Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
 };
+
+/* ==========================================
+   PROJECT STATISTICS
+   (Optional endpoint)
+========================================== */
+
+export const getProjectStats =
+  async () => {
+    try {
+      return await api.get(
+        "/projects/stats"
+      );
+    } catch (error) {
+      console.error(
+        "Project Stats Error:",
+        error.response?.data ||
+          error.message
+      );
+      throw error;
+    }
+  };
