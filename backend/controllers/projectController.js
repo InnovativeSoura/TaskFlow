@@ -67,7 +67,90 @@ export const getProjects = async (req, res) => {
     });
   }
 };
+export const addMember = async (req, res) => {
+  try {
+    const { userId } = req.body;
 
+    const project = await Project.findById(
+      req.params.id
+    );
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    if (
+      !project.members.includes(userId)
+    ) {
+      project.members.push(userId);
+    }
+
+    await project.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Member added successfully",
+      project,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const removeMember = async (
+  req,
+  res
+) => {
+  try {
+
+    const { userId } = req.body;
+
+    const project =
+      await Project.findById(
+        req.params.id
+      );
+
+    if (!project) {
+      return res.status(404).json({
+        success:false,
+        message:"Project not found",
+      });
+    }
+
+
+    project.members =
+      project.members.filter(
+        (member) =>
+          member.toString() !== userId
+      );
+
+
+    await project.save();
+
+
+    res.json({
+      success:true,
+      message:
+        "Member removed successfully",
+      project,
+    });
+
+
+  } catch(error){
+
+    res.status(500).json({
+      success:false,
+      message:error.message,
+    });
+
+  }
+};
 /* ==========================================
    GET SINGLE PROJECT
 ========================================== */
