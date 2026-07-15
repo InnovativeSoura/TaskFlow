@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
+
 import { motion } from "framer-motion";
 
 import {
@@ -19,6 +24,7 @@ import "../styles/Auth.css";
 
 const AuthPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
 
   const { login, register } = useAuth();
@@ -28,7 +34,10 @@ const AuthPage = () => {
   );
 
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -38,7 +47,12 @@ const AuthPage = () => {
     role: "Team Member",
   });
 
-  const { name, email, password, role } = formData;
+  const {
+    name,
+    email,
+    password,
+    role,
+  } = formData;
 
   const handleChange = (e) => {
     setError("");
@@ -50,15 +64,17 @@ const AuthPage = () => {
   };
 
   const validate = () => {
-    if (!email.trim()) return "Email is required.";
+    if (!email.trim())
+      return "Email is required.";
 
-    if (!password.trim()) return "Password is required.";
+    if (!password.trim())
+      return "Password is required.";
 
     if (!isLogin && !name.trim()) {
       return "Full Name is required.";
     }
 
-    if (password.length < 6) {
+    if (password.trim().length < 6) {
       return "Password must be at least 6 characters.";
     }
 
@@ -67,6 +83,8 @@ const AuthPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return;
 
     const validationError = validate();
 
@@ -82,14 +100,17 @@ const AuthPage = () => {
       let response;
 
       if (isLogin) {
-        response = await login(email, password);
-      } else {
-        response = await register(
-          name,
-          email,
+        response = await login({
+          email: email.trim(),
           password,
-          role
-        );
+        });
+      } else {
+        response = await register({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          role,
+        });
       }
 
       if (!response.success) {
@@ -97,10 +118,16 @@ const AuthPage = () => {
         return;
       }
 
-      navigate("/dashboard");
+      const redirectTo =
+        location.state?.from?.pathname ||
+        "/dashboard";
+
+      navigate(redirectTo, {
+        replace: true,
+      });
     } catch (err) {
       setError(
-        err?.response?.data?.message ||
+        err.response?.data?.message ||
           err.message ||
           "Something went wrong."
       );
@@ -108,7 +135,6 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
-
   return (
     <>
       <BackgroundAnimation />
@@ -121,7 +147,9 @@ const AuthPage = () => {
           transition={{ duration: 0.7 }}
         >
           <h2 className="auth-title">
-            {isLogin ? "Welcome Back 👋" : "Create Account"}
+            {isLogin
+              ? "Welcome Back 👋"
+              : "Create Account"}
           </h2>
 
           <p className="auth-subtitle">
@@ -137,8 +165,8 @@ const AuthPage = () => {
           )}
 
           <form
-            onSubmit={handleSubmit}
             className="auth-form"
+            onSubmit={handleSubmit}
           >
             {!isLogin && (
               <>
@@ -151,6 +179,7 @@ const AuthPage = () => {
                     placeholder="Full Name"
                     value={name}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -162,6 +191,7 @@ const AuthPage = () => {
                     name="role"
                     value={role}
                     onChange={handleChange}
+                    disabled={loading}
                   >
                     <option value="Team Member">
                       Team Member
@@ -188,6 +218,8 @@ const AuthPage = () => {
                 placeholder="Email Address"
                 value={email}
                 onChange={handleChange}
+                disabled={loading}
+                autoComplete="email"
                 required
               />
             </div>
@@ -196,19 +228,32 @@ const AuthPage = () => {
               <FaLock className="input-icon" />
 
               <input
-                type={showPassword ? "text" : "password"}
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
                 name="password"
                 placeholder="Password"
                 value={password}
                 onChange={handleChange}
+                disabled={loading}
+                autoComplete={
+                  isLogin
+                    ? "current-password"
+                    : "new-password"
+                }
                 required
               />
 
               <button
                 type="button"
                 className="password-toggle"
+                disabled={loading}
                 onClick={() =>
-                  setShowPassword(!showPassword)
+                  setShowPassword(
+                    (prev) => !prev
+                  )
                 }
               >
                 {showPassword ? (
@@ -245,6 +290,7 @@ const AuthPage = () => {
                 <button
                   type="button"
                   className="link-btn"
+                  disabled={loading}
                   onClick={() => {
                     setError("");
                     setIsLogin(false);
@@ -259,6 +305,7 @@ const AuthPage = () => {
                 <button
                   type="button"
                   className="link-btn"
+                  disabled={loading}
                   onClick={() => {
                     setError("");
                     setIsLogin(true);
@@ -276,3 +323,5 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
+

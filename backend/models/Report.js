@@ -70,36 +70,50 @@ const reportSchema = new mongoose.Schema(
         default: 0,
       },
 
+      activeProjects: {
+        type: Number,
+        default: 0,
+      },
+
+      projectProgress: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+      },
+
       totalTasks: {
         type: Number,
         default: 0,
-      },
-
-      completedTasks: {
-        type: Number,
-        default: 0,
-      },
-
-      pendingTasks: {
-        type: Number,
-        default: 0,
-      },
-
-      overdueTasks: {
-        type: Number,
-        default: 0,
-      },
-
-      activeUsers: {
-        type: Number,
-        default: 0,
-      },
-
-      productivity: {
-        type: Number,
-        default: 0,
-      },
     },
+
+    completedTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    pendingTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    overdueTasks: {
+      type: Number,
+      default: 0,
+    },
+
+    activeUsers: {
+      type: Number,
+      default: 0,
+    },
+
+    productivity: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+  },
 
     charts: [
       {

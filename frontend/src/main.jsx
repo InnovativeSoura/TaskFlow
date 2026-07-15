@@ -14,20 +14,31 @@ import "./styles/index.css";
 import "./styles/Global.css";
 import "./styles/Auth.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+/* ==========================================
+   APPLICATION STARTUP
+========================================== */
+
+console.log("🚀 TaskFlow Client Started");
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root")
+);
+
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <UserProvider>
-          <ProjectProvider>
-            <TaskProvider>
-              <NotificationProvider>
+          <NotificationProvider>
+            <ProjectProvider>
+              <TaskProvider>
                 <App />
-              </NotificationProvider>
-            </TaskProvider>
-          </ProjectProvider>
+              </TaskProvider>
+            </ProjectProvider>
+          </NotificationProvider>
         </UserProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
+

@@ -1,8 +1,18 @@
 import { Navigate } from "react-router-dom";
+
 import { useAuth } from "../context/AuthContext";
 
 const PublicRoute = ({ children }) => {
-  const { token, user, loading } = useAuth();
+  const {
+    loading,
+    user,
+    token,
+    isAuthenticated,
+  } = useAuth();
+
+  /* ==========================================
+     LOADING
+  ========================================== */
 
   if (loading) {
     return (
@@ -12,11 +22,28 @@ const PublicRoute = ({ children }) => {
     );
   }
 
-  if (token && user) {
-    return <Navigate to="/dashboard" replace />;
+  /* ==========================================
+     AUTH CHECK
+  ========================================== */
+
+  const authenticated =
+    isAuthenticated || (token && user);
+
+  if (authenticated) {
+    return (
+      <Navigate
+        to="/dashboard"
+        replace
+      />
+    );
   }
+
+  /* ==========================================
+     ALLOW PUBLIC ACCESS
+  ========================================== */
 
   return children;
 };
 
 export default PublicRoute;
+

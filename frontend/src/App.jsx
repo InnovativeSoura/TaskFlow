@@ -9,7 +9,11 @@ import Tasks from "./pages/Tasks";
 import PublicRoute from "./components/PublicRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Temporary pages
+/* ==========================================
+   TEMPORARY PAGES
+   Replace with actual pages later
+========================================== */
+
 const Users = () => <h1>Users</h1>;
 const Profile = () => <h1>Profile</h1>;
 const Settings = () => <h1>Settings</h1>;
@@ -18,12 +22,24 @@ const Reports = () => <h1>Reports</h1>;
 const Kanban = () => <h1>Kanban</h1>;
 const About = () => <h1>About</h1>;
 
+const NotFound = () => (
+  <div
+    style={{
+      textAlign: "center",
+      marginTop: "80px",
+    }}
+  >
+    <h1>404</h1>
+    <p>Page Not Found</p>
+  </div>
+);
+
 function App() {
   return (
     <Routes>
-      {/* =========================
+      {/* ==========================================
           PUBLIC ROUTES
-      ========================= */}
+      ========================================== */}
 
       <Route path="/" element={<LandingPage />} />
 
@@ -38,9 +54,9 @@ function App() {
 
       <Route path="/about" element={<About />} />
 
-      {/* =========================
+      {/* ==========================================
           PROTECTED ROUTES
-      ========================= */}
+      ========================================== */}
 
       <Route
         path="/dashboard"
@@ -123,16 +139,19 @@ function App() {
         }
       />
 
-      {/* =========================
-          404
-      ========================= */}
+      {/* ==========================================
+          404 ROUTE
+      ========================================== */}
+
+      <Route path="/404" element={<NotFound />} />
 
       <Route
         path="*"
-        element={<Navigate to="/" replace />}
+        element={<Navigate to="/404" replace />}
       />
     </Routes>
   );
 }
 
 export default App;
+

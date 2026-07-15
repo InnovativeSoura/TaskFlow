@@ -10,38 +10,77 @@ import api from "../api/axios";
 
 const AuthContext = createContext();
 
+/* ==========================================
+   SAFE PARSE USER
+========================================== */
+
+const getStoredUser = () => {
+  try {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  } catch (error) {
+    console.error("Invalid user in localStorage:", error);
+    localStorage.removeItem("user");
+    return null;
+  }
+};
+
+/* ==========================================
+   PROVIDER
+========================================== */
+
 export const AuthProvider = ({ children }) => {
   /* ==========================================
-      STATE
+     STATE
   ========================================== */
 
   const [token, setToken] = useState(
-    localStorage.getItem("token")
+    () => localStorage.getItem("token") || null
   );
 
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("user");
-
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [user, setUser] = useState(getStoredUser);
 
   const [loading, setLoading] = useState(true);
 
   /* ==========================================
-      LOGOUT
+     SAVE AUTH DATA
   ========================================== */
 
-  const logout = useCallback(() => {
+  const saveAuth = useCallback((token, user) => {
+    localStorage.setItem("token", token);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+
+    setToken(token);
+    setUser(user);
+  }, []);
+
+  /* ==========================================
+     CLEAR AUTH
+  ========================================== */
+
+  const clearAuth = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
-    setLoading(false);
   }, []);
 
   /* ==========================================
-      LOAD CURRENT USER
+     LOGOUT
+  ========================================== */
+
+  const logout = useCallback(() => {
+    clearAuth();
+    setLoading(false);
+  }, [clearAuth]);
+
+  /* ==========================================
+     LOAD CURRENT USER
   ========================================== */
 
   useEffect(() => {
@@ -64,30 +103,39 @@ export const AuthProvider = ({ children }) => {
             JSON.stringify(data.user)
           );
         } else {
-          logout();
+          clearAuth();
         }
-      } catch (err) {
-        console.error("Auth Error:", err);
+      } catch (error) {
+        console.error(
+          "Load User Error:",
+          error.response?.data || error.message
+        );
 
-        logout();
+        clearAuth();
       } finally {
         setLoading(false);
       }
     };
 
     loadUser();
-  }, [token, logout]);
+  }, [token, clearAuth]);
 
   /* ==========================================
-      LOGIN
+     LOGIN
   ========================================== */
 
-  const login = async ({ email, password }) => {
+  const login = async ({
+    email,
+    password,
+  }) => {
     try {
-      const { data } = await api.post("/auth/login", {
-        email,
-        password,
-      });
+      const { data } = await api.post(
+        "/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
       if (!data.success) {
         return {
@@ -96,35 +144,29 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      localStorage.setItem("token", data.token);
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
+      saveAuth(
+        data.token,
+        data.user
       );
-
-      setToken(data.token);
-      setUser(data.user);
 
       return {
         success: true,
         user: data.user,
       };
-    } catch (err) {
+    } catch (error) {
       return {
         success: false,
         message:
-          err.response?.data?.message ||
+          error.response?.data?.message ||
           "Login failed",
       };
     }
   };
 
   /* ==========================================
-      REGISTER
+     REGISTER
   ========================================== */
-
-  const register = async ({
+    const register = async ({
     name,
     email,
     password,
@@ -148,45 +190,40 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      localStorage.setItem("token", data.token);
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
+      saveAuth(
+        data.token,
+        data.user
       );
-
-      setToken(data.token);
-      setUser(data.user);
 
       return {
         success: true,
         user: data.user,
       };
-    } catch (err) {
+    } catch (error) {
       return {
         success: false,
         message:
-          err.response?.data?.message ||
+          error.response?.data?.message ||
           "Registration failed",
       };
     }
   };
 
   /* ==========================================
-      UPDATE USER
+     UPDATE USER
   ========================================== */
 
-  const updateUser = (updatedUser) => {
+  const updateUser = useCallback((updatedUser) => {
     setUser(updatedUser);
 
     localStorage.setItem(
       "user",
       JSON.stringify(updatedUser)
     );
-  };
+  }, []);
 
   /* ==========================================
-      PROVIDER
+     PROVIDER
   ========================================== */
 
   return (
@@ -195,10 +232,16 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         loading,
+
         login,
         register,
         logout,
+
         updateUser,
+
+        setUser,
+        setToken,
+
         isAuthenticated: !!token,
       }}
     >
@@ -207,6 +250,20 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+/* ==========================================
+   CUSTOM HOOK
+========================================== */
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error(
+      "useAuth must be used within an AuthProvider"
+    );
+  }
+
+  return context;
+};
 
 export default AuthContext;
