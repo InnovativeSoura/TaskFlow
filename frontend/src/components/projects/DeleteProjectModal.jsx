@@ -1,18 +1,20 @@
 import { useEffect } from "react";
+
 import {
   FaTrashAlt,
   FaTimes,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
 const DeleteProjectModal = ({
   open,
-  onClose,
-  onConfirm,
   project,
   loading = false,
+  onClose,
+  onConfirm,
 }) => {
   /* ==========================================
-     ESC TO CLOSE
+      ESC KEY SUPPORT
   ========================================== */
 
   useEffect(() => {
@@ -29,80 +31,82 @@ const DeleteProjectModal = ({
       handleKeyDown
     );
 
-    return () =>
+    document.body.style.overflow = "hidden";
+
+    return () => {
       document.removeEventListener(
         "keydown",
         handleKeyDown
       );
+
+      document.body.style.overflow = "auto";
+    };
   }, [open, loading, onClose]);
 
   if (!open) return null;
 
-  /* ==========================================
-     CLICK OUTSIDE
-  ========================================== */
-
-  const handleOverlayClick = (e) => {
-    if (
-      e.target.classList.contains(
-        "modal-overlay"
-      ) &&
-      !loading
-    ) {
-      onClose();
-    }
-  };
-
   return (
     <div
       className="modal-overlay"
-      onClick={handleOverlayClick}
+      onClick={() => {
+        if (!loading) onClose();
+      }}
     >
-      <div className="modal delete-modal">
-        {/* Header */}
+      <div
+        className="delete-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* ===========================
+            HEADER
+        =========================== */}
 
         <div className="delete-header">
           <div className="delete-icon">
-            <FaTrashAlt />
+            <FaExclamationTriangle />
           </div>
 
+          <h2>Delete Project</h2>
+
           <button
-            type="button"
             className="close-btn"
             onClick={onClose}
             disabled={loading}
+            aria-label="Close"
           >
             <FaTimes />
           </button>
         </div>
 
-        {/* Title */}
+        {/* ===========================
+            BODY
+        =========================== */}
 
-        <h2>Delete Project</h2>
+        <div className="delete-body">
+          <p>
+            Are you sure you want to permanently
+            delete this project?
+          </p>
 
-        {/* Message */}
+          <h3>
+            {project?.title || "Untitled Project"}
+          </h3>
 
-        <p>
-          Are you sure you want to delete
-          <br />
+          <p className="delete-warning">
+            This action cannot be undone.
+            All project information,
+            tasks, members and progress
+            history may be permanently lost.
+          </p>
+        </div>
 
-          <strong>
-            {project?.title ||
-              "this project"}
-          </strong>
-          ?
-        </p>
+        {/* ===========================
+            ACTIONS
+        =========================== */}
 
-        <p className="warning-text">
-          This action cannot be undone.
-        </p>
-
-        {/* Actions */}
-
-        <div className="modal-actions">
+        <div className="delete-actions">
           <button
             type="button"
-            className="cancel-btn"
+            className="btn-secondary"
             onClick={onClose}
             disabled={loading}
           >
@@ -111,10 +115,12 @@ const DeleteProjectModal = ({
 
           <button
             type="button"
-            className="delete-btn"
+            className="btn-danger"
             onClick={onConfirm}
             disabled={loading}
           >
+            <FaTrashAlt />
+
             {loading
               ? "Deleting..."
               : "Delete Project"}
@@ -126,4 +132,3 @@ const DeleteProjectModal = ({
 };
 
 export default DeleteProjectModal;
-

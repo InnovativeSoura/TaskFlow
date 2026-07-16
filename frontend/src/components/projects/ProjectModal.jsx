@@ -1,289 +1,289 @@
 import { useEffect, useState } from "react";
 
-const initialForm = {
+import {
+  FaTimes,
+  FaSave,
+  FaFolderOpen,
+  FaAlignLeft,
+  FaFlag,
+  FaTasks,
+  FaCalendarAlt,
+  FaPalette,
+} from "react-icons/fa";
+
+const defaultProject = {
   title: "",
   description: "",
   status: "Planning",
   priority: "Medium",
   progress: 0,
-  category: "",
-  dueDate: "",
-  manager: "",
+  startDate: "",
+  endDate: "",
+  color: "#6366f1",
+  members: [],
 };
 
 const ProjectModal = ({
   open,
   project,
-  onSave,
+  loading = false,
+  users = [],
   onClose,
+  onSave,
 }) => {
-  /* ==========================================
-     STATE
-  ========================================== */
-
-  const [form, setForm] =
-    useState(initialForm);
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [errors, setErrors] =
-    useState({});
-
-  /* ==========================================
-     LOAD PROJECT
-  ========================================== */
+  const [formData, setFormData] =
+    useState(defaultProject);
 
   useEffect(() => {
-    if (!open) return;
-
     if (project) {
-      setForm({
+      setFormData({
         title: project.title || "",
         description:
           project.description || "",
         status:
-          project.status || "Planning",
+          project.status ||
+          "Planning",
         priority:
-          project.priority || "Medium",
+          project.priority ||
+          "Medium",
         progress:
-          project.progress ?? 0,
-        category:
-          project.category || "",
-        dueDate: project.dueDate
-          ? project.dueDate.substring(0, 10)
-          : "",
-        manager:
-          project.manager || "",
+          project.progress || 0,
+        startDate:
+          project.startDate
+            ?.substring(0, 10) || "",
+        endDate:
+          project.endDate
+            ?.substring(0, 10) || "",
+        color:
+          project.color ||
+          "#6366f1",
+        members:
+          project.members?.map(
+            (m) =>
+              m._id || m
+          ) || [],
       });
     } else {
-      setForm(initialForm);
+      setFormData(defaultProject);
     }
-
-    setErrors({});
   }, [project, open]);
-
-  /* ==========================================
-     INPUT CHANGE
-  ========================================== */
 
   const handleChange = (e) => {
     const {
       name,
       value,
-      type,
     } = e.target;
 
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "range"
-          ? Number(value)
-          : value,
+      [name]: value,
     }));
-
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
   };
 
-  /* ==========================================
-     VALIDATION
-  ========================================== */
-
-  const validate = () => {
-    const newErrors = {};
-
-    if (!form.title.trim()) {
-      newErrors.title =
-        "Project title is required.";
-    } else if (
-      form.title.length > 100
-    ) {
-      newErrors.title =
-        "Maximum 100 characters.";
-    }
-
-    if (!form.description.trim()) {
-      newErrors.description =
-        "Description is required.";
-    } else if (
-      form.description.length > 500
-    ) {
-      newErrors.description =
-        "Maximum 500 characters.";
-    }
-
-    if (
-      form.progress < 0 ||
-      form.progress > 100
-    ) {
-      newErrors.progress =
-        "Progress must be between 0 and 100.";
-    }
-
-    setErrors(newErrors);
-
-    return (
-      Object.keys(newErrors)
-        .length === 0
-    );
+  const toggleMember = (id) => {
+    setFormData((prev) => ({
+      ...prev,
+      members: prev.members.includes(id)
+        ? prev.members.filter(
+            (m) => m !== id
+          )
+        : [
+            ...prev.members,
+            id,
+          ],
+    }));
   };
 
-  /* ==========================================
-     SUBMIT
-  ========================================== */
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validate()) return;
+    if (!formData.title.trim())
+      return;
 
-    try {
-      setLoading(true);
-
-      await onSave({
-        ...form,
-        progress: Number(
-          form.progress
-        ),
-      });
-
-      setForm(initialForm);
-      setErrors({});
-    } finally {
-      setLoading(false);
-    }
+    onSave(formData);
   };
 
   if (!open) return null;
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
-        <h2>
-          {project
-            ? "Edit Project"
-            : "Create Project"}
-        </h2>
+
+      <div className="project-modal">
+
+        <button
+          className="modal-close"
+          onClick={onClose}
+        >
+          <FaTimes />
+        </button>
+
+        <div className="modal-header">
+
+          <h2>
+
+            <FaFolderOpen />
+
+            {project
+              ? " Edit Project"
+              : " Create Project"}
+
+          </h2>
+
+          <p>
+            Manage your project
+            information.
+          </p>
+
+        </div>
 
         <form
           onSubmit={handleSubmit}
+          className="project-form"
         >
-
-
-          {/* ==========================================
+                  {/* ===========================
               TITLE
-          ========================================== */}
+          =========================== */}
 
-          <div>
-            <label>Project Title</label>
+          <div className="form-group">
+
+            <label>
+
+              <FaFolderOpen />
+
+              Project Title
+
+            </label>
 
             <input
               type="text"
               name="title"
-              value={form.title}
-              onChange={handleChange}
               placeholder="Enter project title"
-              maxLength={100}
+              value={formData.title}
+              onChange={handleChange}
+              required
             />
 
-            {errors.title && (
-              <small className="error">
-                {errors.title}
-              </small>
-            )}
           </div>
 
-          {/* ==========================================
+          {/* ===========================
               DESCRIPTION
-          ========================================== */}
+          =========================== */}
 
-          <div>
-            <label>Description</label>
+          <div className="form-group">
+
+            <label>
+
+              <FaAlignLeft />
+
+              Description
+
+            </label>
 
             <textarea
+              rows="4"
               name="description"
-              rows="5"
-              value={form.description}
+              placeholder="Write project description..."
+              value={formData.description}
               onChange={handleChange}
-              placeholder="Describe the project..."
-              maxLength={500}
             />
 
-            {errors.description && (
-              <small className="error">
-                {errors.description}
-              </small>
-            )}
           </div>
 
-          {/* ==========================================
-              STATUS
-          ========================================== */}
+          {/* ===========================
+              STATUS & PRIORITY
+          =========================== */}
 
-          <div>
-            <label>Status</label>
+          <div className="form-grid">
 
-            <select
-              name="status"
-              value={form.status}
-              onChange={handleChange}
-            >
-              <option value="Planning">
-                Planning
-              </option>
+            <div className="form-group">
 
-              <option value="Active">
-                Active
-              </option>
+              <label>
 
-              <option value="Completed">
-                Completed
-              </option>
+                <FaTasks />
 
-              <option value="Archived">
-                Archived
-              </option>
-            </select>
+                Status
+
+              </label>
+
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+              >
+
+                <option value="Planning">
+                  Planning
+                </option>
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="On Hold">
+                  On Hold
+                </option>
+
+                <option value="Completed">
+                  Completed
+                </option>
+
+                <option value="Archived">
+                  Archived
+                </option>
+
+              </select>
+
+            </div>
+
+            <div className="form-group">
+
+              <label>
+
+                <FaFlag />
+
+                Priority
+
+              </label>
+
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+              >
+
+                <option value="Low">
+                  Low
+                </option>
+
+                <option value="Medium">
+                  Medium
+                </option>
+
+                <option value="High">
+                  High
+                </option>
+
+                <option value="Critical">
+                  Critical
+                </option>
+
+              </select>
+
+            </div>
+
           </div>
-
-          {/* ==========================================
-              PRIORITY
-          ========================================== */}
-
-          <div>
-            <label>Priority</label>
-
-            <select
-              name="priority"
-              value={form.priority}
-              onChange={handleChange}
-            >
-              <option value="Low">
-                Low
-              </option>
-
-              <option value="Medium">
-                Medium
-              </option>
-
-              <option value="High">
-                High
-              </option>
-            </select>
-          </div>
-
-          {/* ==========================================
+                    {/* ===========================
               PROGRESS
-          ========================================== */}
+          =========================== */}
 
-          <div>
+          <div className="form-group">
+
             <label>
-              Progress ({form.progress}%)
+
+              <FaTasks />
+
+              Progress ({formData.progress}%)
+
             </label>
 
             <input
@@ -291,107 +291,211 @@ const ProjectModal = ({
               name="progress"
               min="0"
               max="100"
-              step="1"
-              value={form.progress}
+              step="5"
+              value={formData.progress}
               onChange={handleChange}
             />
 
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{
-                  width: `${form.progress}%`,
-                }}
+          </div>
+
+          {/* ===========================
+              START & END DATE
+          =========================== */}
+
+          <div className="form-grid">
+
+            <div className="form-group">
+
+              <label>
+
+                <FaCalendarAlt />
+
+                Start Date
+
+              </label>
+
+              <input
+                type="date"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
               />
+
             </div>
 
-            {errors.progress && (
-              <small className="error">
-                {errors.progress}
-              </small>
-            )}
+            <div className="form-group">
+
+              <label>
+
+                <FaCalendarAlt />
+
+                End Date
+
+              </label>
+
+              <input
+                type="date"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+              />
+
+            </div>
+
           </div>
 
-          {/* ==========================================
-              CATEGORY
-          ========================================== */}
+          {/* ===========================
+              PROJECT COLOR
+          =========================== */}
 
-          <div>
-            <label>Category</label>
+          <div className="form-group">
 
-            <input
-              type="text"
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              placeholder="Web App, Mobile App, AI, CRM..."
-            />
+            <label>
+
+              <FaPalette />
+
+              Theme Color
+
+            </label>
+
+            <div className="color-picker-wrapper">
+
+              <input
+                type="color"
+                name="color"
+                value={formData.color}
+                onChange={handleChange}
+              />
+
+              <span className="color-value">
+                {formData.color}
+              </span>
+
+            </div>
+
           </div>
+                    {/* ===========================
+              TEAM MEMBERS
+          =========================== */}
 
-          {/* ==========================================
-              DUE DATE
-          ========================================== */}
+          <div className="form-group">
 
-          <div>
-            <label>Due Date</label>
+            <label>
+              Team Members
+            </label>
 
-            <input
-              type="date"
-              name="dueDate"
-              value={form.dueDate}
-              onChange={handleChange}
-            />
+            <div className="members-list">
+
+              {users.length === 0 ? (
+
+                <div className="empty-members">
+                  No users available
+                </div>
+
+              ) : (
+
+                users.map((user) => (
+
+                  <label
+                    key={user._id}
+                    className="member-item"
+                  >
+
+                    <input
+                      type="checkbox"
+                      checked={formData.members.includes(
+                        user._id
+                      )}
+                      onChange={() =>
+                        toggleMember(
+                          user._id
+                        )
+                      }
+                    />
+
+                    <div className="member-avatar">
+
+                      {user.avatar ? (
+
+                        <img
+                          src={user.avatar}
+                          alt={user.name}
+                        />
+
+                      ) : (
+
+                        <span>
+                          {user.name
+                            ?.charAt(0)
+                            .toUpperCase()}
+                        </span>
+
+                      )}
+
+                    </div>
+
+                    <div className="member-details">
+
+                      <strong>
+                        {user.name}
+                      </strong>
+
+                      <small>
+                        {user.email}
+                      </small>
+
+                    </div>
+
+                  </label>
+
+                ))
+
+              )}
+
+            </div>
+
           </div>
-
-          {/* ==========================================
-              PROJECT MANAGER
-          ========================================== */}
-
-          <div>
-            <label>Project Manager</label>
-
-            <input
-              type="text"
-              name="manager"
-              value={form.manager}
-              onChange={handleChange}
-              placeholder="Manager name"
-            />
-          </div>
-
-          {/* ==========================================
+                    {/* ===========================
               ACTIONS
-          ========================================== */}
+          =========================== */}
 
           <div className="modal-actions">
+
             <button
               type="button"
-              onClick={() => {
-                setForm(initialForm);
-                setErrors({});
-                onClose();
-              }}
+              className="btn-secondary"
+              onClick={onClose}
               disabled={loading}
             >
+              <FaTimes />
+
               Cancel
             </button>
 
             <button
               type="submit"
+              className="btn-primary"
               disabled={loading}
             >
+              <FaSave />
+
               {loading
-                ? "Saving..."
+                ? project
+                  ? "Updating..."
+                  : "Creating..."
                 : project
                 ? "Update Project"
                 : "Create Project"}
             </button>
+
           </div>
+
         </form>
+
       </div>
+
     </div>
   );
 };
 
 export default ProjectModal;
-

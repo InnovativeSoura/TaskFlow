@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import MainLayout from "../layouts/MainLayout";
 import PageHeader from "../components/PageHeader";
@@ -11,13 +12,11 @@ import DeleteProjectModal from "../components/projects/DeleteProjectModal";
 import StatCard from "../components/StatCard";
 
 import useProjects from "../hooks/useProjects";
-
 import { useAuth } from "../context/AuthContext";
 
-import "../styles/Project.css";
+import "../styles/Projects.css";
 
 const Projects = () => {
-
   const { user } = useAuth();
 
   const {
@@ -28,9 +27,9 @@ const Projects = () => {
     removeProject,
   } = useProjects();
 
-  /* ===========================
-      FILTER STATES
-  =========================== */
+  /* ==========================================
+      FILTERS
+  ========================================== */
 
   const [search, setSearch] = useState("");
 
@@ -40,15 +39,17 @@ const Projects = () => {
   const [sortBy, setSortBy] =
     useState("Newest");
 
-  /* ===========================
-      MODAL STATES
-  =========================== */
+  /* ==========================================
+      MODALS
+  ========================================== */
 
   const [showModal, setShowModal] =
     useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] =
-    useState(false);
+  const [
+    showDeleteModal,
+    setShowDeleteModal,
+  ] = useState(false);
 
   const [selectedProject, setSelectedProject] =
     useState(null);
@@ -56,114 +57,86 @@ const Projects = () => {
   const [deleteLoading, setDeleteLoading] =
     useState(false);
 
-  /* ===========================
+  /* ==========================================
       PAGINATION
-  =========================== */
+  ========================================== */
 
   const [currentPage, setCurrentPage] =
     useState(1);
 
   const itemsPerPage = 8;
 
-  /* ===========================
-      ROLE
-  =========================== */
+  /* ==========================================
+      PERMISSIONS
+  ========================================== */
 
   const canManage =
     user?.role === "Admin" ||
     user?.role === "Manager";
 
-  /* ===========================
-      FILTERED PROJECTS
-  =========================== */
+  /* ==========================================
+      FILTER PROJECTS
+  ========================================== */
 
   const filteredProjects = useMemo(() => {
-
     let data = [...projects];
 
-    // Search
-
     if (search.trim()) {
+      const query = search.toLowerCase();
 
       data = data.filter((project) => {
-
         const title =
           project.title?.toLowerCase() || "";
 
         const description =
-          project.description?.toLowerCase() || "";
-
-        const query =
-          search.toLowerCase();
+          project.description?.toLowerCase() ||
+          "";
 
         return (
           title.includes(query) ||
           description.includes(query)
         );
-
       });
-
     }
-
-    // Status
 
     if (statusFilter !== "All") {
-
       data = data.filter(
-
         (project) =>
           project.status === statusFilter
-
       );
-
     }
 
-    // Sorting
-
     switch (sortBy) {
-
       case "A-Z":
-
         data.sort((a, b) =>
           a.title.localeCompare(b.title)
         );
-
         break;
 
       case "Z-A":
-
         data.sort((a, b) =>
           b.title.localeCompare(a.title)
         );
-
         break;
 
       case "Oldest":
-
         data.sort(
           (a, b) =>
             new Date(a.createdAt) -
             new Date(b.createdAt)
         );
-
         break;
 
       case "Newest":
-
       default:
-
         data.sort(
           (a, b) =>
             new Date(b.createdAt) -
             new Date(a.createdAt)
         );
-
-        break;
-
     }
 
     return data;
-
   }, [
     projects,
     search,
@@ -171,235 +144,188 @@ const Projects = () => {
     sortBy,
   ]);
 
-  /* ===========================
+  /* ==========================================
       PAGINATION
-  =========================== */
+  ========================================== */
 
   const totalPages = Math.ceil(
-    filteredProjects.length /
-      itemsPerPage
+    filteredProjects.length / itemsPerPage
   );
 
   const paginatedProjects =
     filteredProjects.slice(
-
       (currentPage - 1) * itemsPerPage,
-
       currentPage * itemsPerPage
-
     );
-      /* ===========================
-      STATISTICS
-  =========================== */
+
+  /* ==========================================
+      STATS
+  ========================================== */
 
   const stats = useMemo(() => {
-
-    const total = projects.length;
-
-    const active = projects.filter(
-      (project) => project.status === "Active"
-    ).length;
-
-    const planning = projects.filter(
-      (project) => project.status === "Planning"
-    ).length;
-
-    const completed = projects.filter(
-      (project) => project.status === "Completed"
-    ).length;
-
-    const archived = projects.filter(
-      (project) => project.status === "Archived"
-    ).length;
-
     return {
-      total,
-      active,
-      planning,
-      completed,
-      archived,
-    };
+      total: projects.length,
 
+      active: projects.filter(
+        (p) => p.status === "Active"
+      ).length,
+
+      planning: projects.filter(
+        (p) => p.status === "Planning"
+      ).length,
+
+      completed: projects.filter(
+        (p) => p.status === "Completed"
+      ).length,
+
+      archived: projects.filter(
+        (p) => p.status === "Archived"
+      ).length,
+    };
   }, [projects]);
 
-  /* ===========================
-      CREATE PROJECT
-  =========================== */
+  /* ==========================================
+      CREATE
+  ========================================== */
 
   const handleCreateProject = () => {
-
     setSelectedProject(null);
-
     setShowModal(true);
-
   };
 
-  /* ===========================
-      EDIT PROJECT
-  =========================== */
+  /* ==========================================
+      EDIT
+  ========================================== */
 
   const handleEditProject = (project) => {
-
     setSelectedProject(project);
-
     setShowModal(true);
-
   };
 
-  /* ===========================
-      DELETE PROJECT
-  =========================== */
+  /* ==========================================
+      DELETE
+  ========================================== */
 
   const handleDeleteClick = (project) => {
-
     setSelectedProject(project);
-
     setShowDeleteModal(true);
-
   };
 
-  /* ===========================
-      SAVE PROJECT
-  =========================== */
+  /* ==========================================
+      SAVE
+  ========================================== */
 
-  const handleSaveProject = async (projectData) => {
-
+  const handleSaveProject = async (
+    projectData
+  ) => {
     try {
-
       if (selectedProject) {
-
         await editProject(
           selectedProject._id,
           projectData
         );
 
+        toast.success(
+          "Project updated successfully."
+        );
       } else {
-
         await addProject(projectData);
 
+        toast.success(
+          "Project created successfully."
+        );
       }
 
       setShowModal(false);
-
       setSelectedProject(null);
-
     } catch (error) {
-
-      console.error(
-        "Project save failed:",
-        error
-      );
-
-      alert(
-        error?.response?.data?.message ||
-        "Unable to save project."
-      );
-
-    }
-
-  };
-
-  /* ===========================
-      CONFIRM DELETE
-  =========================== */
-
-  const handleConfirmDelete = async (id) => {
-
-    try {
-
-      setDeleteLoading(true);
-
-      await removeProject(id);
-
-      setShowDeleteModal(false);
-
-      setSelectedProject(null);
-
-    } catch (error) {
-
       console.error(error);
 
       toast.error(
         error?.response?.data?.message ||
-        "Unable to save project."
+          "Unable to save project."
       );
-
-    } finally {
-
-      setDeleteLoading(false);
-
     }
-
   };
 
-  /* ===========================
+  /* ==========================================
+      CONFIRM DELETE
+  ========================================== */
+
+  const handleConfirmDelete = async (
+    id
+  ) => {
+    try {
+      setDeleteLoading(true);
+
+      await removeProject(id);
+
+      toast.success(
+        "Project deleted successfully."
+      );
+
+      setShowDeleteModal(false);
+      setSelectedProject(null);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Unable to delete project."
+      );
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  /* ==========================================
       CLOSE MODALS
-  =========================== */
+  ========================================== */
 
   const closeProjectModal = () => {
-
     setShowModal(false);
-
     setSelectedProject(null);
-
   };
 
   const closeDeleteModal = () => {
-
     setShowDeleteModal(false);
-
     setSelectedProject(null);
-
   };
 
-  /* ===========================
+  /* ==========================================
       PAGINATION
-  =========================== */
+  ========================================== */
 
   const goToPage = (page) => {
-
     if (
       page >= 1 &&
       page <= totalPages
     ) {
-
       setCurrentPage(page);
-
     }
-
-  };
-
-  const nextPage = () => {
-
-    if (currentPage < totalPages) {
-
-      setCurrentPage((prev) => prev + 1);
-
-    }
-
   };
 
   const previousPage = () => {
-
     if (currentPage > 1) {
-
       setCurrentPage((prev) => prev - 1);
-
     }
-
   };
 
-  /* ===========================
-      RESET PAGE WHEN FILTER CHANGES
-  =========================== */
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   useEffect(() => {
-  setCurrentPage(1);
-  }, [search, statusFilter, sortBy]);
+    setCurrentPage(1);
+  }, [
+    search,
+    statusFilter,
+    sortBy,
+  ]);
     return (
-
     <MainLayout>
-
       <div className="projects-page">
 
         <div className="projects-main">
@@ -414,19 +340,15 @@ const Projects = () => {
               title="Projects"
               subtitle="Manage all projects from one place."
             >
-
               {canManage && (
-
                 <button
                   className="create-project-btn"
                   disabled={loading}
                   onClick={handleCreateProject}
                 >
-                    + Create Project
+                  + Create Project
                 </button>
-
               )}
-
             </PageHeader>
 
             {/* =====================================
@@ -472,41 +394,32 @@ const Projects = () => {
             ===================================== */}
 
             <ProjectFilters
-
               search={search}
-
               setSearch={setSearch}
 
               status={statusFilter}
-
               setStatus={setStatusFilter}
 
               sortBy={sortBy}
-
               setSortBy={setSortBy}
 
+              totalProjects={filteredProjects.length}
             />
 
             {/* =====================================
-                PROJECT TABLE
+                TABLE
             ===================================== */}
 
             <ProjectTable
-
               projects={paginatedProjects}
-
               loading={loading}
-
               canManage={canManage}
-
               onEdit={handleEditProject}
-
               onDelete={handleDeleteClick}
-
             />
 
             {/* =====================================
-                EMPTY STATE
+                EMPTY
             ===================================== */}
 
             {!loading &&
@@ -515,16 +428,13 @@ const Projects = () => {
                 <div className="empty-projects">
 
                   <h2>
-
                     No Projects Found
-
                   </h2>
 
                   <p>
-
-                    Try changing your search or
-                    create a new project.
-
+                    Try changing the search,
+                    filters or create a new
+                    project.
                   </p>
 
                 </div>
@@ -540,79 +450,60 @@ const Projects = () => {
               <div className="pagination">
 
                 <button
-
                   onClick={previousPage}
-
                   disabled={currentPage === 1}
-
                 >
-
                   Previous
-
                 </button>
 
-                {
+                {Array.from({
+                  length: totalPages,
+                }).map((_, index) => (
 
-                  Array.from({
+                  <button
+                    key={index}
+                    className={
+                      currentPage ===
+                      index + 1
+                        ? "active-page"
+                        : ""
+                    }
+                    onClick={() =>
+                      goToPage(index + 1)
+                    }
+                  >
+                    {index + 1}
+                  </button>
 
-                    length: totalPages
-
-                  }).map((_, index) => (
-
-                    <button
-
-                      key={index}
-
-                      className={
-                        currentPage === index + 1
-                          ? "active-page"
-                          : ""
-                      }
-
-                      onClick={() =>
-                        goToPage(index + 1)
-                      }
-
-                    >
-
-                      {index + 1}
-
-                    </button>
-
-                  ))
-
-                }
+                ))}
 
                 <button
-
                   onClick={nextPage}
-
                   disabled={
-                    currentPage === totalPages
+                    currentPage ===
+                    totalPages
                   }
-
                 >
-
                   Next
-
                 </button>
 
               </div>
 
             )}
-                        {/* =====================================
-                CREATE / EDIT PROJECT MODAL
+
+            {/* =====================================
+                PROJECT MODAL
             ===================================== */}
 
             <ProjectModal
               open={showModal}
+              project={selectedProject}
               onClose={closeProjectModal}
               onSave={handleSaveProject}
-              project={selectedProject}
             />
 
             {/* =====================================
-                DELETE PROJECT MODAL
+                DELETE MODAL
             ===================================== */}
 
             <DeleteProjectModal
@@ -621,7 +512,9 @@ const Projects = () => {
               loading={deleteLoading}
               onClose={closeDeleteModal}
               onConfirm={() =>
-                handleConfirmDelete(selectedProject?._id)
+                handleConfirmDelete(
+                  selectedProject?._id
+                )
               }
             />
 
@@ -632,9 +525,7 @@ const Projects = () => {
       </div>
 
     </MainLayout>
-
   );
-
 };
 
 export default Projects;

@@ -5,12 +5,26 @@ import {
   closestCenter,
 } from "@dnd-kit/core";
 
-import {
-  arrayMove,
-} from "@dnd-kit/sortable";
-
 import KanbanColumn from "./KanbanColumn";
 
+const COLUMNS = [
+  {
+    id: "Pending",
+    title: "Pending",
+  },
+  {
+    id: "In Progress",
+    title: "In Progress",
+  },
+  {
+    id: "Review",
+    title: "Review",
+  },
+  {
+    id: "Completed",
+    title: "Completed",
+  },
+];
 
 const KanbanBoard = ({
   tasks = [],
@@ -19,214 +33,102 @@ const KanbanBoard = ({
   onDelete,
   canManage = true,
 }) => {
-
-
-  /* ==========================================
-      COLUMNS
-  ========================================== */
-
-  const columns = [
-    {
-      id: "Pending",
-      title: "Pending",
-    },
-
-    {
-      id: "In Progress",
-      title: "In Progress",
-    },
-
-    {
-      id: "Review",
-      title: "Review",
-    },
-
-    {
-      id: "Completed",
-      title: "Completed",
-    },
-  ];
-
-
-
   /* ==========================================
       GROUP TASKS
   ========================================== */
 
   const groupedTasks = useMemo(() => {
-
-    const result = {};
-
-    columns.forEach((column) => {
-      result[column.id] = [];
-    });
-
+    const groups = {
+      Pending: [],
+      "In Progress": [],
+      Review: [],
+      Completed: [],
+    };
 
     tasks.forEach((task) => {
+      let status = task.status || "Pending";
 
-      const status =
-        task.status || "Pending";
-
-
-      if (result[status]) {
-
-        result[status].push(task);
-
-      } else {
-
-        result.Pending.push(task);
-
+      // Compatibility with old backend values
+      if (status === "Todo") {
+        status = "Pending";
       }
 
+      if (!groups[status]) {
+        status = "Pending";
+      }
+
+      groups[status].push(task);
     });
 
-
-    return result;
-
-
+    return groups;
   }, [tasks]);
-
-
-
 
   /* ==========================================
       DRAG END
   ========================================== */
 
-  const handleDragEnd = ({
-    active,
-    over,
-  }) => {
-
-
+  const handleDragEnd = ({ active, over }) => {
     if (!over) return;
 
+    const draggedTask = tasks.find(
+      (task) => task._id === active.id
+    );
 
-    const taskId = active.id;
+    if (!draggedTask) return;
 
+    let destinationStatus = over.id;
 
-    let newStatus =
-      over.id;
+    // If dropped on another task,
+    // use that task's column
+    const targetTask = tasks.find(
+      (task) => task._id === over.id
+    );
 
-
-
-    /*
-      Compatibility with
-      old backend statuses
-    */
-
-    if (
-      newStatus === "Todo"
-    ) {
-
-      newStatus =
-        "Pending";
-
+    if (targetTask) {
+      destinationStatus = targetTask.status;
     }
 
-
-
-    const task =
-      tasks.find(
-        (item) =>
-          item._id === taskId
-      );
-
-
-
-    if (!task) return;
-
-
+    if (destinationStatus === "Todo") {
+      destinationStatus = "Pending";
+    }
 
     if (
-      task.status === newStatus
+      draggedTask.status ===
+      destinationStatus
     ) {
       return;
     }
 
-
-
     onUpdateStatus(
-      taskId,
-      newStatus
+      draggedTask._id,
+      destinationStatus
     );
-
   };
 
-
-
-
-
   return (
-
     <div className="kanban-wrapper">
-
-
       <DndContext
-        collisionDetection={
-          closestCenter
-        }
-        onDragEnd={
-          handleDragEnd
-        }
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-
-
         <div className="kanban-board">
-
-
-          {columns.map(
-            (column) => (
-
-              <KanbanColumn
-
-                key={
-                  column.id
-                }
-
-                id={
-                  column.id
-                }
-
-                title={
-                  column.title
-                }
-
-                tasks={
-                  groupedTasks[
-                    column.id
-                  ]
-                }
-
-                canManage={
-                  canManage
-                }
-
-                onEdit={
-                  onEdit
-                }
-
-                onDelete={
-                  onDelete
-                }
-
-              />
-
-            )
-          )}
-
-
+          {COLUMNS.map((column) => (
+            <KanbanColumn
+              key={column.id}
+              id={column.id}
+              title={column.title}
+              tasks={
+                groupedTasks[column.id] || []
+              }
+              canManage={canManage}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
         </div>
-
-
       </DndContext>
-
-
     </div>
-
   );
-
 };
-
 
 export default KanbanBoard;

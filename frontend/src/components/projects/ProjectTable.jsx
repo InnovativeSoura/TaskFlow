@@ -4,6 +4,8 @@ import {
   FaFolderOpen,
   FaUserTie,
   FaCalendarAlt,
+  FaUsers,
+  FaEye,
 } from "react-icons/fa";
 
 import Loader from "../Loader";
@@ -14,6 +16,7 @@ const ProjectTable = ({
   loading = false,
   onEdit,
   onDelete,
+  onView,
   canManage = true,
 }) => {
   if (loading) {
@@ -29,57 +32,57 @@ const ProjectTable = ({
     );
   }
 
-  /* ==========================================
-     STATUS BADGE
-  ========================================== */
-
-  const getBadgeClass = (status) => {
-    switch (status?.toLowerCase()) {
+  const getBadgeClass = (status = "") => {
+    switch (status.toLowerCase()) {
       case "planning":
         return "planning";
-
       case "active":
         return "active";
-
       case "completed":
         return "completed";
-
       case "archived":
         return "archived";
-
       default:
         return "planning";
     }
   };
 
-  /* ==========================================
-     PRIORITY BADGE
-  ========================================== */
-
-  const getPriorityClass = (priority) => {
-    switch (priority?.toLowerCase()) {
+  const getPriorityClass = (priority = "") => {
+    switch (priority.toLowerCase()) {
+      case "critical":
+        return "priority-critical";
       case "high":
         return "priority-high";
-
       case "medium":
         return "priority-medium";
-
       case "low":
         return "priority-low";
-
       default:
         return "priority-medium";
     }
+  };
+
+  const progressColor = (progress = 0) => {
+    if (progress >= 100) return "completed";
+    if (progress >= 75) return "good";
+    if (progress >= 40) return "average";
+    return "low";
   };
 
   return (
     <div className="project-table-wrapper">
+
       <table className="project-table">
+
         <thead>
+
           <tr>
+
             <th>Project</th>
 
             <th>Manager</th>
+
+            <th>Members</th>
 
             <th>Status</th>
 
@@ -94,29 +97,38 @@ const ProjectTable = ({
             <th align="center">
               Actions
             </th>
+
           </tr>
+
         </thead>
 
         <tbody>
+
           {projects.map((project) => (
+
             <tr key={project._id}>
-              {/* ===========================
+
+              {/* ==========================================
                   PROJECT
-              =========================== */}
+              ========================================== */}
 
               <td>
                 <div className="project-name">
-                  <FaFolderOpen />
+                  <div className="project-icon">
+                    <FaFolderOpen />
+                  </div>
 
-                  <div>
-                    <strong>{project.title}</strong>
+                  <div className="project-info">
+                    <div className="project-title">
+                      {project.title}
+                    </div>
 
                     <div className="project-description">
                       {project.description
-                        ? project.description.length > 45
+                        ? project.description.length > 60
                           ? `${project.description.substring(
                               0,
-                              45
+                              60
                             )}...`
                           : project.description
                         : "No description"}
@@ -125,9 +137,9 @@ const ProjectTable = ({
                 </div>
               </td>
 
-              {/* ===========================
-                  PROJECT MANAGER
-              =========================== */}
+              {/* ==========================================
+                  MANAGER
+              ========================================== */}
 
               <td>
                 <div className="project-manager">
@@ -141,7 +153,34 @@ const ProjectTable = ({
                 </div>
               </td>
 
-              {/* ===========================
+              {/* ==========================================
+                  STATUS
+              ========================================== */}
+
+              <td>
+                <span
+                  className={`status-badge ${getStatusClass(
+                    project.status
+                  )}`}
+                >
+                  {project.status || "Planning"}
+                </span>
+              </td>
+
+              {/* ==========================================
+                  PRIORITY
+              ========================================== */}
+
+              <td>
+                <span
+                  className={`priority-badge ${getPriorityClass(
+                    project.priority
+                  )}`}
+                >
+                  {project.priority || "Medium"}
+                </span>
+              </td>
+                            {/* ===========================
                   STATUS
               =========================== */}
 
@@ -173,15 +212,13 @@ const ProjectTable = ({
                   PROGRESS
               =========================== */}
 
-              <td style={{ minWidth: "170px" }}>
+              <td>
                 <div className="progress-wrapper">
                   <div className="progress-bar">
                     <div
                       className="progress-fill"
                       style={{
-                        width: `${
-                          project.progress || 0
-                        }%`,
+                        width: `${project.progress || 0}%`,
                       }}
                     />
                   </div>
@@ -189,6 +226,16 @@ const ProjectTable = ({
                   <span className="progress-text">
                     {project.progress || 0}%
                   </span>
+                </div>
+              </td>
+
+              {/* ===========================
+                  MEMBERS
+              =========================== */}
+
+              <td>
+                <div className="project-members">
+                  {project.members?.length || 0}
                 </div>
               </td>
 
@@ -201,9 +248,9 @@ const ProjectTable = ({
                   <FaCalendarAlt />
 
                   <span>
-                    {project.dueDate
+                    {project.endDate
                       ? new Date(
-                          project.dueDate
+                          project.endDate
                         ).toLocaleDateString()
                       : "--"}
                   </span>
@@ -211,7 +258,7 @@ const ProjectTable = ({
               </td>
 
               {/* ===========================
-                  CREATED DATE
+                  CREATED
               =========================== */}
 
               <td>
@@ -221,8 +268,7 @@ const ProjectTable = ({
                     ).toLocaleDateString()
                   : "--"}
               </td>
-
-              {/* ===========================
+                            {/* ===========================
                   ACTIONS
               =========================== */}
 
@@ -232,9 +278,7 @@ const ProjectTable = ({
                     <button
                       className="edit-btn"
                       title="Edit Project"
-                      onClick={() =>
-                        onEdit(project)
-                      }
+                      onClick={() => onEdit(project)}
                     >
                       <FaEdit />
                     </button>
@@ -242,9 +286,7 @@ const ProjectTable = ({
                     <button
                       className="delete-btn"
                       title="Delete Project"
-                      onClick={() =>
-                        onDelete(project)
-                      }
+                      onClick={() => onDelete(project)}
                     >
                       <FaTrash />
                     </button>
@@ -255,6 +297,7 @@ const ProjectTable = ({
                   </span>
                 )}
               </td>
+
             </tr>
           ))}
         </tbody>
@@ -264,6 +307,3 @@ const ProjectTable = ({
 };
 
 export default ProjectTable;
-
-
-

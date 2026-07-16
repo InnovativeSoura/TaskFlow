@@ -1,41 +1,58 @@
-import { FaFilter, FaRedo } from "react-icons/fa";
-import SearchBar from "../SearchBar";
+import {
+  FaSearch,
+  FaFilter,
+  FaSortAmountDown,
+} from "react-icons/fa";
 
 const ProjectFilters = ({
   search,
   setSearch,
-  status,
-  setStatus,
+
+  statusFilter,
+  setStatusFilter,
+
+  priorityFilter,
+  setPriorityFilter,
+
   sortBy,
   setSortBy,
+
+  totalProjects = 0,
 }) => {
-  const clearFilters = () => {
-    setSearch("");
-    setStatus("All");
-    setSortBy("Newest");
-  };
-
   return (
-    <div className="project-filters">
-      {/* Search */}
+    <div className="project-toolbar">
 
-      <div className="project-search">
-        <SearchBar
+      {/* ===========================
+          SEARCH
+      =========================== */}
+
+      <div className="toolbar-search">
+
+        <FaSearch />
+
+        <input
+          type="text"
+          placeholder="Search projects..."
           value={search}
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          placeholder="Search projects..."
         />
+
       </div>
 
-      {/* Filters */}
+      {/* ===========================
+          STATUS
+      =========================== */}
 
-      <div className="project-filter-select">
+      <div className="toolbar-select">
+
+        <FaFilter />
+
         <select
-          value={status}
+          value={statusFilter}
           onChange={(e) =>
-            setStatus(e.target.value)
+            setStatusFilter(e.target.value)
           }
         >
           <option value="All">
@@ -50,6 +67,10 @@ const ProjectFilters = ({
             Active
           </option>
 
+          <option value="On Hold">
+            On Hold
+          </option>
+
           <option value="Completed">
             Completed
           </option>
@@ -57,12 +78,58 @@ const ProjectFilters = ({
           <option value="Archived">
             Archived
           </option>
+
         </select>
+
+      </div>
+            {/* ===========================
+          PRIORITY
+      =========================== */}
+
+      <div className="toolbar-select">
+
+        <FaFilter />
+
+        <select
+          value={priorityFilter}
+          onChange={(e) =>
+            setPriorityFilter(
+              e.target.value
+            )
+          }
+        >
+          <option value="All">
+            All Priority
+          </option>
+
+          <option value="High">
+            High
+          </option>
+
+          <option value="Medium">
+            Medium
+          </option>
+
+          <option value="Low">
+            Low
+          </option>
+
+          <option value="Critical">
+            Critical
+          </option>
+
+        </select>
+
       </div>
 
-      {/* Sort */}
+      {/* ===========================
+          SORT
+      =========================== */}
 
-      <div className="project-filter-select">
+      <div className="toolbar-select">
+
+        <FaSortAmountDown />
+
         <select
           value={sortBy}
           onChange={(e) =>
@@ -70,11 +137,11 @@ const ProjectFilters = ({
           }
         >
           <option value="Newest">
-            Newest First
+            Newest
           </option>
 
           <option value="Oldest">
-            Oldest First
+            Oldest
           </option>
 
           <option value="A-Z">
@@ -84,19 +151,35 @@ const ProjectFilters = ({
           <option value="Z-A">
             Z - A
           </option>
+
+          <option value="Priority">
+            Priority
+          </option>
+
+          <option value="Progress">
+            Progress
+          </option>
+
         </select>
+
       </div>
 
-      {/* Clear */}
+      {/* ===========================
+          PROJECT COUNT
+      =========================== */}
 
-      <button
-        type="button"
-        className="table-btn view-btn"
-        onClick={clearFilters}
-      >
-        <FaRedo />
-        &nbsp; Clear
-      </button>
+      <div className="toolbar-count">
+
+        <span>
+          Total Projects
+        </span>
+
+        <strong>
+          {totalProjects}
+        </strong>
+
+      </div>
+
     </div>
   );
 };
