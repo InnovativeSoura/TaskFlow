@@ -1,3 +1,5 @@
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
@@ -148,6 +150,11 @@ function App() {
       <Route
         path="*"
         element={<Navigate to="/404" replace />}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        theme="colored"
       />
     </Routes>
   );

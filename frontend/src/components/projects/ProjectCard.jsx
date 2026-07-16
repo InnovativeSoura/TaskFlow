@@ -1,188 +1,392 @@
 import {
-  FaFolderOpen,
-  FaCalendarAlt,
-  FaUsers,
   FaEdit,
   FaTrash,
-  FaChartLine,
+  FaFolderOpen,
+  FaUserTie,
+  FaUsers,
+  FaCalendarAlt,
 } from "react-icons/fa";
+
 
 const ProjectCard = ({
   project,
-  canManage = true,
   onEdit,
   onDelete,
+  canManage = true,
 }) => {
-  const getStatusClass = (status = "") => {
-    switch (status.toLowerCase()) {
+
+
+  const getBadgeClass = (status = "") => {
+
+    switch(status.toLowerCase()) {
+
       case "planning":
         return "planning";
+
       case "active":
         return "active";
+
       case "completed":
         return "completed";
+
       case "archived":
         return "archived";
+
       default:
         return "planning";
+
     }
+
   };
+
+
 
   const getPriorityClass = (priority = "") => {
-    switch (priority.toLowerCase()) {
+
+    switch(priority.toLowerCase()) {
+
+
       case "critical":
         return "priority-critical";
+
+
       case "high":
         return "priority-high";
+
+
       case "medium":
         return "priority-medium";
+
+
       case "low":
         return "priority-low";
+
+
       default:
         return "priority-medium";
+
     }
+
   };
 
-  const progress = project.progress || 0;
 
-  const description =
-    project.description?.length > 120
-      ? `${project.description.substring(0, 120)}...`
-      : project.description || "No description";
-
-  const dueDate = project.endDate
-    ? new Date(project.endDate)
-    : null;
-
-  const isOverdue =
-    dueDate &&
-    dueDate < new Date() &&
-    project.status !== "Completed";
 
   return (
+
     <div className="project-card">
-      {project.color && (
-        <div
-          className="project-color-bar"
-          style={{
-            background: project.color,
-          }}
-        />
-      )}
+
+
+      {/* COLOR BAR */}
+
+      <div
+
+        className="project-color-bar"
+
+        style={{
+          background:
+          project.color || "#6366f1"
+        }}
+
+      />
+
+
+
+
+      {/* HEADER */}
 
       <div className="project-card-header">
+
+
         <div className="project-card-title">
+
+
           <FaFolderOpen />
 
+
           <div>
-            <h3>{project.title}</h3>
-            <p>{description}</p>
+
+
+            <h3>
+
+              {project.title}
+
+            </h3>
+
+
+            <p>
+
+              {
+                project.description
+
+                ?
+
+                project.description.length > 90
+
+                ?
+
+                `${project.description.substring(0,90)}...`
+
+                :
+
+                project.description
+
+                :
+
+                "No description"
+
+              }
+
+            </p>
+
+
           </div>
+
+
         </div>
 
-        <span
-          className={`badge ${getStatusClass(
-            project.status
-          )}`}
-        >
-          {project.status || "Planning"}
-        </span>
+
+
       </div>
+
+
+
+
+
+      {/* STATUS */}
 
       <div className="project-card-row">
-        <span>Priority</span>
+
 
         <span
-          className={`priority-badge ${getPriorityClass(
-            project.priority
-          )}`}
+
+          className={
+            `badge ${
+              getBadgeClass(
+                project.status
+              )
+            }`
+          }
+
         >
-          {project.priority || "Medium"}
+
+          {
+            project.status ||
+            "Planning"
+          }
+
         </span>
+
+
+
+
+
+        <span
+
+          className={
+            `priority-badge ${
+              getPriorityClass(
+                project.priority
+              )
+            }`
+          }
+
+        >
+
+          {
+            project.priority ||
+            "Medium"
+          }
+
+        </span>
+
+
       </div>
+
+
+
+
+
+
+
+      {/* PROGRESS */}
 
       <div className="project-card-progress">
-        <div className="progress-header">
-          <span>
-            <FaChartLine /> Progress
+
+
+        <div className="progress-wrapper">
+
+
+          <div className="progress-bar">
+
+
+            <div
+
+              className="progress-fill"
+
+              style={{
+                width:
+                `${project.progress || 0}%`
+              }}
+
+            />
+
+
+          </div>
+
+
+
+          <span className="progress-text">
+
+            {
+              project.progress || 0
+            }%
+
           </span>
 
-          <span>{progress}%</span>
+
+
         </div>
 
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{
-              width: `${progress}%`,
-            }}
-          />
-        </div>
+
       </div>
 
-      <div className="project-card-row">
-        <span>
-          <FaUsers /> Members
-        </span>
 
-        <strong>
-          {project.members?.length || 0}
-        </strong>
-      </div>
 
-      <div className="project-card-row">
-        <span>Owner</span>
 
-        <strong>
-          {project.owner?.name ||
+
+
+
+      {/* DETAILS */}
+
+
+      <div className="project-card-details">
+
+
+        <div>
+
+          <FaUserTie />
+
+          {
             project.manager?.name ||
-            "Unassigned"}
-        </strong>
-      </div>
-
-      <div className="project-card-row">
-        <span>
-          <FaCalendarAlt /> Due Date
-        </span>
-
-        <strong
-          className={
-            isOverdue
-              ? "overdue-date"
-              : ""
+            project.owner?.name ||
+            "Unassigned"
           }
-        >
-          {dueDate
-            ? dueDate.toLocaleDateString()
-            : "--"}
-        </strong>
+
+        </div>
+
+
+
+
+        <div>
+
+          <FaUsers />
+
+          {
+            project.members?.length || 0
+          }
+          {" "}
+          Members
+
+        </div>
+
+
+
+
+        <div>
+
+          <FaCalendarAlt />
+
+          {
+
+            project.endDate
+
+            ?
+
+            new Date(
+              project.endDate
+            )
+            .toLocaleDateString()
+
+            :
+
+            "--"
+
+          }
+
+        </div>
+
+
       </div>
 
-      {canManage && (
+
+
+
+
+
+
+
+      {/* ACTIONS */}
+
+
+      {
+
+        canManage &&
+
         <div className="project-card-actions">
-          <button
-            className="edit-btn"
-            onClick={() => onEdit?.(project)}
-            title="Edit Project"
-            aria-label="Edit Project"
-          >
-            <FaEdit />
-            Edit
-          </button>
+
 
           <button
-            className="delete-btn"
-            onClick={() => onDelete?.(project)}
-            title="Delete Project"
-            aria-label="Delete Project"
+
+            className="edit-btn"
+
+            onClick={()=>
+              onEdit(project)
+            }
+
           >
-            <FaTrash />
-            Delete
+
+            <FaEdit />
+
+            Edit
+
           </button>
+
+
+
+
+
+          <button
+
+            className="delete-btn"
+
+            onClick={()=>
+              onDelete(project)
+            }
+
+          >
+
+            <FaTrash />
+
+            Delete
+
+          </button>
+
+
         </div>
-      )}
+
+
+      }
+
+
+
+
+
     </div>
+
+
   );
+
 };
+
 
 export default ProjectCard;

@@ -22,10 +22,7 @@ const ProjectFilters = ({
   return (
     <div className="project-toolbar">
 
-      {/* ===========================
-          SEARCH
-      =========================== */}
-
+      {/* SEARCH */}
       <div className="toolbar-search">
 
         <FaSearch />
@@ -41,10 +38,8 @@ const ProjectFilters = ({
 
       </div>
 
-      {/* ===========================
-          STATUS
-      =========================== */}
 
+      {/* STATUS FILTER */}
       <div className="toolbar-select">
 
         <FaFilter />
@@ -55,6 +50,7 @@ const ProjectFilters = ({
             setStatusFilter(e.target.value)
           }
         >
+
           <option value="All">
             All Status
           </option>
@@ -82,10 +78,9 @@ const ProjectFilters = ({
         </select>
 
       </div>
-            {/* ===========================
-          PRIORITY
-      =========================== */}
 
+
+      {/* PRIORITY FILTER */}
       <div className="toolbar-select">
 
         <FaFilter />
@@ -98,8 +93,13 @@ const ProjectFilters = ({
             )
           }
         >
+
           <option value="All">
             All Priority
+          </option>
+
+          <option value="Critical">
+            Critical
           </option>
 
           <option value="High">
@@ -114,18 +114,12 @@ const ProjectFilters = ({
             Low
           </option>
 
-          <option value="Critical">
-            Critical
-          </option>
-
         </select>
 
       </div>
 
-      {/* ===========================
-          SORT
-      =========================== */}
 
+      {/* SORT */}
       <div className="toolbar-select">
 
         <FaSortAmountDown />
@@ -136,6 +130,7 @@ const ProjectFilters = ({
             setSortBy(e.target.value)
           }
         >
+
           <option value="Newest">
             Newest
           </option>
@@ -164,10 +159,8 @@ const ProjectFilters = ({
 
       </div>
 
-      {/* ===========================
-          PROJECT COUNT
-      =========================== */}
 
+      {/* COUNT */}
       <div className="toolbar-count">
 
         <span>
@@ -180,8 +173,10 @@ const ProjectFilters = ({
 
       </div>
 
+
     </div>
   );
 };
+
 
 export default ProjectFilters;

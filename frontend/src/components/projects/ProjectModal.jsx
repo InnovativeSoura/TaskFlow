@@ -1,4 +1,9 @@
-import { useEffect, useState } from "react";
+// src/components/projects/ProjectModal.jsx
+
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import {
   FaTimes,
@@ -11,7 +16,8 @@ import {
   FaPalette,
 } from "react-icons/fa";
 
-const defaultProject = {
+
+const createDefaultProject = () => ({
   title: "",
   description: "",
   status: "Planning",
@@ -21,7 +27,9 @@ const defaultProject = {
   endDate: "",
   color: "#6366f1",
   members: [],
-};
+});
+
+
 
 const ProjectModal = ({
   open,
@@ -31,120 +39,308 @@ const ProjectModal = ({
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] =
-    useState(defaultProject);
+
+
+  const [
+    formData,
+    setFormData,
+  ] = useState(
+    createDefaultProject()
+  );
+
+
+
+
 
   useEffect(() => {
-    if (project) {
+
+
+    if(!open) return;
+
+
+
+    if(project){
+
+
       setFormData({
-        title: project.title || "",
+
+        title:
+          project.title || "",
+
+
         description:
           project.description || "",
+
+
         status:
           project.status ||
           "Planning",
+
+
         priority:
           project.priority ||
           "Medium",
+
+
         progress:
-          project.progress || 0,
+          Number(project.progress) || 0,
+
+
         startDate:
           project.startDate
-            ?.substring(0, 10) || "",
+          ?.substring(0,10)
+          || "",
+
+
         endDate:
           project.endDate
-            ?.substring(0, 10) || "",
+          ?.substring(0,10)
+          || "",
+
+
         color:
           project.color ||
           "#6366f1",
+
+
         members:
           project.members?.map(
-            (m) =>
-              m._id || m
-          ) || [],
-      });
-    } else {
-      setFormData(defaultProject);
-    }
-  }, [project, open]);
+            (member)=>
+              member._id || member
+          )
+          ||
+          [],
 
-  const handleChange = (e) => {
+      });
+
+
+    }
+    else{
+
+
+      setFormData(
+        createDefaultProject()
+      );
+
+
+    }
+
+
+  },[
+    project,
+    open,
+  ]);
+
+
+
+
+
+
+
+  const handleChange = (e)=>{
+
+
     const {
       name,
       value,
     } = e.target;
 
-    setFormData((prev) => ({
+
+
+    setFormData((prev)=>({
+
+
       ...prev,
-      [name]: value,
+
+
+      [name]:
+        name === "progress"
+          ?
+          Number(value)
+          :
+          value,
+
+
     }));
+
+
   };
 
-  const toggleMember = (id) => {
-    setFormData((prev) => ({
+
+
+
+
+
+
+  const toggleMember = (id)=>{
+
+
+    setFormData((prev)=>({
+
+
       ...prev,
-      members: prev.members.includes(id)
-        ? prev.members.filter(
-            (m) => m !== id
-          )
-        : [
-            ...prev.members,
-            id,
-          ],
+
+
+      members:
+        prev.members.includes(id)
+
+        ?
+
+        prev.members.filter(
+          (member)=>
+            member !== id
+        )
+
+        :
+
+        [
+          ...prev.members,
+          id,
+        ],
+
+
     }));
+
+
   };
 
-  const handleSubmit = (e) => {
+
+
+
+
+
+
+
+  const handleSubmit = (e)=>{
+
+
     e.preventDefault();
 
-    if (!formData.title.trim())
+
+
+    if(
+      !formData.title.trim()
+    ){
+
       return;
 
+    }
+
+
+
+    if(
+      formData.startDate &&
+      formData.endDate &&
+      formData.endDate <
+      formData.startDate
+    ){
+
+      alert(
+        "End date cannot be before start date."
+      );
+
+      return;
+
+    }
+
+
+
+
     onSave(formData);
+
+
   };
 
-  if (!open) return null;
+
+
+
+
+
+
+  if(!open)
+    return null;
+
+
+
+
+
 
   return (
+
     <div className="modal-overlay">
+
 
       <div className="project-modal">
 
+
+
         <button
+
           className="modal-close"
+
+          type="button"
+
           onClick={onClose}
+
         >
+
           <FaTimes />
+
         </button>
 
+
+
+
+
+
         <div className="modal-header">
+
 
           <h2>
 
             <FaFolderOpen />
 
-            {project
-              ? " Edit Project"
-              : " Create Project"}
+            {
+              project
+              ?
+              " Edit Project"
+              :
+              " Create Project"
+            }
+
 
           </h2>
 
+
+
           <p>
-            Manage your project
-            information.
+            Manage your project information.
           </p>
+
 
         </div>
 
+
+
+
+
+
+
         <form
-          onSubmit={handleSubmit}
+
           className="project-form"
+
+          onSubmit={handleSubmit}
+
         >
-                  {/* ===========================
-              TITLE
-          =========================== */}
+
+
+
+
+
 
           <div className="form-group">
+
 
             <label>
 
@@ -154,22 +350,35 @@ const ProjectModal = ({
 
             </label>
 
+
+
             <input
+
               type="text"
+
               name="title"
-              placeholder="Enter project title"
+
               value={formData.title}
+
+              placeholder="Enter project title"
+
               onChange={handleChange}
+
               required
+
             />
+
 
           </div>
 
-          {/* ===========================
-              DESCRIPTION
-          =========================== */}
+
+
+
+
+
 
           <div className="form-group">
+
 
             <label>
 
@@ -179,23 +388,38 @@ const ProjectModal = ({
 
             </label>
 
+
+
             <textarea
-              rows="4"
+
               name="description"
-              placeholder="Write project description..."
+
+              rows="4"
+
               value={formData.description}
+
+              placeholder="Write project description..."
+
               onChange={handleChange}
+
             />
+
+
 
           </div>
 
-          {/* ===========================
-              STATUS & PRIORITY
-          =========================== */}
+
+
+
+
+
+
 
           <div className="form-grid">
 
+
             <div className="form-group">
+
 
               <label>
 
@@ -205,37 +429,52 @@ const ProjectModal = ({
 
               </label>
 
+
+
               <select
+
                 name="status"
+
                 value={formData.status}
+
                 onChange={handleChange}
+
               >
 
-                <option value="Planning">
+                <option>
                   Planning
                 </option>
 
-                <option value="Active">
+                <option>
                   Active
                 </option>
 
-                <option value="On Hold">
+                <option>
                   On Hold
                 </option>
 
-                <option value="Completed">
+                <option>
                   Completed
                 </option>
 
-                <option value="Archived">
+                <option>
                   Archived
                 </option>
 
+
               </select>
+
 
             </div>
 
+
+
+
+
+
+
             <div className="form-group">
+
 
               <label>
 
@@ -245,38 +484,58 @@ const ProjectModal = ({
 
               </label>
 
+
+
               <select
+
                 name="priority"
+
                 value={formData.priority}
+
                 onChange={handleChange}
+
               >
 
-                <option value="Low">
+
+                <option>
                   Low
                 </option>
 
-                <option value="Medium">
+
+                <option>
                   Medium
                 </option>
 
-                <option value="High">
+
+                <option>
                   High
                 </option>
 
-                <option value="Critical">
+
+                <option>
                   Critical
                 </option>
 
+
+
               </select>
+
 
             </div>
 
+
           </div>
-                    {/* ===========================
-              PROGRESS
-          =========================== */}
+
+
+
+
+
+
+
+
 
           <div className="form-group">
+
 
             <label>
 
@@ -286,25 +545,42 @@ const ProjectModal = ({
 
             </label>
 
+
+
             <input
+
               type="range"
+
               name="progress"
+
               min="0"
+
               max="100"
+
               step="5"
+
               value={formData.progress}
+
               onChange={handleChange}
+
             />
+
 
           </div>
 
-          {/* ===========================
-              START & END DATE
-          =========================== */}
+
+
+
+
+
+
+
 
           <div className="form-grid">
 
+
             <div className="form-group">
+
 
               <label>
 
@@ -314,16 +590,30 @@ const ProjectModal = ({
 
               </label>
 
+
+
               <input
+
                 type="date"
+
                 name="startDate"
+
                 value={formData.startDate}
+
                 onChange={handleChange}
+
               />
+
 
             </div>
 
+
+
+
+
+
             <div className="form-group">
+
 
               <label>
 
@@ -333,22 +623,37 @@ const ProjectModal = ({
 
               </label>
 
+
+
               <input
+
                 type="date"
+
                 name="endDate"
+
                 value={formData.endDate}
+
                 onChange={handleChange}
+
               />
+
 
             </div>
 
+
+
           </div>
 
-          {/* ===========================
-              PROJECT COLOR
-          =========================== */}
+
+
+
+
+
+
+
 
           <div className="form-group">
+
 
             <label>
 
@@ -358,144 +663,254 @@ const ProjectModal = ({
 
             </label>
 
+
+
             <div className="color-picker-wrapper">
 
+
               <input
+
                 type="color"
+
                 name="color"
+
                 value={formData.color}
+
                 onChange={handleChange}
+
               />
 
+
+
               <span className="color-value">
+
                 {formData.color}
+
               </span>
+
 
             </div>
 
+
           </div>
-                    {/* ===========================
-              TEAM MEMBERS
-          =========================== */}
+
+
+
+
+
+
+
+
 
           <div className="form-group">
+
 
             <label>
               Team Members
             </label>
 
+
+
             <div className="members-list">
 
-              {users.length === 0 ? (
+
+              {
+                users.length === 0
+
+                ?
 
                 <div className="empty-members">
                   No users available
                 </div>
 
-              ) : (
+                :
 
-                users.map((user) => (
+                users.map((user)=>(
 
-                  <label
+
+                  <div
+
                     key={user._id}
+
                     className="member-item"
+
                   >
 
+
+
                     <input
+
                       type="checkbox"
-                      checked={formData.members.includes(
-                        user._id
-                      )}
-                      onChange={() =>
+
+                      checked={
+                        formData.members.includes(
+                          user._id
+                        )
+                      }
+
+                      onChange={()=>
                         toggleMember(
                           user._id
                         )
                       }
+
                     />
+
+
+
 
                     <div className="member-avatar">
 
-                      {user.avatar ? (
+
+                      {
+                        user.avatar
+
+                        ?
 
                         <img
+
                           src={user.avatar}
+
                           alt={user.name}
+
                         />
 
-                      ) : (
+                        :
 
-                        <span>
-                          {user.name
-                            ?.charAt(0)
-                            .toUpperCase()}
-                        </span>
+                        user.name
+                        ?.charAt(0)
+                        .toUpperCase()
 
-                      )}
+                      }
+
 
                     </div>
 
+
+
+
+
                     <div className="member-details">
+
 
                       <strong>
                         {user.name}
                       </strong>
 
+
                       <small>
                         {user.email}
                       </small>
 
+
                     </div>
 
-                  </label>
+
+                  </div>
+
 
                 ))
 
-              )}
+              }
+
 
             </div>
 
+
           </div>
-                    {/* ===========================
-              ACTIONS
-          =========================== */}
+
+
+
+
+
+
+
+
 
           <div className="modal-actions">
 
+
             <button
+
               type="button"
+
               className="btn-secondary"
+
               onClick={onClose}
+
               disabled={loading}
+
             >
+
               <FaTimes />
 
               Cancel
+
+
             </button>
+
+
+
+
+
 
             <button
+
               type="submit"
+
               className="btn-primary"
+
               disabled={loading}
+
             >
+
               <FaSave />
 
-              {loading
-                ? project
-                  ? "Updating..."
-                  : "Creating..."
-                : project
-                ? "Update Project"
-                : "Create Project"}
+
+              {
+                loading
+
+                ?
+
+                "Saving..."
+
+                :
+
+                project
+
+                ?
+
+                "Update Project"
+
+                :
+
+                "Create Project"
+
+              }
+
+
             </button>
+
+
 
           </div>
 
+
+
+
+
         </form>
+
+
 
       </div>
 
+
     </div>
+
   );
+
 };
+
 
 export default ProjectModal;

@@ -1,5 +1,13 @@
-import { useMemo, useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import {
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
+
+import {
+  toast,
+} from "react-toastify";
+
 
 import MainLayout from "../layouts/MainLayout";
 import PageHeader from "../components/PageHeader";
@@ -16,516 +24,770 @@ import { useAuth } from "../context/AuthContext";
 
 import "../styles/Projects.css";
 
+
+
 const Projects = () => {
-  const { user } = useAuth();
+
 
   const {
-    projects,
+    user
+  } = useAuth();
+
+
+
+  const {
+
+    projects = [],
     loading,
+
     addProject,
     editProject,
     removeProject,
+
   } = useProjects();
+
+
+
 
   /* ==========================================
       FILTERS
   ========================================== */
 
-  const [search, setSearch] = useState("");
 
-  const [statusFilter, setStatusFilter] =
-    useState("All");
+  const [
+    search,
+    setSearch
+  ] = useState("");
 
-  const [sortBy, setSortBy] =
-    useState("Newest");
+
+
+  const [
+    statusFilter,
+    setStatusFilter
+  ] = useState("All");
+
+
+
+  const [
+    priorityFilter,
+    setPriorityFilter
+  ] = useState("All");
+
+
+
+  const [
+    sortBy,
+    setSortBy
+  ] = useState("Newest");
+
+
+
+
 
   /* ==========================================
       MODALS
   ========================================== */
 
-  const [showModal, setShowModal] =
-    useState(false);
+
+  const [
+    showModal,
+    setShowModal
+  ] = useState(false);
+
+
 
   const [
     showDeleteModal,
-    setShowDeleteModal,
+    setShowDeleteModal
   ] = useState(false);
 
-  const [selectedProject, setSelectedProject] =
-    useState(null);
 
-  const [deleteLoading, setDeleteLoading] =
-    useState(false);
 
-  /* ==========================================
-      PAGINATION
-  ========================================== */
+  const [
+    selectedProject,
+    setSelectedProject
+  ] = useState(null);
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
 
-  const itemsPerPage = 8;
 
-  /* ==========================================
-      PERMISSIONS
-  ========================================== */
+  const [
+    actionLoading,
+    setActionLoading
+  ] = useState(false);
+
+
+
+
+
+
 
   const canManage =
     user?.role === "Admin" ||
     user?.role === "Manager";
 
+
+
+
+
+
   /* ==========================================
-      FILTER PROJECTS
+      FILTER + SORT
   ========================================== */
 
-  const filteredProjects = useMemo(() => {
-    let data = [...projects];
 
-    if (search.trim()) {
-      const query = search.toLowerCase();
+  const filteredProjects =
+    useMemo(()=>{
 
-      data = data.filter((project) => {
-        const title =
-          project.title?.toLowerCase() || "";
 
-        const description =
-          project.description?.toLowerCase() ||
-          "";
+      let data =
+        [...projects];
 
-        return (
-          title.includes(query) ||
-          description.includes(query)
-        );
-      });
-    }
 
-    if (statusFilter !== "All") {
-      data = data.filter(
-        (project) =>
-          project.status === statusFilter
-      );
-    }
 
-    switch (sortBy) {
-      case "A-Z":
-        data.sort((a, b) =>
-          a.title.localeCompare(b.title)
-        );
-        break;
+      if(search.trim()){
 
-      case "Z-A":
-        data.sort((a, b) =>
-          b.title.localeCompare(a.title)
-        );
-        break;
 
-      case "Oldest":
-        data.sort(
-          (a, b) =>
-            new Date(a.createdAt) -
-            new Date(b.createdAt)
-        );
-        break;
+        const query =
+          search.toLowerCase();
 
-      case "Newest":
-      default:
-        data.sort(
-          (a, b) =>
-            new Date(b.createdAt) -
-            new Date(a.createdAt)
-        );
-    }
 
-    return data;
-  }, [
-    projects,
-    search,
-    statusFilter,
-    sortBy,
-  ]);
+
+        data =
+          data.filter(
+            (project)=>
+
+              project.title
+              ?.toLowerCase()
+              .includes(query)
+
+              ||
+
+              project.description
+              ?.toLowerCase()
+              .includes(query)
+
+          );
+
+
+      }
+
+
+
+
+      if(
+        statusFilter !== "All"
+      ){
+
+        data =
+          data.filter(
+            (project)=>
+              project.status === statusFilter
+          );
+
+      }
+
+
+
+
+      if(
+        priorityFilter !== "All"
+      ){
+
+        data =
+          data.filter(
+            (project)=>
+              project.priority === priorityFilter
+          );
+
+      }
+
+
+
+
+
+      switch(sortBy){
+
+
+        case "A-Z":
+
+          data.sort(
+            (a,b)=>
+              a.title.localeCompare(
+                b.title
+              )
+          );
+
+          break;
+
+
+
+
+        case "Z-A":
+
+          data.sort(
+            (a,b)=>
+              b.title.localeCompare(
+                a.title
+              )
+          );
+
+          break;
+
+
+
+
+        case "Oldest":
+
+          data.sort(
+            (a,b)=>
+              new Date(a.createdAt)
+              -
+              new Date(b.createdAt)
+          );
+
+          break;
+
+
+
+
+        case "Priority":
+
+          const priorityOrder = {
+
+            Critical:4,
+            High:3,
+            Medium:2,
+            Low:1
+
+          };
+
+
+          data.sort(
+            (a,b)=>
+              priorityOrder[b.priority]
+              -
+              priorityOrder[a.priority]
+          );
+
+
+          break;
+
+
+
+
+        case "Progress":
+
+          data.sort(
+            (a,b)=>
+              (b.progress || 0)
+              -
+              (a.progress || 0)
+          );
+
+          break;
+
+
+
+
+        default:
+
+          data.sort(
+            (a,b)=>
+              new Date(b.createdAt)
+              -
+              new Date(a.createdAt)
+          );
+
+
+      }
+
+
+
+      return data;
+
+
+    },[
+
+      projects,
+      search,
+      statusFilter,
+      priorityFilter,
+      sortBy
+
+    ]);
+
+
+
+
+
+
 
   /* ==========================================
       PAGINATION
   ========================================== */
 
-  const totalPages = Math.ceil(
-    filteredProjects.length / itemsPerPage
-  );
+
+  const [
+    currentPage,
+    setCurrentPage
+  ] = useState(1);
+
+
+
+  const itemsPerPage = 8;
+
+
+
+  const totalPages =
+    Math.ceil(
+      filteredProjects.length /
+      itemsPerPage
+    );
+
+
 
   const paginatedProjects =
     filteredProjects.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
+      (currentPage - 1)
+      *
+      itemsPerPage,
+
+      currentPage *
+      itemsPerPage
     );
+
+
+
+
+
+
+  useEffect(()=>{
+
+    setCurrentPage(1);
+
+  },[
+    search,
+    statusFilter,
+    priorityFilter,
+    sortBy
+  ]);
+
+
+
+
+
+
 
   /* ==========================================
       STATS
   ========================================== */
 
-  const stats = useMemo(() => {
-    return {
-      total: projects.length,
 
-      active: projects.filter(
-        (p) => p.status === "Active"
-      ).length,
+  const stats =
+    useMemo(()=>({
 
-      planning: projects.filter(
-        (p) => p.status === "Planning"
-      ).length,
+      total:
+        projects.length,
 
-      completed: projects.filter(
-        (p) => p.status === "Completed"
-      ).length,
 
-      archived: projects.filter(
-        (p) => p.status === "Archived"
-      ).length,
-    };
-  }, [projects]);
+      active:
+        projects.filter(
+          p=>p.status==="Active"
+        ).length,
 
-  /* ==========================================
-      CREATE
-  ========================================== */
 
-  const handleCreateProject = () => {
-    setSelectedProject(null);
-    setShowModal(true);
-  };
+      planning:
+        projects.filter(
+          p=>p.status==="Planning"
+        ).length,
 
-  /* ==========================================
-      EDIT
-  ========================================== */
 
-  const handleEditProject = (project) => {
-    setSelectedProject(project);
-    setShowModal(true);
-  };
+      completed:
+        projects.filter(
+          p=>p.status==="Completed"
+        ).length,
 
-  /* ==========================================
-      DELETE
-  ========================================== */
 
-  const handleDeleteClick = (project) => {
-    setSelectedProject(project);
-    setShowDeleteModal(true);
-  };
+      archived:
+        projects.filter(
+          p=>p.status==="Archived"
+        ).length,
+
+
+    }),[
+      projects
+    ]);
+
+
+
+
+
+
 
   /* ==========================================
-      SAVE
+      SAVE PROJECT
   ========================================== */
 
-  const handleSaveProject = async (
-    projectData
-  ) => {
-    try {
-      if (selectedProject) {
-        await editProject(
-          selectedProject._id,
-          projectData
-        );
 
-        toast.success(
-          "Project updated successfully."
-        );
-      } else {
-        await addProject(projectData);
+  const handleSave =
+    async(data)=>{
 
-        toast.success(
-          "Project created successfully."
-        );
+
+      try{
+
+
+        setActionLoading(true);
+
+
+
+        if(selectedProject){
+
+
+          await editProject(
+            selectedProject._id,
+            data
+          );
+
+
+          toast.success(
+            "Project updated successfully"
+          );
+
+
+        }
+
+        else{
+
+
+          await addProject(
+            data
+          );
+
+
+          toast.success(
+            "Project created successfully"
+          );
+
+
+        }
+
+
+
+
+        setShowModal(false);
+
+        setSelectedProject(null);
+
+
+
       }
 
-      setShowModal(false);
-      setSelectedProject(null);
-    } catch (error) {
-      console.error(error);
+      catch(error){
 
-      toast.error(
-        error?.response?.data?.message ||
-          "Unable to save project."
-      );
-    }
-  };
 
-  /* ==========================================
-      CONFIRM DELETE
-  ========================================== */
+        toast.error(
+          error?.response?.data?.message ||
+          "Unable to save project"
+        );
 
-  const handleConfirmDelete = async (
-    id
-  ) => {
-    try {
-      setDeleteLoading(true);
 
-      await removeProject(id);
+      }
 
-      toast.success(
-        "Project deleted successfully."
-      );
+      finally{
 
-      setShowDeleteModal(false);
-      setSelectedProject(null);
-    } catch (error) {
-      console.error(error);
 
-      toast.error(
-        error?.response?.data?.message ||
-          "Unable to delete project."
-      );
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
+        setActionLoading(false);
 
-  /* ==========================================
-      CLOSE MODALS
-  ========================================== */
 
-  const closeProjectModal = () => {
-    setShowModal(false);
-    setSelectedProject(null);
-  };
+      }
 
-  const closeDeleteModal = () => {
-    setShowDeleteModal(false);
-    setSelectedProject(null);
-  };
 
-  /* ==========================================
-      PAGINATION
-  ========================================== */
+    };
 
-  const goToPage = (page) => {
-    if (
-      page >= 1 &&
-      page <= totalPages
-    ) {
-      setCurrentPage(page);
-    }
-  };
 
-  const previousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [
-    search,
-    statusFilter,
-    sortBy,
-  ]);
-    return (
+
+
+  const handleDelete =
+    async()=>{
+
+
+      try{
+
+
+        setActionLoading(true);
+
+
+
+        await removeProject(
+          selectedProject._id
+        );
+
+
+
+        toast.success(
+          "Project deleted successfully"
+        );
+
+
+
+        setShowDeleteModal(false);
+
+        setSelectedProject(null);
+
+
+
+      }
+
+      catch(error){
+
+
+        toast.error(
+          "Unable to delete project"
+        );
+
+
+      }
+
+      finally{
+
+        setActionLoading(false);
+
+      }
+
+
+    };
+
+
+
+
+
+
+
+
+  return (
+
     <MainLayout>
+
+
       <div className="projects-page">
 
-        <div className="projects-main">
 
-          <div className="projects-container">
 
-            {/* =====================================
-                PAGE HEADER
-            ===================================== */}
+        <PageHeader
 
-            <PageHeader
-              title="Projects"
-              subtitle="Manage all projects from one place."
-            >
-              {canManage && (
-                <button
-                  className="create-project-btn"
-                  disabled={loading}
-                  onClick={handleCreateProject}
-                >
-                  + Create Project
-                </button>
-              )}
-            </PageHeader>
+          title="Projects"
 
-            {/* =====================================
-                STATISTICS
-            ===================================== */}
+          subtitle="Manage all projects from one place."
 
-            <div className="project-stats">
+        >
 
-              <StatCard
-                title="Total Projects"
-                value={stats.total}
-                color="blue"
-              />
 
-              <StatCard
-                title="Active"
-                value={stats.active}
-                color="green"
-              />
+          {
+            canManage && (
 
-              <StatCard
-                title="Planning"
-                value={stats.planning}
-                color="orange"
-              />
+              <button
 
-              <StatCard
-                title="Completed"
-                value={stats.completed}
-                color="purple"
-              />
+                className="create-project-btn"
 
-              <StatCard
-                title="Archived"
-                value={stats.archived}
-                color="dark"
-              />
+                onClick={()=>{
 
-            </div>
+                  setSelectedProject(null);
 
-            {/* =====================================
-                FILTERS
-            ===================================== */}
+                  setShowModal(true);
 
-            <ProjectFilters
-              search={search}
-              setSearch={setSearch}
+                }}
 
-              status={statusFilter}
-              setStatus={setStatusFilter}
+              >
 
-              sortBy={sortBy}
-              setSortBy={setSortBy}
+                + Create Project
 
-              totalProjects={filteredProjects.length}
-            />
+              </button>
 
-            {/* =====================================
-                TABLE
-            ===================================== */}
 
-            <ProjectTable
-              projects={paginatedProjects}
-              loading={loading}
-              canManage={canManage}
-              onEdit={handleEditProject}
-              onDelete={handleDeleteClick}
-            />
+            )
+          }
 
-            {/* =====================================
-                EMPTY
-            ===================================== */}
 
-            {!loading &&
-              filteredProjects.length === 0 && (
 
-                <div className="empty-projects">
+        </PageHeader>
 
-                  <h2>
-                    No Projects Found
-                  </h2>
 
-                  <p>
-                    Try changing the search,
-                    filters or create a new
-                    project.
-                  </p>
 
-                </div>
 
-            )}
 
-            {/* =====================================
-                PAGINATION
-            ===================================== */}
 
-            {totalPages > 1 && (
+        <div className="project-stats-grid">
 
-              <div className="pagination">
 
-                <button
-                  onClick={previousPage}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
+          <StatCard
+            title="Total Projects"
+            value={stats.total}
+            color="blue"
+          />
 
-                {Array.from({
-                  length: totalPages,
-                }).map((_, index) => (
 
-                  <button
-                    key={index}
-                    className={
-                      currentPage ===
-                      index + 1
-                        ? "active-page"
-                        : ""
-                    }
-                    onClick={() =>
-                      goToPage(index + 1)
-                    }
-                  >
-                    {index + 1}
-                  </button>
+          <StatCard
+            title="Active"
+            value={stats.active}
+            color="green"
+          />
 
-                ))}
 
-                <button
-                  onClick={nextPage}
-                  disabled={
-                    currentPage ===
-                    totalPages
-                  }
-                >
-                  Next
-                </button>
+          <StatCard
+            title="Planning"
+            value={stats.planning}
+            color="orange"
+          />
 
-              </div>
 
-            )}
+          <StatCard
+            title="Completed"
+            value={stats.completed}
+            color="purple"
+          />
 
-            {/* =====================================
-                PROJECT MODAL
-            ===================================== */}
 
-            <ProjectModal
-              open={showModal}
-              project={selectedProject}
-              onClose={closeProjectModal}
-              onSave={handleSaveProject}
-            />
+          <StatCard
+            title="Archived"
+            value={stats.archived}
+            color="dark"
+          />
 
-            {/* =====================================
-                DELETE MODAL
-            ===================================== */}
-
-            <DeleteProjectModal
-              open={showDeleteModal}
-              project={selectedProject}
-              loading={deleteLoading}
-              onClose={closeDeleteModal}
-              onConfirm={() =>
-                handleConfirmDelete(
-                  selectedProject?._id
-                )
-              }
-            />
-
-          </div>
 
         </div>
 
+
+
+
+
+
+
+        <ProjectFilters
+
+
+          search={search}
+
+          setSearch={setSearch}
+
+
+
+          statusFilter={statusFilter}
+
+          setStatusFilter={setStatusFilter}
+
+
+
+          priorityFilter={priorityFilter}
+
+          setPriorityFilter={setPriorityFilter}
+
+
+
+          sortBy={sortBy}
+
+          setSortBy={setSortBy}
+
+
+
+          totalProjects={
+            filteredProjects.length
+          }
+
+
+        />
+
+
+
+
+
+
+
+        <ProjectTable
+
+
+          projects={
+            paginatedProjects
+          }
+
+
+          loading={loading}
+
+
+          canManage={canManage}
+
+
+          onEdit={(project)=>{
+
+            setSelectedProject(project);
+
+            setShowModal(true);
+
+          }}
+
+
+          onDelete={(project)=>{
+
+            setSelectedProject(project);
+
+            setShowDeleteModal(true);
+
+          }}
+
+
+        />
+
+
+
+
+
+
+
+        <ProjectModal
+
+          open={showModal}
+
+          project={selectedProject}
+
+          loading={actionLoading}
+
+          onClose={()=>setShowModal(false)}
+
+          onSave={handleSave}
+
+        />
+
+
+
+
+
+        <DeleteProjectModal
+
+          open={showDeleteModal}
+
+          project={selectedProject}
+
+          loading={actionLoading}
+
+          onClose={()=>setShowDeleteModal(false)}
+
+          onConfirm={handleDelete}
+
+        />
+
+
+
       </div>
 
+
+
     </MainLayout>
+
   );
+
+
 };
+
 
 export default Projects;

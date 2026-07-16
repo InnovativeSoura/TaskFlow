@@ -1,47 +1,40 @@
-/* ==========================================
+/* =====================================================
    TASKFLOW PROJECTS PAGE
-========================================== */
+   PREMIUM UI DESIGN
+===================================================== */
+
 
 .projects-page {
-  min-height: 100%;
-  padding: 28px;
-}
 
-.projects-main {
-  width: 100%;
-}
+  display:flex;
+  flex-direction:column;
+  gap:28px;
 
-.projects-container {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  padding:30px;
+
+  min-height:100%;
+
 }
 
 
-/* ==========================================
-   HEADER
-========================================== */
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
 
 .projects-header {
+
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   gap:20px;
+
   flex-wrap:wrap;
+
 }
 
-
-.projects-header h1 {
-  font-size:2rem;
-  font-weight:800;
-  color:var(--text-primary,#111827);
-}
-
-
-.projects-header p {
-  margin-top:6px;
-  color:var(--text-secondary,#64748b);
-}
 
 
 .create-project-btn {
@@ -49,83 +42,93 @@
   display:flex;
   align-items:center;
   justify-content:center;
+
   gap:10px;
 
   padding:13px 24px;
 
   border:none;
+
   border-radius:14px;
 
-  cursor:pointer;
-
-  font-weight:700;
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
 
   color:white;
 
-  background:
-  linear-gradient(
-    135deg,
-    #6366f1,
-    #8b5cf6
-  );
+  font-size:15px;
+
+  font-weight:700;
+
+  cursor:pointer;
 
   transition:.3s;
 
+  box-shadow:
+    0 10px 25px
+    rgba(99,102,241,.25);
+
 }
+
 
 
 .create-project-btn:hover {
 
-  transform:translateY(-3px);
+  transform:
+    translateY(-3px);
 
   box-shadow:
-  0 15px 35px
-  rgba(99,102,241,.35);
-
-}
-
-
-.create-project-btn:disabled {
-
-  opacity:.6;
-  cursor:not-allowed;
+    0 18px 35px
+    rgba(99,102,241,.35);
 
 }
 
 
 
-/* ==========================================
+
+
+/* =====================================================
    STATISTICS
-========================================== */
+===================================================== */
 
 
-.project-stats {
+.project-stats-grid {
 
   display:grid;
 
   grid-template-columns:
   repeat(
     auto-fit,
-    minmax(210px,1fr)
+    minmax(220px,1fr)
   );
 
-  gap:20px;
+  gap:22px;
 
 }
 
 
 
-.stat-card {
+.project-stat-card {
 
-  background:white;
+  display:flex;
+
+  align-items:center;
+
+  gap:18px;
+
+  padding:24px;
 
   border-radius:22px;
 
-  padding:22px;
+  background:#ffffff;
 
   box-shadow:
-  0 10px 30px
-  rgba(0,0,0,.08);
+    0 12px 35px
+    rgba(15,23,42,.08);
 
   transition:.3s;
 
@@ -133,32 +136,59 @@
 
 
 
-.stat-card:hover {
+.project-stat-card:hover {
 
   transform:
-  translateY(-5px);
+    translateY(-6px);
 
 }
 
 
 
-.stat-card h3 {
+
+
+.project-stat-icon {
+
+  width:60px;
+
+  height:60px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+
+  border-radius:18px;
+
+  font-size:25px;
+
+  color:white;
+
+}
+
+
+
+
+
+.project-stat-content h4 {
 
   color:#64748b;
 
-  font-size:.9rem;
+  font-size:14px;
+
+  font-weight:600;
 
 }
 
 
 
-.stat-card h2 {
+.project-stat-content h2 {
 
-  margin-top:10px;
+  margin-top:5px;
 
-  font-size:2rem;
-
-  font-weight:800;
+  font-size:30px;
 
   color:#111827;
 
@@ -166,9 +196,11 @@
 
 
 
-/* ==========================================
-   FILTER TOOLBAR
-========================================== */
+
+
+/* =====================================================
+   PROJECT TOOLBAR FILTERS
+===================================================== */
 
 
 .project-toolbar {
@@ -177,21 +209,24 @@
 
   align-items:center;
 
-  flex-wrap:wrap;
-
   gap:16px;
 
-  padding:20px;
+  flex-wrap:wrap;
 
-  border-radius:20px;
+  padding:22px;
 
   background:white;
 
+  border-radius:22px;
+
   box-shadow:
-  0 10px 30px
-  rgba(0,0,0,.08);
+
+  0 12px 35px
+  rgba(15,23,42,.08);
 
 }
+
+
 
 
 
@@ -209,29 +244,14 @@
 
   gap:12px;
 
-  padding:0 16px;
+  padding:0 18px;
 
-  border-radius:14px;
+
+  border-radius:15px;
 
   background:#f8fafc;
 
-  border:1px solid #e5e7eb;
-
-}
-
-
-
-.toolbar-search input {
-
-  flex:1;
-
-  border:none;
-
-  outline:none;
-
-  background:transparent;
-
-  font-size:15px;
+  border:1px solid #e2e8f0;
 
 }
 
@@ -245,11 +265,33 @@
 
 
 
+.toolbar-search input {
+
+  width:100%;
+
+  border:none;
+
+  outline:none;
+
+  background:none;
+
+  color:#111827;
+
+  font-size:15px;
+
+}
+
+
+
+
+
+
+
 .toolbar-select {
 
   height:52px;
 
-  min-width:180px;
+  min-width:190px;
 
   display:flex;
 
@@ -257,14 +299,24 @@
 
   gap:10px;
 
-  padding:0 15px;
+  padding:0 16px;
 
-  border-radius:14px;
+
+  border-radius:15px;
 
   background:#f8fafc;
 
   border:
-  1px solid #e5e7eb;
+
+  1px solid #e2e8f0;
+
+}
+
+
+
+.toolbar-select svg {
+
+  color:#6366f1;
 
 }
 
@@ -282,7 +334,13 @@
 
   cursor:pointer;
 
+  color:#111827;
+
 }
+
+
+
+
 
 
 
@@ -302,16 +360,17 @@
 
 .toolbar-count span {
 
-  font-size:12px;
-
   color:#64748b;
+
+  font-size:12px;
 
 }
 
 
+
 .toolbar-count strong {
 
-  font-size:1.5rem;
+  font-size:28px;
 
   color:#6366f1;
 
@@ -319,32 +378,13 @@
 
 
 
-/* ==========================================
-   RESPONSIVE FILTERS
-========================================== */
 
 
-@media(max-width:992px){
-
-  .project-toolbar{
-
-    flex-direction:column;
-    align-items:stretch;
-
-  }
 
 
-  .toolbar-count{
-
-    align-items:center;
-    margin:auto;
-
-  }
-
-}
-/* ==========================================
-   PROJECT TABLE
-========================================== */
+/* =====================================================
+   TABLE
+===================================================== */
 
 
 .project-table-wrapper {
@@ -353,15 +393,19 @@
 
   overflow-x:auto;
 
+  border-radius:24px;
+
   background:white;
 
-  border-radius:22px;
-
   box-shadow:
-  0 10px 35px
-  rgba(0,0,0,.08);
+
+  0 12px 35px
+
+  rgba(15,23,42,.08);
 
 }
+
+
 
 
 
@@ -369,11 +413,13 @@
 
   width:100%;
 
-  min-width:1100px;
+  min-width:1200px;
 
   border-collapse:collapse;
 
 }
+
+
 
 
 
@@ -385,35 +431,45 @@
 
 
 
+
+
 .project-table th {
 
   padding:18px 22px;
 
   text-align:left;
 
-  color:#475569;
+  font-size:13px;
 
-  font-size:.85rem;
+  text-transform:uppercase;
 
-  font-weight:700;
+  letter-spacing:.4px;
+
+  color:#64748b;
 
   border-bottom:
+
   1px solid #e5e7eb;
 
 }
 
 
 
+
+
 .project-table td {
 
-  padding:18px 22px;
+  padding:20px 22px;
 
   border-bottom:
+
   1px solid #edf2f7;
 
   vertical-align:middle;
 
 }
+
+
 
 
 
@@ -433,9 +489,13 @@
 
 
 
-/* ==========================================
+
+
+
+
+/* =====================================================
    PROJECT INFORMATION
-========================================== */
+===================================================== */
 
 
 .project-name {
@@ -452,9 +512,11 @@
 
 .project-name svg {
 
-  color:#6366f1;
+  margin-top:5px;
 
-  font-size:20px;
+  font-size:22px;
+
+  color:#6366f1;
 
 }
 
@@ -462,11 +524,9 @@
 
 .project-name strong {
 
-  display:block;
+  font-size:16px;
 
   color:#111827;
-
-  font-size:15px;
 
 }
 
@@ -480,17 +540,14 @@
 
   font-size:13px;
 
-  max-width:280px;
-
   line-height:1.5;
 
 }
 
 
 
-/* ==========================================
-   MANAGER
-========================================== */
+
+
 
 
 .project-manager {
@@ -515,12 +572,11 @@
 
 
 
-/* ==========================================
-   DATE
-========================================== */
 
 
-.project-date {
+
+
+.project-members {
 
   display:flex;
 
@@ -528,13 +584,15 @@
 
   gap:8px;
 
-  color:#64748b;
+  color:#475569;
 
 }
 
 
 
-.project-date svg {
+
+
+.project-members svg {
 
   color:#6366f1;
 
@@ -542,28 +600,23 @@
 
 
 
-.overdue-date {
-
-  color:#dc2626;
-
-  font-weight:700;
-
-}
 
 
-
-/* ==========================================
+/* =====================================================
    STATUS BADGES
-========================================== */
+===================================================== */
 
 
-.badge {
+.badge,
+.priority-badge {
 
   display:inline-flex;
 
   align-items:center;
 
-  padding:6px 14px;
+  justify-content:center;
+
+  padding:7px 14px;
 
   border-radius:999px;
 
@@ -575,14 +628,6 @@
 
 
 
-.badge.active {
-
-  background:#dcfce7;
-
-  color:#15803d;
-
-}
-
 
 
 .badge.planning {
@@ -590,6 +635,16 @@
   background:#eef2ff;
 
   color:#4f46e5;
+
+}
+
+
+
+.badge.active {
+
+  background:#dcfce7;
+
+  color:#16a34a;
 
 }
 
@@ -615,22 +670,7 @@
 
 
 
-/* ==========================================
-   PRIORITY
-========================================== */
 
-
-.priority-badge {
-
-  padding:6px 12px;
-
-  border-radius:999px;
-
-  font-size:12px;
-
-  font-weight:700;
-
-}
 
 
 
@@ -671,12 +711,9 @@
   color:white;
 
 }
-
-
-
-/* ==========================================
+/* =====================================================
    PROGRESS
-========================================== */
+===================================================== */
 
 
 .progress-wrapper {
@@ -687,15 +724,17 @@
 
   gap:12px;
 
+  min-width:180px;
+
 }
 
 
 
 .progress-bar {
 
-  width:130px;
+  flex:1;
 
-  height:9px;
+  height:10px;
 
   overflow:hidden;
 
@@ -714,17 +753,22 @@
   border-radius:999px;
 
   background:
+
   linear-gradient(
     90deg,
     #6366f1,
     #8b5cf6
   );
 
+  transition:.4s ease;
+
 }
 
 
 
 .progress-text {
+
+  min-width:45px;
 
   font-size:13px;
 
@@ -736,18 +780,21 @@
 
 
 
-/* ==========================================
-   TABLE ACTION BUTTONS
-========================================== */
+
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
 
 
 .table-actions {
 
   display:flex;
 
-  gap:10px;
-
   justify-content:center;
+
+  gap:10px;
 
 }
 
@@ -755,7 +802,6 @@
 
 .edit-btn,
 .delete-btn {
-
 
   width:40px;
 
@@ -766,7 +812,6 @@
   align-items:center;
 
   justify-content:center;
-
 
   border:none;
 
@@ -796,7 +841,11 @@
 
   color:white;
 
+  transform:translateY(-2px);
+
 }
+
+
 
 
 
@@ -816,6 +865,8 @@
 
   color:white;
 
+  transform:translateY(-2px);
+
 }
 
 
@@ -830,157 +881,59 @@
 
 
 
-/* ==========================================
-   PROJECT CARD VIEW
-========================================== */
-
-
-.project-card-grid {
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(
-    auto-fill,
-    minmax(330px,1fr)
-  );
-
-  gap:24px;
-
-}
 
 
 
-.project-card {
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+
+.empty-projects {
+
+  padding:60px 30px;
+
+  text-align:center;
 
   background:white;
-
-  padding:24px;
 
   border-radius:22px;
 
   box-shadow:
-  0 10px 35px
-  rgba(0,0,0,.08);
 
-  transition:.3s;
+  0 12px 35px
 
-}
-
-
-
-.project-card:hover {
-
-  transform:
-  translateY(-6px);
-
-  box-shadow:
-  0 20px 45px
-  rgba(0,0,0,.12);
+  rgba(15,23,42,.08);
 
 }
 
 
 
-.project-color-bar {
-
-  height:6px;
-
-  margin:
-  -24px
-  -24px
-  20px;
-
-  border-radius:
-  22px 22px 0 0;
-
-}
-
-
-
-.project-card-header {
-
-  display:flex;
-
-  justify-content:space-between;
-
-  gap:15px;
-
-}
-
-
-
-.project-card-title {
-
-  display:flex;
-
-  gap:12px;
-
-}
-
-
-
-.project-card-title svg {
-
-  color:#6366f1;
-
-  font-size:24px;
-
-}
-
-
-
-.project-card-title h3 {
+.empty-projects h2 {
 
   color:#111827;
 
+  margin-bottom:10px;
+
 }
 
 
 
-.project-card-title p {
-
-  margin-top:8px;
+.empty-projects p {
 
   color:#64748b;
 
-  line-height:1.5;
-
 }
 
 
 
-.project-card-row {
-
-  margin-top:18px;
-
-  display:flex;
-
-  justify-content:space-between;
-
-}
 
 
 
-.project-card-actions {
-
-  display:flex;
-
-  gap:12px;
-
-  margin-top:20px;
-
-}
-
-
-.project-card-actions button {
-
-  flex:1;
-
-}
-/* ==========================================
+/* =====================================================
    PAGINATION
-========================================== */
+===================================================== */
 
 
 .pagination {
@@ -1011,17 +964,19 @@
 
   border-radius:12px;
 
+  cursor:pointer;
+
   background:white;
 
   color:#475569;
 
   font-weight:600;
 
-  cursor:pointer;
-
   box-shadow:
-  0 5px 18px
-  rgba(0,0,0,.08);
+
+  0 5px 15px
+
+  rgba(15,23,42,.08);
 
   transition:.25s;
 
@@ -1059,86 +1014,12 @@
 
 
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
-
-
-.empty-projects {
-
-  min-height:260px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:center;
-
-  align-items:center;
-
-  text-align:center;
-
-  background:white;
-
-  border-radius:22px;
-
-  padding:30px;
-
-  box-shadow:
-  0 10px 35px
-  rgba(0,0,0,.08);
-
-}
 
 
 
-.empty-projects h2 {
-
-  margin-bottom:10px;
-
-  color:#111827;
-
-}
-
-
-
-.empty-projects p {
-
-  color:#64748b;
-
-}
-
-
-
-/* ==========================================
-   LOADING
-========================================== */
-
-
-.projects-loading,
-.projects-loader {
-
-  min-height:250px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-size:18px;
-
-  font-weight:600;
-
-  color:#6366f1;
-
-}
-
-
-
-/* ==========================================
+/* =====================================================
    PROJECT MODAL
-========================================== */
+===================================================== */
 
 
 .modal-overlay {
@@ -1149,17 +1030,17 @@
 
   display:flex;
 
-  align-items:center;
-
   justify-content:center;
+
+  align-items:center;
 
   padding:20px;
 
   background:
-  rgba(15,23,42,.6);
 
-  backdrop-filter:
-  blur(8px);
+  rgba(15,23,42,.65);
+
+  backdrop-filter:blur(8px);
 
   z-index:1000;
 
@@ -1167,7 +1048,10 @@
 
 
 
-.project-modal {
+
+
+.project-modal,
+.delete-modal {
 
   width:100%;
 
@@ -1177,17 +1061,20 @@
 
   overflow-y:auto;
 
-  padding:32px;
-
-  border-radius:24px;
-
   background:white;
 
+  border-radius:28px;
+
+  padding:32px;
+
   box-shadow:
+
   0 30px 70px
-  rgba(0,0,0,.2);
+
+  rgba(0,0,0,.25);
 
   animation:
+
   modalShow .25s ease;
 
 }
@@ -1202,7 +1089,7 @@
 
     transform:
     translateY(20px)
-    scale(.98);
+    scale(.96);
 
   }
 
@@ -1221,8 +1108,16 @@
 
 
 
+
+
 .modal-close,
 .close-btn {
+
+  position:absolute;
+
+  top:20px;
+
+  right:20px;
 
   width:42px;
 
@@ -1253,19 +1148,19 @@
 
 
 
-.modal-header {
-
-  margin-bottom:25px;
-
-}
-
 
 
 .modal-header h2 {
 
-  color:#111827;
+  display:flex;
 
-  font-size:26px;
+  align-items:center;
+
+  gap:10px;
+
+  font-size:28px;
+
+  color:#111827;
 
 }
 
@@ -1273,17 +1168,20 @@
 
 .modal-header p {
 
-  margin-top:8px;
-
   color:#64748b;
+
+  margin-top:8px;
 
 }
 
 
 
-/* ==========================================
+
+
+
+/* =====================================================
    FORM
-========================================== */
+===================================================== */
 
 
 .project-form {
@@ -1292,7 +1190,7 @@
 
   flex-direction:column;
 
-  gap:20px;
+  gap:22px;
 
 }
 
@@ -1303,6 +1201,7 @@
   display:grid;
 
   grid-template-columns:
+
   repeat(2,1fr);
 
   gap:20px;
@@ -1317,13 +1216,19 @@
 
   flex-direction:column;
 
-  gap:8px;
+  gap:10px;
 
 }
 
 
 
 .form-group label {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
 
   font-weight:600;
 
@@ -1333,9 +1238,13 @@
 
 
 
+
+
 .form-group input,
 .form-group textarea,
 .form-group select {
+
+  width:100%;
 
   padding:14px 16px;
 
@@ -1343,11 +1252,13 @@
 
   border:
 
-  1px solid #e5e7eb;
+  1px solid #dbe3ee;
 
   outline:none;
 
   background:#f8fafc;
+
+  transition:.25s;
 
 }
 
@@ -1365,14 +1276,152 @@
 
 
 
-.form-group textarea {
 
-  min-height:120px;
 
-  resize:vertical;
+.color-picker-wrapper {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
 
 }
 
+
+
+.color-picker-wrapper input {
+
+  width:65px;
+
+  height:45px;
+
+  padding:0;
+
+}
+
+
+
+.color-value {
+
+  font-weight:600;
+
+}
+
+
+
+
+
+
+/* =====================================================
+   MEMBERS
+===================================================== */
+
+
+.members-list {
+
+  display:grid;
+
+  grid-template-columns:
+
+  repeat(
+    auto-fill,
+    minmax(230px,1fr)
+  );
+
+  gap:14px;
+
+}
+
+
+
+
+
+.member-item {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:12px;
+
+  border-radius:14px;
+
+  border:
+
+  1px solid #e5e7eb;
+
+  cursor:pointer;
+
+}
+
+
+
+
+
+.member-item:hover {
+
+  background:#eef2ff;
+
+  border-color:#6366f1;
+
+}
+
+
+
+.member-avatar {
+
+  width:42px;
+
+  height:42px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:#6366f1;
+
+  color:white;
+
+  font-weight:700;
+
+}
+
+
+
+
+
+.member-details {
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+
+
+.member-details small {
+
+  color:#64748b;
+
+}
+
+
+
+
+
+
+
+/* =====================================================
+   MODAL ACTIONS
+===================================================== */
 
 
 .modal-actions,
@@ -1424,14 +1473,6 @@
 
 
 
-.btn-primary:hover {
-
-  background:#4f46e5;
-
-}
-
-
-
 .btn-secondary {
 
   background:#e5e7eb;
@@ -1452,120 +1493,117 @@
 
 
 
-.btn-danger:hover {
 
-  background:#b91c1c;
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+
+@media(max-width:992px){
+
+
+  .projects-page {
+
+    padding:20px;
+
+  }
+
+
+  .project-toolbar {
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+  }
+
+
+
+  .toolbar-count {
+
+    align-items:center;
+
+    margin:auto;
+
+  }
+
+
+  .form-grid {
+
+    grid-template-columns:1fr;
+
+  }
+
 
 }
 
 
 
-/* ==========================================
-   DELETE MODAL
-========================================== */
 
 
-.delete-modal {
+@media(max-width:768px){
 
-  width:100%;
 
-  max-width:520px;
+  .projects-header {
 
-  padding:30px;
+    flex-direction:column;
 
-  background:white;
+    align-items:flex-start;
 
-  border-radius:24px;
+  }
+
+
+
+  .project-modal,
+  .delete-modal {
+
+    padding:22px;
+
+  }
+
+
+
+  .modal-actions,
+  .delete-actions {
+
+    flex-direction:column-reverse;
+
+  }
+
+
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+
+    width:100%;
+
+  }
+
 
 }
 
 
 
-.delete-header {
-
-  display:flex;
-
-  align-items:center;
-
-  gap:15px;
-
-}
 
 
 
-.delete-icon {
-
-  width:58px;
-
-  height:58px;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  border-radius:18px;
-
-  background:#fee2e2;
-
-  color:#dc2626;
-
-  font-size:25px;
-
-}
-
-
-
-.delete-body {
-
-  text-align:center;
-
-}
-
-
-
-.delete-body h3 {
-
-  margin:20px 0;
-
-  color:#111827;
-
-}
-
-
-
-.delete-warning {
-
-  padding:16px;
-
-  border-radius:14px;
-
-  background:#fef2f2;
-
-  color:#b91c1c;
-
-}
-
-
-
-/* ==========================================
+/* =====================================================
    DARK MODE
-========================================== */
+===================================================== */
 
 
-.dark .project-card,
-.dark .project-table-wrapper,
+.dark .project-stat-card,
 .dark .project-toolbar,
-.dark .project-modal,
-.dark .delete-modal,
+.dark .project-table-wrapper,
 .dark .empty-projects,
-.dark .pagination button,
-.dark .stat-card {
+.dark .project-modal,
+.dark .delete-modal {
+
 
   background:#1f2937;
-
-  color:white;
 
 }
 
@@ -1582,19 +1620,17 @@
 .dark .project-table th,
 .dark .project-table td {
 
-  border-color:#374151;
-
   color:#e5e7eb;
+
+  border-color:#374151;
 
 }
 
 
 
-.dark .project-description,
-.dark .project-card-title p,
-.dark .empty-projects p {
+.dark .project-table tbody tr:hover {
 
-  color:#cbd5e1;
+  background:#111827;
 
 }
 
@@ -1602,7 +1638,10 @@
 
 .dark .form-group input,
 .dark .form-group textarea,
-.dark .form-group select {
+.dark .form-group select,
+.dark .toolbar-search,
+.dark .toolbar-select {
+
 
   background:#111827;
 
@@ -1614,103 +1653,28 @@
 
 
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+.dark .modal-header h2,
+.dark .empty-projects h2 {
 
-
-@media(max-width:992px){
-
-  .projects-page {
-
-    padding:20px;
-
-  }
-
-
-  .form-grid {
-
-    grid-template-columns:1fr;
-
-  }
+  color:white;
 
 }
 
 
 
-@media(max-width:768px){
+.dark .modal-header p,
+.dark .empty-projects p {
 
-  .projects-header {
-
-    align-items:flex-start;
-
-    flex-direction:column;
-
-  }
-
-
-  .create-project-btn {
-
-    width:100%;
-
-  }
-
-
-  .project-card-grid {
-
-    grid-template-columns:1fr;
-
-  }
-
-
-  .modal-actions,
-  .delete-actions {
-
-    flex-direction:column;
-
-  }
-
-
-  .btn-primary,
-  .btn-secondary,
-  .btn-danger {
-
-    width:100%;
-
-  }
+  color:#cbd5e1;
 
 }
 
 
 
-@media(max-width:576px){
+.dark .pagination button {
 
-  .projects-page {
+  background:#1f2937;
 
-    padding:15px;
-
-  }
-
-
-  .projects-header h1 {
-
-    font-size:1.6rem;
-
-  }
-
-
-  .project-modal,
-  .delete-modal {
-
-    padding:20px;
-
-  }
-
-
-  .pagination {
-
-    flex-wrap:wrap;
-
-  }
+  color:white;
 
 }
