@@ -1,152 +1,232 @@
 import { useMemo } from "react";
-import { motion } from "framer-motion";
 
 import {
   DndContext,
-  PointerSensor,
-  KeyboardSensor,
-  closestCorners,
-  useSensor,
-  useSensors,
+  closestCenter,
 } from "@dnd-kit/core";
 
 import {
-  sortableKeyboardCoordinates,
+  arrayMove,
 } from "@dnd-kit/sortable";
 
 import KanbanColumn from "./KanbanColumn";
 
-const COLUMNS = [
-  {
-    id: "Todo",
-    title: "Todo",
-  },
-  {
-    id: "In Progress",
-    title: "In Progress",
-  },
-  {
-    id: "Review",
-    title: "Review",
-  },
-  {
-    id: "Completed",
-    title: "Completed",
-  },
-];
 
-function KanbanBoard({
+const KanbanBoard = ({
   tasks = [],
-  canManage = true,
+  onUpdateStatus,
   onEdit,
   onDelete,
-  onTaskMove,
-}) {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 6,
-      },
-    }),
+  canManage = true,
+}) => {
 
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+
+  /* ==========================================
+      COLUMNS
+  ========================================== */
+
+  const columns = [
+    {
+      id: "Pending",
+      title: "Pending",
+    },
+
+    {
+      id: "In Progress",
+      title: "In Progress",
+    },
+
+    {
+      id: "Review",
+      title: "Review",
+    },
+
+    {
+      id: "Completed",
+      title: "Completed",
+    },
+  ];
+
+
+
+  /* ==========================================
+      GROUP TASKS
+  ========================================== */
 
   const groupedTasks = useMemo(() => {
-    return {
-      Todo: tasks.filter(
-        (task) =>
-          (task.status || "Todo") === "Todo"
-      ),
 
-      "In Progress": tasks.filter(
-        (task) =>
-          task.status === "In Progress"
-      ),
+    const result = {};
 
-      Review: tasks.filter(
-        (task) =>
-          task.status === "Review"
-      ),
+    columns.forEach((column) => {
+      result[column.id] = [];
+    });
 
-      Completed: tasks.filter(
-        (task) =>
-          task.status === "Completed"
-      ),
-    };
+
+    tasks.forEach((task) => {
+
+      const status =
+        task.status || "Pending";
+
+
+      if (result[status]) {
+
+        result[status].push(task);
+
+      } else {
+
+        result.Pending.push(task);
+
+      }
+
+    });
+
+
+    return result;
+
+
   }, [tasks]);
 
-  const findTask = (id) =>
-    tasks.find((task) => task._id === id);
 
-  const handleDragEnd = ({ active, over }) => {
+
+
+  /* ==========================================
+      DRAG END
+  ========================================== */
+
+  const handleDragEnd = ({
+    active,
+    over,
+  }) => {
+
+
     if (!over) return;
 
-    const activeTask = findTask(active.id);
 
-    if (!activeTask) return;
+    const taskId = active.id;
 
-    let newStatus = over.id;
+
+    let newStatus =
+      over.id;
+
+
+
+    /*
+      Compatibility with
+      old backend statuses
+    */
 
     if (
-      !COLUMNS.some(
-        (column) => column.id === over.id
-      )
+      newStatus === "Todo"
     ) {
-      const targetTask = findTask(over.id);
 
-      if (!targetTask) return;
+      newStatus =
+        "Pending";
 
-      newStatus = targetTask.status;
     }
 
-    if (
-      newStatus &&
-      newStatus !== activeTask.status
-    ) {
-      onTaskMove?.(
-        activeTask,
-        newStatus
+
+
+    const task =
+      tasks.find(
+        (item) =>
+          item._id === taskId
       );
+
+
+
+    if (!task) return;
+
+
+
+    if (
+      task.status === newStatus
+    ) {
+      return;
     }
+
+
+
+    onUpdateStatus(
+      taskId,
+      newStatus
+    );
+
   };
 
+
+
+
+
   return (
-    <motion.div
-      className="kanban-board"
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      transition={{
-        duration: 0.35,
-      }}
-    >
+
+    <div className="kanban-wrapper">
+
+
       <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
+        collisionDetection={
+          closestCenter
+        }
+        onDragEnd={
+          handleDragEnd
+        }
       >
-        {COLUMNS.map((column) => (
-          <KanbanColumn
-            key={column.id}
-            id={column.id}
-            title={column.title}
-            tasks={
-              groupedTasks[column.id] || []
-            }
-            canManage={canManage}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))}
+
+
+        <div className="kanban-board">
+
+
+          {columns.map(
+            (column) => (
+
+              <KanbanColumn
+
+                key={
+                  column.id
+                }
+
+                id={
+                  column.id
+                }
+
+                title={
+                  column.title
+                }
+
+                tasks={
+                  groupedTasks[
+                    column.id
+                  ]
+                }
+
+                canManage={
+                  canManage
+                }
+
+                onEdit={
+                  onEdit
+                }
+
+                onDelete={
+                  onDelete
+                }
+
+              />
+
+            )
+          )}
+
+
+        </div>
+
+
       </DndContext>
-    </motion.div>
+
+
+    </div>
+
   );
-}
+
+};
+
 
 export default KanbanBoard;
