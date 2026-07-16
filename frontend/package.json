@@ -36,7 +36,8 @@
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "stripe": "^22.2.2",
-    "tsparticles": "^4.3.2"
+    "tsparticles": "^4.3.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.2.0",

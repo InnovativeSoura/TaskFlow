@@ -1,0 +1,71 @@
+.calendar-page {
+  padding: 20px;
+}
+
+
+.event-modal-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,0.5);
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  z-index:1000;
+
+}
+
+
+.event-modal {
+
+  width:420px;
+
+  background:white;
+
+  padding:25px;
+
+  border-radius:16px;
+
+}
+
+
+.event-modal input {
+
+  width:100%;
+
+  padding:12px;
+
+  margin:20px 0;
+
+}
+
+
+.close-btn {
+
+  float:right;
+
+  border:none;
+
+  background:none;
+
+  cursor:pointer;
+
+}
+
+
+.modal-actions {
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  gap:12px;
+
+}

@@ -1,7 +1,13 @@
 // src/routes/AppRoutes.jsx
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
 import { useAuth } from "../context/AuthContext";
+
 import ProtectedRoute from "../components/ProtectedRoute";
 
 import AuthPage from "../pages/AuthPage";
@@ -39,57 +45,93 @@ import Notifications from "../pages/Notifications";
 
 import ActivityFeed from "../pages/ActivityFeed";
 import Workspaces from "../pages/Workspaces";
+
 import Subscription from "../pages/Subscription";
 import Pricing from "../pages/Pricing";
 import Upgrade from "../pages/Upgrade";
+
 import Home from "../pages/Home";
 
-function AppRoutes() {
+
+const AppRoutes = () => {
+
   const {
     loading,
     isAuthenticated,
   } = useAuth();
 
+
   if (loading) {
+
     return (
       <div className="page-loader">
+
         <div className="spinner"></div>
+
       </div>
     );
+
   }
 
+
   return (
+
     <Routes>
 
-      {/* Root */}
+
+      {/* ============================
+          PUBLIC
+      ============================ */}
+
 
       <Route
         path="/"
         element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <Navigate to="/login" replace />
-          )
+          isAuthenticated
+          ? (
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            )
+          : (
+              <Navigate
+                to="/login"
+                replace
+              />
+            )
         }
       />
 
-      {/* Public */}
 
       <Route
         path="/login"
         element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <AuthPage />
-          )
+          isAuthenticated
+          ? (
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            )
+          : (
+              <AuthPage />
+            )
         }
       />
 
-      <Route path="/pricing" element={<Pricing />} />
 
-      {/* Dashboard */}
+      <Route
+        path="/pricing"
+        element={<Pricing />}
+      />
+
+
+
+      {/* ============================
+          PROTECTED
+      ============================ */}
+
 
       <Route
         path="/dashboard"
@@ -100,6 +142,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/admin-dashboard"
         element={
@@ -109,7 +152,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Projects */}
+
+
+      {/* PROJECTS */}
 
       <Route
         path="/projects"
@@ -120,6 +165,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/project-list"
         element={
@@ -129,7 +175,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Tasks */}
+
+
+      {/* TASKS */}
 
       <Route
         path="/tasks"
@@ -140,6 +188,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/task-list"
         element={
@@ -149,7 +198,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Users */}
+
+
+      {/* TEAM */}
 
       <Route
         path="/users"
@@ -160,6 +211,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/team"
         element={
@@ -169,7 +221,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Profile */}
+
+
+      {/* USER */}
 
       <Route
         path="/profile"
@@ -180,7 +234,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Reports */}
+
+
+      {/* ANALYTICS */}
 
       <Route
         path="/reports"
@@ -191,6 +247,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/analytics"
         element={
@@ -200,7 +257,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Kanban */}
+
+
+      {/* TOOLS */}
 
       <Route
         path="/kanban"
@@ -211,7 +270,6 @@ function AppRoutes() {
         }
       />
 
-      {/* Calendar */}
 
       <Route
         path="/calendar"
@@ -222,7 +280,6 @@ function AppRoutes() {
         }
       />
 
-      {/* Chat */}
 
       <Route
         path="/chat"
@@ -233,7 +290,6 @@ function AppRoutes() {
         }
       />
 
-      {/* AI */}
 
       <Route
         path="/ai"
@@ -244,7 +300,6 @@ function AppRoutes() {
         }
       />
 
-      {/* Gantt */}
 
       <Route
         path="/gantt"
@@ -255,7 +310,9 @@ function AppRoutes() {
         }
       />
 
-      {/* Others */}
+
+
+      {/* ACCOUNT */}
 
       <Route
         path="/activity"
@@ -266,6 +323,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/workspaces"
         element={
@@ -274,6 +332,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
 
       <Route
         path="/subscription"
@@ -284,6 +343,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/upgrade"
         element={
@@ -292,6 +352,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
 
       <Route
         path="/settings"
@@ -302,6 +363,7 @@ function AppRoutes() {
         }
       />
 
+
       <Route
         path="/notifications"
         element={
@@ -310,6 +372,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
 
       <Route
         path="/home"
@@ -320,21 +383,35 @@ function AppRoutes() {
         }
       />
 
-      {/* Fallback */}
+
+
+      {/* FALLBACK */}
 
       <Route
         path="*"
         element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <Navigate to="/login" replace />
-          )
+          isAuthenticated
+          ? (
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            )
+          : (
+              <Navigate
+                to="/login"
+                replace
+              />
+            )
         }
       />
 
+
     </Routes>
+
   );
-}
+
+};
+
 
 export default AppRoutes;
