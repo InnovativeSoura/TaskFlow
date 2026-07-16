@@ -1,4 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+
+import {
+  FaArrowUp,
+  FaPlus,
+  FaTasks,
+  FaProjectDiagram,
+  FaUsers,
+  FaCheckCircle,
+  FaClock,
+  FaChartLine,
+} from "react-icons/fa";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -8,8 +20,11 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import StatCard from "../components/StatCard";
 
-import { useAuth } from "../context/AuthContext";
+import DashboardOverviewChart from "../components/dashboard/DashboardOverviewChart";
+import ProjectProgressChart from "../components/projects/ProjectProgressChart";
+import TaskStatusChart from "../components/tasks/TaskStatusChart";
 
+import { useAuth } from "../context/AuthContext";
 import { getDashboardStats } from "../services/dashboardService";
 
 import "../styles/Dashboard.css";
@@ -41,105 +56,87 @@ const Dashboard = () => {
   }, []);
 
   const loadDashboard = async () => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const data = await getDashboardStats();
+      const data = await getDashboardStats();
 
-    const usersData =
-      data?.users?.users ||
-      data?.users ||
-      [];
+      const usersData =
+        data?.users?.users ||
+        data?.users ||
+        [];
 
-    const projectsData =
-      data?.projects?.projects ||
-      data?.projects ||
-      [];
+      const projectsData =
+        data?.projects?.projects ||
+        data?.projects ||
+        [];
 
-    const tasksData =
-      data?.tasks?.tasks ||
-      data?.tasks ||
-      [];
+      const tasksData =
+        data?.tasks?.tasks ||
+        data?.tasks ||
+        [];
 
-    setUsers(usersData);
-    setProjects(projectsData);
-    setTasks(tasksData);
+      setUsers(usersData);
+      setProjects(projectsData);
+      setTasks(tasksData);
 
-    const completed = tasksData.filter(
-      (task) => task.status === "Completed"
-    ).length;
+      const completed = tasksData.filter(
+        (task) => task.status === "Completed"
+      ).length;
 
-    const pending = tasksData.filter(
-      (task) =>
-        task.status === "Pending" ||
-        task.status === "To Do"
-    ).length;
+      const pending = tasksData.filter(
+        (task) =>
+          task.status === "Pending" ||
+          task.status === "To Do"
+      ).length;
 
-    const active = projectsData.filter(
-      (project) =>
-        project.status === "Active"
-    ).length;
+      const active = projectsData.filter(
+        (project) =>
+          project.status === "Active"
+      ).length;
 
-    setStats({
-      users: usersData.length,
-      projects: projectsData.length,
-      tasks: tasksData.length,
-      completed,
-      pending,
-      active,
-    });
-  } catch (err) {
-    console.error("Dashboard Error:", err);
+      setStats({
+        users: usersData.length,
+        projects: projectsData.length,
+        tasks: tasksData.length,
+        completed,
+        pending,
+        active,
+      });
+    } catch (err) {
+      console.error(err);
 
-    setUsers([]);
-    setProjects([]);
-    setTasks([]);
+      setUsers([]);
+      setProjects([]);
+      setTasks([]);
 
-    setStats({
-      users: 0,
-      projects: 0,
-      tasks: 0,
-      completed: 0,
-      pending: 0,
-      active: 0,
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+      setStats({
+        users: 0,
+        projects: 0,
+        tasks: 0,
+        completed: 0,
+        pending: 0,
+        active: 0,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredProjects = useMemo(() => {
-
-    return projects.filter((project) => {
-
-      const title =
-        project.title ||
-        project.name ||
-        "";
-
-      return title
+    return projects.filter((project) =>
+      (project.title || project.name || "")
         .toLowerCase()
-        .includes(search.toLowerCase());
-
-    });
-
+        .includes(search.toLowerCase())
+    );
   }, [projects, search]);
 
   const filteredTasks = useMemo(() => {
-
-    return tasks.filter((task) => {
-
-      const title =
-        task.title ||
-        task.name ||
-        "";
-
-      return title
+    return tasks.filter((task) =>
+      (task.title || task.name || "")
         .toLowerCase()
-        .includes(search.toLowerCase());
-
-    });
-
+        .includes(search.toLowerCase())
+    );
   }, [tasks, search]);
 
   const completion = stats.tasks
@@ -155,77 +152,210 @@ const Dashboard = () => {
   return (
     <MainLayout>
 
-      <PageHeader
-        title={`Welcome, ${user?.name || "User"}`}
-        subtitle={`Role : ${user?.role || "Team Member"}`}
-      />
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: -30,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.5,
+        }}
+      >
 
-      <div className="dashboard-actions">
+        <PageHeader
+          title={`Welcome back, ${user?.name || "User"} 👋`}
+          subtitle="Here's what's happening across your workspace today."
+        />
+
+      </motion.div>
+
+      {/* =======================================
+            SEARCH + QUICK ACTIONS
+      ======================================= */}
+
+      <motion.div
+        className="dashboard-toolbar"
+        initial={{
+          opacity: 0,
+          y: 20,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: .15,
+        }}
+      >
 
         <SearchBar
           value={search}
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          placeholder="Search Projects or Tasks..."
+          placeholder="Search projects or tasks..."
         />
 
-        <button>
-          + New Project
-        </button>
+        <div className="quick-actions">
 
-      </div>
+          <button className="primary-btn">
+            <FaPlus />
+            New Project
+          </button>
 
-      <div className="stats-grid">
+          <button className="secondary-btn">
+            <FaTasks />
+            New Task
+          </button>
 
-        <StatCard
-          title="Users"
-          value={stats.users}
-          color="blue"
-        />
+        </div>
+
+      </motion.div>
+
+      {/* =======================================
+                STATS GRID
+      ======================================= */}
+
+      <motion.div
+        className="stats-grid"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          delay: .3,
+        }}
+      >
 
         <StatCard
           title="Projects"
           value={stats.projects}
-          color="green"
+          color="blue"
+          icon={<FaProjectDiagram />}
         />
 
         <StatCard
           title="Tasks"
           value={stats.tasks}
           color="orange"
+          icon={<FaTasks />}
         />
 
         <StatCard
           title="Completed"
           value={stats.completed}
-          color="purple"
+          color="green"
+          icon={<FaCheckCircle />}
         />
 
         <StatCard
           title="Pending"
           value={stats.pending}
           color="red"
+          icon={<FaClock />}
         />
 
         <StatCard
-          title="Active"
-          value={stats.active}
-          color="dark"
+          title="Members"
+          value={stats.users}
+          color="purple"
+          icon={<FaUsers />}
         />
 
-      </div>
-            {/* ==========================
-          DASHBOARD SECTIONS
-      ========================== */}
+        <StatCard
+          title="Productivity"
+          value={`${completion}%`}
+          color="dark"
+          icon={<FaChartLine />}
+        />
+
+      </motion.div>
+            {/* =======================================
+              ANALYTICS
+      ======================================= */}
+
+      <motion.div
+        className="dashboard-analytics"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{ once: true }}
+        transition={{
+          duration: .5,
+        }}
+      >
+        <div className="analytics-card large-card">
+
+          <div className="card-header">
+            <h2>Workspace Overview</h2>
+
+            <span className="live-badge">
+              Live
+            </span>
+          </div>
+
+          <DashboardOverviewChart
+            projects={projects}
+            tasks={tasks}
+          />
+
+        </div>
+
+        <div className="analytics-card">
+
+          <div className="card-header">
+            <h2>Task Status</h2>
+          </div>
+
+          <TaskStatusChart
+            tasks={tasks}
+          />
+
+        </div>
+
+        <div className="analytics-card">
+
+          <div className="card-header">
+            <h2>Project Progress</h2>
+          </div>
+
+          <ProjectProgressChart
+            projects={projects}
+          />
+
+        </div>
+
+      </motion.div>
+
+      {/* =======================================
+            RECENT PROJECTS
+      ======================================= */}
 
       <div className="dashboard-sections">
 
-        {/* ==========================
-            RECENT PROJECTS
-        ========================== */}
-
-        <div className="dashboard-card">
+        <motion.div
+          className="dashboard-card"
+          initial={{
+            opacity: 0,
+            x: -25,
+          }}
+          whileInView={{
+            opacity: 1,
+            x: 0,
+          }}
+          viewport={{ once: true }}
+        >
 
           <div className="card-header">
 
@@ -244,10 +374,13 @@ const Dashboard = () => {
           ) : (
 
             filteredProjects
-              .slice(0, 5)
+              .slice(0, 6)
               .map((project) => (
 
-                <div
+                <motion.div
+                  whileHover={{
+                    scale: 1.02,
+                  }}
                   key={project._id}
                   className="list-item"
                 >
@@ -256,7 +389,8 @@ const Dashboard = () => {
 
                     <h3>
 
-                      {project.title || project.name}
+                      {project.title ||
+                        project.name}
 
                     </h3>
 
@@ -265,7 +399,7 @@ const Dashboard = () => {
                       {project.description
                         ? project.description.substring(
                             0,
-                            80
+                            90
                           )
                         : "No description"}
 
@@ -275,38 +409,49 @@ const Dashboard = () => {
 
                   <span
                     className={`badge ${(
-                      project.status || ""
+                      project.status ||
+                      "Planning"
                     )
                       .toLowerCase()
                       .replace(/\s/g, "")}`}
                   >
 
-                    {project.status || "Planning"}
+                    {project.status ||
+                      "Planning"}
 
                   </span>
 
-                </div>
+                </motion.div>
 
               ))
 
           )}
 
-        </div>
+        </motion.div>
 
         {/* ==========================
-            RECENT TASKS
+              RECENT TASKS
         ========================== */}
 
-        <div className="dashboard-card">
+        <motion.div
+          className="dashboard-card"
+          initial={{
+            opacity: 0,
+            x: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            x: 0,
+          }}
+          viewport={{ once: true }}
+        >
 
           <div className="card-header">
 
             <h2>Recent Tasks</h2>
 
             <button>
-
               View All
-
             </button>
 
           </div>
@@ -318,11 +463,14 @@ const Dashboard = () => {
           ) : (
 
             filteredTasks
-              .slice(0, 5)
+              .slice(0, 6)
               .map((task) => (
 
-                <div
+                <motion.div
                   key={task._id}
+                  whileHover={{
+                    scale: 1.02,
+                  }}
                   className="deadline-item"
                 >
 
@@ -330,7 +478,8 @@ const Dashboard = () => {
 
                     <h3>
 
-                      {task.title || task.name}
+                      {task.title ||
+                        task.name}
 
                     </h3>
 
@@ -352,204 +501,198 @@ const Dashboard = () => {
 
                   <span
                     className={`badge ${(
-                      task.priority || "medium"
+                      task.priority ||
+                      "medium"
                     ).toLowerCase()}`}
                   >
 
-                    {task.priority || "Medium"}
+                    {task.priority ||
+                      "Medium"}
 
                   </span>
 
-                </div>
+                </motion.div>
 
               ))
 
           )}
 
-        </div>
+        </motion.div>
 
       </div>
 
-      {/* ==========================
-          OVERALL PROGRESS
-      ========================== */}
+      {/* =======================================
+              PROGRESS CARD
+      ======================================= */}
 
-      <div className="dashboard-card">
+      <motion.div
+        className="dashboard-card"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{ once: true }}
+      >
 
         <div className="card-header">
 
           <h2>
-
-            Overall Project Progress
-
+            Workspace Completion
           </h2>
+
+          <FaArrowUp />
 
         </div>
 
-        <div className="progress-container">
+        <div className="progress-wrapper">
 
           <div className="progress-bar">
 
-            <div
+            <motion.div
               className="progress-fill"
-              style={{
+              initial={{
+                width: 0,
+              }}
+              animate={{
                 width: `${completion}%`,
+              }}
+              transition={{
+                duration: 1.4,
               }}
             />
 
           </div>
 
           <h2>
-
             {completion}% Completed
-
           </h2>
 
         </div>
 
-      </div>
+      </motion.div>
+            {/* =======================================
+              TEAM OVERVIEW
+      ======================================= */}
 
-      {/* ==========================
-          QUICK SUMMARY
-      ========================== */}
+      <div className="dashboard-bottom">
 
-      <div className="dashboard-card">
+        <motion.div
+          className="dashboard-card"
+          initial={{ opacity: 0, x: -25 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
 
-        <div className="card-header">
-
-          <h2>
-
-            Quick Summary
-
-          </h2>
-
-        </div>
-
-        <div className="summary-grid">
-
-          <div className="summary-item">
-
-            <h3>
-
-              {stats.projects}
-
-            </h3>
-
-            <p>
-
-              Total Projects
-
-            </p>
-
+          <div className="card-header">
+            <h2>Team Members</h2>
+            <span>{users.length} Members</span>
           </div>
 
-          <div className="summary-item">
-
-            <h3>
-
-              {stats.tasks}
-
-            </h3>
-
-            <p>
-
-              Total Tasks
-
-            </p>
-
-          </div>
-
-          <div className="summary-item">
-
-            <h3>
-
-              {stats.completed}
-
-            </h3>
-
-            <p>
-
-              Completed Tasks
-
-            </p>
-
-          </div>
-
-          <div className="summary-item">
-
-            <h3>
-
-              {users.length}
-
-            </h3>
-
-            <p>
-
-              Team Members
-
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-            {/* ==========================
-          TEAM OVERVIEW
-      ========================== */}
-
-      <div className="dashboard-card">
-
-        <div className="card-header">
-
-          <h2>Team Members</h2>
-
-        </div>
-
-        {users.length === 0 ? (
-
-          <EmptyState title="No Team Members Found" />
-
-        ) : (
-
-          users.slice(0, 5).map((member) => (
-
-            <div
-              key={member._id}
-              className="list-item"
-            >
-
-              <div>
-
-                <h3>{member.name}</h3>
-
-                <p>{member.email}</p>
-
-              </div>
-
-              <span
-                className={`badge ${
-                  member.status === "Active"
-                    ? "completed"
-                    : "archived"
-                }`}
+          {users.length === 0 ? (
+            <EmptyState title="No Team Members Found" />
+          ) : (
+            users.slice(0, 6).map((member) => (
+              <motion.div
+                key={member._id}
+                whileHover={{ scale: 1.02 }}
+                className="member-item"
               >
-                {member.status || "Active"}
-              </span>
 
+                <div className="member-left">
+
+                  <div className="member-avatar">
+                    {member.name
+                      ?.substring(0, 2)
+                      .toUpperCase()}
+                  </div>
+
+                  <div>
+
+                    <h3>{member.name}</h3>
+
+                    <p>{member.email}</p>
+
+                  </div>
+
+                </div>
+
+                <span className="badge completed">
+                  {member.status || "Active"}
+                </span>
+
+              </motion.div>
+            ))
+          )}
+
+        </motion.div>
+
+        {/* =======================================
+                QUICK SUMMARY
+        ======================================= */}
+
+        <motion.div
+          className="dashboard-card"
+          initial={{ opacity: 0, x: 25 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
+
+          <div className="card-header">
+            <h2>Workspace Summary</h2>
+          </div>
+
+          <div className="summary-grid">
+
+            <div className="summary-box">
+              <h1>{stats.projects}</h1>
+              <span>Projects</span>
             </div>
 
-          ))
+            <div className="summary-box">
+              <h1>{stats.tasks}</h1>
+              <span>Tasks</span>
+            </div>
 
-        )}
+            <div className="summary-box">
+              <h1>{stats.completed}</h1>
+              <span>Completed</span>
+            </div>
+
+            <div className="summary-box">
+              <h1>{stats.pending}</h1>
+              <span>Pending</span>
+            </div>
+
+            <div className="summary-box">
+              <h1>{stats.users}</h1>
+              <span>Members</span>
+            </div>
+
+            <div className="summary-box">
+              <h1>{completion}%</h1>
+              <span>Efficiency</span>
+            </div>
+
+          </div>
+
+        </motion.div>
 
       </div>
 
-      {/* ==========================
-          RECENT ACTIVITY
-      ========================== */}
+      {/* =======================================
+              RECENT ACTIVITY
+      ======================================= */}
 
-      <div className="dashboard-card">
+      <motion.div
+        className="dashboard-card"
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
 
         <div className="card-header">
 
@@ -557,68 +700,82 @@ const Dashboard = () => {
 
         </div>
 
-        <div className="list-item">
+        <div className="activity-list">
 
-          <div>
+          <div className="activity-item">
 
-            <h3>Projects Created</h3>
+            <div className="activity-dot blue" />
 
-            <p>
-              {stats.projects} project(s) currently available.
-            </p>
+            <div>
+
+              <h4>Projects Created</h4>
+
+              <p>
+                {stats.projects} active project(s)
+                available.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="activity-item">
+
+            <div className="activity-dot green" />
+
+            <div>
+
+              <h4>Completed Tasks</h4>
+
+              <p>
+                {stats.completed} task(s) have been
+                completed successfully.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="activity-item">
+
+            <div className="activity-dot orange" />
+
+            <div>
+
+              <h4>Pending Tasks</h4>
+
+              <p>
+                {stats.pending} task(s) are waiting
+                for completion.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="activity-item">
+
+            <div className="activity-dot purple" />
+
+            <div>
+
+              <h4>Workspace Members</h4>
+
+              <p>
+                {stats.users} member(s) are working
+                together.
+              </p>
+
+            </div>
 
           </div>
 
         </div>
 
-        <div className="list-item">
-
-          <div>
-
-            <h3>Tasks Assigned</h3>
-
-            <p>
-              {stats.tasks} task(s) available in the workspace.
-            </p>
-
-          </div>
-
-        </div>
-
-        <div className="list-item">
-
-          <div>
-
-            <h3>Completed Tasks</h3>
-
-            <p>
-              {stats.completed} task(s) completed successfully.
-            </p>
-
-          </div>
-
-        </div>
-
-        <div className="list-item">
-
-          <div>
-
-            <h3>Pending Tasks</h3>
-
-            <p>
-              {stats.pending} task(s) awaiting completion.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
+      </motion.div>
 
     </MainLayout>
-
   );
-
 };
 
 export default Dashboard;

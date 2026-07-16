@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   FaBars,
@@ -16,20 +16,28 @@ import {
   FaHome,
 } from "react-icons/fa";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 import NotificationBell from "./NotificationBell";
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Navbar.css";
 
-const Navbar = () => {
+const Navbar = ({
+  sidebarOpen,
+  setSidebarOpen,
+}) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const { user, logout } = useAuth();
 
   const [search, setSearch] = useState("");
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
+
+  const [showProfileMenu, setShowProfileMenu] =
+    useState(false);
+
+  const [mobileMenu, setMobileMenu] =
+    useState(false);
 
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -37,11 +45,25 @@ const Navbar = () => {
 
   const menuRef = useRef(null);
 
-  useEffect(() => {
-    document.body.classList.toggle("dark-theme", darkMode);
+  /* ==========================================
+      THEME
+  ========================================== */
 
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  useEffect(() => {
+    document.body.classList.toggle(
+      "dark-theme",
+      darkMode
+    );
+
+    localStorage.setItem(
+      "theme",
+      darkMode ? "dark" : "light"
+    );
   }, [darkMode]);
+
+  /* ==========================================
+      CLOSE PROFILE MENU
+  ========================================== */
 
   useEffect(() => {
     const handler = (e) => {
@@ -53,11 +75,21 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener("mousedown", handler);
+    document.addEventListener(
+      "mousedown",
+      handler
+    );
 
     return () =>
-      document.removeEventListener("mousedown", handler);
+      document.removeEventListener(
+        "mousedown",
+        handler
+      );
   }, []);
+
+  /* ==========================================
+      USER INITIALS
+  ========================================== */
 
   const initials = user?.name
     ? user.name
@@ -68,92 +100,116 @@ const Navbar = () => {
         .toUpperCase()
     : "TF";
 
+  /* ==========================================
+      LOGOUT
+  ========================================== */
+
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true });
+    navigate("/login");
   };
 
   return (
     <header className="navbar">
-      {/* LOGO */}
 
-      <div className="navbar-logo" onClick={() => navigate("/dashboard")}>
-        <div className="logo-circle">TF</div>
+      {/* LEFT */}
 
-        <div>
-          <h2>TaskFlow</h2>
-          <span>Project Management</span>
-        </div>
+      <div className="navbar-left">
+
+        <button
+          className="menu-btn"
+          onClick={() =>
+            setSidebarOpen(!sidebarOpen)
+          }
+        >
+          <FaBars />
+        </button>
+
+        <nav
+          className={`navbar-links ${
+            mobileMenu ? "active" : ""
+          }`}
+        >
+          <NavLink to="/dashboard">
+            <FaHome />
+            Dashboard
+          </NavLink>
+
+          <NavLink to="/projects">
+            <FaProjectDiagram />
+            Projects
+          </NavLink>
+
+          <NavLink to="/tasks">
+            <FaTasks />
+            Tasks
+          </NavLink>
+
+          <NavLink to="/users">
+            <FaUsers />
+            Team
+          </NavLink>
+        </nav>
+
       </div>
-
-      {/* NAVIGATION */}
-
-      <nav className={`navbar-links ${mobileMenu ? "active" : ""}`}>
-        <NavLink to="/dashboard">
-          <FaHome />
-          Dashboard
-        </NavLink>
-
-        <NavLink to="/projects">
-          <FaProjectDiagram />
-          Projects
-        </NavLink>
-
-        <NavLink to="/tasks">
-          <FaTasks />
-          Tasks
-        </NavLink>
-
-        <NavLink to="/users">
-          <FaUsers />
-          Team
-        </NavLink>
-
-        <NavLink to="/about">
-          About
-        </NavLink>
-      </nav>
 
       {/* SEARCH */}
 
       <div className="navbar-search">
-        <FaSearch />
+
+        <FaSearch className="search-icon" />
 
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search projects, tasks..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
         />
+
       </div>
 
       {/* RIGHT */}
 
       <div className="navbar-right">
+
         <button
           className="icon-btn"
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={() =>
+            setDarkMode(!darkMode)
+          }
         >
-          {darkMode ? <FaSun /> : <FaMoon />}
+          {darkMode ? (
+            <FaSun />
+          ) : (
+            <FaMoon />
+          )}
         </button>
 
         <NotificationBell />
 
         <button
           className="icon-btn"
-          onClick={() => navigate("/settings")}
+          onClick={() =>
+            navigate("/settings")
+          }
         >
           <FaCog />
         </button>
+
+        {/* PROFILE */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
-          <div
-            className="profile-card"
+          <button
+            className="profile-trigger"
             onClick={() =>
-              setShowProfileMenu(!showProfileMenu)
+              setShowProfileMenu(
+                !showProfileMenu
+              )
             }
           >
             {user?.avatar ? (
@@ -167,51 +223,105 @@ const Navbar = () => {
                 {initials}
               </div>
             )}
+          </button>
 
-            <div className="profile-info">
-              <h4>{user?.name || "User"}</h4>
+          <AnimatePresence>
 
-              <p>{user?.role || "Member"}</p>
-            </div>
-          </div>
+            {showProfileMenu && (
 
-          {showProfileMenu && (
-            <div className="profile-dropdown">
-              <button
-                onClick={() => {
-                  navigate("/profile");
-                  setShowProfileMenu(false);
+              <motion.div
+                className="profile-dropdown"
+                initial={{
+                  opacity: 0,
+                  y: -10,
+                  scale: 0.95,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -10,
+                  scale: 0.95,
+                }}
+                transition={{
+                  duration: 0.2,
                 }}
               >
-                <FaUserCircle />
 
-                <span>My Profile</span>
-              </button>
+                <div className="dropdown-header">
 
-              <button
-                onClick={() => {
-                  navigate("/settings");
-                  setShowProfileMenu(false);
-                }}
-              >
-                <FaCog />
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt=""
+                      className="dropdown-avatar"
+                    />
+                  ) : (
+                    <div className="dropdown-avatar initials">
+                      {initials}
+                    </div>
+                  )}
 
-                <span>Settings</span>
-              </button>
+                  <div>
 
-              <hr />
+                    <h4>
+                      {user?.name || "User"}
+                    </h4>
 
-              <button
-                className="logout-menu-btn"
-                onClick={handleLogout}
-              >
-                <FaSignOutAlt />
+                    <small>
+                      {user?.role || "Member"}
+                    </small>
 
-                <span>Logout</span>
-              </button>
-            </div>
-          )}
+                  </div>
+
+                </div>
+
+                <button
+                  onClick={() => {
+                    navigate("/profile");
+                    setShowProfileMenu(
+                      false
+                    );
+                  }}
+                >
+                  <FaUserCircle />
+                  Profile
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigate("/settings");
+                    setShowProfileMenu(
+                      false
+                    );
+                  }}
+                >
+                  <FaCog />
+                  Settings
+                </button>
+
+                <hr />
+
+                <button
+                  className="logout-menu-btn"
+                  onClick={handleLogout}
+                >
+                  <FaSignOutAlt />
+                  Logout
+                </button>
+
+              </motion.div>
+
+            )}
+
+          </AnimatePresence>
+
         </div>
+
+        {/* MOBILE */}
 
         <button
           className="mobile-toggle"
@@ -219,9 +329,15 @@ const Navbar = () => {
             setMobileMenu(!mobileMenu)
           }
         >
-          {mobileMenu ? <FaTimes /> : <FaBars />}
+          {mobileMenu ? (
+            <FaTimes />
+          ) : (
+            <FaBars />
+          )}
         </button>
+
       </div>
+
     </header>
   );
 };

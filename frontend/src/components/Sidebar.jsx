@@ -1,4 +1,9 @@
+// src/components/Sidebar.jsx
+
 import { NavLink, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
+
 import {
   FaTachometerAlt,
   FaProjectDiagram,
@@ -10,147 +15,310 @@ import {
   FaCog,
   FaBell,
   FaSignOutAlt,
+  FaTimes,
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
+
 import "../styles/Sidebar.css";
 
-const Sidebar = () => {
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: <FaTachometerAlt />,
+    path: "/dashboard",
+  },
+  {
+    title: "Projects",
+    icon: <FaProjectDiagram />,
+    path: "/projects",
+  },
+  {
+    title: "Tasks",
+    icon: <FaTasks />,
+    path: "/tasks",
+  },
+  {
+    title: "Kanban",
+    icon: <FaColumns />,
+    path: "/kanban",
+  },
+  {
+    title: "Users",
+    icon: <FaUsers />,
+    path: "/users",
+  },
+  {
+    title: "Reports",
+    icon: <FaChartBar />,
+    path: "/reports",
+  },
+  {
+    title: "Profile",
+    icon: <FaUserCircle />,
+    path: "/profile",
+  },
+  {
+    title: "Settings",
+    icon: <FaCog />,
+    path: "/settings",
+  },
+  {
+    title: "Notifications",
+    icon: <FaBell />,
+    path: "/notifications",
+  },
+];
+
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
+
   const { user, logout } = useAuth();
 
-  const handleLogout = async () => {
-  if (logout) {
-    await logout();
-  } else {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  }
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && !sidebarOpen) {
+        setSidebarOpen(true);
+      }
+    };
 
-  navigate("/", { replace: true });
-};
+    window.addEventListener("resize", handleResize);
+
+    return () =>
+      window.removeEventListener("resize", handleResize);
+  }, [sidebarOpen, setSidebarOpen]);
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase()
+    : "TF";
+
+  const handleLogout = async () => {
+    if (logout) {
+      await logout();
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
+  const closeMobile = () => {
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
-    <aside className="sidebar">
-      {/* Logo */}
+    <>
+      {/* Overlay */}
 
-      <div className="sidebar-logo">
-        <h2>TaskFlow</h2>
-
-        {user && (
-          <div className="sidebar-user">
-            <p className="sidebar-name">{user.name}</p>
-            <span className="sidebar-role">{user.role}</span>
-          </div>
+      <AnimatePresence>
+        {sidebarOpen && window.innerWidth <= 768 && (
+          <motion.div
+            className="sidebar-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setSidebarOpen(false)}
+          />
         )}
-      </div>
+      </AnimatePresence>
 
-      {/* Navigation */}
+      {/* Sidebar */}
 
-      <nav className="sidebar-menu">
-        <NavLink
-          to="/dashboard"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaTachometerAlt />
-          <span>Dashboard</span>
-        </NavLink>
+      <motion.aside
+        className={`sidebar ${
+          sidebarOpen ? "expanded" : "collapsed"
+        }`}
+        animate={{
+          width:
+            window.innerWidth <= 768
+              ? sidebarOpen
+                ? 270
+                : 0
+              : sidebarOpen
+              ? 270
+              : 85,
+        }}
+        transition={{
+          duration: 0.3,
+        }}
+      >
+        {/* Header */}
 
-        <NavLink
-          to="/projects"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaProjectDiagram />
-          <span>Projects</span>
-        </NavLink>
+        <div className="sidebar-header">
+          <div className="sidebar-brand">
+            <div className="brand-logo">
+              TF
+            </div>
 
-        <NavLink
-          to="/tasks"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaTasks />
-          <span>Tasks</span>
-        </NavLink>
+            <AnimatePresence>
+              {sidebarOpen && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                >
+                  <h2>TaskFlow</h2>
+                  <small>Workspace</small>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-        <NavLink
-          to="/kanban"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaColumns />
-          <span>Kanban Board</span>
-        </NavLink>
+          {window.innerWidth <= 768 &&
+            sidebarOpen && (
+              <button
+                className="close-sidebar"
+                onClick={() =>
+                  setSidebarOpen(false)
+                }
+              >
+                <FaTimes />
+              </button>
+            )}
+        </div>
 
-        <NavLink
-          to="/users"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaUsers />
-          <span>Users</span>
-        </NavLink>
+        {/* User */}
 
-        <NavLink
-          to="/reports"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaChartBar />
-          <span>Reports</span>
-        </NavLink>
+        <div className="sidebar-user-card">
+          {user?.avatar ? (
+            <img
+              src={user.avatar}
+              alt="avatar"
+              className="sidebar-avatar"
+            />
+          ) : (
+            <div className="sidebar-avatar initials">
+              {initials}
+            </div>
+          )}
 
-        <NavLink
-          to="/profile"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaUserCircle />
-          <span>Profile</span>
-        </NavLink>
+          <AnimatePresence>
+            {sidebarOpen && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+              >
+                <h4>{user?.name || "User"}</h4>
 
-        <NavLink
-          to="/settings"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaCog />
-          <span>Settings</span>
-        </NavLink>
+                <span>
+                  {user?.role || "Member"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        <NavLink
-          to="/notifications"
-          className={({ isActive }) =>
-            isActive ? "active" : ""
-          }
-        >
-          <FaBell />
-          <span>Notifications</span>
-        </NavLink>
-      </nav>
+        {/* Navigation */}
 
-      {/* Footer */}
+        <nav className="sidebar-menu">
+          {menuItems.map((item, index) => (
+            <motion.div
+              key={item.path}
+              initial={{
+                opacity: 0,
+                x: -15,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: index * 0.04,
+              }}
+            >
+              <NavLink
+                to={item.path}
+                title={item.title}
+                onClick={closeMobile}
+                className={({ isActive }) =>
+                  isActive
+                    ? "active"
+                    : ""
+                }
+              >
+                <div className="sidebar-icon">
+                  {item.icon}
+                </div>
 
-      <div className="sidebar-footer">
-        <button
-          className="logout-btn"
-          onClick={handleLogout}
-        >
-          <FaSignOutAlt />
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+                <AnimatePresence>
+                  {sidebarOpen && (
+                    <motion.span
+                      initial={{
+                        opacity: 0,
+                      }}
+                      animate={{
+                        opacity: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                    >
+                      {item.title}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </NavLink>
+            </motion.div>
+          ))}
+        </nav>
+
+        {/* Footer */}
+
+        <div className="sidebar-footer">
+          <button
+            className="logout-btn"
+            onClick={handleLogout}
+          >
+            <FaSignOutAlt />
+
+            <AnimatePresence>
+              {sidebarOpen && (
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+      </motion.aside>
+    </>
   );
 };
 
