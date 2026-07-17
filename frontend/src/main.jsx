@@ -31,7 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./styles/index.css";
 import "./styles/Global.css";
 import "./styles/Auth.css";
-
+import "./styles/Landing.css";
 
 
 /* ==========================================

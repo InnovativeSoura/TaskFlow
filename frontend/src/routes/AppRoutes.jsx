@@ -11,6 +11,7 @@ import { useAuth } from "../context/AuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 import AuthPage from "../pages/AuthPage";
+import Home from "../pages/Home";
 
 import Dashboard from "../pages/Dashboard";
 import AdminDashboard from "../pages/AdminDashboard";
@@ -50,88 +51,84 @@ import Subscription from "../pages/Subscription";
 import Pricing from "../pages/Pricing";
 import Upgrade from "../pages/Upgrade";
 
-import Home from "../pages/Home";
-
-
 const AppRoutes = () => {
-
   const {
     loading,
     isAuthenticated,
   } = useAuth();
 
-
   if (loading) {
-
     return (
       <div className="page-loader">
-
         <div className="spinner"></div>
-
       </div>
     );
-
   }
 
-
   return (
-
     <Routes>
 
-
-      {/* ============================
-          PUBLIC
-      ============================ */}
-
+      {/* =====================================
+          PUBLIC ROUTES
+      ====================================== */}
 
       <Route
         path="/"
-        element={
-          isAuthenticated
-          ? (
-              <Navigate
-                to="/dashboard"
-                replace
-              />
-            )
-          : (
-              <Navigate
-                to="/login"
-                replace
-              />
-            )
-        }
+        element={<Home />}
       />
-
 
       <Route
         path="/login"
         element={
           isAuthenticated
-          ? (
-              <Navigate
-                to="/dashboard"
-                replace
-              />
-            )
-          : (
-              <AuthPage />
-            )
+            ? (
+                <Navigate
+                  to="/dashboard"
+                  replace
+                />
+              )
+            : (
+                <AuthPage />
+              )
         }
       />
 
+      {/* Optional Register Route */}
+      <Route
+        path="/register"
+        element={
+          isAuthenticated
+            ? (
+                <Navigate
+                  to="/dashboard"
+                  replace
+                />
+              )
+            : (
+                <AuthPage />
+              )
+        }
+      />
 
       <Route
         path="/pricing"
         element={<Pricing />}
       />
 
+      {/* Redirect old /home */}
+      <Route
+        path="/home"
+        element={
+          <Navigate
+            to="/"
+            replace
+          />
+        }
+      />
 
-
-      {/* ============================
-          PROTECTED
-      ============================ */}
-
+      {/* =====================================
+          PROTECTED ROUTES
+      ====================================== */}
 
       <Route
         path="/dashboard"
@@ -142,7 +139,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/admin-dashboard"
         element={
@@ -152,9 +148,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* PROJECTS */}
+      {/* Projects */}
 
       <Route
         path="/projects"
@@ -165,7 +159,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/project-list"
         element={
@@ -175,9 +168,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* TASKS */}
+      {/* Tasks */}
 
       <Route
         path="/tasks"
@@ -188,7 +179,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/task-list"
         element={
@@ -198,9 +188,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* TEAM */}
+      {/* Team */}
 
       <Route
         path="/users"
@@ -211,7 +199,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/team"
         element={
@@ -221,9 +208,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* USER */}
+      {/* Profile */}
 
       <Route
         path="/profile"
@@ -234,9 +219,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* ANALYTICS */}
+      {/* Reports */}
 
       <Route
         path="/reports"
@@ -247,7 +230,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/analytics"
         element={
@@ -257,9 +239,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* TOOLS */}
+      {/* Productivity */}
 
       <Route
         path="/kanban"
@@ -270,7 +250,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/calendar"
         element={
@@ -279,7 +258,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
 
       <Route
         path="/chat"
@@ -290,7 +268,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/ai"
         element={
@@ -299,7 +276,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
 
       <Route
         path="/gantt"
@@ -310,9 +286,7 @@ const AppRoutes = () => {
         }
       />
 
-
-
-      {/* ACCOUNT */}
+      {/* Account */}
 
       <Route
         path="/activity"
@@ -323,7 +297,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/workspaces"
         element={
@@ -332,7 +305,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
 
       <Route
         path="/subscription"
@@ -343,7 +315,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/upgrade"
         element={
@@ -352,7 +323,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
 
       <Route
         path="/settings"
@@ -363,7 +333,6 @@ const AppRoutes = () => {
         }
       />
 
-
       <Route
         path="/notifications"
         element={
@@ -373,45 +342,17 @@ const AppRoutes = () => {
         }
       />
 
-
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
-
-
-
-      {/* FALLBACK */}
+      {/* =====================================
+          FALLBACK
+      ====================================== */}
 
       <Route
         path="*"
-        element={
-          isAuthenticated
-          ? (
-              <Navigate
-                to="/dashboard"
-                replace
-              />
-            )
-          : (
-              <Navigate
-                to="/login"
-                replace
-              />
-            )
-        }
+        element={<Navigate to="/" replace />}
       />
 
-
     </Routes>
-
   );
-
 };
-
 
 export default AppRoutes;

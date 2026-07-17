@@ -1,28 +1,43 @@
-import { Link } from "react-router-dom";
+import LandingNavbar from "../components/landing/LandingNavbar";
+import Hero from "../components/landing/Hero";
+import DashboardPreview from "../components/landing/DashboardPreview";
+import Features from "../components/landing/Features";
+import Statistics from "../components/landing/Statistics";
+import Testimonials from "../components/landing/Testimonials";
+import CTA from "../components/landing/CTA";
+import Footer from "../components/landing/Footer";
+import BackgroundAnimation from "../components/landing/BackgroundAnimation";
 
-const Home = () => {
+import "../styles/Landing.css";
+
+function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+    <div className="landing-page">
 
-      <div className="text-center">
-        <h1 className="text-6xl font-bold mb-5">
-          TaskFlow
-        </h1>
+      <BackgroundAnimation />
 
-        <p className="text-slate-400 mb-8">
-          Smart Collaborative Project Management
-        </p>
+      <LandingNavbar />
 
-        <Link
-          to="/login"
-          className="bg-primary px-8 py-3 rounded-xl"
-        >
-          Get Started
-        </Link>
-      </div>
+      <main>
+
+        <Hero />
+
+        <DashboardPreview />
+
+        <Features />
+
+        <Statistics />
+
+        <Testimonials />
+
+        <CTA />
+
+      </main>
+
+      <Footer />
 
     </div>
   );
-};
+}
 
 export default Home;
