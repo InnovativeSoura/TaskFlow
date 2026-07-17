@@ -1,29 +1,96 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
 import {
   FaArrowRight,
   FaPlayCircle,
   FaCheckCircle,
-  FaUsers,
-  FaTasks,
-  FaChartLine,
 } from "react-icons/fa";
 
+import { toast } from "react-toastify";
+
+import { useAuth } from "../../context/AuthContext";
+
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const { login, register } = useAuth();
+
+  const [isRegister, setIsRegister] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const [name, setName] = useState("");
+
+  const [email, setEmail] = useState("");
+
+  const [password, setPassword] = useState("");
+
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      if (isRegister) {
+        if (password !== confirmPassword) {
+          toast.error("Passwords do not match");
+          setLoading(false);
+          return;
+        }
+
+        await register(
+          name,
+          email,
+          password
+        );
+
+        toast.success("Account Created Successfully");
+      } else {
+        await login(
+          email,
+          password
+        );
+
+        toast.success("Welcome Back!");
+      }
+
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Authentication Failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="hero-section">
-
       <div className="hero-container">
 
-        {/* LEFT CONTENT */}
+        {/* LEFT */}
 
         <motion.div
           className="hero-content"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
+          initial={{
+            opacity: 0,
+            x: -40,
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
         >
-
           <span className="hero-badge">
             🚀 The Modern Project Management Platform
           </span>
@@ -31,23 +98,22 @@ const Hero = () => {
           <h1 className="hero-title">
             Organize Projects.
             <br />
-
             Manage Teams.
             <br />
-
             <span>Deliver Faster.</span>
           </h1>
 
           <p className="hero-description">
-            TaskFlow helps teams collaborate, manage projects,
-            track tasks, monitor progress, and deliver work
-            efficiently from one beautiful workspace.
+            TaskFlow helps teams collaborate,
+            manage projects, assign work,
+            track progress and increase
+            productivity from one powerful
+            workspace.
           </p>
 
           <div className="hero-buttons">
-
             <Link
-              to="/register"
+              to="/login"
               className="hero-primary-btn"
             >
               Get Started
@@ -63,149 +129,190 @@ const Hero = () => {
 
               Live Demo
             </Link>
-
           </div>
 
           <div className="hero-features">
-
             <div>
-
               <FaCheckCircle />
 
               <span>No Credit Card</span>
-
             </div>
 
             <div>
-
               <FaCheckCircle />
 
               <span>Unlimited Projects</span>
-
             </div>
 
             <div>
-
               <FaCheckCircle />
 
               <span>Real-time Collaboration</span>
-
             </div>
-
           </div>
-
         </motion.div>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT */}
 
         <motion.div
-          className="hero-dashboard"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          className="hero-right"
+          initial={{
+            opacity: 0,
+            x: 40,
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          transition={{
+            duration: 0.8,
+          }}
         >
+          <div className="auth-preview">
 
-          <div className="dashboard-window">
+            <div className="auth-toggle">
 
-            <div className="window-header">
+              <button
+                className={
+                  !isRegister
+                    ? "active"
+                    : ""
+                }
+                onClick={() =>
+                  setIsRegister(false)
+                }
+              >
+                Login
+              </button>
 
-              <span></span>
-              <span></span>
-              <span></span>
+              <button
+                className={
+                  isRegister
+                    ? "active"
+                    : ""
+                }
+                onClick={() =>
+                  setIsRegister(true)
+                }
+              >
+                Register
+              </button>
 
             </div>
 
-            <div className="window-body">
+            <form
+              className="auth-preview-form"
+              onSubmit={handleSubmit}
+            >
 
-              <div className="dashboard-card large">
+              {isRegister && (
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) =>
+                    setName(
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+              )}
 
-                <div className="card-title">
-                  Project Progress
-                </div>
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) =>
+                  setEmail(
+                    e.target.value
+                  )
+                }
+                required
+              />
 
-                <div className="progress-bar">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(
+                    e.target.value
+                  )
+                }
+                required
+              />
 
-                  <div
-                    className="progress-fill"
-                    style={{ width: "82%" }}
-                  />
+              {isRegister && (
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={
+                    confirmPassword
+                  }
+                  onChange={(e) =>
+                    setConfirmPassword(
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+              )}
 
-                </div>
+              <button
+                type="submit"
+                className="auth-submit"
+                disabled={loading}
+              >
+                {loading
+                  ? "Please wait..."
+                  : isRegister
+                  ? "Create Account"
+                  : "Login"}
+              </button>
 
-                <p>82% Completed</p>
+            </form>
 
-              </div>
+            <div className="hero-card-footer">
 
-              <div className="dashboard-grid">
+              {isRegister ? (
+                <p>
+                  Already have an account?{" "}
 
-                <div className="dashboard-card">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setIsRegister(
+                        false
+                      )
+                    }
+                  >
+                    Login
+                  </button>
+                </p>
+              ) : (
+                <p>
+                  New to TaskFlow?{" "}
 
-                  <FaTasks />
-
-                  <h3>156</h3>
-
-                  <p>Tasks</p>
-
-                </div>
-
-                <div className="dashboard-card">
-
-                  <FaUsers />
-
-                  <h3>28</h3>
-
-                  <p>Members</p>
-
-                </div>
-
-                <div className="dashboard-card">
-
-                  <FaChartLine />
-
-                  <h3>96%</h3>
-
-                  <p>Efficiency</p>
-
-                </div>
-
-              </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setIsRegister(
+                        true
+                      )
+                    }
+                  >
+                    Register
+                  </button>
+                </p>
+              )}
 
             </div>
 
           </div>
-
-          {/* Floating Cards */}
-
-          <motion.div
-            className="floating-card card-one"
-            animate={{
-              y: [-10, 10, -10],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 5,
-            }}
-          >
-            +24 Tasks Completed
-          </motion.div>
-
-          <motion.div
-            className="floating-card card-two"
-            animate={{
-              y: [10, -10, 10],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 6,
-            }}
-          >
-            🎉 Sprint Finished
-          </motion.div>
-
         </motion.div>
 
       </div>
-
     </section>
   );
 };
