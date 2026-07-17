@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import {
@@ -7,89 +6,58 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa";
 
-function DeleteTaskModal({
+const DeleteTaskModal = ({
   open,
   task,
   loading = false,
   onClose,
   onConfirm,
-}) {
-  useEffect(() => {
-    if (!open) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape" && !loading) {
-        onClose();
-      }
-    };
-
-    document.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
-
-    return () =>
-      document.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-  }, [open, loading, onClose]);
-
-  if (!open) return null;
-
-  const handleOverlayClick = (e) => {
-    if (
-      loading ||
-      e.target !== e.currentTarget
-    )
-      return;
-
-    onClose();
-  };
+}) => {
+  if (!open || !task) return null;
 
   return (
     <AnimatePresence>
+
       <motion.div
         className="modal-overlay"
-        onClick={handleOverlayClick}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
+
         <motion.div
           className="modal-content delete-modal"
           initial={{
+            scale: 0.9,
             opacity: 0,
-            scale: 0.92,
-            y: 20,
+            y: 30,
           }}
           animate={{
-            opacity: 1,
             scale: 1,
+            opacity: 1,
             y: 0,
           }}
           exit={{
+            scale: 0.9,
             opacity: 0,
-            scale: 0.92,
+            y: 20,
           }}
           transition={{
             duration: 0.25,
           }}
-          onClick={(e) =>
-            e.stopPropagation()
-          }
         >
+
           {/* Header */}
 
           <div className="modal-header">
 
-            <div className="delete-icon">
-              <FaExclamationTriangle />
-            </div>
+            <h2 className="modal-title">
+              Delete Task
+            </h2>
 
             <button
-              className="modal-close"
               type="button"
+              className="modal-close"
               onClick={onClose}
               disabled={loading}
             >
@@ -102,59 +70,84 @@ function DeleteTaskModal({
 
           <div className="delete-body">
 
-            <h2 className="modal-title">
-              Delete Task
-            </h2>
+            <div className="delete-icon">
+              <FaTrashAlt />
+            </div>
 
-            <p>
-              You're about to permanently
-              delete
+            <h3
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              Delete this task?
+            </h3>
+
+            <p
+              className="text-muted"
+              style={{
+                marginTop: "12px",
+              }}
+            >
+              This action cannot be undone.
+              The task and its related
+              information will be removed
+              permanently.
             </p>
 
             <div className="task-delete-preview">
-              <FaTrashAlt />
+
+              <FaExclamationTriangle />
 
               <span>
-                {task?.title ??
-                  "Untitled Task"}
+                {task.title}
               </span>
+
             </div>
 
             <p className="warning-text">
-              This action cannot be undone.
+              Once deleted, this task
+              cannot be recovered.
             </p>
+                        {/* Footer */}
+
+            <div className="modal-footer">
+
+              <button
+                type="button"
+                className="btn-task btn-secondary"
+                onClick={onClose}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="btn-task btn-danger"
+                onClick={onConfirm}
+                disabled={loading}
+              >
+                {loading ? (
+                  "Deleting..."
+                ) : (
+                  <>
+                    <FaTrashAlt />
+                    {" "}
+                    Delete Task
+                  </>
+                )}
+              </button>
+
+            </div>
 
           </div>
 
-          {/* Footer */}
-
-          <div className="modal-footer">
-
-            <button
-              type="button"
-              className="btn-task btn-secondary"
-              disabled={loading}
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-
-            <button
-              type="button"
-              className="btn-task btn-danger"
-              disabled={loading}
-              onClick={onConfirm}
-            >
-              {loading
-                ? "Deleting..."
-                : "Delete Task"}
-            </button>
-
-          </div>
         </motion.div>
+
       </motion.div>
+
     </AnimatePresence>
   );
-}
+};
 
 export default DeleteTaskModal;

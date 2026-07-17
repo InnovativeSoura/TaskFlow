@@ -1,9 +1,8 @@
 import { memo } from "react";
+import { motion } from "framer-motion";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-
 
 import {
   FaCalendarAlt,
@@ -12,6 +11,7 @@ import {
   FaFolderOpen,
   FaTrash,
   FaUser,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
 const TaskCard = ({
@@ -32,60 +32,107 @@ const TaskCard = ({
   });
 
   const style = {
-    transform:
-      CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.55 : 1,
   };
 
-  const priority = (
-    task.priority || "Medium"
-  )
+  const priority = (task.priority || "Medium")
     .replace(/\s+/g, "-")
     .toLowerCase();
 
-  const status = (
-    task.status || "Pending"
-  )
+  const status = (task.status || "Pending")
     .replace(/\s+/g, "-")
     .toLowerCase();
 
-  const progress =
-    task.progress ?? 0;
+  const progress = task.progress ?? 0;
+
+  const dueDate = task.dueDate
+    ? new Date(task.dueDate)
+    : null;
+
+  const isOverdue =
+    dueDate &&
+    dueDate < new Date() &&
+    status !== "completed";
+
+  const assigneeName =
+    task.assignee?.name || "Unassigned";
+
+  const initials =
+    assigneeName !== "Unassigned"
+      ? assigneeName
+          .split(" ")
+          .map((word) => word[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase()
+      : null;
 
   const handleEdit = (e) => {
     e.stopPropagation();
-
-    if (onEdit) {
-      onEdit(task);
-    }
+    onEdit?.(task);
   };
 
   const handleDelete = (e) => {
     e.stopPropagation();
-
-    if (onDelete) {
-      onDelete(task);
-    }
+    onDelete?.(task);
   };
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
       style={style}
+      layout
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        scale: 0.95,
+      }}
+      whileHover={{
+        y: -6,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
       className={`task-card ${status} ${
         isDragging ? "dragging" : ""
       }`}
       {...attributes}
       {...listeners}
     >
-      {/* Header */}
+      {/* ==========================
+          HEADER
+      ========================== */}
 
       <div className="task-card-header">
 
-        <h3 className="task-title">
-          {task.title}
-        </h3>
+        <div className="task-title-wrapper">
+
+          <h3 className="task-title">
+            {task.title}
+          </h3>
+
+          {isOverdue && (
+            <div className="task-overdue">
+
+              <FaExclamationTriangle />
+
+              <span>
+                Overdue
+              </span>
+
+            </div>
+          )}
+
+        </div>
 
         <div className="task-badges">
 
@@ -105,43 +152,58 @@ const TaskCard = ({
 
       </div>
 
-      {/* Description */}
+      {/* ==========================
+          DESCRIPTION
+      ========================== */}
 
       <p className="task-description">
         {task.description ||
-          "No description provided."}
+          "No description provided for this task."}
       </p>
 
-      {/* Meta */}
+      {/* ==========================
+          META INFORMATION
+      ========================== */}
 
       <div className="task-meta">
 
         {task.project && (
+
           <div className="task-project">
+
             <FaFolderOpen />
 
             <span>
               {task.project.title ||
                 task.project.name}
             </span>
+
           </div>
+
         )}
 
-        {task.dueDate && (
-          <div className="task-date">
+        {dueDate && (
+
+          <div
+            className={`task-date ${
+              isOverdue ? "text-danger" : ""
+            }`}
+          >
+
             <FaCalendarAlt />
 
             <span>
-              {new Date(
-                task.dueDate
-              ).toLocaleDateString()}
+              {dueDate.toLocaleDateString()}
             </span>
+
           </div>
+
         )}
 
       </div>
-
-      {/* Progress */}
+            {/* ==========================
+          PROGRESS
+      ========================== */}
 
       <div className="task-progress">
 
@@ -149,7 +211,8 @@ const TaskCard = ({
 
           <span>
             <FaChartLine />
-            {" "}Progress
+            {" "}
+            Progress
           </span>
 
           <span>{progress}%</span>
@@ -158,10 +221,14 @@ const TaskCard = ({
 
         <div className="progress-track">
 
-          <div
+          <motion.div
             className="progress-fill"
-            style={{
+            initial={{ width: 0 }}
+            animate={{
               width: `${progress}%`,
+            }}
+            transition={{
+              duration: 0.8,
             }}
           />
 
@@ -169,31 +236,60 @@ const TaskCard = ({
 
       </div>
 
-      {/* Footer */}
+      {/* ==========================
+          FOOTER
+      ========================== */}
 
       <div className="task-footer">
 
         <div className="assignee">
 
           <div className="assignee-avatar">
-            <FaUser />
+
+            {task.assignee?.avatar ? (
+
+              <img
+                src={task.assignee.avatar}
+                alt={assigneeName}
+              />
+
+            ) : initials ? (
+
+              <span>
+                {initials}
+              </span>
+
+            ) : (
+
+              <FaUser />
+
+            )}
+
           </div>
 
-          <span className="assignee-name">
-            {task.assignee?.name ||
-              "Unassigned"}
-          </span>
+          <div>
+
+            <div className="assignee-name">
+              {assigneeName}
+            </div>
+
+            <small className="text-muted">
+              Assigned User
+            </small>
+
+          </div>
 
         </div>
 
         {canManage && (
+
           <div className="task-actions">
 
             <button
               type="button"
               className="icon-btn"
-              onClick={handleEdit}
               title="Edit Task"
+              onClick={handleEdit}
             >
               <FaEdit />
             </button>
@@ -201,17 +297,19 @@ const TaskCard = ({
             <button
               type="button"
               className="icon-btn delete"
-              onClick={handleDelete}
               title="Delete Task"
+              onClick={handleDelete}
             >
               <FaTrash />
             </button>
 
           </div>
+
         )}
 
       </div>
-    </div>
+
+    </motion.div>
   );
 };
 

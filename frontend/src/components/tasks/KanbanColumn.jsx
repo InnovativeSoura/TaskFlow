@@ -27,6 +27,17 @@ const columnIcons = {
   Completed: <FaCheckCircle />,
 };
 
+/* ==========================================
+   COLUMN COLORS
+========================================== */
+
+const columnColors = {
+  Pending: "#6366f1",
+  "In Progress": "#f59e0b",
+  Review: "#06b6d4",
+  Completed: "#10b981",
+};
+
 const KanbanColumn = ({
   id,
   title,
@@ -43,7 +54,7 @@ const KanbanColumn = ({
   });
 
   return (
-    <motion.div
+    <motion.section
       layout
       ref={setNodeRef}
       className={`kanban-column ${
@@ -51,34 +62,55 @@ const KanbanColumn = ({
       }`}
       initial={{
         opacity: 0,
-        y: 20,
+        y: 25,
       }}
       animate={{
         opacity: 1,
         y: 0,
       }}
       transition={{
-        duration: 0.25,
+        duration: 0.35,
       }}
     >
-      {/* ===========================
-          HEADER
-      =========================== */}
+      {/* ==========================
+          COLUMN HEADER
+      ========================== */}
 
       <div className="column-header">
+
         <div className="column-title">
-          {columnIcons[id]}
-          <span>{title}</span>
+
+          <div
+            className="column-icon"
+            style={{
+              background: columnColors[id],
+            }}
+          >
+            {columnIcons[id]}
+          </div>
+
+          <div>
+
+            <h3>{title}</h3>
+
+            <small>
+              {tasks.length} Task
+              {tasks.length !== 1 && "s"}
+            </small>
+
+          </div>
+
         </div>
 
         <div className="column-count">
           {tasks.length}
         </div>
+
       </div>
 
-      {/* ===========================
+      {/* ==========================
           TASK LIST
-      =========================== */}
+      ========================== */}
 
       <SortableContext
         items={tasks.map(
@@ -95,6 +127,7 @@ const KanbanColumn = ({
             {tasks.length > 0 ? (
 
               tasks.map((task) => (
+
                 <TaskCard
                   key={task._id}
                   task={task}
@@ -102,6 +135,7 @@ const KanbanColumn = ({
                   onEdit={onEdit}
                   onDelete={onDelete}
                 />
+
               ))
 
             ) : (
@@ -121,24 +155,32 @@ const KanbanColumn = ({
                   opacity: 0,
                 }}
               >
-                <div className="empty-icon">
+
+                <div
+                  className="empty-icon"
+                  style={{
+                    color: columnColors[id],
+                  }}
+                >
                   {columnIcons[id]}
                 </div>
 
-                <h4>No Tasks</h4>
+                <h4>No Tasks Yet</h4>
 
                 <p>
-                  Drag a task here or create a
-                  new task.
+                  Drag and drop tasks here
+                  or create a new one.
                 </p>
 
-                {/* Keeps empty columns droppable */}
+                {/* Keeps column droppable */}
+
                 <div
                   style={{
                     width: "100%",
-                    height: "20px",
+                    height: 40,
                   }}
                 />
+
               </motion.div>
 
             )}
@@ -146,8 +188,41 @@ const KanbanColumn = ({
           </AnimatePresence>
 
         </div>
+
       </SortableContext>
-    </motion.div>
+
+      {/* ==========================
+          FOOTER
+      ========================== */}
+
+      <motion.div
+        className="column-footer"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+      >
+
+        <span>
+          {tasks.length} /
+          {" "}
+          {tasks.length === 1
+            ? "Task"
+            : "Tasks"}
+        </span>
+
+        <div
+          className="column-footer-line"
+          style={{
+            background: columnColors[id],
+          }}
+        />
+
+      </motion.div>
+
+    </motion.section>
   );
 };
 

@@ -1,52 +1,36 @@
-import { motion } from "framer-motion";
-
 import {
-  FaFilter,
   FaSearch,
-  FaUndo,
-  FaTasks,
+  FaFilter,
+  FaSortAmountDown,
+  FaTimes,
 } from "react-icons/fa";
 
-function TaskFilters({
+const TaskFilters = ({
   search,
   setSearch,
 
-  statusFilter,
-  setStatusFilter,
+  status,
+  setStatus,
 
-  priorityFilter,
-  setPriorityFilter,
+  priority,
+  setPriority,
 
-  sortBy,
-  setSortBy,
+  sort,
+  setSort,
 
   totalTasks = 0,
-}) {
-  const resetFilters = () => {
-    setSearch("");
-    setStatusFilter("All");
-    setPriorityFilter("All");
-    setSortBy("Newest");
-  };
-
+  onClearFilters,
+}) => {
   return (
-    <motion.div
-      className="tasks-toolbar"
-      initial={{
-        opacity: 0,
-        y: -15,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.25,
-      }}
-    >
-      {/* Left */}
+    <div className="tasks-toolbar">
+
+      {/* =========================
+          LEFT
+      ========================= */}
 
       <div className="toolbar-left">
+
+        {/* Search */}
 
         <div className="toolbar-search">
 
@@ -63,35 +47,21 @@ function TaskFilters({
 
         </div>
 
-        <div className="task-count-chip">
-
-          <FaTasks />
-
-          <span>
-            {totalTasks} Tasks
-          </span>
-
-        </div>
-
-      </div>
-
-      {/* Right */}
-
-      <div className="toolbar-right">
+        {/* Status */}
 
         <select
           className="task-filter"
-          value={statusFilter}
+          value={status}
           onChange={(e) =>
-            setStatusFilter(e.target.value)
+            setStatus(e.target.value)
           }
         >
           <option value="All">
             All Status
           </option>
 
-          <option value="Todo">
-            Todo
+          <option value="Pending">
+            Pending
           </option>
 
           <option value="In Progress">
@@ -105,13 +75,16 @@ function TaskFilters({
           <option value="Completed">
             Completed
           </option>
+
         </select>
+
+        {/* Priority */}
 
         <select
           className="task-filter"
-          value={priorityFilter}
+          value={priority}
           onChange={(e) =>
-            setPriorityFilter(e.target.value)
+            setPriority(e.target.value)
           }
         >
           <option value="All">
@@ -133,52 +106,93 @@ function TaskFilters({
           <option value="Critical">
             Critical
           </option>
+
         </select>
+                {/* Sort */}
 
         <select
           className="task-filter"
-          value={sortBy}
+          value={sort}
           onChange={(e) =>
-            setSortBy(e.target.value)
+            setSort(e.target.value)
           }
         >
           <option value="Newest">
-            Newest First
+            Newest
           </option>
 
           <option value="Oldest">
-            Oldest First
+            Oldest
           </option>
 
           <option value="Priority">
             Priority
           </option>
 
-          <option value="Due Date">
-            Due Date
+          <option value="Progress">
+            Progress
           </option>
 
           <option value="A-Z">
-            A → Z
+            A - Z
           </option>
 
           <option value="Z-A">
-            Z → A
+            Z - A
           </option>
+
         </select>
 
-        <button
-          className="btn-task btn-secondary"
-          onClick={resetFilters}
-        >
-          <FaUndo />
+      </div>
 
-          Reset
+      {/* =========================
+          RIGHT
+      ========================= */}
+
+      <div className="toolbar-right">
+
+        {/* Task Count */}
+
+        <div className="task-count-chip">
+
+          <FaFilter />
+
+          <span>
+            {totalTasks} Task
+            {totalTasks !== 1 && "s"}
+          </span>
+
+        </div>
+
+        {/* Sort Indicator */}
+
+        <div className="task-count-chip">
+
+          <FaSortAmountDown />
+
+          <span>
+            {sort}
+          </span>
+
+        </div>
+
+        {/* Clear Filters */}
+
+        <button
+          type="button"
+          className="btn-task btn-secondary"
+          onClick={onClearFilters}
+        >
+          <FaTimes />
+
+          Clear Filters
+
         </button>
 
       </div>
-    </motion.div>
+
+    </div>
   );
-}
+};
 
 export default TaskFilters;
