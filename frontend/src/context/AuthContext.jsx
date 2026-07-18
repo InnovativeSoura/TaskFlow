@@ -11,7 +11,7 @@ import api from "../api/axios";
 const AuthContext = createContext();
 
 /* ==========================================
-   SAFE PARSE USER
+   GET STORED USER
 ========================================== */
 
 const getStoredUser = () => {
@@ -19,8 +19,10 @@ const getStoredUser = () => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   } catch (error) {
-    console.error("Invalid user in localStorage:", error);
+    console.error("Invalid stored user:", error);
+
     localStorage.removeItem("user");
+
     return null;
   }
 };
@@ -35,27 +37,29 @@ export const AuthProvider = ({ children }) => {
   ========================================== */
 
   const [token, setToken] = useState(
-    () => localStorage.getItem("token") || null
+    localStorage.getItem("token")
   );
 
-  const [user, setUser] = useState(getStoredUser);
+  const [user, setUser] = useState(
+    getStoredUser()
+  );
 
   const [loading, setLoading] = useState(true);
 
   /* ==========================================
-     SAVE AUTH DATA
+     SAVE AUTH
   ========================================== */
 
-  const saveAuth = useCallback((token, user) => {
-    localStorage.setItem("token", token);
+  const saveAuth = useCallback((jwt, currentUser) => {
+    localStorage.setItem("token", jwt);
 
     localStorage.setItem(
       "user",
-      JSON.stringify(user)
+      JSON.stringify(currentUser)
     );
 
-    setToken(token);
-    setUser(user);
+    setToken(jwt);
+    setUser(currentUser);
   }, []);
 
   /* ==========================================
@@ -71,54 +75,56 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /* ==========================================
-     LOGOUT
-  ========================================== */
-
-  const logout = useCallback(() => {
-    clearAuth();
-    setLoading(false);
-  }, [clearAuth]);
-
-  /* ==========================================
      LOAD CURRENT USER
   ========================================== */
 
-  useEffect(() => {
-    const loadUser = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+  const loadCurrentUser = useCallback(async () => {
+    const storedToken =
+      localStorage.getItem("token");
 
-      try {
-        setLoading(true);
+    if (!storedToken) {
+      clearAuth();
+      setLoading(false);
+      return;
+    }
 
-        const { data } = await api.get("/auth/me");
+    try {
+      setLoading(true);
 
-        if (data.success) {
-          setUser(data.user);
+      const { data } =
+        await api.get("/auth/me");
 
-          localStorage.setItem(
-            "user",
-            JSON.stringify(data.user)
-          );
-        } else {
-          clearAuth();
-        }
-      } catch (error) {
-        console.error(
-          "Load User Error:",
-          error.response?.data || error.message
+      if (data.success) {
+        setUser(data.user);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
         );
 
+        setToken(storedToken);
+      } else {
         clearAuth();
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error(
+        "Load User Error:",
+        error.response?.data || error.message
+      );
 
-    loadUser();
-  }, [token, clearAuth]);
+      clearAuth();
+    } finally {
+      setLoading(false);
+    }
+  }, [clearAuth]);
+
+  /* ==========================================
+     INITIAL LOAD
+  ========================================== */
+
+  useEffect(() => {
+    loadCurrentUser();
+  }, [loadCurrentUser]);
 
   /* ==========================================
      LOGIN
@@ -129,13 +135,11 @@ export const AuthProvider = ({ children }) => {
     password,
   }) => {
     try {
-      const { data } = await api.post(
-        "/auth/login",
-        {
+      const { data } =
+        await api.post("/auth/login", {
           email,
           password,
-        }
-      );
+        });
 
       if (!data.success) {
         return {
@@ -149,16 +153,38 @@ export const AuthProvider = ({ children }) => {
         data.user
       );
 
+      /* Verify Token */
+
+      const me =
+        await api.get("/auth/me");
+
+      if (!me.data.success) {
+        clearAuth();
+
+        return {
+          success: false,
+          message:
+            "Authentication verification failed.",
+        };
+      }
+
+      saveAuth(
+        data.token,
+        me.data.user
+      );
+
       return {
         success: true,
-        user: data.user,
+        user: me.data.user,
       };
     } catch (error) {
+      clearAuth();
+
       return {
         success: false,
         message:
           error.response?.data?.message ||
-          "Login failed",
+          "Login failed.",
       };
     }
   };
@@ -166,22 +192,24 @@ export const AuthProvider = ({ children }) => {
   /* ==========================================
      REGISTER
   ========================================== */
-    const register = async ({
+
+  const register = async ({
     name,
     email,
     password,
     role = "Team Member",
   }) => {
     try {
-      const { data } = await api.post(
-        "/auth/register",
-        {
-          name,
-          email,
-          password,
-          role,
-        }
-      );
+      const { data } =
+        await api.post(
+          "/auth/register",
+          {
+            name,
+            email,
+            password,
+            role,
+          }
+        );
 
       if (!data.success) {
         return {
@@ -195,32 +223,63 @@ export const AuthProvider = ({ children }) => {
         data.user
       );
 
+      const me =
+        await api.get("/auth/me");
+
+      if (!me.data.success) {
+        clearAuth();
+
+        return {
+          success: false,
+          message:
+            "Authentication verification failed.",
+        };
+      }
+
+      saveAuth(
+        data.token,
+        me.data.user
+      );
+
       return {
         success: true,
-        user: data.user,
+        user: me.data.user,
       };
     } catch (error) {
+      clearAuth();
+
       return {
         success: false,
         message:
           error.response?.data?.message ||
-          "Registration failed",
+          "Registration failed.",
       };
     }
   };
 
   /* ==========================================
+     LOGOUT
+  ========================================== */
+
+  const logout = useCallback(() => {
+    clearAuth();
+  }, [clearAuth]);
+
+  /* ==========================================
      UPDATE USER
   ========================================== */
 
-  const updateUser = useCallback((updatedUser) => {
-    setUser(updatedUser);
+  const updateUser = useCallback(
+    (updatedUser) => {
+      setUser(updatedUser);
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(updatedUser)
-    );
-  }, []);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(updatedUser)
+      );
+    },
+    []
+  );
 
   /* ==========================================
      PROVIDER
@@ -242,7 +301,11 @@ export const AuthProvider = ({ children }) => {
         setUser,
         setToken,
 
-        isAuthenticated: !!token,
+        isAuthenticated: Boolean(
+          token &&
+          user &&
+          user._id
+        ),
       }}
     >
       {children}
@@ -255,11 +318,12 @@ export const AuthProvider = ({ children }) => {
 ========================================== */
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context =
+    useContext(AuthContext);
 
   if (!context) {
     throw new Error(
-      "useAuth must be used within an AuthProvider"
+      "useAuth must be used inside AuthProvider"
     );
   }
 

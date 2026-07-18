@@ -1,5 +1,4 @@
 import { Navigate, useLocation } from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
@@ -7,13 +6,12 @@ const ProtectedRoute = ({ children }) => {
     loading,
     user,
     token,
-    isAuthenticated,
   } = useAuth();
 
   const location = useLocation();
 
   /* ==========================================
-     LOADING STATE
+     LOADING
   ========================================== */
 
   if (loading) {
@@ -28,8 +26,11 @@ const ProtectedRoute = ({ children }) => {
      AUTH CHECK
   ========================================== */
 
-  const authenticated =
-    isAuthenticated || (token && user);
+  const authenticated = Boolean(
+    token &&
+    user &&
+    user._id
+  );
 
   if (!authenticated) {
     return (
@@ -49,4 +50,3 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default ProtectedRoute;
-

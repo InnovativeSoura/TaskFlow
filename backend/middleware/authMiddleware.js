@@ -1,17 +1,12 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-/* ======================================================
+/* ==========================================
    PROTECT ROUTE
-====================================================== */
+========================================== */
 
 export const protect = async (req, res, next) => {
   try {
-
-    /* ==========================================
-       JWT SECRET CHECK
-    ========================================== */
-
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({
         success: false,
@@ -22,35 +17,30 @@ export const protect = async (req, res, next) => {
     let token = null;
 
     /* ==========================================
-       READ AUTHORIZATION HEADER
-       Authorization: Bearer xxxxx
+       AUTH HEADER
     ========================================== */
 
     const authHeader = req.headers.authorization;
 
     if (
       authHeader &&
-      authHeader.startsWith("Bearer ")
+      authHeader.toLowerCase().startsWith("bearer ")
     ) {
-      token = authHeader.split(" ")[1];
+      token = authHeader.substring(7).trim();
     }
 
     /* ==========================================
-       READ COOKIE TOKEN (OPTIONAL)
+       COOKIE
     ========================================== */
 
     if (!token && req.cookies?.token) {
       token = req.cookies.token;
     }
 
-    /* ==========================================
-       TOKEN NOT FOUND
-    ========================================== */
-
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authorized, no token provided.",
+        message: "Not authorized. No token.",
       });
     }
 
@@ -63,10 +53,6 @@ export const protect = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    /* ==========================================
-       FIND USER
-    ========================================== */
-
     const user = await User.findById(decoded.id)
       .select("-password");
 
@@ -77,10 +63,6 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ==========================================
-       USER STATUS CHECK
-    ========================================== */
-
     if (user.status === "Inactive") {
       return res.status(403).json({
         success: false,
@@ -88,17 +70,13 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ==========================================
-       ATTACH USER
-    ========================================== */
-
     req.user = user;
 
     next();
 
   } catch (error) {
 
-    console.error("Auth Middleware Error:", error);
+    console.error("Auth Middleware:", error);
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({
@@ -118,13 +96,12 @@ export const protect = async (req, res, next) => {
       success: false,
       message: "Authentication failed.",
     });
-
   }
 };
 
-/* ======================================================
-   ADMIN ONLY
-====================================================== */
+/* ==========================================
+   ADMIN
+========================================== */
 
 export const adminOnly = (req, res, next) => {
 
@@ -138,17 +115,16 @@ export const adminOnly = (req, res, next) => {
   if (req.user.role !== "Admin") {
     return res.status(403).json({
       success: false,
-      message: "Access denied.",
+      message: "Admin only.",
     });
   }
 
   next();
-
 };
 
-/* ======================================================
-   MANAGER OR ADMIN
-====================================================== */
+/* ==========================================
+   MANAGER
+========================================== */
 
 export const managerOnly = (req, res, next) => {
 
@@ -159,13 +135,13 @@ export const managerOnly = (req, res, next) => {
     });
   }
 
-  const allowedRoles = [
+  const allowed = [
     "Admin",
     "Manager",
     "Project Manager",
   ];
 
-  if (!allowedRoles.includes(req.user.role)) {
+  if (!allowed.includes(req.user.role)) {
     return res.status(403).json({
       success: false,
       message: "Access denied.",
@@ -173,5 +149,4 @@ export const managerOnly = (req, res, next) => {
   }
 
   next();
-
 };
