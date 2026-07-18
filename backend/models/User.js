@@ -1,8 +1,16 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+/* ======================================================
+   USER SCHEMA
+====================================================== */
+
 const userSchema = new mongoose.Schema(
   {
+    /* ==========================
+       BASIC INFO
+    ========================== */
+
     name: {
       type: String,
       required: true,
@@ -21,7 +29,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
+      select: false,
     },
+
+    /* ==========================
+       PROFILE
+    ========================== */
 
     avatar: {
       type: String,
@@ -48,15 +61,23 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    /* ==========================
+       ROLE
+    ========================== */
+
     role: {
       type: String,
       enum: [
         "Admin",
-        "Manager",
+        "Project Manager",
         "Team Member",
       ],
-      default: "Admin",
+      default: "Team Member",
     },
+
+    /* ==========================
+       STATUS
+    ========================== */
 
     status: {
       type: String,
@@ -67,15 +88,23 @@ const userSchema = new mongoose.Schema(
       default: "Active",
     },
 
-    lastLogin: {
-      type: Date,
-      default: null,
-    },
+    /* ==========================
+       ACCOUNT
+    ========================== */
 
     isVerified: {
       type: Boolean,
       default: false,
     },
+
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+
+    /* ==========================
+       PASSWORD RESET
+    ========================== */
 
     resetPasswordToken: {
       type: String,
@@ -92,35 +121,66 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-/* ===========================
+/* ======================================================
    HASH PASSWORD
-=========================== */
+====================================================== */
 
 userSchema.pre("save", async function (next) {
+
   if (!this.isModified("password")) {
     return next();
   }
 
   try {
+
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+
+    this.password = await bcrypt.hash(
+      this.password,
+      salt
+    );
+
     next();
-  } catch (err) {
-    next(err);
+
+  } catch (error) {
+
+    next(error);
+
   }
+
 });
 
-/* ===========================
+/* ======================================================
    MATCH PASSWORD
-=========================== */
+====================================================== */
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(
-    enteredPassword,
-    this.password
-  );
+userSchema.methods.matchPassword =
+  async function (enteredPassword) {
+
+    return bcrypt.compare(
+      enteredPassword,
+      this.password
+    );
+
 };
 
-const User = mongoose.model("User", userSchema);
+/* ======================================================
+   REMOVE PASSWORD FROM JSON
+====================================================== */
+
+userSchema.methods.toJSON = function () {
+
+  const obj = this.toObject();
+
+  delete obj.password;
+
+  return obj;
+
+};
+
+const User = mongoose.model(
+  "User",
+  userSchema
+);
 
 export default User;

@@ -16,24 +16,39 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 const app = express();
 
 /* ==========================================
+   TRUST PROXY (Required for Render)
+========================================== */
+
+app.set("trust proxy", 1);
+
+/* ==========================================
    SECURITY
 ========================================== */
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 /* ==========================================
-   CORS
+   ALLOWED ORIGINS
 ========================================== */
 
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  process.env.CLIENT_URL,
   process.env.CLIENT_API_URL,
 ].filter(Boolean);
 
+/* ==========================================
+   CORS
+========================================== */
+
 const corsOptions = {
   origin(origin, callback) {
-    // Allow Postman, curl, server-to-server requests
+    // Allow Postman / curl / server-side requests
     if (!origin) {
       return callback(null, true);
     }
@@ -42,9 +57,9 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    console.log("❌ Blocked Origin:", origin);
+    console.log("Blocked Origin:", origin);
 
-    callback(new Error("Not allowed by CORS"));
+    return callback(new Error("Not allowed by CORS"));
   },
 
   credentials: true,
@@ -65,21 +80,33 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
 app.options("*", cors(corsOptions));
 
 /* ==========================================
-   MIDDLEWARE
+   BODY PARSER
 ========================================== */
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+/* ==========================================
+   OTHER MIDDLEWARE
+========================================== */
 
 app.use(cookieParser());
+
 app.use(compression());
+
 app.use(morgan("dev"));
 
 /* ==========================================
-   ROOT ROUTE
+   ROOT
 ========================================== */
 
 app.get("/", (req, res) => {
@@ -90,61 +117,76 @@ app.get("/", (req, res) => {
 });
 
 /* ==========================================
-   API ROUTES
-========================================== */
-
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/tasks", taskRoutes);
-app.use("/api/settings", settingsRoutes);
-app.use("/api/notifications", notificationRoutes);
-
-/* ==========================================
    HEALTH CHECK
 ========================================== */
 
 app.get("/api/health", (req, res) => {
-  res.status(200).json({
+  res.json({
     success: true,
     status: "OK",
+    environment: process.env.NODE_ENV,
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   });
 });
 
 /* ==========================================
-   404 HANDLER
+   API ROUTES
 ========================================== */
 
-app.use((req, res) => {
+app.use("/api/auth", authRoutes);
+
+app.use("/api/users", userRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/projects", projectRoutes);
+
+app.use("/api/tasks", taskRoutes);
+
+app.use("/api/settings", settingsRoutes);
+
+app.use(
+  "/api/notifications",
+  notificationRoutes
+);
+
+/* ==========================================
+   404
+========================================== */
+
+app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
-    message: `Route Not Found: ${req.method} ${req.originalUrl}`,
+    message: `Route Not Found : ${req.method} ${req.originalUrl}`,
   });
 });
 
 /* ==========================================
-   ERROR HANDLER
+   GLOBAL ERROR HANDLER
 ========================================== */
 
 app.use((err, req, res, next) => {
+  console.error("Server Error");
   console.error(err);
 
   res.status(err.status || 500).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Internal Server Error"
+        : err.message,
   });
 });
 
 /* ==========================================
-   LOG ALLOWED ORIGINS
+   STARTUP LOG
 ========================================== */
 
-console.log("====================================");
+console.log("========================================");
+console.log("TaskFlow Express Initialized");
 console.log("Allowed Origins:");
 console.log(allowedOrigins);
-console.log("====================================");
+console.log("========================================");
 
 export default app;
