@@ -17,53 +17,42 @@ const router = express.Router();
    Base URL: /api/auth
 ====================================================== */
 
-/*
-   POST
-   /api/auth/register
-*/
+/* ======================================================
+   REGISTER
+   POST /api/auth/register
+====================================================== */
+
 router.post(
   "/register",
   register
 );
 
-/*
-   POST
-   /api/auth/login
-*/
+/* ======================================================
+   LOGIN
+   POST /api/auth/login
+====================================================== */
+
 router.post(
   "/login",
   login
 );
 
-/*
-   GET
-   /api/auth/me
-*/
+/* ======================================================
+   CURRENT USER
+   GET /api/auth/me
+====================================================== */
+
 router.get(
   "/me",
   protect,
   getMe
 );
 
-/*
-   POST
-   /api/auth/logout
-*/
-router.post(
-  "/logout",
-  (req, res) => {
-    return res.status(200).json({
-      success: true,
-      message: "Logged out successfully.",
-    });
-  }
-);
+/* ======================================================
+   VERIFY TOKEN
+   GET /api/auth/verify
+====================================================== */
 
-/*
-   GET
-   /api/auth/verify
-   Used by frontend to verify JWT
-*/
 router.get(
   "/verify",
   protect,
@@ -72,6 +61,48 @@ router.get(
       success: true,
       authenticated: true,
       user: req.user,
+    });
+  }
+);
+
+/* ======================================================
+   LOGOUT
+   POST /api/auth/logout
+====================================================== */
+
+router.post(
+  "/logout",
+  protect,
+  (req, res) => {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite:
+        process.env.NODE_ENV === "production"
+          ? "None"
+          : "Lax",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logout successful.",
+    });
+  }
+);
+
+/* ======================================================
+   HEALTH CHECK
+   GET /api/auth/status
+====================================================== */
+
+router.get(
+  "/status",
+  (req, res) => {
+    return res.status(200).json({
+      success: true,
+      service: "Authentication",
+      status: "Running",
+      timestamp: new Date().toISOString(),
     });
   }
 );

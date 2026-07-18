@@ -1,12 +1,16 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-/* ==========================================
+/* ======================================================
    PROTECT ROUTE
-========================================== */
+====================================================== */
 
 export const protect = async (req, res, next) => {
   try {
+    /* ==========================================
+       JWT SECRET CHECK
+    ========================================== */
+
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({
         success: false,
@@ -17,7 +21,8 @@ export const protect = async (req, res, next) => {
     let token = null;
 
     /* ==========================================
-       AUTH HEADER
+       AUTHORIZATION HEADER
+       Authorization: Bearer <token>
     ========================================== */
 
     const authHeader = req.headers.authorization;
@@ -26,26 +31,30 @@ export const protect = async (req, res, next) => {
       authHeader &&
       authHeader.toLowerCase().startsWith("bearer ")
     ) {
-      token = authHeader.substring(7).trim();
+      token = authHeader.split(" ")[1];
     }
 
     /* ==========================================
-       COOKIE
+       COOKIE TOKEN (OPTIONAL)
     ========================================== */
 
     if (!token && req.cookies?.token) {
       token = req.cookies.token;
     }
 
+    /* ==========================================
+       TOKEN NOT FOUND
+    ========================================== */
+
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authorized. No token.",
+        message: "Not authorized. No token provided.",
       });
     }
 
     /* ==========================================
-       VERIFY TOKEN
+       VERIFY JWT
     ========================================== */
 
     const decoded = jwt.verify(
@@ -53,7 +62,20 @@ export const protect = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    const user = await User.findById(decoded.id)
+    const userId = decoded.id || decoded._id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token payload.",
+      });
+    }
+
+    /* ==========================================
+       FIND USER
+    ========================================== */
+
+    const user = await User.findById(userId)
       .select("-password");
 
     if (!user) {
@@ -63,6 +85,10 @@ export const protect = async (req, res, next) => {
       });
     }
 
+    /* ==========================================
+       USER STATUS
+    ========================================== */
+
     if (user.status === "Inactive") {
       return res.status(403).json({
         success: false,
@@ -70,25 +96,29 @@ export const protect = async (req, res, next) => {
       });
     }
 
+    /* ==========================================
+       ATTACH USER
+    ========================================== */
+
     req.user = user;
 
     next();
 
   } catch (error) {
 
-    console.error("Auth Middleware:", error);
+    console.error("🔒 Auth Middleware Error:", error);
 
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({
         success: false,
-        message: "Token expired.",
+        message: "Token expired. Please login again.",
       });
     }
 
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({
         success: false,
-        message: "Invalid token.",
+        message: "Invalid authentication token.",
       });
     }
 
@@ -99,12 +129,11 @@ export const protect = async (req, res, next) => {
   }
 };
 
-/* ==========================================
-   ADMIN
-========================================== */
+/* ======================================================
+   ADMIN ONLY
+====================================================== */
 
 export const adminOnly = (req, res, next) => {
-
   if (!req.user) {
     return res.status(401).json({
       success: false,
@@ -115,19 +144,18 @@ export const adminOnly = (req, res, next) => {
   if (req.user.role !== "Admin") {
     return res.status(403).json({
       success: false,
-      message: "Admin only.",
+      message: "Admin access required.",
     });
   }
 
   next();
 };
 
-/* ==========================================
-   MANAGER
-========================================== */
+/* ======================================================
+   MANAGER / ADMIN
+====================================================== */
 
 export const managerOnly = (req, res, next) => {
-
   if (!req.user) {
     return res.status(401).json({
       success: false,
@@ -135,13 +163,13 @@ export const managerOnly = (req, res, next) => {
     });
   }
 
-  const allowed = [
+  const allowedRoles = [
     "Admin",
     "Manager",
     "Project Manager",
   ];
 
-  if (!allowed.includes(req.user.role)) {
+  if (!allowedRoles.includes(req.user.role)) {
     return res.status(403).json({
       success: false,
       message: "Access denied.",

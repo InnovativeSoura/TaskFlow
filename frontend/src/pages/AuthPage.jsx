@@ -34,10 +34,7 @@ const AuthPage = () => {
   );
 
   const [loading, setLoading] = useState(false);
-
-  const [showPassword, setShowPassword] =
-    useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -47,12 +44,7 @@ const AuthPage = () => {
     role: "Team Member",
   });
 
-  const {
-    name,
-    email,
-    password,
-    role,
-  } = formData;
+  const { name, email, password, role } = formData;
 
   const handleChange = (e) => {
     setError("");
@@ -64,17 +56,15 @@ const AuthPage = () => {
   };
 
   const validate = () => {
-    if (!email.trim())
-      return "Email is required.";
+    if (!email.trim()) return "Email is required.";
 
-    if (!password.trim())
-      return "Password is required.";
+    if (!password.trim()) return "Password is required.";
 
     if (!isLogin && !name.trim()) {
       return "Full Name is required.";
     }
 
-    if (password.trim().length < 6) {
+    if (password.length < 6) {
       return "Password must be at least 6 characters.";
     }
 
@@ -86,10 +76,10 @@ const AuthPage = () => {
 
     if (loading) return;
 
-    const validationError = validate();
+    const validation = validate();
 
-    if (validationError) {
-      setError(validationError);
+    if (validation) {
+      setError(validation);
       return;
     }
 
@@ -113,19 +103,27 @@ const AuthPage = () => {
         });
       }
 
+      console.log("LOGIN RESPONSE:", response);
+
       if (!response.success) {
         setError(response.message);
+        setLoading(false);
         return;
       }
 
-      const redirectTo =
-        location.state?.from?.pathname ||
-        "/dashboard";
+      console.log("Login Success");
+      console.log("Redirecting...");
 
-      navigate(redirectTo, {
+      const redirect =
+        location.state?.from?.pathname || "/dashboard";
+
+      navigate(redirect, {
         replace: true,
       });
+
     } catch (err) {
+      console.error(err);
+
       setError(
         err.response?.data?.message ||
           err.message ||
@@ -135,6 +133,7 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
+
   return (
     <>
       <BackgroundAnimation />
@@ -176,10 +175,9 @@ const AuthPage = () => {
                   <input
                     type="text"
                     name="name"
-                    placeholder="Full Name"
                     value={name}
                     onChange={handleChange}
-                    disabled={loading}
+                    placeholder="Full Name"
                     required
                   />
                 </div>
@@ -191,7 +189,6 @@ const AuthPage = () => {
                     name="role"
                     value={role}
                     onChange={handleChange}
-                    disabled={loading}
                   >
                     <option value="Team Member">
                       Team Member
@@ -215,11 +212,9 @@ const AuthPage = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Email Address"
                 value={email}
                 onChange={handleChange}
-                disabled={loading}
-                autoComplete="email"
+                placeholder="Email"
                 required
               />
             </div>
@@ -234,26 +229,17 @@ const AuthPage = () => {
                     : "password"
                 }
                 name="password"
-                placeholder="Password"
                 value={password}
                 onChange={handleChange}
-                disabled={loading}
-                autoComplete={
-                  isLogin
-                    ? "current-password"
-                    : "new-password"
-                }
+                placeholder="Password"
                 required
               />
 
               <button
                 type="button"
                 className="password-toggle"
-                disabled={loading}
                 onClick={() =>
-                  setShowPassword(
-                    (prev) => !prev
-                  )
+                  setShowPassword(!showPassword)
                 }
               >
                 {showPassword ? (
@@ -265,32 +251,27 @@ const AuthPage = () => {
             </div>
 
             <button
-              type="submit"
               className="auth-btn"
-              disabled={loading}
+              type="submit"
             >
-              {loading ? (
-                "Please Wait..."
-              ) : (
-                <>
-                  {isLogin
-                    ? "Login"
-                    : "Register"}
+              {loading
+                ? "Please Wait..."
+                : isLogin
+                ? "Login"
+                : "Register"}
 
-                  <FaArrowRight />
-                </>
-              )}
+              {!loading && <FaArrowRight />}
             </button>
           </form>
 
           <div className="auth-footer">
             {isLogin ? (
               <>
-                Don't have an account?{" "}
+                Don't have an account?
+
                 <button
-                  type="button"
                   className="link-btn"
-                  disabled={loading}
+                  type="button"
                   onClick={() => {
                     setError("");
                     setIsLogin(false);
@@ -301,11 +282,11 @@ const AuthPage = () => {
               </>
             ) : (
               <>
-                Already have an account?{" "}
+                Already have an account?
+
                 <button
-                  type="button"
                   className="link-btn"
-                  disabled={loading}
+                  type="button"
                   onClick={() => {
                     setError("");
                     setIsLogin(true);
@@ -323,5 +304,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
-

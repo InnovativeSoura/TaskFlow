@@ -10,51 +10,81 @@ import { useAuth } from "../context/AuthContext";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
-import AuthPage from "../pages/AuthPage";
+/* ===========================
+   PUBLIC PAGES
+=========================== */
+
 import Home from "../pages/Home";
+import AuthPage from "../pages/AuthPage";
+import Pricing from "../pages/Pricing";
+
+/* ===========================
+   DASHBOARDS
+=========================== */
 
 import Dashboard from "../pages/Dashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 
+/* ===========================
+   PROJECTS
+=========================== */
+
 import Projects from "../pages/Projects";
 import ProjectList from "../pages/ProjectList";
+
+/* ===========================
+   TASKS
+=========================== */
 
 import Tasks from "../pages/Tasks";
 import TaskList from "../pages/TaskList";
 
+/* ===========================
+   TEAM
+=========================== */
+
 import Users from "../pages/Users";
 import Team from "../pages/Team";
 
+/* ===========================
+   PROFILE
+=========================== */
+
 import Profile from "../pages/Profile";
+
+/* ===========================
+   REPORTS
+=========================== */
 
 import Reports from "../pages/Reports";
 import Analytics from "../pages/Analytics";
 
+/* ===========================
+   PRODUCTIVITY
+=========================== */
+
 import KanbanBoard from "../pages/KanbanBoard";
-
 import CalendarPage from "../pages/CalendarPage";
-
 import TeamChat from "../pages/TeamChat";
-
 import AIInsights from "../pages/AIInsights";
-
 import GanttPage from "../pages/GanttPage";
 
+/* ===========================
+   SETTINGS
+=========================== */
+
 import Settings from "../pages/Settings";
-
 import Notifications from "../pages/Notifications";
-
 import ActivityFeed from "../pages/ActivityFeed";
 import Workspaces from "../pages/Workspaces";
-
 import Subscription from "../pages/Subscription";
-import Pricing from "../pages/Pricing";
 import Upgrade from "../pages/Upgrade";
 
 const AppRoutes = () => {
   const {
     loading,
-    isAuthenticated,
+    token,
+    user,
   } = useAuth();
 
   if (loading) {
@@ -65,12 +95,14 @@ const AppRoutes = () => {
     );
   }
 
+  const authenticated = !!token && !!user;
+
   return (
     <Routes>
 
-      {/* =====================================
+      {/* ===========================
           PUBLIC ROUTES
-      ====================================== */}
+      ============================ */}
 
       <Route
         path="/"
@@ -80,7 +112,7 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
-          isAuthenticated
+          authenticated
             ? (
                 <Navigate
                   to="/dashboard"
@@ -93,11 +125,10 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Optional Register Route */}
       <Route
         path="/register"
         element={
-          isAuthenticated
+          authenticated
             ? (
                 <Navigate
                   to="/dashboard"
@@ -115,7 +146,6 @@ const AppRoutes = () => {
         element={<Pricing />}
       />
 
-      {/* Redirect old /home */}
       <Route
         path="/home"
         element={
@@ -126,9 +156,9 @@ const AppRoutes = () => {
         }
       />
 
-      {/* =====================================
+      {/* ===========================
           PROTECTED ROUTES
-      ====================================== */}
+      ============================ */}
 
       <Route
         path="/dashboard"
@@ -148,8 +178,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Projects */}
-
       <Route
         path="/projects"
         element={
@@ -167,8 +195,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Tasks */}
 
       <Route
         path="/tasks"
@@ -188,8 +214,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Team */}
-
       <Route
         path="/users"
         element={
@@ -208,8 +232,6 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Profile */}
-
       <Route
         path="/profile"
         element={
@@ -218,8 +240,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Reports */}
 
       <Route
         path="/reports"
@@ -238,8 +258,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Productivity */}
 
       <Route
         path="/kanban"
@@ -285,8 +303,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Account */}
 
       <Route
         path="/activity"
@@ -342,13 +358,18 @@ const AppRoutes = () => {
         }
       />
 
-      {/* =====================================
-          FALLBACK
-      ====================================== */}
+      {/* ===========================
+          404
+      ============================ */}
 
       <Route
         path="*"
-        element={<Navigate to="/" replace />}
+        element={
+          <Navigate
+            to="/"
+            replace
+          />
+        }
       />
 
     </Routes>

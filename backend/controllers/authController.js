@@ -15,18 +15,21 @@ const formatUser = (user) => ({
   designation: user.designation,
   department: user.department,
   status: user.status,
+  phone: user.phone,
+  bio: user.bio,
+  isVerified: user.isVerified,
   lastLogin: user.lastLogin,
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
 });
 
 /* ======================================================
-   GENERATE JWT
+   GENERATE JWT TOKEN
 ====================================================== */
 
 const generateToken = (userId) => {
   if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is missing");
+    throw new Error("JWT_SECRET is missing.");
   }
 
   return jwt.sign(
@@ -70,9 +73,11 @@ export const register = async (req, res) => {
       });
     }
 
-    const exists = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      email,
+    });
 
-    if (exists) {
+    if (existingUser) {
       return res.status(400).json({
         success: false,
         message: "Email already registered.",
@@ -88,22 +93,22 @@ export const register = async (req, res) => {
 
     const token = generateToken(user._id);
 
+    const createdUser = await User.findById(user._id).select("-password");
+
     return res.status(201).json({
       success: true,
       message: "Registration successful.",
       token,
-      user: formatUser(user),
+      user: formatUser(createdUser),
     });
 
   } catch (error) {
-
     console.error("Register Error:", error);
 
     return res.status(500).json({
       success: false,
       message: error.message || "Server Error",
     });
-
   }
 };
 
@@ -113,7 +118,6 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-
     let {
       email,
       password,
@@ -128,7 +132,9 @@ export const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email,
+    });
 
     if (!user) {
       return res.status(401).json({
@@ -146,27 +152,35 @@ export const login = async (req, res) => {
       });
     }
 
+    if (user.status === "Inactive") {
+      return res.status(403).json({
+        success: false,
+        message: "Your account is inactive.",
+      });
+    }
+
     user.lastLogin = new Date();
+
     await user.save();
 
     const token = generateToken(user._id);
+
+    const loggedInUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
       message: "Login successful.",
       token,
-      user: formatUser(user),
+      user: formatUser(loggedInUser),
     });
 
   } catch (error) {
-
     console.error("Login Error:", error);
 
     return res.status(500).json({
       success: false,
       message: error.message || "Server Error",
     });
-
   }
 };
 
@@ -176,7 +190,6 @@ export const login = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -184,8 +197,7 @@ export const getMe = async (req, res) => {
       });
     }
 
-    const user = await User.findById(req.user._id)
-      .select("-password");
+    const user = await User.findById(req.user._id).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -200,13 +212,11 @@ export const getMe = async (req, res) => {
     });
 
   } catch (error) {
-
     console.error("GetMe Error:", error);
 
     return res.status(500).json({
       success: false,
       message: error.message || "Server Error",
     });
-
   }
 };
