@@ -1,318 +1,354 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import {
   FaArrowRight,
-  FaPlayCircle,
   FaCheckCircle,
+  FaEye,
+  FaEyeSlash,
 } from "react-icons/fa";
 
-import { toast } from "react-toastify";
-
-import { useAuth } from "../../context/AuthContext";
-
 const Hero = () => {
-  const navigate = useNavigate();
-
-  const { login, register } = useAuth();
-
   const [isRegister, setIsRegister] = useState(false);
-
-  const [loading, setLoading] = useState(false);
-
-  const [name, setName] = useState("");
-
-  const [email, setEmail] = useState("");
-
-  const [password, setPassword] = useState("");
-
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    try {
-      if (isRegister) {
-        if (password !== confirmPassword) {
-          toast.error("Passwords do not match");
-          setLoading(false);
-          return;
-        }
-
-        await register(
-          name,
-          email,
-          password
-        );
-
-        toast.success("Account Created Successfully");
-      } else {
-        await login(
-          email,
-          password
-        );
-
-        toast.success("Welcome Back!");
-      }
-
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Authentication Failed"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <section className="hero-section">
+
       <div className="hero-container">
 
-        {/* LEFT */}
+        {/* ===========================
+            LEFT CONTENT
+        ============================ */}
 
         <motion.div
           className="hero-content"
-          initial={{
-            opacity: 0,
-            x: -40,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.7,
-          }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
         >
+
           <span className="hero-badge">
-            🚀 The Modern Project Management Platform
+            🚀 Next Generation Project Management
           </span>
 
           <h1 className="hero-title">
-            Organize Projects.
+            Manage Projects
             <br />
-            Manage Teams.
+
+            Collaborate Faster
             <br />
-            <span>Deliver Faster.</span>
+
+            <span>Deliver On Time.</span>
           </h1>
 
           <p className="hero-description">
-            TaskFlow helps teams collaborate,
-            manage projects, assign work,
-            track progress and increase
-            productivity from one powerful
-            workspace.
+            TaskFlow is an all-in-one project management platform
+            that helps teams organize projects, assign tasks,
+            monitor progress, collaborate in real time, and boost
+            productivity from one beautiful workspace.
           </p>
 
           <div className="hero-buttons">
+
             <Link
               to="/login"
               className="hero-primary-btn"
             >
               Get Started
-
               <FaArrowRight />
             </Link>
 
-            <Link
-              to="/login"
+            <a
+              href="#features"
               className="hero-secondary-btn"
             >
-              <FaPlayCircle />
+              Learn More
+            </a>
 
-              Live Demo
-            </Link>
           </div>
 
           <div className="hero-features">
-            <div>
-              <FaCheckCircle />
-
-              <span>No Credit Card</span>
-            </div>
 
             <div>
               <FaCheckCircle />
-
               <span>Unlimited Projects</span>
             </div>
 
             <div>
               <FaCheckCircle />
-
               <span>Real-time Collaboration</span>
             </div>
+
+            <div>
+              <FaCheckCircle />
+              <span>Secure Cloud Storage</span>
+            </div>
+
           </div>
+
         </motion.div>
 
-        {/* RIGHT */}
+        {/* ===========================
+            RIGHT SIDE
+        ============================ */}
 
         <motion.div
           className="hero-right"
-          initial={{
-            opacity: 0,
-            x: 40,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.8,
-          }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
         >
+
           <div className="auth-preview">
+
+            {/* Toggle */}
 
             <div className="auth-toggle">
 
               <button
-                className={
-                  !isRegister
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setIsRegister(false)
-                }
+                className={!isRegister ? "active" : ""}
+                onClick={() => setIsRegister(false)}
               >
                 Login
               </button>
 
               <button
-                className={
-                  isRegister
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setIsRegister(true)
-                }
+                className={isRegister ? "active" : ""}
+                onClick={() => setIsRegister(true)}
               >
                 Register
               </button>
 
             </div>
 
-            <form
-              className="auth-preview-form"
-              onSubmit={handleSubmit}
-            >
+            {/* Heading */}
 
-              {isRegister && (
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={(e) =>
-                    setName(
-                      e.target.value
-                    )
-                  }
-                  required
-                />
-              )}
+            <div className="auth-preview-title">
 
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) =>
-                  setEmail(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) =>
-                  setPassword(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-              {isRegister && (
-                <input
-                  type="password"
-                  placeholder="Confirm Password"
-                  value={
-                    confirmPassword
-                  }
-                  onChange={(e) =>
-                    setConfirmPassword(
-                      e.target.value
-                    )
-                  }
-                  required
-                />
-              )}
-
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={loading}
-              >
-                {loading
-                  ? "Please wait..."
-                  : isRegister
+              <h2>
+                {isRegister
                   ? "Create Account"
-                  : "Login"}
-              </button>
+                  : "Welcome Back"}
+              </h2>
 
-            </form>
-
-            <div className="hero-card-footer">
-
-              {isRegister ? (
-                <p>
-                  Already have an account?{" "}
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setIsRegister(
-                        false
-                      )
-                    }
-                  >
-                    Login
-                  </button>
-                </p>
-              ) : (
-                <p>
-                  New to TaskFlow?{" "}
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setIsRegister(
-                        true
-                      )
-                    }
-                  >
-                    Register
-                  </button>
-                </p>
-              )}
+              <p>
+                {isRegister
+                  ? "Start managing your projects today."
+                  : "Sign in to continue to TaskFlow."}
+              </p>
 
             </div>
 
+            {/* Form */}
+
+            <form
+  className="auth-preview-form"
+  onSubmit={(e) => e.preventDefault()}
+>
+
+  {/* Register Only */}
+
+  {isRegister && (
+    <div className="auth-group">
+
+      <label>Full Name</label>
+
+      <input
+        type="text"
+        placeholder="John Doe"
+      />
+
+    </div>
+  )}
+
+  {/* Email */}
+
+  <div className="auth-group">
+
+    <label>Email Address</label>
+
+    <input
+      type="email"
+      placeholder="john@example.com"
+    />
+
+  </div>
+
+  {/* Password */}
+
+  <div className="auth-group">
+
+    <label>Password</label>
+
+    <div className="password-group">
+
+      <input
+        type={
+          showPassword
+            ? "text"
+            : "password"
+        }
+        placeholder="Enter your password"
+      />
+
+      <span
+        className="password-toggle"
+        onClick={() =>
+          setShowPassword(!showPassword)
+        }
+      >
+        {showPassword ? (
+          <FaEyeSlash />
+        ) : (
+          <FaEye />
+        )}
+      </span>
+
+    </div>
+
+  </div>
+
+  {/* Confirm Password */}
+
+  {isRegister && (
+
+    <div className="auth-group">
+
+      <label>
+        Confirm Password
+      </label>
+
+      <input
+        type="password"
+        placeholder="Confirm password"
+      />
+
+    </div>
+
+  )}
+
+  {/* Login Only */}
+
+  {!isRegister && (
+
+    <div className="auth-options">
+
+      <label className="remember-me">
+
+        <input type="checkbox" />
+
+        Remember me
+
+      </label>
+
+      <Link
+        to="/forgot-password"
+        className="forgot-password"
+      >
+        Forgot Password?
+      </Link>
+
+    </div>
+
+  )}
+
+  {/* Submit */}
+
+  <button
+    type="submit"
+    className="auth-submit"
+  >
+    {isRegister
+      ? "Create Account"
+      : "Login"}
+  </button>
+
+  {/* Divider */}
+
+  <div className="auth-divider">
+
+    <span>OR</span>
+
+  </div>
+
+  {/* Social Login */}
+
+  <div className="auth-social">
+
+    <button type="button">
+
+      <img
+        src="https://www.svgrepo.com/show/475656/google-color.svg"
+        alt="Google"
+        width="22"
+      />
+
+      Google
+
+    </button>
+
+    <button type="button">
+
+      <img
+        src="https://www.svgrepo.com/show/512317/github-142.svg"
+        alt="GitHub"
+        width="22"
+      />
+
+      GitHub
+
+    </button>
+
+  </div>
+
+  {/* Footer */}
+
+  <div className="auth-footer">
+
+    {isRegister ? (
+
+      <>
+        Already have an account?
+
+        <button
+          type="button"
+          onClick={() =>
+            setIsRegister(false)
+          }
+        >
+          Login
+        </button>
+      </>
+
+    ) : (
+
+      <>
+        Don't have an account?
+
+        <button
+          type="button"
+          onClick={() =>
+            setIsRegister(true)
+          }
+        >
+          Register
+        </button>
+      </>
+
+    )}
+
+  </div>
+
+</form>
+
           </div>
+
         </motion.div>
 
       </div>
+
     </section>
   );
 };
