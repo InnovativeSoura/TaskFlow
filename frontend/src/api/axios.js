@@ -22,7 +22,8 @@ console.log("====================================");
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
+  withCredentials: false, // JWT is sent in Authorization header
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -38,8 +39,6 @@ api.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-    } else {
-      delete config.headers.Authorization;
     }
 
     console.log(
@@ -51,6 +50,10 @@ api.interceptors.request.use(
       token ? "Present" : "Missing"
     );
 
+    if (config.data) {
+      console.log("📤 Request Body:", config.data);
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -61,10 +64,17 @@ api.interceptors.request.use(
 ========================================== */
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(
+      `✅ ${response.status} ${response.config.url}`
+    );
+
+    return response;
+  },
 
   (error) => {
     const status = error.response?.status;
+    const url = error.config?.url;
 
     console.error(
       "❌ API Error:",
@@ -72,8 +82,12 @@ api.interceptors.response.use(
       error.response?.data || error.message
     );
 
-    // Token expired or invalid
-    if (status === 401) {
+    // Only clear auth if an authenticated endpoint fails
+    if (
+      status === 401 &&
+      url !== "/auth/login" &&
+      url !== "/auth/register"
+    ) {
       console.warn("⚠ Session expired.");
 
       localStorage.removeItem("token");
