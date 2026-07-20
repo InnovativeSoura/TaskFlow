@@ -1,5 +1,5 @@
 /* ==========================================
-   GOOGLE FONT
+   TASKFLOW AUTH PAGE
 ========================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
@@ -11,202 +11,269 @@
     font-family:"Poppins",sans-serif;
 }
 
-/* ==========================================
-   BODY
-========================================== */
-
 body{
-    background:#050816;
-    overflow-x:hidden;
+    background:#090b17;
+    color:#fff;
 }
-
-/* ==========================================
-   PAGE
-========================================== */
 
 .auth-page{
-
-    position:relative;
-
     min-height:100vh;
-
-    display:grid;
-
-    grid-template-columns:1.2fr 550px;
-
+    display:flex;
     align-items:center;
-
-    gap:80px;
-
-    padding:60px 8%;
-
+    justify-content:center;
+    padding:50px;
+    gap:70px;
+    position:relative;
+    overflow:hidden;
 }
 
 /* ==========================================
-   AUTH WRAPPER
+   LEFT SECTION
+========================================== */
+
+.auth-left{
+    width:50%;
+    max-width:620px;
+    z-index:2;
+}
+
+.hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 20px;
+    border-radius:999px;
+    background:rgba(123,97,255,.12);
+    border:1px solid rgba(123,97,255,.35);
+    color:#9d8cff;
+    font-size:.9rem;
+    margin-bottom:25px;
+}
+
+.auth-left h1{
+    font-size:3.7rem;
+    line-height:1.1;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.auth-left h1 span{
+    background:linear-gradient(
+        135deg,
+        #7b61ff,
+        #b56dff
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.auth-left p{
+    color:#b8bfd8;
+    font-size:1.08rem;
+    line-height:1.9;
+    max-width:520px;
+    margin-bottom:40px;
+}
+
+.hero-features{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.hero-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:18px;
+
+    padding:18px 20px;
+
+    transition:.35s;
+}
+
+.hero-card:hover{
+    transform:translateY(-5px);
+
+    border-color:#7b61ff;
+}
+
+.hero-card svg{
+    color:#7b61ff;
+    font-size:20px;
+}
+
+/* ==========================================
+   RIGHT CARD
 ========================================== */
 
 .auth-wrapper{
 
-    display:flex;
+    width:430px;
 
-    justify-content:center;
+    background:rgba(255,255,255,.07);
 
-    align-items:center;
+    backdrop-filter:blur(25px);
 
-}
+    border:1px solid rgba(255,255,255,.08);
 
-/* ==========================================
-   GLASS CARD
-========================================== */
-
-.auth-card{
-
-    width:100%;
-
-    max-width:500px;
+    border-radius:28px;
 
     padding:40px;
 
-    border-radius:30px;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(22px);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-    0 20px 50px rgba(0,0,0,.45),
-    0 0 40px rgba(124,77,255,.12);
-
     position:relative;
 
-    overflow:hidden;
+    z-index:5;
 
+    box-shadow:
+    0 30px 70px rgba(0,0,0,.45);
 }
 
-/* glowing border */
+.auth-title{
+    font-size:2rem;
+    font-weight:700;
+    margin-bottom:8px;
+}
 
-.auth-card::before{
+.auth-subtitle{
+    color:#aab2cc;
+    margin-bottom:30px;
+    line-height:1.6;
+}
+/* ==========================================
+   LOGIN / REGISTER TOGGLE
+========================================== */
 
-    content:"";
+.auth-toggle{
+    display:flex;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:6px;
+    margin-bottom:30px;
+}
 
-    position:absolute;
+.auth-toggle button{
+    flex:1;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:#aeb6d3;
+    font-size:.95rem;
+    font-weight:600;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s ease;
+}
 
-    inset:-2px;
+.auth-toggle button:hover{
+    color:#fff;
+}
 
-    border-radius:30px;
-
-    padding:2px;
-
+.auth-toggle button.active{
     background:linear-gradient(
         135deg,
-        #7c4dff,
-        #3b82f6,
-        #00d4ff
+        #7b61ff,
+        #9d6dff
     );
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-
-    -webkit-mask-composite:xor;
-
-    mask-composite:exclude;
-
-    pointer-events:none;
-
-}
-
-/* ==========================================
-   HEADER
-========================================== */
-
-.auth-header{
-
-    text-align:center;
-
-    margin-bottom:30px;
-
-}
-
-.auth-header h2{
-
     color:#fff;
-
-    font-size:34px;
-
-    margin-bottom:10px;
-
-    font-weight:700;
-
-}
-
-.auth-header p{
-
-    color:#a5b4c7;
-
-    font-size:15px;
-
-    line-height:1.7;
-
+    box-shadow:
+        0 10px 25px rgba(123,97,255,.35);
 }
 
 /* ==========================================
-   TOGGLE
+   SOCIAL BUTTONS
 ========================================== */
 
-.toggle-container{
-
-    display:flex;
-
-    background:rgba(255,255,255,.05);
-
-    padding:6px;
-
-    border-radius:50px;
-
-    margin-bottom:35px;
-
+.social-login{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:24px;
 }
 
-.toggle-btn{
-
-    flex:1;
-
-    height:48px;
+.social-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
 
     border:none;
-
-    border-radius:40px;
-
-    background:transparent;
-
-    color:#cbd5e1;
-
-    font-size:15px;
-
-    font-weight:600;
+    outline:none;
 
     cursor:pointer;
 
-    transition:.35s;
+    padding:13px;
 
+    border-radius:14px;
+
+    font-size:.95rem;
+
+    color:#fff;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.3s;
 }
 
-.toggle-btn.active{
+.social-btn:hover{
+    transform:translateY(-3px);
 
-    background:linear-gradient(
-        135deg,
-        #7c4dff,
-        #3b82f6
-    );
+    background:rgba(255,255,255,.1);
 
-    color:white;
+    border-color:#7b61ff;
+}
 
-    box-shadow:0 10px 20px rgba(124,77,255,.35);
+.social-btn svg{
+    font-size:18px;
+}
 
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.divider{
+    display:flex;
+    align-items:center;
+    margin:26px 0;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:rgba(255,255,255,.08);
+}
+
+.divider span{
+    margin:0 15px;
+    color:#97a1bf;
+    font-size:.85rem;
+}
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.auth-error{
+    background:rgba(255,70,70,.12);
+    border:1px solid rgba(255,70,70,.25);
+    color:#ff7a7a;
+    padding:14px 16px;
+    border-radius:12px;
+    margin-bottom:20px;
+    font-size:.9rem;
 }
 
 /* ==========================================
@@ -214,39 +281,63 @@ body{
 ========================================== */
 
 .auth-form{
-
     display:flex;
-
     flex-direction:column;
-
-}
-
-.auth-form label{
-
-    color:#dbe4f3;
-
-    margin-bottom:8px;
-
-    margin-top:18px;
-
-    font-size:14px;
-
-    font-weight:500;
-
+    gap:18px;
 }
 
 /* ==========================================
-   INPUT GROUP
+   INPUTS
 ========================================== */
 
 .input-group{
-
     position:relative;
+}
 
-    display:flex;
+.input-group input,
+.input-group select{
 
-    align-items:center;
+    width:100%;
 
+    height:58px;
+
+    border:none;
+
+    outline:none;
+
+    color:#fff;
+
+    font-size:.95rem;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding-left:52px;
+
+    padding-right:52px;
+
+    transition:.3s;
+}
+
+.input-group input::placeholder{
+    color:#8f98b8;
+}
+
+.input-group input:focus,
+.input-group select:focus{
+
+    border-color:#7b61ff;
+
+    box-shadow:
+        0 0 0 4px rgba(123,97,255,.15);
+}
+
+.input-group select{
+    appearance:none;
+    cursor:pointer;
 }
 
 .input-icon{
@@ -255,72 +346,17 @@ body{
 
     left:18px;
 
-    color:#94a3b8;
+    top:50%;
 
-    font-size:17px;
+    transform:translateY(-50%);
+
+    color:#8e96b4;
+
+    font-size:16px;
 
     pointer-events:none;
-
 }
 
-.input-group input,
-.input-group select{
-
-    width:100%;
-
-    height:56px;
-
-    padding-left:55px;
-
-    padding-right:18px;
-
-    border-radius:16px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:rgba(255,255,255,.05);
-
-    color:white;
-
-    outline:none;
-
-    transition:.35s;
-
-    font-size:15px;
-
-}
-
-.input-group input::placeholder{
-
-    color:#94a3b8;
-
-}
-
-.input-group input:focus,
-.input-group select:focus{
-
-    border-color:#7c4dff;
-
-    box-shadow:
-    0 0 0 3px rgba(124,77,255,.15);
-
-    background:rgba(255,255,255,.08);
-
-}
-
-.input-group select{
-
-    cursor:pointer;
-
-}
-
-.input-group option{
-
-    background:#101827;
-
-    color:white;
-
-}
 /* ==========================================
    PASSWORD
 ========================================== */
@@ -329,75 +365,48 @@ body{
     position:relative;
 }
 
-.password-group input{
-    padding-right:60px;
-}
-
-.eye-btn{
+.password-toggle{
 
     position:absolute;
 
-    right:8px;
+    right:16px;
 
-    width:42px;
-    height:42px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    background:none;
 
     border:none;
 
-    border-radius:12px;
-
-    background:transparent;
-
-    color:#a5b4c7;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    color:#9aa4c6;
 
     cursor:pointer;
+
+    font-size:17px;
 
     transition:.3s;
 }
 
-.eye-btn:hover{
+.password-toggle:hover{
+    color:#fff;
+}
+/* ==========================================
+   FORGOT PASSWORD
+========================================== */
 
-    background:rgba(124,77,255,.15);
-
-    color:#7c4dff;
-
+.forgot-password{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:-6px;
+    margin-bottom:6px;
 }
 
 /* ==========================================
-   ERROR
+   PRIMARY BUTTON
 ========================================== */
 
-.auth-error{
-
-    margin-top:20px;
-
-    padding:14px 18px;
-
-    border-radius:14px;
-
-    background:rgba(239,68,68,.12);
-
-    border:1px solid rgba(239,68,68,.25);
-
-    color:#ffb4b4;
-
-    font-size:14px;
-
-    animation:shake .4s;
-
-}
-
-/* ==========================================
-   SUBMIT BUTTON
-========================================== */
-
-.auth-submit-btn{
-
-    margin-top:30px;
+.auth-btn{
 
     width:100%;
 
@@ -409,88 +418,74 @@ body{
 
     background:linear-gradient(
         135deg,
-        #7c4dff,
-        #3b82f6
+        #7b61ff,
+        #965cff,
+        #b56dff
     );
 
-    color:white;
+    color:#fff;
 
-    font-size:16px;
+    font-size:1rem;
 
     font-weight:600;
 
     cursor:pointer;
 
     display:flex;
-    justify-content:center;
+
     align-items:center;
+
+    justify-content:center;
+
     gap:12px;
 
     transition:.35s;
 
-    box-shadow:
-    0 12px 30px rgba(124,77,255,.35);
-
-}
-
-.auth-submit-btn:hover{
-
-    transform:translateY(-4px);
+    margin-top:10px;
 
     box-shadow:
-    0 18px 40px rgba(124,77,255,.45);
-
+        0 15px 35px rgba(123,97,255,.35);
 }
 
-.auth-submit-btn:active{
+.auth-btn:hover:not(:disabled){
 
-    transform:scale(.98);
+    transform:translateY(-3px);
 
+    box-shadow:
+        0 25px 45px rgba(123,97,255,.45);
 }
 
-.auth-submit-btn:disabled{
+.auth-btn:disabled{
 
     opacity:.7;
 
     cursor:not-allowed;
 
+    transform:none;
 }
 
 /* ==========================================
-   DIVIDER
+   LINKS
 ========================================== */
 
-.divider{
+.link-btn{
 
-    display:flex;
+    background:none;
 
-    align-items:center;
+    border:none;
 
-    margin:30px 0;
+    color:#8c7bff;
 
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
 }
 
-.divider::before,
-.divider::after{
+.link-btn:hover{
 
-    content:"";
-
-    flex:1;
-
-    height:1px;
-
-    background:rgba(255,255,255,.08);
-
-}
-
-.divider span{
-
-    margin:0 18px;
-
-    color:#94a3b8;
-
-    font-size:13px;
-
+    color:#b69cff;
 }
 
 /* ==========================================
@@ -499,587 +494,38 @@ body{
 
 .auth-footer{
 
+    margin-top:28px;
+
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
+
+    justify-content:center;
 
     gap:8px;
 
     flex-wrap:wrap;
 
-    color:#cbd5e1;
+    color:#9ea8c7;
 
-    font-size:15px;
-
-}
-
-.footer-link{
-
-    background:none;
-
-    border:none;
-
-    color:#7c4dff;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.footer-link:hover{
-
-    color:#60a5fa;
-
+    font-size:.95rem;
 }
 
 /* ==========================================
-   INPUT HOVER EFFECTS
-========================================== */
-
-.input-group:hover input,
-.input-group:hover select{
-
-    border-color:rgba(124,77,255,.35);
-
-}
-
-/* ==========================================
-   CARD HOVER
-========================================== */
-
-.auth-card{
-
-    transition:.4s;
-
-}
-
-.auth-card:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:
-    0 25px 60px rgba(0,0,0,.45),
-    0 0 50px rgba(124,77,255,.25);
-
-}
-
-/* ==========================================
-   BUTTON SHINE
-========================================== */
-
-.auth-submit-btn{
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-.auth-submit-btn::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-
-    left:-100%;
-
-    width:60%;
-
-    height:100%;
-
-    background:linear-gradient(
-
-        90deg,
-
-        transparent,
-
-        rgba(255,255,255,.25),
-
-        transparent
-
-    );
-
-    transform:skewX(-25deg);
-
-}
-
-.auth-submit-btn:hover::before{
-
-    animation:shine .9s;
-
-}
-
-@keyframes shine{
-
-    from{
-
-        left:-100%;
-
-    }
-
-    to{
-
-        left:140%;
-
-    }
-
-}
-
-/* ==========================================
-   SHAKE ANIMATION
-========================================== */
-
-@keyframes shake{
-
-    0%{transform:translateX(0);}
-    20%{transform:translateX(-5px);}
-    40%{transform:translateX(5px);}
-    60%{transform:translateX(-5px);}
-    80%{transform:translateX(5px);}
-    100%{transform:translateX(0);}
-
-}
-/* ==========================================
-   CARD FLOAT ANIMATION
-========================================== */
-
-.auth-card{
-    animation:cardFloat 6s ease-in-out infinite;
-}
-
-@keyframes cardFloat{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
-
-}
-
-/* ==========================================
-   GLOWING BACKGROUND
-========================================== */
-
-.auth-wrapper{
-    position:relative;
-}
-
-.auth-wrapper::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:420px;
-    height:420px;
-
-    border-radius:50%;
-
-    background:radial-gradient(
-        rgba(124,77,255,.25),
-        transparent 70%
-    );
-
-    filter:blur(60px);
-
-    animation:glowMove 12s infinite ease-in-out;
-
-    z-index:-1;
-}
-
-@keyframes glowMove{
-
-    0%{
-        transform:translate(-40px,-20px);
-    }
-
-    50%{
-        transform:translate(40px,30px);
-    }
-
-    100%{
-        transform:translate(-40px,-20px);
-    }
-
-}
-
-/* ==========================================
-   INPUT TRANSITIONS
-========================================== */
-
-.input-group{
-
-    transition:.35s;
-
-}
-
-.input-group:focus-within{
-
-    transform:translateY(-2px);
-
-}
-
-.input-group:focus-within .input-icon{
-
-    color:#7c4dff;
-
-}
-
-/* ==========================================
-   LABEL ANIMATION
-========================================== */
-
-.auth-form label{
-
-    transition:.3s;
-
-}
-
-.input-group:focus-within + label{
-
-    color:#7c4dff;
-
-}
-
-/* ==========================================
-   CUSTOM SCROLLBAR
+   SCROLLBAR
 ========================================== */
 
 ::-webkit-scrollbar{
-
     width:8px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:#050816;
-
 }
 
 ::-webkit-scrollbar-thumb{
-
-    background:#7c4dff;
-
-    border-radius:50px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:#5f36ff;
-
+    background:#7b61ff;
+    border-radius:20px;
 }
 
 /* ==========================================
-   SELECTION
-========================================== */
-
-::selection{
-
-    background:#7c4dff;
-
-    color:white;
-
-}
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media(max-width:1200px){
-
-.auth-page{
-
-grid-template-columns:1fr;
-
-gap:60px;
-
-padding:40px;
-
-}
-
-.auth-wrapper{
-
-justify-content:center;
-
-}
-
-}
-
-/* ==========================================
-   TABLET
-========================================== */
-
-@media(max-width:992px){
-
-.auth-page{
-
-padding:30px;
-
-}
-
-.auth-card{
-
-max-width:550px;
-
-padding:35px;
-
-}
-
-.auth-header h2{
-
-font-size:30px;
-
-}
-
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media(max-width:768px){
-
-.auth-page{
-
-padding:25px;
-
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
-}
-
-.auth-card{
-
-padding:30px;
-
-border-radius:22px;
-
-}
-
-.toggle-btn{
-
-height:46px;
-
-font-size:14px;
-
-}
-
-.auth-header h2{
-
-font-size:28px;
-
-}
-
-.auth-header p{
-
-font-size:14px;
-
-}
-
-.auth-submit-btn{
-
-height:54px;
-
-font-size:15px;
-
-}
-
-}
-
-/* ==========================================
-   SMALL MOBILE
-========================================== */
-
-@media(max-width:480px){
-
-.auth-page{
-
-padding:15px;
-
-}
-
-.auth-card{
-
-padding:22px;
-
-}
-
-.auth-header h2{
-
-font-size:24px;
-
-}
-
-.auth-header p{
-
-font-size:13px;
-
-}
-
-.input-group input,
-.input-group select{
-
-height:52px;
-
-font-size:14px;
-
-padding-left:50px;
-
-}
-
-.input-icon{
-
-left:15px;
-
-}
-
-.eye-btn{
-
-width:38px;
-height:38px;
-
-}
-
-.auth-submit-btn{
-
-height:50px;
-
-font-size:14px;
-
-}
-
-.footer-link{
-
-font-size:14px;
-
-}
-
-}
-
-/* ==========================================
-   DARK THEME SUPPORT
-========================================== */
-
-body.dark-theme .auth-card{
-
-background:rgba(15,23,42,.82);
-
-border-color:rgba(255,255,255,.08);
-
-}
-
-body.dark-theme .input-group input,
-body.dark-theme .input-group select{
-
-background:rgba(255,255,255,.04);
-
-}
-
-body.dark-theme .toggle-container{
-
-background:rgba(255,255,255,.04);
-
-}
-/* ==========================================
-   PREMIUM GLOW EFFECTS
-========================================== */
-
-.auth-card::after {
-  content: "";
-
-  position: absolute;
-
-  top: -40%;
-  left: -40%;
-
-  width: 180%;
-  height: 180%;
-
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,.08),
-    transparent
-  );
-
-  transform: rotate(25deg);
-
-  animation: glassShine 8s linear infinite;
-
-  pointer-events: none;
-}
-
-@keyframes glassShine {
-
-  0% {
-    transform: translateX(-120%) rotate(25deg);
-  }
-
-  100% {
-    transform: translateX(120%) rotate(25deg);
-  }
-
-}
-
-/* ==========================================
-   BUTTON GLOW
-========================================== */
-
-.auth-submit-btn{
-
-    animation:pulseGlow 3s infinite;
-
-}
-
-@keyframes pulseGlow{
-
-    0%{
-
-        box-shadow:
-        0 0 0 rgba(124,77,255,.25),
-        0 12px 30px rgba(124,77,255,.35);
-
-    }
-
-    50%{
-
-        box-shadow:
-        0 0 35px rgba(124,77,255,.45),
-        0 20px 40px rgba(124,77,255,.45);
-
-    }
-
-    100%{
-
-        box-shadow:
-        0 0 0 rgba(124,77,255,.25),
-        0 12px 30px rgba(124,77,255,.35);
-
-    }
-
-}
-
-/* ==========================================
-   GLASS DECORATION
+   FLOATING GLOW
 ========================================== */
 
 .auth-page::before{
@@ -1088,22 +534,21 @@ background:rgba(255,255,255,.04);
 
     position:absolute;
 
-    width:220px;
-    height:220px;
+    width:420px;
 
-    top:8%;
-    right:10%;
+    height:420px;
+
+    left:-120px;
+
+    top:-120px;
 
     border-radius:50%;
 
-    background:rgba(255,255,255,.03);
+    background:#7b61ff;
 
-    border:1px solid rgba(255,255,255,.08);
+    opacity:.15;
 
-    backdrop-filter:blur(15px);
-
-    animation:floatCircle1 14s ease-in-out infinite;
-
+    filter:blur(120px);
 }
 
 .auth-page::after{
@@ -1112,241 +557,167 @@ background:rgba(255,255,255,.04);
 
     position:absolute;
 
-    width:160px;
-    height:160px;
+    width:350px;
 
-    bottom:8%;
-    left:6%;
+    height:350px;
+
+    right:-80px;
+
+    bottom:-80px;
 
     border-radius:50%;
 
-    background:rgba(124,77,255,.08);
+    background:#c46dff;
 
-    border:1px solid rgba(255,255,255,.08);
+    opacity:.15;
 
-    backdrop-filter:blur(15px);
-
-    animation:floatCircle2 18s ease-in-out infinite;
-
-}
-
-@keyframes floatCircle1{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-35px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-
-}
-
-@keyframes floatCircle2{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(25px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-
+    filter:blur(120px);
 }
 
 /* ==========================================
-   INPUT AUTOFILL FIX
+   ANIMATIONS
 ========================================== */
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus{
+.hero-card,
+.social-btn,
+.auth-btn,
+.input-group input,
+.input-group select{
 
-    -webkit-text-fill-color:#ffffff;
+    transition:
+        transform .3s,
+        border-color .3s,
+        background .3s,
+        box-shadow .3s;
+}
 
-    -webkit-box-shadow:
-        0 0 0px 1000px rgba(255,255,255,.05) inset;
+.input-group:hover input,
+.input-group:hover select{
 
-    transition:background-color 9999s ease-in-out 0s;
-
+    border-color:rgba(123,97,255,.45);
 }
 
 /* ==========================================
-   PLACEHOLDER
+   RESPONSIVE
 ========================================== */
 
-::placeholder{
+@media (max-width:1200px){
 
-    color:#94a3b8;
+    .auth-page{
 
-    opacity:1;
+        gap:40px;
 
-}
-
-/* ==========================================
-   SMOOTH TRANSITIONS
-========================================== */
-
-button,
-input,
-select,
-.auth-card,
-.toggle-btn,
-.footer-link,
-.eye-btn{
-
-    transition:all .3s ease;
-
-}
-
-/* ==========================================
-   ACCESSIBILITY
-========================================== */
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible{
-
-    outline:2px solid #7c4dff;
-    outline-offset:2px;
-
-}
-
-/* ==========================================
-   MOBILE CLEANUP
-========================================== */
-
-@media(max-width:768px){
-
-    .auth-page::before,
-    .auth-page::after{
-
-        display:none;
-
+        padding:40px;
     }
 
-    .auth-card{
+    .auth-left h1{
 
-        animation:none;
+        font-size:3rem;
+    }
+}
 
+@media (max-width:992px){
+
+    .auth-page{
+
+        flex-direction:column;
+
+        justify-content:center;
     }
 
-}
+    .auth-left{
 
-/* ==========================================
-   REDUCED MOTION SUPPORT
-========================================== */
+        width:100%;
 
-@media(prefers-reduced-motion:reduce){
+        max-width:700px;
 
-    *,
-    *::before,
-    *::after{
-
-        animation:none !important;
-        transition:none !important;
-
+        text-align:center;
     }
 
-}
-/* =====================================================
-   FIX FOR AUTHPAGE.JSX CLASS NAMES
-===================================================== */
+    .auth-left p{
 
-.auth-title{
-    color:#fff;
-    font-size:34px;
-    font-weight:700;
-    text-align:center;
-    margin-bottom:12px;
-}
+        margin-inline:auto;
+    }
 
-.auth-subtitle{
-    text-align:center;
-    color:#9ca3af;
-    margin-bottom:30px;
-    line-height:1.6;
+    .hero-features{
+
+        grid-template-columns:1fr 1fr;
+    }
+
+    .auth-wrapper{
+
+        width:100%;
+
+        max-width:480px;
+    }
 }
 
-.auth-btn{
-    margin-top:30px;
-    width:100%;
-    height:58px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(135deg,#7c4dff,#3b82f6);
-    color:#fff;
-    font-size:16px;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    cursor:pointer;
-    transition:.35s;
-    box-shadow:0 12px 30px rgba(124,77,255,.35);
+@media (max-width:768px){
+
+    .auth-page{
+
+        padding:25px 16px;
+    }
+
+    .hero-features{
+
+        grid-template-columns:1fr;
+    }
+
+    .auth-left h1{
+
+        font-size:2.3rem;
+    }
+
+    .auth-wrapper{
+
+        padding:28px 22px;
+    }
+
+    .social-login{
+
+        grid-template-columns:1fr;
+    }
+
+    .auth-toggle{
+
+        flex-direction:column;
+    }
+
+    .auth-toggle button{
+
+        width:100%;
+    }
+
+    .auth-footer{
+
+        flex-direction:column;
+
+        gap:4px;
+    }
 }
 
-.auth-btn:hover{
-    transform:translateY(-4px);
-    box-shadow:0 18px 40px rgba(124,77,255,.45);
-}
+@media (max-width:480px){
 
-.auth-btn:disabled{
-    opacity:.6;
-    cursor:not-allowed;
-}
+    .auth-title{
 
-.password-toggle{
-    position:absolute;
-    right:10px;
-    top:50%;
-    transform:translateY(-50%);
-    width:42px;
-    height:42px;
-    border:none;
-    background:transparent;
-    color:#a5b4c7;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-}
+        font-size:1.7rem;
+    }
 
-.password-toggle:hover{
-    color:#7c4dff;
-}
+    .auth-subtitle{
 
-.link-btn{
-    border:none;
-    background:none;
-    color:#7c4dff;
-    font-weight:600;
-    cursor:pointer;
-}
+        font-size:.9rem;
+    }
 
-.link-btn:hover{
-    color:#60a5fa;
-    text-decoration:underline;
-}
+    .input-group input,
+    .input-group select,
+    .auth-btn{
 
-.auth-error{
-    margin-bottom:20px;
-}
+        height:54px;
+    }
 
-.auth-wrapper{
-    width:100%;
-}
+    .hero-badge{
 
-.auth-card{
-    width:100%;
-    max-width:500px;
+        font-size:.8rem;
+    }
 }

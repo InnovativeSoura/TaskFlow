@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
   useNavigate,
-  useSearchParams,
   useLocation,
+  useSearchParams,
 } from "react-router-dom";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   FaEye,
@@ -15,10 +15,13 @@ import {
   FaUser,
   FaUserTie,
   FaArrowRight,
+  FaGoogle,
+  FaGithub,
+  FaCheckCircle,
 } from "react-icons/fa";
 
-import { useAuth } from "../context/AuthContext";
 import BackgroundAnimation from "../components/BackgroundAnimation";
+import { useAuth } from "../context/AuthContext";
 
 import "../styles/Auth.css";
 
@@ -34,17 +37,41 @@ const AuthPage = () => {
   );
 
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "Team Member",
   });
 
-  const { name, email, password, role } = formData;
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    role,
+  } = formData;
+
+  const switchMode = (loginMode) => {
+    setError("");
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "Team Member",
+    });
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+    setIsLogin(loginMode);
+  };
 
   const handleChange = (e) => {
     setError("");
@@ -56,17 +83,27 @@ const AuthPage = () => {
   };
 
   const validate = () => {
-    if (!email.trim()) return "Email is required.";
+    if (!email.trim()) {
+      return "Email is required.";
+    }
 
-    if (!password.trim()) return "Password is required.";
-
-    if (!isLogin && !name.trim()) {
-      return "Full Name is required.";
+    if (!password.trim()) {
+      return "Password is required.";
     }
 
     if (password.length < 6) {
-      return "Password must be at least 6 characters.";
-    }
+  return "Password must be at least 6 characters.";
+}
+
+  if (!isLogin) {
+    if (!name.trim()) {
+      return "Full Name is required.";
+    } 
+
+  if (password !== confirmPassword) {
+    return "Passwords do not match.";
+  }
+}
 
     return "";
   };
@@ -103,27 +140,20 @@ const AuthPage = () => {
         });
       }
 
-      console.log("LOGIN RESPONSE:", response);
-
       if (!response.success) {
         setError(response.message);
         setLoading(false);
         return;
       }
 
-      console.log("Login Success");
-      console.log("Redirecting...");
-
       const redirect =
-        location.state?.from?.pathname || "/dashboard";
+        location.state?.from?.pathname ||
+        "/dashboard";
 
       navigate(redirect, {
         replace: true,
       });
-
     } catch (err) {
-      console.error(err);
-
       setError(
         err.response?.data?.message ||
           err.message ||
@@ -133,171 +163,342 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
-
-  return (
+    return (
     <>
       <BackgroundAnimation />
 
       <div className="auth-page">
-        <motion.div
-          className="auth-wrapper"
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <h2 className="auth-title">
-            {isLogin
-              ? "Welcome Back 👋"
-              : "Create Account"}
-          </h2>
 
-          <p className="auth-subtitle">
-            {isLogin
-              ? "Login to continue managing your projects."
-              : "Join TaskFlow and start managing your work."}
+        {/* ================= LEFT SIDE ================= */}
+
+        <motion.div
+          className="auth-left"
+          initial={{ x: -60, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <span className="hero-badge">
+            🚀 Smart Project Management
+          </span>
+
+          <h1>
+            Manage Projects
+            <br />
+            <span>Like Never Before</span>
+          </h1>
+
+          <p>
+            Plan projects, organize tasks, collaborate with your
+            team and monitor progress in one beautiful workspace.
           </p>
 
-          {error && (
-            <div className="auth-error">
-              {error}
-            </div>
-          )}
+          <div className="hero-features">
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
-          >
-            {!isLogin && (
-              <>
+            <div className="hero-card">
+              <FaCheckCircle />
+              <span>Real-time Collaboration</span>
+            </div>
+
+            <div className="hero-card">
+              <FaCheckCircle />
+              <span>Kanban Task Boards</span>
+            </div>
+
+            <div className="hero-card">
+              <FaCheckCircle />
+              <span>Project Analytics</span>
+            </div>
+
+            <div className="hero-card">
+              <FaCheckCircle />
+              <span>Instant Notifications</span>
+            </div>
+
+          </div>
+
+        </motion.div>
+
+        {/* ================= RIGHT SIDE ================= */}
+
+        <motion.div
+          className="auth-wrapper"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: .7 }}
+        >
+
+          {/* Toggle */}
+
+          <div className="auth-toggle">
+
+            <button
+              type="button"
+              className={isLogin ? "active" : ""}
+              onClick={() => switchMode(true)}
+            >
+              Login
+            </button>
+
+            <button
+              type="button"
+              className={!isLogin ? "active" : ""}
+              onClick={() => switchMode(false)}
+            >
+              Register
+            </button>
+
+          </div>
+
+          <AnimatePresence mode="wait">
+
+            <motion.div
+              key={isLogin ? "login" : "register"}
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: .35 }}
+            >
+
+              <h2 className="auth-title">
+                {isLogin
+                  ? "Welcome Back 👋"
+                  : "Create Account"}
+              </h2>
+
+              <p className="auth-subtitle">
+                {isLogin
+                  ? "Login to continue managing your projects."
+                  : "Create your TaskFlow account."}
+              </p>
+
+              {error && (
+                <div className="auth-error">
+                  {error}
+                </div>
+              )}
+
+              <div className="social-login">
+
+                <button
+                  type="button"
+                  className="social-btn"
+                >
+                  <FaGoogle />
+                  Google
+                </button>
+
+                <button
+                  type="button"
+                  className="social-btn"
+                >
+                  <FaGithub />
+                  GitHub
+                </button>
+
+              </div>
+
+              <div className="divider">
+                <span>or continue with email</span>
+              </div>
+
+              <form
+                className="auth-form"
+                onSubmit={handleSubmit}
+              >
+                                {!isLogin && (
+                  <>
+                    <div className="input-group">
+                      <FaUser className="input-icon" />
+
+                      <input
+                        type="text"
+                        name="name"
+                        value={name}
+                        onChange={handleChange}
+                        placeholder="Full Name"
+                        autoComplete="name"
+                        required
+                      />
+                    </div>
+
+                    <div className="input-group">
+                      <FaUserTie className="input-icon" />
+
+                      <select
+                        name="role"
+                        value={role}
+                        onChange={handleChange}
+                      >
+                        <option value="Team Member">
+                          Team Member
+                        </option>
+
+                        <option value="Project Manager">
+                          Project Manager
+                        </option>
+
+                        <option value="Admin">
+                          Admin
+                        </option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
                 <div className="input-group">
-                  <FaUser className="input-icon" />
+                  <FaEnvelope className="input-icon" />
 
                   <input
-                    type="text"
-                    name="name"
-                    value={name}
+                    type="email"
+                    name="email"
+                    value={email}
                     onChange={handleChange}
-                    placeholder="Full Name"
+                    placeholder="Email Address"
+                    autoComplete="email"
                     required
                   />
                 </div>
 
-                <div className="input-group">
-                  <FaUserTie className="input-icon" />
+                <div className="input-group password-group">
+                  <FaLock className="input-icon" />
 
-                  <select
-                    name="role"
-                    value={role}
+                  <input
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="password"
+                    value={password}
                     onChange={handleChange}
+                    placeholder="Password"
+                    autoComplete={
+                      isLogin
+                        ? "current-password"
+                        : "new-password"
+                    }
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() =>
+                      setShowPassword((prev) => !prev)
+                    }
                   >
-                    <option value="Team Member">
-                      Team Member
-                    </option>
-
-                    <option value="Project Manager">
-                      Project Manager
-                    </option>
-
-                    <option value="Admin">
-                      Admin
-                    </option>
-                  </select>
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </button>
                 </div>
-              </>
-            )}
 
-            <div className="input-group">
-              <FaEnvelope className="input-icon" />
+                {!isLogin && (
+                  <div className="input-group password-group">
+                    <FaLock className="input-icon" />
 
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                placeholder="Email"
-                required
-              />
-            </div>
+                    <input
+                      type={
+                        showConfirmPassword
+                          ? "text"
+                          : "password"
+                      }
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm Password"
+                      autoComplete="new-password"
+                      required
+                    />
 
-            <div className="input-group password-group">
-              <FaLock className="input-icon" />
-
-              <input
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
-                name="password"
-                value={password}
-                onChange={handleChange}
-                placeholder="Password"
-                required
-              />
-
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() =>
-                  setShowPassword(!showPassword)
-                }
-              >
-                {showPassword ? (
-                  <FaEyeSlash />
-                ) : (
-                  <FaEye />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() =>
+                        setShowConfirmPassword(
+                          (prev) => !prev
+                        )
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <FaEyeSlash />
+                      ) : (
+                        <FaEye />
+                      )}
+                    </button>
+                  </div>
                 )}
-              </button>
-            </div>
 
-            <button
-              className="auth-btn"
-              type="submit"
-            >
-              {loading
-                ? "Please Wait..."
-                : isLogin
-                ? "Login"
-                : "Register"}
-
-              {!loading && <FaArrowRight />}
-            </button>
-          </form>
-
-          <div className="auth-footer">
-            {isLogin ? (
-              <>
-                Don't have an account?
+                {isLogin && (
+                  <div className="forgot-password">
+                    <button
+                      type="button"
+                      className="link-btn"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
 
                 <button
-                  className="link-btn"
-                  type="button"
-                  onClick={() => {
-                    setError("");
-                    setIsLogin(false);
-                  }}
+                  type="submit"
+                  className="auth-btn"
+                  disabled={loading}
                 >
-                  Register
-                </button>
-              </>
-            ) : (
-              <>
-                Already have an account?
+                  {loading
+                    ? "Please Wait..."
+                    : isLogin
+                    ? "Login"
+                    : "Create Account"}
 
-                <button
-                  className="link-btn"
-                  type="button"
-                  onClick={() => {
-                    setError("");
-                    setIsLogin(true);
-                  }}
-                >
-                  Login
+                  {!loading && (
+                    <FaArrowRight />
+                  )}
                 </button>
-              </>
-            )}
-          </div>
+                            </form>
+
+              <div className="auth-footer">
+
+                {isLogin ? (
+                  <>
+                    <span>
+                      Don't have an account?
+                    </span>
+
+                    <button
+                      type="button"
+                      className="link-btn"
+                      onClick={() => switchMode(false)}
+                    >
+                      Register Now
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>
+                      Already have an account?
+                    </span>
+
+                    <button
+                      type="button"
+                      className="link-btn"
+                      onClick={() => switchMode(true)}
+                    >
+                      Login
+                    </button>
+                  </>
+                )}
+
+              </div>
+
+            </motion.div>
+
+          </AnimatePresence>
+
         </motion.div>
+
       </div>
     </>
   );
