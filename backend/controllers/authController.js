@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 /* ======================================================
    FORMAT USER RESPONSE
@@ -112,6 +113,8 @@ export const register = async (req, res) => {
   }
 };
 
+import bcrypt from "bcryptjs";
+
 /* ======================================================
    LOGIN
 ====================================================== */
@@ -121,6 +124,12 @@ export const login = async (req, res) => {
     let { email, password } = req.body;
 
     email = email?.trim().toLowerCase();
+
+    console.log("================================");
+    console.log("LOGIN REQUEST");
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("================================");
 
     if (!email || !password) {
       return res.status(400).json({
@@ -134,12 +143,8 @@ export const login = async (req, res) => {
       email,
     }).select("+password");
 
-    console.log("========== LOGIN ==========");
-    console.log("Email:", email);
-    console.log("User Found:", !!user);
-
     if (!user) {
-      console.log("User not found");
+      console.log("❌ User not found");
 
       return res.status(401).json({
         success: false,
@@ -147,10 +152,16 @@ export const login = async (req, res) => {
       });
     }
 
+    console.log("✅ User Found");
     console.log("Mongo ID:", user._id.toString());
+    console.log("Mongo Email:", user.email);
     console.log("Stored Hash:", user.password);
 
-    const isMatch = await user.matchPassword(password);
+    // Compare directly with bcrypt
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     console.log("Password Match:", isMatch);
 
@@ -174,7 +185,9 @@ export const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    const loggedInUser = await User.findById(user._id).select("-password");
+    const loggedInUser = await User.findById(
+      user._id
+    ).select("-password");
 
     return res.status(200).json({
       success: true,
@@ -184,11 +197,11 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Login Error:", error);
+    console.error("LOGIN ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Server Error",
+      message: error.message,
     });
   }
 };
