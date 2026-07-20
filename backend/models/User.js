@@ -7,10 +7,6 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
-    /* ==========================
-       BASIC INFO
-    ========================== */
-
     name: {
       type: String,
       required: true,
@@ -31,10 +27,6 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false,
     },
-
-    /* ==========================
-       PROFILE
-    ========================== */
 
     avatar: {
       type: String,
@@ -61,10 +53,6 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    /* ==========================
-       ROLE
-    ========================== */
-
     role: {
       type: String,
       enum: [
@@ -75,10 +63,6 @@ const userSchema = new mongoose.Schema(
       default: "Team Member",
     },
 
-    /* ==========================
-       STATUS
-    ========================== */
-
     status: {
       type: String,
       enum: [
@@ -87,10 +71,6 @@ const userSchema = new mongoose.Schema(
       ],
       default: "Active",
     },
-
-    /* ==========================
-       ACCOUNT
-    ========================== */
 
     isVerified: {
       type: Boolean,
@@ -101,10 +81,6 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-
-    /* ==========================
-       PASSWORD RESET
-    ========================== */
 
     resetPasswordToken: {
       type: String,
@@ -125,23 +101,18 @@ const userSchema = new mongoose.Schema(
    HASH PASSWORD
 ====================================================== */
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
+  // Skip hashing if password hasn't changed
   if (!this.isModified("password")) {
-    return next();
+    return;
   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10);
 
-    this.password = await bcrypt.hash(
-      this.password,
-      salt
-    );
-
-    next();
-  } catch (error) {
-    next(error);
-  }
+  this.password = await bcrypt.hash(
+    this.password,
+    salt
+  );
 });
 
 /* ======================================================
@@ -151,15 +122,11 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.matchPassword = async function (
   enteredPassword
 ) {
-  if (!enteredPassword) {
+  if (!enteredPassword || !this.password) {
     return false;
   }
 
-  if (!this.password) {
-    return false;
-  }
-
-  return await bcrypt.compare(
+  return bcrypt.compare(
     enteredPassword,
     this.password
   );
