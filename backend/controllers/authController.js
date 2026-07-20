@@ -118,10 +118,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    let {
-      email,
-      password,
-    } = req.body;
+    let { email, password } = req.body;
 
     email = email?.trim().toLowerCase();
 
@@ -132,18 +129,30 @@ export const login = async (req, res) => {
       });
     }
 
+    // IMPORTANT: include password field
     const user = await User.findOne({
       email,
-    });
+    }).select("+password");
+
+    console.log("========== LOGIN ==========");
+    console.log("Email:", email);
+    console.log("User Found:", !!user);
 
     if (!user) {
+      console.log("User not found");
+
       return res.status(401).json({
         success: false,
         message: "Invalid email or password.",
       });
     }
 
+    console.log("Mongo ID:", user._id.toString());
+    console.log("Stored Hash:", user.password);
+
     const isMatch = await user.matchPassword(password);
+
+    console.log("Password Match:", isMatch);
 
     if (!isMatch) {
       return res.status(401).json({
