@@ -126,13 +126,11 @@ const userSchema = new mongoose.Schema(
 ====================================================== */
 
 userSchema.pre("save", async function (next) {
-
   if (!this.isModified("password")) {
     return next();
   }
 
   try {
-
     const salt = await bcrypt.genSalt(10);
 
     this.password = await bcrypt.hash(
@@ -141,27 +139,30 @@ userSchema.pre("save", async function (next) {
     );
 
     next();
-
   } catch (error) {
-
     next(error);
-
   }
-
 });
 
 /* ======================================================
    MATCH PASSWORD
 ====================================================== */
 
-userSchema.methods.matchPassword =
-  async function (enteredPassword) {
+userSchema.methods.matchPassword = async function (
+  enteredPassword
+) {
+  if (!enteredPassword) {
+    return false;
+  }
 
-    return bcrypt.compare(
-      enteredPassword,
-      this.password
-    );
+  if (!this.password) {
+    return false;
+  }
 
+  return await bcrypt.compare(
+    enteredPassword,
+    this.password
+  );
 };
 
 /* ======================================================
@@ -169,13 +170,11 @@ userSchema.methods.matchPassword =
 ====================================================== */
 
 userSchema.methods.toJSON = function () {
-
   const obj = this.toObject();
 
   delete obj.password;
 
   return obj;
-
 };
 
 const User = mongoose.model(
