@@ -5,7 +5,10 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
 
 import {
   FaEye,
@@ -39,9 +42,13 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
+  const [showPassword, setShowPassword] =
     useState(false);
+
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -59,8 +66,18 @@ const AuthPage = () => {
     role,
   } = formData;
 
+  /* ===============================
+      SWITCH LOGIN / REGISTER
+  =============================== */
+
   const switchMode = (loginMode) => {
+    setIsLogin(loginMode);
+
     setError("");
+
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+
     setFormData({
       name: "",
       email: "",
@@ -68,10 +85,11 @@ const AuthPage = () => {
       confirmPassword: "",
       role: "Team Member",
     });
-    setShowPassword(false);
-    setShowConfirmPassword(false);
-    setIsLogin(loginMode);
   };
+
+  /* ===============================
+      INPUT CHANGE
+  =============================== */
 
   const handleChange = (e) => {
     setError("");
@@ -82,31 +100,37 @@ const AuthPage = () => {
     }));
   };
 
+  /* ===============================
+      VALIDATION
+  =============================== */
+
   const validate = () => {
-    if (!email.trim()) {
+    if (!email.trim())
       return "Email is required.";
-    }
 
-    if (!password.trim()) {
+    if (!password.trim())
       return "Password is required.";
+
+    if (password.length < 6)
+      return "Password must be at least 6 characters.";
+
+    if (!isLogin) {
+      if (!name.trim())
+        return "Full Name is required.";
+
+      if (!confirmPassword.trim())
+        return "Please confirm your password.";
+
+      if (password !== confirmPassword)
+        return "Passwords do not match.";
     }
-
-    if (password.length < 6) {
-  return "Password must be at least 6 characters.";
-}
-
-  if (!isLogin) {
-    if (!name.trim()) {
-      return "Full Name is required.";
-    } 
-
-  if (password !== confirmPassword) {
-    return "Passwords do not match.";
-  }
-}
 
     return "";
   };
+
+  /* ===============================
+      SUBMIT
+  =============================== */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -121,7 +145,6 @@ const AuthPage = () => {
     }
 
     setLoading(true);
-    setError("");
 
     try {
       let response;
@@ -142,7 +165,6 @@ const AuthPage = () => {
 
       if (!response.success) {
         setError(response.message);
-        setLoading(false);
         return;
       }
 
@@ -153,11 +175,12 @@ const AuthPage = () => {
       navigate(redirect, {
         replace: true,
       });
+
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Something went wrong."
+        err.message ||
+        "Something went wrong."
       );
     } finally {
       setLoading(false);
@@ -169,7 +192,9 @@ const AuthPage = () => {
 
       <div className="auth-page">
 
-        {/* ================= LEFT SIDE ================= */}
+        {/* ======================================
+            LEFT HERO
+        ======================================= */}
 
         <motion.div
           className="auth-left"
@@ -189,7 +214,8 @@ const AuthPage = () => {
 
           <p>
             Plan projects, organize tasks, collaborate with your
-            team and monitor progress in one beautiful workspace.
+            team, monitor progress, and boost productivity
+            using one powerful workspace.
           </p>
 
           <div className="hero-features">
@@ -218,22 +244,40 @@ const AuthPage = () => {
 
         </motion.div>
 
-        {/* ================= RIGHT SIDE ================= */}
+        {/* ======================================
+            AUTH CARD
+        ======================================= */}
 
         <motion.div
           className="auth-wrapper"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: .7 }}
+          transition={{ duration: 0.7 }}
         >
 
-          {/* Toggle */}
+          {/* ======================================
+              LOGIN / REGISTER TOGGLE
+          ======================================= */}
 
-          <div className="auth-toggle">
+          <div
+            className={`auth-toggle ${
+            isLogin ? "" : "register"
+            }`}
+          >
+
+            {/* Sliding Active Background */}
+
+            <span
+              className={`toggle-slider ${
+                isLogin ? "left" : "right"
+              }`}
+            />
 
             <button
               type="button"
-              className={isLogin ? "active" : ""}
+              className={`toggle-btn ${
+                isLogin ? "active" : ""
+              }`}
               onClick={() => switchMode(true)}
             >
               Login
@@ -241,7 +285,9 @@ const AuthPage = () => {
 
             <button
               type="button"
-              className={!isLogin ? "active" : ""}
+              className={`toggle-btn ${
+                !isLogin ? "active" : ""
+              }`}
               onClick={() => switchMode(false)}
             >
               Register
@@ -253,10 +299,21 @@ const AuthPage = () => {
 
             <motion.div
               key={isLogin ? "login" : "register"}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: .35 }}
+              initial={{
+                opacity: 0,
+                x: 40,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              exit={{
+                opacity: 0,
+                x: -40,
+              }}
+              transition={{
+                duration: 0.35,
+              }}
             >
 
               <h2 className="auth-title">
@@ -268,7 +325,7 @@ const AuthPage = () => {
               <p className="auth-subtitle">
                 {isLogin
                   ? "Login to continue managing your projects."
-                  : "Create your TaskFlow account."}
+                  : "Join TaskFlow and start managing your team."}
               </p>
 
               {error && (
@@ -277,6 +334,10 @@ const AuthPage = () => {
                 </div>
               )}
 
+              {/* ======================================
+                  SOCIAL LOGIN
+              ======================================= */}
+
               <div className="social-login">
 
                 <button
@@ -284,7 +345,7 @@ const AuthPage = () => {
                   className="social-btn"
                 >
                   <FaGoogle />
-                  Google
+                  <span>Google</span>
                 </button>
 
                 <button
@@ -292,7 +353,7 @@ const AuthPage = () => {
                   className="social-btn"
                 >
                   <FaGithub />
-                  GitHub
+                  <span>GitHub</span>
                 </button>
 
               </div>
@@ -305,159 +366,192 @@ const AuthPage = () => {
                 className="auth-form"
                 onSubmit={handleSubmit}
               >
-                                {!isLogin && (
-                  <>
-                    <div className="input-group">
-                      <FaUser className="input-icon" />
+                {/* ===========================
+    REGISTER ONLY
+=========================== */}
 
-                      <input
-                        type="text"
-                        name="name"
-                        value={name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        autoComplete="name"
-                        required
-                      />
-                    </div>
+{!isLogin && (
+  <>
+    <div className="input-group">
+      <FaUser className="input-icon" />
 
-                    <div className="input-group">
-                      <FaUserTie className="input-icon" />
+      <input
+        type="text"
+        name="name"
+        value={name}
+        onChange={handleChange}
+        placeholder="Full Name"
+        autoComplete="name"
+        required
+      />
+    </div>
 
-                      <select
-                        name="role"
-                        value={role}
-                        onChange={handleChange}
-                      >
-                        <option value="Team Member">
-                          Team Member
-                        </option>
+    <div className="input-group">
+      <FaUserTie className="input-icon" />
 
-                        <option value="Project Manager">
-                          Project Manager
-                        </option>
+      <select
+        name="role"
+        value={role}
+        onChange={handleChange}
+      >
+        <option value="Team Member">
+          Team Member
+        </option>
 
-                        <option value="Admin">
-                          Admin
-                        </option>
-                      </select>
-                    </div>
-                  </>
-                )}
+        <option value="Project Manager">
+          Project Manager
+        </option>
 
-                <div className="input-group">
-                  <FaEnvelope className="input-icon" />
+        <option value="Admin">
+          Admin
+        </option>
+      </select>
+    </div>
+  </>
+)}
 
-                  <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Email Address"
-                    autoComplete="email"
-                    required
-                  />
-                </div>
+{/* ===========================
+    EMAIL
+=========================== */}
 
-                <div className="input-group password-group">
-                  <FaLock className="input-icon" />
+<div className="input-group">
+  <FaEnvelope className="input-icon" />
 
-                  <input
-                    type={
-                      showPassword
-                        ? "text"
-                        : "password"
-                    }
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                    autoComplete={
-                      isLogin
-                        ? "current-password"
-                        : "new-password"
-                    }
-                    required
-                  />
+      <input
+        type="email"
+        name="email"
+        value={email}
+        onChange={handleChange}
+        placeholder="Email Address"
+        autoComplete="email"
+        required
+      />
+  </div>
 
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() =>
-                      setShowPassword((prev) => !prev)
-                    }
-                  >
-                    {showPassword ? (
-                      <FaEyeSlash />
-                    ) : (
-                      <FaEye />
-                    )}
-                  </button>
-                </div>
+{/* ===========================
+    PASSWORD
+=========================== */}
 
-                {!isLogin && (
-                  <div className="input-group password-group">
-                    <FaLock className="input-icon" />
+ <div className="input-group password-group">
+    <FaLock className="input-icon" />
 
-                    <input
-                      type={
-                        showConfirmPassword
-                          ? "text"
-                          : "password"
-                      }
-                      name="confirmPassword"
-                      value={confirmPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm Password"
-                      autoComplete="new-password"
-                      required
-                    />
+    <input
+      type={
+        showPassword
+          ? "text"
+          : "password"
+      }
+      name="password"
+      value={password}
+      onChange={handleChange}
+      placeholder="Password"
+      autoComplete={
+        isLogin
+        ? "current-password"
+        : "new-password"
+      }
+        required
+    />
 
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() =>
-                        setShowConfirmPassword(
-                          (prev) => !prev
-                        )
-                      }
-                    >
-                      {showConfirmPassword ? (
-                        <FaEyeSlash />
-                      ) : (
-                        <FaEye />
-                      )}
-                    </button>
-                  </div>
-                )}
+      <button
+        type="button"
+         className="password-toggle"
+          onClick={() =>
+            setShowPassword(
+              !showPassword
+            )
+          }
+      >
+        {showPassword ? (
+          <FaEyeSlash />
+          ) : (
+            <FaEye />
+          )}
+      </button>
+  </div>
 
-                {isLogin && (
-                  <div className="forgot-password">
-                    <button
-                      type="button"
-                      className="link-btn"
-                    >
-                      Forgot Password?
-                    </button>
-                  </div>
-                )}
+{/* ===========================
+    CONFIRM PASSWORD
+=========================== */}
+
+{!isLogin && (
+  <div className="input-group password-group">
+    <FaLock className="input-icon" />
+
+    <input
+      type={
+        showConfirmPassword
+          ? "text"
+          : "password"
+      }
+      name="confirmPassword"
+      value={confirmPassword}
+      onChange={handleChange}
+      placeholder="Confirm Password"
+      autoComplete="new-password"
+      required
+    />
+
+    <button
+      type="button"
+      className="password-toggle"
+      onClick={() =>
+        setShowConfirmPassword(
+           !showConfirmPassword
+        )
+      }
+    >
+      {showConfirmPassword ? (
+        <FaEyeSlash />
+      ) : (
+        <FaEye />
+      )}
+    </button>
+  </div>
+)}
+
+{/* ===========================
+    FORGOT PASSWORD
+=========================== */}
+
+{isLogin && (
+  <div className="forgot-password">
+    <button
+      type="button"
+      className="link-btn"
+    >
+      Forgot Password?
+    </button>
+  </div>
+)}
+
+{/* ===========================
+    SUBMIT BUTTON
+=========================== */}
+
+                {/* Submit Button */}
 
                 <button
                   type="submit"
                   className="auth-btn"
                   disabled={loading}
                 >
-                  {loading
-                    ? "Please Wait..."
-                    : isLogin
-                    ? "Login"
-                    : "Create Account"}
+                  {loading ? (
+                    "Please Wait..."
+                  ) : (
+                    <>
+                      {isLogin
+                        ? "Login"
+                        : "Create Account"}
 
-                  {!loading && (
-                    <FaArrowRight />
+                      <FaArrowRight />
+                    </>
                   )}
                 </button>
-                            </form>
+
+              </form>
+
+              {/* Footer */}
 
               <div className="auth-footer">
 
@@ -500,6 +594,7 @@ const AuthPage = () => {
         </motion.div>
 
       </div>
+
     </>
   );
 };
