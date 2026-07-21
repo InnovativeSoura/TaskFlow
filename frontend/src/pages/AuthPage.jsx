@@ -26,7 +26,7 @@ import {
 import BackgroundAnimation from "../components/BackgroundAnimation";
 import { useAuth } from "../context/AuthContext";
 
-import "../styles/AuthCard.css";
+import "../styles/Auth.css";
 
 const AuthPage = () => {
   const navigate = useNavigate();
