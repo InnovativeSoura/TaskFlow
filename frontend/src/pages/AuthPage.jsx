@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   useNavigate,
   useLocation,
@@ -29,18 +30,40 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 const AuthPage = () => {
+  /* ==========================================
+      ROUTER
+  ========================================== */
+
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  const { login, register } = useAuth();
+  /* ==========================================
+      AUTH CONTEXT
+  ========================================== */
+
+  const {
+    login,
+    register,
+  } = useAuth();
+
+  /* ==========================================
+      LOGIN / REGISTER MODE
+  ========================================== */
 
   const [isLogin, setIsLogin] = useState(
     searchParams.get("mode") !== "register"
   );
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  /* ==========================================
+      UI STATE
+  ========================================== */
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
 
   const [showPassword, setShowPassword] =
     useState(false);
@@ -49,6 +72,10 @@ const AuthPage = () => {
     showConfirmPassword,
     setShowConfirmPassword,
   ] = useState(false);
+
+  /* ==========================================
+      FORM STATE
+  ========================================== */
 
   const [formData, setFormData] = useState({
     name: "",
@@ -65,18 +92,8 @@ const AuthPage = () => {
     confirmPassword,
     role,
   } = formData;
-
-  /* ===============================
-      SWITCH LOGIN / REGISTER
-  =============================== */
-
-  const switchMode = (loginMode) => {
-    setIsLogin(loginMode);
-
+    const switchMode = (loginMode) => {
     setError("");
-
-    setShowPassword(false);
-    setShowConfirmPassword(false);
 
     setFormData({
       name: "",
@@ -85,11 +102,21 @@ const AuthPage = () => {
       confirmPassword: "",
       role: "Team Member",
     });
-  };
 
-  /* ===============================
-      INPUT CHANGE
-  =============================== */
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+
+    setIsLogin(loginMode);
+
+    navigate(
+      loginMode
+        ? "/auth?mode=login"
+        : "/auth?mode=register",
+      {
+        replace: true,
+      }
+    );
+  };
 
   const handleChange = (e) => {
     setError("");
@@ -100,37 +127,31 @@ const AuthPage = () => {
     }));
   };
 
-  /* ===============================
-      VALIDATION
-  =============================== */
-
   const validate = () => {
-    if (!email.trim())
+    if (!email.trim()) {
       return "Email is required.";
+    }
 
-    if (!password.trim())
+    if (!password.trim()) {
       return "Password is required.";
+    }
 
-    if (password.length < 6)
+    if (password.length < 6) {
       return "Password must be at least 6 characters.";
+    }
 
     if (!isLogin) {
-      if (!name.trim())
+      if (!name.trim()) {
         return "Full Name is required.";
+      }
 
-      if (!confirmPassword.trim())
-        return "Please confirm your password.";
-
-      if (password !== confirmPassword)
+      if (password !== confirmPassword) {
         return "Passwords do not match.";
+      }
     }
 
     return "";
   };
-
-  /* ===============================
-      SUBMIT
-  =============================== */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,6 +166,7 @@ const AuthPage = () => {
     }
 
     setLoading(true);
+    setError("");
 
     try {
       let response;
@@ -165,6 +187,7 @@ const AuthPage = () => {
 
       if (!response.success) {
         setError(response.message);
+        setLoading(false);
         return;
       }
 
@@ -175,26 +198,23 @@ const AuthPage = () => {
       navigate(redirect, {
         replace: true,
       });
-
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        err.message ||
-        "Something went wrong."
+          err.message ||
+          "Something went wrong."
       );
     } finally {
       setLoading(false);
     }
   };
-    return (
+
+  return (
     <>
       <BackgroundAnimation />
 
       <div className="auth-page">
-
-        {/* ======================================
-            LEFT HERO
-        ======================================= */}
+              {/* ================= LEFT PANEL ================= */}
 
         <motion.div
           className="auth-left"
@@ -213,9 +233,9 @@ const AuthPage = () => {
           </h1>
 
           <p>
-            Plan projects, organize tasks, collaborate with your
-            team, monitor progress, and boost productivity
-            using one powerful workspace.
+            Plan projects, organize tasks, collaborate with
+            your team, track productivity and deliver
+            projects faster using one beautiful workspace.
           </p>
 
           <div className="hero-features">
@@ -227,12 +247,12 @@ const AuthPage = () => {
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Kanban Task Boards</span>
+              <span>Kanban Boards</span>
             </div>
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Project Analytics</span>
+              <span>Analytics Dashboard</span>
             </div>
 
             <div className="hero-card">
@@ -241,12 +261,9 @@ const AuthPage = () => {
             </div>
 
           </div>
-
         </motion.div>
 
-        {/* ======================================
-            AUTH CARD
-        ======================================= */}
+        {/* ================= RIGHT PANEL ================= */}
 
         <motion.div
           className="auth-wrapper"
@@ -255,29 +272,12 @@ const AuthPage = () => {
           transition={{ duration: 0.7 }}
         >
 
-          {/* ======================================
-              LOGIN / REGISTER TOGGLE
-          ======================================= */}
+          {/* LOGIN / REGISTER TOGGLE */}
 
-          <div
-            className={`auth-toggle ${
-            isLogin ? "" : "register"
-            }`}
-          >
-
-            {/* Sliding Active Background */}
-
-            <span
-              className={`toggle-slider ${
-                isLogin ? "left" : "right"
-              }`}
-            />
-
+          <div className="auth-toggle">
             <button
               type="button"
-              className={`toggle-btn ${
-                isLogin ? "active" : ""
-              }`}
+              className={isLogin ? "active" : ""}
               onClick={() => switchMode(true)}
             >
               Login
@@ -285,23 +285,28 @@ const AuthPage = () => {
 
             <button
               type="button"
-              className={`toggle-btn ${
-                !isLogin ? "active" : ""
-              }`}
+              className={!isLogin ? "active" : ""}
               onClick={() => switchMode(false)}
             >
               Register
             </button>
 
+            <span
+              className={`toggle-slider ${
+                isLogin ? "login" : "register"
+              }`}
+            />
           </div>
 
-          <AnimatePresence mode="wait">
-
+          <AnimatePresence
+            mode="wait"
+            initial={false}
+          >
             <motion.div
               key={isLogin ? "login" : "register"}
               initial={{
                 opacity: 0,
-                x: 40,
+                x: isLogin ? -50 : 50,
               }}
               animate={{
                 opacity: 1,
@@ -309,13 +314,12 @@ const AuthPage = () => {
               }}
               exit={{
                 opacity: 0,
-                x: -40,
+                x: isLogin ? 50 : -50,
               }}
               transition={{
                 duration: 0.35,
               }}
             >
-
               <h2 className="auth-title">
                 {isLogin
                   ? "Welcome Back 👋"
@@ -325,7 +329,7 @@ const AuthPage = () => {
               <p className="auth-subtitle">
                 {isLogin
                   ? "Login to continue managing your projects."
-                  : "Join TaskFlow and start managing your team."}
+                  : "Create your TaskFlow account."}
               </p>
 
               {error && (
@@ -333,10 +337,7 @@ const AuthPage = () => {
                   {error}
                 </div>
               )}
-
-              {/* ======================================
-                  SOCIAL LOGIN
-              ======================================= */}
+                            {/* ================= SOCIAL LOGIN ================= */}
 
               <div className="social-login">
 
@@ -362,196 +363,164 @@ const AuthPage = () => {
                 <span>or continue with email</span>
               </div>
 
+              {/* ================= FORM ================= */}
+
               <form
                 className="auth-form"
                 onSubmit={handleSubmit}
               >
-                {/* ===========================
-    REGISTER ONLY
-=========================== */}
 
-{!isLogin && (
-  <>
-    <div className="input-group">
-      <FaUser className="input-icon" />
+                {!isLogin && (
+                  <>
+                    <div className="input-group">
+                      <FaUser className="input-icon" />
 
-      <input
-        type="text"
-        name="name"
-        value={name}
-        onChange={handleChange}
-        placeholder="Full Name"
-        autoComplete="name"
-        required
-      />
-    </div>
+                      <input
+                        type="text"
+                        name="name"
+                        value={name}
+                        onChange={handleChange}
+                        placeholder="Full Name"
+                        autoComplete="name"
+                        required
+                      />
+                    </div>
 
-    <div className="input-group">
-      <FaUserTie className="input-icon" />
+                    <div className="input-group">
+                      <FaUserTie className="input-icon" />
 
-      <select
-        name="role"
-        value={role}
-        onChange={handleChange}
-      >
-        <option value="Team Member">
-          Team Member
-        </option>
+                      <select
+                        name="role"
+                        value={role}
+                        onChange={handleChange}
+                      >
+                        <option value="Team Member">
+                          Team Member
+                        </option>
 
-        <option value="Project Manager">
-          Project Manager
-        </option>
+                        <option value="Project Manager">
+                          Project Manager
+                        </option>
 
-        <option value="Admin">
-          Admin
-        </option>
-      </select>
-    </div>
-  </>
-)}
+                        <option value="Admin">
+                          Admin
+                        </option>
+                      </select>
+                    </div>
+                  </>
+                )}
 
-{/* ===========================
-    EMAIL
-=========================== */}
+                <div className="input-group">
+                  <FaEnvelope className="input-icon" />
 
-<div className="input-group">
-  <FaEnvelope className="input-icon" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    placeholder="Email Address"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
 
-      <input
-        type="email"
-        name="email"
-        value={email}
-        onChange={handleChange}
-        placeholder="Email Address"
-        autoComplete="email"
-        required
-      />
-  </div>
+                <div className="input-group password-group">
+                  <FaLock className="input-icon" />
 
-{/* ===========================
-    PASSWORD
-=========================== */}
+                  <input
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="password"
+                    value={password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                    autoComplete={
+                      isLogin
+                        ? "current-password"
+                        : "new-password"
+                    }
+                    required
+                  />
 
- <div className="input-group password-group">
-    <FaLock className="input-icon" />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() =>
+                      setShowPassword((prev) => !prev)
+                    }
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </button>
+                </div>
+                                {!isLogin && (
+                  <div className="input-group password-group">
+                    <FaLock className="input-icon" />
 
-    <input
-      type={
-        showPassword
-          ? "text"
-          : "password"
-      }
-      name="password"
-      value={password}
-      onChange={handleChange}
-      placeholder="Password"
-      autoComplete={
-        isLogin
-        ? "current-password"
-        : "new-password"
-      }
-        required
-    />
+                    <input
+                      type={
+                        showConfirmPassword
+                          ? "text"
+                          : "password"
+                      }
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm Password"
+                      autoComplete="new-password"
+                      required
+                    />
 
-      <button
-        type="button"
-         className="password-toggle"
-          onClick={() =>
-            setShowPassword(
-              !showPassword
-            )
-          }
-      >
-        {showPassword ? (
-          <FaEyeSlash />
-          ) : (
-            <FaEye />
-          )}
-      </button>
-  </div>
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() =>
+                        setShowConfirmPassword(
+                          (prev) => !prev
+                        )
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <FaEyeSlash />
+                      ) : (
+                        <FaEye />
+                      )}
+                    </button>
+                  </div>
+                )}
 
-{/* ===========================
-    CONFIRM PASSWORD
-=========================== */}
-
-{!isLogin && (
-  <div className="input-group password-group">
-    <FaLock className="input-icon" />
-
-    <input
-      type={
-        showConfirmPassword
-          ? "text"
-          : "password"
-      }
-      name="confirmPassword"
-      value={confirmPassword}
-      onChange={handleChange}
-      placeholder="Confirm Password"
-      autoComplete="new-password"
-      required
-    />
-
-    <button
-      type="button"
-      className="password-toggle"
-      onClick={() =>
-        setShowConfirmPassword(
-           !showConfirmPassword
-        )
-      }
-    >
-      {showConfirmPassword ? (
-        <FaEyeSlash />
-      ) : (
-        <FaEye />
-      )}
-    </button>
-  </div>
-)}
-
-{/* ===========================
-    FORGOT PASSWORD
-=========================== */}
-
-{isLogin && (
-  <div className="forgot-password">
-    <button
-      type="button"
-      className="link-btn"
-    >
-      Forgot Password?
-    </button>
-  </div>
-)}
-
-{/* ===========================
-    SUBMIT BUTTON
-=========================== */}
-
-                {/* Submit Button */}
+                {isLogin && (
+                  <div className="forgot-password">
+                    <button
+                      type="button"
+                      className="link-btn"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
 
                 <button
                   type="submit"
                   className="auth-btn"
                   disabled={loading}
                 >
-                  {loading ? (
-                    "Please Wait..."
-                  ) : (
-                    <>
-                      {isLogin
-                        ? "Login"
-                        : "Create Account"}
+                  {loading
+                    ? "Please Wait..."
+                    : isLogin
+                    ? "Login"
+                    : "Create Account"}
 
-                      <FaArrowRight />
-                    </>
-                  )}
+                  {!loading && <FaArrowRight />}
                 </button>
 
               </form>
-
-              {/* Footer */}
 
               <div className="auth-footer">
 
