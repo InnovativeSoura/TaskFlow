@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   useNavigate,
   useLocation,
@@ -30,40 +29,18 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 const AuthPage = () => {
-  /* ==========================================
-      ROUTER
-  ========================================== */
-
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  /* ==========================================
-      AUTH CONTEXT
-  ========================================== */
-
-  const {
-    login,
-    register,
-  } = useAuth();
-
-  /* ==========================================
-      LOGIN / REGISTER MODE
-  ========================================== */
+  const { login, register } = useAuth();
 
   const [isLogin, setIsLogin] = useState(
     searchParams.get("mode") !== "register"
   );
 
-  /* ==========================================
-      UI STATE
-  ========================================== */
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [showPassword, setShowPassword] =
     useState(false);
@@ -72,10 +49,6 @@ const AuthPage = () => {
     showConfirmPassword,
     setShowConfirmPassword,
   ] = useState(false);
-
-  /* ==========================================
-      FORM STATE
-  ========================================== */
 
   const [formData, setFormData] = useState({
     name: "",
@@ -92,7 +65,8 @@ const AuthPage = () => {
     confirmPassword,
     role,
   } = formData;
-    const switchMode = (loginMode) => {
+
+  const switchMode = (loginMode) => {
     setError("");
 
     setFormData({
@@ -152,8 +126,7 @@ const AuthPage = () => {
 
     return "";
   };
-
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (loading) return;
@@ -187,7 +160,6 @@ const AuthPage = () => {
 
       if (!response.success) {
         setError(response.message);
-        setLoading(false);
         return;
       }
 
@@ -201,8 +173,8 @@ const AuthPage = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Something went wrong."
+        err.message ||
+        "Something went wrong."
       );
     } finally {
       setLoading(false);
@@ -214,13 +186,22 @@ const AuthPage = () => {
       <BackgroundAnimation />
 
       <div className="auth-page">
-              {/* ================= LEFT PANEL ================= */}
+
+        {/* ================= LEFT SIDE ================= */}
 
         <motion.div
           className="auth-left"
-          initial={{ x: -60, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{
+            x: -60,
+            opacity: 0,
+          }}
+          animate={{
+            x: 0,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.8,
+          }}
         >
           <span className="hero-badge">
             🚀 Smart Project Management
@@ -233,69 +214,102 @@ const AuthPage = () => {
           </h1>
 
           <p>
-            Plan projects, organize tasks, collaborate with
-            your team, track productivity and deliver
-            projects faster using one beautiful workspace.
+            Plan projects, organize tasks,
+            collaborate with your team and
+            monitor progress in one beautiful
+            workspace.
           </p>
 
           <div className="hero-features">
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Real-time Collaboration</span>
+              <span>
+                Real-time Collaboration
+              </span>
             </div>
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Kanban Boards</span>
+              <span>
+                Kanban Boards
+              </span>
             </div>
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Analytics Dashboard</span>
+              <span>
+                Project Analytics
+              </span>
             </div>
 
             <div className="hero-card">
               <FaCheckCircle />
-              <span>Instant Notifications</span>
+              <span>
+                Smart Notifications
+              </span>
             </div>
 
           </div>
         </motion.div>
 
-        {/* ================= RIGHT PANEL ================= */}
+        {/* ================= RIGHT SIDE ================= */}
 
         <motion.div
           className="auth-wrapper"
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7 }}
+          initial={{
+            y: 40,
+            opacity: 0,
+          }}
+          animate={{
+            y: 0,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
         >
 
-          {/* LOGIN / REGISTER TOGGLE */}
+          {/* ================= TOGGLE ================= */}
 
           <div className="auth-toggle">
+
+            <div
+              className={`toggle-slider ${
+                isLogin
+                  ? "login"
+                  : "register"
+              }`}
+            />
+
             <button
               type="button"
-              className={isLogin ? "active" : ""}
-              onClick={() => switchMode(true)}
+              className={
+                isLogin
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                switchMode(true)
+              }
             >
               Login
             </button>
 
             <button
               type="button"
-              className={!isLogin ? "active" : ""}
-              onClick={() => switchMode(false)}
+              className={
+                !isLogin
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                switchMode(false)
+              }
             >
               Register
             </button>
 
-            <span
-              className={`toggle-slider ${
-                isLogin ? "login" : "register"
-              }`}
-            />
           </div>
 
           <AnimatePresence
@@ -303,10 +317,14 @@ const AuthPage = () => {
             initial={false}
           >
             <motion.div
-              key={isLogin ? "login" : "register"}
+              key={
+                isLogin
+                  ? "login"
+                  : "register"
+              }
               initial={{
                 opacity: 0,
-                x: isLogin ? -50 : 50,
+                x: 50,
               }}
               animate={{
                 opacity: 1,
@@ -314,13 +332,13 @@ const AuthPage = () => {
               }}
               exit={{
                 opacity: 0,
-                x: isLogin ? 50 : -50,
+                x: -50,
               }}
               transition={{
                 duration: 0.35,
               }}
             >
-              <h2 className="auth-title">
+                            <h2 className="auth-title">
                 {isLogin
                   ? "Welcome Back 👋"
                   : "Create Account"}
@@ -337,7 +355,8 @@ const AuthPage = () => {
                   {error}
                 </div>
               )}
-                            {/* ================= SOCIAL LOGIN ================= */}
+
+              {/* ================= SOCIAL LOGIN ================= */}
 
               <div className="social-login">
 
@@ -360,7 +379,9 @@ const AuthPage = () => {
               </div>
 
               <div className="divider">
-                <span>or continue with email</span>
+                <span>
+                  or continue with email
+                </span>
               </div>
 
               {/* ================= FORM ================= */}
@@ -372,7 +393,9 @@ const AuthPage = () => {
 
                 {!isLogin && (
                   <>
+
                     <div className="input-group">
+
                       <FaUser className="input-icon" />
 
                       <input
@@ -384,9 +407,11 @@ const AuthPage = () => {
                         autoComplete="name"
                         required
                       />
+
                     </div>
 
                     <div className="input-group">
+
                       <FaUserTie className="input-icon" />
 
                       <select
@@ -405,12 +430,16 @@ const AuthPage = () => {
                         <option value="Admin">
                           Admin
                         </option>
+
                       </select>
+
                     </div>
+
                   </>
                 )}
 
                 <div className="input-group">
+
                   <FaEnvelope className="input-icon" />
 
                   <input
@@ -422,9 +451,11 @@ const AuthPage = () => {
                     autoComplete="email"
                     required
                   />
+
                 </div>
 
                 <div className="input-group password-group">
+
                   <FaLock className="input-icon" />
 
                   <input
@@ -449,7 +480,9 @@ const AuthPage = () => {
                     type="button"
                     className="password-toggle"
                     onClick={() =>
-                      setShowPassword((prev) => !prev)
+                      setShowPassword(
+                        (prev) => !prev
+                      )
                     }
                   >
                     {showPassword ? (
@@ -458,9 +491,11 @@ const AuthPage = () => {
                       <FaEye />
                     )}
                   </button>
+
                 </div>
-                                {!isLogin && (
+                              {!isLogin && (
                   <div className="input-group password-group">
+
                     <FaLock className="input-icon" />
 
                     <input
@@ -492,6 +527,7 @@ const AuthPage = () => {
                         <FaEye />
                       )}
                     </button>
+
                   </div>
                 )}
 
@@ -511,16 +547,22 @@ const AuthPage = () => {
                   className="auth-btn"
                   disabled={loading}
                 >
-                  {loading
-                    ? "Please Wait..."
-                    : isLogin
-                    ? "Login"
-                    : "Create Account"}
+                  {loading ? (
+                    "Please Wait..."
+                  ) : (
+                    <>
+                      {isLogin
+                        ? "Login"
+                        : "Create Account"}
 
-                  {!loading && <FaArrowRight />}
+                      <FaArrowRight />
+                    </>
+                  )}
                 </button>
 
               </form>
+
+              {/* ================= FOOTER ================= */}
 
               <div className="auth-footer">
 
@@ -533,7 +575,9 @@ const AuthPage = () => {
                     <button
                       type="button"
                       className="link-btn"
-                      onClick={() => switchMode(false)}
+                      onClick={() =>
+                        switchMode(false)
+                      }
                     >
                       Register Now
                     </button>
@@ -547,7 +591,9 @@ const AuthPage = () => {
                     <button
                       type="button"
                       className="link-btn"
-                      onClick={() => switchMode(true)}
+                      onClick={() =>
+                        switchMode(true)
+                      }
                     >
                       Login
                     </button>
