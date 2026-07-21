@@ -475,9 +475,8 @@ body{
 
 
 /* ==========================================================
-   LOGIN / REGISTER TOGGLE
+   LOGIN REGISTER TOGGLE FIXED
 ========================================================== */
-
 
 .auth-toggle{
 
@@ -493,18 +492,95 @@ body{
 
     border-radius:999px;
 
+    background:rgba(255,255,255,.06);
 
-    background:
-
-        rgba(255,255,255,.06);
-
-
-    border:
-
-        1px solid rgba(255,255,255,.08);
-
+    border:1px solid rgba(255,255,255,.08);
 
     overflow:hidden;
+
+}
+
+
+/* Sliding Background */
+
+.toggle-slider{
+
+    position:absolute;
+
+    top:5px;
+
+    left:5px;
+
+    width:calc(50% - 5px);
+
+    height:calc(100% - 10px);
+
+    border-radius:999px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    box-shadow:
+    0 12px 35px rgba(99,102,241,.35);
+
+    transition:
+    transform .45s cubic-bezier(.22,1,.36,1);
+
+    z-index:1;
+
+}
+
+
+/* Login Position */
+
+.toggle-slider.login{
+
+    transform:translateX(0);
+
+}
+
+
+/* Register Position */
+
+.toggle-slider.register{
+
+    transform:translateX(100%);
+
+}
+
+
+/* Buttons */
+
+.auth-toggle button{
+
+    flex:1;
+
+    position:relative;
+
+    z-index:2;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    color:#9ca3af;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+
+.auth-toggle button.active{
+
+    color:white;
 
 }
 
