@@ -1895,18 +1895,11 @@ select:focus-visible{
 */
 
 
-.auth-page,
-.auth-wrapper,
-.auth-form,
-.hero-card,
-.social-btn,
-.auth-btn,
-.input-group,
-.auth-toggle{
+.auth-toggle,
+.toggle-slider{
 
     transition:
-
-        all .35s ease;
+        transform .45s cubic-bezier(.22,1,.36,1);
 
 }
 
