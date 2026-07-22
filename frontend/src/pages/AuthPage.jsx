@@ -30,8 +30,8 @@ import { useAuth } from "../context/AuthContext";
 
 import "../styles/Auth.css";
 
-
 const AuthPage = () => {
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -66,7 +66,7 @@ const AuthPage = () => {
   ] = useState(false);
 
   /* ==========================================
-      FORM
+      FORM DATA
   ========================================== */
 
   const [formData, setFormData] = useState({
@@ -86,10 +86,11 @@ const AuthPage = () => {
   } = formData;
 
   /* ==========================================
-      SWITCH LOGIN / REGISTER
+      SWITCH MODE
   ========================================== */
 
   const switchMode = (loginMode) => {
+
     if (loginMode === isLogin) return;
 
     setError("");
@@ -122,6 +123,7 @@ const AuthPage = () => {
   ========================================== */
 
   const handleChange = (e) => {
+
     setError("");
 
     setFormData((prev) => ({
@@ -129,6 +131,7 @@ const AuthPage = () => {
       [e.target.name]:
         e.target.value,
     }));
+
   };
 
   /* ==========================================
@@ -136,29 +139,28 @@ const AuthPage = () => {
   ========================================== */
 
   const validate = () => {
-    if (!email.trim()) {
+
+    if (!email.trim())
       return "Email is required.";
-    }
 
-    if (!password.trim()) {
+    if (!password.trim())
       return "Password is required.";
-    }
 
-    if (password.length < 6) {
+    if (password.length < 6)
       return "Password must be at least 6 characters.";
-    }
 
     if (!isLogin) {
-      if (!name.trim()) {
-        return "Full Name is required.";
-      }
 
-      if (password !== confirmPassword) {
+      if (!name.trim())
+        return "Full Name is required.";
+
+      if (password !== confirmPassword)
         return "Passwords do not match.";
-      }
+
     }
 
     return "";
+
   };
 
   /* ==========================================
@@ -166,6 +168,7 @@ const AuthPage = () => {
   ========================================== */
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     if (loading) return;
@@ -182,44 +185,58 @@ const AuthPage = () => {
     setError("");
 
     try {
+
       let response;
 
       if (isLogin) {
+
         response = await login({
           email: email.trim(),
           password,
         });
+
       } else {
+
         response = await register({
           name: name.trim(),
           email: email.trim(),
           password,
           role,
         });
+
       }
 
       if (!response.success) {
+
         setError(response.message);
 
         setLoading(false);
 
         return;
+
       }
 
       navigate("/dashboard", {
         replace: true,
       });
+
     } catch (err) {
+
       setError(
         err.response?.data?.message ||
-          err.message ||
-          "Something went wrong."
+        err.message ||
+        "Something went wrong."
       );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
-    /* ==========================================
+
+  /* ==========================================
       JSX
   ========================================== */
 
@@ -229,9 +246,7 @@ const AuthPage = () => {
 
       <div className="auth-page">
 
-        {/* =====================================
-            LEFT SIDE
-        ====================================== */}
+        {/* LEFT SIDE */}
 
         <motion.section
           className="auth-left"
@@ -244,7 +259,7 @@ const AuthPage = () => {
             x: 0,
           }}
           transition={{
-            duration: 0.8,
+            duration: .8,
           }}
         >
 
@@ -253,61 +268,79 @@ const AuthPage = () => {
           </span>
 
           <h1>
+
             Manage Projects
+
             <br />
 
             <span>
               Like Never Before
             </span>
+
           </h1>
 
           <p>
-            Plan projects, organize tasks,
+
+            Plan projects,
+
+            organize tasks,
+
             collaborate with your team,
-            monitor progress and boost
-            productivity with one powerful
-            workspace.
+
+            monitor progress,
+
+            and boost productivity
+
+            with one powerful workspace.
+
           </p>
 
           <div className="hero-features">
 
             <div className="hero-card">
+
               <FaCheckCircle />
 
               <span>
                 Real-time Collaboration
               </span>
+
             </div>
 
             <div className="hero-card">
+
               <FaCheckCircle />
 
               <span>
                 Kanban Boards
               </span>
+
             </div>
 
             <div className="hero-card">
+
               <FaCheckCircle />
 
               <span>
-                Project Analytics
+                Analytics Dashboard
               </span>
+
             </div>
 
             <div className="hero-card">
+
               <FaCheckCircle />
 
               <span>
                 Team Notifications
               </span>
+
             </div>
 
           </div>
 
         </motion.section>
-
-        {/* =====================================
+                {/* =====================================
             RIGHT SIDE
         ====================================== */}
 
@@ -315,154 +348,110 @@ const AuthPage = () => {
           className="auth-wrapper"
           initial={{
             opacity: 0,
-            y: 40,
+            x: 60,
           }}
           animate={{
             opacity: 1,
-            y: 0,
+            x: 0,
           }}
           transition={{
-            duration: .6,
+            duration: 0.6,
           }}
         >
-
           <div className="auth-card">
 
-            {/* ============================
-                TOGGLE
-            ============================= */}
+            {/* ==========================
+                LOGIN / REGISTER TOGGLE
+            ========================== */}
 
             <div className="auth-toggle">
 
               <div
                 className={`toggle-slider ${
-                  isLogin
-                    ? "login"
-                    : "register"
+                  isLogin ? "login" : "register"
                 }`}
               />
 
               <button
                 type="button"
-                className={
-                  isLogin
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  switchMode(true)
-                }
+                className={isLogin ? "active" : ""}
+                onClick={() => switchMode(true)}
               >
                 Login
               </button>
 
               <button
                 type="button"
-                className={
-                  !isLogin
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  switchMode(false)
-                }
+                className={!isLogin ? "active" : ""}
+                onClick={() => switchMode(false)}
               >
                 Register
               </button>
 
             </div>
 
-            <AnimatePresence
-              mode="wait"
-            >
+            <AnimatePresence mode="wait">
 
               <motion.div
-                key={
-                  isLogin
-                    ? "login"
-                    : "register"
-                }
+                key={isLogin ? "login" : "register"}
                 initial={{
                   opacity: 0,
-                  x: 40,
+                  y: 20,
                 }}
                 animate={{
                   opacity: 1,
-                  x: 0,
+                  y: 0,
                 }}
                 exit={{
                   opacity: 0,
-                  x: -40,
+                  y: -20,
                 }}
                 transition={{
-                  duration: .35,
+                  duration: 0.35,
                 }}
               >
-                                {/* ==========================
-                    TITLE
+
+                {/* ==========================
+                    HEADER
                 ========================== */}
 
-                <h2 className="auth-title">
-                  {isLogin
-                    ? "Welcome Back 👋"
-                    : "Create Your Account"}
-                </h2>
+                <div className="auth-header">
 
-                <p className="auth-subtitle">
-                  {isLogin
-                    ? "Login to continue managing your projects."
-                    : "Join TaskFlow and start collaborating today."}
-                </p>
+                  <h2 className="auth-title">
+                    {isLogin
+                      ? "Welcome Back 👋"
+                      : "Create Account"}
+                  </h2>
+
+                  <p className="auth-subtitle">
+                    {isLogin
+                      ? "Sign in to continue managing your workspace."
+                      : "Create your TaskFlow account and start collaborating today."}
+                  </p>
+
+                </div>
 
                 {/* ==========================
                     ERROR
                 ========================== */}
 
                 {error && (
-                  <div className="auth-error">
+
+                  <motion.div
+                    className="auth-error"
+                    initial={{
+                      opacity: 0,
+                      y: -10,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                  >
                     {error}
-                  </div>
+                  </motion.div>
+
                 )}
-
-                {/* ==========================
-                    SOCIAL LOGIN
-                ========================== */}
-
-                <div className="social-login">
-
-                  <button
-                    type="button"
-                    className="social-btn"
-                  >
-                    <FaGoogle />
-
-                    <span>
-                      Google
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="social-btn"
-                  >
-                    <FaGithub />
-
-                    <span>
-                      GitHub
-                    </span>
-                  </button>
-
-                </div>
-
-                {/* ==========================
-                    DIVIDER
-                ========================== */}
-
-                <div className="divider">
-                  <span>
-                    or continue with email
-                  </span>
-                </div>
 
                 {/* ==========================
                     FORM
@@ -478,13 +467,12 @@ const AuthPage = () => {
                   ====================== */}
 
                   {!isLogin && (
+
                     <>
 
                       <div className="input-group">
 
-                        <FaUser
-                          className="input-icon"
-                        />
+                        <FaUser className="input-icon" />
 
                         <input
                           type="text"
@@ -500,15 +488,14 @@ const AuthPage = () => {
 
                       <div className="input-group">
 
-                        <FaUserTie
-                          className="input-icon"
-                        />
+                        <FaUserTie className="input-icon" />
 
                         <select
                           name="role"
                           value={role}
                           onChange={handleChange}
                         >
+
                           <option value="Team Member">
                             Team Member
                           </option>
@@ -526,6 +513,7 @@ const AuthPage = () => {
                       </div>
 
                     </>
+
                   )}
 
                   {/* ======================
@@ -549,7 +537,8 @@ const AuthPage = () => {
                     />
 
                   </div>
-                                    {/* ======================
+
+                  {/* ======================
                       PASSWORD
                   ====================== */}
 
@@ -582,20 +571,17 @@ const AuthPage = () => {
                       className="password-toggle"
                       onClick={() =>
                         setShowPassword(
-                          (prev) => !prev
+                          prev => !prev
                         )
                       }
                     >
-                      {showPassword ? (
-                        <FaEyeSlash />
-                      ) : (
-                        <FaEye />
-                      )}
+                      {showPassword
+                        ? <FaEyeSlash />
+                        : <FaEye />}
                     </button>
 
                   </div>
-
-                  {/* ======================
+                                    {/* ======================
                       CONFIRM PASSWORD
                   ====================== */}
 
@@ -626,15 +612,13 @@ const AuthPage = () => {
                         className="password-toggle"
                         onClick={() =>
                           setShowConfirmPassword(
-                            (prev) => !prev
+                            prev => !prev
                           )
                         }
                       >
-                        {showConfirmPassword ? (
-                          <FaEyeSlash />
-                        ) : (
-                          <FaEye />
-                        )}
+                        {showConfirmPassword
+                          ? <FaEyeSlash />
+                          : <FaEye />}
                       </button>
 
                     </div>
@@ -642,12 +626,24 @@ const AuthPage = () => {
                   )}
 
                   {/* ======================
-                      FORGOT PASSWORD
+                      LOGIN OPTIONS
                   ====================== */}
 
                   {isLogin && (
 
-                    <div className="forgot-password">
+                    <div className="auth-options">
+
+                      <label className="remember-me">
+
+                        <input
+                          type="checkbox"
+                        />
+
+                        <span>
+                          Remember me
+                        </span>
+
+                      </label>
 
                       <button
                         type="button"
@@ -675,8 +671,8 @@ const AuthPage = () => {
                       {loading
                         ? "Please Wait..."
                         : isLogin
-                        ? "Login"
-                        : "Create Account"}
+                          ? "Sign In"
+                          : "Create Account"}
 
                     </span>
 
@@ -689,16 +685,71 @@ const AuthPage = () => {
                 </form>
 
                 {/* ======================
+                    DIVIDER
+                ====================== */}
+
+                <div className="divider">
+
+                  <span>
+
+                    or continue with
+
+                  </span>
+
+                </div>
+
+                {/* ======================
+                    SOCIAL LOGIN
+                ====================== */}
+
+                <div className="social-login">
+
+                  <button
+                    type="button"
+                    className="social-btn"
+                  >
+
+                    <FaGoogle />
+
+                    <span>
+
+                      Google
+
+                    </span>
+
+                  </button>
+
+                  <button
+                    type="button"
+                    className="social-btn"
+                  >
+
+                    <FaGithub />
+
+                    <span>
+
+                      GitHub
+
+                    </span>
+
+                  </button>
+
+                </div>
+
+                {/* ======================
                     FOOTER
                 ====================== */}
 
                 <div className="auth-footer">
 
                   {isLogin ? (
+
                     <>
 
                       <span>
+
                         Don't have an account?
+
                       </span>
 
                       <button
@@ -708,15 +759,21 @@ const AuthPage = () => {
                           switchMode(false)
                         }
                       >
+
                         Register Now
+
                       </button>
 
                     </>
+
                   ) : (
+
                     <>
 
                       <span>
+
                         Already have an account?
+
                       </span>
 
                       <button
@@ -726,10 +783,13 @@ const AuthPage = () => {
                           switchMode(true)
                         }
                       >
+
                         Login
+
                       </button>
 
                     </>
+
                   )}
 
                 </div>
@@ -741,9 +801,13 @@ const AuthPage = () => {
           </div>
 
         </motion.section>
+                {/* ===============================
+            END RIGHT SIDE
+        ================================ */}
 
       </div>
-          </>
+
+    </>
   );
 };
 
