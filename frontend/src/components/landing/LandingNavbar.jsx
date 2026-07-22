@@ -1,50 +1,49 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaBars,
   FaTimes,
   FaTasks,
+  FaArrowRight,
 } from "react-icons/fa";
+
+import "../../styles/LandingNavbar.css";
 
 const LandingNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleMenu = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () =>
+      window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const toggleMenu = () =>
     setMenuOpen((prev) => !prev);
-  };
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  const navItems = [
-    {
-      label: "Home",
-      to: "/",
-    },
-    {
-      label: "Features",
-      to: "#features",
-      hash: true,
-    },
-    {
-      label: "Pricing",
-      to: "/pricing",
-    },
-    {
-      label: "About",
-      to: "#footer",
-      hash: true,
-    },
-  ];
-
-  const handleHashNavigation = (id) => {
+  const handleSectionScroll = (id) => {
     closeMenu();
 
-    const element = document.querySelector(id);
+    if (location.pathname !== "/") {
+      window.location.href = `/${id}`;
+      return;
+    }
 
-    if (element) {
-      element.scrollIntoView({
+    const section = document.querySelector(id);
+
+    if (section) {
+      section.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -52,74 +51,119 @@ const LandingNavbar = () => {
   };
 
   return (
-    <header className="landing-navbar">
-
+    <motion.header
+      className={`landing-navbar ${
+        scrolled ? "scrolled" : ""
+      }`}
+      initial={{
+        y: -80,
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.7,
+      }}
+    >
       <div className="landing-navbar-container">
+        {/* Logo */}
 
         <Link
           to="/"
           className="landing-logo"
+          onClick={closeMenu}
         >
-          <span className="landing-logo-icon">
+          <div className="landing-logo-icon">
             <FaTasks />
-          </span>
+          </div>
 
-          <span>
-            TaskFlow
-          </span>
+          <div className="landing-logo-text">
+            <h2>TaskFlow</h2>
+            <span>Project Management</span>
+          </div>
         </Link>
 
-        <nav className={`landing-nav ${menuOpen ? "open" : ""}`}>
+        {/* Desktop Navigation */}
 
-          {navItems.map((item) =>
-            item.hash ? (
-              <button
-                key={item.label}
-                className="landing-nav-link landing-nav-button"
-                onClick={() =>
-                  handleHashNavigation(item.to)
-                }
-              >
-                {item.label}
-              </button>
-            ) : (
-              <NavLink
-                key={item.label}
-                to={item.to}
-                className="landing-nav-link"
-                onClick={closeMenu}
-              >
-                {item.label}
-              </NavLink>
-            )
-          )}
+        <nav
+          className={`landing-nav ${
+            menuOpen ? "open" : ""
+          }`}
+        >
+          <button
+            className="landing-nav-link"
+            onClick={() =>
+              handleSectionScroll("#home")
+            }
+          >
+            Home
+          </button>
+
+          <button
+            className="landing-nav-link"
+            onClick={() =>
+              handleSectionScroll("#features")
+            }
+          >
+            Features
+          </button>
+
+          <button
+            className="landing-nav-link"
+            onClick={() =>
+              handleSectionScroll("#statistics")
+            }
+          >
+            Statistics
+          </button>
+
+          <button
+            className="landing-nav-link"
+            onClick={() =>
+              handleSectionScroll("#testimonials")
+            }
+          >
+            Testimonials
+          </button>
+
+          <button
+            className="landing-nav-link"
+            onClick={() =>
+              handleSectionScroll("#footer")
+            }
+          >
+            Contact
+          </button>
 
           <div className="landing-auth-buttons">
-
-            <Link
+            <NavLink
               to="/login"
               className="landing-login-btn"
               onClick={closeMenu}
             >
               Login
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/register"
               className="landing-register-btn"
               onClick={closeMenu}
             >
               Get Started
-            </Link>
 
+              <FaArrowRight />
+            </NavLink>
           </div>
-
         </nav>
+
+        {/* Mobile Toggle */}
 
         <button
           className="landing-menu-toggle"
           onClick={toggleMenu}
-          aria-label="Toggle navigation"
+          aria-label="Toggle Navigation"
         >
           {menuOpen ? (
             <FaTimes />
@@ -128,9 +172,27 @@ const LandingNavbar = () => {
           )}
         </button>
 
-      </div>
+        {/* Mobile Background */}
 
-    </header>
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              className="landing-mobile-overlay"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              onClick={closeMenu}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   );
 };
 

@@ -5,33 +5,54 @@ import {
   FaFolderOpen,
   FaTasks,
   FaChartLine,
+  FaArrowTrendUp,
+  FaShieldAlt,
+  FaGlobe,
+  FaClock,
 } from "react-icons/fa";
 
-const stats = [
+const statistics = [
   {
     icon: <FaUsers />,
     value: 2500,
     suffix: "+",
     label: "Active Teams",
+    description:
+      "Teams collaborating daily using TaskFlow.",
   },
   {
     icon: <FaFolderOpen />,
     value: 12000,
     suffix: "+",
     label: "Projects Created",
+    description:
+      "Projects successfully managed worldwide.",
   },
   {
     icon: <FaTasks />,
     value: 85000,
     suffix: "+",
     label: "Tasks Completed",
+    description:
+      "Completed tasks delivered on schedule.",
   },
   {
     icon: <FaChartLine />,
     value: 99.9,
     suffix: "%",
     label: "Platform Uptime",
+    description:
+      "Reliable cloud infrastructure you can trust.",
   },
+];
+
+const companies = [
+  "Google",
+  "Microsoft",
+  "Amazon",
+  "Netflix",
+  "Adobe",
+  "IBM",
 ];
 
 function Counter({
@@ -42,7 +63,7 @@ function Counter({
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let start = 0;
+    let current = 0;
 
     const duration = 1800;
 
@@ -50,14 +71,14 @@ function Counter({
       end / (duration / 20);
 
     const timer = setInterval(() => {
-      start += increment;
+      current += increment;
 
-      if (start >= end) {
-        start = end;
+      if (current >= end) {
+        current = end;
         clearInterval(timer);
       }
 
-      setCount(start);
+      setCount(current);
     }, 20);
 
     return () => clearInterval(timer);
@@ -65,7 +86,7 @@ function Counter({
 
   return (
     <>
-      {decimals > 0
+      {decimals
         ? count.toFixed(decimals)
         : Math.floor(count)}
       {suffix}
@@ -75,85 +96,151 @@ function Counter({
 
 function Statistics() {
   return (
-    <section className="statistics-section">
+    <section
+      id="statistics"
+      className="statistics-section"
+    >
+      {/* Heading */}
 
-      <div className="section-heading">
-
+      <motion.div
+        className="section-heading"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
+      >
         <span className="section-tag">
           Trusted Worldwide
         </span>
 
         <h2>
-          Helping teams deliver projects
-          faster every day
+          Numbers that demonstrate
+          productivity at scale
         </h2>
 
         <p>
-          Thousands of professionals rely
-          on TaskFlow to organize work,
-          collaborate effectively and
-          achieve outstanding results.
+          Thousands of organizations rely
+          on TaskFlow every day to plan,
+          collaborate and deliver projects
+          faster with complete confidence.
         </p>
+      </motion.div>
 
-      </div>
+      {/* Statistics Cards */}
 
       <div className="statistics-grid">
+        {statistics.map(
+          (item, index) => (
+            <motion.div
+              key={item.label}
+              className="statistics-card"
+              initial={{
+                opacity: 0,
+                y: 40,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              transition={{
+                delay: index * 0.12,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -10,
+              }}
+            >
+              <div className="statistics-icon">
+                {item.icon}
+              </div>
 
-        {stats.map((item, index) => (
+              <h2>
+                <Counter
+                  end={item.value}
+                  suffix={item.suffix}
+                  decimals={
+                    item.value % 1 !== 0
+                      ? 1
+                      : 0
+                  }
+                />
+              </h2>
 
-          <motion.div
-            key={item.label}
-            className="statistics-card"
-            initial={{
-              opacity: 0,
-              y: 40,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              delay: index * 0.15,
-              duration: 0.5,
-            }}
-            whileHover={{
-              y: -8,
-            }}
-          >
+              <h4
+                style={{
+                  marginBottom: "10px",
+                  fontSize: "20px",
+                }}
+              >
+                {item.label}
+              </h4>
 
-            <div className="statistics-icon">
-              {item.icon}
-            </div>
-
-            <h2>
-
-              <Counter
-                end={item.value}
-                suffix={item.suffix}
-                decimals={
-                  item.value % 1 !== 0
-                    ? 1
-                    : 0
-                }
-              />
-
-            </h2>
-
-            <p>
-              {item.label}
-            </p>
-
-          </motion.div>
-
-        ))}
-
+              <p>{item.description}</p>
+            </motion.div>
+          )
+        )}
       </div>
+
+      {/* Trusted Companies */}
 
       <motion.div
         className="trusted-companies"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+        <p>
+          Trusted by innovative companies
+          across the globe
+        </p>
+
+        <div className="company-grid">
+          {companies.map(
+            (company) => (
+              <motion.span
+                key={company}
+                whileHover={{
+                  scale: 1.05,
+                }}
+              >
+                {company}
+              </motion.span>
+            )
+          )}
+        </div>
+      </motion.div>
+
+      {/* Extra Summary */}
+
+      <motion.div
+        className="statistics-grid"
+        style={{
+          marginTop: "70px",
+        }}
         initial={{
           opacity: 0,
         }}
@@ -164,33 +251,61 @@ function Statistics() {
           once: true,
         }}
         transition={{
-          delay: 0.3,
-          duration: 0.8,
+          delay: 0.2,
         }}
       >
+        <div className="statistics-card">
+          <div className="statistics-icon">
+            <FaArrowTrendUp />
+          </div>
 
-        <p>
-          Trusted by innovative teams worldwide
-        </p>
+          <h2>95%</h2>
 
-        <div className="company-grid">
-
-          <span>Google</span>
-
-          <span>Microsoft</span>
-
-          <span>Amazon</span>
-
-          <span>Netflix</span>
-
-          <span>IBM</span>
-
-          <span>Adobe</span>
-
+          <p>
+            Average productivity increase
+            after adopting TaskFlow.
+          </p>
         </div>
 
-      </motion.div>
+        <div className="statistics-card">
+          <div className="statistics-icon">
+            <FaShieldAlt />
+          </div>
 
+          <h2>100%</h2>
+
+          <p>
+            Secure authentication using JWT
+            and protected APIs.
+          </p>
+        </div>
+
+        <div className="statistics-card">
+          <div className="statistics-icon">
+            <FaGlobe />
+          </div>
+
+          <h2>80+</h2>
+
+          <p>
+            Countries where teams use
+            TaskFlow every day.
+          </p>
+        </div>
+
+        <div className="statistics-card">
+          <div className="statistics-icon">
+            <FaClock />
+          </div>
+
+          <h2>24/7</h2>
+
+          <p>
+            Continuous monitoring and cloud
+            availability for your projects.
+          </p>
+        </div>
+      </motion.div>
     </section>
   );
 }

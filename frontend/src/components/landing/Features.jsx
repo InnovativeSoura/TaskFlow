@@ -8,6 +8,8 @@ import {
   FaRobot,
   FaLock,
   FaCloud,
+  FaArrowRight,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 const features = [
@@ -15,49 +17,49 @@ const features = [
     icon: <FaTasks />,
     title: "Smart Task Management",
     description:
-      "Create, assign, prioritize and organize tasks with an intuitive Kanban workflow.",
+      "Create, assign, prioritize and organize work effortlessly using an intuitive Kanban workflow.",
   },
   {
     icon: <FaUsers />,
-    title: "Team Collaboration",
+    title: "Real-Time Collaboration",
     description:
-      "Collaborate with teammates in real time through shared workspaces and comments.",
+      "Collaborate with teammates using shared workspaces, comments and live project updates.",
   },
   {
     icon: <FaChartLine />,
     title: "Advanced Analytics",
     description:
-      "Visualize project health using interactive charts, reports and performance insights.",
+      "Visualize project health with interactive charts, productivity metrics and detailed reports.",
   },
   {
     icon: <FaCalendarAlt />,
     title: "Project Planning",
     description:
-      "Plan timelines with integrated calendar, milestones and Gantt charts.",
+      "Plan milestones, schedules and deadlines using integrated calendars and timelines.",
   },
   {
     icon: <FaBell />,
     title: "Instant Notifications",
     description:
-      "Stay informed with activity feeds and real-time project notifications.",
+      "Receive real-time alerts for deadlines, assignments and team activity.",
   },
   {
     icon: <FaRobot />,
     title: "AI Productivity",
     description:
-      "Receive AI-powered recommendations to improve workflow efficiency.",
+      "AI-powered recommendations help teams prioritize tasks and improve efficiency.",
   },
   {
     icon: <FaLock />,
-    title: "Secure Authentication",
+    title: "Enterprise Security",
     description:
-      "JWT authentication with protected routes keeps every workspace secure.",
+      "JWT authentication, encrypted data and secure workspaces keep every project protected.",
   },
   {
     icon: <FaCloud />,
     title: "Cloud Workspace",
     description:
-      "Access your projects from anywhere with seamless cloud synchronization.",
+      "Access projects securely from anywhere with automatic cloud synchronization.",
   },
 ];
 
@@ -71,10 +73,29 @@ const cardVariants = {
     y: 0,
     transition: {
       delay: index * 0.08,
-      duration: 0.5,
+      duration: 0.6,
     },
   }),
 };
+
+const stats = [
+  {
+    value: "10K+",
+    label: "Projects",
+  },
+  {
+    value: "50K+",
+    label: "Tasks Managed",
+  },
+  {
+    value: "99.9%",
+    label: "System Uptime",
+  },
+  {
+    value: "24/7",
+    label: "Support",
+  },
+];
 
 function Features() {
   return (
@@ -82,129 +103,192 @@ function Features() {
       id="features"
       className="features-section"
     >
-      <div className="section-heading">
+      {/* Heading */}
 
+      <motion.div
+        className="section-heading"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
+      >
         <span className="section-tag">
-          Why Choose TaskFlow
+          Premium Features
         </span>
 
         <h2>
-          Everything you need to manage
-          projects efficiently
+          Everything your team needs to
+          deliver projects faster
         </h2>
 
         <p>
-          Powerful tools built for modern
-          teams to collaborate, plan,
-          organize and deliver projects
-          faster than ever.
+          TaskFlow combines planning,
+          collaboration, analytics and
+          automation into one beautiful
+          workspace built for modern teams.
         </p>
+      </motion.div>
 
-      </div>
+      {/* Feature Cards */}
 
       <div className="features-grid">
+        {features.map((feature, index) => (
+          <motion.div
+            key={feature.title}
+            className="feature-card"
+            custom={index}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            whileHover={{
+              y: -10,
+            }}
+          >
+            <div className="feature-icon">
+              {feature.icon}
+            </div>
 
-        {features.map(
-          (feature, index) => (
-            <motion.div
-              key={feature.title}
-              className="feature-card"
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{
-                once: true,
-              }}
-              whileHover={{
-                y: -8,
-              }}
-            >
-              <div className="feature-icon">
-                {feature.icon}
-              </div>
+            <h3>{feature.title}</h3>
 
-              <h3>
-                {feature.title}
-              </h3>
-
-              <p>
-                {feature.description}
-              </p>
-            </motion.div>
-          )
-        )}
-
+            <p>{feature.description}</p>
+          </motion.div>
+        ))}
       </div>
 
-      <div className="features-highlight">
+      {/* Highlight Section */}
 
-        <motion.div
-          className="highlight-card"
-          initial={{
-            opacity: 0,
-            scale: 0.95,
-          }}
-          whileInView={{
-            opacity: 1,
-            scale: 1,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.6,
-          }}
-        >
+      <motion.div
+        className="features-highlight"
+        initial={{
+          opacity: 0,
+          y: 40,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+        <div className="highlight-card">
+
+          {/* Left */}
 
           <div className="highlight-left">
 
             <span className="section-tag">
-              Productivity
+              Productivity Platform
             </span>
 
             <h2>
-              Manage every project from a
-              single intelligent dashboard
+              One intelligent workspace for
+              every project and every team
             </h2>
 
             <p>
               Replace spreadsheets,
-              scattered chats and multiple
-              apps with one unified
-              workspace built for
-              productivity.
+              disconnected tools and endless
+              email chains with one
+              collaborative platform designed
+              to help your organization stay
+              organized, productive and on
+              schedule.
             </p>
 
+            <div
+              style={{
+                marginTop: "35px",
+                display: "grid",
+                gap: "18px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <FaCheckCircle color="#22c55e" />
+                AI-powered workflow automation
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <FaCheckCircle color="#22c55e" />
+                Real-time collaboration
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <FaCheckCircle color="#22c55e" />
+                Secure cloud infrastructure
+              </div>
+            </div>
+
+            <motion.button
+              whileHover={{
+                x: 6,
+              }}
+              className="hero-primary-btn"
+              style={{
+                marginTop: "40px",
+              }}
+            >
+              Explore Platform
+
+              <FaArrowRight />
+            </motion.button>
+
           </div>
+
+          {/* Right */}
 
           <div className="highlight-right">
+            {stats.map((item) => (
+              <motion.div
+                key={item.label}
+                className="mini-stat"
+                whileHover={{
+                  y: -8,
+                }}
+              >
+                <h3>{item.value}</h3>
 
-            <div className="mini-stat">
-              <h3>10K+</h3>
-              <span>Projects</span>
-            </div>
-
-            <div className="mini-stat">
-              <h3>50K+</h3>
-              <span>Tasks Managed</span>
-            </div>
-
-            <div className="mini-stat">
-              <h3>99.9%</h3>
-              <span>Availability</span>
-            </div>
-
-            <div className="mini-stat">
-              <h3>24/7</h3>
-              <span>Support</span>
-            </div>
-
+                <span>{item.label}</span>
+              </motion.div>
+            ))}
           </div>
 
-        </motion.div>
-
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

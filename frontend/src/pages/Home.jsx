@@ -14,26 +14,47 @@ function Home() {
   return (
     <div className="landing-page">
 
+      {/* Background Effects */}
       <BackgroundAnimation />
 
+      {/* Navigation */}
       <LandingNavbar />
 
       <main>
 
-        <Hero />
+        {/* ================= HERO ================= */}
+        <section id="home">
+          <Hero />
+        </section>
 
-        <DashboardPreview />
+        {/* =========== DASHBOARD PREVIEW ========== */}
+        <section id="dashboard">
+          <DashboardPreview />
+        </section>
 
-        <Features />
+        {/* ================= FEATURES ================= */}
+        <section id="features">
+          <Features />
+        </section>
 
-        <Statistics />
+        {/* ================= STATISTICS ================= */}
+        <section id="statistics">
+          <Statistics />
+        </section>
 
-        <Testimonials />
+        {/* ================= TESTIMONIALS ================= */}
+        <section id="testimonials">
+          <Testimonials />
+        </section>
 
-        <CTA />
+        {/* ================= CTA / CONTACT ================= */}
+        <section id="contact">
+          <CTA />
+        </section>
 
       </main>
 
+      {/* Footer */}
       <Footer />
 
     </div>

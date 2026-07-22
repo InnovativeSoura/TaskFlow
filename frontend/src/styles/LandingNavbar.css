@@ -1,419 +1,467 @@
-/* ==========================================
-   LANDING NAVBAR
-========================================== */
+/* ==========================================================
+   PREMIUM LANDING NAVBAR
+========================================================== */
 
 .landing-navbar {
   position: fixed;
   top: 0;
   left: 0;
-
   width: 100%;
-  height: 80px;
+  z-index: 1000;
 
-  padding: 0 7%;
+  background: rgba(5, 10, 25, 0.72);
+  backdrop-filter: blur(22px);
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.08);
 
-  background: rgba(10, 15, 35, 0.65);
-
-  backdrop-filter: blur(18px);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-  z-index: 999;
-
-  transition: 0.35s ease;
+  transition: .35s ease;
 }
 
-/* ==========================================
+.landing-navbar-container{
+  width:min(1400px,92%);
+  height:82px;
+
+  margin:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* ==========================================================
    LOGO
-========================================== */
+========================================================== */
 
-.landing-logo {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.landing-logo{
+  display:flex;
+  align-items:center;
+  gap:16px;
 
-  cursor: pointer;
+  color:white;
+  text-decoration:none;
+
+  font-size:28px;
+  font-weight:800;
+
+  transition:.35s;
 }
 
-.landing-logo-icon {
-  width: 52px;
-  height: 52px;
-
-  border-radius: 16px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 22px;
-
-  color: white;
-
-  background: linear-gradient(
-      135deg,
-      #7c4dff,
-      #3b82f6
-  );
-
-  box-shadow:
-      0 10px 30px rgba(124,77,255,.45);
-
-  transition: .35s;
-}
-
-.landing-logo:hover .landing-logo-icon {
-
-  transform: rotate(-10deg) scale(1.08);
-
-}
-
-.landing-logo-text h2{
-
-    color:white;
-
-    font-size:24px;
-
-    font-weight:700;
-
-    margin:0;
-}
-
-.landing-logo-text span{
-
-    color:#94a3b8;
-
-    font-size:12px;
-
-}
-
-/* ==========================================
-   NAVIGATION
-========================================== */
-
-.landing-nav{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:38px;
-
-}
-
-.landing-nav a{
-
-    position:relative;
-
-    color:#d1d5db;
-
-    text-decoration:none;
-
-    font-size:15px;
-
-    font-weight:500;
-
-    transition:.3s;
-
-}
-
-.landing-nav a:hover{
-
-    color:white;
-
-}
-
-.landing-nav a::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    bottom:-8px;
-
-    width:0;
-
-    height:3px;
-
-    border-radius:50px;
-
-    background:#7c4dff;
-
-    transition:.35s;
-
-}
-
-.landing-nav a:hover::after{
-
-    width:100%;
-
-}
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.landing-actions{
-
-    display:flex;
-
-    gap:15px;
-
-}
-
-.login-btn{
-
-    width:110px;
-    height:46px;
-
-    border-radius:12px;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    color:white;
-
-    text-decoration:none;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    transition:.35s;
-
-}
-
-.login-btn:hover{
-
-    background:rgba(255,255,255,.08);
-
-}
-
-.register-btn{
-
-    width:130px;
-    height:46px;
-
-    border:none;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    color:white;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    background:linear-gradient(
-        135deg,
-        #7c4dff,
-        #3b82f6
-    );
-
-    box-shadow:
-        0 10px 25px rgba(124,77,255,.35);
-
-    transition:.35s;
-
-}
-
-.register-btn:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:
-        0 20px 40px rgba(124,77,255,.45);
-
-}
-
-/* ==========================================
-   MOBILE BUTTON
-========================================== */
-
-.mobile-menu-btn{
-
-    display:none;
-
-    background:none;
-
-    border:none;
-
-    color:white;
-
-    font-size:26px;
-
-    cursor:pointer;
-
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media(max-width:900px){
-
-.mobile-menu-btn{
-
-display:block;
-
-z-index:1001;
-
-}
-
-.landing-actions{
-
-display:none;
-
-}
-
-.landing-nav{
-
-position:absolute;
-
-top:80px;
-
-left:0;
-
-width:100%;
-
-padding:35px;
-
-background:#09111f;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:25px;
-
-transform:translateY(-130%);
-
-opacity:0;
-
-transition:.35s;
-
-}
-
-.landing-nav.active{
-
-transform:translateY(0);
-
-opacity:1;
-
-}
-
-}
-
-@media(max-width:600px){
-
-.landing-navbar{
-
-padding:0 20px;
-
-}
-
-.landing-logo-text h2{
-
-font-size:20px;
-
-}
-
-.landing-logo-text span{
-
-font-size:11px;
-
+.landing-logo:hover{
+  transform:translateY(-2px);
 }
 
 .landing-logo-icon{
 
-width:45px;
-height:45px;
+  width:58px;
+  height:58px;
 
-font-size:20px;
+  border-radius:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:24px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 20px 40px rgba(99,102,241,.35);
+
+  transition:.35s;
+}
+
+.landing-logo:hover .landing-logo-icon{
+
+  transform:rotate(-8deg) scale(1.08);
 
 }
 
-}
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
-/* ==========================================
-   SCROLL EFFECT
-========================================== */
+.landing-nav{
 
-.landing-navbar:hover{
-
-background:rgba(10,15,35,.8);
-
-}
-
-/* ==========================================
-   BUTTON SHINE
-========================================== */
-
-.register-btn{
-
-position:relative;
-
-overflow:hidden;
+  display:flex;
+  align-items:center;
+  gap:38px;
 
 }
 
-.register-btn::before{
+.landing-nav-link,
+.landing-nav-button{
 
-content:"";
+  position:relative;
 
-position:absolute;
+  color:#cbd5e1;
 
-top:0;
+  background:none;
+  border:none;
 
-left:-100%;
+  cursor:pointer;
 
-width:60%;
+  text-decoration:none;
 
-height:100%;
+  font-size:15px;
+  font-weight:600;
 
-background:
-
-linear-gradient(
-
-90deg,
-
-transparent,
-
-rgba(255,255,255,.3),
-
-transparent
-
-);
-
-transform:skewX(-25deg);
+  transition:.3s;
 
 }
 
-.register-btn:hover::before{
+.landing-nav-link:hover,
+.landing-nav-button:hover{
 
-animation:shine .8s;
+  color:white;
+
+}
+
+.landing-nav-link::after,
+.landing-nav-button::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  bottom:-8px;
+
+  width:0;
+  height:3px;
+
+  border-radius:50px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6366f1,
+      #06b6d4
+    );
+
+  transition:.35s;
+
+}
+
+.landing-nav-link:hover::after,
+.landing-nav-button:hover::after,
+.landing-nav-link.active::after{
+
+  width:100%;
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.landing-auth-buttons{
+
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  margin-left:20px;
+
+}
+
+.landing-login-btn{
+
+  padding:14px 28px;
+
+  border-radius:14px;
+
+  text-decoration:none;
+
+  color:white;
+
+  font-weight:600;
+
+  border:1px solid rgba(255,255,255,.12);
+
+  background:rgba(255,255,255,.05);
+
+  transition:.35s;
+
+}
+
+.landing-login-btn:hover{
+
+  background:rgba(255,255,255,.08);
+
+  transform:translateY(-2px);
+
+}
+
+.landing-register-btn{
+
+  position:relative;
+
+  overflow:hidden;
+
+  padding:14px 30px;
+
+  border-radius:14px;
+
+  text-decoration:none;
+
+  color:white;
+
+  font-weight:700;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 18px 40px rgba(99,102,241,.35);
+
+  transition:.35s;
+
+}
+
+.landing-register-btn:hover{
+
+  transform:translateY(-4px);
+
+  box-shadow:
+    0 28px 55px rgba(99,102,241,.45);
+
+}
+
+.landing-register-btn::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:60%;
+  height:100%;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.4),
+      transparent
+    );
+
+  transform:skewX(-25deg);
+
+}
+
+.landing-register-btn:hover::before{
+
+  animation:shine .8s;
 
 }
 
 @keyframes shine{
 
-0%{
+  from{
 
-left:-100%;
+    left:-120%;
+
+  }
+
+  to{
+
+    left:150%;
+
+  }
 
 }
 
-100%{
+/* ==========================================================
+   MOBILE MENU BUTTON
+========================================================== */
 
-left:140%;
+.landing-menu-toggle{
+
+  display:none;
+
+  width:48px;
+  height:48px;
+
+  border:none;
+
+  border-radius:14px;
+
+  color:white;
+
+  cursor:pointer;
+
+  font-size:22px;
+
+  background:rgba(255,255,255,.05);
+
+  transition:.35s;
 
 }
+
+.landing-menu-toggle:hover{
+
+  background:rgba(255,255,255,.1);
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width:980px){
+
+  .landing-menu-toggle{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:1002;
+
+  }
+
+  .landing-nav{
+
+    position:absolute;
+
+    top:82px;
+    left:0;
+
+    width:100%;
+
+    padding:35px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+    gap:24px;
+
+    background:#07101f;
+
+    border-bottom:
+      1px solid rgba(255,255,255,.08);
+
+    transform:translateY(-140%);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.35s;
+
+  }
+
+  .landing-nav.open{
+
+    transform:translateY(0);
+
+    opacity:1;
+
+    pointer-events:auto;
+
+  }
+
+  .landing-auth-buttons{
+
+    width:100%;
+
+    margin-top:10px;
+
+    margin-left:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+  }
+
+  .landing-login-btn,
+  .landing-register-btn{
+
+    width:100%;
+
+    text-align:center;
+
+  }
+
+}
+
+@media (max-width:768px){
+
+  .landing-navbar-container{
+
+    height:76px;
+
+  }
+
+  .landing-logo{
+
+    font-size:24px;
+
+  }
+
+  .landing-logo-icon{
+
+    width:50px;
+    height:50px;
+
+    font-size:22px;
+
+  }
+
+}
+
+@media (max-width:576px){
+
+  .landing-navbar-container{
+
+    width:92%;
+
+  }
+
+  .landing-logo{
+
+    font-size:22px;
+
+  }
+
+  .landing-logo-icon{
+
+    width:46px;
+    height:46px;
+
+    font-size:20px;
+
+    border-radius:15px;
+
+  }
+
+}
+
+/* ==========================================================
+   HOVER GLASS EFFECT
+========================================================== */
+
+.landing-navbar:hover{
+
+  background:rgba(5,10,25,.82);
 
 }

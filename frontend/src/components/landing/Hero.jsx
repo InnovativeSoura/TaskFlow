@@ -15,16 +15,15 @@ const Hero = () => {
 
   return (
     <section className="hero-section">
-
       <div className="hero-container">
 
-        {/* ===========================
+        {/* ===================================
             LEFT CONTENT
-        ============================ */}
+        ==================================== */}
 
         <motion.div
           className="hero-content"
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
         >
@@ -36,18 +35,16 @@ const Hero = () => {
           <h1 className="hero-title">
             Manage Projects
             <br />
-
             Collaborate Faster
             <br />
-
             <span>Deliver On Time.</span>
           </h1>
 
           <p className="hero-description">
             TaskFlow is an all-in-one project management platform
-            that helps teams organize projects, assign tasks,
-            monitor progress, collaborate in real time, and boost
-            productivity from one beautiful workspace.
+            built for modern teams. Plan projects, assign tasks,
+            monitor progress, collaborate in real time and keep
+            every workflow organized from one beautiful dashboard.
           </p>
 
           <div className="hero-buttons">
@@ -78,34 +75,36 @@ const Hero = () => {
 
             <div>
               <FaCheckCircle />
-              <span>Real-time Collaboration</span>
+              <span>Real-Time Collaboration</span>
             </div>
 
             <div>
               <FaCheckCircle />
-              <span>Secure Cloud Storage</span>
+              <span>Enterprise Security</span>
             </div>
 
           </div>
 
         </motion.div>
 
-        {/* ===========================
+        {/* ===================================
             RIGHT SIDE
-        ============================ */}
+        ==================================== */}
 
         <motion.div
           className="hero-right"
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
 
           <div className="auth-preview">
 
-            {/* Toggle */}
-
-            <div className="auth-toggle">
+            <div
+              className={`auth-toggle ${
+                isRegister ? "register" : ""
+              }`}
+            >
 
               <button
                 className={!isRegister ? "active" : ""}
@@ -123,8 +122,6 @@ const Hero = () => {
 
             </div>
 
-            {/* Heading */}
-
             <div className="auth-preview-title">
 
               <h2>
@@ -141,207 +138,182 @@ const Hero = () => {
 
             </div>
 
-            {/* Form */}
-
             <form
-  className="auth-preview-form"
-  onSubmit={(e) => e.preventDefault()}
->
+              className="auth-preview-form"
+              onSubmit={(e) => e.preventDefault()}
+            >
 
-  {/* Register Only */}
+              {isRegister && (
 
-  {isRegister && (
-    <div className="auth-group">
+                <div className="auth-group">
 
-      <label>Full Name</label>
+                  <label>Full Name</label>
 
-      <input
-        type="text"
-        placeholder="John Doe"
-      />
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                  />
 
-    </div>
-  )}
+                </div>
 
-  {/* Email */}
+              )}
 
-  <div className="auth-group">
+              <div className="auth-group">
 
-    <label>Email Address</label>
+                <label>Email Address</label>
 
-    <input
-      type="email"
-      placeholder="john@example.com"
-    />
+                <input
+                  type="email"
+                  placeholder="john@example.com"
+                />
 
-  </div>
+              </div>
 
-  {/* Password */}
+              <div className="auth-group">
 
-  <div className="auth-group">
+                <label>Password</label>
 
-    <label>Password</label>
+                <div className="password-group">
 
-    <div className="password-group">
+                  <input
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    placeholder="Enter password"
+                  />
 
-      <input
-        type={
-          showPassword
-            ? "text"
-            : "password"
-        }
-        placeholder="Enter your password"
-      />
+                  <span
+                    className="password-toggle"
+                    onClick={() =>
+                      setShowPassword(
+                        !showPassword
+                      )
+                    }
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </span>
 
-      <span
-        className="password-toggle"
-        onClick={() =>
-          setShowPassword(!showPassword)
-        }
-      >
-        {showPassword ? (
-          <FaEyeSlash />
-        ) : (
-          <FaEye />
-        )}
-      </span>
+                </div>
 
-    </div>
+              </div>
+                          {isRegister && (
 
-  </div>
+                <div className="auth-group">
 
-  {/* Confirm Password */}
+                  <label>Confirm Password</label>
 
-  {isRegister && (
+                  <input
+                    type="password"
+                    placeholder="Confirm password"
+                  />
 
-    <div className="auth-group">
+                </div>
 
-      <label>
-        Confirm Password
-      </label>
+              )}
 
-      <input
-        type="password"
-        placeholder="Confirm password"
-      />
+              {!isRegister && (
 
-    </div>
+                <div className="auth-options">
 
-  )}
+                  <label className="remember-me">
 
-  {/* Login Only */}
+                    <input type="checkbox" />
 
-  {!isRegister && (
+                    Remember me
 
-    <div className="auth-options">
+                  </label>
 
-      <label className="remember-me">
+                  <Link
+                    to="/forgot-password"
+                    className="forgot-password"
+                  >
+                    Forgot Password?
+                  </Link>
 
-        <input type="checkbox" />
+                </div>
 
-        Remember me
+              )}
 
-      </label>
+              <button
+                type="submit"
+                className="auth-submit"
+              >
+                {isRegister
+                  ? "Create Account"
+                  : "Login"}
+              </button>
 
-      <Link
-        to="/forgot-password"
-        className="forgot-password"
-      >
-        Forgot Password?
-      </Link>
+              <div className="auth-divider">
+                <span>OR</span>
+              </div>
 
-    </div>
+              <div className="auth-social">
 
-  )}
+                <button type="button">
 
-  {/* Submit */}
+                  <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    alt="Google"
+                    width="22"
+                  />
 
-  <button
-    type="submit"
-    className="auth-submit"
-  >
-    {isRegister
-      ? "Create Account"
-      : "Login"}
-  </button>
+                  Google
 
-  {/* Divider */}
+                </button>
 
-  <div className="auth-divider">
+                <button type="button">
 
-    <span>OR</span>
+                  <img
+                    src="https://www.svgrepo.com/show/512317/github-142.svg"
+                    alt="GitHub"
+                    width="22"
+                  />
 
-  </div>
+                  GitHub
 
-  {/* Social Login */}
+                </button>
 
-  <div className="auth-social">
+              </div>
 
-    <button type="button">
+              <div className="auth-footer">
 
-      <img
-        src="https://www.svgrepo.com/show/475656/google-color.svg"
-        alt="Google"
-        width="22"
-      />
+                {isRegister ? (
+                  <>
+                    Already have an account?
 
-      Google
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsRegister(false)
+                      }
+                    >
+                      Login
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Don't have an account?
 
-    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsRegister(true)
+                      }
+                    >
+                      Register
+                    </button>
+                  </>
+                )}
 
-    <button type="button">
+              </div>
 
-      <img
-        src="https://www.svgrepo.com/show/512317/github-142.svg"
-        alt="GitHub"
-        width="22"
-      />
-
-      GitHub
-
-    </button>
-
-  </div>
-
-  {/* Footer */}
-
-  <div className="auth-footer">
-
-    {isRegister ? (
-
-      <>
-        Already have an account?
-
-        <button
-          type="button"
-          onClick={() =>
-            setIsRegister(false)
-          }
-        >
-          Login
-        </button>
-      </>
-
-    ) : (
-
-      <>
-        Don't have an account?
-
-        <button
-          type="button"
-          onClick={() =>
-            setIsRegister(true)
-          }
-        >
-          Register
-        </button>
-      </>
-
-    )}
-
-  </div>
-
-</form>
+            </form>
 
           </div>
 

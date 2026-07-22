@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FaGithub,
   FaLinkedin,
@@ -6,6 +7,7 @@ import {
   FaInstagram,
   FaArrowUp,
   FaTasks,
+  FaPaperPlane,
 } from "react-icons/fa";
 
 function Footer() {
@@ -21,31 +23,50 @@ function Footer() {
       id="footer"
       className="landing-footer"
     >
+      {/* Background Glow */}
+
+      <div className="footer-glow"></div>
+
       <div className="footer-container">
+        {/* =========================
+            BRAND
+        ========================= */}
 
-        {/* Brand */}
-
-        <div className="footer-brand">
-
+        <motion.div
+          className="footer-brand"
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.6,
+          }}
+        >
           <div className="footer-logo">
-
             <div className="footer-logo-icon">
               <FaTasks />
             </div>
 
-            <h2>TaskFlow</h2>
-
+            <div>
+              <h2>TaskFlow</h2>
+              <span>Project Management Platform</span>
+            </div>
           </div>
 
           <p>
-            TaskFlow is a modern project management
-            platform that helps teams organize work,
-            collaborate efficiently and deliver
-            projects faster.
+            TaskFlow is an intelligent project management
+            platform that helps individuals, startups and
+            enterprise teams collaborate, organize work,
+            automate workflows and deliver projects faster
+            than ever.
           </p>
 
           <div className="footer-social">
-
             <a
               href="#"
               aria-label="GitHub"
@@ -73,24 +94,36 @@ function Footer() {
             >
               <FaInstagram />
             </a>
-
           </div>
+        </motion.div>
 
-        </div>
+        {/* =========================
+            PRODUCT
+        ========================= */}
 
-        {/* Product */}
-
-        <div className="footer-column">
-
+        <motion.div
+          className="footer-column"
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            delay: 0.1,
+            duration: 0.6,
+          }}
+        >
           <h3>Product</h3>
 
-          <Link to="/">
-            Home
-          </Link>
+          <Link to="/">Home</Link>
 
-          <Link to="/pricing">
-            Pricing
-          </Link>
+          <a href="#features">
+            Features
+          </a>
 
           <Link to="/login">
             Login
@@ -100,17 +133,32 @@ function Footer() {
             Register
           </Link>
 
-        </div>
-
-        {/* Platform */}
-
-        <div className="footer-column">
-
-          <h3>Platform</h3>
-
           <Link to="/dashboard">
             Dashboard
           </Link>
+        </motion.div>
+
+        {/* =========================
+            PLATFORM
+        ========================= */}
+
+        <motion.div
+          className="footer-column"
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            delay: 0.2,
+            duration: 0.6,
+          }}
+        >
+          <h3>Platform</h3>
 
           <Link to="/projects">
             Projects
@@ -120,25 +168,78 @@ function Footer() {
             Tasks
           </Link>
 
-          <Link to="/analytics">
-            Analytics
+          <Link to="/kanban">
+            Kanban Board
           </Link>
 
-        </div>
+          <Link to="/reports">
+            Reports
+          </Link>
 
-        {/* Support */}
+          <Link to="/settings">
+            Settings
+          </Link>
+        </motion.div>
 
-        <div className="footer-column">
+        {/* =========================
+            NEWSLETTER
+        ========================= */}
 
-          <h3>Resources</h3>
+        <motion.div
+          className="footer-newsletter"
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            delay: 0.3,
+            duration: 0.6,
+          }}
+        >
+          <h3>Stay Updated</h3>
 
+          <p>
+            Subscribe to receive product updates,
+            productivity tips and the latest TaskFlow
+            features directly in your inbox.
+          </p>
+
+          <div className="newsletter-box">
+            <input
+              type="email"
+              placeholder="Enter your email"
+            />
+
+            <button>
+              <FaPaperPlane />
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* =========================
+          FOOTER BOTTOM
+      ========================= */}
+
+      <div className="footer-bottom">
+        <p>
+          © {new Date().getFullYear()} TaskFlow.
+          All rights reserved. Designed for modern teams.
+        </p>
+
+        <div className="footer-links">
           <a href="#features">
             Features
           </a>
 
-          <Link to="/pricing">
-            Pricing
-          </Link>
+          <a href="#get-started">
+            Get Started
+          </a>
 
           <a href="#footer">
             Contact
@@ -147,30 +248,20 @@ function Footer() {
           <a href="#footer">
             Privacy Policy
           </a>
-
         </div>
-
       </div>
 
-      {/* Bottom */}
+      {/* =========================
+          SCROLL TO TOP
+      ========================= */}
 
-      <div className="footer-bottom">
-
-        <p>
-          © {new Date().getFullYear()} TaskFlow.
-          All rights reserved.
-        </p>
-
-        <button
-          className="scroll-top-btn"
-          onClick={scrollToTop}
-          aria-label="Back to top"
-        >
-          <FaArrowUp />
-        </button>
-
-      </div>
-
+      <button
+        className="scroll-top-btn"
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+      >
+        <FaArrowUp />
+      </button>
     </footer>
   );
 }

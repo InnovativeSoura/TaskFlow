@@ -4,58 +4,62 @@ import {
   FaArrowRight,
   FaPlayCircle,
   FaCheckCircle,
+  FaTasks,
+  FaUsers,
+  FaChartLine,
+  FaRocket,
 } from "react-icons/fa";
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
 function CTA() {
   return (
-    <section className="cta-section">
-
+    <section className="cta-section" id="get-started">
       <motion.div
         className="cta-container"
-        initial={{
-          opacity: 0,
-          scale: 0.96,
-        }}
-        whileInView={{
-          opacity: 1,
-          scale: 1,
-        }}
-        viewport={{
-          once: true,
-        }}
-        transition={{
-          duration: 0.7,
-        }}
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
       >
+        {/* Background Glow */}
 
-        {/* Background Shapes */}
+        <div className="cta-circle cta-circle-1" />
+        <div className="cta-circle cta-circle-2" />
 
-        <div className="cta-circle cta-circle-1"></div>
-        <div className="cta-circle cta-circle-2"></div>
-
-        {/* Content */}
+        {/* Left Side */}
 
         <div className="cta-content">
-
           <span className="section-tag">
-            Start Today
+            🚀 Ready to Get Started?
           </span>
 
           <h2>
-            Ready to transform the way
-            your team works?
+            Build Better Projects.
+            <br />
+            Collaborate Smarter.
+            <br />
+            Deliver Faster.
           </h2>
 
           <p>
-            Join thousands of organizations
-            using TaskFlow to plan projects,
-            manage teams, collaborate in
-            real time, and deliver work
-            faster than ever.
+            Join thousands of teams using TaskFlow to organize
+            projects, collaborate in real time, monitor
+            performance and finish work on schedule—all from
+            one intelligent workspace.
           </p>
 
           <div className="cta-buttons">
-
             <Link
               to="/login"
               className="cta-primary-btn"
@@ -71,101 +75,125 @@ function CTA() {
             >
               <FaPlayCircle />
 
-              Book Demo
+              Watch Demo
             </Link>
-
           </div>
 
           <div className="cta-features">
-
             <div>
               <FaCheckCircle />
-
               <span>Free Forever Plan</span>
             </div>
 
             <div>
               <FaCheckCircle />
-
-              <span>No Credit Card</span>
+              <span>No Credit Card Required</span>
             </div>
 
             <div>
               <FaCheckCircle />
-
-              <span>Setup in 2 Minutes</span>
+              <span>2 Minute Setup</span>
             </div>
 
+            <div>
+              <FaCheckCircle />
+              <span>Cloud Sync Included</span>
+            </div>
           </div>
-
         </div>
 
-        {/* Right Side */}
+        {/* Right Dashboard */}
 
         <motion.div
           className="cta-dashboard"
-
           animate={{
-            y: [-10, 10, -10],
+            y: [-8, 8, -8],
           }}
-
           transition={{
             repeat: Infinity,
             duration: 6,
+            ease: "easeInOut",
           }}
         >
+          {/* Widget */}
 
           <div className="cta-widget">
-
             <div className="widget-header">
-
-              <span></span>
-              <span></span>
-              <span></span>
-
+              <span />
+              <span />
+              <span />
             </div>
 
-            <h3>
-              Project Health
-            </h3>
+            <h3>Workspace Performance</h3>
 
             <div className="widget-progress">
-
               <div
                 className="widget-progress-fill"
-                style={{
-                  width: "91%",
-                }}
-              ></div>
-
+                style={{ width: "91%" }}
+              />
             </div>
 
-            <h1>
-              91%
-            </h1>
+            <h1>91%</h1>
 
-            <p>
-              Overall Team Productivity
-            </p>
+            <p>Overall Team Productivity</p>
+          </div>
 
+          {/* Mini Cards */}
+
+          <div className="cta-mini-card">
+            <div>
+              <h3>124</h3>
+              <span>Tasks Completed</span>
+            </div>
+
+            <FaTasks
+              size={34}
+              color="#818cf8"
+            />
           </div>
 
           <div className="cta-mini-card">
+            <div>
+              <h3>18</h3>
+              <span>Active Members</span>
+            </div>
 
-            <strong>
-              🚀 Sprint Completed
-            </strong>
-
-            <span>
-              124 Tasks Finished
-            </span>
-
+            <FaUsers
+              size={34}
+              color="#22c55e"
+            />
           </div>
 
+          <div className="cta-mini-card">
+            <div>
+              <h3>96%</h3>
+              <span>Project Success</span>
+            </div>
+
+            <FaChartLine
+              size={34}
+              color="#06b6d4"
+            />
+          </div>
+
+          <div className="cta-mini-card">
+            <div>
+              <strong>
+                Sprint Completed
+              </strong>
+
+              <span>
+                🚀 Excellent Progress
+              </span>
+            </div>
+
+            <FaRocket
+              size={30}
+              color="#fbbf24"
+            />
+          </div>
         </motion.div>
-
       </motion.div>
-
     </section>
   );
 }
