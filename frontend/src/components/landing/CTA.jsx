@@ -7,7 +7,6 @@ import {
   FaTasks,
   FaUsers,
   FaChartLine,
-  FaRocket,
 } from "react-icons/fa";
 
 const fadeUp = {
@@ -23,7 +22,10 @@ const fadeUp = {
 
 function CTA() {
   return (
-    <section className="cta-section" id="get-started">
+    <section
+      className="cta-section"
+      id="get-started"
+    >
       <motion.div
         className="cta-container"
         variants={fadeUp}
@@ -37,7 +39,7 @@ function CTA() {
         <div className="cta-circle cta-circle-1" />
         <div className="cta-circle cta-circle-2" />
 
-        {/* Left Side */}
+        {/* Left */}
 
         <div className="cta-content">
           <span className="section-tag">
@@ -53,10 +55,12 @@ function CTA() {
           </h2>
 
           <p>
-            Join thousands of teams using TaskFlow to organize
-            projects, collaborate in real time, monitor
-            performance and finish work on schedule—all from
-            one intelligent workspace.
+            Join thousands of teams using
+            TaskFlow to organize projects,
+            collaborate in real time,
+            monitor performance and finish
+            work on schedule—all from one
+            intelligent workspace.
           </p>
 
           <div className="cta-buttons">
@@ -115,8 +119,6 @@ function CTA() {
             ease: "easeInOut",
           }}
         >
-          {/* Widget */}
-
           <div className="cta-widget">
             <div className="widget-header">
               <span />
@@ -124,26 +126,32 @@ function CTA() {
               <span />
             </div>
 
-            <h3>Workspace Performance</h3>
+            <h3>
+              Workspace Performance
+            </h3>
 
             <div className="widget-progress">
               <div
                 className="widget-progress-fill"
-                style={{ width: "91%" }}
+                style={{
+                  width: "91%",
+                }}
               />
             </div>
 
             <h1>91%</h1>
 
-            <p>Overall Team Productivity</p>
+            <p>
+              Overall Team Productivity
+            </p>
           </div>
-
-          {/* Mini Cards */}
 
           <div className="cta-mini-card">
             <div>
               <h3>124</h3>
-              <span>Tasks Completed</span>
+              <span>
+                Tasks Completed
+              </span>
             </div>
 
             <FaTasks
@@ -155,7 +163,9 @@ function CTA() {
           <div className="cta-mini-card">
             <div>
               <h3>18</h3>
-              <span>Active Members</span>
+              <span>
+                Active Members
+              </span>
             </div>
 
             <FaUsers
@@ -167,7 +177,9 @@ function CTA() {
           <div className="cta-mini-card">
             <div>
               <h3>96%</h3>
-              <span>Project Success</span>
+              <span>
+                Project Success
+              </span>
             </div>
 
             <FaChartLine
@@ -183,11 +195,11 @@ function CTA() {
               </strong>
 
               <span>
-                🚀 Excellent Progress
+                Excellent Progress
               </span>
             </div>
 
-            <FaRocket
+            <FaCheckCircle
               size={30}
               color="#fbbf24"
             />

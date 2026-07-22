@@ -5,11 +5,10 @@ import {
   FaFolderOpen,
   FaTasks,
   FaChartLine,
+  FaLock,
+  FaGlobe,
+  FaClock,
 } from "react-icons/fa";
-
-import {
-  FaArrowTrendUp,
-} from "react-icons/fa6";
 
 const statistics = [
   {
@@ -55,20 +54,14 @@ const companies = [
   "IBM",
 ];
 
-function Counter({
-  end,
-  suffix = "",
-  decimals = 0,
-}) {
+function Counter({ end, suffix = "", decimals = 0 }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     let current = 0;
 
     const duration = 1800;
-
-    const increment =
-      end / (duration / 20);
+    const increment = end / (duration / 20);
 
     const timer = setInterval(() => {
       current += increment;
@@ -86,9 +79,7 @@ function Counter({
 
   return (
     <>
-      {decimals
-        ? count.toFixed(decimals)
-        : Math.floor(count)}
+      {decimals ? count.toFixed(decimals) : Math.floor(count)}
       {suffix}
     </>
   );
@@ -100,183 +91,110 @@ function Statistics() {
       id="statistics"
       className="statistics-section"
     >
-      {/* Heading */}
-
       <motion.div
         className="section-heading"
-        initial={{
-          opacity: 0,
-          y: 30,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        viewport={{
-          once: true,
-        }}
-        transition={{
-          duration: 0.7,
-        }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
       >
         <span className="section-tag">
           Trusted Worldwide
         </span>
 
         <h2>
-          Numbers that demonstrate
-          productivity at scale
+          Numbers that demonstrate productivity at scale
         </h2>
 
         <p>
-          Thousands of organizations rely
-          on TaskFlow every day to plan,
-          collaborate and deliver projects
-          faster with complete confidence.
+          Thousands of organizations rely on TaskFlow every day to
+          plan, collaborate and deliver projects faster.
         </p>
       </motion.div>
 
-      {/* Statistics Cards */}
-
       <div className="statistics-grid">
-        {statistics.map(
-          (item, index) => (
-            <motion.div
-              key={item.label}
-              className="statistics-card"
-              initial={{
-                opacity: 0,
-                y: 40,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                delay: index * 0.12,
-                duration: 0.6,
-              }}
-              whileHover={{
-                y: -10,
-              }}
-            >
-              <div className="statistics-icon">
-                {item.icon}
-              </div>
+        {statistics.map((item, index) => (
+          <motion.div
+            key={item.label}
+            className="statistics-card"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              delay: index * 0.12,
+              duration: 0.6,
+            }}
+            whileHover={{ y: -10 }}
+          >
+            <div className="statistics-icon">
+              {item.icon}
+            </div>
 
-              <h2>
-                <Counter
-                  end={item.value}
-                  suffix={item.suffix}
-                  decimals={
-                    item.value % 1 !== 0
-                      ? 1
-                      : 0
-                  }
-                />
-              </h2>
+            <h2>
+              <Counter
+                end={item.value}
+                suffix={item.suffix}
+                decimals={item.value % 1 ? 1 : 0}
+              />
+            </h2>
 
-              <h4
-                style={{
-                  marginBottom: "10px",
-                  fontSize: "20px",
-                }}
-              >
-                {item.label}
-              </h4>
+            <h4>{item.label}</h4>
 
-              <p>{item.description}</p>
-            </motion.div>
-          )
-        )}
+            <p>{item.description}</p>
+          </motion.div>
+        ))}
       </div>
-
-      {/* Trusted Companies */}
 
       <motion.div
         className="trusted-companies"
-        initial={{
-          opacity: 0,
-          y: 30,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        viewport={{
-          once: true,
-        }}
-        transition={{
-          duration: 0.8,
-        }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
       >
         <p>
-          Trusted by innovative companies
-          across the globe
+          Trusted by innovative companies across the globe
         </p>
 
         <div className="company-grid">
-          {companies.map(
-            (company) => (
-              <motion.span
-                key={company}
-                whileHover={{
-                  scale: 1.05,
-                }}
-              >
-                {company}
-              </motion.span>
-            )
-          )}
+          {companies.map((company) => (
+            <motion.span
+              key={company}
+              whileHover={{ scale: 1.05 }}
+            >
+              {company}
+            </motion.span>
+          ))}
         </div>
       </motion.div>
 
-      {/* Extra Summary */}
-
       <motion.div
         className="statistics-grid"
-        style={{
-          marginTop: "70px",
-        }}
-        initial={{
-          opacity: 0,
-        }}
-        whileInView={{
-          opacity: 1,
-        }}
-        viewport={{
-          once: true,
-        }}
-        transition={{
-          delay: 0.2,
-        }}
+        style={{ marginTop: "70px" }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
       >
         <div className="statistics-card">
           <div className="statistics-icon">
-            <FaArrowTrendUp />
+            <FaChartLine />
           </div>
 
           <h2>95%</h2>
 
           <p>
-            Average productivity increase
-            after adopting TaskFlow.
+            Average productivity increase after adopting TaskFlow.
           </p>
         </div>
 
         <div className="statistics-card">
           <div className="statistics-icon">
-            <FaShieldAlt />
+            <FaLock />
           </div>
 
           <h2>100%</h2>
 
           <p>
-            Secure authentication using JWT
-            and protected APIs.
+            Secure authentication using JWT and protected APIs.
           </p>
         </div>
 
@@ -288,8 +206,7 @@ function Statistics() {
           <h2>80+</h2>
 
           <p>
-            Countries where teams use
-            TaskFlow every day.
+            Countries where teams use TaskFlow every day.
           </p>
         </div>
 
@@ -301,8 +218,7 @@ function Statistics() {
           <h2>24/7</h2>
 
           <p>
-            Continuous monitoring and cloud
-            availability for your projects.
+            Continuous monitoring and cloud availability.
           </p>
         </div>
       </motion.div>
