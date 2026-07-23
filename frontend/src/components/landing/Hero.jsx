@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import { motion } from "framer-motion";
 
 import {
@@ -43,16 +43,7 @@ const Hero = () => {
           </p>
 
           <div className="hero-buttons">
-            <Link
-              to="/register"
-              className="hero-primary-btn"
-            >
-              Get Started
-              <FaArrowRight />
-            </Link>
-
-            <a
-              href="#features"
+            <a href="#features"
               className="hero-secondary-btn"
             >
               Learn More

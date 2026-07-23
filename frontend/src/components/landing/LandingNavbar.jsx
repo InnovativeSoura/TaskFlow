@@ -138,20 +138,12 @@ const LandingNavbar = () => {
           </button>
 
            <div className="landing-auth-buttons">
-            {/*<NavLink
-              to="/login"
-              className="landing-login-btn"
-              onClick={closeMenu}
-            >
-              Login
-            </NavLink> */}
-
             <NavLink
-              to="/register"
+              
               className="landing-register-btn"
               onClick={closeMenu}
             >
-              Get Started
+              Explore
 
               <FaArrowRight />
             </NavLink>
