@@ -18,6 +18,13 @@ const AuthCard = ({ compact = false }) => {
   const { login, register } = useAuth();
 
   /* ==========================================
+      API URL
+  ========================================== */
+
+  const API_URL =
+    import.meta.env.VITE_API_URL;
+
+  /* ==========================================
       LOGIN / REGISTER MODE
   ========================================== */
 
@@ -27,7 +34,9 @@ const AuthCard = ({ compact = false }) => {
 
   useEffect(() => {
     if (!compact) {
-      setIsLogin(location.pathname !== "/register");
+      setIsLogin(
+        location.pathname !== "/register"
+      );
     }
   }, [location.pathname, compact]);
 
@@ -35,9 +44,11 @@ const AuthCard = ({ compact = false }) => {
       UI STATE
   ========================================== */
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] =
+    useState("");
 
   const [rememberMe, setRememberMe] =
     useState(false);
@@ -54,13 +65,28 @@ const AuthCard = ({ compact = false }) => {
       FORM DATA
   ========================================== */
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "Team Member",
-  });
+  const [formData, setFormData] =
+    useState({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "Team Member",
+    });
+
+  /* ==========================================
+      OAUTH
+  ========================================== */
+
+  const handleGoogleLogin = () => {
+    window.location.href =
+      `${API_URL}/auth/google`;
+  };
+
+  const handleGithubLogin = () => {
+    window.location.href =
+      `${API_URL}/auth/github`;
+  };
 
   /* ==========================================
       RESET FORM
@@ -91,25 +117,30 @@ const AuthCard = ({ compact = false }) => {
 
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     }));
   };
 
   /* ==========================================
-      MODE SWITCH
+      SWITCH MODE
   ========================================== */
 
-  const switchMode = (loginMode) => {
-    if (loginMode === isLogin) return;
+  const switchMode = (
+    loginMode
+  ) => {
+    if (loginMode === isLogin)
+      return;
 
     resetForm();
 
     setIsLogin(loginMode);
 
-    // Only change the URL on the dedicated auth pages.
     if (!compact) {
       navigate(
-        loginMode ? "/login" : "/register",
+        loginMode
+          ? "/login"
+          : "/register",
         {
           replace: true,
         }
@@ -148,7 +179,10 @@ const AuthCard = ({ compact = false }) => {
       if (!name.trim())
         return "Full Name is required.";
 
-      if (password !== confirmPassword)
+      if (
+        password !==
+        confirmPassword
+      )
         return "Passwords do not match.";
     }
 
@@ -159,12 +193,15 @@ const AuthCard = ({ compact = false }) => {
       SUBMIT
   ========================================== */
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (
+    e
+  ) => {
     e.preventDefault();
 
     if (loading) return;
 
-    const validation = validate();
+    const validation =
+      validate();
 
     if (validation) {
       setError(validation);
@@ -179,27 +216,40 @@ const AuthCard = ({ compact = false }) => {
       let result;
 
       if (isLogin) {
-        result = await login({
-          email: formData.email.trim(),
-          password: formData.password,
-        });
+        result =
+          await login({
+            email:
+              formData.email.trim(),
+            password:
+              formData.password,
+          });
       } else {
-        result = await register({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          password: formData.password,
-          role: formData.role,
-        });
+        result =
+          await register({
+            name:
+              formData.name.trim(),
+            email:
+              formData.email.trim(),
+            password:
+              formData.password,
+            role:
+              formData.role,
+          });
       }
 
       if (!result.success) {
-        setError(result.message);
+        setError(
+          result.message
+        );
         return;
       }
 
-      navigate("/dashboard", {
-        replace: true,
-      });
+      navigate(
+        "/dashboard",
+        {
+          replace: true,
+        }
+      );
     } catch (err) {
       setError(
         err.message ||
@@ -244,10 +294,6 @@ const AuthCard = ({ compact = false }) => {
             duration: 0.35,
           }}
         >
-                      {/* ==========================
-              HEADER
-          ========================== */}
-
           <div className="auth-header">
             <h2 className="auth-title">
               {isLogin
@@ -262,33 +308,41 @@ const AuthCard = ({ compact = false }) => {
             </p>
           </div>
 
-          {/* ==========================
-              LOGIN FORM
-          ========================== */}
-
           {isLogin ? (
             <LoginForm
               email={formData.email}
               password={formData.password}
-              rememberMe={rememberMe}
+              rememberMe={
+                rememberMe
+              }
               loading={loading}
               error={error}
-              showPassword={showPassword}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
+              showPassword={
+                showPassword
+              }
+              onChange={
+                handleChange
+              }
+              onSubmit={
+                handleSubmit
+              }
               onTogglePassword={() =>
-                setShowPassword((prev) => !prev)
+                setShowPassword(
+                  (prev) =>
+                    !prev
+                )
               }
               onRememberChange={() =>
-                setRememberMe((prev) => !prev)
+                setRememberMe(
+                  (prev) =>
+                    !prev
+                )
               }
-              onForgotPassword={() => {
-                if (!compact) {
-                  navigate("/forgot-password");
-                } else {
-                  window.location.href = "/forgot-password";
-                }
-              }}
+              onForgotPassword={() =>
+                navigate(
+                  "/forgot-password"
+                )
+              }
             />
           ) : (
             <RegisterForm
@@ -301,56 +355,57 @@ const AuthCard = ({ compact = false }) => {
               role={formData.role}
               loading={loading}
               error={error}
-              showPassword={showPassword}
+              showPassword={
+                showPassword
+              }
               showConfirmPassword={
                 showConfirmPassword
               }
-              onChange={handleChange}
-              onSubmit={handleSubmit}
+              onChange={
+                handleChange
+              }
+              onSubmit={
+                handleSubmit
+              }
               onTogglePassword={() =>
-                setShowPassword((prev) => !prev)
+                setShowPassword(
+                  (prev) =>
+                    !prev
+                )
               }
               onToggleConfirmPassword={() =>
                 setShowConfirmPassword(
-                  (prev) => !prev
+                  (prev) =>
+                    !prev
                 )
               }
             />
           )}
 
-          {/* ==========================
-              SOCIAL LOGIN
-          ========================== */}
-
           <SocialButtons
-            onGoogleLogin={() => {
-              console.log(
-                "Google login coming soon."
-              );
-            }}
-            onGithubLogin={() => {
-              console.log(
-                "GitHub login coming soon."
-              );
-            }}
+            onGoogleLogin={
+              handleGoogleLogin
+            }
+            onGithubLogin={
+              handleGithubLogin
+            }
           />
-
-          {/* ==========================
-              FOOTER
-          ========================== */}
 
           <div className="auth-footer">
             {isLogin ? (
               <>
                 <span>
-                  Don't have an account?
+                  Don't have an
+                  account?
                 </span>
 
                 <button
                   type="button"
                   className="link-btn"
                   onClick={() =>
-                    switchMode(false)
+                    switchMode(
+                      false
+                    )
                   }
                 >
                   Register Now
@@ -359,14 +414,17 @@ const AuthCard = ({ compact = false }) => {
             ) : (
               <>
                 <span>
-                  Already have an account?
+                  Already have an
+                  account?
                 </span>
 
                 <button
                   type="button"
                   className="link-btn"
                   onClick={() =>
-                    switchMode(true)
+                    switchMode(
+                      true
+                    )
                   }
                 >
                   Login
