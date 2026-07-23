@@ -137,14 +137,14 @@ const LandingNavbar = () => {
             Contact
           </button>
 
-          <div className="landing-auth-buttons">
-            <NavLink
+           <div className="landing-auth-buttons">
+            {/*<NavLink
               to="/login"
               className="landing-login-btn"
               onClick={closeMenu}
             >
               Login
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
               to="/register"
