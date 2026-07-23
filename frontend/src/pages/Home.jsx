@@ -1,6 +1,5 @@
 import LandingNavbar from "../components/landing/LandingNavbar";
 import Hero from "../components/landing/Hero";
-// import DashboardPreview from "../components/landing/DashboardPreview";
 import Features from "../components/landing/Features";
 import Statistics from "../components/landing/Statistics";
 import Testimonials from "../components/landing/Testimonials";
@@ -10,55 +9,46 @@ import BackgroundAnimation from "../components/landing/BackgroundAnimation";
 
 import "../styles/Landing.css";
 
-function Home() {
+const Home = () => {
   return (
     <div className="landing-page">
-
-      {/* Background Effects */}
+      {/* Background */}
       <BackgroundAnimation />
 
-      {/* Navigation */}
+      {/* Navbar */}
       <LandingNavbar />
 
       <main>
-
-        {/* ================= HERO ================= */}
+        {/* Hero */}
         <section id="home">
           <Hero />
         </section>
 
-        {/* =========== DASHBOARD PREVIEW ==========
-        <section id="dashboard">
-          <DashboardPreview />
-        </section> */}
-
-        {/* ================= FEATURES ================= */}
+        {/* Features */}
         <section id="features">
           <Features />
         </section>
 
-        {/* ================= STATISTICS ================= */}
+        {/* Statistics */}
         <section id="statistics">
           <Statistics />
         </section>
 
-        {/* ================= TESTIMONIALS ================= */}
+        {/* Testimonials */}
         <section id="testimonials">
           <Testimonials />
         </section>
 
-        {/* ================= CTA / CONTACT ================= */}
+        {/* CTA */}
         <section id="contact">
           <CTA />
         </section>
-
       </main>
 
       {/* Footer */}
       <Footer />
-
     </div>
   );
-}
+};
 
 export default Home;
