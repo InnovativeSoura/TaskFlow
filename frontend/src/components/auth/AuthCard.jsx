@@ -26,8 +26,10 @@ const AuthCard = ({ compact = false }) => {
   );
 
   useEffect(() => {
-    setIsLogin(location.pathname !== "/register");
-  }, [location.pathname]);
+    if (!compact) {
+      setIsLogin(location.pathname !== "/register");
+    }
+  }, [location.pathname, compact]);
 
   /* ==========================================
       UI STATE
@@ -104,14 +106,15 @@ const AuthCard = ({ compact = false }) => {
 
     setIsLogin(loginMode);
 
-    navigate(
-      loginMode
-        ? "/login"
-        : "/register",
-      {
-        replace: true,
-      }
-    );
+    // Only change the URL on the dedicated auth pages.
+    if (!compact) {
+      navigate(
+        loginMode ? "/login" : "/register",
+        {
+          replace: true,
+        }
+      );
+    }
   };
 
   /* ==========================================
@@ -279,9 +282,13 @@ const AuthCard = ({ compact = false }) => {
               onRememberChange={() =>
                 setRememberMe((prev) => !prev)
               }
-              onForgotPassword={() =>
-                navigate("/forgot-password")
-              }
+              onForgotPassword={() => {
+                if (!compact) {
+                  navigate("/forgot-password");
+                } else {
+                  window.location.href = "/forgot-password";
+                }
+              }}
             />
           ) : (
             <RegisterForm
