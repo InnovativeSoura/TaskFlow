@@ -9,10 +9,10 @@ import {
 
 const testimonials = [
   {
-    name: "Sarah Johnson",
+    name: "Nicholas Johnson",
     role: "Project Manager",
     company: "TechNova",
-    avatar: "SJ",
+    avatar: "NJ",
     review:
       "TaskFlow transformed the way our team manages projects. Planning, collaboration and delivery are now significantly faster and more organized.",
   },

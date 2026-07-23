@@ -1,313 +1,313 @@
-import { motion } from "framer-motion";
-import {
-  FaChartPie,
-  FaTasks,
-  FaUsers,
-  FaCalendarAlt,
-  FaCheckCircle,
-  FaClock,
-  FaChartLine,
-} from "react-icons/fa";
-
-const DashboardPreview = () => {
-  return (
-    <section
-      id="dashboard"
-      className="dashboard-preview"
-    >
-      {/* Section Heading */}
-
-      <motion.div
-        className="section-heading"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-      >
-        <span className="section-tag">
-          Dashboard Preview
-        </span>
-
-        <h2>
-          Everything you need in one intelligent workspace
-        </h2>
+// import { motion } from "framer-motion";
+// import {
+//   FaChartPie,
+//   FaTasks,
+//   FaUsers,
+//   FaCalendarAlt,
+//   FaCheckCircle,
+//   FaClock,
+//   FaChartLine,
+// } from "react-icons/fa";
+
+// const DashboardPreview = () => {
+//   return (
+//     <section
+//       id="dashboard"
+//       className="dashboard-preview"
+//     >
+//       {/* Section Heading */}
+
+//       <motion.div
+//         className="section-heading"
+//         initial={{ opacity: 0, y: 30 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         viewport={{ once: true }}
+//         transition={{ duration: 0.7 }}
+//       >
+//         <span className="section-tag">
+//           Dashboard Preview
+//         </span>
+
+//         <h2>
+//           Everything you need in one intelligent workspace
+//         </h2>
 
-        <p>
-          Track projects, monitor productivity,
-          collaborate with teammates, organize
-          tasks and visualize progress through a
-          beautiful modern dashboard.
-        </p>
-      </motion.div>
-
-      {/* Dashboard Window */}
+//         <p>
+//           Track projects, monitor productivity,
+//           collaborate with teammates, organize
+//           tasks and visualize progress through a
+//           beautiful modern dashboard.
+//         </p>
+//       </motion.div>
+
+//       {/* Dashboard Window */}
 
-      <motion.div
-        className="dashboard-preview-window"
-        initial={{ opacity: 0, y: 70 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        {/* Header */}
+//       <motion.div
+//         className="dashboard-preview-window"
+//         initial={{ opacity: 0, y: 70 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         viewport={{ once: true }}
+//         transition={{ duration: 0.8 }}
+//       >
+//         {/* Header */}
 
-        <div className="preview-header">
-          <div className="preview-dots">
-            <span />
-            <span />
-            <span />
-          </div>
+//         <div className="preview-header">
+//           <div className="preview-dots">
+//             <span />
+//             <span />
+//             <span />
+//           </div>
 
-          <div className="preview-title">
-            TaskFlow Dashboard
-          </div>
-        </div>
+//           <div className="preview-title">
+//             TaskFlow Dashboard
+//           </div>
+//         </div>
 
-        {/* Body */}
+//         {/* Body */}
 
-        <div className="preview-body">
+//         <div className="preview-body">
 
-          {/* Sidebar */}
+//           {/* Sidebar */}
 
-          <aside className="preview-sidebar">
+//           <aside className="preview-sidebar">
 
-            <div className="sidebar-item active">
-              <FaChartPie />
-              Dashboard
-            </div>
+//             <div className="sidebar-item active">
+//               <FaChartPie />
+//               Dashboard
+//             </div>
 
-            <div className="sidebar-item">
-              <FaTasks />
-              Projects
-            </div>
+//             <div className="sidebar-item">
+//               <FaTasks />
+//               Projects
+//             </div>
 
-            <div className="sidebar-item">
-              <FaCalendarAlt />
-              Calendar
-            </div>
+//             <div className="sidebar-item">
+//               <FaCalendarAlt />
+//               Calendar
+//             </div>
 
-            <div className="sidebar-item">
-              <FaUsers />
-              Team
-            </div>
+//             <div className="sidebar-item">
+//               <FaUsers />
+//               Team
+//             </div>
 
-          </aside>
+//           </aside>
 
-          {/* Main */}
+//           {/* Main */}
 
-          <main className="preview-main">
+//           <main className="preview-main">
 
-            {/* Statistics */}
+//             {/* Statistics */}
 
-            <div className="preview-stats">
+//             <div className="preview-stats">
 
-              <div className="preview-stat-card">
-                <FaTasks />
+//               <div className="preview-stat-card">
+//                 <FaTasks />
 
-                <h3>124</h3>
+//                 <h3>124</h3>
 
-                <p>Total Tasks</p>
-              </div>
+//                 <p>Total Tasks</p>
+//               </div>
 
-              <div className="preview-stat-card">
-                <FaUsers />
+//               <div className="preview-stat-card">
+//                 <FaUsers />
 
-                <h3>18</h3>
+//                 <h3>18</h3>
 
-                <p>Active Members</p>
-              </div>
+//                 <p>Active Members</p>
+//               </div>
 
-              <div className="preview-stat-card">
-                <FaChartLine />
+//               <div className="preview-stat-card">
+//                 <FaChartLine />
 
-                <h3>91%</h3>
+//                 <h3>91%</h3>
 
-                <p>Productivity</p>
-              </div>
+//                 <p>Productivity</p>
+//               </div>
 
-            </div>
+//             </div>
 
-            {/* Progress */}
+//             {/* Progress */}
 
-            <div className="preview-progress">
+//             <div className="preview-progress">
 
-              <div className="preview-card-header">
-                <h3>
-                  Mobile Application
-                </h3>
+//               <div className="preview-card-header">
+//                 <h3>
+//                   Mobile Application
+//                 </h3>
 
-                <span>
-                  82%
-                </span>
-              </div>
+//                 <span>
+//                   82%
+//                 </span>
+//               </div>
 
-              <div className="progress-track">
+//               <div className="progress-track">
 
-                <div
-                  className="progress-fill"
-                  style={{
-                    width: "82%",
-                  }}
-                />
+//                 <div
+//                   className="progress-fill"
+//                   style={{
+//                     width: "82%",
+//                   }}
+//                 />
 
-              </div>
+//               </div>
 
-              <p>
-                Current Sprint Progress
-              </p>
+//               <p>
+//                 Current Sprint Progress
+//               </p>
 
-            </div>
+//             </div>
 
-            {/* Kanban */}
+//             {/* Kanban */}
 
-            <div className="preview-kanban">
+//             <div className="preview-kanban">
 
-              {/* Todo */}
+//               {/* Todo */}
 
-              <div className="kanban-column">
+//               <div className="kanban-column">
 
-                <h4>To Do</h4>
+//                 <h4>To Do</h4>
 
-                <div className="kanban-card">
-                  Design Login Page
-                </div>
+//                 <div className="kanban-card">
+//                   Design Login Page
+//                 </div>
 
-                <div className="kanban-card">
-                  API Documentation
-                </div>
+//                 <div className="kanban-card">
+//                   API Documentation
+//                 </div>
 
-              </div>
+//               </div>
 
-              {/* Progress */}
+//               {/* Progress */}
 
-              <div className="kanban-column">
+//               <div className="kanban-column">
 
-                <h4>
-                  In Progress
-                </h4>
+//                 <h4>
+//                   In Progress
+//                 </h4>
 
-                <div className="kanban-card active">
-                  Dashboard UI
-                </div>
+//                 <div className="kanban-card active">
+//                   Dashboard UI
+//                 </div>
 
-                <div className="kanban-card active">
-                  Authentication
-                </div>
+//                 <div className="kanban-card active">
+//                   Authentication
+//                 </div>
 
-              </div>
+//               </div>
 
-              {/* Completed */}
+//               {/* Completed */}
 
-              <div className="kanban-column">
+//               <div className="kanban-column">
 
-                <h4>
-                  Completed
-                </h4>
+//                 <h4>
+//                   Completed
+//                 </h4>
 
-                <div className="kanban-card success">
-                  <FaCheckCircle />
+//                 <div className="kanban-card success">
+//                   <FaCheckCircle />
 
-                  Database Setup
-                </div>
+//                   Database Setup
+//                 </div>
 
-                <div className="kanban-card success">
-                  <FaCheckCircle />
+//                 <div className="kanban-card success">
+//                   <FaCheckCircle />
 
-                  JWT Login
-                </div>
+//                   JWT Login
+//                 </div>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-          </main>
+//           </main>
 
-          {/* Activity */}
+//           {/* Activity */}
 
-          <aside className="preview-activity">
+//           <aside className="preview-activity">
 
-            <h3>
-              Recent Activity
-            </h3>
+//             <h3>
+//               Recent Activity
+//             </h3>
 
-            <div className="activity-item">
+//             <div className="activity-item">
 
-              <FaClock />
+//               <FaClock />
 
-              <div>
+//               <div>
 
-                <strong>
-                  Dashboard Updated
-                </strong>
+//                 <strong>
+//                   Dashboard Updated
+//                 </strong>
 
-                <span>
-                  5 minutes ago
-                </span>
+//                 <span>
+//                   5 minutes ago
+//                 </span>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <div className="activity-item">
+//             <div className="activity-item">
 
-              <FaCheckCircle />
+//               <FaCheckCircle />
 
-              <div>
+//               <div>
 
-                <strong>
-                  Sprint Completed
-                </strong>
+//                 <strong>
+//                   Sprint Completed
+//                 </strong>
 
-                <span>
-                  Today
-                </span>
+//                 <span>
+//                   Today
+//                 </span>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <div className="activity-item">
+//             <div className="activity-item">
 
-              <FaUsers />
+//               <FaUsers />
 
-              <div>
+//               <div>
 
-                <strong>
-                  New Team Member Added
-                </strong>
+//                 <strong>
+//                   New Team Member Added
+//                 </strong>
 
-                <span>
-                  Yesterday
-                </span>
+//                 <span>
+//                   Yesterday
+//                 </span>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <div className="activity-item">
+//             <div className="activity-item">
 
-              <FaTasks />
+//               <FaTasks />
 
-              <div>
+//               <div>
 
-                <strong>
-                  12 Tasks Assigned
-                </strong>
+//                 <strong>
+//                   12 Tasks Assigned
+//                 </strong>
 
-                <span>
-                  This Week
-                </span>
+//                 <span>
+//                   This Week
+//                 </span>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-          </aside>
+//           </aside>
 
-        </div>
-      </motion.div>
-    </section>
-  );
-};
+//         </div>
+//       </motion.div>
+//     </section>
+//   );
+// };
 
-export default DashboardPreview;
+// export default DashboardPreview;
