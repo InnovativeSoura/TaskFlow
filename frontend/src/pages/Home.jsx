@@ -27,10 +27,10 @@ function Home() {
           <Hero />
         </section>
 
-        {/* =========== DASHBOARD PREVIEW ========== */}
+        {/* =========== DASHBOARD PREVIEW ==========
         <section id="dashboard">
           <DashboardPreview />
-        </section>
+        </section> */}
 
         {/* ================= FEATURES ================= */}
         <section id="features">
