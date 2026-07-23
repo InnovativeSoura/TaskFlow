@@ -855,7 +855,7 @@ INPUTS
 
     height:60px;
 
-    padding:0 58px;
+    padding:0 60px 0 58px;
 
     border-radius:18px;
 
@@ -940,41 +940,44 @@ PASSWORD
 ==========================================================*/
 
 .password-group{
-
     position:relative;
+}
 
+.password-group input{
+    padding-right:60px;
 }
 
 .password-toggle{
-
     position:absolute;
-
-    right:18px;
-
     top:50%;
-
+    right:18px;
     transform:translateY(-50%);
 
-    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    background:none;
+    width:34px;
+    height:34px;
+
+    border:none;
+    background:transparent;
 
     color:#94a3b8;
-
     cursor:pointer;
 
-    font-size:18px;
+    z-index:20;
 
-    transition:.30s;
-
-    z-index:10;
-
+    transition:.3s ease;
 }
 
 .password-toggle:hover{
+    color:#7c83ff;
+}
 
-    color:white;
-
+.password-toggle svg{
+    font-size:18px;
+    pointer-events:none;
 }
 
 /*==========================================================

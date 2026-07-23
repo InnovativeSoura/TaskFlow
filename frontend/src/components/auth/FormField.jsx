@@ -66,41 +66,38 @@ const FormField = ({
   ========================== */
 
   if (type === "password") {
-    return (
-      <div className="input-group password-group">
-        {Icon && (
-          <Icon className="input-icon" />
+  return (
+    <div className="input-group password-group">
+      {Icon && (
+        <Icon className="input-icon" />
+      )}
+
+      <input
+        type={showPassword ? "text" : "password"}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required={required}
+        disabled={disabled}
+        autoComplete={autoComplete}
+        {...props}
+      />
+
+      <button
+        type="button"
+        className="password-toggle"
+        onClick={onTogglePassword}
+        aria-label="Toggle password visibility"
+      >
+        {showPassword ? (
+          <FaEyeSlash />
+        ) : (
+          <FaEye />
         )}
-
-        <input
-          type={
-            showPassword
-              ? "text"
-              : "password"
-          }
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          required={required}
-          disabled={disabled}
-          autoComplete={autoComplete}
-          {...props}
-        />
-
-        <button
-          type="button"
-          className="password-toggle"
-          onClick={onTogglePassword}
-        >
-          {showPassword ? (
-            <FaEyeSlash />
-          ) : (
-            <FaEye />
-          )}
-        </button>
-      </div>
-    );
+      </button>
+    </div>
+  );
   }
 
   /* ==========================
