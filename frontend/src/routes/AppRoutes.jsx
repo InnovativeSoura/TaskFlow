@@ -17,6 +17,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Home from "../pages/Home";
 import AuthPage from "../pages/AuthPage";
 import Pricing from "../pages/Pricing";
+import OAuthSuccess from "../pages/OAuthSuccess";
 
 /* ===========================
    DASHBOARDS
@@ -95,7 +96,8 @@ const AppRoutes = () => {
     );
   }
 
-  const authenticated = !!token && !!user;
+  const authenticated =
+    !!token && !!user;
 
   return (
     <Routes>
@@ -112,32 +114,28 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
-          authenticated
-            ? (
-                <Navigate
-                  to="/dashboard"
-                  replace
-                />
-              )
-            : (
-                <AuthPage />
-              )
+          authenticated ? (
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          ) : (
+            <AuthPage />
+          )
         }
       />
 
       <Route
         path="/register"
         element={
-          authenticated
-            ? (
-                <Navigate
-                  to="/dashboard"
-                  replace
-                />
-              )
-            : (
-                <AuthPage />
-              )
+          authenticated ? (
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          ) : (
+            <AuthPage />
+          )
         }
       />
 
@@ -154,6 +152,15 @@ const AppRoutes = () => {
             replace
           />
         }
+      />
+
+      {/* ===========================
+          OAUTH CALLBACK
+      ============================ */}
+
+      <Route
+        path="/oauth-success"
+        element={<OAuthSuccess />}
       />
 
       {/* ===========================

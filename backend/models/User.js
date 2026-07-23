@@ -21,14 +21,28 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
+    // Optional for OAuth users
     password: {
       type: String,
-      required: true,
+      default: "",
       minlength: 6,
       select: false,
     },
 
     avatar: {
+      type: String,
+      default: "",
+    },
+
+    // NEW
+    provider: {
+      type: String,
+      enum: ["local", "google", "github"],
+      default: "local",
+    },
+
+    // NEW
+    providerId: {
       type: String,
       default: "",
     },
@@ -101,10 +115,14 @@ const userSchema = new mongoose.Schema(
    HASH PASSWORD
 ====================================================== */
 
-userSchema.pre("save", async function () {
-  // Skip hashing if password hasn't changed
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    return;
+    return next();
+  }
+
+  // Skip hashing for OAuth users
+  if (!this.password) {
+    return next();
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -113,6 +131,8 @@ userSchema.pre("save", async function () {
     this.password,
     salt
   );
+
+  next();
 });
 
 /* ======================================================

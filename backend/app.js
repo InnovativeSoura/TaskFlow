@@ -4,8 +4,11 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "./config/passport.js";
 
 import authRoutes from "./routes/authRoutes.js";
+import oauthRoutes from "./routes/oauthRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
@@ -48,7 +51,6 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin(origin, callback) {
-    // Allow Postman / curl / server-side requests
     if (!origin) {
       return callback(null, true);
     }
@@ -59,7 +61,9 @@ const corsOptions = {
 
     console.log("Blocked Origin:", origin);
 
-    return callback(new Error("Not allowed by CORS"));
+    return callback(
+      new Error("Not allowed by CORS")
+    );
   },
 
   credentials: true,
@@ -96,10 +100,57 @@ app.use(
 );
 
 /* ==========================================
-   OTHER MIDDLEWARE
+   COOKIE PARSER
 ========================================== */
 
 app.use(cookieParser());
+
+/* ==========================================
+   EXPRESS SESSION
+========================================== */
+
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+
+    resave: false,
+
+    saveUninitialized: false,
+
+    cookie: {
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+
+      httpOnly: true,
+
+      sameSite:
+        process.env.NODE_ENV ===
+        "production"
+          ? "none"
+          : "lax",
+
+      maxAge:
+        1000 *
+        60 *
+        60 *
+        24 *
+        7,
+    },
+  })
+);
+
+/* ==========================================
+   PASSPORT
+========================================== */
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+/* ==========================================
+   OTHER MIDDLEWARE
+========================================== */
 
 app.use(compression());
 
@@ -112,7 +163,8 @@ app.use(morgan("dev"));
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "TaskFlow Backend Running 🚀",
+    message:
+      "TaskFlow Backend Running 🚀",
   });
 });
 
@@ -120,15 +172,20 @@ app.get("/", (req, res) => {
    HEALTH CHECK
 ========================================== */
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    success: true,
-    status: "OK",
-    environment: process.env.NODE_ENV,
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-  });
-});
+app.get(
+  "/api/health",
+  (req, res) => {
+    res.json({
+      success: true,
+      status: "OK",
+      environment:
+        process.env.NODE_ENV,
+      uptime: process.uptime(),
+      timestamp:
+        new Date().toISOString(),
+    });
+  }
+);
 
 /* ==========================================
    API ROUTES
@@ -136,15 +193,40 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 
+/* OAuth */
+
+app.use("/api/auth", oauthRoutes);
+
+/* Users */
+
 app.use("/api/users", userRoutes);
 
-app.use("/api/dashboard", dashboardRoutes);
+/* Dashboard */
 
-app.use("/api/projects", projectRoutes);
+app.use(
+  "/api/dashboard",
+  dashboardRoutes
+);
+
+/* Projects */
+
+app.use(
+  "/api/projects",
+  projectRoutes
+);
+
+/* Tasks */
 
 app.use("/api/tasks", taskRoutes);
 
-app.use("/api/settings", settingsRoutes);
+/* Settings */
+
+app.use(
+  "/api/settings",
+  settingsRoutes
+);
+
+/* Notifications */
 
 app.use(
   "/api/notifications",
@@ -166,27 +248,48 @@ app.use("*", (req, res) => {
    GLOBAL ERROR HANDLER
 ========================================== */
 
-app.use((err, req, res, next) => {
-  console.error("Server Error");
-  console.error(err);
+app.use(
+  (err, req, res, next) => {
+    console.error(
+      "Server Error"
+    );
 
-  res.status(err.status || 500).json({
-    success: false,
-    message:
-      process.env.NODE_ENV === "production"
-        ? "Internal Server Error"
-        : err.message,
-  });
-});
+    console.error(err);
+
+    res.status(
+      err.status || 500
+    ).json({
+      success: false,
+
+      message:
+        process.env.NODE_ENV ===
+        "production"
+          ? "Internal Server Error"
+          : err.message,
+    });
+  }
+);
 
 /* ==========================================
    STARTUP LOG
 ========================================== */
 
-console.log("========================================");
-console.log("TaskFlow Express Initialized");
-console.log("Allowed Origins:");
+console.log(
+  "========================================"
+);
+
+console.log(
+  "TaskFlow Express Initialized"
+);
+
+console.log(
+  "Allowed Origins:"
+);
+
 console.log(allowedOrigins);
-console.log("========================================");
+
+console.log(
+  "========================================"
+);
 
 export default app;

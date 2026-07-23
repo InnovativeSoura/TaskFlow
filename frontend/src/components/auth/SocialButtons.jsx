@@ -3,6 +3,23 @@ import {
   FaGithub,
 } from "react-icons/fa";
 
+const API =
+  import.meta.env.VITE_API_URL;
+
+/* ==========================================
+   DEFAULT OAUTH HANDLERS
+========================================== */
+
+const googleLogin = () => {
+  window.location.href =
+    `${API}/auth/google`;
+};
+
+const githubLogin = () => {
+  window.location.href =
+    `${API}/auth/github`;
+};
+
 const SocialButtons = ({
   onGoogleLogin,
   onGithubLogin,
@@ -28,12 +45,15 @@ const SocialButtons = ({
         <button
           type="button"
           className="social-btn"
-          onClick={onGoogleLogin}
+          onClick={
+            onGoogleLogin ||
+            googleLogin
+          }
         >
           <FaGoogle />
 
           <span>
-            Google
+            Continue with Google
           </span>
 
         </button>
@@ -41,12 +61,15 @@ const SocialButtons = ({
         <button
           type="button"
           className="social-btn"
-          onClick={onGithubLogin}
+          onClick={
+            onGithubLogin ||
+            githubLogin
+          }
         >
           <FaGithub />
 
           <span>
-            GitHub
+            Continue with GitHub
           </span>
 
         </button>
@@ -57,8 +80,8 @@ const SocialButtons = ({
 };
 
 SocialButtons.defaultProps = {
-  onGoogleLogin: () => {},
-  onGithubLogin: () => {},
+  onGoogleLogin: null,
+  onGithubLogin: null,
 };
 
 export default SocialButtons;
