@@ -27,7 +27,7 @@ const OAuthSuccess = () => {
         /* Save Token */
 
         localStorage.setItem(
-          "taskflow_token",
+          "token",
           token
         );
 
@@ -49,7 +49,7 @@ const OAuthSuccess = () => {
         /* Save User */
 
         localStorage.setItem(
-          "taskflow_user",
+          "user",
           JSON.stringify(
             data.user
           )
@@ -66,22 +66,17 @@ const OAuthSuccess = () => {
           error
         );
 
-        localStorage.removeItem(
-          "taskflow_token"
-        );
-
-        localStorage.removeItem(
-          "taskflow_user"
-        );
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
 
         delete api.defaults.headers.common[
-          "Authorization"
+         "Authorization"
         ];
 
         navigate("/login", {
-          replace: true,
+         replace: true,
         });
-      }
+      } 
     };
 
     completeOAuth();
