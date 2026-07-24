@@ -171,5 +171,16 @@ passport.deserializeUser(async (id, done) => {
     done(err, null);
   }
 });
+console.log("================================");
+console.log("Passport initialized");
+console.log(
+  "Google Client:",
+  process.env.GOOGLE_CLIENT_ID ? "OK" : "Missing"
+);
+console.log(
+  "Github Client:",
+  process.env.GITHUB_CLIENT_ID ? "OK" : "Missing"
+);
+console.log("================================");
 
 export default passport;
