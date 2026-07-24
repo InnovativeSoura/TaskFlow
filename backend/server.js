@@ -1,3 +1,5 @@
+// backend/server.js
+
 import dns from "dns";
 import dotenv from "dotenv";
 
@@ -25,7 +27,7 @@ import app from "./app.js";
 const PORT = process.env.PORT || 5000;
 
 /* ======================================================
-   CREATE HTTP SERVER
+   HTTP SERVER
 ====================================================== */
 
 const server = http.createServer(app);
@@ -37,9 +39,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-
   process.env.CLIENT_URL,
-
   process.env.CLIENT_API_URL,
 ].filter(Boolean);
 
@@ -50,21 +50,15 @@ const allowedOrigins = [
 export const io = new Server(server, {
   cors: {
     origin(origin, callback) {
-
-      if (!origin) {
-        return callback(null, true);
-      }
+      if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      console.log("❌ Blocked Origin:", origin);
+      console.log("❌ Socket Blocked Origin:", origin);
 
-      callback(
-        new Error("Socket CORS Error")
-      );
-
+      callback(new Error("Socket CORS Error"));
     },
 
     credentials: true,
@@ -84,35 +78,17 @@ export const io = new Server(server, {
 ====================================================== */
 
 io.on("connection", (socket) => {
+  console.log(`✅ Socket Connected : ${socket.id}`);
 
-  console.log(
-    `✅ Socket Connected : ${socket.id}`
-  );
+  socket.on("join-user", (userId) => {
+    socket.join(userId);
 
-  socket.on(
-    "join-user",
-    (userId) => {
+    console.log(`👤 ${userId} joined`);
+  });
 
-      socket.join(userId);
-
-      console.log(
-        `👤 ${userId} joined`
-      );
-
-    }
-  );
-
-  socket.on(
-    "disconnect",
-    () => {
-
-      console.log(
-        `❌ Socket Disconnected : ${socket.id}`
-      );
-
-    }
-  );
-
+  socket.on("disconnect", () => {
+    console.log(`❌ Socket Disconnected : ${socket.id}`);
+  });
 });
 
 /* ======================================================
@@ -120,9 +96,7 @@ io.on("connection", (socket) => {
 ====================================================== */
 
 const startServer = async () => {
-
   try {
-
     console.log("");
     console.log("=======================================");
     console.log("🚀 Starting TaskFlow Backend...");
@@ -130,39 +104,31 @@ const startServer = async () => {
 
     await connectDB();
 
-    server.listen(
-      PORT,
-      "0.0.0.0",
-      () => {
-
-        console.log("");
-        console.log("=======================================");
-        console.log("✅ TaskFlow Backend Running");
-        console.log("=======================================");
-        console.log(
-          "🌍 Environment :",
-          process.env.NODE_ENV || "development"
-        );
-        console.log(
-          "📡 Port        :",
-          PORT
-        );
-        console.log(
-          "🖥 Client URL  :",
-          process.env.CLIENT_URL
-        );
-        console.log(
-          "🌐 API URL     :",
-          `http://localhost:${PORT}`
-        );
-        console.log("=======================================");
-        console.log("");
-
-      }
-    );
-
+    server.listen(PORT, "0.0.0.0", () => {
+      console.log("");
+      console.log("=======================================");
+      console.log("✅ TaskFlow Backend Running");
+      console.log("=======================================");
+      console.log(
+        "🌍 Environment :",
+        process.env.NODE_ENV || "development"
+      );
+      console.log(
+        "📡 Port        :",
+        PORT
+      );
+      console.log(
+        "🖥 Client URL  :",
+        process.env.CLIENT_URL
+      );
+      console.log(
+        "🌐 API URL     :",
+        process.env.API_URL || `http://localhost:${PORT}`
+      );
+      console.log("=======================================");
+      console.log("");
+    });
   } catch (error) {
-
     console.error("");
     console.error("=======================================");
     console.error("❌ SERVER START FAILED");
@@ -172,9 +138,7 @@ const startServer = async () => {
     console.error("");
 
     process.exit(1);
-
   }
-
 };
 
 startServer();

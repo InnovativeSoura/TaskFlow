@@ -1,21 +1,63 @@
+// src/services/api.js
+
 import axios from "axios";
 
+/* ==========================================
+   API BASE URL
+========================================== */
 
-const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+const BASE_URL =
+  `${import.meta.env.VITE_API_URL}/api`;
+
+console.log("====================================");
+console.log("🌐 API Base URL:", BASE_URL);
+console.log("====================================");
+
+/* ==========================================
+   AXIOS INSTANCE
+========================================== */
+
+const api = axios.create({
+  baseURL: BASE_URL,
+
+  withCredentials: true,
+
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+
+  timeout: 30000,
 });
 
-// Add JWT token to every request
-API.interceptors.request.use(
+/* ==========================================
+   REQUEST INTERCEPTOR
+========================================== */
+
+api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Support both old and new token keys
+    const token =
+      localStorage.getItem("token") ||
+      localStorage.getItem("taskflow_token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    console.log(
+      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+    );
+
+    console.log(
+      "🔑 Token:",
+      token ? "Present" : "Missing"
+    );
+
+    if (config.data) {
+      console.log(
+        "📤 Request Body:",
+        config.data
+      );
     }
 
     return config;
@@ -23,10 +65,27 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Handle unauthorized responses
-API.interceptors.response.use(
-  (response) => response,
+/* ==========================================
+   RESPONSE INTERCEPTOR
+========================================== */
+
+api.interceptors.response.use(
+  (response) => {
+    console.log(
+      `✅ ${response.status}`,
+      response.config.url
+    );
+
+    return response;
+  },
+
   (error) => {
+    console.error(
+      "❌ API Error:",
+      error.response?.status,
+      error.response?.data
+    );
+
     if (error.response?.status === 401) {
       console.warn("Unauthorized request");
     }
@@ -35,4 +94,4 @@ API.interceptors.response.use(
   }
 );
 
-export default API;
+export default api;
