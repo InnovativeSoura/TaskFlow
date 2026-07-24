@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 /* ======================================================
    FORMAT USER RESPONSE
@@ -103,7 +104,7 @@ export const register = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Register Error:", error);
+    console.error("REGISTER ERROR:", error);
 
     return res.status(500).json({
       success: false,
@@ -111,8 +112,6 @@ export const register = async (req, res) => {
     });
   }
 };
-
-import bcrypt from "bcryptjs";
 
 /* ======================================================
    LOGIN
@@ -124,7 +123,7 @@ export const login = async (req, res) => {
 
     email = email?.trim().toLowerCase();
 
-    console.log("================================");
+    console.log("\n================================");
     console.log("LOGIN REQUEST");
     console.log("Email:", email);
     console.log("Password:", password);
@@ -137,13 +136,35 @@ export const login = async (req, res) => {
       });
     }
 
-    // IMPORTANT: include password field
+    /* ==========================================
+       DEBUG DATABASE
+    ========================================== */
+
+    console.log("Database:", User.db.name);
+
+    const totalUsers = await User.countDocuments();
+
+    console.log("Total Users:", totalUsers);
+
+    const allUsers = await User.find({})
+      .select("name email")
+      .lean();
+
+    console.log("========== USERS ==========");
+    console.table(allUsers);
+    console.log("===========================");
+
+    /* ==========================================
+       FIND USER
+    ========================================== */
+
     const user = await User.findOne({
       email,
     }).select("+password");
 
     if (!user) {
       console.log("❌ User not found");
+      console.log("Searching for:", email);
 
       return res.status(401).json({
         success: false,
@@ -156,7 +177,10 @@ export const login = async (req, res) => {
     console.log("Mongo Email:", user.email);
     console.log("Stored Hash:", user.password);
 
-    // Compare directly with bcrypt
+    /* ==========================================
+       PASSWORD CHECK
+    ========================================== */
+
     const isMatch = await bcrypt.compare(
       password,
       user.password
@@ -184,9 +208,8 @@ export const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    const loggedInUser = await User.findById(
-      user._id
-    ).select("-password");
+    const loggedInUser = await User.findById(user._id)
+      .select("-password");
 
     return res.status(200).json({
       success: true,
@@ -196,11 +219,12 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("LOGIN ERROR:", error);
+    console.error("LOGIN ERROR:");
+    console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Server Error",
     });
   }
 };
@@ -218,7 +242,8 @@ export const getMe = async (req, res) => {
       });
     }
 
-    const user = await User.findById(req.user._id).select("-password");
+    const user = await User.findById(req.user._id)
+      .select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -233,7 +258,7 @@ export const getMe = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("GetMe Error:", error);
+    console.error("GET ME ERROR:", error);
 
     return res.status(500).json({
       success: false,
