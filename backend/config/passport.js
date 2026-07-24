@@ -1,10 +1,14 @@
-// backend/config/passport.js
-
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
 
 import User from "../models/User.js";
+
+/* ======================================================
+   CALLBACK URL
+====================================================== */
+
+const API_URL = process.env.API_URL?.replace(/\/$/, "");
 
 /* ======================================================
    GOOGLE STRATEGY
@@ -15,15 +19,19 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.API_URL}/api/auth/google/callback`,
+      callbackURL: `${API_URL}/api/auth/google/callback`,
     },
 
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const email = profile.emails?.[0]?.value?.toLowerCase();
+        const email =
+          profile.emails?.[0]?.value?.toLowerCase();
 
         if (!email) {
-          return done(new Error("Google account has no email."), null);
+          return done(
+            new Error("Google account has no email."),
+            null
+          );
         }
 
         let user = await User.findOne({ email });
@@ -32,22 +40,30 @@ passport.use(
           user = await User.create({
             name: profile.displayName,
             email,
+
             password: "",
-            avatar: profile.photos?.[0]?.value || "",
+
+            avatar:
+              profile.photos?.[0]?.value || "",
 
             provider: "google",
+
             googleId: profile.id,
 
             role: "Team Member",
+
             isVerified: true,
+
             lastLogin: new Date(),
           });
         } else {
           user.provider = "google";
+
           user.googleId = profile.id;
 
           if (profile.photos?.length) {
-            user.avatar = profile.photos[0].value;
+            user.avatar =
+              profile.photos[0].value;
           }
 
           user.lastLogin = new Date();
@@ -56,8 +72,8 @@ passport.use(
         }
 
         return done(null, user);
-      } catch (error) {
-        return done(error, null);
+      } catch (err) {
+        return done(err, null);
       }
     }
   )
@@ -71,8 +87,12 @@ passport.use(
   new GitHubStrategy(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: `${process.env.API_URL}/api/auth/github/callback`,
+
+      clientSecret:
+        process.env.GITHUB_CLIENT_SECRET,
+
+      callbackURL: `${API_URL}/api/auth/github/callback`,
+
       scope: ["user:email"],
     },
 
@@ -86,24 +106,35 @@ passport.use(
 
         if (!user) {
           user = await User.create({
-            name: profile.displayName || profile.username,
+            name:
+              profile.displayName ||
+              profile.username,
+
             email,
+
             password: "",
-            avatar: profile.photos?.[0]?.value || "",
+
+            avatar:
+              profile.photos?.[0]?.value || "",
 
             provider: "github",
+
             githubId: profile.id,
 
             role: "Team Member",
+
             isVerified: true,
+
             lastLogin: new Date(),
           });
         } else {
           user.provider = "github";
+
           user.githubId = profile.id;
 
           if (profile.photos?.length) {
-            user.avatar = profile.photos[0].value;
+            user.avatar =
+              profile.photos[0].value;
           }
 
           user.lastLogin = new Date();
@@ -112,8 +143,8 @@ passport.use(
         }
 
         return done(null, user);
-      } catch (error) {
-        return done(error, null);
+      } catch (err) {
+        return done(err, null);
       }
     }
   )
@@ -136,8 +167,8 @@ passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
 
     done(null, user);
-  } catch (error) {
-    done(error, null);
+  } catch (err) {
+    done(err, null);
   }
 });
 
