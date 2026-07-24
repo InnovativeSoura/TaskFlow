@@ -78,14 +78,15 @@ const AuthCard = ({ compact = false }) => {
       OAUTH
   ========================================== */
 
+  const API_URL =
+  import.meta.env.VITE_API_URL.replace(/\/$/, "");
+
   const handleGoogleLogin = () => {
-    window.location.href =
-      `${API_URL}api/auth/google`;
+    window.location.href = `${API_URL}/api/auth/google`;
   };
 
   const handleGithubLogin = () => {
-    window.location.href =
-      `${API_URL}api/auth/github`;
+    window.location.href = `${API_URL}/api/auth/github`;
   };
 
   /* ==========================================
