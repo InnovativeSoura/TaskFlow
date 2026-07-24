@@ -80,12 +80,12 @@ const AuthCard = ({ compact = false }) => {
 
   const handleGoogleLogin = () => {
     window.location.href =
-      `${API_URL}/auth/google`;
+      `${API_URL}api/auth/google`;
   };
 
   const handleGithubLogin = () => {
     window.location.href =
-      `${API_URL}/auth/github`;
+      `${API_URL}api/auth/github`;
   };
 
   /* ==========================================
