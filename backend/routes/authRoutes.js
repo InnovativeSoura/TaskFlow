@@ -1,11 +1,11 @@
-// backend/routes/authRoutes.js
-
 import express from "express";
+import passport from "passport";
 
 import {
   register,
   login,
   getMe,
+  generateToken,
 } from "../controllers/authController.js";
 
 import {
@@ -13,11 +13,6 @@ import {
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
-
-/* ======================================================
-   AUTH ROUTES
-   Base URL: /api/auth
-====================================================== */
 
 /* ======================================================
    REGISTER
@@ -32,6 +27,67 @@ router.post("/register", register);
 router.post("/login", login);
 
 /* ======================================================
+   GOOGLE LOGIN
+====================================================== */
+
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+/* ======================================================
+   GOOGLE CALLBACK
+====================================================== */
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${process.env.CLIENT_URL}/login`,
+  }),
+  (req, res) => {
+    const token = generateToken(req.user._id);
+
+    res.redirect(
+      `${process.env.CLIENT_URL}/oauth-success?token=${token}`
+    );
+  }
+);
+
+/* ======================================================
+   GITHUB LOGIN
+====================================================== */
+
+router.get(
+  "/github",
+  passport.authenticate("github", {
+    scope: ["user:email"],
+    session: false,
+  })
+);
+
+/* ======================================================
+   GITHUB CALLBACK
+====================================================== */
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    session: false,
+    failureRedirect: `${process.env.CLIENT_URL}/login`,
+  }),
+  (req, res) => {
+    const token = generateToken(req.user._id);
+
+    res.redirect(
+      `${process.env.CLIENT_URL}/oauth-success?token=${token}`
+    );
+  }
+);
+
+/* ======================================================
    CURRENT USER
 ====================================================== */
 
@@ -42,7 +98,7 @@ router.get("/me", protect, getMe);
 ====================================================== */
 
 router.get("/verify", protect, (req, res) => {
-  return res.status(200).json({
+  res.json({
     success: true,
     authenticated: true,
     user: req.user,
@@ -54,16 +110,9 @@ router.get("/verify", protect, (req, res) => {
 ====================================================== */
 
 router.post("/logout", protect, (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite:
-      process.env.NODE_ENV === "production"
-        ? "none"
-        : "lax",
-  });
+  res.clearCookie("token");
 
-  return res.status(200).json({
+  res.json({
     success: true,
     message: "Logout successful.",
   });
@@ -74,7 +123,7 @@ router.post("/logout", protect, (req, res) => {
 ====================================================== */
 
 router.get("/status", (req, res) => {
-  return res.status(200).json({
+  res.json({
     success: true,
     service: "Authentication",
     status: "Running",
