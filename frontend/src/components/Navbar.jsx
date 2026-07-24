@@ -104,9 +104,20 @@ const Navbar = ({
       LOGOUT
   ========================================== */
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error(err);
+    }
+
+    // Extra safety
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/", {
+      replace: true,
+    });
   };
 
   return (

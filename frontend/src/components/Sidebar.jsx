@@ -98,14 +98,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     : "TF";
 
   const handleLogout = async () => {
-    if (logout) {
+    try {
       await logout();
-    } else {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+    } catch (err) {
+      console.error(err);
     }
 
-    navigate("/login", {
+    // Extra safety
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/", {
       replace: true,
     });
   };
