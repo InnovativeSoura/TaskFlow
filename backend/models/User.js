@@ -119,14 +119,15 @@ const userSchema = new mongoose.Schema(
    HASH PASSWORD
 ====================================================== */
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
+  // Don't hash if password hasn't changed
   if (!this.isModified("password")) {
-    return next();
+    return;
   }
 
   // Skip hashing for OAuth users
-  if (!this.password) {
-    return next();
+  if (!this.password || this.password.trim() === "") {
+    return;
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -135,8 +136,6 @@ userSchema.pre("save", async function (next) {
     this.password,
     salt
   );
-
-  next();
 });
 
 /* ======================================================
