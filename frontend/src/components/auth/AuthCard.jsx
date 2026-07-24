@@ -22,7 +22,7 @@ const AuthCard = ({ compact = false }) => {
   ========================================== */
 
   const API_URL =
-    import.meta.env.VITE_API_URL;
+  import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
   /* ==========================================
       LOGIN / REGISTER MODE
@@ -77,10 +77,6 @@ const AuthCard = ({ compact = false }) => {
   /* ==========================================
       OAUTH
   ========================================== */
-
-  const API_URL =
-  import.meta.env.VITE_API_URL.replace(/\/$/, "");
-
   const handleGoogleLogin = () => {
     window.location.href = `${API_URL}/api/auth/google`;
   };
