@@ -1,220 +1,144 @@
+// backend/config/passport.js
+
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
 
 import User from "../models/User.js";
 
-/* ==========================================
+/* ======================================================
    GOOGLE STRATEGY
-========================================== */
+====================================================== */
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret:
-        process.env.GOOGLE_CLIENT_SECRET,
-
-      callbackURL:
-        `${process.env.API_URL}/api/auth/google/callback`,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env.API_URL}/api/auth/google/callback`,
     },
 
-    async (
-      accessToken,
-      refreshToken,
-      profile,
-      done
-    ) => {
+    async (accessToken, refreshToken, profile, done) => {
       try {
-        const email =
-          profile.emails?.[0]?.value;
+        const email = profile.emails?.[0]?.value?.toLowerCase();
 
         if (!email) {
-          return done(
-            new Error(
-              "Google account has no email."
-            ),
-            null
-          );
+          return done(new Error("Google account has no email."), null);
         }
 
-        let user =
-          await User.findOne({
-            email,
-          });
+        let user = await User.findOne({ email });
 
         if (!user) {
-          user =
-            await User.create({
-              name:
-                profile.displayName,
+          user = await User.create({
+            name: profile.displayName,
+            email,
+            password: "",
+            avatar: profile.photos?.[0]?.value || "",
 
-              email,
+            provider: "google",
+            googleId: profile.id,
 
-              password: "",
-
-              avatar:
-                profile.photos?.[0]
-                  ?.value || "",
-
-              role:
-                "Team Member",
-
-              provider:
-                "google",
-
-              googleId:
-                profile.id,
-
-              isVerified: true,
-
-              lastLogin:
-                new Date(),
-            });
+            role: "Team Member",
+            isVerified: true,
+            lastLogin: new Date(),
+          });
         } else {
-          user.googleId =
-            profile.id;
+          user.provider = "google";
+          user.googleId = profile.id;
 
-          user.provider =
-            "google";
+          if (profile.photos?.length) {
+            user.avatar = profile.photos[0].value;
+          }
 
-          user.avatar =
-            profile.photos?.[0]
-              ?.value ||
-            user.avatar;
-
-          user.lastLogin =
-            new Date();
+          user.lastLogin = new Date();
 
           await user.save();
         }
 
-        done(null, user);
+        return done(null, user);
       } catch (error) {
-        done(error, null);
+        return done(error, null);
       }
     }
   )
 );
 
-/* ==========================================
+/* ======================================================
    GITHUB STRATEGY
-========================================== */
+====================================================== */
 
 passport.use(
   new GitHubStrategy(
     {
-      clientID:
-        process.env.GITHUB_CLIENT_ID,
-
-      clientSecret:
-        process.env.GITHUB_CLIENT_SECRET,
-
-      callbackURL:
-        `${process.env.API_URL}/api/auth/github/callback`,
-
-      scope: [
-        "user:email",
-      ],
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: `${process.env.API_URL}/api/auth/github/callback`,
+      scope: ["user:email"],
     },
 
-    async (
-      accessToken,
-      refreshToken,
-      profile,
-      done
-    ) => {
+    async (accessToken, refreshToken, profile, done) => {
       try {
         const email =
-          profile.emails?.[0]
-            ?.value ||
+          profile.emails?.[0]?.value?.toLowerCase() ||
           `${profile.username}@github.local`;
 
-        let user =
-          await User.findOne({
-            email,
-          });
+        let user = await User.findOne({ email });
 
         if (!user) {
-          user =
-            await User.create({
-              name:
-                profile.displayName ||
-                profile.username,
+          user = await User.create({
+            name: profile.displayName || profile.username,
+            email,
+            password: "",
+            avatar: profile.photos?.[0]?.value || "",
 
-              email,
+            provider: "github",
+            githubId: profile.id,
 
-              password: "",
-
-              avatar:
-                profile.photos?.[0]
-                  ?.value || "",
-
-              role:
-                "Team Member",
-
-              provider:
-                "github",
-
-              githubId:
-                profile.id,
-
-              isVerified: true,
-
-              lastLogin:
-                new Date(),
-            });
+            role: "Team Member",
+            isVerified: true,
+            lastLogin: new Date(),
+          });
         } else {
-          user.githubId =
-            profile.id;
+          user.provider = "github";
+          user.githubId = profile.id;
 
-          user.provider =
-            "github";
+          if (profile.photos?.length) {
+            user.avatar = profile.photos[0].value;
+          }
 
-          user.avatar =
-            profile.photos?.[0]
-              ?.value ||
-            user.avatar;
-
-          user.lastLogin =
-            new Date();
+          user.lastLogin = new Date();
 
           await user.save();
         }
 
-        done(null, user);
+        return done(null, user);
       } catch (error) {
-        done(error, null);
+        return done(error, null);
       }
     }
   )
 );
 
-/* ==========================================
+/* ======================================================
    SERIALIZE
-========================================== */
+====================================================== */
 
-passport.serializeUser(
-  (user, done) => {
-    done(null, user.id);
-  }
-);
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-/* ==========================================
+/* ======================================================
    DESERIALIZE
-========================================== */
+====================================================== */
 
-passport.deserializeUser(
-  async (id, done) => {
-    try {
-      const user =
-        await User.findById(id);
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
 
-      done(null, user);
-    } catch (error) {
-      done(error, null);
-    }
+    done(null, user);
+  } catch (error) {
+    done(error, null);
   }
-);
+});
 
 export default passport;

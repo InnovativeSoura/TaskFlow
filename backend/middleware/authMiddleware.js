@@ -1,3 +1,5 @@
+// backend/middleware/authMiddleware.js
+
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
@@ -7,39 +9,50 @@ import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
   try {
-    if (!process.env.JWT_SECRET) {
-      return res.status(500).json({
-        success: false,
-        message: "JWT_SECRET is missing.",
-      });
-    }
+    let token;
 
-    let token = null;
-
-    const authHeader = req.headers.authorization;
+    /* ------------------------------------------
+       Authorization Header
+    ------------------------------------------ */
 
     if (
-      authHeader &&
-      authHeader.startsWith("Bearer ")
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
     ) {
-      token = authHeader.split(" ")[1];
+      token = req.headers.authorization.split(" ")[1];
     }
+
+    /* ------------------------------------------
+       Cookie Fallback
+    ------------------------------------------ */
 
     if (!token && req.cookies?.token) {
       token = req.cookies.token;
     }
 
+    /* ------------------------------------------
+       No Token
+    ------------------------------------------ */
+
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authorized. No token provided.",
+        message: "No authentication token provided.",
       });
     }
+
+    /* ------------------------------------------
+       Verify JWT
+    ------------------------------------------ */
 
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET
     );
+
+    /* ------------------------------------------
+       Find User
+    ------------------------------------------ */
 
     const user = await User.findById(decoded.id).select("-password");
 
@@ -59,9 +72,10 @@ export const protect = async (req, res, next) => {
 
     req.user = user;
 
-    next();
-  } catch (error) {
-    console.error("Auth Middleware Error:", error);
+    return next();
+  } catch (err) {
+    console.error("AUTH ERROR");
+    console.error(err);
 
     return res.status(401).json({
       success: false,
@@ -89,11 +103,11 @@ export const adminOnly = (req, res, next) => {
     });
   }
 
-  next();
+  return next();
 };
 
 /* ======================================================
-   MANAGER / PROJECT MANAGER
+   PROJECT MANAGER / ADMIN
 ====================================================== */
 
 export const managerOnly = (req, res, next) => {
@@ -116,5 +130,5 @@ export const managerOnly = (req, res, next) => {
     });
   }
 
-  next();
+  return next();
 };

@@ -41,8 +41,12 @@ const userSchema = new mongoose.Schema(
       default: "local",
     },
 
-    // NEW
-    providerId: {
+    googleId: {
+      type: String,
+      default: "",
+    },
+
+    githubId: {
       type: String,
       default: "",
     },
