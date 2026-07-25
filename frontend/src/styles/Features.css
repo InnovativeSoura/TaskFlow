@@ -1,6 +1,6 @@
 /* =========================================================
    TASKFLOW — FEATURES SECTION
-   Matches Statistics / Landing Page Design
+   Fully scoped to prevent global CSS conflicts
 ========================================================= */
 
 
@@ -8,102 +8,106 @@
    SECTION
 ========================================================= */
 
-.features-section {
+.taskflow-features-section {
   position: relative;
 
   width: 100%;
 
-  padding:
-    125px
-    0
-    115px;
+  padding: 125px 0 135px;
 
   overflow: hidden;
 
   background:
     radial-gradient(
-      circle at 8% 32%,
-      rgba(80, 72, 220, 0.13),
-      transparent 28%
+      circle at 8% 25%,
+      rgba(92, 80, 220, 0.13),
+      transparent 24%
     ),
     radial-gradient(
-      circle at 94% 42%,
-      rgba(0, 188, 212, 0.09),
-      transparent 29%
+      circle at 94% 40%,
+      rgba(0, 180, 220, 0.10),
+      transparent 26%
     ),
     linear-gradient(
       180deg,
-      #070b1c 0%,
-      #080d20 48%,
-      #070b1a 100%
+      #070d1e 0%,
+      #080f22 50%,
+      #07101f 100%
     );
-
-  isolation: isolate;
 }
 
 
 /* =========================================================
-   GRID BACKGROUND
+   SUBTLE GRID BACKGROUND
 ========================================================= */
 
-.features-section::before {
+.taskflow-features-section::before {
   content: "";
 
   position: absolute;
 
   inset: 0;
 
+  pointer-events: none;
+
+  opacity: 0.34;
+
   background-image:
     linear-gradient(
-      rgba(255, 255, 255, 0.022) 1px,
+      rgba(255, 255, 255, 0.035) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.022) 1px,
+      rgba(255, 255, 255, 0.035) 1px,
       transparent 1px
     );
 
   background-size:
-    44px
-    44px;
+    50px 50px;
 
-  pointer-events: none;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
 
-  z-index: -3;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
 }
 
 
 /* =========================================================
-   LEFT AMBIENT GLOW
+   GLOW — LEFT
 ========================================================= */
 
-.features-section::after {
+.taskflow-features-section::after {
   content: "";
 
   position: absolute;
 
-  width: 460px;
-  height: 460px;
+  width: 420px;
+  height: 420px;
 
-  left: -230px;
-  top: 210px;
+  left: -220px;
+  top: 280px;
 
   border-radius: 50%;
 
-  background:
-    rgba(
-      75,
-      65,
-      200,
-      0.12
-    );
+  background: rgba(76, 87, 255, 0.10);
 
-  filter: blur(90px);
+  filter: blur(80px);
 
   pointer-events: none;
-
-  z-index: -2;
 }
 
 
@@ -111,18 +115,17 @@
    CONTAINER
 ========================================================= */
 
-.features-container {
+.taskflow-features-container {
   position: relative;
 
-  width:
-    min(
-      calc(100% - 48px),
-      1120px
-    );
+  z-index: 2;
+
+  width: min(
+    calc(100% - 48px),
+    1160px
+  );
 
   margin: 0 auto;
-
-  z-index: 2;
 }
 
 
@@ -130,140 +133,126 @@
    HEADER
 ========================================================= */
 
-.features-header {
+.taskflow-features-header {
   width: 100%;
 
   max-width: 760px;
 
-  margin:
-    0 auto
-    48px;
+  margin: 0 auto 52px;
 
   text-align: center;
 }
 
 
 /* =========================================================
-   EYEBROW
+   MAIN TITLE
 ========================================================= */
 
-.features-eyebrow {
-  display: inline-block;
-
-  margin-bottom: 12px;
-
-  font-size: 12px;
-
-  line-height: 1.4;
-
-  font-weight: 500;
-
-  letter-spacing: 0.04em;
-
-  color:
-    rgba(
-      159,
-      171,
-      220,
-      0.88
-    );
-}
-
-
-/* =========================================================
-   TITLE
-========================================================= */
-
-.features-title {
+.taskflow-features-title {
   margin: 0;
 
-  font-size:
-    clamp(
-      38px,
-      4vw,
-      52px
-    );
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
-  line-height: 1.08;
+  font-size: clamp(
+    36px,
+    4vw,
+    48px
+  );
+
+  line-height: 1.12;
 
   font-weight: 800;
 
-  letter-spacing: -0.035em;
+  letter-spacing: -1.6px;
 
   color: #ffffff;
 }
 
 
 /* =========================================================
-   TITLE GRADIENT
+   GRADIENT SUBTITLE
 ========================================================= */
 
-.features-title span {
-  display: block;
+.taskflow-features-gradient-title {
+  margin-top: 2px;
 
-  margin-top: 4px;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
+
+  font-size: clamp(
+    14px,
+    1.6vw,
+    18px
+  );
+
+  font-weight: 600;
+
+  line-height: 1.5;
 
   background:
     linear-gradient(
       90deg,
-      #8b7cff 0%,
-      #4f9cff 50%,
-      #22b9df 100%
+      #6f6cff 0%,
+      #3199ff 55%,
+      #27c8e8 100%
     );
 
-  background-clip: text;
-
   -webkit-background-clip: text;
-
-  color: transparent;
+  background-clip: text;
 
   -webkit-text-fill-color: transparent;
 }
 
 
 /* =========================================================
-   DESCRIPTION
+   HEADER DESCRIPTION
 ========================================================= */
 
-.features-description {
-  max-width: 670px;
+.taskflow-features-description {
+  width: 100%;
 
-  margin:
-    20px auto
-    0;
+  max-width: 680px;
 
-  font-size: 13px;
+  margin: 22px auto 0;
 
-  line-height: 1.75;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1.85;
 
   font-weight: 400;
 
-  color:
-    rgba(
-      170,
-      181,
-      208,
-      0.78
-    );
+  color: rgba(
+    193,
+    201,
+    223,
+    0.72
+  );
 }
 
 
 /* =========================================================
-   GRID
+   FEATURE GRID
 ========================================================= */
 
-.features-grid {
+.taskflow-features-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(
-      4,
-      minmax(0, 1fr)
-    );
+    repeat(4, minmax(0, 1fr));
 
-  gap: 18px;
+  gap: 20px;
 
-  width: 100%;
+  align-items: stretch;
 }
 
 
@@ -271,172 +260,99 @@
    FEATURE CARD
 ========================================================= */
 
-.feature-card {
+.taskflow-feature-card {
   position: relative;
-
-  min-width: 0;
-
-  min-height: 295px;
-
-  padding:
-    23px
-    21px
-    22px;
 
   display: flex;
 
   flex-direction: column;
 
-  border-radius: 18px;
+  min-width: 0;
 
-  border:
-    1px solid
+  min-height: 305px;
+
+  padding: 24px 21px 23px;
+
+  border: 1px solid
     rgba(
-      148,
-      163,
-      184,
-      0.12
+      143,
+      156,
+      202,
+      0.14
     );
+
+  border-radius: 18px;
 
   background:
     linear-gradient(
       145deg,
       rgba(
-        28,
-        37,
-        63,
+        31,
+        40,
+        67,
         0.88
       ),
       rgba(
-        22,
-        29,
-        51,
-        0.82
+        20,
+        28,
+        50,
+        0.91
       )
     );
 
   box-shadow:
-    0
-    16px
-    38px
-    rgba(
-      0,
-      0,
-      0,
-      0.18
-    ),
-
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      0.025
-    );
-
-  backdrop-filter:
-    blur(16px);
-
-  -webkit-backdrop-filter:
-    blur(16px);
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.035
+      ),
+    0 15px 40px
+      rgba(
+        0,
+        0,
+        0,
+        0.16
+      );
 
   overflow: hidden;
 
   transition:
-    border-color
-    0.3s
-    ease,
-
-    box-shadow
-    0.3s
-    ease,
-
-    background
-    0.3s
-    ease;
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
 
 /* =========================================================
-   CARD TOP LINE
+   CARD TOP GLOW
 ========================================================= */
 
-.feature-card::before {
+.taskflow-feature-card::before {
   content: "";
 
   position: absolute;
 
-  left: 15%;
+  top: -100px;
+  right: -100px;
 
-  right: 15%;
-
-  top: 0;
-
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(
-        113,
-        123,
-        255,
-        0.42
-      ),
-      transparent
-    );
-
-  opacity: 0;
-
-  transition:
-    opacity
-    0.3s
-    ease;
-}
-
-
-/* =========================================================
-   CARD AMBIENT GLOW
-========================================================= */
-
-.feature-card::after {
-  content: "";
-
-  position: absolute;
-
-  width: 130px;
-
-  height: 130px;
-
-  top: -70px;
-
-  right: -65px;
+  width: 190px;
+  height: 190px;
 
   border-radius: 50%;
 
   background:
     rgba(
-      67,
-      105,
+      55,
+      111,
       255,
-      0.12
+      0.09
     );
 
-  filter:
-    blur(35px);
-
-  opacity: 0;
+  filter: blur(45px);
 
   pointer-events: none;
-
-  transition:
-    opacity
-    0.3s
-    ease;
 }
 
 
@@ -444,58 +360,47 @@
    CARD HOVER
 ========================================================= */
 
-.feature-card:hover {
+.taskflow-feature-card:hover {
   border-color:
     rgba(
-      99,
-      102,
-      241,
-      0.30
+      89,
+      116,
+      255,
+      0.35
     );
 
   background:
     linear-gradient(
       145deg,
       rgba(
-        31,
-        41,
-        70,
+        34,
+        44,
+        75,
         0.94
       ),
       rgba(
-        22,
+        21,
         30,
-        53,
-        0.90
+        54,
+        0.96
       )
     );
 
   box-shadow:
-    0
-    22px
-    45px
-    rgba(
-      0,
-      0,
-      0,
-      0.25
-    ),
-
-    0
-    0
-    28px
-    rgba(
-      79,
-      70,
-      229,
-      0.07
-    );
-}
-
-
-.feature-card:hover::before,
-.feature-card:hover::after {
-  opacity: 1;
+    0 20px 50px
+      rgba(
+        0,
+        0,
+        0,
+        0.25
+      ),
+    0 0 35px
+      rgba(
+        74,
+        91,
+        255,
+        0.08
+      );
 }
 
 
@@ -503,14 +408,8 @@
    ICON
 ========================================================= */
 
-.feature-icon {
+.taskflow-feature-icon {
   position: relative;
-
-  width: 50px;
-
-  height: 50px;
-
-  flex-shrink: 0;
 
   display: flex;
 
@@ -518,78 +417,34 @@
 
   justify-content: center;
 
-  margin-bottom: 18px;
+  width: 49px;
+  height: 49px;
+
+  flex-shrink: 0;
+
+  margin-bottom: 20px;
 
   border-radius: 14px;
 
   background:
     linear-gradient(
       145deg,
-      #347cf0,
-      #2868e9
+      #3578f6 0%,
+      #286be5 100%
     );
 
   color: #ffffff;
 
-  font-size: 19px;
+  font-size: 20px;
 
   box-shadow:
-    0
-    10px
-    24px
-    rgba(
-      37,
-      99,
-      235,
-      0.25
-    ),
-
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      0.18
-    );
-
-  z-index: 2;
-
-  transition:
-    box-shadow
-    0.3s
-    ease;
-}
-
-
-/* =========================================================
-   ICON HOVER
-========================================================= */
-
-.feature-card:hover .feature-icon {
-  box-shadow:
-    0
-    13px
-    28px
-    rgba(
-      37,
-      99,
-      235,
-      0.34
-    ),
-
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      0.22
-    );
+    0 10px 25px
+      rgba(
+        45,
+        103,
+        238,
+        0.28
+      );
 }
 
 
@@ -597,11 +452,15 @@
    CARD TITLE
 ========================================================= */
 
-.feature-card h3 {
-  margin:
-    0
-    0
-    11px;
+.taskflow-feature-card-title {
+  position: relative;
+
+  margin: 0 0 12px;
+
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 16px;
 
@@ -609,7 +468,7 @@
 
   font-weight: 700;
 
-  letter-spacing: -0.015em;
+  letter-spacing: -0.2px;
 
   color: #ffffff;
 }
@@ -619,23 +478,28 @@
    CARD DESCRIPTION
 ========================================================= */
 
-.feature-card p {
-  margin:
-    0
-    0
-    15px;
+.taskflow-feature-card-description {
+  position: relative;
+
+  margin: 0 0 13px;
+
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 11.5px;
 
-  line-height: 1.7;
+  line-height: 1.75;
 
-  color:
-    rgba(
-      164,
-      176,
-      204,
-      0.76
-    );
+  font-weight: 400;
+
+  color: rgba(
+    186,
+    196,
+    219,
+    0.72
+  );
 }
 
 
@@ -643,17 +507,16 @@
    FEATURE LIST
 ========================================================= */
 
-.feature-list {
+.taskflow-feature-list {
+  position: relative;
+
   display: flex;
 
   flex-direction: column;
 
-  gap: 7px;
+  gap: 6px;
 
-  margin:
-    auto
-    0
-    0;
+  margin: auto 0 0;
 
   padding: 0;
 
@@ -662,29 +525,37 @@
 
 
 /* =========================================================
-   LIST ITEM
+   FEATURE LIST ITEM
 ========================================================= */
 
-.feature-list li {
+.taskflow-feature-list li {
   display: flex;
 
   align-items: flex-start;
 
-  gap: 7px;
+  gap: 6px;
 
-  min-width: 0;
+  margin: 0;
 
-  font-size: 11px;
+  padding: 0;
 
-  line-height: 1.45;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
-  color:
-    rgba(
-      231,
-      235,
-      247,
-      0.90
-    );
+  font-size: 11.5px;
+
+  line-height: 1.5;
+
+  font-weight: 400;
+
+  color: rgba(
+    239,
+    243,
+    255,
+    0.88
+  );
 }
 
 
@@ -692,138 +563,14 @@
    CHECK ICON
 ========================================================= */
 
-.feature-list li svg {
+.taskflow-feature-list li svg {
   flex-shrink: 0;
 
-  margin-top: 2px;
+  margin-top: 3px;
 
   font-size: 10px;
 
-  color: #22c55e;
-
-  filter:
-    drop-shadow(
-      0
-      0
-      4px
-      rgba(
-        34,
-        197,
-        94,
-        0.30
-      )
-    );
-}
-
-
-/* =========================================================
-   EXPLORE AREA
-========================================================= */
-
-.features-explore {
-  display: flex;
-
-  justify-content: center;
-
-  margin-top: 42px;
-}
-
-
-/* =========================================================
-   EXPLORE BUTTON
-========================================================= */
-
-.features-explore-btn {
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 9px;
-
-  min-width: 185px;
-
-  padding:
-    12px
-    22px;
-
-  border: 0;
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6366f1,
-      #8b5cf6
-    );
-
   color: #ffffff;
-
-  font-family: inherit;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  line-height: 1.2;
-
-  cursor: pointer;
-
-  box-shadow:
-    0
-    10px
-    26px
-    rgba(
-      99,
-      102,
-      241,
-      0.24
-    );
-
-  transition:
-    box-shadow
-    0.25s
-    ease;
-}
-
-
-/* =========================================================
-   BUTTON HOVER
-========================================================= */
-
-.features-explore-btn:hover {
-  box-shadow:
-    0
-    15px
-    32px
-    rgba(
-      99,
-      102,
-      241,
-      0.34
-    );
-}
-
-
-/* =========================================================
-   BUTTON ICON
-========================================================= */
-
-.features-explore-btn svg {
-  font-size: 11px;
-
-  transition:
-    transform
-    0.25s
-    ease;
-}
-
-
-.features-explore-btn:hover svg {
-  transform:
-    translateX(3px);
 }
 
 
@@ -833,32 +580,27 @@
 
 @media (max-width: 1050px) {
 
-  .features-section {
+  .taskflow-features-section {
     padding:
-      120px
-      0
-      100px;
+      110px 0
+      120px;
   }
 
-  .features-container {
-    width:
-      min(
-        calc(100% - 40px),
-        900px
-      );
+  .taskflow-features-container {
+    width: min(
+      calc(100% - 40px),
+      900px
+    );
   }
 
-  .features-grid {
+  .taskflow-features-grid {
     grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
+      repeat(2, minmax(0, 1fr));
 
     gap: 18px;
   }
 
-  .feature-card {
+  .taskflow-feature-card {
     min-height: 285px;
   }
 }
@@ -868,79 +610,53 @@
    MOBILE
 ========================================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 680px) {
 
-  .features-section {
+  .taskflow-features-section {
     padding:
-      110px
-      0
-      80px;
+      90px 0
+      100px;
   }
 
-  .features-container {
-    width:
-      calc(100% - 32px);
+  .taskflow-features-container {
+    width: calc(100% - 32px);
   }
 
-  .features-header {
-    margin-bottom: 36px;
+  .taskflow-features-header {
+    margin-bottom: 38px;
   }
 
-  .features-eyebrow {
-    font-size: 11px;
+  .taskflow-features-title {
+    font-size: 34px;
+
+    letter-spacing: -1px;
   }
 
-  .features-title {
-    font-size: 35px;
+  .taskflow-features-description {
+    margin-top: 18px;
+
+    font-size: 13px;
+
+    line-height: 1.75;
   }
 
-  .features-description {
-    margin-top: 17px;
-
-    font-size: 12px;
-
-    line-height: 1.7;
-  }
-
-  .features-grid {
+  .taskflow-features-grid {
     grid-template-columns: 1fr;
 
-    gap: 15px;
+    gap: 16px;
   }
 
-  .feature-card {
+  .taskflow-feature-card {
     min-height: auto;
 
-    padding:
-      21px
-      19px
-      21px;
+    padding: 22px 20px;
   }
 
-  .feature-icon {
-    width: 48px;
+  .taskflow-feature-icon {
+    width: 47px;
+    height: 47px;
 
-    height: 48px;
-
-    margin-bottom: 16px;
-
-    font-size: 18px;
-  }
-
-  .feature-card h3 {
-    font-size: 16px;
-  }
-
-  .feature-card p {
-    font-size: 11.5px;
-  }
-
-  .feature-list li {
-    font-size: 11px;
-  }
-
-  .features-explore {
-    margin-top: 35px;
+    margin-bottom: 17px;
   }
 }
 
@@ -951,48 +667,34 @@
 
 @media (max-width: 420px) {
 
-  .features-section {
+  .taskflow-features-section {
     padding:
-      100px
-      0
-      70px;
+      80px 0
+      90px;
   }
 
-  .features-container {
-    width:
-      calc(100% - 24px);
+  .taskflow-features-container {
+    width: calc(100% - 24px);
   }
 
-  .features-title {
+  .taskflow-features-title {
     font-size: 30px;
   }
 
-  .features-description {
-    font-size: 11.5px;
+  .taskflow-features-gradient-title {
+    font-size: 14px;
   }
 
-  .feature-card {
-    border-radius: 16px;
+  .taskflow-feature-card {
+    padding: 20px 18px;
   }
 
-  .features-explore-btn {
-    width: 100%;
-
-    min-width: 0;
+  .taskflow-feature-card-title {
+    font-size: 15px;
   }
-}
 
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .feature-card,
-  .feature-icon,
-  .features-explore-btn,
-  .features-explore-btn svg {
-    transition: none;
+  .taskflow-feature-card-description,
+  .taskflow-feature-list li {
+    font-size: 11px;
   }
 }
