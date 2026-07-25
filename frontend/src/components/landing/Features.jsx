@@ -15,7 +15,7 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 
-// import "../../styles/Features.css";
+import "../../styles/FeatureSection.css";
 
 const Features = () => {
 
