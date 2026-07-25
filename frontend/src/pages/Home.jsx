@@ -1,5 +1,3 @@
-// src/pages/Home.jsx
-
 import LandingNavbar from "../components/landing/LandingNavbar";
 import Hero from "../components/landing/Hero";
 import Features from "../components/landing/Features";
@@ -14,83 +12,41 @@ import "../styles/Landing.css";
 const Home = () => {
   return (
     <div className="landing-page">
-
-      {/* =====================================================
-          BACKGROUND ANIMATION
-      ====================================================== */}
-
+      {/* Background */}
       <BackgroundAnimation />
 
-
-      {/* =====================================================
-          LANDING NAVBAR
-      ====================================================== */}
-
+      {/* Navbar */}
       <LandingNavbar />
 
-
-      {/* =====================================================
-          MAIN LANDING CONTENT
-      ====================================================== */}
-
       <main>
-
-        {/* ===================================================
-            HERO
-        ==================================================== */}
-
+        {/* Hero */}
         <section id="home">
           <Hero />
         </section>
 
+        {/* Features */}
+        <section id="features">
+          <Features />
+        </section>
 
-        {/* ===================================================
-            FEATURES
+        {/* Statistics */}
+        <section id="statistics">
+          <Statistics />
+        </section>
 
-            Features.jsx already contains:
-            id="features"
-        ==================================================== */}
+        {/* Testimonials */}
+        <section id="testimonials">
+          <Testimonials />
+        </section>
 
-        <Features />
-
-
-        {/* ===================================================
-            STATISTICS
-
-            Statistics.jsx already contains:
-            id="statistics"
-        ==================================================== */}
-
-        <Statistics />
-
-
-        {/* ===================================================
-            TESTIMONIALS
-
-            Testimonials.jsx should contain:
-            id="testimonials"
-        ==================================================== */}
-
-        <Testimonials />
-
-
-        {/* ===================================================
-            CTA
-        ==================================================== */}
-
+        {/* CTA */}
         <section id="contact">
           <CTA />
         </section>
-
       </main>
 
-
-      {/* =====================================================
-          FOOTER
-      ====================================================== */}
-
+      {/* Footer */}
       <Footer />
-
     </div>
   );
 };
