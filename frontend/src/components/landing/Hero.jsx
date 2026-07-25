@@ -8,18 +8,16 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-import AuthCard from "../auth/AuthCard";
 import "../../styles/Hero.css";
 
 const Hero = () => {
-  const authRef = useRef(null);
+  const heroRef = useRef(null);
 
-  /* ==========================================
-      SCROLL TO AUTH CARD
-  ========================================== */
+  /* =========================================================
+     SCROLL TO AUTH
+  ========================================================= */
 
   const scrollToAuth = (mode = "login") => {
-    // Tell AuthCard which mode should be active
     window.dispatchEvent(
       new CustomEvent("taskflow-auth-mode", {
         detail: {
@@ -28,25 +26,34 @@ const Hero = () => {
       })
     );
 
-    // Small delay allows the AuthCard to update first
+    window.dispatchEvent(
+      new CustomEvent("taskflow-scroll-auth", {
+        detail: {
+          mode,
+        },
+      })
+    );
+
     setTimeout(() => {
-      authRef.current?.scrollIntoView({
+      const authElement =
+        document.getElementById("auth");
+
+      authElement?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-    }, 50);
+    }, 80);
   };
 
-  /* ==========================================
-      GLOBAL AUTH SCROLL EVENT
-  ========================================== */
+  /* =========================================================
+     GLOBAL AUTH SCROLL EVENT
+  ========================================================= */
 
   useEffect(() => {
     const handleAuthScroll = (event) => {
       const mode =
         event.detail?.mode || "login";
 
-      // Update auth mode
       window.dispatchEvent(
         new CustomEvent("taskflow-auth-mode", {
           detail: {
@@ -56,11 +63,14 @@ const Hero = () => {
       );
 
       setTimeout(() => {
-        authRef.current?.scrollIntoView({
+        const authElement =
+          document.getElementById("auth");
+
+        authElement?.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
-      }, 50);
+      }, 80);
     };
 
     window.addEventListener(
@@ -78,144 +88,25 @@ const Hero = () => {
 
   return (
     <section
+      ref={heroRef}
       className="hero-section"
       id="home"
     >
       <div className="hero-container">
 
-        {/* ======================================
-            LEFT SIDE
-        ======================================= */}
+        {/* =====================================================
+            MAIN HERO PANEL
+        ===================================================== */}
 
         <motion.div
-          className="hero-content"
+          className="hero-main-panel"
           initial={{
             opacity: 0,
-            x: -60,
+            y: 35,
           }}
           animate={{
             opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
-        >
-
-          {/* ==============================
-              BADGE
-          =============================== */}
-
-          <span className="hero-badge">
-            🚀 Next Generation Project Management
-          </span>
-
-          {/* ==============================
-              TITLE
-          =============================== */}
-
-          <h1 className="hero-title">
-            Manage Projects
-            <br />
-            Collaborate Faster
-            <br />
-
-            <span>
-              Deliver On Time.
-            </span>
-          </h1>
-
-          {/* ==============================
-              DESCRIPTION
-          =============================== */}
-
-          <p className="hero-description">
-            TaskFlow is an all-in-one project
-            management platform built for modern
-            teams. Plan projects, assign tasks,
-            monitor progress, collaborate in real
-            time and keep every workflow organized
-            from one beautiful dashboard.
-          </p>
-
-          {/* ==============================
-              ACTION BUTTONS
-          =============================== */}
-
-          <div className="hero-buttons">
-
-            {/* LEARN MORE */}
-
-            <a
-              href="#features"
-              className="hero-secondary-btn"
-            >
-              Learn More
-            </a>
-
-          </div>
-
-          {/* ==============================
-              FEATURES
-          =============================== */}
-
-          <div className="hero-features">
-
-            <motion.div
-              whileHover={{
-                x: 4,
-              }}
-            >
-              <FaCheckCircle />
-
-              <span>
-                Unlimited Projects
-              </span>
-            </motion.div>
-
-            <motion.div
-              whileHover={{
-                x: 4,
-              }}
-            >
-              <FaCheckCircle />
-
-              <span>
-                Real-Time Collaboration
-              </span>
-            </motion.div>
-
-            <motion.div
-              whileHover={{
-                x: 4,
-              }}
-            >
-              <FaCheckCircle />
-
-              <span>
-                Enterprise Security
-              </span>
-            </motion.div>
-
-          </div>
-        </motion.div>
-
-        {/* ======================================
-            RIGHT SIDE
-        ======================================= */}
-
-        <motion.div
-          ref={authRef}
-          className="hero-right"
-          id="auth"
-          initial={{
-            opacity: 0,
-            x: 60,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
+            y: 0,
           }}
           transition={{
             duration: 0.8,
@@ -223,12 +114,284 @@ const Hero = () => {
           }}
         >
 
-          <AuthCard
-            compact
-            onAuthReady={() => {
-              // Reserved for future auth animation
-            }}
-          />
+          {/* =================================================
+              LEFT CONTENT
+          ================================================= */}
+
+          <div className="hero-content">
+
+            {/* LABEL */}
+
+            <motion.div
+              className="hero-eyebrow"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.15,
+                duration: 0.5,
+              }}
+            >
+              Productivity Platform
+            </motion.div>
+
+            {/* TITLE */}
+
+            <motion.h1
+              className="hero-title"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.2,
+                duration: 0.7,
+              }}
+            >
+              One intelligent workspace for
+              <br />
+              every project and every team
+            </motion.h1>
+
+            {/* DESCRIPTION */}
+
+            <motion.p
+              className="hero-description"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.3,
+                duration: 0.6,
+              }}
+            >
+              Replace spreadsheets, disconnected tools and
+              endless email chains with one collaborative
+              platform designed to help your organization stay
+              organized, productive and on schedule.
+            </motion.p>
+
+            {/* =================================================
+                BENEFITS
+            ================================================= */}
+
+            <motion.div
+              className="hero-benefits"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.4,
+                duration: 0.6,
+              }}
+            >
+
+              <div className="hero-benefit">
+                <FaCheckCircle />
+                <span>
+                  AI-powered workflow automation
+                </span>
+              </div>
+
+              <div className="hero-benefit">
+                <FaCheckCircle />
+                <span>
+                  Real-time collaboration
+                </span>
+              </div>
+
+              <div className="hero-benefit">
+                <FaCheckCircle />
+                <span>
+                  Secure cloud infrastructure
+                </span>
+              </div>
+
+            </motion.div>
+
+            {/* =================================================
+                CTA
+            ================================================= */}
+
+            <motion.button
+              type="button"
+              className="hero-primary-btn"
+              onClick={() => scrollToAuth("login")}
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.5,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -3,
+                scale: 1.01,
+              }}
+              whileTap={{
+                scale: 0.98,
+              }}
+            >
+              <span>
+                Explore Platform
+              </span>
+
+              <FaArrowRight />
+            </motion.button>
+
+          </div>
+
+
+          {/* =================================================
+              RIGHT STATISTICS
+          ================================================= */}
+
+          <div className="hero-stats">
+
+            {/* PROJECTS */}
+
+            <motion.div
+              className="hero-stat-card"
+              initial={{
+                opacity: 0,
+                x: 25,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: 0.35,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
+              <span className="hero-stat-value">
+                10K+
+              </span>
+
+              <span className="hero-stat-label">
+                Projects
+              </span>
+            </motion.div>
+
+
+            {/* TASKS */}
+
+            <motion.div
+              className="hero-stat-card"
+              initial={{
+                opacity: 0,
+                x: 25,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: 0.45,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
+              <span className="hero-stat-value">
+                50K+
+              </span>
+
+              <span className="hero-stat-label">
+                Tasks Managed
+              </span>
+            </motion.div>
+
+
+            {/* UPTIME */}
+
+            <motion.div
+              className="hero-stat-card"
+              initial={{
+                opacity: 0,
+                x: 25,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: 0.55,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
+              <span className="hero-stat-value">
+                99.9%
+              </span>
+
+              <span className="hero-stat-label">
+                System Uptime
+              </span>
+            </motion.div>
+
+
+            {/* SUPPORT */}
+
+            <motion.div
+              className="hero-stat-card"
+              initial={{
+                opacity: 0,
+                x: 25,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                delay: 0.65,
+                duration: 0.6,
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
+              <span className="hero-stat-value">
+                24/7
+              </span>
+
+              <span className="hero-stat-label">
+                Support
+              </span>
+            </motion.div>
+
+          </div>
 
         </motion.div>
 
