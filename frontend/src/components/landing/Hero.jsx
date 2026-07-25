@@ -95,30 +95,6 @@ const Hero = () => {
 
           <div className="hero-buttons">
 
-            {/* EXPLORE */}
-
-            <motion.button
-              type="button"
-              className="hero-primary-btn"
-              onClick={handleExplore}
-              whileHover={{
-                y: -3,
-                scale: 1.02,
-              }}
-              whileTap={{
-                scale: 0.98,
-              }}
-            >
-
-              <span>
-                Explore
-              </span>
-
-              <FaArrowRight />
-
-            </motion.button>
-
-
             {/* LEARN MORE */}
 
             <a
