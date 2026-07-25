@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
 import {
   FaBars,
   FaTimes,
@@ -23,14 +24,16 @@ const LandingNavbar = () => {
 
     window.addEventListener("scroll", handleScroll);
 
-    return () =>
+    return () => {
       window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
 
-  const toggleMenu = () =>
+  const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
+  };
 
   const handleSectionScroll = (id) => {
     closeMenu();
@@ -68,7 +71,10 @@ const LandingNavbar = () => {
       }}
     >
       <div className="landing-navbar-container">
-        {/* Logo */}
+
+        {/* ==================================================
+            LOGO
+        ================================================== */}
 
         <Link
           to="/"
@@ -85,13 +91,17 @@ const LandingNavbar = () => {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
+
+        {/* ==================================================
+            DESKTOP / MOBILE NAVIGATION
+        ================================================== */}
 
         <nav
           className={`landing-nav ${
             menuOpen ? "open" : ""
           }`}
         >
+
           <button
             className="landing-nav-link"
             onClick={() =>
@@ -137,25 +147,36 @@ const LandingNavbar = () => {
             Contact
           </button>
 
-           <div className="landing-auth-buttons">
+
+          {/* ==================================================
+              EXPLORE PLATFORM BUTTON
+          ================================================== */}
+
+          <div className="landing-auth-buttons">
+
             <NavLink
-              
-              className="landing-register-btn"
+              to="/auth"
+              className="landing-explore-btn"
               onClick={closeMenu}
             >
-              Explore
+              <span>Explore Platform</span>
 
               <FaArrowRight />
             </NavLink>
+
           </div>
         </nav>
 
-        {/* Mobile Toggle */}
+
+        {/* ==================================================
+            MOBILE MENU TOGGLE
+        ================================================== */}
 
         <button
           className="landing-menu-toggle"
           onClick={toggleMenu}
           aria-label="Toggle Navigation"
+          aria-expanded={menuOpen}
         >
           {menuOpen ? (
             <FaTimes />
@@ -164,7 +185,10 @@ const LandingNavbar = () => {
           )}
         </button>
 
-        {/* Mobile Background */}
+
+        {/* ==================================================
+            MOBILE BACKGROUND OVERLAY
+        ================================================== */}
 
         <AnimatePresence>
           {menuOpen && (
@@ -183,6 +207,7 @@ const LandingNavbar = () => {
             />
           )}
         </AnimatePresence>
+
       </div>
     </motion.header>
   );
