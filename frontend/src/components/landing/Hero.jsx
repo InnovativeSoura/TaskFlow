@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 
 import AuthCard from "../auth/AuthCard";
+import "../../styles/Hero.css";
 
 const Hero = () => {
   const authRef = useRef(null);
