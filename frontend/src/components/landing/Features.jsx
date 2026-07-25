@@ -12,6 +12,7 @@ import {
   FaComments,
   FaCalendarAlt,
   FaCheckCircle,
+  FaArrowRight,
 } from "react-icons/fa";
 
 import "../../styles/Features.css";
@@ -116,21 +117,18 @@ const FEATURES = [
 
 const Features = () => {
   return (
-    <section
-      id="features"
-      className="taskflow-features-section"
-    >
+    <section className="taskflow-features-section">
       <div className="taskflow-features-container">
 
-        {/* ==========================================
+        {/* ==================================================
             SECTION HEADER
-        ========================================== */}
+        ================================================== */}
 
         <motion.div
           className="taskflow-features-header"
           initial={{
             opacity: 0,
-            y: 30,
+            y: 35,
           }}
           whileInView={{
             opacity: 1,
@@ -145,13 +143,17 @@ const Features = () => {
             ease: "easeOut",
           }}
         >
+          <span className="taskflow-features-eyebrow">
+            Powerful Features
+          </span>
+
           <h2 className="taskflow-features-title">
             Everything You Need
           </h2>
 
-          <div className="taskflow-features-gradient-title">
+          <h3 className="taskflow-features-gradient-title">
             To Manage Projects Better.
-          </div>
+          </h3>
 
           <p className="taskflow-features-description">
             TaskFlow brings projects, tasks, teams, communication
@@ -161,9 +163,9 @@ const Features = () => {
         </motion.div>
 
 
-        {/* ==========================================
+        {/* ==================================================
             FEATURE GRID
-        ========================================== */}
+        ================================================== */}
 
         <div className="taskflow-features-grid">
 
@@ -196,7 +198,9 @@ const Features = () => {
                 }}
               >
 
-                {/* ICON */}
+                {/* ==================================================
+                    ICON
+                ================================================== */}
 
                 <motion.div
                   className="taskflow-feature-icon"
@@ -212,41 +216,123 @@ const Features = () => {
                 </motion.div>
 
 
-                {/* TITLE */}
+                {/* ==================================================
+                    CONTENT
+                ================================================== */}
 
-                <h3 className="taskflow-feature-card-title">
-                  {feature.title}
-                </h3>
+                <div className="taskflow-feature-content">
+
+                  <h3 className="taskflow-feature-card-title">
+                    {feature.title}
+                  </h3>
+
+                  <p className="taskflow-feature-card-description">
+                    {feature.description}
+                  </p>
 
 
-                {/* DESCRIPTION */}
+                  {/* ==================================================
+                      FEATURE POINTS
+                  ================================================== */}
 
-                <p className="taskflow-feature-card-description">
-                  {feature.description}
-                </p>
+                  <ul className="taskflow-feature-list">
+
+                    {feature.points.map((point) => (
+                      <li key={point}>
+                        <FaCheckCircle />
+
+                        <span>
+                          {point}
+                        </span>
+                      </li>
+                    ))}
+
+                  </ul>
+
+                </div>
 
 
-                {/* FEATURE POINTS */}
+                {/* ==================================================
+                    CARD ARROW
+                ================================================== */}
 
-                <ul className="taskflow-feature-list">
-
-                  {feature.points.map((point) => (
-                    <li key={point}>
-                      <FaCheckCircle />
-
-                      <span>
-                        {point}
-                      </span>
-                    </li>
-                  ))}
-
-                </ul>
+                <div className="taskflow-feature-arrow">
+                  <FaArrowRight />
+                </div>
 
               </motion.article>
             );
           })}
 
         </div>
+
+
+        {/* ==================================================
+            BOTTOM CTA
+        ================================================== */}
+
+        <motion.div
+          className="taskflow-features-bottom"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: 0.15,
+          }}
+        >
+
+          <div className="taskflow-features-bottom-content">
+
+            <span>
+              Ready to work smarter?
+            </span>
+
+            <strong>
+              Bring your entire workflow together with TaskFlow.
+            </strong>
+
+          </div>
+
+          <motion.button
+            type="button"
+            className="taskflow-features-cta"
+            onClick={() => {
+              const authSection =
+                document.querySelector(".hero-right");
+
+              if (authSection) {
+                authSection.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+              }
+            }}
+            whileHover={{
+              y: -3,
+              scale: 1.02,
+            }}
+            whileTap={{
+              scale: 0.98,
+            }}
+          >
+            <span>
+              Explore Platform
+            </span>
+
+            <FaArrowRight />
+          </motion.button>
+
+        </motion.div>
 
       </div>
     </section>
