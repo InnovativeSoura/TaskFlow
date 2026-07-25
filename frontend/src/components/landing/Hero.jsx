@@ -144,7 +144,29 @@ const Hero = () => {
 
           <div className="hero-buttons">
 
-            
+            {/* EXPLORE PLATFORM */}
+
+            <motion.button
+              type="button"
+              className="hero-primary-btn"
+              onClick={() =>
+                scrollToAuth("login")
+              }
+              whileHover={{
+                y: -3,
+                scale: 1.02,
+              }}
+              whileTap={{
+                scale: 0.98,
+              }}
+            >
+              <span>
+                Explore Platform
+              </span>
+
+              <FaArrowRight />
+            </motion.button>
+
             {/* LEARN MORE */}
 
             <a
