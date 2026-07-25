@@ -1,7 +1,7 @@
 // src/components/landing/Hero.jsx
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 import {
   FaArrowRight,
@@ -11,19 +11,75 @@ import {
 import AuthCard from "../auth/AuthCard";
 
 const Hero = () => {
-  const navigate = useNavigate();
+  const authRef = useRef(null);
 
   /* ==========================================
-      NAVIGATION
+      SCROLL TO AUTH CARD
   ========================================== */
 
-  const handleExplore = () => {
-    navigate("/login");
+  const scrollToAuth = (mode = "login") => {
+    // Tell AuthCard which mode should be active
+    window.dispatchEvent(
+      new CustomEvent("taskflow-auth-mode", {
+        detail: {
+          mode,
+        },
+      })
+    );
+
+    // Small delay allows the AuthCard to update first
+    setTimeout(() => {
+      authRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 50);
   };
 
-  return (
-    <section className="hero-section">
+  /* ==========================================
+      GLOBAL AUTH SCROLL EVENT
+  ========================================== */
 
+  useEffect(() => {
+    const handleAuthScroll = (event) => {
+      const mode =
+        event.detail?.mode || "login";
+
+      // Update auth mode
+      window.dispatchEvent(
+        new CustomEvent("taskflow-auth-mode", {
+          detail: {
+            mode,
+          },
+        })
+      );
+
+      setTimeout(() => {
+        authRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 50);
+    };
+
+    window.addEventListener(
+      "taskflow-scroll-auth",
+      handleAuthScroll
+    );
+
+    return () => {
+      window.removeEventListener(
+        "taskflow-scroll-auth",
+        handleAuthScroll
+      );
+    };
+  }, []);
+
+  return (
+    <section
+      className="hero-section"
+      id="home"
+    >
       <div className="hero-container">
 
         {/* ======================================
@@ -54,46 +110,62 @@ const Hero = () => {
             🚀 Next Generation Project Management
           </span>
 
-
           {/* ==============================
               TITLE
           =============================== */}
 
           <h1 className="hero-title">
-
             Manage Projects
-
             <br />
-
             Collaborate Faster
-
             <br />
 
             <span>
               Deliver On Time.
             </span>
-
           </h1>
-
 
           {/* ==============================
               DESCRIPTION
           =============================== */}
 
           <p className="hero-description">
-            TaskFlow is an all-in-one project management
-            platform built for modern teams. Plan projects,
-            assign tasks, monitor progress, collaborate in
-            real time and keep every workflow organized
+            TaskFlow is an all-in-one project
+            management platform built for modern
+            teams. Plan projects, assign tasks,
+            monitor progress, collaborate in real
+            time and keep every workflow organized
             from one beautiful dashboard.
           </p>
-
 
           {/* ==============================
               ACTION BUTTONS
           =============================== */}
 
           <div className="hero-buttons">
+
+            {/* EXPLORE PLATFORM */}
+
+            <motion.button
+              type="button"
+              className="hero-primary-btn"
+              onClick={() =>
+                scrollToAuth("login")
+              }
+              whileHover={{
+                y: -3,
+                scale: 1.02,
+              }}
+              whileTap={{
+                scale: 0.98,
+              }}
+            >
+              <span>
+                Explore Platform
+              </span>
+
+              <FaArrowRight />
+            </motion.button>
 
             {/* LEARN MORE */}
 
@@ -105,7 +177,6 @@ const Hero = () => {
             </a>
 
           </div>
-
 
           {/* ==============================
               FEATURES
@@ -125,7 +196,6 @@ const Hero = () => {
               </span>
             </motion.div>
 
-
             <motion.div
               whileHover={{
                 x: 4,
@@ -137,7 +207,6 @@ const Hero = () => {
                 Real-Time Collaboration
               </span>
             </motion.div>
-
 
             <motion.div
               whileHover={{
@@ -152,16 +221,16 @@ const Hero = () => {
             </motion.div>
 
           </div>
-
         </motion.div>
-
 
         {/* ======================================
             RIGHT SIDE
         ======================================= */}
 
         <motion.div
+          ref={authRef}
           className="hero-right"
+          id="auth"
           initial={{
             opacity: 0,
             x: 60,
@@ -176,18 +245,16 @@ const Hero = () => {
           }}
         >
 
-          {/* 
-             Keep the existing compact AuthCard.
-             The actual full Login/Register page
-             is opened through Explore -> /login.
-          */}
-
-          <AuthCard compact />
+          <AuthCard
+            compact
+            onAuthReady={() => {
+              // Reserved for future auth animation
+            }}
+          />
 
         </motion.div>
 
       </div>
-
     </section>
   );
 };
