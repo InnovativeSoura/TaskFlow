@@ -242,9 +242,9 @@ const Features = () => {
           duration: 0.65,
         }}
       >
-        <span className="section-pill">
+        {/* <span className="section-pill">
           Everything You Need
-        </span>
+        </span> */}
 
         <h2>
           Everything You Need
