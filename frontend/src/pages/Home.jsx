@@ -7,7 +7,7 @@ import CTA from "../components/landing/CTA";
 import Footer from "../components/landing/Footer";
 import BackgroundAnimation from "../components/landing/BackgroundAnimation";
 
-// import "../styles/Landing.css";
+import "../styles/Landing.css";
 
 const Home = () => {
   return (
