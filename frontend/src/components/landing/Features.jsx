@@ -1,340 +1,267 @@
 // src/components/landing/Features.jsx
 
+import React from "react";
 import { motion } from "framer-motion";
 
 import {
+  FaBell,
+  FaRobot,
+  FaShieldAlt,
+  FaCloud,
+  FaCheckCircle,
+  FaArrowRight,
   FaProjectDiagram,
   FaTasks,
   FaUsers,
   FaChartLine,
-  FaBolt,
-  FaShieldAlt,
-  FaComments,
-  FaCalendarAlt,
-  FaCheckCircle,
-  FaArrowRight,
 } from "react-icons/fa";
 
-import "../../styles/Features.css";
-
-const FEATURES = [
+const features = [
   {
-    icon: FaProjectDiagram,
-    title: "Project Management",
+    icon: <FaBell />,
+    title: "Instant Notifications",
     description:
-      "Create, organize and manage multiple projects from one centralized workspace.",
-    points: [
-      "Unlimited projects",
-      "Project progress tracking",
-      "Centralized project workspace",
-    ],
+      "Receive real-time alerts for deadlines, assignments and team activity.",
   },
-
   {
-    icon: FaTasks,
-    title: "Smart Task Management",
+    icon: <FaRobot />,
+    title: "AI Productivity",
     description:
-      "Break projects into manageable tasks and keep every team member aligned.",
-    points: [
-      "Task assignment",
-      "Priority management",
-      "Status tracking",
-    ],
+      "AI-powered recommendations help teams prioritize tasks and improve efficiency.",
   },
-
   {
-    icon: FaUsers,
-    title: "Team Collaboration",
-    description:
-      "Bring your team together with real-time collaboration and transparent workflows.",
-    points: [
-      "Team-based workspaces",
-      "Real-time collaboration",
-      "Role-based access",
-    ],
-  },
-
-  {
-    icon: FaChartLine,
-    title: "Progress Analytics",
-    description:
-      "Understand project performance with clear dashboards, progress indicators and reports.",
-    points: [
-      "Visual progress tracking",
-      "Project analytics",
-      "Performance insights",
-    ],
-  },
-
-  {
-    icon: FaBolt,
-    title: "Real-Time Updates",
-    description:
-      "Stay informed as your team works with fast, real-time updates across the platform.",
-    points: [
-      "Instant task updates",
-      "Live notifications",
-      "Real-time status changes",
-    ],
-  },
-
-  {
-    icon: FaShieldAlt,
+    icon: <FaShieldAlt />,
     title: "Enterprise Security",
     description:
-      "Keep your projects and team data protected with secure authentication and controlled access.",
-    points: [
-      "Secure authentication",
-      "Protected project data",
-      "Role-based permissions",
-    ],
+      "JWT authentication, encrypted data and secure workspaces keep every project protected.",
   },
-
   {
-    icon: FaComments,
-    title: "Team Communication",
+    icon: <FaCloud />,
+    title: "Cloud Workspace",
     description:
-      "Keep project communication connected to your workflow instead of scattered across different tools.",
-    points: [
-      "Centralized communication",
-      "Team collaboration",
-      "Workflow visibility",
-    ],
-  },
-
-  {
-    icon: FaCalendarAlt,
-    title: "Workflow Planning",
-    description:
-      "Plan deadlines, organize schedules and keep your team focused on what matters most.",
-    points: [
-      "Deadline tracking",
-      "Workflow planning",
-      "Better project visibility",
-    ],
+      "Access projects securely from anywhere without complicated cloud synchronization.",
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+    y: 35,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: "easeOut",
+    },
+  },
+};
+
 const Features = () => {
+  const handleExplore = () => {
+    const target = document.getElementById("auth-section");
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
   return (
-    <section className="taskflow-features-section">
-      <div className="taskflow-features-container">
+    <section
+      className="features-section"
+      id="features"
+    >
+      {/* ================================
+          SECTION HEADER
+      ================================= */}
 
-        {/* ==================================================
-            SECTION HEADER
-        ================================================== */}
+      <motion.div
+        className="features-header"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+      >
+        <span className="section-pill">
+          Everything You Need
+        </span>
 
-        <motion.div
-          className="taskflow-features-header"
-          initial={{
-            opacity: 0,
-            y: 35,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.2,
-          }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
-        >
-          <span className="taskflow-features-eyebrow">
-            Powerful Features
-          </span>
+        <h2>
+          Everything You Need
+          <span> To Manage Projects Better.</span>
+        </h2>
 
-          <h2 className="taskflow-features-title">
-            Everything You Need
-          </h2>
+        <p>
+          TaskFlow brings projects, tasks, teams, communication and
+          analytics together in one intelligent workspace designed
+          for modern teams.
+        </p>
+      </motion.div>
 
-          <h3 className="taskflow-features-gradient-title">
-            To Manage Projects Better.
-          </h3>
+      {/* ================================
+          FEATURE GRID
+      ================================= */}
 
-          <p className="taskflow-features-description">
-            TaskFlow brings projects, tasks, teams, communication
-            and analytics together in one intelligent workspace
-            designed for modern teams.
-          </p>
-        </motion.div>
+      <motion.div
+        className="features-grid"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.15,
+        }}
+      >
+        {features.map((feature, index) => (
+          <motion.article
+            className="feature-card"
+            key={feature.title}
+            variants={cardVariants}
+            whileHover={{
+              y: -8,
+              transition: {
+                duration: 0.25,
+              },
+            }}
+          >
+            <div className="feature-icon">
+              {feature.icon}
+            </div>
 
+            <div className="feature-content">
+              <h3>{feature.title}</h3>
 
-        {/* ==================================================
-            FEATURE GRID
-        ================================================== */}
+              <p>{feature.description}</p>
+            </div>
+          </motion.article>
+        ))}
+      </motion.div>
 
-        <div className="taskflow-features-grid">
+      {/* ================================
+          FEATURE HIGHLIGHT
+      ================================= */}
 
-          {FEATURES.map((feature, index) => {
-            const Icon = feature.icon;
+      <motion.div
+        className="features-highlight"
+        initial={{
+          opacity: 0,
+          y: 45,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
+      >
+        <div className="highlight-card">
 
-            return (
-              <motion.article
-                key={feature.title}
-                className="taskflow-feature-card"
-                initial={{
-                  opacity: 0,
-                  y: 35,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                  amount: 0.15,
-                }}
-                transition={{
-                  duration: 0.55,
-                  delay: index * 0.06,
-                  ease: "easeOut",
-                }}
-                whileHover={{
-                  y: -8,
-                }}
-              >
+          {/* LEFT */}
+          <div className="highlight-left">
 
-                {/* ==================================================
-                    ICON
-                ================================================== */}
-
-                <motion.div
-                  className="taskflow-feature-icon"
-                  whileHover={{
-                    scale: 1.08,
-                    rotate: 2,
-                  }}
-                  transition={{
-                    duration: 0.25,
-                  }}
-                >
-                  <Icon />
-                </motion.div>
-
-
-                {/* ==================================================
-                    CONTENT
-                ================================================== */}
-
-                <div className="taskflow-feature-content">
-
-                  <h3 className="taskflow-feature-card-title">
-                    {feature.title}
-                  </h3>
-
-                  <p className="taskflow-feature-card-description">
-                    {feature.description}
-                  </p>
-
-
-                  {/* ==================================================
-                      FEATURE POINTS
-                  ================================================== */}
-
-                  <ul className="taskflow-feature-list">
-
-                    {feature.points.map((point) => (
-                      <li key={point}>
-                        <FaCheckCircle />
-
-                        <span>
-                          {point}
-                        </span>
-                      </li>
-                    ))}
-
-                  </ul>
-
-                </div>
-
-
-                {/* ==================================================
-                    CARD ARROW
-                ================================================== */}
-
-                <div className="taskflow-feature-arrow">
-                  <FaArrowRight />
-                </div>
-
-              </motion.article>
-            );
-          })}
-
-        </div>
-
-
-        {/* ==================================================
-            BOTTOM CTA
-        ================================================== */}
-
-        <motion.div
-          className="taskflow-features-bottom"
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.2,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 0.15,
-          }}
-        >
-
-          <div className="taskflow-features-bottom-content">
-
-            <span>
-              Ready to work smarter?
+            <span className="highlight-label">
+              Productivity Platform
             </span>
 
-            <strong>
-              Bring your entire workflow together with TaskFlow.
-            </strong>
+            <h2>
+              One intelligent workspace for
+              <span> every project and every team.</span>
+            </h2>
+
+            <p>
+              Replace spreadsheets, disconnected tools and endless
+              email chains with one collaborative platform designed
+              to help your organization stay organized, productive
+              and on schedule.
+            </p>
+
+            <div className="highlight-features">
+
+              <div>
+                <FaCheckCircle />
+                <span>AI-powered workflow automation</span>
+              </div>
+
+              <div>
+                <FaCheckCircle />
+                <span>Real-time collaboration</span>
+              </div>
+
+              <div>
+                <FaCheckCircle />
+                <span>Secure cloud infrastructure</span>
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              className="highlight-button"
+              onClick={handleExplore}
+            >
+              <span>Explore Platform</span>
+              <FaArrowRight />
+            </button>
 
           </div>
 
-          <motion.button
-            type="button"
-            className="taskflow-features-cta"
-            onClick={() => {
-              const authSection =
-                document.querySelector(".hero-right");
+          {/* RIGHT */}
+          <div className="highlight-right">
 
-              if (authSection) {
-                authSection.scrollIntoView({
-                  behavior: "smooth",
-                  block: "center",
-                });
-              }
-            }}
-            whileHover={{
-              y: -3,
-              scale: 1.02,
-            }}
-            whileTap={{
-              scale: 0.98,
-            }}
-          >
-            <span>
-              Explore Platform
-            </span>
+            <div className="mini-stat">
+              <FaProjectDiagram />
 
-            <FaArrowRight />
-          </motion.button>
+              <h3>10K+</h3>
 
-        </motion.div>
+              <span>Projects</span>
+            </div>
 
-      </div>
+            <div className="mini-stat">
+              <FaTasks />
+
+              <h3>50K+</h3>
+
+              <span>Tasks Managed</span>
+            </div>
+
+            <div className="mini-stat">
+              <FaChartLine />
+
+              <h3>99.9%</h3>
+
+              <span>System Uptime</span>
+            </div>
+
+            <div className="mini-stat">
+              <FaUsers />
+
+              <h3>24/7</h3>
+
+              <span>Support</span>
+            </div>
+
+          </div>
+
+        </div>
+      </motion.div>
     </section>
   );
 };
