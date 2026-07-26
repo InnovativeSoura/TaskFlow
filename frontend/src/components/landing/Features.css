@@ -1,317 +1,387 @@
 /* =========================================================
    TASKFLOW — PREMIUM FEATURES SECTION
-   ========================================================= */
+========================================================= */
 
 .features-section {
   position: relative;
   width: 100%;
   max-width: 1180px;
+
   margin: 0 auto;
-  padding: 105px 24px 120px;
-  box-sizing: border-box;
+  padding: 115px 0 130px;
+
   z-index: 2;
 }
 
+
 /* =========================================================
    SECTION HEADER
-   ========================================================= */
+========================================================= */
 
 .features-header {
-  width: 100%;
-  max-width: 760px;
+  width: min(760px, 100%);
   margin: 0 auto 58px;
+
   text-align: center;
 }
 
-.features-header .section-pill {
+.section-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  padding: 7px 14px;
-  margin-bottom: 18px;
+  padding: 8px 16px;
 
-  border: 1px solid rgba(124, 92, 255, 0.28);
   border-radius: 999px;
 
-  background: rgba(91, 72, 190, 0.09);
-
-  color: #9c8cff;
+  color: #a99cff;
 
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 
+  background:
+    rgba(109, 93, 252, 0.09);
+
+  border:
+    1px solid rgba(139, 124, 255, 0.20);
+
   box-shadow:
-    0 0 25px rgba(108, 76, 255, 0.08);
+    0 8px 30px rgba(109, 93, 252, 0.08);
+
+  margin-bottom: 20px;
 }
 
 .features-header h2 {
   margin: 0;
 
-  color: #f7f8ff;
+  color: #f8fafc;
 
-  font-size: clamp(34px, 4vw, 54px);
-  line-height: 1.08;
+  font-size: clamp(38px, 4vw, 54px);
+
   font-weight: 700;
+  line-height: 1.08;
+
   letter-spacing: -0.035em;
 }
 
 .features-header h2 span {
   display: inline;
 
-  background: linear-gradient(
-    90deg,
-    #8c7cff 0%,
-    #5ca7ff 52%,
-    #25c8e8 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      #8b7cff 0%,
+      #5f8cff 48%,
+      #22d3ee 100%
+    );
 
   -webkit-background-clip: text;
   background-clip: text;
+
   -webkit-text-fill-color: transparent;
 }
 
 .features-header p {
-  max-width: 650px;
-  margin: 20px auto 0;
+  max-width: 670px;
 
-  color: rgba(190, 199, 220, 0.72);
+  margin: 22px auto 0;
 
-  font-size: 14px;
+  color: #8f9bb1;
+
+  font-size: 15px;
   line-height: 1.8;
-  font-weight: 400;
 }
+
 
 /* =========================================================
    FEATURE GRID
-   ========================================================= */
+========================================================= */
 
 .features-grid {
   display: grid;
 
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 18px;
 
   width: 100%;
 }
 
+
 /* =========================================================
    FEATURE CARD
-   ========================================================= */
+========================================================= */
 
 .feature-card {
   position: relative;
 
-  min-height: 218px;
+  min-height: 238px;
 
-  padding: 22px 20px 20px;
+  padding: 24px 22px 22px;
 
-  border: 1px solid rgba(255, 255, 255, 0.075);
-  border-radius: 18px;
+  border-radius: 20px;
+
+  overflow: hidden;
 
   background:
     linear-gradient(
       145deg,
-      rgba(26, 35, 58, 0.88),
-      rgba(15, 23, 41, 0.84)
+      rgba(29, 39, 67, 0.82),
+      rgba(13, 21, 40, 0.78)
     );
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 15px 35px rgba(0, 0, 0, 0.14);
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
 
-  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 15px 45px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
   transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
 }
 
-/* subtle glow */
+
+/* =========================================================
+   CARD TOP GLOW
+========================================================= */
 
 .feature-card::before {
   content: "";
 
   position: absolute;
 
-  width: 100px;
-  height: 100px;
+  top: -80px;
+  left: -50px;
 
-  top: -55px;
-  right: -45px;
+  width: 180px;
+  height: 150px;
 
   border-radius: 50%;
 
-  background: rgba(108, 84, 255, 0.12);
-
-  filter: blur(20px);
+  background:
+    radial-gradient(
+      circle,
+      rgba(109, 93, 252, 0.20),
+      transparent 70%
+    );
 
   pointer-events: none;
+
+  opacity: 0.75;
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
+
+
+/* =========================================================
+   CARD SHINE
+========================================================= */
 
 .feature-card::after {
   content: "";
 
   position: absolute;
 
-  left: 18px;
-  right: 18px;
-  bottom: 0;
+  top: 0;
+  left: -120%;
 
-  height: 1px;
+  width: 80%;
+  height: 100%;
 
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(117, 91, 255, 0.5),
-    transparent
-  );
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.055),
+      transparent
+    );
 
-  opacity: 0;
+  transform: skewX(-22deg);
 
-  transition: opacity 0.3s ease;
+  transition: left 0.7s ease;
+
+  pointer-events: none;
 }
 
-.feature-card:hover {
-  transform: translateY(-6px);
+.feature-card:hover::after {
+  left: 150%;
+}
 
-  border-color: rgba(122, 102, 255, 0.28);
+
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.feature-card:hover {
+  transform: translateY(-7px);
+
+  border-color:
+    rgba(139, 124, 255, 0.28);
 
   background:
     linear-gradient(
       145deg,
-      rgba(31, 40, 67, 0.96),
-      rgba(16, 24, 43, 0.95)
+      rgba(35, 45, 78, 0.92),
+      rgba(14, 23, 43, 0.88)
     );
 
   box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.22),
-    0 0 30px rgba(101, 76, 255, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 60px rgba(0, 0, 0, 0.30),
+    0 0 35px rgba(109, 93, 252, 0.08);
 }
 
-.feature-card:hover::after {
+.feature-card:hover::before {
   opacity: 1;
+
+  transform: scale(1.15);
 }
+
 
 /* =========================================================
    FEATURE ICON
-   ========================================================= */
+========================================================= */
 
 .feature-icon {
+  position: relative;
+
+  width: 46px;
+  height: 46px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 42px;
-  height: 42px;
+  margin-bottom: 20px;
 
-  margin-bottom: 18px;
-
-  border-radius: 12px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #7560ff,
-      #477df4
-    );
+  border-radius: 13px;
 
   color: #ffffff;
 
-  font-size: 16px;
+  font-size: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d5dfc,
+      #7c65ff
+    );
+
+  border:
+    1px solid rgba(255, 255, 255, 0.12);
 
   box-shadow:
-    0 8px 20px rgba(91, 78, 255, 0.23);
+    0 10px 25px rgba(109, 93, 252, 0.28);
 
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .feature-card:hover .feature-icon {
-  transform: translateY(-2px) scale(1.04);
+  transform:
+    translateY(-2px)
+    scale(1.05);
 
   box-shadow:
-    0 10px 26px rgba(91, 78, 255, 0.34);
+    0 14px 32px rgba(109, 93, 252, 0.42);
 }
+
 
 /* =========================================================
    FEATURE CONTENT
-   ========================================================= */
+========================================================= */
+
+.feature-content {
+  position: relative;
+  z-index: 2;
+}
 
 .feature-content h3 {
-  margin: 0 0 9px;
+  margin: 0 0 10px;
 
-  color: #f5f7ff;
+  color: #f8fafc;
 
   font-size: 16px;
-  line-height: 1.3;
-  font-weight: 650;
+  font-weight: 700;
 
-  letter-spacing: -0.015em;
+  line-height: 1.35;
+
+  letter-spacing: -0.01em;
 }
 
 .feature-content p {
   margin: 0;
 
-  color: rgba(174, 184, 208, 0.72);
+  color: #8d99ad;
 
-  font-size: 11.5px;
-  line-height: 1.7;
+  font-size: 12px;
+
+  line-height: 1.65;
 }
+
 
 /* =========================================================
-   FEATURE CHECK LIST
-   ========================================================= */
+   FEATURE LIST
+========================================================= */
 
-/*
-   These styles work if you later add feature bullet lists
-   inside .feature-content.
-*/
-
-.feature-content ul {
+.feature-list {
   display: flex;
+
   flex-direction: column;
 
-  gap: 6px;
-
-  margin: 13px 0 0;
-  padding: 0;
-
-  list-style: none;
-}
-
-.feature-content li {
-  display: flex;
-  align-items: center;
   gap: 7px;
 
-  color: rgba(220, 225, 239, 0.78);
+  margin-top: 15px;
+}
 
-  font-size: 10.5px;
+.feature-list-item {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #b9c2d2;
+
+  font-size: 11px;
+
   line-height: 1.4;
 }
 
-.feature-content li svg {
+.feature-list-item svg {
   flex-shrink: 0;
 
-  color: #7f70ff;
+  color: #7c6cff;
 
   font-size: 9px;
+
+  filter:
+    drop-shadow(
+      0 0 5px rgba(124, 108, 255, 0.35)
+    );
 }
+
 
 /* =========================================================
    FEATURE HIGHLIGHT
-   ========================================================= */
+========================================================= */
 
 .features-highlight {
+  margin-top: 62px;
+
   width: 100%;
-  margin-top: 72px;
 }
 
 .highlight-card {
@@ -319,212 +389,269 @@
 
   display: grid;
 
-  grid-template-columns: 1.4fr 0.8fr;
+  grid-template-columns:
+    minmax(0, 1.45fr)
+    minmax(300px, 0.75fr);
 
   gap: 45px;
 
-  width: 100%;
+  min-height: 320px;
 
-  padding: 42px;
+  padding: 38px 40px;
 
-  border: 1px solid rgba(113, 98, 255, 0.18);
   border-radius: 24px;
+
+  overflow: hidden;
 
   background:
     radial-gradient(
-      circle at 85% 20%,
-      rgba(35, 198, 232, 0.08),
+      circle at 90% 20%,
+      rgba(0, 196, 255, 0.13),
       transparent 32%
     ),
     radial-gradient(
-      circle at 15% 80%,
-      rgba(102, 76, 255, 0.1),
-      transparent 35%
+      circle at 20% 80%,
+      rgba(109, 93, 252, 0.16),
+      transparent 38%
     ),
     linear-gradient(
       135deg,
-      rgba(26, 37, 72, 0.94),
-      rgba(12, 28, 48, 0.94)
+      rgba(29, 42, 79, 0.95),
+      rgba(16, 29, 52, 0.90)
     );
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 25px 60px rgba(0, 0, 0, 0.18);
+  border:
+    1px solid rgba(139, 124, 255, 0.16);
 
-  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 30px 80px rgba(0, 0, 0, 0.24);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 
-/* decorative glow */
+
+/* =========================================================
+   HIGHLIGHT GLOW
+========================================================= */
 
 .highlight-card::before {
   content: "";
 
   position: absolute;
 
-  width: 260px;
-  height: 260px;
+  top: -180px;
+  right: -100px;
 
-  top: -150px;
-  right: -90px;
+  width: 420px;
+  height: 420px;
 
   border-radius: 50%;
 
-  background: rgba(82, 117, 255, 0.13);
-
-  filter: blur(55px);
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 210, 255, 0.12),
+      transparent 68%
+    );
 
   pointer-events: none;
 }
 
+.highlight-card::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.035) 50%,
+      transparent 65%
+    );
+
+  pointer-events: none;
+}
+
+
 /* =========================================================
    HIGHLIGHT LEFT
-   ========================================================= */
+========================================================= */
 
 .highlight-left {
   position: relative;
-  z-index: 1;
+
+  z-index: 2;
 }
 
 .highlight-label {
   display: inline-block;
 
-  margin-bottom: 14px;
+  margin-bottom: 13px;
 
-  color: #8c9aff;
+  color: #8d7fff;
 
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.15em;
+
   text-transform: uppercase;
 }
 
 .highlight-left h2 {
   max-width: 620px;
 
-  margin: 0 0 16px;
+  margin: 0;
 
-  color: #f5f7ff;
+  color: #f8fafc;
 
-  font-size: clamp(27px, 3vw, 39px);
-  line-height: 1.13;
-  letter-spacing: -0.03em;
+  font-size: clamp(29px, 3vw, 39px);
+
+  line-height: 1.12;
+
+  letter-spacing: -0.035em;
 }
 
 .highlight-left h2 span {
-  color: #8294ff;
+  display: inline;
+
+  color: #8d9dff;
 }
 
-.highlight-left > p {
-  max-width: 620px;
+.highlight-left p {
+  max-width: 650px;
 
-  margin: 0;
+  margin: 16px 0 20px;
 
-  color: rgba(184, 195, 219, 0.72);
+  color: #95a1b7;
 
-  font-size: 12.5px;
-  line-height: 1.8;
+  font-size: 12px;
+
+  line-height: 1.75;
 }
+
 
 /* =========================================================
-   HIGHLIGHT CHECKS
-   ========================================================= */
+   HIGHLIGHT FEATURES
+========================================================= */
 
 .highlight-features {
   display: flex;
+
   flex-direction: column;
 
   gap: 9px;
 
-  margin-top: 21px;
+  margin-bottom: 24px;
 }
 
-.highlight-features div {
+.highlight-features > div {
   display: flex;
   align-items: center;
+
   gap: 9px;
 
-  color: rgba(226, 231, 244, 0.86);
-
-  font-size: 11.5px;
-}
-
-.highlight-features svg {
-  flex-shrink: 0;
-
-  color: #32d583;
+  color: #c5cedd;
 
   font-size: 11px;
 }
 
+.highlight-features svg {
+  color: #22d879;
+
+  font-size: 11px;
+
+  filter:
+    drop-shadow(
+      0 0 6px rgba(34, 216, 121, 0.30)
+    );
+}
+
+
 /* =========================================================
    HIGHLIGHT BUTTON
-   ========================================================= */
+========================================================= */
 
 .highlight-button {
+  position: relative;
+
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
+
   gap: 10px;
 
-  min-width: 210px;
+  padding: 12px 22px;
 
-  margin-top: 25px;
-  padding: 12px 20px;
-
-  border: none;
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #536cf5,
-      #7857ef
-    );
+  border-radius: 11px;
 
   color: #ffffff;
 
-  font-family: inherit;
-  font-size: 11.5px;
-  font-weight: 650;
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #3b82f6
+    );
+
+  border:
+    1px solid rgba(255, 255, 255, 0.10);
+
+  font-size: 11px;
+
+  font-weight: 700;
 
   cursor: pointer;
 
   box-shadow:
-    0 10px 25px rgba(85, 87, 239, 0.2);
+    0 12px 28px rgba(59, 130, 246, 0.25);
 
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .highlight-button:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 13px 30px rgba(85, 87, 239, 0.32);
+    0 18px 36px rgba(59, 130, 246, 0.35);
 }
 
 .highlight-button svg {
   font-size: 10px;
 
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.3s ease;
 }
 
 .highlight-button:hover svg {
   transform: translateX(4px);
 }
 
+
 /* =========================================================
-   HIGHLIGHT RIGHT
-   ========================================================= */
+   HIGHLIGHT RIGHT — MINI STATS
+========================================================= */
 
 .highlight-right {
   position: relative;
-  z-index: 1;
+
+  z-index: 2;
 
   display: grid;
 
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns:
+    repeat(2, 1fr);
 
   gap: 12px;
 
@@ -532,129 +659,176 @@
 }
 
 .mini-stat {
-  min-height: 115px;
+  min-height: 112px;
+
+  padding: 19px;
+
+  border-radius: 16px;
 
   display: flex;
+
   flex-direction: column;
-  align-items: flex-start;
+
   justify-content: center;
 
-  padding: 17px;
+  background:
+    rgba(255, 255, 255, 0.045);
 
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 15px;
-
-  background: rgba(255, 255, 255, 0.045);
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+  backdrop-filter: blur(12px);
 
   transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .mini-stat:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 
-  border-color: rgba(126, 109, 255, 0.2);
+  background:
+    rgba(255, 255, 255, 0.07);
 
-  background: rgba(255, 255, 255, 0.065);
+  border-color:
+    rgba(139, 124, 255, 0.22);
 }
 
-.mini-stat > svg {
+.mini-stat svg {
   margin-bottom: 8px;
 
-  color: #7e8dff;
+  color: #8b7cff;
 
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .mini-stat h3 {
-  margin: 0 0 4px;
+  margin: 0;
 
-  color: #a0a7ff;
+  color: #8d9dff;
 
-  font-size: 24px;
-  line-height: 1;
-  font-weight: 600;
+  font-size: 22px;
+
+  line-height: 1.1;
+
+  font-weight: 700;
 }
 
 .mini-stat span {
-  color: rgba(171, 182, 207, 0.68);
+  margin-top: 6px;
 
-  font-size: 10px;
+  color: #8995aa;
+
+  font-size: 9px;
+
+  line-height: 1.4;
 }
 
-/* =========================================================
-   TABLET
-   ========================================================= */
 
-@media (max-width: 1050px) {
+/* =========================================================
+   RESPONSIVE — 1100
+========================================================= */
+
+@media (max-width: 1100px) {
+
   .features-section {
-    padding-left: 20px;
-    padding-right: 20px;
+    width: min(
+      94%,
+      1000px
+    );
   }
 
   .features-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .feature-card {
-    min-height: 200px;
+    min-height: 220px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — 800
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .features-section {
+    padding:
+      90px 0 100px;
+  }
+
+  .features-header {
+    margin-bottom: 45px;
   }
 
   .highlight-card {
     grid-template-columns: 1fr;
+
     gap: 30px;
+
+    padding: 32px;
   }
 
   .highlight-right {
-    max-width: 500px;
+    grid-template-columns:
+      repeat(4, 1fr);
   }
+
+  .mini-stat {
+    min-height: 100px;
+  }
+
 }
 
+
 /* =========================================================
-   MOBILE
-   ========================================================= */
+   RESPONSIVE — 600
+========================================================= */
 
-@media (max-width: 650px) {
+@media (max-width: 600px) {
+
   .features-section {
-    padding: 75px 16px 90px;
-  }
+    width: calc(100% - 28px);
 
-  .features-header {
-    margin-bottom: 40px;
+    padding:
+      75px 0 85px;
   }
 
   .features-header h2 {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   .features-header p {
-    font-size: 12px;
+    font-size: 13px;
+
     line-height: 1.7;
   }
 
   .features-grid {
     grid-template-columns: 1fr;
-    gap: 13px;
+
+    gap: 14px;
   }
 
   .feature-card {
     min-height: auto;
 
-    padding: 20px;
-
-    border-radius: 16px;
+    padding: 22px 20px;
   }
 
   .feature-icon {
-    width: 40px;
-    height: 40px;
+    width: 43px;
+    height: 43px;
 
-    margin-bottom: 15px;
+    margin-bottom: 17px;
   }
 
   .feature-content h3 {
@@ -666,65 +840,48 @@
   }
 
   .features-highlight {
-    margin-top: 48px;
+    margin-top: 42px;
   }
 
   .highlight-card {
-    padding: 27px 22px;
+    padding: 26px 22px;
 
     border-radius: 20px;
   }
 
   .highlight-left h2 {
-    font-size: 27px;
-  }
-
-  .highlight-left > p {
-    font-size: 11.5px;
-  }
-
-  .highlight-right {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .mini-stat {
-    min-height: 100px;
-
-    padding: 14px;
-  }
-
-  .mini-stat h3 {
-    font-size: 21px;
-  }
-
-  .highlight-button {
-    width: 100%;
-  }
-}
-
-/* =========================================================
-   VERY SMALL DEVICES
-   ========================================================= */
-
-@media (max-width: 390px) {
-  .features-section {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .features-header h2 {
     font-size: 28px;
   }
 
   .highlight-right {
-    gap: 8px;
+    grid-template-columns:
+      repeat(2, 1fr);
   }
 
   .mini-stat {
-    min-height: 90px;
+    min-height: 95px;
+
+    padding: 15px;
   }
 
-  .mini-stat h3 {
-    font-size: 19px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .feature-card,
+  .feature-icon,
+  .mini-stat,
+  .highlight-button {
+    transition: none;
   }
+
+  .feature-card::after {
+    display: none;
+  }
+
 }
