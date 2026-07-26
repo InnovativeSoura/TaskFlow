@@ -1,71 +1,57 @@
 /* =========================================================
-   TASKFLOW LANDING PAGE
-   GLOBAL LANDING STYLES ONLY
-========================================================= */
+   TASKFLOW — GLOBAL LANDING PAGE
+   ========================================================= */
 
 :root {
-  --tf-primary: #6366f1;
-  --tf-primary-light: #8b5cf6;
-  --tf-secondary: #06b6d4;
-
-  --tf-success: #22c55e;
-  --tf-warning: #f59e0b;
-  --tf-danger: #ef4444;
-
   --tf-bg: #050816;
-  --tf-bg-secondary: #091224;
-  --tf-surface: rgba(255, 255, 255, 0.055);
-  --tf-surface-hover: rgba(255, 255, 255, 0.085);
+  --tf-bg-deep: #030511;
 
-  --tf-border: rgba(255, 255, 255, 0.09);
+  --tf-primary: #6d5dfc;
+  --tf-primary-light: #8b7cff;
+  --tf-blue: #3b82f6;
 
-  --tf-text: #ffffff;
-  --tf-text-secondary: #cbd5e1;
-  --tf-text-muted: #94a3b8;
+  --tf-text: #f8fafc;
+  --tf-text-soft: #cbd5e1;
+  --tf-text-muted: #8994aa;
 
-  --tf-radius-sm: 14px;
-  --tf-radius-md: 20px;
-  --tf-radius-lg: 28px;
-  --tf-radius-xl: 36px;
+  --tf-border: rgba(255, 255, 255, 0.08);
 
-  --tf-container: 1400px;
-
-  --tf-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.4);
-
-  --tf-shadow-primary:
-    0 25px 60px rgba(99, 102, 241, 0.22);
+  --tf-nav-height: 76px;
 }
+
 
 /* =========================================================
    RESET
-========================================================= */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+   ========================================================= */
 
 html {
+  margin: 0;
+  padding: 0;
   scroll-behavior: smooth;
+  background: var(--tf-bg-deep);
 }
 
 body {
   margin: 0;
   padding: 0;
-
   min-width: 320px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(92, 77, 255, 0.08),
+      transparent 35%
+    ),
+    var(--tf-bg-deep);
+
+  color: var(--tf-text);
 
   font-family:
     Inter,
-    -apple-system,
-    BlinkMacSystemFont,
+    "Poppins",
     "Segoe UI",
+    Arial,
     sans-serif;
-
-  background: var(--tf-bg);
-  color: var(--tf-text);
 
   overflow-x: hidden;
 }
@@ -75,260 +61,284 @@ button,
 input,
 textarea,
 select {
-  font-family: inherit;
+  font-family:
+    Inter,
+    "Poppins",
+    "Segoe UI",
+    Arial,
+    sans-serif;
 }
 
-button {
-  border: 0;
-  outline: none;
-  cursor: pointer;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+
+/* =========================================================
+   ROOT
+   ========================================================= */
+
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
-img {
-  display: block;
-  max-width: 100%;
-}
 
 /* =========================================================
    LANDING PAGE
-========================================================= */
+   ========================================================= */
 
 .landing-page {
   position: relative;
+
+  width: 100%;
   min-height: 100vh;
 
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 
   background:
     radial-gradient(
-      circle at 15% 10%,
-      rgba(99, 102, 241, 0.08),
+      circle at 15% 15%,
+      rgba(91, 76, 255, 0.08),
       transparent 28%
     ),
     radial-gradient(
-      circle at 85% 35%,
-      rgba(6, 182, 212, 0.06),
+      circle at 88% 25%,
+      rgba(0, 210, 255, 0.06),
       transparent 28%
     ),
     linear-gradient(
       180deg,
       #050816 0%,
-      #081021 48%,
-      #050816 100%
+      #06091a 45%,
+      #030511 100%
     );
+
+  overflow-x: clip;
 }
+
 
 /* =========================================================
    MAIN CONTENT
-========================================================= */
+   ========================================================= */
 
-.landing-page main {
+.landing-main {
   position: relative;
   z-index: 2;
-}
 
-/* =========================================================
-   GENERIC SECTION CONTAINER
-========================================================= */
+  width: 100%;
 
-.landing-section-container {
-  width: min(var(--tf-container), 92%);
-  margin-inline: auto;
-}
-
-/* =========================================================
-   GENERIC SECTION PILL
-========================================================= */
-
-.section-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 9px 18px;
-
-  border: 1px solid rgba(99, 102, 241, 0.28);
-  border-radius: 999px;
-
-  background: rgba(99, 102, 241, 0.1);
-
-  color: #c7d2fe;
-
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-}
-
-/* =========================================================
-   GLOBAL SECTION HEADINGS
-========================================================= */
-
-.section-heading {
-  max-width: 800px;
-  margin: 0 auto 70px;
-  text-align: center;
-}
-
-.section-heading .section-pill {
-  margin-bottom: 22px;
-}
-
-.section-heading h2 {
-  margin: 0 0 20px;
-
-  color: #ffffff;
-
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  line-height: 1.12;
-  letter-spacing: -1.5px;
-}
-
-.section-heading h2 span {
-  background:
-    linear-gradient(
-      90deg,
-      #818cf8,
-      #06b6d4
-    );
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.section-heading p {
   margin: 0;
-
-  color: var(--tf-text-muted);
-
-  font-size: 17px;
-  line-height: 1.8;
+  padding: 0;
 }
 
+
 /* =========================================================
-   GLOBAL GLASS CARD
-========================================================= */
+   GENERIC SECTION
+   ========================================================= */
 
-.tf-glass {
-  background: var(--tf-surface);
+.landing-section {
+  position: relative;
 
-  border: 1px solid var(--tf-border);
+  width: 100%;
 
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  margin: 0;
+  padding: 0;
 
-  box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.18);
+  isolation: isolate;
 }
 
+
 /* =========================================================
-   SCROLL TARGET
-========================================================= */
+   HERO
+   IMPORTANT:
+   No giant top margin.
+   No giant padding.
+   Navbar overlays the hero.
+   ========================================================= */
+
+.landing-hero-section {
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+
+  position: relative;
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.landing-statistics-section {
+  padding: 50px 0 80px;
+}
+
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.landing-features-section {
+  padding: 80px 0 100px;
+}
+
+
+/* =========================================================
+   TESTIMONIALS
+   ========================================================= */
+
+.landing-testimonials-section {
+  padding: 80px 0 100px;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.landing-cta-section {
+  padding: 70px 0 100px;
+}
+
+
+/* =========================================================
+   GLOBAL CONTAINER
+   ========================================================= */
+
+.landing-page .container {
+  width: min(1180px, calc(100% - 40px));
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =========================================================
+   SECTION ANCHOR OFFSET
+   ========================================================= */
 
 #home,
 #features,
 #statistics,
 #testimonials,
-#contact,
-#auth-section {
-  scroll-margin-top: 100px;
+#contact {
+  scroll-margin-top: 90px;
 }
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: 2px solid #818cf8;
-  outline-offset: 4px;
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.landing-page a {
+  color: inherit;
+  text-decoration: none;
 }
 
+
 /* =========================================================
-   SCROLL TOP
-========================================================= */
+   BUTTON RESET
+   ========================================================= */
 
-.scroll-top-btn {
-  position: fixed;
+.landing-page button {
+  border: 0;
+  outline: none;
+}
 
-  right: 30px;
-  bottom: 30px;
 
-  width: 54px;
-  height: 54px;
+/* =========================================================
+   SELECTION
+   ========================================================= */
 
-  display: grid;
-  place-items: center;
-
-  z-index: 999;
-
-  border-radius: 50%;
-
+.landing-page ::selection {
+  background: rgba(109, 93, 252, 0.35);
   color: #ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--tf-primary),
-      var(--tf-primary-light)
-    );
-
-  box-shadow:
-    0 18px 45px rgba(99, 102, 241, 0.35);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
 }
 
-.scroll-top-btn:hover {
-  transform: translateY(-5px);
-
-  box-shadow:
-    0 25px 55px rgba(99, 102, 241, 0.45);
-}
 
 /* =========================================================
-   REDUCED MOTION
-========================================================= */
+   SCROLLBAR
+   ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+.landing-page::-webkit-scrollbar {
+  width: 8px;
 }
+
+.landing-page::-webkit-scrollbar-track {
+  background: #030511;
+}
+
+.landing-page::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #6d5dfc,
+    #3b82f6
+  );
+
+  border-radius: 20px;
+}
+
 
 /* =========================================================
    RESPONSIVE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 768px) {
-  .section-heading {
-    margin-bottom: 45px;
+@media (max-width: 900px) {
+  :root {
+    --tf-nav-height: 70px;
   }
 
-  .section-heading p {
-    font-size: 15px;
+  .landing-hero-section {
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 70px;
   }
 
-  .scroll-top-btn {
-    right: 20px;
-    bottom: 20px;
+  .landing-statistics-section {
+    padding: 40px 0 70px;
+  }
 
-    width: 48px;
-    height: 48px;
+  .landing-features-section {
+    padding: 70px 0 80px;
+  }
+
+  .landing-testimonials-section {
+    padding: 70px 0 80px;
+  }
+
+  .landing-cta-section {
+    padding: 60px 0 80px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .landing-page .container {
+    width: min(
+      100% - 28px,
+      1180px
+    );
+  }
+
+  .landing-hero-section {
+    padding-top: 90px;
+    padding-bottom: 55px;
+  }
+
+  .landing-statistics-section,
+  .landing-features-section,
+  .landing-testimonials-section,
+  .landing-cta-section {
+    padding-top: 55px;
+    padding-bottom: 65px;
   }
 }
