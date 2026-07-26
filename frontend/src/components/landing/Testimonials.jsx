@@ -7,6 +7,8 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
+import "./Testimonials.css";
+
 const testimonials = [
   {
     name: "Nicholas Johnson",

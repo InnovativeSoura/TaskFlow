@@ -9,6 +9,8 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 
+import "./CTA.css";
+
 const fadeUp = {
   hidden: {
     opacity: 0,

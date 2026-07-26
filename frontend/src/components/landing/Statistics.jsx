@@ -10,6 +10,8 @@ import {
   FaClock,
 } from "react-icons/fa";
 
+import "./Statistics.css";
+
 const statistics = [
   {
     icon: <FaUsers />,

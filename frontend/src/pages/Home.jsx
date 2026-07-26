@@ -12,64 +12,35 @@ import "../styles/Landing.css";
 const Home = () => {
   return (
     <div className="landing-page">
-      {/* Animated background */}
+
+      {/* Background */}
       <BackgroundAnimation />
 
-      {/* Fixed / sticky navbar */}
+      {/* Navbar */}
       <LandingNavbar />
 
-      <main className="landing-main">
-        {/* =========================
-            HERO
-        ========================== */}
-        <section id="home" className="landing-section hero-wrapper">
-          <Hero />
-        </section>
+      <main>
 
-        {/* =========================
-            FEATURES
-        ========================== */}
+        {/* Hero */}
+        <Hero />
+
+        {/* Features */}
         <Features />
 
-        {/* =========================
-            STATISTICS
-        ========================== */}
-        <section id="statistics" className="landing-section">
-          <Statistics />
-        </section>
+        {/* Statistics */}
+        <Statistics />
 
-        {/* =========================
-            TESTIMONIALS
-        ========================== */}
-        <section id="testimonials" className="landing-section">
-          <Testimonials />
-        </section>
+        {/* Testimonials */}
+        <Testimonials />
 
-        {/* =========================
-            CTA
-        ========================== */}
-        <section id="contact" className="landing-section">
-          <CTA />
-        </section>
+        {/* CTA */}
+        <CTA />
+
       </main>
 
       {/* Footer */}
       <Footer />
 
-      {/* Scroll to top */}
-      <button
-        type="button"
-        className="landing-scroll-top"
-        onClick={() =>
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          })
-        }
-        aria-label="Scroll to top"
-      >
-        ↑
-      </button>
     </div>
   );
 };

@@ -1,0 +1,389 @@
+/* =========================================================
+   TASKFLOW STATISTICS
+========================================================= */
+
+.statistics-section {
+  position: relative;
+  z-index: 2;
+
+  width: min(1400px, 92%);
+
+  margin: 100px auto 0;
+
+  padding: 100px 0;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.statistics-section .section-heading {
+  max-width: 820px;
+  margin-bottom: 70px;
+}
+
+.statistics-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 24px;
+}
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+.statistics-card {
+  position: relative;
+
+  min-height: 310px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 35px 25px;
+
+  overflow: hidden;
+
+  text-align: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 26px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.03)
+    );
+
+  backdrop-filter: blur(24px);
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.statistics-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  top: -120px;
+  right: -100px;
+
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  filter: blur(90px);
+
+  opacity: 0;
+
+  transition: opacity 0.4s ease;
+}
+
+.statistics-card:hover {
+  border-color:
+    rgba(129, 140, 248, 0.35);
+
+  box-shadow:
+    0 30px 70px
+    rgba(0, 0, 0, 0.3);
+}
+
+.statistics-card:hover::before {
+  opacity: 0.13;
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.statistics-icon {
+  position: relative;
+  z-index: 2;
+
+  width: 70px;
+  height: 70px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 24px;
+
+  border-radius: 20px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  font-size: 27px;
+
+  box-shadow:
+    0 18px 40px
+    rgba(99, 102, 241, 0.3);
+}
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+.statistics-card h2 {
+  position: relative;
+  z-index: 2;
+
+  margin: 0 0 8px;
+
+  font-size: 44px;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #c7d2fe
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.statistics-card h4 {
+  position: relative;
+  z-index: 2;
+
+  margin: 0 0 10px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+}
+
+.statistics-card p {
+  position: relative;
+  z-index: 2;
+
+  max-width: 250px;
+
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   TRUSTED COMPANIES
+========================================================= */
+
+.trusted-companies {
+  margin-top: 80px;
+
+  text-align: center;
+}
+
+.trusted-companies > p {
+  margin: 0 0 28px;
+
+  color: #64748b;
+
+  font-size: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 2px;
+
+  font-weight: 700;
+}
+
+.company-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.company-grid span {
+  min-height: 65px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  border-radius: 17px;
+
+  color: #94a3b8;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.company-grid span:hover {
+  transform: translateY(-4px);
+
+  color: #ffffff;
+
+  border-color:
+    rgba(99, 102, 241, 0.25);
+
+  background:
+    rgba(99, 102, 241, 0.08);
+}
+
+/* =========================================================
+   SECONDARY STATISTICS
+========================================================= */
+
+.statistics-extra {
+  margin-top: 60px;
+}
+
+.statistics-extra .statistics-card {
+  min-height: 220px;
+}
+
+.statistics-extra .statistics-card h2 {
+  font-size: 40px;
+}
+
+/* =========================================================
+   GLOW
+========================================================= */
+
+.statistics-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  left: -220px;
+  top: 0;
+
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  filter: blur(150px);
+
+  opacity: 0.08;
+
+  z-index: -1;
+
+  pointer-events: none;
+}
+
+.statistics-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: -220px;
+  bottom: 0;
+
+  border-radius: 50%;
+
+  background: #06b6d4;
+
+  filter: blur(150px);
+
+  opacity: 0.07;
+
+  z-index: -1;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .statistics-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .company-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .statistics-section {
+    padding: 70px 0;
+  }
+
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .company-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .statistics-section {
+    width: 90%;
+  }
+
+  .statistics-card {
+    min-height: 270px;
+  }
+
+  .statistics-card h2 {
+    font-size: 38px;
+  }
+
+  .company-grid {
+    grid-template-columns: 1fr;
+  }
+}

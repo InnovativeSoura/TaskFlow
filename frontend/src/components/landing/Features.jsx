@@ -20,7 +20,7 @@ import {
   FaChartBar,
 } from "react-icons/fa";
 
-// import "../../styles/Features.css";
+import "./Features.css";
 /* =========================================================
    FEATURE DATA
 ========================================================= */

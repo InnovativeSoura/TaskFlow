@@ -1,0 +1,468 @@
+/* =========================================================
+   TASKFLOW CTA
+========================================================= */
+
+.cta-section {
+  position: relative;
+  z-index: 2;
+
+  width: min(1400px, 92%);
+
+  margin: 100px auto 0;
+
+  padding: 100px 0;
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.cta-container {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    1.15fr
+    0.85fr;
+
+  gap: 70px;
+
+  overflow: hidden;
+
+  padding: 65px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+
+  border-radius: 36px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.17),
+      rgba(6, 182, 212, 0.06)
+    );
+
+  backdrop-filter: blur(30px);
+
+  box-shadow:
+    0 35px 90px
+    rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   GLOW
+========================================================= */
+
+.cta-circle {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(120px);
+
+  pointer-events: none;
+}
+
+.cta-circle-1 {
+  width: 350px;
+  height: 350px;
+
+  left: -180px;
+  top: -180px;
+
+  background: #6366f1;
+
+  opacity: 0.2;
+}
+
+.cta-circle-2 {
+  width: 350px;
+  height: 350px;
+
+  right: -180px;
+  bottom: -180px;
+
+  background: #06b6d4;
+
+  opacity: 0.16;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-badge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px 17px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 999px;
+
+  color: #dbe4ff;
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cta-content h2 {
+  margin: 23px 0 20px;
+
+  color: #ffffff;
+
+  font-size:
+    clamp(
+      2.2rem,
+      4vw,
+      3.5rem
+    );
+
+  line-height: 1.12;
+
+  letter-spacing: -1.5px;
+}
+
+.cta-content h2 span {
+  background:
+    linear-gradient(
+      90deg,
+      #818cf8,
+      #06b6d4
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cta-content p {
+  max-width: 650px;
+
+  margin: 0 0 30px;
+
+  color: #cbd5e1;
+
+  font-size: 16px;
+
+  line-height: 1.85;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  margin-bottom: 30px;
+}
+
+.cta-primary-btn,
+.cta-secondary-btn {
+  min-height: 53px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 24px;
+
+  border-radius: 16px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cta-primary-btn {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 18px 40px
+    rgba(99, 102, 241, 0.3);
+}
+
+.cta-primary-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 25px 50px
+    rgba(99, 102, 241, 0.4);
+}
+
+.cta-secondary-btn {
+  color: #ffffff;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  background:
+    rgba(255, 255, 255, 0.045);
+}
+
+.cta-secondary-btn:hover {
+  transform: translateY(-3px);
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.cta-features {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 18px;
+}
+
+.cta-features div {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #d1fae5;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cta-features svg {
+  color: #22c55e;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.cta-dashboard {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 18px;
+}
+
+.cta-widget {
+  padding: 25px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 23px;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 25px 60px
+    rgba(0, 0, 0, 0.2);
+
+  animation:
+    ctaFloat
+    6s
+    ease-in-out
+    infinite;
+}
+
+.widget-header {
+  display: flex;
+
+  gap: 7px;
+
+  margin-bottom: 20px;
+}
+
+.widget-header span {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+}
+
+.widget-header span:nth-child(2) {
+  background: #f59e0b;
+}
+
+.widget-header span:nth-child(3) {
+  background: #22c55e;
+}
+
+.widget-progress {
+  height: 11px;
+
+  margin: 18px 0;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #1e293b;
+}
+
+.widget-progress-fill {
+  width: 88%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6366f1,
+      #06b6d4
+    );
+}
+
+.cta-mini-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 19px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  animation:
+    ctaFloat
+    5s
+    ease-in-out
+    infinite;
+}
+
+.cta-mini-card h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 25px;
+}
+
+.cta-mini-card span {
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes ctaFloat {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .cta-container {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-dashboard {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 70px 0;
+  }
+
+  .cta-container {
+    padding: 42px 32px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-primary-btn,
+  .cta-secondary-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .cta-section {
+    width: 90%;
+  }
+
+  .cta-container {
+    padding: 30px 22px;
+
+    border-radius: 27px;
+  }
+
+  .cta-features {
+    flex-direction: column;
+  }
+
+  .cta-widget {
+    padding: 21px;
+  }
+}
