@@ -1,5 +1,3 @@
-// src/pages/Home.jsx
-
 import LandingNavbar from "../components/landing/LandingNavbar";
 import Hero from "../components/landing/Hero";
 import Features from "../components/landing/Features";
@@ -14,55 +12,64 @@ import "../styles/Landing.css";
 const Home = () => {
   return (
     <div className="landing-page">
-
-      {/* ==========================================
-          BACKGROUND ANIMATION
-      ========================================== */}
-
+      {/* Animated background */}
       <BackgroundAnimation />
 
-
-      {/* ==========================================
-          LANDING NAVBAR
-      ========================================== */}
-
+      {/* Fixed / sticky navbar */}
       <LandingNavbar />
 
+      <main className="landing-main">
+        {/* =========================
+            HERO
+        ========================== */}
+        <section id="home" className="landing-section hero-wrapper">
+          <Hero />
+        </section>
 
-      {/* ==========================================
-          MAIN LANDING CONTENT
-      ========================================== */}
-
-      <main>
-
-        {/* HERO */}
-        <Hero />
-
-
-        {/* FEATURES */}
+        {/* =========================
+            FEATURES
+        ========================== */}
         <Features />
 
+        {/* =========================
+            STATISTICS
+        ========================== */}
+        <section id="statistics" className="landing-section">
+          <Statistics />
+        </section>
 
-        {/* STATISTICS */}
-        <Statistics />
+        {/* =========================
+            TESTIMONIALS
+        ========================== */}
+        <section id="testimonials" className="landing-section">
+          <Testimonials />
+        </section>
 
-
-        {/* TESTIMONIALS */}
-        <Testimonials />
-
-
-        {/* CTA */}
-        <CTA />
-
+        {/* =========================
+            CTA
+        ========================== */}
+        <section id="contact" className="landing-section">
+          <CTA />
+        </section>
       </main>
 
-
-      {/* ==========================================
-          FOOTER
-      ========================================== */}
-
+      {/* Footer */}
       <Footer />
 
+      {/* Scroll to top */}
+      <button
+        type="button"
+        className="landing-scroll-top"
+        onClick={() =>
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          })
+        }
+        aria-label="Scroll to top"
+      >
+        ↑
+      </button>
     </div>
   );
 };
