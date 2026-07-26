@@ -1,3 +1,5 @@
+// src/pages/Home.jsx
+
 import LandingNavbar from "../components/landing/LandingNavbar";
 import Hero from "../components/landing/Hero";
 import Features from "../components/landing/Features";
@@ -12,41 +14,55 @@ import "../styles/Landing.css";
 const Home = () => {
   return (
     <div className="landing-page">
-      {/* Background */}
+
+      {/* ==========================================
+          BACKGROUND ANIMATION
+      ========================================== */}
+
       <BackgroundAnimation />
 
-      {/* Navbar */}
+
+      {/* ==========================================
+          LANDING NAVBAR
+      ========================================== */}
+
       <LandingNavbar />
 
+
+      {/* ==========================================
+          MAIN LANDING CONTENT
+      ========================================== */}
+
       <main>
-        {/* Hero */}
-        <section id="home">
-          <Hero />
-        </section>
 
-        {/* Features */}
-        <section id="features">
-          <Features />
-        </section>
+        {/* HERO */}
+        <Hero />
 
-        {/* Statistics */}
-        <section id="statistics">
-          <Statistics />
-        </section>
 
-        {/* Testimonials */}
-        <section id="testimonials">
-          <Testimonials />
-        </section>
+        {/* FEATURES */}
+        <Features />
+
+
+        {/* STATISTICS */}
+        <Statistics />
+
+
+        {/* TESTIMONIALS */}
+        <Testimonials />
+
 
         {/* CTA */}
-        <section id="contact">
-          <CTA />
-        </section>
+        <CTA />
+
       </main>
 
-      {/* Footer */}
+
+      {/* ==========================================
+          FOOTER
+      ========================================== */}
+
       <Footer />
+
     </div>
   );
 };
