@@ -1,358 +1,96 @@
 /* =========================================================
-   TASKFLOW — STATISTICS SECTION
-   Premium Productivity / Metrics Design
+   TASKFLOW STATISTICS
+   Premium Dark / Glassmorphism
 ========================================================= */
 
 .statistics-section {
   position: relative;
   width: 100%;
-  padding: 110px 0 130px;
-  overflow: hidden;
-  color: #ffffff;
-}
-
-.statistics-container {
-  width: min(1180px, calc(100% - 48px));
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-
-/* =========================================================
-   PRODUCTIVITY PANEL
-========================================================= */
-
-.productivity-panel {
-  width: 100%;
-  min-height: 395px;
-
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(350px, 0.85fr);
-  gap: 38px;
-
-  padding: 38px;
-
-  border-radius: 25px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(31, 45, 91, 0.88),
-      rgba(17, 38, 67, 0.82)
-    );
-
-  border: 1px solid rgba(130, 150, 255, 0.14);
-
-  box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045);
-
-  backdrop-filter: blur(25px);
-
-  position: relative;
-  overflow: hidden;
-}
-
-
-/* subtle panel glow */
-
-.productivity-panel::before {
-  content: "";
-
-  position: absolute;
-
-  width: 420px;
-  height: 420px;
-
-  right: -180px;
-  bottom: -240px;
-
-  border-radius: 50%;
+  padding: 110px 0 125px;
 
   background:
     radial-gradient(
-      circle,
-      rgba(37, 99, 235, 0.18),
-      transparent 70%
+      circle at 20% 40%,
+      rgba(91, 77, 255, 0.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 82% 35%,
+      rgba(0, 194, 255, 0.06),
+      transparent 30%
     );
 
-  pointer-events: none;
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   PRODUCTIVITY LEFT CONTENT
+   CONTAINER
 ========================================================= */
 
-.productivity-content {
-  position: relative;
-  z-index: 2;
-
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
+.statistics-container {
+  width: min(1150px, calc(100% - 48px));
+  margin: 0 auto;
 }
 
-.productivity-label {
-  display: block;
 
-  margin-bottom: 18px;
+/* =========================================================
+   INTRO
+========================================================= */
 
-  color: #dbe4ff;
+.statistics-intro {
+  max-width: 720px;
+  margin-bottom: 34px;
+}
+
+
+.statistics-tag {
+  display: inline-block;
+
+  margin-bottom: 8px;
+
+  color: #aab5ff;
 
   font-size: 13px;
   font-weight: 500;
-
-  letter-spacing: 0.2px;
+  letter-spacing: 0.01em;
 }
 
 
-.productivity-content h2 {
-  margin: 0 0 17px;
-
-  max-width: 650px;
-
-  font-size: 31px;
-  line-height: 1.22;
-
-  font-weight: 500;
-
-  letter-spacing: -0.8px;
-
-  color: #f8fafc;
-}
-
-
-.productivity-content > p {
-  max-width: 660px;
-
-  margin: 0 0 20px;
-
-  color: #aebbd1;
-
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-
-/* =========================================================
-   PRODUCTIVITY CHECK LIST
-========================================================= */
-
-.productivity-points {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  margin-bottom: 22px;
-}
-
-
-.productivity-points div {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  color: #dce5f5;
-
-  font-size: 12px;
-}
-
-
-.productivity-points svg {
-  flex-shrink: 0;
-
-  color: #22c55e;
-
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   EXPLORE BUTTON
-========================================================= */
-
-.productivity-button {
-  width: min(100%, 470px);
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  border: none;
-  border-radius: 11px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #3b82f6
-    );
-
-  color: #ffffff;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 15px 35px rgba(37, 99, 235, 0.25);
-
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-
-.productivity-button:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 20px 45px rgba(37, 99, 235, 0.38);
-}
-
-
-.productivity-button svg {
-  transition: transform 0.3s ease;
-}
-
-
-.productivity-button:hover svg {
-  transform: translateX(5px);
-}
-
-
-/* =========================================================
-   MINI STATISTICS
-========================================================= */
-
-.productivity-mini-grid {
-  display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 14px;
-
-  align-content: center;
-
-  position: relative;
-  z-index: 2;
-}
-
-
-.productivity-mini-card {
-  min-height: 150px;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-
-  padding: 20px;
-
-  border-radius: 16px;
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.075);
-
-  transition:
-    transform 0.3s ease,
-    background 0.3s ease,
-    border-color 0.3s ease;
-}
-
-
-.productivity-mini-card:hover {
-  transform: translateY(-5px);
-
-  background:
-    rgba(255, 255, 255, 0.07);
-
-  border-color:
-    rgba(99, 102, 241, 0.35);
-}
-
-
-.productivity-mini-card strong {
-  display: block;
-
-  margin-bottom: 10px;
-
-  color: #8b9cff;
-
-  font-size: 25px;
-  line-height: 1;
-
-  font-weight: 500;
-}
-
-
-.productivity-mini-card span {
-  color: #8998b2;
-
-  font-size: 11px;
-}
-
-
-/* =========================================================
-   STATISTICS HEADING
-========================================================= */
-
-.statistics-heading {
-  margin-top: 95px;
-  margin-bottom: 24px;
-
-  max-width: 650px;
-}
-
-
-.statistics-heading > span {
-  display: block;
-
-  margin-bottom: 4px;
-
-  color: #f3f6ff;
-
-  font-size: 12px;
-  font-weight: 500;
-}
-
-
-.statistics-heading h3 {
-  margin: 0 0 4px;
-
-  color: #ffffff;
-
-  font-size: 13px;
-  font-weight: 500;
-}
-
-
-.statistics-heading p {
+.statistics-title {
   margin: 0;
 
-  color: #9ba8bd;
+  color: #ffffff;
 
-  font-size: 11px;
-  line-height: 1.6;
+  font-size: clamp(
+    28px,
+    3vw,
+    39px
+  );
+
+  line-height: 1.12;
+
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+}
+
+
+.statistics-description {
+  max-width: 760px;
+
+  margin: 8px 0 0;
+
+  color: #a6afc8;
+
+  font-size: 14px;
+
+  line-height: 1.55;
 }
 
 
 /* =========================================================
-   MAIN STATISTICS GRID
+   STATISTICS GRID
 ========================================================= */
 
 .statistics-grid {
@@ -362,56 +100,100 @@
     repeat(4, minmax(0, 1fr));
 
   gap: 14px;
+
+  width: 100%;
 }
 
 
 /* =========================================================
-   STATISTIC CARD
+   STATISTICS CARD
 ========================================================= */
 
 .statistics-card {
-  min-height: 235px;
+  position: relative;
+
+  min-height: 270px;
+
+  padding: 26px 22px 24px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 42, 72, 0.95),
+      rgba(23, 31, 55, 0.95)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.025),
+    0 18px 45px
+      rgba(0, 0, 0, 0.15);
 
   display: flex;
   flex-direction: column;
 
   align-items: center;
+
   text-align: center;
 
-  padding: 25px 20px;
-
-  border-radius: 17px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(30, 42, 75, 0.82),
-      rgba(22, 31, 54, 0.78)
-    );
-
-  border:
-    1px solid rgba(255, 255, 255, 0.065);
-
-  box-shadow:
-    0 20px 45px rgba(0, 0, 0, 0.16);
-
-  backdrop-filter: blur(20px);
+  overflow: hidden;
 
   transition:
-    transform 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+
+/* =========================================================
+   CARD TOP GLOW
+========================================================= */
+
+.statistics-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -80px;
+  left: 50%;
+
+  width: 150px;
+  height: 150px;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(76, 132, 255, 0.18),
+      transparent 68%
+    );
+
+  pointer-events: none;
 }
 
 
 .statistics-card:hover {
-  transform: translateY(-10px);
-
   border-color:
-    rgba(79, 125, 255, 0.3);
+    rgba(80, 130, 255, 0.25);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(34, 46, 79, 0.98),
+      rgba(25, 34, 60, 0.98)
+    );
 
   box-shadow:
-    0 25px 55px rgba(0, 0, 0, 0.25);
+    0 22px 55px
+      rgba(0, 0, 0, 0.25),
+    0 0 35px
+      rgba(65, 106, 255, 0.07);
 }
 
 
@@ -420,172 +202,152 @@
 ========================================================= */
 
 .statistics-icon {
-  width: 53px;
-  height: 53px;
+  position: relative;
+  z-index: 1;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 54px;
+  height: 54px;
 
   margin-bottom: 20px;
 
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #2563eb,
-      #3b82f6
-    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   color: #ffffff;
 
   font-size: 21px;
 
+  background:
+    linear-gradient(
+      145deg,
+      #347cff,
+      #2868e9
+    );
+
   box-shadow:
-    0 12px 30px rgba(37, 99, 235, 0.35);
+    0 12px 28px
+      rgba(47, 112, 255, 0.28);
+
+  flex-shrink: 0;
 }
 
 
-.statistics-card h2 {
-  margin: 0 0 10px;
+/* =========================================================
+   NUMBER
+========================================================= */
 
-  color: #f8fafc;
+.statistics-number {
+  position: relative;
+  z-index: 1;
 
-  font-size: 30px;
+  margin: 0 0 9px;
+
+  color: #f6f8ff;
+
+  font-size: clamp(
+    32px,
+    3vw,
+    43px
+  );
+
   line-height: 1;
 
   font-weight: 800;
 
-  letter-spacing: -0.7px;
+  letter-spacing: -1.4px;
 }
 
 
-.statistics-card h4 {
-  margin: 0 0 10px;
+/* =========================================================
+   LABEL
+========================================================= */
+
+.statistics-label {
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 11px;
 
   color: #ffffff;
 
-  font-size: 13px;
+  font-size: 15px;
+
+  line-height: 1.3;
 
   font-weight: 500;
 }
 
 
-.statistics-card p {
-  max-width: 210px;
+/* =========================================================
+   DESCRIPTION
+========================================================= */
 
-  margin: 0;
+.statistics-card-description {
+  position: relative;
+  z-index: 1;
 
-  color: #8e9bb0;
+  max-width: 190px;
 
-  font-size: 10px;
+  margin: auto 0 0;
 
-  line-height: 1.7;
+  color: #8d98b5;
+
+  font-size: 12px;
+
+  line-height: 1.65;
 }
 
 
 /* =========================================================
-   RESPONSIVE — 1100
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1000px) {
 
   .statistics-container {
-    width: min(100% - 40px, 1050px);
-  }
-
-  .productivity-panel {
-    grid-template-columns:
-      minmax(0, 1.4fr)
-      minmax(310px, 0.8fr);
-  }
-
-  .productivity-content h2 {
-    font-size: 28px;
-  }
-
-}
-
-
-/* =========================================================
-   RESPONSIVE — 900
-========================================================= */
-
-@media (max-width: 900px) {
-
-  .productivity-panel {
-    grid-template-columns: 1fr;
-
-    padding: 32px;
-  }
-
-  .productivity-content h2 {
-    max-width: 700px;
-  }
-
-  .productivity-button {
-    max-width: 100%;
-  }
-
-  .productivity-mini-grid {
-    grid-template-columns:
-      repeat(4, 1fr);
-  }
-
-  .productivity-mini-card {
-    min-height: 105px;
+    width: min(
+      900px,
+      calc(100% - 40px)
+    );
   }
 
   .statistics-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
   }
 
+  .statistics-card {
+    min-height: 250px;
+  }
 }
 
-
-/* =========================================================
-   RESPONSIVE — 650
-========================================================= */
 
 @media (max-width: 650px) {
 
   .statistics-section {
-    padding: 80px 0 90px;
+    padding:
+      80px 0 90px;
   }
 
   .statistics-container {
-    width: calc(100% - 30px);
+    width: calc(100% - 32px);
   }
 
-  .productivity-panel {
-    padding: 25px 20px;
-
-    border-radius: 20px;
+  .statistics-intro {
+    margin-bottom: 28px;
   }
 
-  .productivity-content h2 {
-    font-size: 25px;
-
-    line-height: 1.25;
+  .statistics-title {
+    font-size: 29px;
   }
 
-  .productivity-content h2 br {
-    display: none;
-  }
-
-  .productivity-mini-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .productivity-mini-card {
-    min-height: 115px;
-  }
-
-  .statistics-heading {
-    margin-top: 70px;
+  .statistics-description {
+    font-size: 13px;
   }
 
   .statistics-grid {
@@ -593,36 +355,24 @@
   }
 
   .statistics-card {
-    min-height: 220px;
-  }
+    min-height: 235px;
 
+    padding: 24px 20px;
+  }
 }
 
 
-/* =========================================================
-   RESPONSIVE — 420
-========================================================= */
-
 @media (max-width: 420px) {
 
-  .productivity-panel {
-    padding: 22px 16px;
+  .statistics-title {
+    font-size: 26px;
   }
 
-  .productivity-content h2 {
-    font-size: 22px;
+  .statistics-number {
+    font-size: 37px;
   }
 
-  .productivity-content > p {
-    font-size: 12px;
+  .statistics-card {
+    min-height: 220px;
   }
-
-  .productivity-mini-card strong {
-    font-size: 22px;
-  }
-
-  .statistics-card h2 {
-    font-size: 28px;
-  }
-
 }
