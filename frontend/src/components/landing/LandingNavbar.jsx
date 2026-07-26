@@ -23,7 +23,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-import "../../styles/LandingNavbar.css";
+import "./LandingNavbar.css";
 
 const LandingNavbar = () => {
   /* ==========================================
