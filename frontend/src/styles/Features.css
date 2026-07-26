@@ -1,92 +1,115 @@
 /* =========================================================
    TASKFLOW — FEATURES SECTION
-   Premium dark / glassmorphism landing-page design
+   Fully scoped to prevent global CSS conflicts
+========================================================= */
+
+
+/* =========================================================
+   SECTION
 ========================================================= */
 
 .taskflow-features-section {
   position: relative;
+
   width: 100%;
-  min-height: 850px;
-  padding: 105px 0 125px;
+
+  padding: 125px 0 135px;
+
   overflow: hidden;
-  isolation: isolate;
 
   background:
     radial-gradient(
       circle at 8% 25%,
-      rgba(92, 72, 255, 0.14),
-      transparent 30%
+      rgba(92, 80, 220, 0.13),
+      transparent 24%
     ),
     radial-gradient(
-      circle at 92% 28%,
-      rgba(0, 204, 255, 0.10),
-      transparent 30%
+      circle at 94% 40%,
+      rgba(0, 180, 220, 0.10),
+      transparent 26%
     ),
     linear-gradient(
       180deg,
-      #080d1e 0%,
-      #0a1022 50%,
-      #07101e 100%
+      #070d1e 0%,
+      #080f22 50%,
+      #07101f 100%
     );
 }
 
+
 /* =========================================================
-   SUBTLE GRID
+   SUBTLE GRID BACKGROUND
 ========================================================= */
 
 .taskflow-features-section::before {
   content: "";
+
   position: absolute;
+
   inset: 0;
-  z-index: -3;
+
   pointer-events: none;
+
+  opacity: 0.34;
 
   background-image:
     linear-gradient(
-      rgba(104, 130, 190, 0.055) 1px,
+      rgba(255, 255, 255, 0.035) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(104, 130, 190, 0.055) 1px,
+      rgba(255, 255, 255, 0.035) 1px,
       transparent 1px
     );
 
-  background-size: 38px 38px;
+  background-size:
+    50px 50px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 18%,
-    black 82%,
-    transparent 100%
-  );
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent
+    );
 }
 
+
 /* =========================================================
-   BACKGROUND GLOW — LEFT
+   GLOW — LEFT
 ========================================================= */
 
 .taskflow-features-section::after {
   content: "";
+
   position: absolute;
 
-  width: 430px;
-  height: 430px;
+  width: 420px;
+  height: 420px;
 
   left: -220px;
-  top: 250px;
-
-  z-index: -2;
+  top: 280px;
 
   border-radius: 50%;
 
-  background: rgba(70, 82, 255, 0.12);
+  background: rgba(76, 87, 255, 0.10);
 
-  filter: blur(100px);
+  filter: blur(80px);
 
   pointer-events: none;
 }
+
 
 /* =========================================================
    CONTAINER
@@ -95,22 +118,31 @@
 .taskflow-features-container {
   position: relative;
 
-  width: min(1100px, calc(100% - 48px));
+  z-index: 2;
+
+  width: min(
+    calc(100% - 48px),
+    1160px
+  );
 
   margin: 0 auto;
 }
+
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 .taskflow-features-header {
-  width: min(720px, 100%);
+  width: 100%;
 
-  margin: 0 auto 58px;
+  max-width: 760px;
+
+  margin: 0 auto 52px;
 
   text-align: center;
 }
+
 
 /* =========================================================
    MAIN TITLE
@@ -119,47 +151,55 @@
 .taskflow-features-title {
   margin: 0;
 
-  color: #ffffff;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: clamp(
-    34px,
-    3.2vw,
-    46px
+    36px,
+    4vw,
+    48px
   );
 
-  line-height: 1.08;
+  line-height: 1.12;
 
   font-weight: 800;
 
-  letter-spacing: -1.8px;
+  letter-spacing: -1.6px;
 
-  text-shadow:
-    0 0 24px rgba(255, 255, 255, 0.04);
+  color: #ffffff;
 }
 
+
 /* =========================================================
-   GRADIENT TITLE
+   GRADIENT SUBTITLE
 ========================================================= */
 
 .taskflow-features-gradient-title {
-  margin-top: 5px;
+  margin-top: 2px;
+
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: clamp(
-    16px,
-    1.5vw,
-    20px
+    14px,
+    1.6vw,
+    18px
   );
 
-  line-height: 1.4;
+  font-weight: 600;
 
-  font-weight: 700;
+  line-height: 1.5;
 
   background:
     linear-gradient(
       90deg,
-      #4f8cff 0%,
-      #2e82ff 45%,
-      #6d63ff 100%
+      #6f6cff 0%,
+      #3199ff 55%,
+      #27c8e8 100%
     );
 
   -webkit-background-clip: text;
@@ -168,23 +208,37 @@
   -webkit-text-fill-color: transparent;
 }
 
+
 /* =========================================================
-   DESCRIPTION
+   HEADER DESCRIPTION
 ========================================================= */
 
 .taskflow-features-description {
-  max-width: 650px;
+  width: 100%;
 
-  margin: 18px auto 0;
+  max-width: 680px;
 
-  color: #8793b0;
+  margin: 22px auto 0;
+
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 14px;
 
-  line-height: 1.8;
+  line-height: 1.85;
 
   font-weight: 400;
+
+  color: rgba(
+    193,
+    201,
+    223,
+    0.72
+  );
 }
+
 
 /* =========================================================
    FEATURE GRID
@@ -198,8 +252,9 @@
 
   gap: 20px;
 
-  width: 100%;
+  align-items: stretch;
 }
+
 
 /* =========================================================
    FEATURE CARD
@@ -208,42 +263,70 @@
 .taskflow-feature-card {
   position: relative;
 
-  min-height: 275px;
-
-  padding: 24px 21px 22px;
-
   display: flex;
+
   flex-direction: column;
 
-  border-radius: 17px;
+  min-width: 0;
+
+  min-height: 305px;
+
+  padding: 24px 21px 23px;
 
   border: 1px solid
-    rgba(112, 132, 190, 0.18);
+    rgba(
+      143,
+      156,
+      202,
+      0.14
+    );
+
+  border-radius: 18px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(29, 41, 72, 0.92),
-      rgba(19, 28, 51, 0.94)
+      rgba(
+        31,
+        40,
+        67,
+        0.88
+      ),
+      rgba(
+        20,
+        28,
+        50,
+        0.91
+      )
     );
 
   box-shadow:
     inset 0 1px 0
-      rgba(255, 255, 255, 0.035),
-    0 18px 40px
-      rgba(0, 0, 0, 0.20);
+      rgba(
+        255,
+        255,
+        255,
+        0.035
+      ),
+    0 15px 40px
+      rgba(
+        0,
+        0,
+        0,
+        0.16
+      );
 
   overflow: hidden;
 
   transition:
-    transform 0.3s ease,
     border-color 0.3s ease,
     box-shadow 0.3s ease,
     background 0.3s ease;
 }
 
+
 /* =========================================================
-   CARD TOP LIGHT
+   CARD TOP GLOW
 ========================================================= */
 
 .taskflow-feature-card::before {
@@ -251,76 +334,75 @@
 
   position: absolute;
 
-  top: 0;
-  left: 18px;
-  right: 18px;
+  top: -100px;
+  right: -100px;
 
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(116, 143, 255, 0.45),
-      transparent
-    );
-
-  opacity: 0.65;
-}
-
-/* =========================================================
-   CARD HOVER GLOW
-========================================================= */
-
-.taskflow-feature-card::after {
-  content: "";
-
-  position: absolute;
-
-  width: 150px;
-  height: 150px;
-
-  top: -80px;
-  right: -80px;
+  width: 190px;
+  height: 190px;
 
   border-radius: 50%;
 
   background:
-    rgba(50, 110, 255, 0.13);
+    rgba(
+      55,
+      111,
+      255,
+      0.09
+    );
 
-  filter: blur(25px);
+  filter: blur(45px);
 
-  opacity: 0;
-
-  transition:
-    opacity 0.35s ease;
+  pointer-events: none;
 }
 
-.taskflow-feature-card:hover {
-  transform: translateY(-7px);
 
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.taskflow-feature-card:hover {
   border-color:
-    rgba(76, 129, 255, 0.40);
+    rgba(
+      89,
+      116,
+      255,
+      0.35
+    );
 
   background:
     linear-gradient(
       145deg,
-      rgba(31, 45, 79, 0.97),
-      rgba(20, 31, 57, 0.98)
+      rgba(
+        34,
+        44,
+        75,
+        0.94
+      ),
+      rgba(
+        21,
+        30,
+        54,
+        0.96
+      )
     );
 
   box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.055),
-    0 24px 48px
-      rgba(0, 0, 0, 0.28),
-    0 0 30px
-      rgba(45, 93, 255, 0.08);
+    0 20px 50px
+      rgba(
+        0,
+        0,
+        0,
+        0.25
+      ),
+    0 0 35px
+      rgba(
+        74,
+        91,
+        255,
+        0.08
+      );
 }
 
-.taskflow-feature-card:hover::after {
-  opacity: 1;
-}
 
 /* =========================================================
    ICON
@@ -329,41 +411,42 @@
 .taskflow-feature-icon {
   position: relative;
 
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
   width: 49px;
   height: 49px;
 
   flex-shrink: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   margin-bottom: 20px;
 
-  border-radius: 13px;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #3578f6 0%,
+      #286be5 100%
+    );
 
   color: #ffffff;
 
   font-size: 20px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #347cff 0%,
-      #2869e8 100%
-    );
-
-  border: 1px solid
-    rgba(122, 168, 255, 0.28);
-
   box-shadow:
-    0 8px 22px
-      rgba(42, 108, 255, 0.30),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.16);
-
-  z-index: 1;
+    0 10px 25px
+      rgba(
+        45,
+        103,
+        238,
+        0.28
+      );
 }
+
 
 /* =========================================================
    CARD TITLE
@@ -371,11 +454,13 @@
 
 .taskflow-feature-card-title {
   position: relative;
-  z-index: 1;
 
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 
-  color: #ffffff;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 16px;
 
@@ -383,27 +468,40 @@
 
   font-weight: 700;
 
-  letter-spacing: -0.25px;
+  letter-spacing: -0.2px;
+
+  color: #ffffff;
 }
 
+
 /* =========================================================
-   DESCRIPTION
+   CARD DESCRIPTION
 ========================================================= */
 
 .taskflow-feature-card-description {
   position: relative;
-  z-index: 1;
 
-  margin: 0 0 17px;
+  margin: 0 0 13px;
 
-  color: #8e9bb7;
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 11.5px;
 
-  line-height: 1.7;
+  line-height: 1.75;
 
   font-weight: 400;
+
+  color: rgba(
+    186,
+    196,
+    219,
+    0.72
+  );
 }
+
 
 /* =========================================================
    FEATURE LIST
@@ -411,12 +509,12 @@
 
 .taskflow-feature-list {
   position: relative;
-  z-index: 1;
 
   display: flex;
+
   flex-direction: column;
 
-  gap: 8px;
+  gap: 6px;
 
   margin: auto 0 0;
 
@@ -424,6 +522,7 @@
 
   list-style: none;
 }
+
 
 /* =========================================================
    FEATURE LIST ITEM
@@ -434,611 +533,31 @@
 
   align-items: flex-start;
 
-  gap: 7px;
+  gap: 6px;
 
-  color: #d4dced;
-
-  font-size: 11px;
-
-  line-height: 1.4;
-
-  font-weight: 400;
-}
-
-/* =========================================================
-   CHECK ICON
-========================================================= */
-
-.taskflow-feature-list li svg {
-  flex-shrink: 0;
-
-  margin-top: 2px;
-
-  color: #f3f6ff;
-
-  font-size: 9px;
-
-  filter:
-    drop-shadow(
-      0 0 4px
-      rgba(255, 255, 255, 0.20)
-    );
-}
-
-/* =========================================================
-   RESPONSIVE — 1100px
-========================================================= */
-
-@media (max-width: 1100px) {
-  .taskflow-features-container {
-    width: min(
-      960px,
-      calc(100% - 42px)
-    );
-  }
-
-  .taskflow-features-grid {
-    gap: 17px;
-  }
-
-  .taskflow-feature-card {
-    padding: 22px 18px 20px;
-  }
-
-  .taskflow-feature-card-title {
-    font-size: 15px;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — 900px
-========================================================= */
-
-@media (max-width: 900px) {
-  .taskflow-features-section {
-    padding: 90px 0 105px;
-  }
-
-  .taskflow-features-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 20px;
-  }
-
-  .taskflow-feature-card {
-    min-height: 255px;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — 600px
-========================================================= */
-
-@media (max-width: 600px) {
-  .taskflow-features-section {
-    min-height: auto;
-
-    padding: 75px 0 90px;
-  }
-
-  .taskflow-features-container {
-    width: min(
-      100% - 30px,
-      500px
-    );
-  }
-
-  .taskflow-features-header {
-    margin-bottom: 42px;
-  }
-
-  .taskflow-features-title {
-    font-size: 32px;
-
-    letter-spacing: -1.2px;
-  }
-
-  .taskflow-features-description {
-    font-size: 13px;
-
-    line-height: 1.7;
-  }
-
-  .taskflow-features-grid {
-    grid-template-columns: 1fr;
-
-    gap: 16px;
-  }
-
-  .taskflow-feature-card {
-    min-height: 0;
-
-    padding: 22px;
-  }
-
-  .taskflow-feature-icon {
-    width: 46px;
-    height: 46px;
-
-    margin-bottom: 17px;
-  }
-
-  .taskflow-feature-card-title {
-    font-size: 16px;
-  }
-
-  .taskflow-feature-card-description {
-    font-size: 12px;
-  }
-
-  .taskflow-feature-list li {
-    font-size: 11.5px;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 380px) {
-  .taskflow-features-container {
-    width: calc(100% - 24px);
-  }
-
-  .taskflow-features-title {
-    font-size: 29px;
-  }
-
-  .taskflow-feature-card {
-    padding: 20px;
-  }
-}/* =========================================================
-   TASKFLOW — FEATURES SECTION
-   Premium dark / glassmorphism landing-page design
-========================================================= */
-
-.taskflow-features-section {
-  position: relative;
-  width: 100%;
-  min-height: 850px;
-  padding: 105px 0 125px;
-  overflow: hidden;
-  isolation: isolate;
-
-  background:
-    radial-gradient(
-      circle at 8% 25%,
-      rgba(92, 72, 255, 0.14),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 92% 28%,
-      rgba(0, 204, 255, 0.10),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #080d1e 0%,
-      #0a1022 50%,
-      #07101e 100%
-    );
-}
-
-/* =========================================================
-   SUBTLE GRID
-========================================================= */
-
-.taskflow-features-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-
-  background-image:
-    linear-gradient(
-      rgba(104, 130, 190, 0.055) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(104, 130, 190, 0.055) 1px,
-      transparent 1px
-    );
-
-  background-size: 38px 38px;
-
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 18%,
-    black 82%,
-    transparent 100%
-  );
-}
-
-/* =========================================================
-   BACKGROUND GLOW — LEFT
-========================================================= */
-
-.taskflow-features-section::after {
-  content: "";
-  position: absolute;
-
-  width: 430px;
-  height: 430px;
-
-  left: -220px;
-  top: 250px;
-
-  z-index: -2;
-
-  border-radius: 50%;
-
-  background: rgba(70, 82, 255, 0.12);
-
-  filter: blur(100px);
-
-  pointer-events: none;
-}
-
-/* =========================================================
-   CONTAINER
-========================================================= */
-
-.taskflow-features-container {
-  position: relative;
-
-  width: min(1100px, calc(100% - 48px));
-
-  margin: 0 auto;
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.taskflow-features-header {
-  width: min(720px, 100%);
-
-  margin: 0 auto 58px;
-
-  text-align: center;
-}
-
-/* =========================================================
-   MAIN TITLE
-========================================================= */
-
-.taskflow-features-title {
   margin: 0;
 
-  color: #ffffff;
-
-  font-size: clamp(
-    34px,
-    3.2vw,
-    46px
-  );
-
-  line-height: 1.08;
-
-  font-weight: 800;
-
-  letter-spacing: -1.8px;
-
-  text-shadow:
-    0 0 24px rgba(255, 255, 255, 0.04);
-}
-
-/* =========================================================
-   GRADIENT TITLE
-========================================================= */
-
-.taskflow-features-gradient-title {
-  margin-top: 5px;
-
-  font-size: clamp(
-    16px,
-    1.5vw,
-    20px
-  );
-
-  line-height: 1.4;
-
-  font-weight: 700;
-
-  background:
-    linear-gradient(
-      90deg,
-      #4f8cff 0%,
-      #2e82ff 45%,
-      #6d63ff 100%
-    );
-
-  -webkit-background-clip: text;
-  background-clip: text;
-
-  -webkit-text-fill-color: transparent;
-}
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.taskflow-features-description {
-  max-width: 650px;
-
-  margin: 18px auto 0;
-
-  color: #8793b0;
-
-  font-size: 14px;
-
-  line-height: 1.8;
-
-  font-weight: 400;
-}
-
-/* =========================================================
-   FEATURE GRID
-========================================================= */
-
-.taskflow-features-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
-  gap: 20px;
-
-  width: 100%;
-}
-
-/* =========================================================
-   FEATURE CARD
-========================================================= */
-
-.taskflow-feature-card {
-  position: relative;
-
-  min-height: 275px;
-
-  padding: 24px 21px 22px;
-
-  display: flex;
-  flex-direction: column;
-
-  border-radius: 17px;
-
-  border: 1px solid
-    rgba(112, 132, 190, 0.18);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(29, 41, 72, 0.92),
-      rgba(19, 28, 51, 0.94)
-    );
-
-  box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.035),
-    0 18px 40px
-      rgba(0, 0, 0, 0.20);
-
-  overflow: hidden;
-
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
-}
-
-/* =========================================================
-   CARD TOP LIGHT
-========================================================= */
-
-.taskflow-feature-card::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 18px;
-  right: 18px;
-
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(116, 143, 255, 0.45),
-      transparent
-    );
-
-  opacity: 0.65;
-}
-
-/* =========================================================
-   CARD HOVER GLOW
-========================================================= */
-
-.taskflow-feature-card::after {
-  content: "";
-
-  position: absolute;
-
-  width: 150px;
-  height: 150px;
-
-  top: -80px;
-  right: -80px;
-
-  border-radius: 50%;
-
-  background:
-    rgba(50, 110, 255, 0.13);
-
-  filter: blur(25px);
-
-  opacity: 0;
-
-  transition:
-    opacity 0.35s ease;
-}
-
-.taskflow-feature-card:hover {
-  transform: translateY(-7px);
-
-  border-color:
-    rgba(76, 129, 255, 0.40);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(31, 45, 79, 0.97),
-      rgba(20, 31, 57, 0.98)
-    );
-
-  box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.055),
-    0 24px 48px
-      rgba(0, 0, 0, 0.28),
-    0 0 30px
-      rgba(45, 93, 255, 0.08);
-}
-
-.taskflow-feature-card:hover::after {
-  opacity: 1;
-}
-
-/* =========================================================
-   ICON
-========================================================= */
-
-.taskflow-feature-icon {
-  position: relative;
-
-  width: 49px;
-  height: 49px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-bottom: 20px;
-
-  border-radius: 13px;
-
-  color: #ffffff;
-
-  font-size: 20px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #347cff 0%,
-      #2869e8 100%
-    );
-
-  border: 1px solid
-    rgba(122, 168, 255, 0.28);
-
-  box-shadow:
-    0 8px 22px
-      rgba(42, 108, 255, 0.30),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.16);
-
-  z-index: 1;
-}
-
-/* =========================================================
-   CARD TITLE
-========================================================= */
-
-.taskflow-feature-card-title {
-  position: relative;
-  z-index: 1;
-
-  margin: 0 0 10px;
-
-  color: #ffffff;
-
-  font-size: 16px;
-
-  line-height: 1.3;
-
-  font-weight: 700;
-
-  letter-spacing: -0.25px;
-}
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.taskflow-feature-card-description {
-  position: relative;
-  z-index: 1;
-
-  margin: 0 0 17px;
-
-  color: #8e9bb7;
+  padding: 0;
+
+  font-family:
+    "Poppins",
+    "Inter",
+    sans-serif;
 
   font-size: 11.5px;
 
-  line-height: 1.7;
+  line-height: 1.5;
 
   font-weight: 400;
+
+  color: rgba(
+    239,
+    243,
+    255,
+    0.88
+  );
 }
 
-/* =========================================================
-   FEATURE LIST
-========================================================= */
-
-.taskflow-feature-list {
-  position: relative;
-  z-index: 1;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 8px;
-
-  margin: auto 0 0;
-
-  padding: 0;
-
-  list-style: none;
-}
-
-/* =========================================================
-   FEATURE LIST ITEM
-========================================================= */
-
-.taskflow-feature-list li {
-  display: flex;
-
-  align-items: flex-start;
-
-  gap: 7px;
-
-  color: #d4dced;
-
-  font-size: 11px;
-
-  line-height: 1.4;
-
-  font-weight: 400;
-}
 
 /* =========================================================
    CHECK ICON
@@ -1047,97 +566,78 @@
 .taskflow-feature-list li svg {
   flex-shrink: 0;
 
-  margin-top: 2px;
+  margin-top: 3px;
 
-  color: #f3f6ff;
+  font-size: 10px;
 
-  font-size: 9px;
-
-  filter:
-    drop-shadow(
-      0 0 4px
-      rgba(255, 255, 255, 0.20)
-    );
+  color: #ffffff;
 }
 
+
 /* =========================================================
-   RESPONSIVE — 1100px
+   TABLET
 ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1050px) {
+
+  .taskflow-features-section {
+    padding:
+      110px 0
+      120px;
+  }
+
   .taskflow-features-container {
     width: min(
-      960px,
-      calc(100% - 42px)
+      calc(100% - 40px),
+      900px
     );
-  }
-
-  .taskflow-features-grid {
-    gap: 17px;
-  }
-
-  .taskflow-feature-card {
-    padding: 22px 18px 20px;
-  }
-
-  .taskflow-feature-card-title {
-    font-size: 15px;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — 900px
-========================================================= */
-
-@media (max-width: 900px) {
-  .taskflow-features-section {
-    padding: 90px 0 105px;
   }
 
   .taskflow-features-grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
-    gap: 20px;
+    gap: 18px;
   }
 
   .taskflow-feature-card {
-    min-height: 255px;
+    min-height: 285px;
   }
 }
 
+
 /* =========================================================
-   RESPONSIVE — 600px
+   MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
-  .taskflow-features-section {
-    min-height: auto;
+@media (max-width: 680px) {
 
-    padding: 75px 0 90px;
+  .taskflow-features-section {
+    padding:
+      90px 0
+      100px;
   }
 
   .taskflow-features-container {
-    width: min(
-      100% - 30px,
-      500px
-    );
+    width: calc(100% - 32px);
   }
 
   .taskflow-features-header {
-    margin-bottom: 42px;
+    margin-bottom: 38px;
   }
 
   .taskflow-features-title {
-    font-size: 32px;
+    font-size: 34px;
 
-    letter-spacing: -1.2px;
+    letter-spacing: -1px;
   }
 
   .taskflow-features-description {
+    margin-top: 18px;
+
     font-size: 13px;
 
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
   .taskflow-features-grid {
@@ -1147,45 +647,54 @@
   }
 
   .taskflow-feature-card {
-    min-height: 0;
+    min-height: auto;
 
-    padding: 22px;
+    padding: 22px 20px;
   }
 
   .taskflow-feature-icon {
-    width: 46px;
-    height: 46px;
+    width: 47px;
+    height: 47px;
 
     margin-bottom: 17px;
   }
-
-  .taskflow-feature-card-title {
-    font-size: 16px;
-  }
-
-  .taskflow-feature-card-description {
-    font-size: 12px;
-  }
-
-  .taskflow-feature-list li {
-    font-size: 11.5px;
-  }
 }
+
 
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 420px) {
+
+  .taskflow-features-section {
+    padding:
+      80px 0
+      90px;
+  }
+
   .taskflow-features-container {
     width: calc(100% - 24px);
   }
 
   .taskflow-features-title {
-    font-size: 29px;
+    font-size: 30px;
+  }
+
+  .taskflow-features-gradient-title {
+    font-size: 14px;
   }
 
   .taskflow-feature-card {
-    padding: 20px;
+    padding: 20px 18px;
+  }
+
+  .taskflow-feature-card-title {
+    font-size: 15px;
+  }
+
+  .taskflow-feature-card-description,
+  .taskflow-feature-list li {
+    font-size: 11px;
   }
 }
