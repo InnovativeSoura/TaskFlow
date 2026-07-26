@@ -1,6 +1,5 @@
 /* ==========================================================
-   TASKFLOW — PREMIUM LANDING NAVBAR
-   Glassmorphism / Dark SaaS / Responsive
+   PREMIUM TASKFLOW LANDING NAVBAR
 ========================================================== */
 
 .landing-navbar {
@@ -8,21 +7,19 @@
   top: 0;
   left: 0;
   width: 100%;
-
   z-index: 1000;
 
-  background: rgba(5, 10, 25, 0.48);
+  background: rgba(5, 10, 25, 0.72);
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
   transition:
     background 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
 }
 
 /* ==========================================================
@@ -30,32 +27,28 @@
 ========================================================== */
 
 .landing-navbar.scrolled {
-  background:
-    rgba(5, 10, 25, 0.82);
+  background: rgba(5, 10, 25, 0.90);
 
   border-bottom-color:
-    rgba(99, 102, 241, 0.14);
+    rgba(99, 102, 241, 0.16);
 
   box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.28);
+    0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* ==========================================================
-   NAVBAR CONTAINER
+   CONTAINER
 ========================================================== */
 
 .landing-navbar-container {
-  width: min(1180px, calc(100% - 48px));
+  width: min(1400px, 92%);
+  height: 82px;
 
-  height: 72px;
-
-  margin: 0 auto;
+  margin: auto;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  position: relative;
 }
 
 /* ==========================================================
@@ -63,113 +56,73 @@
 ========================================================== */
 
 .landing-logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  gap: 16px;
 
-  gap: 11px;
-
-  color: #ffffff;
-
+  color: white;
   text-decoration: none;
 
-  flex-shrink: 0;
+  font-size: 28px;
+  font-weight: 800;
 
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: 0.35s;
 }
 
 .landing-logo:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
-/* ==========================================================
-   LOGO ICON
-========================================================== */
-
 .landing-logo-icon {
-  width: 42px;
-  height: 42px;
+  width: 58px;
+  height: 58px;
 
-  flex-shrink: 0;
+  border-radius: 18px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 13px;
+  font-size: 24px;
 
-  color: #ffffff;
-
-  font-size: 18px;
+  color: white;
 
   background:
     linear-gradient(
       135deg,
-      #6366f1 0%,
-      #7c5cff 50%,
-      #8b5cf6 100%
+      #6366f1,
+      #8b5cf6
     );
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.13);
-
   box-shadow:
-    0 10px 25px
-    rgba(99, 102, 241, 0.28);
+    0 20px 40px rgba(99, 102, 241, 0.35);
 
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
+  transition: 0.35s;
 }
 
 .landing-logo:hover .landing-logo-icon {
   transform:
-    rotate(-5deg)
-    scale(1.04);
-
-  box-shadow:
-    0 14px 32px
-    rgba(99, 102, 241, 0.38);
+    rotate(-8deg)
+    scale(1.08);
 }
-
-/* ==========================================================
-   LOGO TEXT
-========================================================== */
 
 .landing-logo-text {
   display: flex;
-
   flex-direction: column;
-
-  justify-content: center;
-
-  line-height: 1;
+  line-height: 1.05;
 }
 
 .landing-logo-text h2 {
   margin: 0;
-
-  color: #ffffff;
-
-  font-size: 18px;
-
+  font-size: 24px;
   font-weight: 800;
-
-  letter-spacing: -0.35px;
 }
 
 .landing-logo-text span {
-  margin-top: 4px;
-
-  color:
-    rgba(255, 255, 255, 0.55);
-
-  font-size: 9px;
-
+  margin-top: 5px;
+  font-size: 14px;
   font-weight: 600;
-
-  letter-spacing: 0.15px;
+  color: #ffffff;
 }
 
 /* ==========================================================
@@ -179,64 +132,33 @@
 .landing-nav {
   display: flex;
   align-items: center;
-
-  gap: 30px;
-
-  margin-left: auto;
-  margin-right: 28px;
+  gap: 38px;
 }
-
-/* ==========================================================
-   NAV LINKS
-========================================================== */
 
 .landing-nav-link,
 .landing-nav-button {
   position: relative;
 
-  display: inline-flex;
-  align-items: center;
+  color: #cbd5e1;
 
-  padding: 7px 0;
-
+  background: none;
   border: none;
-  outline: none;
-
-  background: transparent;
-
-  color:
-    rgba(226, 232, 240, 0.72);
-
-  text-decoration: none;
-
-  font-family: inherit;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.05px;
 
   cursor: pointer;
 
+  text-decoration: none;
+
+  font-size: 15px;
+  font-weight: 600;
+
   transition:
-    color 0.25s ease,
-    transform 0.25s ease;
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .landing-nav-link:hover,
 .landing-nav-button:hover {
-  color: #ffffff;
-
-  transform: translateY(-1px);
-}
-
-/* ==========================================================
-   NAV ACTIVE
-========================================================== */
-
-.landing-nav-link.active {
-  color: #ffffff;
+  color: white;
 }
 
 /* ==========================================================
@@ -249,30 +171,22 @@
 
   position: absolute;
 
-  left: 50%;
-  bottom: -2px;
+  left: 0;
+  bottom: -8px;
 
   width: 0;
-  height: 2px;
+  height: 3px;
 
-  border-radius: 100px;
+  border-radius: 50px;
 
   background:
     linear-gradient(
       90deg,
       #6366f1,
-      #8b5cf6,
       #06b6d4
     );
 
-  transform: translateX(-50%);
-
-  box-shadow:
-    0 0 10px
-    rgba(99, 102, 241, 0.55);
-
-  transition:
-    width 0.3s ease;
+  transition: 0.35s;
 }
 
 .landing-nav-link:hover::after,
@@ -289,60 +203,56 @@
   display: flex;
   align-items: center;
 
-  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 /* ==========================================================
    EXPLORE PLATFORM BUTTON
+   Matches the CTA "Explore Platform" button
 ========================================================== */
 
 .landing-explore-btn {
   position: relative;
 
-  min-width: 108px;
-
-  min-height: 42px;
-
-  padding: 10px 15px;
+  min-width: 172px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: 11px;
 
-  overflow: hidden;
+  padding: 14px 24px;
 
-  border-radius: 11px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
 
   color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  overflow: hidden;
 
   background:
     linear-gradient(
       135deg,
       #6366f1,
-      #7c4dff
+      #8b5cf6
     );
 
-  text-decoration: none;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  line-height: 1.2;
+  border: 1px solid
+    rgba(255, 255, 255, 0.10);
 
   box-shadow:
-    0 10px 25px
-    rgba(99, 102, 241, 0.28);
+    0 15px 35px
+    rgba(99, 102, 241, 0.35);
 
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    filter 0.3s ease;
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
 }
 
 /* ==========================================================
@@ -355,23 +265,22 @@
   position: absolute;
 
   top: 0;
-  left: -130%;
+  left: -120%;
 
-  width: 70%;
+  width: 60%;
   height: 100%;
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.35),
       transparent
     );
 
   transform: skewX(-25deg);
 
-  transition:
-    left 0.65s ease;
+  transition: left 0.7s ease;
 }
 
 .landing-explore-btn:hover::before {
@@ -383,34 +292,32 @@
 ========================================================== */
 
 .landing-explore-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
   filter: brightness(1.08);
 
   box-shadow:
-    0 15px 32px
-    rgba(99, 102, 241, 0.42);
+    0 22px 45px
+    rgba(99, 102, 241, 0.48);
 }
 
 .landing-explore-btn:active {
-  transform:
-    translateY(0)
-    scale(0.98);
+  transform: translateY(-1px) scale(0.98);
 }
 
 /* ==========================================================
-   BUTTON ARROW
+   ARROW
 ========================================================== */
 
 .landing-explore-btn svg {
-  font-size: 10px;
+  font-size: 13px;
 
   transition:
     transform 0.3s ease;
 }
 
 .landing-explore-btn:hover svg {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 /* ==========================================================
@@ -420,42 +327,32 @@
 .landing-menu-toggle {
   display: none;
 
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
 
-  align-items: center;
-  justify-content: center;
+  border: none;
 
-  padding: 0;
+  border-radius: 14px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.09);
-
-  border-radius: 12px;
-
-  color: #ffffff;
-
-  background:
-    rgba(255, 255, 255, 0.045);
+  color: white;
 
   cursor: pointer;
 
-  font-size: 18px;
+  font-size: 22px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
 
   transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.3s ease;
+    background 0.35s ease,
+    transform 0.35s ease;
 }
 
 .landing-menu-toggle:hover {
   background:
-    rgba(255, 255, 255, 0.08);
+    rgba(255, 255, 255, 0.10);
 
-  border-color:
-    rgba(99, 102, 241, 0.35);
-
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 /* ==========================================================
@@ -470,160 +367,91 @@
   z-index: -1;
 
   background:
-    rgba(0, 0, 0, 0.5);
+    rgba(0, 0, 0, 0.45);
 
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
 }
 
 /* ==========================================================
-   TABLET / MOBILE NAV
+   MOBILE
 ========================================================== */
 
-@media (max-width: 900px) {
-
-  .landing-navbar-container {
-    width: min(
-      100% - 36px,
-      720px
-    );
-
-    height: 68px;
-  }
-
-  /* MENU BUTTON */
+@media (max-width: 980px) {
 
   .landing-menu-toggle {
     display: flex;
 
-    position: relative;
+    align-items: center;
+    justify-content: center;
 
     z-index: 1002;
   }
 
-  /* NAVIGATION PANEL */
-
   .landing-nav {
     position: absolute;
 
-    top: calc(100% + 10px);
-
+    top: 82px;
     left: 0;
-    right: 0;
 
     width: 100%;
 
-    margin: 0;
-
-    padding: 22px;
+    padding: 35px;
 
     display: flex;
-
     flex-direction: column;
+    align-items: flex-start;
 
-    align-items: stretch;
-
-    gap: 5px;
-
-    border: 1px solid
-      rgba(255, 255, 255, 0.08);
-
-    border-radius: 18px;
+    gap: 24px;
 
     background:
-      rgba(7, 12, 28, 0.94);
+      rgba(7, 16, 31, 0.98);
 
-    backdrop-filter: blur(26px);
-    -webkit-backdrop-filter: blur(26px);
+    border-bottom:
+      1px solid
+      rgba(255, 255, 255, 0.08);
 
     box-shadow:
-      0 25px 70px
-      rgba(0, 0, 0, 0.42);
+      0 25px 60px
+      rgba(0, 0, 0, 0.35);
+
+    transform:
+      translateY(-140%);
 
     opacity: 0;
 
-    visibility: hidden;
-
     pointer-events: none;
 
-    transform:
-      translateY(-10px)
-      scale(0.98);
-
-    transform-origin: top center;
-
     transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease,
-      transform 0.3s ease;
+      transform 0.35s ease,
+      opacity 0.35s ease;
   }
-
-  /* OPEN */
 
   .landing-nav.open {
+    transform:
+      translateY(0);
+
     opacity: 1;
 
-    visibility: visible;
-
     pointer-events: auto;
-
-    transform:
-      translateY(0)
-      scale(1);
   }
-
-  /* MOBILE LINKS */
-
-  .landing-nav-link,
-  .landing-nav-button {
-    width: 100%;
-
-    min-height: 44px;
-
-    padding: 10px 12px;
-
-    justify-content: flex-start;
-
-    border-radius: 10px;
-
-    font-size: 13px;
-  }
-
-  .landing-nav-link:hover,
-  .landing-nav-button:hover {
-    background:
-      rgba(255, 255, 255, 0.045);
-
-    transform: none;
-  }
-
-  .landing-nav-link::after,
-  .landing-nav-button::after {
-    display: none;
-  }
-
-  /* AUTH BUTTON */
 
   .landing-auth-buttons {
     width: 100%;
 
     margin-top: 10px;
+    margin-left: 0;
 
-    padding-top: 15px;
-
-    border-top:
-      1px solid
-      rgba(255, 255, 255, 0.07);
+    display: flex;
   }
 
   .landing-explore-btn {
     width: 100%;
 
-    min-height: 44px;
+    min-width: 0;
 
-    border-radius: 12px;
+    padding: 16px 24px;
 
-    font-size: 12px;
+    border-radius: 16px;
   }
 }
 
@@ -634,56 +462,58 @@
 @media (max-width: 768px) {
 
   .landing-navbar-container {
-    width: calc(100% - 32px);
+    height: 76px;
+  }
 
-    height: 66px;
+  .landing-nav {
+    top: 76px;
+  }
+
+  .landing-logo {
+    font-size: 24px;
   }
 
   .landing-logo-icon {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 
-    border-radius: 12px;
-
-    font-size: 17px;
+    font-size: 22px;
   }
 
   .landing-logo-text h2 {
-    font-size: 17px;
+    font-size: 22px;
   }
 
   .landing-logo-text span {
-    font-size: 8px;
+    font-size: 12px;
   }
 }
 
 /* ==========================================================
-   SMALL MOBILE
+   MOBILE
 ========================================================== */
 
 @media (max-width: 576px) {
 
   .landing-navbar-container {
-    width: calc(100% - 24px);
-
-    height: 62px;
+    width: 92%;
   }
 
   .landing-logo {
-    gap: 9px;
+    gap: 10px;
   }
 
   .landing-logo-icon {
-    width: 38px;
-    height: 38px;
+    width: 46px;
+    height: 46px;
 
-    border-radius: 11px;
+    font-size: 20px;
 
-    font-size: 16px;
+    border-radius: 15px;
   }
 
   .landing-logo-text h2 {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .landing-logo-text span {
@@ -691,79 +521,22 @@
   }
 
   .landing-menu-toggle {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
 
-    border-radius: 11px;
-
-    font-size: 17px;
+    font-size: 20px;
   }
 
   .landing-nav {
-    top: calc(100% + 8px);
-
-    padding: 18px;
-
-    border-radius: 16px;
+    padding: 28px 24px;
   }
 }
 
 /* ==========================================================
-   VERY SMALL DEVICES
+   NAVBAR GLASS EFFECT
 ========================================================== */
 
-@media (max-width: 380px) {
-
-  .landing-navbar-container {
-    width: calc(100% - 18px);
-  }
-
-  .landing-logo-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .landing-logo-text h2 {
-    font-size: 15px;
-  }
-
-  .landing-nav {
-    padding: 15px;
-  }
-}
-
-/* ==========================================================
-   ACCESSIBILITY
-========================================================== */
-
-.landing-nav-link:focus-visible,
-.landing-nav-button:focus-visible,
-.landing-explore-btn:focus-visible,
-.landing-menu-toggle:focus-visible {
-  outline: 2px solid
-    rgba(129, 140, 248, 0.9);
-
-  outline-offset: 4px;
-}
-
-/* ==========================================================
-   REDUCED MOTION
-========================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .landing-navbar,
-  .landing-logo,
-  .landing-logo-icon,
-  .landing-nav-link,
-  .landing-nav-button,
-  .landing-explore-btn,
-  .landing-menu-toggle,
-  .landing-nav {
-    transition: none !important;
-  }
-
-  .landing-explore-btn::before {
-    display: none;
-  }
+.landing-navbar:hover {
+  background:
+    rgba(5, 10, 25, 0.84);
 }
