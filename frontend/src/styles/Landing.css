@@ -1,45 +1,22 @@
 /* =========================================================
-   TASKFLOW — PREMIUM LANDING PAGE GLOBAL STYLES
-   ========================================================= */
-
-/* =========================================================
-   DESIGN TOKENS
+   TASKFLOW — GLOBAL LANDING PAGE
    ========================================================= */
 
 :root {
-  --tf-bg: #030612;
-  --tf-bg-soft: #070b1d;
-  --tf-bg-card: #0b1228;
+  --tf-bg: #050816;
+  --tf-bg-deep: #030511;
 
   --tf-primary: #6d5dfc;
-  --tf-primary-2: #8b5cf6;
+  --tf-primary-light: #8b7cff;
   --tf-blue: #3b82f6;
-  --tf-cyan: #06b6d4;
 
   --tf-text: #f8fafc;
   --tf-text-soft: #cbd5e1;
-  --tf-text-muted: #8b97ad;
+  --tf-text-muted: #8994aa;
 
   --tf-border: rgba(255, 255, 255, 0.08);
-  --tf-border-light: rgba(255, 255, 255, 0.12);
-
-  --tf-glass: rgba(10, 17, 38, 0.64);
-  --tf-glass-strong: rgba(10, 17, 38, 0.84);
 
   --tf-nav-height: 76px;
-
-  --tf-container: 1180px;
-
-  --tf-radius-sm: 12px;
-  --tf-radius-md: 18px;
-  --tf-radius-lg: 24px;
-  --tf-radius-xl: 30px;
-
-  --tf-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.35);
-
-  --tf-transition:
-    0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
@@ -50,39 +27,33 @@
 html {
   margin: 0;
   padding: 0;
-
-  width: 100%;
-
   scroll-behavior: smooth;
-
-  background: var(--tf-bg);
-
-  scroll-padding-top: 90px;
+  background: var(--tf-bg-deep);
 }
 
 body {
   margin: 0;
   padding: 0;
-
-  width: 100%;
   min-width: 320px;
-  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(92, 77, 255, 0.08),
+      transparent 35%
+    ),
+    var(--tf-bg-deep);
 
   color: var(--tf-text);
 
-  background: var(--tf-bg);
-
   font-family:
     Inter,
-    Poppins,
+    "Poppins",
     "Segoe UI",
     Arial,
     sans-serif;
 
   overflow-x: hidden;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 body,
@@ -92,7 +63,7 @@ textarea,
 select {
   font-family:
     Inter,
-    Poppins,
+    "Poppins",
     "Segoe UI",
     Arial,
     sans-serif;
@@ -110,16 +81,14 @@ select {
    ========================================================= */
 
 #root {
-  width: 100%;
   min-height: 100vh;
-
   margin: 0;
   padding: 0;
 }
 
 
 /* =========================================================
-   LANDING PAGE ROOT
+   LANDING PAGE
    ========================================================= */
 
 .landing-page {
@@ -133,25 +102,20 @@ select {
 
   background:
     radial-gradient(
-      circle at 12% 12%,
-      rgba(109, 93, 252, 0.13),
-      transparent 27%
+      circle at 15% 15%,
+      rgba(91, 76, 255, 0.08),
+      transparent 28%
     ),
     radial-gradient(
-      circle at 88% 20%,
-      rgba(6, 182, 212, 0.09),
-      transparent 27%
-    ),
-    radial-gradient(
-      circle at 50% 70%,
-      rgba(59, 130, 246, 0.055),
-      transparent 32%
+      circle at 88% 25%,
+      rgba(0, 210, 255, 0.06),
+      transparent 28%
     ),
     linear-gradient(
       180deg,
-      #030612 0%,
-      #05091a 42%,
-      #030611 100%
+      #050816 0%,
+      #06091a 45%,
+      #030511 100%
     );
 
   overflow-x: clip;
@@ -159,115 +123,11 @@ select {
 
 
 /* =========================================================
-   GLOBAL BACKGROUND LAYER
-   ========================================================= */
-
-.landing-page::before {
-  content: "";
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 0;
-
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      rgba(255, 255, 255, 0.018) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.018) 1px,
-      transparent 1px
-    );
-
-  background-size:
-    56px 56px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black 0%,
-      rgba(0, 0, 0, 0.75) 50%,
-      transparent 100%
-    );
-
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      black 0%,
-      rgba(0, 0, 0, 0.75) 50%,
-      transparent 100%
-    );
-}
-
-
-/* =========================================================
-   GLOBAL GLOW
-   ========================================================= */
-
-.landing-page::after {
-  content: "";
-
-  position: fixed;
-
-  width: 650px;
-  height: 650px;
-
-  left: 50%;
-  top: 25%;
-
-  transform: translate(-50%, -50%);
-
-  border-radius: 50%;
-
-  pointer-events: none;
-
-  z-index: 0;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 93, 252, 0.055),
-      transparent 68%
-    );
-
-  filter: blur(20px);
-}
-
-
-/* =========================================================
-   BACKGROUND ANIMATION
-   IMPORTANT:
-   BackgroundAnimation MUST stay behind content
-   but above the base background.
-   ========================================================= */
-
-.landing-page > * {
-  position: relative;
-}
-
-
-/* BackgroundAnimation component */
-
-.landing-page > .background-animation,
-.landing-page > [class*="background"] {
-  z-index: 0;
-
-  pointer-events: none;
-}
-
-
-/* =========================================================
    MAIN CONTENT
    ========================================================= */
 
-.landing-page main {
+.landing-main {
   position: relative;
-
   z-index: 2;
 
   width: 100%;
@@ -278,10 +138,10 @@ select {
 
 
 /* =========================================================
-   GENERIC SECTIONS
+   GENERIC SECTION
    ========================================================= */
 
-.landing-page main > section {
+.landing-section {
   position: relative;
 
   width: 100%;
@@ -294,41 +154,14 @@ select {
 
 
 /* =========================================================
-   HOME / HERO WRAPPER
+   HERO
    IMPORTANT:
-   Home.jsx uses:
-   <section id="home">
-      <Hero />
-   </section>
+   No giant top margin.
+   No giant padding.
+   Navbar overlays the hero.
    ========================================================= */
 
-#home {
-  position: relative;
-
-  width: 100%;
-
-  min-height: 100vh;
-
-  margin: 0;
-  padding: 0;
-
-  display: block;
-
-  scroll-margin-top: 0;
-
-  isolation: isolate;
-}
-
-
-/* =========================================================
-   HERO SECTION SUPPORT
-   ========================================================= */
-
-.hero-section {
-  position: relative;
-
-  width: 100%;
-
+.landing-hero-section {
   min-height: 100vh;
 
   margin: 0;
@@ -337,143 +170,43 @@ select {
   display: flex;
   align-items: center;
 
-  overflow: hidden;
-
-  isolation: isolate;
-}
-
-
-/* =========================================================
-   HERO BACKGROUND GLOW
-   ========================================================= */
-
-.hero-section::before {
-  content: "";
-
-  position: absolute;
-
-  width: 700px;
-  height: 700px;
-
-  left: -280px;
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 93, 252, 0.12),
-      transparent 68%
-    );
-
-  filter: blur(20px);
-
-  pointer-events: none;
-
-  z-index: -1;
-}
-
-
-.hero-section::after {
-  content: "";
-
-  position: absolute;
-
-  width: 600px;
-  height: 600px;
-
-  right: -250px;
-  top: 20%;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(6, 182, 212, 0.09),
-      transparent 70%
-    );
-
-  filter: blur(25px);
-
-  pointer-events: none;
-
-  z-index: -1;
-}
-
-
-/* =========================================================
-   FEATURES SECTION
-   ========================================================= */
-
-#features {
   position: relative;
-
-  width: 100%;
-
-  margin: 0;
-  padding: 100px 0 120px;
-
-  scroll-margin-top: 70px;
-
-  isolation: isolate;
 }
 
 
 /* =========================================================
-   STATISTICS SECTION
+   STATISTICS
    ========================================================= */
 
-#statistics {
-  position: relative;
-
-  width: 100%;
-
-  margin: 0;
-  padding: 100px 0 120px;
-
-  scroll-margin-top: 70px;
-
-  isolation: isolate;
+.landing-statistics-section {
+  padding: 50px 0 80px;
 }
 
 
 /* =========================================================
-   TESTIMONIALS SECTION
+   FEATURES
    ========================================================= */
 
-#testimonials {
-  position: relative;
-
-  width: 100%;
-
-  margin: 0;
-  padding: 100px 0 120px;
-
-  scroll-margin-top: 70px;
-
-  isolation: isolate;
+.landing-features-section {
+  padding: 80px 0 100px;
 }
 
 
 /* =========================================================
-   CTA SECTION
+   TESTIMONIALS
    ========================================================= */
 
-#contact {
-  position: relative;
+.landing-testimonials-section {
+  padding: 80px 0 100px;
+}
 
-  width: 100%;
 
-  margin: 0;
-  padding: 100px 0 120px;
+/* =========================================================
+   CTA
+   ========================================================= */
 
-  scroll-margin-top: 70px;
-
-  isolation: isolate;
+.landing-cta-section {
+  padding: 70px 0 100px;
 }
 
 
@@ -481,12 +214,8 @@ select {
    GLOBAL CONTAINER
    ========================================================= */
 
-.landing-page .container,
-.landing-page .section-container {
-  width: min(
-    var(--tf-container),
-    calc(100% - 48px)
-  );
+.landing-page .container {
+  width: min(1180px, calc(100% - 40px));
 
   margin-left: auto;
   margin-right: auto;
@@ -494,168 +223,35 @@ select {
 
 
 /* =========================================================
-   PREMIUM SECTION DIVIDER
+   SECTION ANCHOR OFFSET
    ========================================================= */
 
-#features::before,
-#statistics::before,
-#testimonials::before,
-#contact::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 50%;
-
-  width: min(900px, 70%);
-
-  height: 1px;
-
-  transform: translateX(-50%);
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(109, 93, 252, 0.18),
-      rgba(6, 182, 212, 0.18),
-      transparent
-    );
-
-  pointer-events: none;
+#home,
+#features,
+#statistics,
+#testimonials,
+#contact {
+  scroll-margin-top: 90px;
 }
 
 
 /* =========================================================
-   SECTION BACKGROUND GLOW
-   ========================================================= */
-
-#features::after,
-#statistics::after,
-#testimonials::after,
-#contact::after {
-  content: "";
-
-  position: absolute;
-
-  width: 520px;
-  height: 520px;
-
-  right: -250px;
-  top: 15%;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 93, 252, 0.045),
-      transparent 70%
-    );
-
-  filter: blur(25px);
-
-  pointer-events: none;
-
-  z-index: -1;
-}
-
-
-/* =========================================================
-   GENERIC SECTION HEADINGS
-   ========================================================= */
-
-.landing-page .section-pill {
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  min-height: 32px;
-
-  padding: 7px 14px;
-
-  border-radius: 999px;
-
-  color: #b9b4ff;
-
-  background:
-    rgba(109, 93, 252, 0.09);
-
-  border:
-    1px solid
-    rgba(109, 93, 252, 0.18);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.04em;
-
-  text-transform: uppercase;
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-
-/* =========================================================
-   GLOBAL GRADIENT TEXT
-   ========================================================= */
-
-.landing-page .gradient-text {
-  background:
-    linear-gradient(
-      90deg,
-      #8b7cff,
-      #3b82f6,
-      #06b6d4
-    );
-
-  -webkit-background-clip: text;
-  background-clip: text;
-
-  -webkit-text-fill-color: transparent;
-
-  color: transparent;
-}
-
-
-/* =========================================================
-   GLOBAL BUTTON BASE
-   ========================================================= */
-
-.landing-page button {
-  font-family: inherit;
-
-  border: 0;
-  outline: none;
-
-  cursor: pointer;
-}
-
-
-/* =========================================================
-   GLOBAL LINK
+   LINKS
    ========================================================= */
 
 .landing-page a {
   color: inherit;
-
   text-decoration: none;
 }
 
 
 /* =========================================================
-   FOCUS STATES
+   BUTTON RESET
    ========================================================= */
 
-.landing-page button:focus-visible,
-.landing-page a:focus-visible {
-  outline: 2px solid rgba(139, 124, 255, 0.9);
-
-  outline-offset: 4px;
+.landing-page button {
+  border: 0;
+  outline: none;
 }
 
 
@@ -665,19 +261,7 @@ select {
 
 .landing-page ::selection {
   background: rgba(109, 93, 252, 0.35);
-
   color: #ffffff;
-}
-
-
-/* =========================================================
-   IMAGE DEFAULT
-   ========================================================= */
-
-.landing-page img {
-  max-width: 100%;
-
-  display: block;
 }
 
 
@@ -685,214 +269,76 @@ select {
    SCROLLBAR
    ========================================================= */
 
-html::-webkit-scrollbar {
+.landing-page::-webkit-scrollbar {
   width: 8px;
 }
 
-html::-webkit-scrollbar-track {
-  background: #02040c;
+.landing-page::-webkit-scrollbar-track {
+  background: #030511;
 }
 
-html::-webkit-scrollbar-thumb {
-  background:
-    linear-gradient(
-      180deg,
-      #6d5dfc,
-      #3b82f6
-    );
+.landing-page::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #6d5dfc,
+    #3b82f6
+  );
 
-  border-radius: 999px;
-}
-
-html::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(
-      180deg,
-      #8b7cff,
-      #06b6d4
-    );
+  border-radius: 20px;
 }
 
 
 /* =========================================================
-   HIDE HORIZONTAL OVERFLOW
-   ========================================================= */
-
-html,
-body,
-#root,
-.landing-page {
-  max-width: 100%;
-
-  overflow-x: hidden;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-  :root {
-    --tf-container: 960px;
-  }
-
-  .landing-page .container,
-  .landing-page .section-container {
-    width: min(
-      var(--tf-container),
-      calc(100% - 40px)
-    );
-  }
-
-  #features,
-  #statistics,
-  #testimonials,
-  #contact {
-    padding-top: 90px;
-    padding-bottom: 100px;
-  }
-}
-
-
-/* =========================================================
-   TABLET / SMALL LAPTOP
+   RESPONSIVE
    ========================================================= */
 
 @media (max-width: 900px) {
-
   :root {
     --tf-nav-height: 70px;
   }
 
-  #home {
+  .landing-hero-section {
     min-height: auto;
-  }
-
-  .hero-section {
-    min-height: auto;
-
     padding-top: 100px;
-    padding-bottom: 80px;
+    padding-bottom: 70px;
   }
 
-  #features,
-  #statistics,
-  #testimonials,
-  #contact {
-    padding-top: 75px;
-    padding-bottom: 85px;
+  .landing-statistics-section {
+    padding: 40px 0 70px;
   }
 
-  .landing-page .container,
-  .landing-page .section-container {
-    width: min(
-      760px,
-      calc(100% - 36px)
-    );
+  .landing-features-section {
+    padding: 70px 0 80px;
+  }
+
+  .landing-testimonials-section {
+    padding: 70px 0 80px;
+  }
+
+  .landing-cta-section {
+    padding: 60px 0 80px;
   }
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 600px) {
-
-  :root {
-    --tf-nav-height: 66px;
+  .landing-page .container {
+    width: min(
+      100% - 28px,
+      1180px
+    );
   }
 
-  .landing-page .container,
-  .landing-page .section-container {
-    width: calc(100% - 28px);
-  }
-
-  #home {
-    min-height: auto;
-
-    scroll-margin-top: 66px;
-  }
-
-  .hero-section {
-    min-height: auto;
-
-    padding-top: 88px;
-    padding-bottom: 65px;
-  }
-
-  #features,
-  #statistics,
-  #testimonials,
-  #contact {
-    padding-top: 65px;
-    padding-bottom: 70px;
-
-    scroll-margin-top: 66px;
-  }
-
-  #features::before,
-  #statistics::before,
-  #testimonials::before,
-  #contact::before {
-    width: 80%;
-  }
-
-  .landing-page::before {
-    background-size: 42px 42px;
-  }
-
-  .landing-page::after {
-    width: 400px;
-    height: 400px;
-  }
-}
-
-
-/* =========================================================
-   VERY SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-  .landing-page .container,
-  .landing-page .section-container {
-    width: calc(100% - 22px);
-  }
-
-  .hero-section {
-    padding-top: 82px;
+  .landing-hero-section {
+    padding-top: 90px;
     padding-bottom: 55px;
   }
 
-  #features,
-  #statistics,
-  #testimonials,
-  #contact {
+  .landing-statistics-section,
+  .landing-features-section,
+  .landing-testimonials-section,
+  .landing-cta-section {
     padding-top: 55px;
-    padding-bottom: 60px;
-  }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    padding-bottom: 65px;
   }
 }
