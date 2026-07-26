@@ -1,0 +1,688 @@
+/* =========================================================
+   TASKFLOW — STATISTICS SECTION
+   Premium Dark / Glassmorphism Landing Page
+========================================================= */
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.statistics-section {
+  position: relative;
+  width: 100%;
+  padding: 110px 24px 130px;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(75, 91, 220, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 15, 34, 0.35),
+      rgba(5, 12, 28, 0.95)
+    );
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+.statistics-section::before {
+  content: "";
+  position: absolute;
+
+  width: 520px;
+  height: 520px;
+
+  left: -260px;
+  top: 180px;
+
+  border-radius: 50%;
+
+  background: rgba(79, 70, 229, 0.09);
+
+  filter: blur(100px);
+
+  pointer-events: none;
+}
+
+
+.statistics-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  right: -250px;
+  top: 250px;
+
+  border-radius: 50%;
+
+  background: rgba(0, 190, 255, 0.07);
+
+  filter: blur(100px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   MAIN HEADING
+========================================================= */
+
+.statistics-section .section-heading {
+  position: relative;
+  z-index: 2;
+
+  width: min(900px, 100%);
+
+  margin: 0 auto 42px;
+
+  text-align: center;
+}
+
+
+.statistics-section .section-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  padding: 7px 15px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(92, 112, 255, 0.25);
+
+  background: rgba(70, 86, 180, 0.09);
+
+  color: #8ea4ff;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 0.05em;
+
+  text-transform: uppercase;
+}
+
+
+.statistics-section .section-heading h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: clamp(28px, 4vw, 44px);
+
+  line-height: 1.15;
+
+  font-weight: 700;
+
+  letter-spacing: -0.03em;
+}
+
+
+.statistics-section .section-heading p {
+  max-width: 680px;
+
+  margin: 18px auto 0;
+
+  color: #8995ae;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   PRIMARY STATISTICS GRID
+========================================================= */
+
+.statistics-grid {
+  position: relative;
+  z-index: 2;
+
+  width: min(1160px, 100%);
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+
+/* =========================================================
+   STATISTICS CARD
+========================================================= */
+
+.statistics-card {
+  position: relative;
+
+  min-height: 245px;
+
+  padding: 27px 24px 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(120, 140, 190, 0.15);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(29, 42, 76, 0.82),
+      rgba(19, 29, 53, 0.88)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 18px 50px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* =========================================================
+   CARD TOP GLOW
+========================================================= */
+
+.statistics-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -100px;
+  left: 50%;
+
+  width: 190px;
+  height: 190px;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background: rgba(55, 115, 255, 0.10);
+
+  filter: blur(55px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.statistics-card:hover {
+  border-color: rgba(72, 126, 255, 0.34);
+
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.28),
+    0 0 35px rgba(48, 102, 255, 0.08);
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.statistics-icon {
+  position: relative;
+  z-index: 2;
+
+  width: 58px;
+  height: 58px;
+
+  margin-bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #3d7df5,
+      #2765df
+    );
+
+  color: #ffffff;
+
+  font-size: 23px;
+
+  box-shadow:
+    0 10px 25px rgba(37, 100, 230, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.statistics-card:hover .statistics-icon {
+  transform: translateY(-3px) scale(1.04);
+
+  box-shadow:
+    0 14px 32px rgba(37, 100, 230, 0.38),
+    0 0 25px rgba(58, 115, 255, 0.15);
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+.statistics-card h2 {
+  position: relative;
+  z-index: 2;
+
+  margin: 0;
+
+  color: #f7f9ff;
+
+  font-size: clamp(30px, 3vw, 40px);
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.statistics-card h4 {
+  position: relative;
+  z-index: 2;
+
+  margin: 14px 0 0;
+
+  color: #f2f5ff;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.statistics-card p {
+  position: relative;
+  z-index: 2;
+
+  max-width: 210px;
+
+  margin: 10px auto 0;
+
+  color: #8995ae;
+
+  font-size: 12px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   TRUSTED COMPANIES
+========================================================= */
+
+.trusted-companies {
+  position: relative;
+  z-index: 2;
+
+  width: min(1000px, 100%);
+
+  margin: 70px auto 0;
+
+  text-align: center;
+}
+
+
+.trusted-companies > p {
+  margin: 0 0 25px;
+
+  color: #6f7d99;
+
+  font-size: 12px;
+
+  letter-spacing: 0.04em;
+}
+
+
+/* =========================================================
+   COMPANY GRID
+========================================================= */
+
+.company-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 12px;
+
+  align-items: center;
+}
+
+
+.company-grid span {
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px 16px;
+
+  border: 1px solid rgba(120, 140, 190, 0.10);
+
+  border-radius: 12px;
+
+  background: rgba(18, 28, 51, 0.38);
+
+  color: #65728c;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.company-grid span:hover {
+  color: #b7c5ff;
+
+  border-color: rgba(75, 119, 255, 0.25);
+
+  background: rgba(48, 70, 130, 0.20);
+}
+
+
+/* =========================================================
+   SECONDARY STATISTICS GRID
+========================================================= */
+
+.statistics-section > .statistics-grid:last-child {
+  margin-top: 70px !important;
+}
+
+
+/* =========================================================
+   SECONDARY CARDS
+========================================================= */
+
+.statistics-section
+  > .statistics-grid:last-child
+  .statistics-card {
+  min-height: 205px;
+
+  justify-content: center;
+}
+
+
+.statistics-section
+  > .statistics-grid:last-child
+  .statistics-card
+  .statistics-icon {
+  margin-bottom: 18px;
+}
+
+
+.statistics-section
+  > .statistics-grid:last-child
+  .statistics-card
+  h2 {
+  font-size: 30px;
+}
+
+
+.statistics-section
+  > .statistics-grid:last-child
+  .statistics-card
+  p {
+  max-width: 225px;
+
+  margin-top: 12px;
+}
+
+
+/* =========================================================
+   TOP BORDER ACCENT
+========================================================= */
+
+.statistics-card {
+  isolation: isolate;
+}
+
+
+.statistics-card::after {
+  content: "";
+
+  position: absolute;
+
+  left: 18%;
+  right: 18%;
+
+  top: 0;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(78, 124, 255, 0.35),
+      transparent
+    );
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+}
+
+
+.statistics-card:hover::after {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+  .statistics-section {
+    padding: 90px 22px 110px;
+  }
+
+
+  .statistics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+
+
+  .company-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+
+  .statistics-card {
+    min-height: 230px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .statistics-section {
+    padding: 75px 16px 90px;
+  }
+
+
+  .statistics-section .section-heading {
+    margin-bottom: 30px;
+  }
+
+
+  .statistics-section .section-heading h2 {
+    font-size: 28px;
+
+    line-height: 1.2;
+  }
+
+
+  .statistics-section .section-heading p {
+    font-size: 13px;
+
+    line-height: 1.7;
+  }
+
+
+  .statistics-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+
+  .statistics-card {
+    min-height: 220px;
+
+    padding: 26px 20px;
+  }
+
+
+  .statistics-icon {
+    width: 55px;
+    height: 55px;
+
+    margin-bottom: 19px;
+  }
+
+
+  .statistics-card h2 {
+    font-size: 34px;
+  }
+
+
+  .statistics-card h4 {
+    font-size: 14px;
+  }
+
+
+  .statistics-card p {
+    font-size: 12px;
+  }
+
+
+  .trusted-companies {
+    margin-top: 50px;
+  }
+
+
+  .company-grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+  }
+
+
+  .company-grid span {
+    min-height: 48px;
+
+    font-size: 12px;
+  }
+
+
+  .statistics-section > .statistics-grid:last-child {
+    margin-top: 45px !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .statistics-section {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+
+  .statistics-section .section-heading h2 {
+    font-size: 25px;
+  }
+
+
+  .statistics-card {
+    border-radius: 16px;
+  }
+
+
+  .company-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .statistics-card,
+  .statistics-icon,
+  .company-grid span {
+    transition: none;
+  }
+}
