@@ -5,42 +5,41 @@ import {
   useState,
 } from "react";
 
-const ThemeContext =
-  createContext();
+const ThemeContext = createContext(null);
 
-export const ThemeProvider = ({
-  children,
-}) => {
-  const [theme, setTheme] =
-    useState(
-      localStorage.getItem(
-        "theme"
-      ) || "dark"
-    );
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("taskflow-theme") || "light";
+  });
 
   useEffect(() => {
-    document.body.className =
-      theme;
+    const root = document.documentElement;
+
+    root.setAttribute("data-theme", theme);
 
     localStorage.setItem(
-      "theme",
+      "taskflow-theme",
       theme
     );
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) =>
-      prev === "dark"
-        ? "light"
-        : "dark"
+    setTheme((current) =>
+      current === "light"
+        ? "dark"
+        : "light"
     );
   };
+
+  const isDark = theme === "dark";
 
   return (
     <ThemeContext.Provider
       value={{
         theme,
+        isDark,
         toggleTheme,
+        setTheme,
       }}
     >
       {children}
@@ -48,5 +47,16 @@ export const ThemeProvider = ({
   );
 };
 
-export const useTheme = () =>
-  useContext(ThemeContext);
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+
+  if (!context) {
+    throw new Error(
+      "useTheme must be used inside ThemeProvider"
+    );
+  }
+
+  return context;
+};
+
+export default ThemeContext;

@@ -1,5 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+// src/components/Navbar.jsx
+
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   FaBars,
@@ -16,225 +27,714 @@ import {
   FaHome,
 } from "react-icons/fa";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
 
 import NotificationBell from "./NotificationBell";
+
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Navbar.css";
+
 
 const Navbar = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { user, logout } = useAuth();
-
-  const [search, setSearch] = useState("");
-
-  const [showProfileMenu, setShowProfileMenu] =
-    useState(false);
-
-  const [mobileMenu, setMobileMenu] =
-    useState(false);
-
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
 
   const menuRef = useRef(null);
 
   /* ==========================================
-      THEME
+     SEARCH
   ========================================== */
 
-  useEffect(() => {
-    document.body.classList.toggle(
-      "dark-theme",
-      darkMode
-    );
+  const [search, setSearch] = useState("");
 
-    localStorage.setItem(
-      "theme",
-      darkMode ? "dark" : "light"
-    );
-  }, [darkMode]);
 
   /* ==========================================
-      CLOSE PROFILE MENU
+     PROFILE MENU
+  ========================================== */
+
+  const [showProfileMenu, setShowProfileMenu] =
+    useState(false);
+
+
+  /* ==========================================
+     MOBILE MENU
+  ========================================== */
+
+  const [mobileMenu, setMobileMenu] =
+    useState(false);
+
+
+  /* ==========================================
+     THEME
+  ========================================== */
+
+  const getInitialTheme = () => {
+    const savedTheme =
+      localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      return true;
+    }
+
+    if (savedTheme === "light") {
+      return false;
+    }
+
+    return window.matchMedia &&
+      window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+  };
+
+  const [darkMode, setDarkMode] = useState(
+    getInitialTheme
+  );
+
+
+  /* ==========================================
+     APPLY THEME
   ========================================== */
 
   useEffect(() => {
-    const handler = (e) => {
+    const root =
+      document.documentElement;
+
+    const body =
+      document.body;
+
+    if (darkMode) {
+      root.classList.add("dark-theme");
+      body.classList.add("dark-theme");
+
+      root.setAttribute(
+        "data-theme",
+        "dark"
+      );
+
+      localStorage.setItem(
+        "theme",
+        "dark"
+      );
+    } else {
+      root.classList.remove("dark-theme");
+      body.classList.remove("dark-theme");
+
+      root.setAttribute(
+        "data-theme",
+        "light"
+      );
+
+      localStorage.setItem(
+        "theme",
+        "light"
+      );
+    }
+
+    /*
+      Notify other components that the theme
+      has changed.
+
+      Profile page can listen to this event
+      if required.
+    */
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "taskflow-theme-change",
+        {
+          detail: {
+            theme: darkMode
+              ? "dark"
+              : "light",
+          },
+        }
+      )
+    );
+
+  }, [darkMode]);
+
+
+  /* ==========================================
+     SYNC THEME BETWEEN COMPONENTS / TABS
+  ========================================== */
+
+  useEffect(() => {
+
+    const handleStorage = (event) => {
+
+      if (event.key !== "theme") {
+        return;
+      }
+
+      setDarkMode(
+        event.newValue === "dark"
+      );
+    };
+
+
+    const handleThemeChange = (event) => {
+
+      const theme =
+        event.detail?.theme;
+
       if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target)
+        theme === "dark" ||
+        theme === "light"
       ) {
-        setShowProfileMenu(false);
+        setDarkMode(
+          theme === "dark"
+        );
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handler
+
+    window.addEventListener(
+      "storage",
+      handleStorage
     );
 
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handler
+    window.addEventListener(
+      "taskflow-theme-change",
+      handleThemeChange
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "storage",
+        handleStorage
       );
+
+      window.removeEventListener(
+        "taskflow-theme-change",
+        handleThemeChange
+      );
+
+    };
+
   }, []);
 
+
   /* ==========================================
-      USER INITIALS
+     CLOSE PROFILE MENU
   ========================================== */
 
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .substring(0, 2)
-        .toUpperCase()
-    : "TF";
+  useEffect(() => {
+
+    const handleOutsideClick = (event) => {
+
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(
+          event.target
+        )
+      ) {
+        setShowProfileMenu(false);
+      }
+
+    };
+
+
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick
+    );
+
+
+    return () => {
+
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+      );
+
+    };
+
+  }, []);
+
 
   /* ==========================================
-      LOGOUT
+     CLOSE MENUS ON ROUTE CHANGE
+  ========================================== */
+
+  useEffect(() => {
+
+    setShowProfileMenu(false);
+    setMobileMenu(false);
+
+  }, [location.pathname]);
+
+
+  /* ==========================================
+     USER INITIALS
+  ========================================== */
+
+  const initials =
+    user?.name
+      ?.trim()
+      ?.split(/\s+/)
+      ?.map(
+        (name) => name[0]
+      )
+      ?.join("")
+      ?.substring(0, 2)
+      ?.toUpperCase() || "TF";
+
+
+  /* ==========================================
+     TOGGLE THEME
+  ========================================== */
+
+  const toggleTheme = () => {
+
+    setDarkMode(
+      (previous) => !previous
+    );
+
+  };
+
+
+  /* ==========================================
+     LOGOUT
   ========================================== */
 
   const handleLogout = async () => {
+
     try {
+
       await logout();
-    } catch (err) {
-      console.error(err);
+
+    } catch (error) {
+
+      console.error(
+        "Logout error:",
+        error
+      );
+
     }
 
-    // Extra safety
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+
+    /*
+      Extra cleanup to guarantee that
+      authentication state is removed.
+    */
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    localStorage.removeItem(
+      "user"
+    );
+
 
     navigate("/", {
       replace: true,
     });
+
   };
 
-  return (
-    <header className="navbar">
 
-      {/* LEFT */}
+  /* ==========================================
+     SEARCH HANDLER
+  ========================================== */
+
+  const handleSearch = (event) => {
+
+    const value =
+      event.target.value;
+
+    setSearch(value);
+
+  };
+
+
+  /* ==========================================
+     KEYBOARD SEARCH
+  ========================================== */
+
+  const handleSearchKeyDown = (
+    event
+  ) => {
+
+    if (
+      event.key === "Enter" &&
+      search.trim()
+    ) {
+
+      navigate(
+        `/tasks?search=${encodeURIComponent(
+          search.trim()
+        )}`
+      );
+
+      setSearch("");
+
+    }
+
+  };
+
+
+  /* ==========================================
+     NAVIGATION HELPERS
+  ========================================== */
+
+  const handleNavigate = (path) => {
+
+    navigate(path);
+
+    setShowProfileMenu(false);
+    setMobileMenu(false);
+
+  };
+
+
+  return (
+    <header
+      className={`navbar ${
+        darkMode
+          ? "navbar-dark"
+          : "navbar-light"
+      }`}
+    >
+
+      {/* ======================================
+          LEFT SECTION
+      ====================================== */}
 
       <div className="navbar-left">
 
+        {/* SIDEBAR BUTTON */}
+
         <button
+          type="button"
           className="menu-btn"
+          aria-label={
+            sidebarOpen
+              ? "Close sidebar"
+              : "Open sidebar"
+          }
+          title={
+            sidebarOpen
+              ? "Close sidebar"
+              : "Open sidebar"
+          }
           onClick={() =>
-            setSidebarOpen(!sidebarOpen)
+            setSidebarOpen(
+              !sidebarOpen
+            )
           }
         >
           <FaBars />
         </button>
 
+
+        {/* DESKTOP NAVIGATION */}
+
         <nav
           className={`navbar-links ${
-            mobileMenu ? "active" : ""
+            mobileMenu
+              ? "active"
+              : ""
           }`}
         >
-          <NavLink to="/dashboard">
+
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "active"
+                : ""
+            }
+          >
             <FaHome />
-            Dashboard
+
+            <span>
+              Dashboard
+            </span>
           </NavLink>
 
-          <NavLink to="/projects">
+
+          <NavLink
+            to="/projects"
+            className={({ isActive }) =>
+              isActive
+                ? "active"
+                : ""
+            }
+          >
             <FaProjectDiagram />
-            Projects
+
+            <span>
+              Projects
+            </span>
           </NavLink>
 
-          <NavLink to="/tasks">
+
+          <NavLink
+            to="/tasks"
+            className={({ isActive }) =>
+              isActive
+                ? "active"
+                : ""
+            }
+          >
             <FaTasks />
-            Tasks
+
+            <span>
+              Tasks
+            </span>
           </NavLink>
 
-          <NavLink to="/users">
+
+          <NavLink
+            to="/users"
+            className={({ isActive }) =>
+              isActive
+                ? "active"
+                : ""
+            }
+          >
             <FaUsers />
-            Team
+
+            <span>
+              Team
+            </span>
           </NavLink>
+
         </nav>
 
       </div>
 
-      {/* SEARCH */}
+
+      {/* ======================================
+          SEARCH
+      ====================================== */}
 
       <div className="navbar-search">
 
-        <FaSearch className="search-icon" />
+        <FaSearch
+          className="search-icon"
+        />
 
         <input
           type="text"
+          aria-label="Search"
           placeholder="Search projects, tasks..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
+          onChange={handleSearch}
+          onKeyDown={
+            handleSearchKeyDown
           }
         />
 
+        {search && (
+          <button
+            type="button"
+            className="search-clear"
+            aria-label="Clear search"
+            onClick={() =>
+              setSearch("")
+            }
+          >
+            <FaTimes />
+          </button>
+        )}
+
       </div>
 
-      {/* RIGHT */}
+
+      {/* ======================================
+          RIGHT SECTION
+      ====================================== */}
 
       <div className="navbar-right">
 
-        <button
-          className="icon-btn"
-          onClick={() =>
-            setDarkMode(!darkMode)
+
+        {/* ====================================
+            DAY / NIGHT THEME
+        ==================================== */}
+
+        <motion.button
+          type="button"
+          className={`icon-btn theme-toggle ${
+            darkMode
+              ? "theme-active"
+              : ""
+          }`}
+          aria-label={
+            darkMode
+              ? "Switch to light mode"
+              : "Switch to dark mode"
           }
+          title={
+            darkMode
+              ? "Switch to light mode"
+              : "Switch to dark mode"
+          }
+          onClick={toggleTheme}
+          whileTap={{
+            scale: 0.9,
+          }}
+          whileHover={{
+            scale: 1.05,
+          }}
         >
-          {darkMode ? (
-            <FaSun />
-          ) : (
-            <FaMoon />
-          )}
-        </button>
+
+          <AnimatePresence
+            mode="wait"
+            initial={false}
+          >
+
+            {darkMode ? (
+
+              <motion.span
+                key="sun"
+                initial={{
+                  opacity: 0,
+                  rotate: -90,
+                  scale: 0.5,
+                }}
+                animate={{
+                  opacity: 1,
+                  rotate: 0,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  rotate: 90,
+                  scale: 0.5,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                <FaSun />
+              </motion.span>
+
+            ) : (
+
+              <motion.span
+                key="moon"
+                initial={{
+                  opacity: 0,
+                  rotate: 90,
+                  scale: 0.5,
+                }}
+                animate={{
+                  opacity: 1,
+                  rotate: 0,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  rotate: -90,
+                  scale: 0.5,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                <FaMoon />
+              </motion.span>
+
+            )}
+
+          </AnimatePresence>
+
+        </motion.button>
+
+
+        {/* ====================================
+            NOTIFICATIONS
+        ==================================== */}
 
         <NotificationBell />
 
+
+        {/* ====================================
+            SETTINGS
+        ==================================== */}
+
         <button
+          type="button"
           className="icon-btn"
+          aria-label="Settings"
+          title="Settings"
           onClick={() =>
-            navigate("/settings")
+            handleNavigate(
+              "/settings"
+            )
           }
         >
           <FaCog />
         </button>
 
-        {/* PROFILE */}
+
+        {/* ====================================
+            PROFILE
+        ==================================== */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
-          <button
-            className="profile-trigger"
+
+          <motion.button
+            type="button"
+            className={`profile-trigger ${
+              darkMode
+                ? "profile-trigger-dark"
+                : ""
+            }`}
+            aria-label="Open profile menu"
+            aria-expanded={
+              showProfileMenu
+            }
             onClick={() =>
               setShowProfileMenu(
-                !showProfileMenu
+                (previous) =>
+                  !previous
               )
             }
+            whileTap={{
+              scale: 0.94,
+            }}
           >
+
             {user?.avatar ? (
+
               <img
                 src={user.avatar}
-                alt="avatar"
+                alt={
+                  user?.name ||
+                  "User avatar"
+                }
                 className="avatar"
               />
+
             ) : (
+
               <div className="avatar initials">
                 {initials}
               </div>
+
             )}
-          </button>
+
+          </motion.button>
+
+
+          {/* PROFILE DROPDOWN */}
 
           <AnimatePresence>
 
@@ -245,7 +745,7 @@ const Navbar = ({
                 initial={{
                   opacity: 0,
                   y: -10,
-                  scale: 0.95,
+                  scale: 0.96,
                 }}
                 animate={{
                   opacity: 1,
@@ -254,74 +754,112 @@ const Navbar = ({
                 }}
                 exit={{
                   opacity: 0,
-                  y: -10,
-                  scale: 0.95,
+                  y: -8,
+                  scale: 0.96,
                 }}
                 transition={{
-                  duration: 0.2,
+                  duration: 0.18,
+                  ease: "easeOut",
                 }}
               >
+
+                {/* DROPDOWN HEADER */}
 
                 <div className="dropdown-header">
 
                   {user?.avatar ? (
+
                     <img
                       src={user.avatar}
                       alt=""
                       className="dropdown-avatar"
                     />
+
                   ) : (
+
                     <div className="dropdown-avatar initials">
                       {initials}
                     </div>
+
                   )}
 
-                  <div>
+
+                  <div className="dropdown-user-info">
 
                     <h4>
-                      {user?.name || "User"}
+                      {
+                        user?.name ||
+                        "User"
+                      }
                     </h4>
 
                     <small>
-                      {user?.role || "Member"}
+                      {
+                        user?.role ||
+                        "Member"
+                      }
                     </small>
 
                   </div>
 
                 </div>
 
-                <button
-                  onClick={() => {
-                    navigate("/profile");
-                    setShowProfileMenu(
-                      false
-                    );
-                  }}
-                >
-                  <FaUserCircle />
-                  Profile
-                </button>
+
+                {/* PROFILE */}
 
                 <button
-                  onClick={() => {
-                    navigate("/settings");
-                    setShowProfileMenu(
-                      false
-                    );
-                  }}
+                  type="button"
+                  onClick={() =>
+                    handleNavigate(
+                      "/profile"
+                    )
+                  }
+                >
+                  <FaUserCircle />
+
+                  <span>
+                    Profile
+                  </span>
+                </button>
+
+
+                {/* SETTINGS */}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleNavigate(
+                      "/settings"
+                    )
+                  }
                 >
                   <FaCog />
-                  Settings
+
+                  <span>
+                    Settings
+                  </span>
                 </button>
+
+
+                {/* DIVIDER */}
 
                 <hr />
 
+
+                {/* LOGOUT */}
+
                 <button
+                  type="button"
                   className="logout-menu-btn"
-                  onClick={handleLogout}
+                  onClick={
+                    handleLogout
+                  }
                 >
                   <FaSignOutAlt />
-                  Logout
+
+                  <span>
+                    Logout
+                  </span>
                 </button>
 
               </motion.div>
@@ -332,19 +870,33 @@ const Navbar = ({
 
         </div>
 
-        {/* MOBILE */}
+
+        {/* ====================================
+            MOBILE MENU
+        ==================================== */}
 
         <button
+          type="button"
           className="mobile-toggle"
+          aria-label={
+            mobileMenu
+              ? "Close navigation menu"
+              : "Open navigation menu"
+          }
           onClick={() =>
-            setMobileMenu(!mobileMenu)
+            setMobileMenu(
+              (previous) =>
+                !previous
+            )
           }
         >
+
           {mobileMenu ? (
             <FaTimes />
           ) : (
             <FaBars />
           )}
+
         </button>
 
       </div>
@@ -352,5 +904,6 @@ const Navbar = ({
     </header>
   );
 };
+
 
 export default Navbar;

@@ -1,7 +1,4 @@
-// src/pages/Profile.jsx
-
 import {
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -10,135 +7,188 @@ import {
 import {
   FaUser,
   FaEnvelope,
-  FaPhoneAlt,
+  FaPhone,
   FaBriefcase,
   FaBuilding,
   FaShieldAlt,
   FaDatabase,
-  FaCheckCircle,
   FaCalendarAlt,
   FaClock,
+  FaCheckCircle,
+  FaLock,
   FaSave,
   FaTimes,
-  FaLock,
+  FaEdit,
   FaGlobe,
-  FaSpinner,
-  FaUserCircle,
-  FaPen,
 } from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
+
 import {
-  getProfile,
-  updateProfile,
-} from "../services/userService";
+  useAuth,
+} from "../context/AuthContext";
+
+import {
+  useTheme,
+} from "../context/ThemeContext";
 
 import "../styles/Profile.css";
 
+const INITIAL_FORM = {
+  name: "",
+  phone: "",
+  designation: "",
+  department: "",
+  bio: "",
+};
+
+const formatDate = (date) => {
+  if (!date) return "Not available";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "Not available";
+  }
+
+  return parsed.toLocaleDateString(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }
+  );
+};
+
+const formatDateTime = (date) => {
+  if (!date) return "Not available";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "Not available";
+  }
+
+  return parsed.toLocaleString(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
+};
+
 function Profile() {
   const {
-    user: authUser,
-    updateUser: updateAuthUser,
+    user,
+    updateUser,
   } = useAuth();
 
+  const {
+    isDark,
+  } = useTheme();
+
+  const [profile, setProfile] =
+    useState(user || null);
+
+  const [form, setForm] =
+    useState(INITIAL_FORM);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  const [success, setSuccess] =
+    useState("");
+
   /* ==========================================
-     STATE
+     FETCH PROFILE
   ========================================== */
 
-  const [profile, setProfile] = useState(
-    authUser || null
-  );
-
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    designation: "",
-    department: "",
-    bio: "",
-  });
-
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  /* ==========================================
-     LOAD PROFILE
-  ========================================== */
-
-  const loadProfile = useCallback(async () => {
+  const fetchProfile = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const result = await getProfile();
+      const response =
+        await api.get("/users/profile");
 
-      if (!result.success || !result.data) {
+      if (!response.data?.success) {
         throw new Error(
-          result.message || "Unable to load profile."
+          response.data?.message ||
+            "Unable to load profile."
         );
       }
 
-      const currentUser = result.data;
+      const currentUser =
+        response.data.user;
 
       setProfile(currentUser);
 
       setForm({
-        name: currentUser.name || "",
-        phone: currentUser.phone || "",
+        name:
+          currentUser.name || "",
+        phone:
+          currentUser.phone || "",
         designation:
           currentUser.designation || "",
         department:
           currentUser.department || "",
-        bio: currentUser.bio || "",
+        bio:
+          currentUser.bio || "",
       });
+
+      updateUser(currentUser);
     } catch (err) {
       console.error(
-        "Profile Load Error:",
+        "Profile Fetch Error:",
         err
       );
 
       setError(
         err.response?.data?.message ||
-          err.message ||
           "Unable to load your profile."
       );
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchProfile();
   }, []);
 
   /* ==========================================
-     INITIAL LOAD
-  ========================================== */
-
-  useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
-
-  /* ==========================================
-     FORM CHANGE
+     FORM HANDLER
   ========================================== */
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const {
+      name,
+      value,
+    } = event.target;
 
     setForm((previous) => ({
       ...previous,
-      [name]: value,
+      [name]:
+        name === "bio"
+          ? value.slice(0, 500)
+          : value,
     }));
 
-    if (message) {
-      setMessage("");
-    }
-
-    if (error) {
-      setError("");
-    }
+    setSuccess("");
   };
 
   /* ==========================================
@@ -148,49 +198,47 @@ function Profile() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (saving) {
-      return;
-    }
-
     try {
       setSaving(true);
-      setMessage("");
       setError("");
+      setSuccess("");
 
-      const result = await updateProfile(form);
+      const response =
+        await api.put(
+          "/users/profile",
+          form
+        );
 
-      if (!result.success || !result.data) {
+      if (!response.data?.success) {
         throw new Error(
-          result.message ||
+          response.data?.message ||
             "Unable to update profile."
         );
       }
 
-      const updatedUser = result.data;
+      const updatedUser =
+        response.data.user;
 
       setProfile(updatedUser);
 
       setForm({
-        name: updatedUser.name || "",
-        phone: updatedUser.phone || "",
+        name:
+          updatedUser.name || "",
+        phone:
+          updatedUser.phone || "",
         designation:
           updatedUser.designation || "",
         department:
           updatedUser.department || "",
-        bio: updatedUser.bio || "",
+        bio:
+          updatedUser.bio || "",
       });
 
-      /* Update global auth state + localStorage */
-      updateAuthUser(updatedUser);
+      updateUser(updatedUser);
 
-      setMessage(
+      setSuccess(
         "Your profile has been updated successfully."
       );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
     } catch (err) {
       console.error(
         "Profile Update Error:",
@@ -199,7 +247,6 @@ function Profile() {
 
       setError(
         err.response?.data?.message ||
-          err.message ||
           "Unable to update your profile."
       );
     } finally {
@@ -208,81 +255,49 @@ function Profile() {
   };
 
   /* ==========================================
-     RESET FORM
+     CANCEL
   ========================================== */
 
   const handleCancel = () => {
-    if (!profile) {
-      return;
-    }
+    if (!profile) return;
 
     setForm({
-      name: profile.name || "",
-      phone: profile.phone || "",
+      name:
+        profile.name || "",
+      phone:
+        profile.phone || "",
       designation:
         profile.designation || "",
       department:
         profile.department || "",
-      bio: profile.bio || "",
+      bio:
+        profile.bio || "",
     });
 
-    setMessage("");
     setError("");
+    setSuccess("");
   };
 
   /* ==========================================
-     AVATAR INITIALS
+     INITIALS
   ========================================== */
 
   const initials = useMemo(() => {
     const name =
       profile?.name ||
-      authUser?.name ||
-      "User";
+      user?.name ||
+      "TaskFlow";
 
     return name
       .split(" ")
       .filter(Boolean)
       .slice(0, 2)
-      .map((part) =>
-        part.charAt(0).toUpperCase()
+      .map(
+        (part) =>
+          part[0]?.toUpperCase()
       )
       .join("");
-  }, [profile, authUser]);
-
-  /* ==========================================
-     DATE FORMATTER
-  ========================================== */
-
-  const formatDate = (date) => {
-    if (!date) {
-      return "Not available";
-    }
-
-    const parsedDate = new Date(date);
-
-    if (Number.isNaN(parsedDate.getTime())) {
-      return "Not available";
-    }
-
-    return parsedDate.toLocaleDateString(
-      "en-GB",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }
-    );
-  };
-
-  /* ==========================================
-     LAST LOGIN
-  ========================================== */
-
-  const lastLogin =
-    profile?.lastLogin ||
-    profile?.updatedAt ||
-    profile?.createdAt;
+  }, [profile, user]);
 
   /* ==========================================
      LOADING
@@ -293,22 +308,21 @@ function Profile() {
       <div className="profile-layout">
         <Sidebar />
 
-        <div className="profile-main">
+        <main className="profile-main">
           <Navbar />
 
-          <main className="profile-content">
-            <div className="profile-skeleton">
-              <div className="skeleton-title" />
+          <div className="profile-loading">
+            <div className="profile-loading-spinner" />
 
-              <div className="skeleton-grid">
-                <div className="skeleton-card large" />
-                <div className="skeleton-card large" />
-              </div>
+            <h2>
+              Loading your profile
+            </h2>
 
-              <div className="skeleton-card wide" />
-            </div>
-          </main>
-        </div>
+            <p>
+              Fetching your TaskFlow account information...
+            </p>
+          </div>
+        </main>
       </div>
     );
   }
@@ -322,150 +336,165 @@ function Profile() {
       <div className="profile-layout">
         <Sidebar />
 
-        <div className="profile-main">
+        <main className="profile-main">
           <Navbar />
 
-          <main className="profile-content">
-            <div className="profile-error-state">
-              <div className="error-icon">
-                <FaUserCircle />
-              </div>
-
-              <h2>
-                Unable to load profile
-              </h2>
-
-              <p>
-                {error ||
-                  "Something went wrong while loading your account."}
-              </p>
-
-              <button
-                className="profile-primary-btn"
-                onClick={loadProfile}
-              >
-                Try Again
-              </button>
+          <div className="profile-error">
+            <div className="error-icon">
+              !
             </div>
-          </main>
-        </div>
+
+            <h2>
+              Profile unavailable
+            </h2>
+
+            <p>
+              {error ||
+                "We could not load your profile."}
+            </p>
+
+            <button
+              type="button"
+              onClick={fetchProfile}
+            >
+              Try Again
+            </button>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="profile-layout">
+    <div
+      className={`profile-layout ${
+        isDark
+          ? "profile-dark"
+          : "profile-light"
+      }`}
+    >
       <Sidebar />
 
-      <div className="profile-main">
+      <main className="profile-main">
         <Navbar />
 
-        <main className="profile-content">
+        <div className="profile-content">
 
-          {/* ==========================================
+          {/* =====================================
               PAGE HEADER
-          ========================================== */}
+          ===================================== */}
 
           <section className="profile-page-header">
 
-            <div className="profile-breadcrumb">
-              <span>ACCOUNT</span>
-              <span className="breadcrumb-arrow">
-                /
-              </span>
-              <strong>MY PROFILE</strong>
+            <div className="profile-heading">
+
+              <div className="profile-breadcrumb">
+                <span>
+                  ACCOUNT
+                </span>
+
+                <i>/</i>
+
+                <strong>
+                  MY PROFILE
+                </strong>
+              </div>
+
+              <h1>
+                My Profile
+                <span className="verified-title">
+                  <FaCheckCircle />
+                </span>
+              </h1>
+
+              <p>
+                Manage your personal information
+                and workspace profile.
+              </p>
+
             </div>
 
-            <div className="profile-header-row">
+            <div className="profile-header-actions">
 
-              <div>
-                <div className="profile-title-row">
-                  <h1>My Profile</h1>
-
-                  <span className="verified-title">
-                    <FaShieldAlt />
-                  </span>
-                </div>
-
-                <p>
-                  Manage your personal information
-                  and workspace profile.
-                </p>
-              </div>
-
-              <div className="profile-header-actions">
-
-                <button
-                  type="button"
-                  className="profile-secondary-btn"
-                  onClick={handleCancel}
-                  disabled={saving}
-                >
-                  <FaTimes />
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  form="profile-form"
-                  className="profile-primary-btn"
-                  disabled={saving}
-                >
-                  {saving ? (
-                    <>
-                      <FaSpinner className="spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <FaSave />
-                      Save Changes
-                    </>
-                  )}
-                </button>
-
-              </div>
-            </div>
-
-            {message && (
-              <div className="profile-alert success">
-                <FaCheckCircle />
-                <span>{message}</span>
-              </div>
-            )}
-
-            {error && (
-              <div className="profile-alert error">
+              <button
+                type="button"
+                className="profile-cancel-top"
+                onClick={handleCancel}
+                disabled={saving}
+              >
                 <FaTimes />
-                <span>{error}</span>
-              </div>
-            )}
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                form="profile-form"
+                className="profile-save-top"
+                disabled={saving}
+              >
+                <FaSave />
+
+                {saving
+                  ? "Saving..."
+                  : "Save Changes"}
+              </button>
+
+            </div>
 
           </section>
 
-          {/* ==========================================
-              PROFILE GRID
-          ========================================== */}
+          {/* =====================================
+              FEEDBACK
+          ===================================== */}
 
-          <section className="profile-grid">
+          {success && (
+            <div className="profile-alert success">
+              <FaCheckCircle />
 
-            {/* ==========================================
+              <span>
+                {success}
+              </span>
+            </div>
+          )}
+
+          {error && (
+            <div className="profile-alert error">
+              <span className="alert-symbol">
+                !
+              </span>
+
+              <span>
+                {error}
+              </span>
+            </div>
+          )}
+
+          {/* =====================================
+              MAIN GRID
+          ===================================== */}
+
+          <div className="profile-grid">
+
+            {/* =================================
                 LEFT COLUMN
-            ========================================== */}
+            ================================= */}
 
-            <div className="profile-left-column">
+            <aside className="profile-sidebar">
 
-              {/* Identity Card */}
+              {/* PROFILE CARD */}
 
-              <article className="identity-card">
+              <div className="profile-identity-card">
 
-                <div className="identity-cover">
+                <div className="profile-cover">
+
                   <div className="cover-orb orb-one" />
                   <div className="cover-orb orb-two" />
+
                   <div className="cover-grid" />
+
                 </div>
 
-                <div className="identity-body">
+                <div className="identity-content">
 
                   <div className="avatar-wrapper">
 
@@ -481,28 +510,28 @@ function Profile() {
                       </div>
                     )}
 
-                    <span className="online-indicator" />
+                    <span className="avatar-status" />
 
                     <button
                       type="button"
-                      className="avatar-edit-btn"
-                      title="Avatar"
+                      className="avatar-edit"
+                      title="Profile picture"
                     >
-                      <FaPen />
+                      <FaEdit />
                     </button>
+
                   </div>
 
                   <h2>
-                    {profile.name ||
-                      "TaskFlow User"}
+                    {profile.name}
                   </h2>
 
-                  <span className="identity-designation">
+                  <span className="designation-pill">
                     {profile.designation ||
                       "Team Member"}
                   </span>
 
-                  <div className="identity-meta">
+                  <div className="identity-details">
 
                     <div className="identity-row">
                       <span>
@@ -536,14 +565,8 @@ function Profile() {
                       </span>
 
                       <strong>
-                        {profile.provider
-                          ? profile.provider
-                              .charAt(0)
-                              .toUpperCase() +
-                            profile.provider.slice(
-                              1
-                            )
-                          : "Local"}
+                        {profile.provider ||
+                          "local"}
                       </strong>
                     </div>
 
@@ -554,8 +577,7 @@ function Profile() {
                       </span>
 
                       <strong>
-                        {profile.role ||
-                          "Team Member"}
+                        TaskFlow
                       </strong>
                     </div>
 
@@ -563,44 +585,51 @@ function Profile() {
 
                   <div className="identity-divider" />
 
-                  <div className="identity-dates">
+                  <div className="identity-footer">
 
                     <div>
-                      <span>
-                        <FaCalendarAlt />
-                        Joined
-                      </span>
+                      <FaCalendarAlt />
 
-                      <strong>
-                        {formatDate(
-                          profile.createdAt
-                        )}
-                      </strong>
+                      <span>
+                        <small>
+                          Joined
+                        </small>
+
+                        <strong>
+                          {formatDate(
+                            profile.createdAt
+                          )}
+                        </strong>
+                      </span>
                     </div>
 
                     <div>
-                      <span>
-                        <FaClock />
-                        Last Login
-                      </span>
+                      <FaClock />
 
-                      <strong>
-                        {formatDate(
-                          lastLogin
-                        )}
-                      </strong>
+                      <span>
+                        <small>
+                          Last Login
+                        </small>
+
+                        <strong>
+                          {formatDateTime(
+                            profile.lastLogin
+                          )}
+                        </strong>
+                      </span>
                     </div>
 
                   </div>
 
                 </div>
-              </article>
 
-              {/* Security Card */}
+              </div>
 
-              <article className="security-card">
+              {/* SECURITY CARD */}
 
-                <div className="security-header">
+              <div className="profile-security-card">
+
+                <div className="security-heading">
 
                   <div className="security-icon">
                     <FaLock />
@@ -612,9 +641,8 @@ function Profile() {
                     </h3>
 
                     <p>
-                      Your profile information
-                      is securely stored in
-                      MongoDB.
+                      Your profile information is
+                      securely stored in MongoDB.
                     </p>
                   </div>
 
@@ -626,8 +654,7 @@ function Profile() {
 
                 <div className="security-divider" />
 
-                <div className="security-item">
-
+                <div className="security-row">
                   <span>
                     <FaShieldAlt />
                     Authentication
@@ -635,18 +662,13 @@ function Profile() {
 
                   <strong>
                     {profile.provider ===
-                    "google"
-                      ? "Google"
-                      : profile.provider ===
-                        "github"
-                      ? "GitHub"
-                      : "Local"}
+                    "local"
+                      ? "Local"
+                      : profile.provider}
                   </strong>
-
                 </div>
 
-                <div className="security-item">
-
+                <div className="security-row">
                   <span>
                     <FaDatabase />
                     Database
@@ -655,24 +677,27 @@ function Profile() {
                   <strong>
                     MongoDB
                   </strong>
-
                 </div>
 
-              </article>
+              </div>
 
-            </div>
+            </aside>
 
-            {/* ==========================================
+            {/* =================================
                 RIGHT COLUMN
-            ========================================== */}
+            ================================= */}
 
-            <div className="profile-right-column">
+            <section className="profile-form-column">
 
-              <article className="information-card">
+              <form
+                id="profile-form"
+                className="profile-form-card"
+                onSubmit={handleSubmit}
+              >
 
-                <div className="information-header">
+                <div className="form-card-header">
 
-                  <div className="information-icon">
+                  <div className="form-heading-icon">
                     <FaUser />
                   </div>
 
@@ -682,9 +707,9 @@ function Profile() {
                     </h2>
 
                     <p>
-                      Update your personal
-                      details and how others
-                      see you in TaskFlow.
+                      Update your personal details
+                      and how others see you in
+                      TaskFlow.
                     </p>
                   </div>
 
@@ -692,22 +717,19 @@ function Profile() {
 
                 <div className="form-divider" />
 
-                <form
-                  id="profile-form"
-                  onSubmit={handleSubmit}
-                  className="profile-form"
-                >
+                {/* FORM GRID */}
 
-                  {/* Name */}
+                <div className="form-grid">
 
-                  <div className="form-field">
+                  {/* NAME */}
+
+                  <div className="field-group">
 
                     <label htmlFor="name">
                       Full Name
                     </label>
 
                     <div className="input-wrapper">
-
                       <FaUser />
 
                       <input
@@ -715,26 +737,25 @@ function Profile() {
                         name="name"
                         type="text"
                         value={form.name}
-                        onChange={handleChange}
+                        onChange={
+                          handleChange
+                        }
                         placeholder="Enter your full name"
-                        autoComplete="name"
                         required
                       />
-
                     </div>
 
                   </div>
 
-                  {/* Email */}
+                  {/* EMAIL */}
 
-                  <div className="form-field">
+                  <div className="field-group">
 
                     <label htmlFor="email">
                       Email Address
                     </label>
 
                     <div className="input-wrapper disabled">
-
                       <FaEnvelope />
 
                       <input
@@ -744,9 +765,7 @@ function Profile() {
                           profile.email || ""
                         }
                         disabled
-                        readOnly
                       />
-
                     </div>
 
                     <small>
@@ -756,42 +775,40 @@ function Profile() {
 
                   </div>
 
-                  {/* Phone */}
+                  {/* PHONE */}
 
-                  <div className="form-field">
+                  <div className="field-group">
 
                     <label htmlFor="phone">
                       Phone Number
                     </label>
 
                     <div className="input-wrapper">
-
-                      <FaPhoneAlt />
+                      <FaPhone />
 
                       <input
                         id="phone"
                         name="phone"
                         type="tel"
                         value={form.phone}
-                        onChange={handleChange}
+                        onChange={
+                          handleChange
+                        }
                         placeholder="Enter phone number"
-                        autoComplete="tel"
                       />
-
                     </div>
 
                   </div>
 
-                  {/* Designation */}
+                  {/* DESIGNATION */}
 
-                  <div className="form-field">
+                  <div className="field-group">
 
                     <label htmlFor="designation">
                       Designation
                     </label>
 
                     <div className="input-wrapper">
-
                       <FaBriefcase />
 
                       <input
@@ -801,24 +818,24 @@ function Profile() {
                         value={
                           form.designation
                         }
-                        onChange={handleChange}
+                        onChange={
+                          handleChange
+                        }
                         placeholder="e.g. Product Designer"
                       />
-
                     </div>
 
                   </div>
 
-                  {/* Department */}
+                  {/* DEPARTMENT */}
 
-                  <div className="form-field">
+                  <div className="field-group">
 
                     <label htmlFor="department">
                       Department
                     </label>
 
                     <div className="input-wrapper">
-
                       <FaBuilding />
 
                       <input
@@ -828,37 +845,35 @@ function Profile() {
                         value={
                           form.department
                         }
-                        onChange={handleChange}
+                        onChange={
+                          handleChange
+                        }
                         placeholder="e.g. Engineering"
                       />
-
                     </div>
 
                   </div>
 
-                  {/* Workspace Role */}
+                  {/* ROLE */}
 
-                  <div className="form-field">
+                  <div className="field-group">
 
-                    <label htmlFor="workspace-role">
+                    <label htmlFor="role">
                       Workspace Role
                     </label>
 
                     <div className="input-wrapper disabled">
-
                       <FaShieldAlt />
 
                       <input
-                        id="workspace-role"
+                        id="role"
                         type="text"
                         value={
                           profile.role ||
                           "Team Member"
                         }
                         disabled
-                        readOnly
                       />
-
                     </div>
 
                     <small>
@@ -868,182 +883,161 @@ function Profile() {
 
                   </div>
 
-                  {/* Bio */}
+                </div>
 
-                  <div className="form-field full-width">
+                {/* BIO */}
 
-                    <div className="label-row">
+                <div className="bio-field">
 
-                      <label htmlFor="bio">
-                        About Me
-                      </label>
+                  <div className="bio-label-row">
 
-                      <span>
-                        {form.bio.length}/500
-                      </span>
+                    <label htmlFor="bio">
+                      About Me
+                    </label>
 
-                    </div>
-
-                    <div className="textarea-wrapper">
-
-                      <FaUser />
-
-                      <textarea
-                        id="bio"
-                        name="bio"
-                        value={form.bio}
-                        onChange={(event) => {
-                          const value =
-                            event.target
-                              .value
-                              .slice(
-                                0,
-                                500
-                              );
-
-                          setForm(
-                            (previous) => ({
-                              ...previous,
-                              bio: value,
-                            })
-                          );
-
-                          setMessage("");
-                          setError("");
-                        }}
-                        placeholder="Tell your team a little about yourself..."
-                        maxLength={500}
-                        rows={5}
-                      />
-
-                    </div>
+                    <span>
+                      {form.bio.length}/500
+                    </span>
 
                   </div>
 
-                  {/* Form Buttons */}
+                  <div className="textarea-wrapper">
+                    <FaUser />
 
-                  <div className="form-actions full-width">
-
-                    <button
-                      type="button"
-                      className="profile-secondary-btn form-cancel"
-                      onClick={
-                        handleCancel
+                    <textarea
+                      id="bio"
+                      name="bio"
+                      rows="6"
+                      maxLength="500"
+                      value={form.bio}
+                      onChange={
+                        handleChange
                       }
-                      disabled={saving}
-                    >
-                      <FaTimes />
-                      Cancel
-                    </button>
-
-                    <button
-                      type="submit"
-                      className="profile-primary-btn form-save"
-                      disabled={saving}
-                    >
-                      {saving ? (
-                        <>
-                          <FaSpinner className="spin" />
-                          Saving...
-                        </>
-                      ) : (
-                        <>
-                          <FaSave />
-                          Save Changes
-                        </>
-                      )}
-                    </button>
-
+                      placeholder="Tell your team a little about yourself..."
+                    />
                   </div>
 
-                </form>
+                </div>
 
-              </article>
+                {/* FORM ACTIONS */}
 
-              {/* ==========================================
-                  STATISTICS
-              ========================================== */}
+                <div className="form-actions">
 
-              <div className="profile-stat-card">
+                  <button
+                    type="button"
+                    className="form-cancel"
+                    onClick={handleCancel}
+                    disabled={saving}
+                  >
+                    <FaTimes />
+                    Cancel
+                  </button>
 
-                <div className="profile-stat">
+                  <button
+                    type="submit"
+                    className="form-save"
+                    disabled={saving}
+                  >
+                    <FaSave />
 
-                  <div className="stat-icon purple">
+                    {saving
+                      ? "Saving Changes..."
+                      : "Save Changes"}
+                  </button>
+
+                </div>
+
+              </form>
+
+              {/* =================================
+                  BOTTOM INFO
+              ================================= */}
+
+              <div className="profile-bottom-card">
+
+                <div className="bottom-info">
+
+                  <div className="bottom-icon workspace">
                     <FaBriefcase />
                   </div>
 
                   <div>
-                    <strong>Workspace</strong>
                     <span>
+                      Workspace
+                    </span>
+
+                    <strong>
                       TaskFlow
-                    </span>
+                    </strong>
+
+                    <small>
+                      Active Workspace
+                    </small>
                   </div>
 
                 </div>
 
-                <div className="stat-separator" />
+                <div className="bottom-divider" />
 
-                <div className="profile-stat">
+                <div className="bottom-info">
 
-                  <div className="stat-icon blue">
-                    <FaShieldAlt />
-                  </div>
-
-                  <div>
-                    <strong>Account</strong>
-                    <span>
-                      {profile.status ||
-                        "Active"}
-                    </span>
-                  </div>
-
-                </div>
-
-                <div className="stat-separator" />
-
-                <div className="profile-stat">
-
-                  <div className="stat-icon green">
+                  <div className="bottom-icon verified">
                     <FaCheckCircle />
                   </div>
 
                   <div>
-                    <strong>Verified</strong>
                     <span>
-                      {profile.isVerified
-                        ? "Verified"
-                        : "Active Account"}
+                      Account
                     </span>
+
+                    <strong className="green-text">
+                      {profile.status ||
+                        "Active"}
+                    </strong>
+
+                    <small>
+                      {profile.isVerified
+                        ? "Verified Account"
+                        : "Active Account"}
+                    </small>
                   </div>
 
                 </div>
 
-                <div className="stat-separator" />
+                <div className="bottom-divider" />
 
-                <div className="profile-stat">
+                <div className="bottom-info">
 
-                  <div className="stat-icon orange">
+                  <div className="bottom-icon member">
                     <FaCalendarAlt />
                   </div>
 
                   <div>
-                    <strong>Member Since</strong>
                     <span>
+                      Member Since
+                    </span>
+
+                    <strong>
                       {formatDate(
                         profile.createdAt
                       )}
-                    </span>
+                    </strong>
+
+                    <small>
+                      TaskFlow Member
+                    </small>
                   </div>
 
                 </div>
 
               </div>
 
-            </div>
-          </section>
+            </section>
 
-        </main>
-      </div>
+          </div>
+
+        </div>
+      </main>
     </div>
   );
 }

@@ -32,27 +32,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <UserProvider>
-          <NotificationProvider>
-            <ProjectProvider>
-              <TaskProvider>
-                <App />
-
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  newestOnTop
-                  closeOnClick
-                  pauseOnHover
-                  draggable
-                  theme="colored"
-                />
-              </TaskProvider>
-            </ProjectProvider>
-          </NotificationProvider>
-        </UserProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <UserProvider>
+            <App />
+          </UserProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
