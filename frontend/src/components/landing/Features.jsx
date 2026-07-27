@@ -1,45 +1,37 @@
-// src/components/landing/Features.jsx
-
-import React from "react";
 import { motion } from "framer-motion";
-
 import {
-  FaBell,
-  FaRobot,
-  FaShieldAlt,
-  FaCloud,
-  FaCheckCircle,
-  FaArrowRight,
   FaProjectDiagram,
   FaTasks,
   FaUsers,
   FaChartLine,
   FaBolt,
+  FaShieldAlt,
   FaComments,
   FaCalendarAlt,
-  FaChartBar,
+  FaBell,
+  FaRobot,
+  FaLock,
+  FaCloud,
+  FaCheckCircle,
+  FaArrowRight,
 } from "react-icons/fa";
 
 import "./Features.css";
-/* =========================================================
-   FEATURE DATA
-========================================================= */
 
 const features = [
   {
-    icon: <FaProjectDiagram />,
+    icon: FaProjectDiagram,
     title: "Project Management",
     description:
       "Create, organize and manage multiple projects from one centralized workspace.",
     points: [
       "Unlimited projects",
       "Project progress tracking",
-      "Centralized project workspace",
+      "Centralized workspace",
     ],
   },
-
   {
-    icon: <FaTasks />,
+    icon: FaTasks,
     title: "Smart Task Management",
     description:
       "Break projects into manageable tasks and keep every team member aligned.",
@@ -49,9 +41,8 @@ const features = [
       "Status tracking",
     ],
   },
-
   {
-    icon: <FaUsers />,
+    icon: FaUsers,
     title: "Team Collaboration",
     description:
       "Bring your team together with real-time collaboration and transparent workflows.",
@@ -61,9 +52,8 @@ const features = [
       "Role-based access",
     ],
   },
-
   {
-    icon: <FaChartLine />,
+    icon: FaChartLine,
     title: "Progress Analytics",
     description:
       "Understand project performance with clear dashboards, progress indicators and reports.",
@@ -73,9 +63,8 @@ const features = [
       "Performance insights",
     ],
   },
-
   {
-    icon: <FaBolt />,
+    icon: FaBolt,
     title: "Real-Time Updates",
     description:
       "Stay informed as your team works with fast, real-time updates across the platform.",
@@ -85,9 +74,8 @@ const features = [
       "Real-time status changes",
     ],
   },
-
   {
-    icon: <FaShieldAlt />,
+    icon: FaShieldAlt,
     title: "Enterprise Security",
     description:
       "Keep your projects and team data protected with secure authentication and controlled access.",
@@ -97,9 +85,8 @@ const features = [
       "Role-based permissions",
     ],
   },
-
   {
-    icon: <FaComments />,
+    icon: FaComments,
     title: "Team Communication",
     description:
       "Keep project communication connected to your workflow instead of scattered across different tools.",
@@ -109,9 +96,8 @@ const features = [
       "Workflow visibility",
     ],
   },
-
   {
-    icon: <FaCalendarAlt />,
+    icon: FaCalendarAlt,
     title: "Workflow Planning",
     description:
       "Plan deadlines, organize schedules and keep your team focused on what matters most.",
@@ -121,9 +107,8 @@ const features = [
       "Better project visibility",
     ],
   },
-
   {
-    icon: <FaBell />,
+    icon: FaBell,
     title: "Instant Notifications",
     description:
       "Receive real-time alerts for deadlines, assignments and team activity.",
@@ -133,9 +118,8 @@ const features = [
       "Team activity updates",
     ],
   },
-
   {
-    icon: <FaRobot />,
+    icon: FaRobot,
     title: "AI Productivity",
     description:
       "AI-powered recommendations help teams prioritize tasks and improve efficiency.",
@@ -145,9 +129,8 @@ const features = [
       "Productivity insights",
     ],
   },
-
   {
-    icon: <FaShieldAlt />,
+    icon: FaLock,
     title: "Advanced Protection",
     description:
       "JWT authentication, encrypted data and secure workspaces keep every project protected.",
@@ -157,9 +140,8 @@ const features = [
       "Secure workspaces",
     ],
   },
-
   {
-    icon: <FaCloud />,
+    icon: FaCloud,
     title: "Cloud Workspace",
     description:
       "Access projects securely from anywhere without complicated cloud synchronization.",
@@ -171,289 +153,256 @@ const features = [
   },
 ];
 
-/* =========================================================
-   ANIMATION VARIANTS
-========================================================= */
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.07,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 35,
-  },
-
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      ease: "easeOut",
-    },
-  },
-};
-
-/* =========================================================
-   COMPONENT
-========================================================= */
-
 const Features = () => {
-  const handleExplore = () => {
-    const target =
-      document.getElementById("auth-section") ||
-      document.getElementById("home");
-
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  };
-
   return (
-    <section className="features-section" id="features">
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
+    <section
+      className="features-section"
+      id="features"
+    >
+      <div className="features-background-glow features-glow-one" />
+      <div className="features-background-glow features-glow-two" />
 
-      <motion.div
-        className="features-header"
-        initial={{
-          opacity: 0,
-          y: 35,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        viewport={{
-          once: true,
-          amount: 0.2,
-        }}
-        transition={{
-          duration: 0.65,
-        }}
-      >
-        {/* <span className="section-pill">
-          Everything You Need
-        </span> */}
+      <div className="features-container">
 
-        <h2>
-          Everything You Need
-          <span> To Manage Projects Better.</span>
-        </h2>
+        {/* =====================================================
+            HEADER
+        ===================================================== */}
 
-        <p>
-          TaskFlow brings projects, tasks, teams, communication
-          and analytics together in one intelligent workspace
-          designed for modern teams.
-        </p>
-      </motion.div>
+        <motion.div
+          className="features-header"
+          initial={{
+            opacity: 0,
+            y: 35,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
+        >
+          <span className="features-eyebrow">
+            <span className="features-eyebrow-dot" />
+            POWERFUL FEATURES
+          </span>
 
-      {/* =====================================================
-          FEATURE GRID
-      ====================================================== */}
+          <h2 className="features-title">
+            Everything You Need
+            <br />
+            <span>To Manage Projects Better.</span>
+          </h2>
 
-      <motion.div
-        className="features-grid"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: true,
-          amount: 0.08,
-        }}
-      >
-        {features.map((feature) => (
-          <motion.article
-            className="feature-card"
-            key={feature.title}
-            variants={cardVariants}
-            whileHover={{
-              y: -8,
-              transition: {
-                duration: 0.25,
-                ease: "easeOut",
-              },
-            }}
-          >
-            {/* Icon */}
-            <div className="feature-icon">
-              {feature.icon}
-            </div>
+          <p className="features-subtitle">
+            TaskFlow brings projects, tasks, teams, communication and
+            analytics together in one intelligent workspace designed for
+            modern teams.
+          </p>
+        </motion.div>
 
-            {/* Content */}
-            <div className="feature-content">
-              <h3>{feature.title}</h3>
 
-              <p>{feature.description}</p>
+        {/* =====================================================
+            FEATURE GRID
+        ===================================================== */}
 
-              <ul className="feature-points">
-                {feature.points.map((point) => (
-                  <li key={point}>
-                    <FaCheckCircle />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.article>
-        ))}
-      </motion.div>
+        <div className="features-grid">
 
-      {/* =====================================================
-          PRODUCTIVITY HIGHLIGHT
-      ====================================================== */}
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
 
-      <motion.div
-        className="features-highlight"
-        initial={{
-          opacity: 0,
-          y: 50,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        viewport={{
-          once: true,
-          amount: 0.15,
-        }}
-        transition={{
-          duration: 0.75,
-          ease: "easeOut",
-        }}
-      >
-        <div className="highlight-card">
-          {/* =================================================
-              LEFT SIDE
-          ================================================== */}
+            return (
+              <motion.article
+                className="feature-card"
+                key={feature.title}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.12,
+                }}
+                transition={{
+                  duration: 0.5,
+                  delay: (index % 4) * 0.07,
+                }}
+                whileHover={{
+                  y: -8,
+                }}
+              >
 
-          <div className="highlight-left">
-            <span className="highlight-label">
-              Productivity Platform
+                {/* CARD GLOW */}
+
+                <div className="feature-card-glow" />
+
+
+                {/* TOP */}
+
+                <div className="feature-card-top">
+
+                  <div className="feature-icon">
+                    <Icon />
+                  </div>
+
+                  <span className="feature-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                </div>
+
+
+                {/* CONTENT */}
+
+                <div className="feature-content">
+
+                  <h3>
+                    {feature.title}
+                  </h3>
+
+                  <p>
+                    {feature.description}
+                  </p>
+
+                </div>
+
+
+                {/* POINTS */}
+
+                <ul className="feature-points">
+
+                  {feature.points.map((point) => (
+                    <li key={point}>
+                      <FaCheckCircle />
+
+                      <span>
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+
+                </ul>
+
+
+                {/* BOTTOM */}
+
+                <div className="feature-card-bottom">
+
+                  <span>
+                    Explore feature
+                  </span>
+
+                  <FaArrowRight />
+
+                </div>
+
+              </motion.article>
+            );
+          })}
+
+        </div>
+
+
+        {/* =====================================================
+            FEATURE CTA PANEL
+        ===================================================== */}
+
+        <motion.div
+          className="features-cta"
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
+        >
+
+          <div className="features-cta-content">
+
+            <span className="features-cta-label">
+              PRODUCTIVITY PLATFORM
             </span>
 
-            <h2>
+            <h3>
               One intelligent workspace for
-              <span> every project and every team.</span>
-            </h2>
+              <br />
+              <span>every project and every team.</span>
+            </h3>
 
             <p>
-              Replace spreadsheets, disconnected tools and
-              endless email chains with one collaborative
-              platform designed to help your organization stay
-              organized, productive and on schedule.
+              Replace spreadsheets, disconnected tools and endless email
+              chains with one collaborative platform designed to help your
+              organization stay organized, productive and on schedule.
             </p>
 
-            <div className="highlight-features">
-              <div>
-                <FaCheckCircle />
-                <span>
-                  AI-powered workflow automation
-                </span>
-              </div>
+            <div className="features-cta-points">
 
-              <div>
+              <span>
                 <FaCheckCircle />
-                <span>
-                  Real-time collaboration
-                </span>
-              </div>
+                AI-powered workflow automation
+              </span>
 
-              <div>
+              <span>
                 <FaCheckCircle />
-                <span>
-                  Secure cloud infrastructure
-                </span>
-              </div>
+                Real-time collaboration
+              </span>
+
+              <span>
+                <FaCheckCircle />
+                Secure cloud infrastructure
+              </span>
+
             </div>
 
-            <button
-              type="button"
-              className="highlight-button"
-              onClick={handleExplore}
-            >
-              <span>Explore Platform</span>
-              <FaArrowRight />
-            </button>
           </div>
 
-          {/* =================================================
-              RIGHT SIDE STATS
-          ================================================== */}
 
-          <div className="highlight-right">
-            <motion.div
-              className="mini-stat"
-              whileHover={{
-                y: -5,
-              }}
-            >
-              <span className="mini-stat-number">
-                10K+
-              </span>
+          <div className="features-cta-stats">
 
-              <span className="mini-stat-label">
-                Projects
-              </span>
-            </motion.div>
+            <div className="feature-stat">
+              <strong>10K+</strong>
+              <span>Projects</span>
+            </div>
 
-            <motion.div
-              className="mini-stat"
-              whileHover={{
-                y: -5,
-              }}
-            >
-              <span className="mini-stat-number">
-                50K+
-              </span>
+            <div className="feature-stat">
+              <strong>50K+</strong>
+              <span>Tasks Managed</span>
+            </div>
 
-              <span className="mini-stat-label">
-                Tasks Managed
-              </span>
-            </motion.div>
+            <div className="feature-stat">
+              <strong>99.9%</strong>
+              <span>System Uptime</span>
+            </div>
 
-            <motion.div
-              className="mini-stat"
-              whileHover={{
-                y: -5,
-              }}
-            >
-              <span className="mini-stat-number">
-                99.9%
-              </span>
+            <div className="feature-stat">
+              <strong>24/7</strong>
+              <span>Support</span>
+            </div>
 
-              <span className="mini-stat-label">
-                System Uptime
-              </span>
-            </motion.div>
-
-            <motion.div
-              className="mini-stat"
-              whileHover={{
-                y: -5,
-              }}
-            >
-              <span className="mini-stat-number">
-                24/7
-              </span>
-
-              <span className="mini-stat-label">
-                Support
-              </span>
-            </motion.div>
           </div>
-        </div>
-      </motion.div>
+
+
+          <div className="features-cta-shine" />
+
+        </motion.div>
+
+      </div>
     </section>
   );
 };
