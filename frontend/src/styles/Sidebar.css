@@ -1,184 +1,198 @@
 /* =========================================================
-   TASKFLOW PREMIUM SIDEBAR
+   CLICKABLE PROFILE CARD
 ========================================================= */
 
-:root {
-  --tf-sidebar-width: 260px;
-  --tf-sidebar-collapsed: 84px;
+.sidebar-user-card {
+  width: calc(100% - 24px);
 
-  --tf-sidebar-bg: #0b1220;
-  --tf-sidebar-bg-2: #0f172a;
+  margin: 12px;
 
-  --tf-sidebar-border:
-    rgba(255, 255, 255, 0.07);
-
-  --tf-sidebar-text: #cbd5e1;
-  --tf-sidebar-muted: #64748b;
-
-  --tf-primary: #6366f1;
-  --tf-primary-2: #8b5cf6;
-}
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-  bottom: 0;
-
-  z-index: 1000;
-
-  display: flex;
-  flex-direction: column;
-
-  width: var(--tf-sidebar-width);
-
-  overflow: hidden;
-
-  color: var(--tf-sidebar-text);
-
-  background:
-    radial-gradient(
-      circle at 0% 0%,
-      rgba(99, 102, 241, 0.14),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 100% 100%,
-      rgba(6, 182, 212, 0.07),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #0b1220 0%,
-      #0d1525 50%,
-      #0a1120 100%
-    );
-
-  border-right:
-    1px solid
-    var(--tf-sidebar-border);
-
-  box-shadow:
-    18px 0 50px
-    rgba(2, 6, 23, 0.16);
-
-  transition:
-    width 0.3s
-    cubic-bezier(0.4, 0, 0.2, 1);
-
-  isolation: isolate;
-}
-
-/* =========================================================
-   SIDEBAR BACKGROUND GRID
-========================================================= */
-
-.sidebar::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  z-index: -1;
-
-  opacity: 0.22;
-
-  background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.025)
-      1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.025)
-      1px,
-      transparent 1px
-    );
-
-  background-size:
-    28px 28px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 90%
-    );
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.sidebar-header {
-  height: 82px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 16px;
-
-  border-bottom:
-    1px solid
-    rgba(255, 255, 255, 0.055);
-}
-
-/* =========================================================
-   TASKFLOW BRAND BUTTON
-========================================================= */
-
-.sidebar-brand-button {
-  width: 100%;
+  padding: 12px;
 
   display: flex;
   align-items: center;
 
   gap: 12px;
 
-  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
-  border: none;
+  border-radius: 16px;
 
-  color: inherit;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.025)
+    );
 
-  background: transparent;
+  color: #ffffff;
 
   cursor: pointer;
 
   text-align: left;
+
+  appearance: none;
+
+  -webkit-appearance: none;
+
+  box-shadow:
+    0 8px 25px
+    rgba(0, 0, 0, 0.12);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
 
-/*
-   IMPORTANT:
-   The logo itself is now the collapse / expand trigger.
-*/
+.sidebar-user-card:hover {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.18),
+      rgba(255, 255, 255, 0.05)
+    );
 
-.brand-logo {
-  position: relative;
+  border-color:
+    rgba(129, 140, 248, 0.3);
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-user-card.profile-active {
+  border-color:
+    rgba(99, 102, 241, 0.5);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.2),
+      rgba(99, 102, 241, 0.07)
+    );
+
+  box-shadow:
+    0 10px 30px
+    rgba(99, 102, 241, 0.15);
+}
+
+/* =========================================================
+   USER INFO
+========================================================= */
+
+.sidebar-user-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.sidebar-user-text {
+  min-width: 0;
+}
+
+.sidebar-user-card h4 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #f8fafc;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-card span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: capitalize;
+}
+
+.profile-arrow {
+  flex-shrink: 0;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.sidebar-user-card:hover
+.profile-arrow {
+  color: #a5b4fc;
+
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   COLLAPSED PROFILE
+========================================================= */
+
+.sidebar.collapsed
+.sidebar-user-card {
+  width: 61px;
+
+  margin: 12px;
+
+  padding: 8px;
+
+  justify-content: center;
+}
+
+.sidebar.collapsed
+.sidebar-user-card:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.sidebar-avatar {
+  width: 42px;
+  height: 42px;
 
   flex-shrink: 0;
 
-  width: 46px;
-  height: 46px;
+  border-radius: 13px;
 
-  display: grid;
-  place-items: center;
+  object-fit: cover;
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.14);
+    rgba(255, 255, 255, 0.15);
 
-  border-radius: 14px;
+  box-shadow:
+    0 5px 18px
+    rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-avatar.initials {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   color: #ffffff;
 
@@ -189,759 +203,6 @@
       #8b5cf6
     );
 
-  box-shadow:
-    0 10px 28px
-    rgba(99, 102, 241, 0.32),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.22);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.brand-logo::after {
-  content: "";
-
-  position: absolute;
-
-  inset: -4px;
-
-  border-radius: 17px;
-
-  border:
-    1px solid
-    rgba(129, 140, 248, 0.16);
-
-  opacity: 0;
-
-  transition: opacity 0.25s ease;
-}
-
-.sidebar-brand-button:hover
-.brand-logo {
-  box-shadow:
-    0 14px 35px
-    rgba(99, 102, 241, 0.45),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.25);
-}
-
-.sidebar-brand-button:hover
-.brand-logo::after {
-  opacity: 1;
-}
-
-.brand-logo span {
-  font-size: 15px;
-
-  font-weight: 900;
-
-  letter-spacing: -0.5px;
-}
-
-/* =========================================================
-   BRAND CONTENT
-========================================================= */
-
-.brand-content {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  line-height: 1;
-}
-
-.brand-content strong {
-  color: #ffffff;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  letter-spacing: -0.4px;
-}
-
-.brand-content span {
-  margin-top: 5px;
-
-  color: #64748b;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: 1.3px;
-
-  text-transform: uppercase;
-}
-
-/* =========================================================
-   DIVIDER
-========================================================= */
-
-.sidebar-divider {
-  height: 1px;
-
-  flex-shrink: 0;
-
-  margin: 0 16px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.08),
-      transparent
-    );
-}
-
-/* =========================================================
-   USER CARD
-========================================================= */
-
-.sidebar-user-card {
-  min-height: 74px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  margin: 16px 12px 10px;
-
-  padding: 11px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.055);
-
-  border-radius: 16px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  box-shadow:
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.025);
-}
-
-.sidebar-avatar {
-  width: 42px;
-  height: 42px;
-
-  flex-shrink: 0;
-
-  object-fit: cover;
-
-  border-radius: 13px;
-
-  border:
-    2px solid
-    rgba(129, 140, 248, 0.35);
-}
-
-.sidebar-avatar.initials {
-  display: grid;
-  place-items: center;
-
-  color: #ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #334155,
-      #1e293b
-    );
-
   font-size: 13px;
-
   font-weight: 800;
-}
-
-.sidebar-user-info {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-user-info strong {
-  overflow: hidden;
-
-  color: #f8fafc;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-}
-
-.sidebar-user-info span {
-  margin-top: 5px;
-
-  color: #64748b;
-
-  font-size: 10px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.6px;
-
-  text-transform: uppercase;
-}
-
-/* =========================================================
-   SECTION LABEL
-========================================================= */
-
-.sidebar-section-label {
-  padding:
-    12px
-    22px
-    8px;
-
-  color: #475569;
-
-  font-size: 9px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.5px;
-}
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-.sidebar-menu {
-  flex: 1;
-
-  min-height: 0;
-
-  padding:
-    5px
-    12px;
-
-  overflow-y: auto;
-
-  overflow-x: hidden;
-
-  scrollbar-width: none;
-}
-
-.sidebar-menu::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================================================
-   NAV LINK
-========================================================= */
-
-.sidebar-menu a {
-  position: relative;
-
-  min-height: 48px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  margin-bottom: 4px;
-
-  padding:
-    0
-    13px;
-
-  overflow: hidden;
-
-  border:
-    1px solid
-    transparent;
-
-  border-radius: 14px;
-
-  color: #7f8da5;
-
-  text-decoration: none;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.sidebar-menu a:hover {
-  color: #e2e8f0;
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  border-color:
-    rgba(255, 255, 255, 0.045);
-
-  transform: translateX(2px);
-}
-
-/* =========================================================
-   ACTIVE LINK
-========================================================= */
-
-.sidebar-menu a.active {
-  color: #ffffff;
-
-  border-color:
-    rgba(129, 140, 248, 0.18);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(99, 102, 241, 0.22),
-      rgba(99, 102, 241, 0.08)
-    );
-
-  box-shadow:
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.035),
-    0 8px 24px
-    rgba(15, 23, 42, 0.18);
-}
-
-/* =========================================================
-   ACTIVE INDICATOR
-========================================================= */
-
-.sidebar-active-indicator {
-  position: absolute;
-
-  right: 0;
-
-  top: 10px;
-  bottom: 10px;
-
-  width: 3px;
-
-  border-radius: 5px 0 0 5px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #818cf8,
-      #6366f1
-    );
-
-  box-shadow:
-    0 0 14px
-    rgba(99, 102, 241, 0.7);
-}
-
-/* =========================================================
-   ICON
-========================================================= */
-
-.sidebar-icon {
-  width: 21px;
-  height: 21px;
-
-  flex-shrink: 0;
-
-  display: grid;
-  place-items: center;
-
-  font-size: 15px;
-
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease;
-}
-
-.sidebar-menu a:hover
-.sidebar-icon {
-  transform: scale(1.08);
-}
-
-.sidebar-menu a.active
-.sidebar-icon {
-  color: #818cf8;
-}
-
-/* =========================================================
-   LINK TEXT
-========================================================= */
-
-.sidebar-link-text {
-  overflow: hidden;
-
-  font-size: 12px;
-
-  font-weight: 650;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
-}
-
-/* =========================================================
-   BOTTOM
-========================================================= */
-
-.sidebar-bottom {
-  flex-shrink: 0;
-
-  padding:
-    12px;
-
-  border-top:
-    1px solid
-    rgba(255, 255, 255, 0.055);
-
-  background:
-    rgba(2, 6, 23, 0.16);
-}
-
-/* =========================================================
-   COLLAPSE BUTTON
-========================================================= */
-
-.sidebar-collapse-button {
-  width: 100%;
-
-  min-height: 42px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  padding:
-    0
-    13px;
-
-  margin-bottom: 7px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.05);
-
-  border-radius: 12px;
-
-  color: #64748b;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  cursor: pointer;
-
-  font-size: 11px;
-
-  font-weight: 650;
-
-  text-align: left;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.sidebar-collapse-button:hover {
-  color: #cbd5e1;
-
-  background:
-    rgba(255, 255, 255, 0.055);
-
-  border-color:
-    rgba(255, 255, 255, 0.08);
-}
-
-.collapse-icon {
-  width: 21px;
-
-  display: grid;
-  place-items: center;
-
-  flex-shrink: 0;
-}
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-.logout-btn {
-  width: 100%;
-
-  min-height: 46px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  padding:
-    0
-    13px;
-
-  border:
-    1px solid
-    rgba(248, 113, 113, 0.08);
-
-  border-radius: 13px;
-
-  color: #94a3b8;
-
-  background:
-    rgba(248, 113, 113, 0.025);
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  font-weight: 650;
-
-  text-align: left;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.logout-btn:hover {
-  color: #fca5a5;
-
-  border-color:
-    rgba(248, 113, 113, 0.18);
-
-  background:
-    rgba(248, 113, 113, 0.07);
-}
-
-.logout-icon {
-  width: 21px;
-
-  display: grid;
-  place-items: center;
-
-  flex-shrink: 0;
-}
-
-/* =========================================================
-   CLOSE MOBILE
-========================================================= */
-
-.close-sidebar {
-  width: 34px;
-  height: 34px;
-
-  display: grid;
-  place-items: center;
-
-  flex-shrink: 0;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.07);
-
-  border-radius: 10px;
-
-  color: #94a3b8;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  cursor: pointer;
-
-  font-size: 13px;
-}
-
-.close-sidebar:hover {
-  color: #ffffff;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-}
-
-/* =========================================================
-   COLLAPSED MODE
-========================================================= */
-
-.sidebar.collapsed {
-  width: var(--tf-sidebar-collapsed);
-}
-
-.sidebar.collapsed
-.sidebar-header {
-  justify-content: center;
-
-  padding:
-    0
-    10px;
-}
-
-.sidebar.collapsed
-.sidebar-brand-button {
-  width: auto;
-
-  justify-content: center;
-}
-
-.sidebar.collapsed
-.sidebar-user-card {
-  justify-content: center;
-
-  margin:
-    16px
-    10px;
-
-  padding: 8px;
-}
-
-.sidebar.collapsed
-.sidebar-menu {
-  padding:
-    5px
-    10px;
-}
-
-.sidebar.collapsed
-.sidebar-menu a {
-  justify-content: center;
-
-  padding:
-    0;
-
-  gap: 0;
-}
-
-.sidebar.collapsed
-.sidebar-icon {
-  width: 100%;
-
-  font-size: 16px;
-}
-
-.sidebar.collapsed
-.sidebar-bottom {
-  padding:
-    10px;
-}
-
-.sidebar.collapsed
-.sidebar-collapse-button,
-.sidebar.collapsed
-.logout-btn {
-  justify-content: center;
-
-  padding:
-    0;
-}
-
-.sidebar.collapsed
-.sidebar-collapse-button {
-  min-height: 42px;
-}
-
-.sidebar.collapsed
-.logout-btn {
-  min-height: 46px;
-}
-
-/* =========================================================
-   OVERLAY
-========================================================= */
-
-.sidebar-overlay {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 999;
-
-  background:
-    rgba(2, 6, 23, 0.55);
-
-  backdrop-filter:
-    blur(5px);
-}
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 992px) {
-
-  .sidebar {
-    width: 84px;
-  }
-
-  .sidebar.expanded {
-    width: 260px;
-  }
-
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
-  .sidebar {
-    width: 0;
-
-    border-right: none;
-
-    box-shadow:
-      20px 0 60px
-      rgba(2, 6, 23, 0.35);
-  }
-
-  .sidebar.expanded {
-    width: 270px;
-  }
-
-  .sidebar.collapsed {
-    width: 0;
-  }
-
-  .sidebar-header {
-    padding:
-      0
-      16px;
-  }
-
-  .sidebar-menu {
-    padding:
-      5px
-      14px;
-  }
-
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-  .sidebar.expanded {
-    width: 285px;
-  }
-
-  .sidebar-user-card {
-    margin:
-      14px
-      12px;
-  }
-
 }
