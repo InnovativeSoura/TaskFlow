@@ -1,5 +1,3 @@
-// src/api/axios.js
-
 import axios from "axios";
 
 /* ==========================================
@@ -10,32 +8,13 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000";
 
-/*
-  Supports both:
-
-  VITE_API_URL=http://localhost:5000
-
-  and
-
-  VITE_API_URL=http://localhost:5000/api
-*/
-
 const BASE_URL = API_URL.endsWith("/api")
   ? API_URL
-  : `${API_URL.replace(/\/+$/, "")}/api`;
+  : `${API_URL}/api`;
 
-console.log(
-  "===================================="
-);
-
-console.log(
-  "🌐 API Base URL:",
-  BASE_URL
-);
-
-console.log(
-  "===================================="
-);
+console.log("====================================");
+console.log("🌐 API Base URL:", BASE_URL);
+console.log("====================================");
 
 /* ==========================================
    AXIOS INSTANCE
@@ -43,14 +22,11 @@ console.log(
 
 const api = axios.create({
   baseURL: BASE_URL,
-
   withCredentials: false,
-
   timeout: 15000,
 
   headers: {
-    "Content-Type":
-      "application/json",
+    "Content-Type": "application/json",
   },
 });
 
@@ -64,38 +40,29 @@ api.interceptors.request.use(
       localStorage.getItem("token");
 
     if (token) {
-      config.headers =
-        config.headers || {};
+      config.headers = config.headers || {};
 
       config.headers.Authorization =
         `Bearer ${token}`;
     }
 
     console.log(
-      `🚀 ${
-        config.method?.toUpperCase()
-      } ${config.baseURL}${config.url}`
+      `🚀 ${config.method?.toUpperCase()} ${
+        config.baseURL
+      }${config.url}`
     );
 
     console.log(
       "🔑 Token:",
-      token
-        ? "Present"
-        : "Missing"
+      token ? "Present" : "Missing"
     );
-
-    if (config.data) {
-      console.log(
-        "📤 Request Body:",
-        config.data
-      );
-    }
 
     return config;
   },
 
-  (error) =>
-    Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 /* ==========================================
@@ -126,32 +93,20 @@ api.interceptors.response.use(
     );
 
     /*
-      Do not remove authentication
-      for login/register failures.
-    */
+     * Do not clear authentication for
+     * login/register failures.
+     */
 
-    const publicAuthRoutes = [
-      "/auth/login",
-      "/auth/register",
-    ];
-
-    const isPublicAuthRoute =
-      publicAuthRoutes.some(
-        (route) =>
-          url.includes(route)
-      );
-
-    /*
-      If a protected endpoint returns
-      401, remove the stale token.
-    */
+    const isAuthRoute =
+      url.includes("/auth/login") ||
+      url.includes("/auth/register");
 
     if (
       status === 401 &&
-      !isPublicAuthRoute
+      !isAuthRoute
     ) {
       console.warn(
-        "⚠ Session expired or token invalid."
+        "⚠ Session expired."
       );
 
       localStorage.removeItem(

@@ -1,5 +1,3 @@
-// backend/routes/userRoutes.js
-
 import express from "express";
 
 import {
@@ -31,15 +29,10 @@ const router = express.Router();
 router.use(protect);
 
 /* ==========================================
-   LOGGED-IN USER PROFILE
-========================================== */
-
-/*
+   CURRENT LOGGED-IN USER
    IMPORTANT:
-   These routes must appear BEFORE /:id
-   because "profile" would otherwise be
-   interpreted as an ID.
-*/
+   These MUST come before /:id
+========================================== */
 
 router.get(
   "/profile",
@@ -52,8 +45,10 @@ router.put(
 );
 
 /* ==========================================
-   ALL AUTHENTICATED USERS
+   USER ROUTES
 ========================================== */
+
+/* All authenticated users */
 
 router.get(
   "/",
@@ -64,10 +59,6 @@ router.get(
   "/search",
   searchUsers
 );
-
-/* ==========================================
-   USER BY ID
-========================================== */
 
 router.get(
   "/:id",
