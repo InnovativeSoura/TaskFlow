@@ -14,6 +14,7 @@ import {
   FaCloud,
   FaCheckCircle,
   FaArrowRight,
+  FaLayerGroup,
 } from "react-icons/fa";
 
 import "./Features.css";
@@ -154,19 +155,35 @@ const features = [
 ];
 
 const Features = () => {
+  const handleExplorePlatform = () => {
+    window.dispatchEvent(
+      new CustomEvent("taskflow-scroll-auth", {
+        detail: {
+          mode: "login",
+        },
+      })
+    );
+
+    setTimeout(() => {
+      document
+        .getElementById("auth")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+    }, 100);
+  };
+
   return (
     <section
       className="features-section"
       id="features"
     >
-      <div className="features-background-glow features-glow-one" />
-      <div className="features-background-glow features-glow-two" />
-
       <div className="features-container">
 
-        {/* =====================================================
-            HEADER
-        ===================================================== */}
+        {/* =========================================
+            SECTION HEADER
+        ========================================== */}
 
         <motion.div
           className="features-header"
@@ -187,30 +204,26 @@ const Features = () => {
           }}
         >
           <span className="features-eyebrow">
-            <span className="features-eyebrow-dot" />
-            POWERFUL FEATURES
+            POWERFUL WORKSPACE
           </span>
 
-          <h2 className="features-title">
-            Everything You Need
-            <br />
+          <h2>
+            Everything You Need{" "}
             <span>To Manage Projects Better.</span>
           </h2>
 
-          <p className="features-subtitle">
+          <p>
             TaskFlow brings projects, tasks, teams, communication and
-            analytics together in one intelligent workspace designed for
-            modern teams.
+            analytics together in one intelligent workspace designed
+            for modern teams.
           </p>
         </motion.div>
 
-
-        {/* =====================================================
+        {/* =========================================
             FEATURE GRID
-        ===================================================== */}
+        ========================================== */}
 
         <div className="features-grid">
-
           {features.map((feature, index) => {
             const Icon = feature.icon;
 
@@ -220,7 +233,7 @@ const Features = () => {
                 key={feature.title}
                 initial={{
                   opacity: 0,
-                  y: 30,
+                  y: 35,
                 }}
                 whileInView={{
                   opacity: 1,
@@ -231,94 +244,47 @@ const Features = () => {
                   amount: 0.12,
                 }}
                 transition={{
-                  duration: 0.5,
-                  delay: (index % 4) * 0.07,
+                  duration: 0.55,
+                  delay: Math.min(index * 0.035, 0.3),
                 }}
                 whileHover={{
                   y: -8,
                 }}
               >
-
-                {/* CARD GLOW */}
-
                 <div className="feature-card-glow" />
 
-
-                {/* TOP */}
-
-                <div className="feature-card-top">
-
-                  <div className="feature-icon">
-                    <Icon />
-                  </div>
-
-                  <span className="feature-number">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
+                <div className="feature-icon">
+                  <Icon />
                 </div>
 
+                <h3>{feature.title}</h3>
 
-                {/* CONTENT */}
+                <p className="feature-description">
+                  {feature.description}
+                </p>
 
-                <div className="feature-content">
-
-                  <h3>
-                    {feature.title}
-                  </h3>
-
-                  <p>
-                    {feature.description}
-                  </p>
-
-                </div>
-
-
-                {/* POINTS */}
-
-                <ul className="feature-points">
-
+                <ul>
                   {feature.points.map((point) => (
                     <li key={point}>
                       <FaCheckCircle />
-
-                      <span>
-                        {point}
-                      </span>
+                      <span>{point}</span>
                     </li>
                   ))}
-
                 </ul>
-
-
-                {/* BOTTOM */}
-
-                <div className="feature-card-bottom">
-
-                  <span>
-                    Explore feature
-                  </span>
-
-                  <FaArrowRight />
-
-                </div>
-
               </motion.article>
             );
           })}
-
         </div>
 
-
-        {/* =====================================================
-            FEATURE CTA PANEL
-        ===================================================== */}
+        {/* =========================================
+            PRODUCTIVITY PLATFORM
+        ========================================== */}
 
         <motion.div
-          className="features-cta"
+          className="productivity-platform"
           initial={{
             opacity: 0,
-            y: 40,
+            y: 45,
           }}
           whileInView={{
             opacity: 1,
@@ -326,33 +292,37 @@ const Features = () => {
           }}
           viewport={{
             once: true,
-            amount: 0.2,
+            amount: 0.15,
           }}
           transition={{
-            duration: 0.7,
+            duration: 0.8,
           }}
         >
+          <div className="productivity-background-glow" />
 
-          <div className="features-cta-content">
+          {/* LEFT CONTENT */}
 
-            <span className="features-cta-label">
+          <div className="productivity-content">
+            <span className="productivity-eyebrow">
+              <FaLayerGroup />
               PRODUCTIVITY PLATFORM
             </span>
 
-            <h3>
-              One intelligent workspace for
-              <br />
-              <span>every project and every team.</span>
-            </h3>
+            <h2>
+              One intelligent workspace for{" "}
+              <span>
+                every project and every team.
+              </span>
+            </h2>
 
             <p>
-              Replace spreadsheets, disconnected tools and endless email
-              chains with one collaborative platform designed to help your
-              organization stay organized, productive and on schedule.
+              Replace spreadsheets, disconnected tools and endless
+              email chains with one collaborative platform designed
+              to help your organization stay organized, productive
+              and on schedule.
             </p>
 
-            <div className="features-cta-points">
-
+            <div className="productivity-benefits">
               <span>
                 <FaCheckCircle />
                 AI-powered workflow automation
@@ -367,41 +337,73 @@ const Features = () => {
                 <FaCheckCircle />
                 Secure cloud infrastructure
               </span>
-
             </div>
 
+            <button
+              type="button"
+              className="productivity-button"
+              onClick={handleExplorePlatform}
+            >
+              <span>Explore Platform</span>
+              <FaArrowRight />
+            </button>
           </div>
 
+          {/* CENTER VISUAL */}
 
-          <div className="features-cta-stats">
+          <div className="productivity-visual">
+            <div className="visual-orbit orbit-one" />
+            <div className="visual-orbit orbit-two" />
 
-            <div className="feature-stat">
+            <div className="visual-line line-one" />
+            <div className="visual-line line-two" />
+            <div className="visual-line line-three" />
+
+            <div className="visual-center">
+              <FaLayerGroup />
+            </div>
+
+            <div className="visual-node node-one">
+              <FaUsers />
+            </div>
+
+            <div className="visual-node node-two">
+              <FaChartLine />
+            </div>
+
+            <div className="visual-node node-three">
+              <FaTasks />
+            </div>
+
+            <div className="visual-node node-four">
+              <FaCloud />
+            </div>
+          </div>
+
+          {/* RIGHT STATS */}
+
+          <div className="productivity-stats">
+            <div className="productivity-stat">
               <strong>10K+</strong>
               <span>Projects</span>
             </div>
 
-            <div className="feature-stat">
+            <div className="productivity-stat">
               <strong>50K+</strong>
               <span>Tasks Managed</span>
             </div>
 
-            <div className="feature-stat">
+            <div className="productivity-stat">
               <strong>99.9%</strong>
               <span>System Uptime</span>
             </div>
 
-            <div className="feature-stat">
+            <div className="productivity-stat">
               <strong>24/7</strong>
               <span>Support</span>
             </div>
-
           </div>
-
-
-          <div className="features-cta-shine" />
-
         </motion.div>
-
       </div>
     </section>
   );
