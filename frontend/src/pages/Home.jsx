@@ -17,13 +17,13 @@ const Home = () => {
     <div className="landing-page">
 
       {/* =====================================================
-          GLOBAL ANIMATED BACKGROUND
-          Stays behind every section
+          GLOBAL BACKGROUND
+          Rendered once and stays behind the complete landing page
       ===================================================== */}
       <BackgroundAnimation />
 
       {/* =====================================================
-          FIXED LANDING NAVBAR
+          LANDING NAVBAR
       ===================================================== */}
       <LandingNavbar />
 
@@ -33,58 +33,58 @@ const Home = () => {
       <main className="landing-main">
 
         {/* ===================================================
-            HERO
+            HERO SECTION
         =================================================== */}
-        <div
+        <section
           id="home"
           className="landing-section landing-hero-section"
         >
           <Hero />
-        </div>
+        </section>
 
 
         {/* ===================================================
-            STATISTICS
+            STATISTICS SECTION
         =================================================== */}
-        <div
+        <section
           id="statistics"
           className="landing-section landing-statistics-section"
         >
           <Statistics />
-        </div>
+        </section>
 
 
         {/* ===================================================
-            FEATURES
+            FEATURES SECTION
         =================================================== */}
-        <div
+        <section
           id="features"
           className="landing-section landing-features-section"
         >
           <Features />
-        </div>
+        </section>
 
 
         {/* ===================================================
-            TESTIMONIALS
+            TESTIMONIALS SECTION
         =================================================== */}
-        <div
+        <section
           id="testimonials"
           className="landing-section landing-testimonials-section"
         >
           <Testimonials />
-        </div>
+        </section>
 
 
         {/* ===================================================
-            CTA
+            CTA SECTION
         =================================================== */}
-        <div
+        <section
           id="contact"
           className="landing-section landing-cta-section"
         >
           <CTA />
-        </div>
+        </section>
 
       </main>
 

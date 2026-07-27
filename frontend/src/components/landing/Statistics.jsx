@@ -1,5 +1,8 @@
+// src/components/landing/Statistics.jsx
+
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+
 import {
   FaUsers,
   FaFolderOpen,
@@ -8,9 +11,15 @@ import {
   FaLock,
   FaGlobe,
   FaClock,
+  FaArrowUp,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 import "./Statistics.css";
+
+/* =========================================================
+   PRIMARY STATISTICS
+========================================================= */
 
 const statistics = [
   {
@@ -19,7 +28,7 @@ const statistics = [
     suffix: "+",
     label: "Active Teams",
     description:
-      "Teams collaborating daily using TaskFlow.",
+      "Teams collaborating every day with TaskFlow.",
   },
   {
     icon: <FaFolderOpen />,
@@ -27,7 +36,7 @@ const statistics = [
     suffix: "+",
     label: "Projects Created",
     description:
-      "Projects successfully managed worldwide.",
+      "Projects planned, organized and delivered worldwide.",
   },
   {
     icon: <FaTasks />,
@@ -35,7 +44,7 @@ const statistics = [
     suffix: "+",
     label: "Tasks Completed",
     description:
-      "Completed tasks delivered on schedule.",
+      "Tasks completed efficiently and delivered on schedule.",
   },
   {
     icon: <FaChartLine />,
@@ -43,9 +52,14 @@ const statistics = [
     suffix: "%",
     label: "Platform Uptime",
     description:
-      "Reliable cloud infrastructure you can trust.",
+      "Reliable infrastructure built for teams that move fast.",
+    decimals: 1,
   },
 ];
+
+/* =========================================================
+   TRUSTED COMPANIES
+========================================================= */
 
 const companies = [
   "Google",
@@ -56,14 +70,60 @@ const companies = [
   "IBM",
 ];
 
-function Counter({ end, suffix = "", decimals = 0 }) {
+/* =========================================================
+   SECONDARY METRICS
+========================================================= */
+
+const secondaryStats = [
+  {
+    icon: <FaArrowUp />,
+    value: "95%",
+    label: "Productivity Increase",
+    description:
+      "Average productivity improvement after adopting TaskFlow.",
+  },
+  {
+    icon: <FaLock />,
+    value: "100%",
+    label: "Secure Workflows",
+    description:
+      "Protected authentication and secure project management.",
+  },
+  {
+    icon: <FaGlobe />,
+    value: "80+",
+    label: "Countries Reached",
+    description:
+      "Teams around the world use TaskFlow every day.",
+  },
+  {
+    icon: <FaClock />,
+    value: "24/7",
+    label: "Always Available",
+    description:
+      "Continuous monitoring and dependable cloud availability.",
+  },
+];
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+function Counter({
+  end,
+  suffix = "",
+  decimals = 0,
+}) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     let current = 0;
 
     const duration = 1800;
-    const increment = end / (duration / 20);
+    const intervalTime = 20;
+    const steps = duration / intervalTime;
+
+    const increment = end / steps;
 
     const timer = setInterval(() => {
       current += increment;
@@ -74,18 +134,25 @@ function Counter({ end, suffix = "", decimals = 0 }) {
       }
 
       setCount(current);
-    }, 20);
+    }, intervalTime);
 
     return () => clearInterval(timer);
   }, [end]);
 
   return (
     <>
-      {decimals ? count.toFixed(decimals) : Math.floor(count)}
+      {decimals
+        ? count.toFixed(decimals)
+        : Math.floor(count)}
+
       {suffix}
     </>
   );
 }
+
+/* =========================================================
+   STATISTICS COMPONENT
+========================================================= */
 
 function Statistics() {
   return (
@@ -93,135 +160,282 @@ function Statistics() {
       id="statistics"
       className="statistics-section"
     >
+      {/* =====================================================
+          DECORATIVE BACKGROUND
+      ===================================================== */}
+
+      <div className="statistics-orb statistics-orb-one" />
+      <div className="statistics-orb statistics-orb-two" />
+
+      {/* =====================================================
+          SECTION HEADER
+      ===================================================== */}
+
       <motion.div
-        className="section-heading"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
+        className="statistics-heading"
+        initial={{
+          opacity: 0,
+          y: 35,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        transition={{
+          duration: 0.8,
+          ease: "easeOut",
+        }}
       >
-        <span className="section-tag">
+        <span className="statistics-eyebrow">
+          <span className="eyebrow-dot" />
           Trusted Worldwide
         </span>
 
         <h2>
-          Numbers that demonstrate productivity at scale
+          Numbers that show
+          <br />
+
+          <span>
+            how TaskFlow gets work done.
+          </span>
         </h2>
 
         <p>
-          Thousands of organizations rely on TaskFlow every day to
-          plan, collaborate and deliver projects faster.
+          From growing startups to established teams,
+          TaskFlow helps organizations plan smarter,
+          collaborate faster and deliver better results.
         </p>
+
+        <div className="heading-divider">
+          <span />
+          <span />
+          <span />
+        </div>
       </motion.div>
+
+      {/* =====================================================
+          PRIMARY STATISTICS
+      ===================================================== */}
 
       <div className="statistics-grid">
         {statistics.map((item, index) => (
-          <motion.div
+          <motion.article
             key={item.label}
             className="statistics-card"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              delay: index * 0.12,
-              duration: 0.6,
+            initial={{
+              opacity: 0,
+              y: 45,
             }}
-            whileHover={{ y: -10 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
+            transition={{
+              delay: index * 0.1,
+              duration: 0.65,
+              ease: "easeOut",
+            }}
+            whileHover={{
+              y: -12,
+            }}
           >
+            {/* Top glow */}
+
+            <div className="card-glow" />
+
+            {/* Icon */}
+
             <div className="statistics-icon">
               {item.icon}
             </div>
 
-            <h2>
+            {/* Number */}
+
+            <h3>
               <Counter
                 end={item.value}
                 suffix={item.suffix}
-                decimals={item.value % 1 ? 1 : 0}
+                decimals={item.decimals || 0}
               />
-            </h2>
+            </h3>
 
-            <h4>{item.label}</h4>
+            {/* Label */}
 
-            <p>{item.description}</p>
-          </motion.div>
+            <h4>
+              {item.label}
+            </h4>
+
+            {/* Description */}
+
+            <p>
+              {item.description}
+            </p>
+
+            {/* Bottom accent */}
+
+            <div className="card-accent">
+              <span />
+            </div>
+          </motion.article>
         ))}
       </div>
 
+      {/* =====================================================
+          TRUSTED COMPANIES
+      ===================================================== */}
+
       <motion.div
         className="trusted-companies"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={{
+          opacity: 0,
+          y: 25,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
       >
-        <p>
-          Trusted by innovative companies across the globe
-        </p>
+        <div className="trusted-label">
+          <span className="trusted-line" />
+
+          <span>
+            Trusted by innovative teams worldwide
+          </span>
+
+          <span className="trusted-line" />
+        </div>
 
         <div className="company-grid">
-          {companies.map((company) => (
-            <motion.span
+          {companies.map((company, index) => (
+            <motion.div
               key={company}
-              whileHover={{ scale: 1.05 }}
+              className="company-pill"
+              whileHover={{
+                y: -5,
+                scale: 1.03,
+              }}
+              transition={{
+                duration: 0.25,
+              }}
             >
+              <span className="company-dot" />
+
               {company}
-            </motion.span>
+            </motion.div>
           ))}
         </div>
       </motion.div>
 
+      {/* =====================================================
+          SECONDARY METRICS
+      ===================================================== */}
+
       <motion.div
-        className="statistics-grid"
-        style={{ marginTop: "70px" }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
+        className="secondary-statistics"
+        initial={{
+          opacity: 0,
+          y: 45,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.1,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
       >
-        <div className="statistics-card">
-          <div className="statistics-icon">
-            <FaChartLine />
-          </div>
+        {secondaryStats.map((item, index) => (
+          <motion.div
+            key={item.label}
+            className="secondary-card"
+            whileHover={{
+              y: -8,
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+          >
+            <div className="secondary-icon">
+              {item.icon}
+            </div>
 
-          <h2>95%</h2>
+            <div className="secondary-content">
+              <div className="secondary-top">
+                <h3>
+                  {item.value}
+                </h3>
 
-          <p>
-            Average productivity increase after adopting TaskFlow.
-          </p>
+                <FaCheckCircle className="verified-icon" />
+              </div>
+
+              <h4>
+                {item.label}
+              </h4>
+
+              <p>
+                {item.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* =====================================================
+          BOTTOM TRUST STATEMENT
+      ===================================================== */}
+
+      <motion.div
+        className="statistics-bottom"
+        initial={{
+          opacity: 0,
+          y: 25,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
+      >
+        <div className="bottom-icon">
+          <FaChartLine />
         </div>
 
-        <div className="statistics-card">
-          <div className="statistics-icon">
-            <FaLock />
-          </div>
+        <div>
+          <strong>
+            Built for teams that want more from work.
+          </strong>
 
-          <h2>100%</h2>
-
-          <p>
-            Secure authentication using JWT and protected APIs.
-          </p>
+          <span>
+            Plan better. Collaborate smarter. Deliver faster.
+          </span>
         </div>
 
-        <div className="statistics-card">
-          <div className="statistics-icon">
-            <FaGlobe />
-          </div>
-
-          <h2>80+</h2>
-
-          <p>
-            Countries where teams use TaskFlow every day.
-          </p>
-        </div>
-
-        <div className="statistics-card">
-          <div className="statistics-icon">
-            <FaClock />
-          </div>
-
-          <h2>24/7</h2>
-
-          <p>
-            Continuous monitoring and cloud availability.
-          </p>
+        <div className="bottom-status">
+          <span />
+          Platform running smoothly
         </div>
       </motion.div>
     </section>
