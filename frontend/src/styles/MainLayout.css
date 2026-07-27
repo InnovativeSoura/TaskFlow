@@ -156,19 +156,19 @@ body {
 }
 
 
-/* =========================================================
+/* ==========================================================
    MAIN CONTENT
-========================================================= */
+========================================================== */
 
 .main-content {
   position: relative;
+
   z-index: 2;
 
   flex: 1;
 
-  width: calc(
-    100% - var(--sidebar-width)
-  );
+  display: flex;
+  flex-direction: column;
 
   min-width: 0;
 
@@ -176,12 +176,17 @@ body {
 
   margin-left: var(--sidebar-width);
 
-  display: flex;
-  flex-direction: column;
-
   transition:
-    margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-    width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left 0.3s
+    cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed);
+}
+
+.main-content.sidebar-expanded {
+  margin-left: var(--sidebar-width);
 }
 
 
