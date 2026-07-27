@@ -1,3 +1,5 @@
+// backend/routes/userRoutes.js
+
 import express from "express";
 
 import {
@@ -29,9 +31,9 @@ const router = express.Router();
 router.use(protect);
 
 /* ==========================================
-   LOGGED-IN USER PROFILE
+   CURRENT USER PROFILE
    IMPORTANT:
-   These MUST come before /:id
+   These MUST be before /:id
 ========================================== */
 
 router.get(
@@ -45,8 +47,12 @@ router.put(
 );
 
 /* ==========================================
-   ALL AUTHENTICATED USERS
+   USERS
 ========================================== */
+
+/*
+   All authenticated users
+*/
 
 router.get(
   "/",
@@ -83,7 +89,7 @@ router.put(
 );
 
 /* ==========================================
-   ADMIN ONLY
+   ADMIN
 ========================================== */
 
 router.patch(

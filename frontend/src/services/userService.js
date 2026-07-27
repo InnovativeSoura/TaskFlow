@@ -1,3 +1,5 @@
+// src/services/userService.js
+
 import api from "../api/axios";
 
 /* ==========================================
@@ -8,10 +10,10 @@ export const getUsers = async () => {
   const res = await api.get("/users");
 
   return {
-    success: res.data?.success ?? true,
+    success: true,
     data:
-      res.data?.users ??
-      res.data?.data ??
+      res.data.users ??
+      res.data.data ??
       res.data ??
       [],
   };
@@ -22,19 +24,16 @@ export const getUsers = async () => {
 ========================================== */
 
 export const getUser = async (id) => {
-  if (!id) {
-    throw new Error("User ID is required.");
-  }
-
   const res = await api.get(`/users/${id}`);
 
   return {
-    success: res.data?.success ?? true,
+    success: true,
     data:
-      res.data?.user ??
-      res.data?.data ??
+      res.data.user ??
+      res.data.data ??
       res.data,
-    statistics: res.data?.statistics ?? null,
+    statistics:
+      res.data.statistics ?? null,
   };
 };
 
@@ -46,11 +45,13 @@ export const getProfile = async () => {
   const res = await api.get("/users/profile");
 
   return {
-    success: res.data?.success ?? false,
+    success: Boolean(res.data?.success),
     data:
       res.data?.user ??
       res.data?.data ??
       null,
+    message:
+      res.data?.message || "",
   };
 };
 
@@ -65,14 +66,13 @@ export const updateProfile = async (data) => {
   );
 
   return {
-    success: res.data?.success ?? false,
-    message:
-      res.data?.message ||
-      "Profile updated successfully.",
+    success: Boolean(res.data?.success),
     data:
       res.data?.user ??
       res.data?.data ??
       null,
+    message:
+      res.data?.message || "",
   };
 };
 
@@ -81,13 +81,16 @@ export const updateProfile = async (data) => {
 ========================================== */
 
 export const createUser = async (data) => {
-  const res = await api.post("/users", data);
+  const res = await api.post(
+    "/users",
+    data
+  );
 
   return {
-    success: res.data?.success ?? true,
+    success: true,
     data:
-      res.data?.user ??
-      res.data?.data ??
+      res.data.user ??
+      res.data.data ??
       res.data,
   };
 };
@@ -96,21 +99,20 @@ export const createUser = async (data) => {
    UPDATE USER
 ========================================== */
 
-export const updateUser = async (id, data) => {
-  if (!id) {
-    throw new Error("User ID is required.");
-  }
-
+export const updateUser = async (
+  id,
+  data
+) => {
   const res = await api.put(
     `/users/${id}`,
     data
   );
 
   return {
-    success: res.data?.success ?? true,
+    success: true,
     data:
-      res.data?.user ??
-      res.data?.data ??
+      res.data.user ??
+      res.data.data ??
       res.data,
   };
 };
@@ -120,9 +122,53 @@ export const updateUser = async (id, data) => {
 ========================================== */
 
 export const deleteUser = async (id) => {
-  if (!id) {
-    throw new Error("User ID is required.");
-  }
+  return await api.delete(
+    `/users/${id}`
+  );
+};
 
-  return await api.delete(`/users/${id}`);
+/* ==========================================
+   CHANGE ROLE
+========================================== */
+
+export const changeUserRole = async (
+  id,
+  role
+) => {
+  const res = await api.patch(
+    `/users/${id}/role`,
+    { role }
+  );
+
+  return {
+    success: Boolean(res.data?.success),
+    data:
+      res.data?.user ??
+      res.data?.data ??
+      null,
+    message:
+      res.data?.message || "",
+  };
+};
+
+/* ==========================================
+   TOGGLE STATUS
+========================================== */
+
+export const toggleUserStatus = async (
+  id
+) => {
+  const res = await api.patch(
+    `/users/${id}/status`
+  );
+
+  return {
+    success: Boolean(res.data?.success),
+    data:
+      res.data?.user ??
+      res.data?.data ??
+      null,
+    message:
+      res.data?.message || "",
+  };
 };

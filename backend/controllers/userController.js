@@ -8,10 +8,7 @@ import Task from "../models/Task.js";
    GET ALL USERS
 ========================================== */
 
-export const getUsers = async (
-  req,
-  res
-) => {
+export const getUsers = async (req, res) => {
   try {
     const filter = {};
 
@@ -23,12 +20,9 @@ export const getUsers = async (
       filter.status = req.query.status;
     }
 
-    const users =
-      await User.find(filter)
-        .select("-password")
-        .sort({
-          createdAt: -1,
-        });
+    const users = await User.find(filter)
+      .select("-password")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -142,7 +136,8 @@ export const updateUser = async (
 
     fields.forEach((field) => {
       if (
-        req.body[field] !== undefined
+        req.body[field] !==
+        undefined
       ) {
         user[field] =
           req.body[field];
@@ -159,7 +154,7 @@ export const updateUser = async (
     return res.status(200).json({
       success: true,
       message:
-        "Profile updated successfully",
+        "User updated successfully",
       user: safeUser,
     });
   } catch (error) {
@@ -284,51 +279,53 @@ export const changeUserRole = async (
    TOGGLE USER STATUS
 ========================================== */
 
-export const toggleUserStatus =
-  async (req, res) => {
-    try {
-      const user =
-        await User.findById(
-          req.params.id
-        );
-
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found",
-        });
-      }
-
-      user.status =
-        user.status === "Active"
-          ? "Inactive"
-          : "Active";
-
-      await user.save();
-
-      const safeUser =
-        await User.findById(
-          user._id
-        ).select("-password");
-
-      return res.status(200).json({
-        success: true,
-        message:
-          "User status updated successfully",
-        user: safeUser,
-      });
-    } catch (error) {
-      console.error(
-        "Toggle Status Error:",
-        error
+export const toggleUserStatus = async (
+  req,
+  res
+) => {
+  try {
+    const user =
+      await User.findById(
+        req.params.id
       );
 
-      return res.status(500).json({
+    if (!user) {
+      return res.status(404).json({
         success: false,
-        message: "Server error",
+        message: "User not found",
       });
     }
-  };
+
+    user.status =
+      user.status === "Active"
+        ? "Inactive"
+        : "Active";
+
+    await user.save();
+
+    const safeUser =
+      await User.findById(
+        user._id
+      ).select("-password");
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "User status updated successfully",
+      user: safeUser,
+    });
+  } catch (error) {
+    console.error(
+      "Toggle Status Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 
 /* ==========================================
    SEARCH USERS
@@ -358,14 +355,12 @@ export const searchUsers = async (
               $options: "i",
             },
           },
-
           {
             email: {
               $regex: query,
               $options: "i",
             },
           },
-
           {
             designation: {
               $regex: query,
@@ -402,8 +397,7 @@ export const getUserSummary = async (
   res
 ) => {
   try {
-    const userId =
-      req.params.id;
+    const userId = req.params.id;
 
     const user =
       await User.findById(
@@ -476,11 +470,23 @@ export const getUserSummary = async (
    GET LOGGED-IN USER PROFILE
 ========================================== */
 
-export const getProfile = async (req, res) => {
+export const getProfile = async (
+  req,
+  res
+) => {
   try {
-    const user = await User.findById(
-      req.user.id
-    ).select("-password");
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "Authentication required",
+      });
+    }
+
+    const user =
+      await User.findById(
+        req.user.id
+      ).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -496,7 +502,7 @@ export const getProfile = async (req, res) => {
   } catch (error) {
     console.error(
       "Get Profile Error:",
-      error.message
+      error
     );
 
     return res.status(500).json({
@@ -515,9 +521,18 @@ export const updateProfile = async (
   res
 ) => {
   try {
-    const user = await User.findById(
-      req.user.id
-    );
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "Authentication required",
+      });
+    }
+
+    const user =
+      await User.findById(
+        req.user.id
+      );
 
     if (!user) {
       return res.status(404).json({
@@ -526,7 +541,7 @@ export const updateProfile = async (
       });
     }
 
-    const fields = [
+    const allowedFields = [
       "name",
       "phone",
       "designation",
@@ -535,27 +550,35 @@ export const updateProfile = async (
       "avatar",
     ];
 
-    fields.forEach((field) => {
-      if (
-        req.body[field] !== undefined
-      ) {
-        user[field] =
-          req.body[field];
+    allowedFields.forEach(
+      (field) => {
+        if (
+          req.body[field] !==
+          undefined
+        ) {
+          user[field] =
+            req.body[field];
+        }
       }
-    });
+    );
 
     await user.save();
+
+    const updatedUser =
+      await User.findById(
+        user._id
+      ).select("-password");
 
     return res.status(200).json({
       success: true,
       message:
         "Profile updated successfully",
-      user,
+      user: updatedUser,
     });
   } catch (error) {
     console.error(
       "Update Profile Error:",
-      error.message
+      error
     );
 
     return res.status(500).json({
