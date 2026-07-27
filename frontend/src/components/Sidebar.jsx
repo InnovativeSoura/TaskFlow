@@ -1,8 +1,14 @@
 // src/components/Sidebar.jsx
 
-import { NavLink, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import {
+  NavLink,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
 
 import {
   FaTachometerAlt,
@@ -19,7 +25,6 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaShieldAlt,
-  FaCircle,
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
@@ -27,11 +32,11 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Sidebar.css";
 
 
-// ============================================================
-// NAVIGATION
-// ============================================================
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-const menuItems = [
+const mainMenuItems = [
   {
     title: "Dashboard",
     icon: <FaTachometerAlt />,
@@ -62,6 +67,9 @@ const menuItems = [
     icon: <FaChartBar />,
     path: "/reports",
   },
+];
+
+const accountMenuItems = [
   {
     title: "Profile",
     icon: <FaUserCircle />,
@@ -80,9 +88,9 @@ const menuItems = [
 ];
 
 
-// ============================================================
-// SIDEBAR
-// ============================================================
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 const Sidebar = ({
   sidebarOpen,
@@ -90,78 +98,30 @@ const Sidebar = ({
 }) => {
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
-
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined"
-      ? window.innerWidth <= 768
-      : false
-  );
+  const {
+    user,
+    logout,
+  } = useAuth();
 
 
-  // ==========================================================
-  // RESPONSIVE STATE
-  // ==========================================================
-
-  useEffect(() => {
-    const handleResize = () => {
-      const mobile =
-        window.innerWidth <= 768;
-
-      setIsMobile(mobile);
-
-      if (!mobile && !sidebarOpen) {
-        setSidebarOpen(true);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener(
-      "resize",
-      handleResize
-    );
-
-    return () => {
-      window.removeEventListener(
-        "resize",
-        handleResize
-      );
-    };
-  }, [
-    sidebarOpen,
-    setSidebarOpen,
-  ]);
-
-
-  // ==========================================================
-  // USER INITIALS
-  // ==========================================================
+  /* =======================================================
+     USER INITIALS
+  ======================================================= */
 
   const initials = user?.name
     ? user.name
         .trim()
         .split(/\s+/)
-        .map((name) => name[0])
+        .map((name) => name.charAt(0))
         .join("")
         .substring(0, 2)
         .toUpperCase()
-    : "SP";
+    : "TF";
 
 
-  // ==========================================================
-  // USER ROLE
-  // ==========================================================
-
-  const userRole =
-    user?.role ||
-    user?.userRole ||
-    "Admin";
-
-
-  // ==========================================================
-  // LOGOUT
-  // ==========================================================
+  /* =======================================================
+     LOGOUT
+  ======================================================= */
 
   const handleLogout = async () => {
     try {
@@ -182,131 +142,235 @@ const Sidebar = ({
   };
 
 
-  // ==========================================================
-  // MOBILE CLOSE
-  // ==========================================================
+  /* =======================================================
+     NAVIGATION CLICK
+  ======================================================= */
 
-  const closeMobile = () => {
-    if (isMobile) {
+  const handleNavigation = () => {
+    if (window.innerWidth <= 768) {
       setSidebarOpen(false);
     }
   };
 
 
-  // ==========================================================
-  // COLLAPSE / EXPAND
-  // ==========================================================
+  /* =======================================================
+     COLLAPSE
+  ======================================================= */
 
   const toggleSidebar = () => {
     setSidebarOpen(
-      !sidebarOpen
+      (previous) => !previous
     );
   };
 
 
-  // ==========================================================
-  // WIDTH
-  // ==========================================================
+  /* =======================================================
+     RENDER MENU
+  ======================================================= */
 
-  const sidebarWidth = isMobile
-    ? sidebarOpen
-      ? 285
-      : 0
-    : sidebarOpen
-    ? 285
-    : 88;
+  const renderMenu = (
+    items,
+    sectionTitle
+  ) => {
+    return (
+      <div className="sidebar-nav-section">
 
-
-  // ==========================================================
-  // RENDER
-  // ==========================================================
-
-  return (
-    <>
-      {/* ======================================================
-          MOBILE OVERLAY
-      ====================================================== */}
-
-      <AnimatePresence>
-        {isMobile &&
-          sidebarOpen && (
+        <AnimatePresence mode="wait">
+          {sidebarOpen && (
             <motion.div
-              className="sidebar-overlay"
+              className="sidebar-section-title"
               initial={{
                 opacity: 0,
+                x: -8,
               }}
               animate={{
                 opacity: 1,
+                x: 0,
               }}
               exit={{
                 opacity: 0,
+                x: -8,
               }}
               transition={{
-                duration: 0.25,
+                duration: 0.18,
               }}
-              onClick={() =>
-                setSidebarOpen(false)
-              }
-            />
+            >
+              {sectionTitle}
+            </motion.div>
           )}
+        </AnimatePresence>
+
+
+        <div className="sidebar-nav-list">
+
+          {items.map(
+            (
+              item,
+              index
+            ) => (
+              <motion.div
+                key={item.path}
+                className="sidebar-nav-item-wrapper"
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                transition={{
+                  delay:
+                    index * 0.035,
+                  duration: 0.25,
+                }}
+              >
+
+                <NavLink
+                  to={item.path}
+                  title={
+                    !sidebarOpen
+                      ? item.title
+                      : undefined
+                  }
+                  onClick={
+                    handleNavigation
+                  }
+                  className={({
+                    isActive,
+                  }) =>
+                    `sidebar-nav-link ${
+                      isActive
+                        ? "active"
+                        : ""
+                    }`
+                  }
+                >
+
+                  <span className="sidebar-nav-icon">
+                    {item.icon}
+                  </span>
+
+
+                  <AnimatePresence>
+                    {sidebarOpen && (
+                      <motion.span
+                        className="sidebar-nav-text"
+                        initial={{
+                          opacity: 0,
+                          x: -8,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          x: -8,
+                        }}
+                        transition={{
+                          duration: 0.18,
+                        }}
+                      >
+                        {item.title}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+
+
+                  {sidebarOpen && (
+                    <span className="sidebar-active-dot" />
+                  )}
+
+                </NavLink>
+
+              </motion.div>
+            )
+          )}
+
+        </div>
+
+      </div>
+    );
+  };
+
+
+  return (
+    <>
+      {/* =====================================================
+          MOBILE OVERLAY
+      ===================================================== */}
+
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            className="sidebar-overlay"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            onClick={() =>
+              setSidebarOpen(false)
+            }
+          />
+        )}
       </AnimatePresence>
 
 
-      {/* ======================================================
+      {/* =====================================================
           SIDEBAR
-      ====================================================== */}
+      ===================================================== */}
 
       <motion.aside
         className={`sidebar ${
           sidebarOpen
-            ? "expanded"
-            : "collapsed"
+            ? "sidebar-expanded"
+            : "sidebar-collapsed"
         }`}
         animate={{
-          width: sidebarWidth,
+          width:
+            sidebarOpen
+              ? 285
+              : 88,
         }}
         transition={{
-          duration: 0.35,
-          ease: [0.4, 0, 0.2, 1],
+          duration: 0.3,
+          ease: [
+            0.22,
+            1,
+            0.36,
+            1,
+          ],
         }}
       >
 
-        {/* ====================================================
-            TOP BRAND AREA
-        ==================================================== */}
+        {/* ===================================================
+            TOP BRAND
+        =================================================== */}
 
-        <div className="sidebar-header">
+        <div className="sidebar-top">
 
-          <NavLink
-            to="/dashboard"
-            className="sidebar-brand"
-            onClick={closeMobile}
-          >
+          <div className="sidebar-brand">
 
-            {/* TF LOGO */}
-
-            <motion.div
-              className="brand-logo"
-              whileHover={{
-                scale: 1.06,
-                rotate: -2,
-              }}
-              transition={{
-                duration: 0.2,
-              }}
-            >
+            <div className="sidebar-brand-logo">
               <span>TF</span>
 
-              <div className="brand-logo-glow" />
-            </motion.div>
+              <div className="sidebar-logo-glow" />
+            </div>
 
 
-            {/* BRAND TEXT */}
-
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {sidebarOpen && (
                 <motion.div
-                  className="brand-content"
+                  className="sidebar-brand-content"
                   initial={{
                     opacity: 0,
                     x: -12,
@@ -320,59 +384,31 @@ const Sidebar = ({
                     x: -12,
                   }}
                   transition={{
-                    duration: 0.25,
+                    duration: 0.2,
                   }}
                 >
-                  <div className="brand-title">
+                  <h2>
                     TaskFlow
-                  </div>
+                  </h2>
 
-                  <div className="brand-subtitle">
+                  <span>
                     Workspace
-                  </div>
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>
 
-          </NavLink>
+          </div>
 
 
-          {/* MOBILE CLOSE */}
+          {/* DESKTOP COLLAPSE BUTTON */}
 
-          {isMobile &&
-            sidebarOpen && (
-              <motion.button
-                type="button"
-                className="close-sidebar"
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                whileTap={{
-                  scale: 0.9,
-                }}
-              >
-                <FaTimes />
-              </motion.button>
-            )}
-
-        </div>
-
-
-        {/* ====================================================
-            DESKTOP COLLAPSE BUTTON
-        ==================================================== */}
-
-        {!isMobile && (
-          <motion.button
+          <button
             type="button"
-            className="sidebar-collapse-btn"
-            onClick={toggleSidebar}
-            whileHover={{
-              scale: 1.05,
-            }}
-            whileTap={{
-              scale: 0.92,
-            }}
+            className="sidebar-collapse-button"
+            onClick={
+              toggleSidebar
+            }
             title={
               sidebarOpen
                 ? "Collapse sidebar"
@@ -384,56 +420,52 @@ const Sidebar = ({
             ) : (
               <FaChevronRight />
             )}
-          </motion.button>
-        )}
+          </button>
 
 
-        {/* ====================================================
-            USER PROFILE
-        ==================================================== */}
+          {/* MOBILE CLOSE */}
 
-        <div
-          className={`sidebar-user-card ${
-            sidebarOpen
-              ? "user-expanded"
-              : "user-collapsed"
-          }`}
-        >
+          <button
+            type="button"
+            className="sidebar-mobile-close"
+            onClick={() =>
+              setSidebarOpen(false)
+            }
+          >
+            <FaTimes />
+          </button>
 
-          {/* AVATAR */}
+        </div>
 
-          <div className="sidebar-avatar-wrapper">
+
+        {/* ===================================================
+            PROFILE
+        =================================================== */}
+
+        <div className="sidebar-profile">
+
+          <div className="sidebar-profile-avatar">
 
             {user?.avatar ? (
               <img
                 src={user.avatar}
-                alt={
-                  user?.name ||
-                  "User avatar"
-                }
-                className="sidebar-avatar"
+                alt="Profile"
               />
             ) : (
-              <div className="sidebar-avatar initials">
+              <span>
                 {initials}
-              </div>
+              </span>
             )}
 
-            {/* ONLINE STATUS */}
-
-            <span className="user-online-dot">
-              <FaCircle />
-            </span>
+            <span className="sidebar-online-dot" />
 
           </div>
 
 
-          {/* USER DETAILS */}
-
           <AnimatePresence>
             {sidebarOpen && (
               <motion.div
-                className="sidebar-user-info"
+                className="sidebar-profile-info"
                 initial={{
                   opacity: 0,
                   x: -10,
@@ -446,35 +478,77 @@ const Sidebar = ({
                   opacity: 0,
                   x: -10,
                 }}
-                transition={{
-                  duration: 0.25,
+              >
+                <strong>
+                  {user?.name ||
+                    "Souradipta Patra"}
+                </strong>
+
+                <span>
+                  {user?.role ||
+                    "Admin"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+        </div>
+
+
+        {/* ===================================================
+            NAVIGATION
+        =================================================== */}
+
+        <div className="sidebar-scroll">
+
+          {renderMenu(
+            mainMenuItems,
+            "Workspace"
+          )}
+
+          {renderMenu(
+            accountMenuItems,
+            "Account"
+          )}
+
+
+          {/* =================================================
+              ADMIN CARD
+          ================================================= */}
+
+          <AnimatePresence>
+            {sidebarOpen && (
+              <motion.div
+                className="sidebar-admin-card"
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: 10,
                 }}
               >
 
-                <div className="user-name-row">
-
-                  <h4>
-                    {user?.name ||
-                      "Souradipta Patra"}
-                  </h4>
-
-                  <span className="user-status-dot" />
-
+                <div className="sidebar-admin-icon">
+                  <FaShieldAlt />
                 </div>
 
-                <div className="user-role-row">
-
-                  <FaShieldAlt />
+                <div className="sidebar-admin-content">
+                  <strong>
+                    Admin Workspace
+                  </strong>
 
                   <span>
-                    {userRole}
+                    Full access enabled
                   </span>
-
-                  <span className="admin-badge">
-                    ADMIN
-                  </span>
-
                 </div>
+
+                <span className="sidebar-admin-status" />
 
               </motion.div>
             )}
@@ -483,194 +557,33 @@ const Sidebar = ({
         </div>
 
 
-        {/* ====================================================
-            NAVIGATION LABEL
-        ==================================================== */}
-
-        <AnimatePresence>
-          {sidebarOpen && (
-            <motion.div
-              className="sidebar-section-label"
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-            >
-              <span>WORKSPACE</span>
-
-              <div />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-
-        {/* ====================================================
-            NAVIGATION
-        ==================================================== */}
-
-        <nav className="sidebar-menu">
-
-          {menuItems.map(
-            (item, index) => (
-              <motion.div
-                key={item.path}
-                className="sidebar-menu-item"
-                initial={{
-                  opacity: 0,
-                  x: -15,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                transition={{
-                  delay:
-                    index * 0.035,
-                  duration: 0.3,
-                }}
-              >
-
-                <NavLink
-                  to={item.path}
-                  title={item.title}
-                  onClick={closeMobile}
-                  className={({ isActive }) =>
-                    isActive
-                      ? "active"
-                      : ""
-                  }
-                >
-
-                  {/* ACTIVE INDICATOR */}
-
-                  <span className="nav-active-line" />
-
-
-                  {/* ICON */}
-
-                  <div className="sidebar-icon">
-                    {item.icon}
-                  </div>
-
-
-                  {/* LABEL */}
-
-                  <AnimatePresence>
-                    {sidebarOpen && (
-                      <motion.span
-                        className="sidebar-link-text"
-                        initial={{
-                          opacity: 0,
-                          x: -6,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          x: 0,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          x: -6,
-                        }}
-                      >
-                        {item.title}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-
-
-                  {/* NOTIFICATION DOT */}
-
-                  {item.title ===
-                    "Notifications" && (
-                    <span className="notification-dot" />
-                  )}
-
-                </NavLink>
-
-              </motion.div>
-            )
-          )}
-
-        </nav>
-
-
-        {/* ====================================================
-            ADMIN SECTION
-        ==================================================== */}
-
-        <AnimatePresence>
-          {sidebarOpen && (
-            <motion.div
-              className="sidebar-admin-section"
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                y: 10,
-              }}
-            >
-
-              <div className="admin-section-icon">
-                <FaShieldAlt />
-              </div>
-
-              <div className="admin-section-content">
-
-                <strong>
-                  Admin Workspace
-                </strong>
-
-                <span>
-                  Manage your team
-                </span>
-
-              </div>
-
-              <span className="admin-live-dot" />
-
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-
-        {/* ====================================================
-            SIDEBAR FOOTER
-        ==================================================== */}
+        {/* ===================================================
+            FOOTER
+        =================================================== */}
 
         <div className="sidebar-footer">
 
-          <motion.button
+          <button
             type="button"
-            className="logout-btn"
-            onClick={handleLogout}
-            whileHover={{
-              y: -2,
-            }}
-            whileTap={{
-              scale: 0.98,
-            }}
-            title="Logout"
+            className="sidebar-logout"
+            onClick={
+              handleLogout
+            }
+            title={
+              !sidebarOpen
+                ? "Logout"
+                : undefined
+            }
           >
 
-            <span className="logout-icon">
+            <span className="sidebar-logout-icon">
               <FaSignOutAlt />
             </span>
 
+
             <AnimatePresence>
               {sidebarOpen && (
-                <motion.div
-                  className="logout-content"
+                <motion.span
                   initial={{
                     opacity: 0,
                     x: -8,
@@ -684,18 +597,12 @@ const Sidebar = ({
                     x: -8,
                   }}
                 >
-                  <span>
-                    Sign out
-                  </span>
-
-                  <small>
-                    End current session
-                  </small>
-                </motion.div>
+                  Logout
+                </motion.span>
               )}
             </AnimatePresence>
 
-          </motion.button>
+          </button>
 
         </div>
 
@@ -703,5 +610,6 @@ const Sidebar = ({
     </>
   );
 };
+
 
 export default Sidebar;

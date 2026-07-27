@@ -1,389 +1,517 @@
-/* ==========================================================
-   TASKFLOW PREMIUM MAIN LAYOUT
-========================================================== */
+/* =========================================================
+   TASKFLOW — PREMIUM MAIN LAYOUT
+   Stable sidebar + content synchronization
+========================================================= */
 
-:root{
-  --sidebar-width:260px;
-  --sidebar-collapsed:85px;
-  --navbar-height:78px;
+:root {
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 86px;
+  --navbar-height: 72px;
 
-  --background:#f4f7fc;
-  --glass:rgba(255,255,255,.72);
+  --page-background: #f4f7fc;
 
-  --border:rgba(255,255,255,.35);
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
 
-  --shadow:
-      0 20px 45px rgba(15,23,42,.08);
+  --blue: #2563eb;
+  --blue-light: #3b82f6;
+
+  --border-light: rgba(148, 163, 184, 0.18);
+
+  --shadow-soft:
+    0 20px 60px rgba(15, 23, 42, 0.07);
+
+  --shadow-medium:
+    0 25px 70px rgba(15, 23, 42, 0.1);
 }
 
-/* ==========================================================
-   LAYOUT
-========================================================== */
 
-.layout{
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
 
-  display:flex;
-
-  min-height:100vh;
-  width:100%;
-
-  background:
-      linear-gradient(
-          180deg,
-          #eef4ff 0%,
-          #f8fbff 40%,
-          #f4f7fc 100%
-      );
-
-  overflow:hidden;
-
-  position:relative;
+* {
+  box-sizing: border-box;
 }
 
-/* ==========================================================
-   ANIMATED BACKGROUND
-========================================================== */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-.layout::before{
+body {
+  overflow-x: hidden;
+}
 
-  content:"";
 
-  position:fixed;
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
 
-  top:-220px;
-  left:-220px;
+.layout {
+  position: relative;
 
-  width:500px;
-  height:500px;
+  display: flex;
 
-  border-radius:50%;
+  width: 100%;
+  min-height: 100vh;
 
   background:
+    radial-gradient(
+      circle at 5% 5%,
+      rgba(59, 130, 246, 0.1),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 95% 95%,
+      rgba(99, 102, 241, 0.1),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      #eef4ff 0%,
+      #f7faff 48%,
+      #f4f7fc 100%
+    );
 
-  radial-gradient(
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW — TOP LEFT
+========================================================= */
+
+.layout::before {
+  content: "";
+
+  position: fixed;
+
+  width: 500px;
+  height: 500px;
+
+  top: -260px;
+  left: -220px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
       circle,
-      rgba(59,130,246,.12),
+      rgba(59, 130, 246, 0.13),
       transparent 70%
-  );
+    );
 
-  animation:floatBlob1 15s ease-in-out infinite;
+  filter: blur(10px);
 
-  pointer-events:none;
+  pointer-events: none;
 
-  z-index:0;
+  z-index: 0;
+
+  animation:
+    layoutGlowOne
+    16s
+    ease-in-out
+    infinite;
 }
 
-.layout::after{
 
-  content:"";
+/* =========================================================
+   BACKGROUND GLOW — BOTTOM RIGHT
+========================================================= */
 
-  position:fixed;
+.layout::after {
+  content: "";
 
-  right:-220px;
-  bottom:-220px;
+  position: fixed;
 
-  width:520px;
-  height:520px;
+  width: 520px;
+  height: 520px;
 
-  border-radius:50%;
+  right: -250px;
+  bottom: -260px;
+
+  border-radius: 50%;
 
   background:
-
-  radial-gradient(
+    radial-gradient(
       circle,
-      rgba(124,77,255,.10),
-      transparent 72%
-  );
+      rgba(124, 58, 237, 0.1),
+      transparent 70%
+    );
 
-  animation:floatBlob2 18s ease-in-out infinite;
+  pointer-events: none;
 
-  pointer-events:none;
+  z-index: 0;
 
-  z-index:0;
+  animation:
+    layoutGlowTwo
+    18s
+    ease-in-out
+    infinite;
 }
 
-/* ==========================================================
+
+/* =========================================================
    MAIN CONTENT
-========================================================== */
+========================================================= */
 
-.main-content{
+.main-content {
+  position: relative;
+  z-index: 2;
 
-  flex:1;
+  flex: 1;
 
-  display:flex;
+  width: calc(
+    100% - var(--sidebar-width)
+  );
 
-  flex-direction:column;
+  min-width: 0;
 
-  margin-left:260px;
+  min-height: 100vh;
 
-  min-height:100vh;
+  margin-left: var(--sidebar-width);
+
+  display: flex;
+  flex-direction: column;
 
   transition:
-
-      margin-left .35s ease,
-      width .35s ease;
-
-  position:relative;
-
-  z-index:2;
+    margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================
-   COLLAPSED SIDEBAR
-========================================================== */
 
-.main-content.sidebar-collapsed{
+/* =========================================================
+   COLLAPSED STATE
+========================================================= */
 
-  margin-left:85px;
+.layout.sidebar-collapsed .main-content {
+  width: calc(
+    100% - var(--sidebar-collapsed-width)
+  );
 
+  margin-left: var(--sidebar-collapsed-width);
 }
 
-/* ==========================================================
-   PAGE
-========================================================== */
 
-.page-content{
+/* =========================================================
+   PAGE CONTENT
+========================================================= */
 
-  flex:1;
+.page-content {
+  position: relative;
+  z-index: 2;
 
-  overflow-y:auto;
+  flex: 1;
 
-  padding:32px;
+  width: 100%;
 
-  margin-top:78px;
+  min-width: 0;
 
-  animation:fadePage .45s ease;
+  margin-top: var(--navbar-height);
 
-  position:relative;
+  padding: 30px;
 
-  z-index:2;
+  overflow-x: hidden;
+
+  animation:
+    pageEnter
+    0.45s
+    ease;
 }
 
-/* ==========================================================
-   PAGE CONTAINER
-========================================================== */
 
-.page-wrapper{
+/* =========================================================
+   INNER PAGE CONTAINER
+========================================================= */
 
-  background:var(--glass);
+.page-inner {
+  position: relative;
 
-  backdrop-filter:blur(18px);
+  width: 100%;
 
-  border:1px solid var(--border);
-
-  border-radius:22px;
-
-  padding:28px;
-
-  min-height:calc(100vh - 120px);
-
-  box-shadow:var(--shadow);
-
-  transition:.3s;
+  min-height:
+    calc(
+      100vh - var(--navbar-height) - 60px
+    );
 }
 
-.page-wrapper:hover{
 
-  transform:translateY(-2px);
+/* =========================================================
+   OPTIONAL PAGE WRAPPER
+========================================================= */
 
+.page-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  min-height:
+    calc(
+      100vh - var(--navbar-height) - 60px
+    );
+
+  padding: 30px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.7);
+
+  border-radius: 24px;
+
+  background:
+    rgba(255, 255, 255, 0.62);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  box-shadow:
+    var(--shadow-soft);
 }
 
-/* ==========================================================
-   DASHBOARD
-========================================================== */
 
-.dashboard-main{
+/* =========================================================
+   DASHBOARD MAIN
+========================================================= */
 
-  min-height:100vh;
+.dashboard-main {
+  position: relative;
 
-  animation:fadePage .4s ease;
+  width: 100%;
 
+  min-height: 100vh;
+
+  animation:
+    pageEnter
+    0.45s
+    ease;
 }
 
-/* ==========================================================
-   CUSTOM SCROLLBAR
-========================================================== */
 
-.page-content::-webkit-scrollbar{
+/* =========================================================
+   CONTENT WIDTH SAFETY
+========================================================= */
 
-  width:10px;
-
+.page-content img,
+.page-content table,
+.page-content canvas,
+.page-content iframe {
+  max-width: 100%;
 }
 
-.page-content::-webkit-scrollbar-track{
 
-  background:transparent;
+/* =========================================================
+   SCROLLBAR
+========================================================= */
 
+.page-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-.page-content::-webkit-scrollbar-thumb{
-
-  background:#c9d5ea;
-
-  border-radius:30px;
-
+.page-content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.page-content::-webkit-scrollbar-thumb:hover{
+.page-content::-webkit-scrollbar-thumb {
+  border-radius: 999px;
 
-  background:#9cb3dd;
-
+  background:
+    rgba(100, 116, 139, 0.28);
 }
 
-/* ==========================================================
+.page-content::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(37, 99, 235, 0.5);
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+  color: #ffffff;
+
+  background:
+    rgba(37, 99, 235, 0.85);
+}
+
+
+/* =========================================================
    TABLET
-========================================================== */
+========================================================= */
 
-@media(max-width:992px){
+@media (max-width: 1100px) {
+  :root {
+    --sidebar-width: 250px;
+    --sidebar-collapsed-width: 82px;
+  }
 
-.main-content{
+  .main-content {
+    width: calc(
+      100% - var(--sidebar-width)
+    );
 
-margin-left:85px;
+    margin-left: var(--sidebar-width);
+  }
 
+  .layout.sidebar-collapsed .main-content {
+    width: calc(
+      100% - var(--sidebar-collapsed-width)
+    );
+
+    margin-left: var(--sidebar-collapsed-width);
+  }
+
+  .page-content {
+    padding: 26px;
+  }
 }
 
-}
 
-/* ==========================================================
+/* =========================================================
    MOBILE
-========================================================== */
+========================================================= */
 
-@media(max-width:768px){
+@media (max-width: 768px) {
+  .layout {
+    display: block;
 
-.main-content{
+    min-height: 100vh;
+  }
 
-margin-left:0;
+  .main-content,
+  .layout.sidebar-collapsed .main-content {
+    width: 100%;
 
-width:100%;
+    margin-left: 0;
+  }
 
+  .page-content {
+    width: 100%;
+
+    margin-top: var(--navbar-height);
+
+    padding: 22px 18px 30px;
+  }
+
+  .page-inner {
+    min-height:
+      calc(
+        100vh - var(--navbar-height) - 52px
+      );
+  }
+
+  .page-wrapper {
+    padding: 22px;
+
+    border-radius: 20px;
+  }
 }
 
-.main-content.sidebar-collapsed{
 
-margin-left:0;
-
-}
-
-.page-content{
-
-padding:22px;
-
-margin-top:78px;
-
-}
-
-.page-wrapper{
-
-padding:20px;
-
-border-radius:18px;
-
-}
-
-}
-
-/* ==========================================================
+/* =========================================================
    SMALL MOBILE
-========================================================== */
+========================================================= */
 
-@media(max-width:480px){
+@media (max-width: 480px) {
+  .page-content {
+    padding:
+      18px
+      14px
+      28px;
+  }
 
-.page-content{
+  .page-wrapper {
+    padding: 18px;
 
-padding:16px;
-
+    border-radius: 18px;
+  }
 }
 
-.page-wrapper{
 
-padding:16px;
+/* =========================================================
+   PAGE ANIMATION
+========================================================= */
 
-border-radius:16px;
+@keyframes pageEnter {
+  from {
+    opacity: 0;
 
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
 }
 
+
+/* =========================================================
+   BACKGROUND ANIMATIONS
+========================================================= */
+
+@keyframes layoutGlowOne {
+  0% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate3d(70px, 50px, 0)
+      scale(1.1);
+  }
+
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
 }
 
-/* ==========================================================
-   ANIMATIONS
-========================================================== */
+@keyframes layoutGlowTwo {
+  0% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
 
-@keyframes fadePage{
+  50% {
+    transform:
+      translate3d(-60px, -50px, 0)
+      scale(1.08);
+  }
 
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
 }
 
-to{
 
-opacity:1;
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
 
-transform:translateY(0);
+@media (prefers-reduced-motion: reduce) {
+  .layout::before,
+  .layout::after,
+  .page-content {
+    animation: none;
+  }
 
-}
-
-}
-
-@keyframes floatBlob1{
-
-0%{
-
-transform:translate(0,0) scale(1);
-
-}
-
-50%{
-
-transform:translate(80px,60px) scale(1.15);
-
-}
-
-100%{
-
-transform:translate(0,0) scale(1);
-
-}
-
-}
-
-@keyframes floatBlob2{
-
-0%{
-
-transform:translate(0,0) scale(1);
-
-}
-
-50%{
-
-transform:translate(-70px,-60px) scale(1.12);
-
-}
-
-100%{
-
-transform:translate(0,0) scale(1);
-
-}
-
-}
-
-/* ==========================================================
-   GLOBAL TRANSITIONS
-========================================================== */
-
-*{
-
-transition:
-
-background .25s ease,
-color .25s ease,
-border-color .25s ease,
-box-shadow .25s ease,
-transform .25s ease;
-
+  .main-content {
+    transition: none;
+  }
 }
