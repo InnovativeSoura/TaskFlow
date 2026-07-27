@@ -6,11 +6,10 @@
   --tf-sidebar-width: 260px;
   --tf-sidebar-collapsed: 84px;
 
-  --tf-sidebar-bg: #0b1220;
-  --tf-sidebar-bg-2: #0f172a;
+  --tf-sidebar-bg: #080f1d;
+  --tf-sidebar-bg-2: #0d1729;
 
-  --tf-sidebar-border:
-    rgba(255, 255, 255, 0.07);
+  --tf-sidebar-border: rgba(255, 255, 255, 0.07);
 
   --tf-sidebar-text: #cbd5e1;
   --tf-sidebar-muted: #64748b;
@@ -26,9 +25,7 @@
 .sidebar {
   position: fixed;
 
-  top: 0;
-  left: 0;
-  bottom: 0;
+  inset: 0 auto 0 0;
 
   z-index: 1000;
 
@@ -44,34 +41,29 @@
   background:
     radial-gradient(
       circle at 0% 0%,
-      rgba(99, 102, 241, 0.14),
+      rgba(99, 102, 241, 0.17),
       transparent 34%
     ),
     radial-gradient(
-      circle at 100% 100%,
-      rgba(6, 182, 212, 0.07),
-      transparent 30%
+      circle at 100% 90%,
+      rgba(14, 165, 233, 0.07),
+      transparent 32%
     ),
     linear-gradient(
       180deg,
       #0b1220 0%,
-      #0d1525 50%,
-      #0a1120 100%
+      #0d1627 50%,
+      #080f1c 100%
     );
 
-  border-right:
-    1px solid
-    var(--tf-sidebar-border);
+  border-right: 1px solid var(--tf-sidebar-border);
 
   box-shadow:
-    18px 0 50px
-    rgba(2, 6, 23, 0.16);
-
-  transition:
-    width 0.3s
-    cubic-bezier(0.4, 0, 0.2, 1);
+    18px 0 50px rgba(2, 6, 23, 0.17);
 
   isolation: isolate;
+
+  will-change: width;
 }
 
 /* =========================================================
@@ -87,29 +79,28 @@
 
   z-index: -1;
 
-  opacity: 0.22;
+  opacity: 0.2;
+
+  pointer-events: none;
 
   background-image:
     linear-gradient(
-      rgba(255, 255, 255, 0.025)
-      1px,
+      rgba(255, 255, 255, 0.025) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.025)
-      1px,
+      rgba(255, 255, 255, 0.025) 1px,
       transparent 1px
     );
 
-  background-size:
-    28px 28px;
+  background-size: 28px 28px;
 
   mask-image:
     linear-gradient(
       to bottom,
       black,
-      transparent 90%
+      transparent 92%
     );
 }
 
@@ -126,7 +117,7 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 16px;
+  padding: 0 15px;
 
   border-bottom:
     1px solid
@@ -147,7 +138,7 @@
 
   padding: 0;
 
-  border: none;
+  border: 0;
 
   color: inherit;
 
@@ -156,27 +147,37 @@
   cursor: pointer;
 
   text-align: left;
+
+  outline: none;
 }
 
-/*
-   IMPORTANT:
-   The logo itself is now the collapse / expand trigger.
-*/
+.sidebar-brand-button:focus-visible
+.brand-logo {
+  outline:
+    2px solid
+    rgba(129, 140, 248, 0.8);
+
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   BRAND LOGO
+========================================================= */
 
 .brand-logo {
   position: relative;
 
-  flex-shrink: 0;
-
   width: 46px;
   height: 46px;
+
+  flex-shrink: 0;
 
   display: grid;
   place-items: center;
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.14);
+    rgba(255, 255, 255, 0.15);
 
   border-radius: 14px;
 
@@ -185,19 +186,35 @@
   background:
     linear-gradient(
       135deg,
-      #6366f1,
-      #8b5cf6
+      #6366f1 0%,
+      #7c3aed 100%
     );
 
   box-shadow:
     0 10px 28px
     rgba(99, 102, 241, 0.32),
     inset 0 1px 0
-    rgba(255, 255, 255, 0.22);
+    rgba(255, 255, 255, 0.23);
 
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.brand-logo::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 4px;
+
+  border-radius: 10px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.13);
+
+  pointer-events: none;
 }
 
 .brand-logo::after {
@@ -205,13 +222,13 @@
 
   position: absolute;
 
-  inset: -4px;
+  inset: -5px;
 
-  border-radius: 17px;
+  border-radius: 18px;
 
   border:
     1px solid
-    rgba(129, 140, 248, 0.16);
+    rgba(129, 140, 248, 0.18);
 
   opacity: 0;
 
@@ -221,10 +238,10 @@
 .sidebar-brand-button:hover
 .brand-logo {
   box-shadow:
-    0 14px 35px
-    rgba(99, 102, 241, 0.45),
+    0 14px 36px
+    rgba(99, 102, 241, 0.46),
     inset 0 1px 0
-    rgba(255, 255, 255, 0.25);
+    rgba(255, 255, 255, 0.28);
 }
 
 .sidebar-brand-button:hover
@@ -233,11 +250,15 @@
 }
 
 .brand-logo span {
+  position: relative;
+
+  z-index: 1;
+
   font-size: 15px;
 
   font-weight: 900;
 
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
 }
 
 /* =========================================================
@@ -260,7 +281,7 @@
 
   font-weight: 800;
 
-  letter-spacing: -0.4px;
+  letter-spacing: -0.45px;
 }
 
 .brand-content span {
@@ -270,9 +291,9 @@
 
   font-size: 9px;
 
-  font-weight: 700;
+  font-weight: 800;
 
-  letter-spacing: 1.3px;
+  letter-spacing: 1.4px;
 
   text-transform: uppercase;
 }
@@ -292,26 +313,30 @@
     linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.09),
       transparent
     );
 }
 
 /* =========================================================
-   USER CARD
+   PROFILE CARD
 ========================================================= */
 
 .sidebar-user-card {
+  position: relative;
+
   min-height: 74px;
 
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 11px;
 
-  margin: 16px 12px 10px;
+  margin: 15px 10px 9px;
 
-  padding: 11px;
+  padding: 10px;
+
+  overflow: hidden;
 
   border:
     1px solid
@@ -319,31 +344,131 @@
 
   border-radius: 16px;
 
+  color: inherit;
+
+  text-decoration: none;
+
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.06),
       rgba(255, 255, 255, 0.025)
     );
 
   box-shadow:
     inset 0 1px 0
-    rgba(255, 255, 255, 0.025);
+    rgba(255, 255, 255, 0.035);
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
+
+.sidebar-user-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 80%
+    );
+
+  transform:
+    translateX(-120%);
+
+  transition:
+    transform 0.55s ease;
+
+  pointer-events: none;
+}
+
+.sidebar-user-card:hover {
+  transform: translateY(-1px);
+
+  border-color:
+    rgba(129, 140, 248, 0.25);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.12),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  box-shadow:
+    0 10px 25px
+    rgba(2, 6, 23, 0.18),
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-user-card:hover::before {
+  transform:
+    translateX(120%);
+}
+
+.sidebar-user-card.profile-active {
+  border-color:
+    rgba(129, 140, 248, 0.32);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.19),
+      rgba(124, 58, 237, 0.07)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.055),
+    0 8px 25px
+    rgba(79, 70, 229, 0.13);
+}
+
+/* =========================================================
+   PROFILE AVATAR WRAPPER
+========================================================= */
+
+.sidebar-avatar-wrapper {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   AVATAR
+========================================================= */
 
 .sidebar-avatar {
   width: 42px;
   height: 42px;
 
-  flex-shrink: 0;
+  display: block;
 
   object-fit: cover;
 
-  border-radius: 13px;
-
   border:
     2px solid
-    rgba(129, 140, 248, 0.35);
+    rgba(129, 140, 248, 0.38);
+
+  border-radius: 13px;
+
+  box-shadow:
+    0 4px 15px
+    rgba(2, 6, 23, 0.25);
 }
 
 .sidebar-avatar.initials {
@@ -361,11 +486,43 @@
 
   font-size: 13px;
 
-  font-weight: 800;
+  font-weight: 900;
 }
+
+/* =========================================================
+   ONLINE DOT
+========================================================= */
+
+.profile-online-dot {
+  position: absolute;
+
+  right: -1px;
+  bottom: -1px;
+
+  width: 10px;
+  height: 10px;
+
+  border:
+    2px solid
+    #0d1627;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 8px
+    rgba(34, 197, 94, 0.55);
+}
+
+/* =========================================================
+   PROFILE INFORMATION
+========================================================= */
 
 .sidebar-user-info {
   min-width: 0;
+
+  flex: 1;
 
   display: flex;
   flex-direction: column;
@@ -376,9 +533,11 @@
 
   color: #f8fafc;
 
-  font-size: 13px;
+  font-size: 12px;
 
-  font-weight: 700;
+  font-weight: 750;
+
+  line-height: 1.2;
 
   text-overflow: ellipsis;
 
@@ -390,13 +549,48 @@
 
   color: #64748b;
 
-  font-size: 10px;
+  font-size: 9px;
 
-  font-weight: 700;
+  font-weight: 800;
 
-  letter-spacing: 0.6px;
+  letter-spacing: 0.8px;
 
   text-transform: uppercase;
+}
+
+/* =========================================================
+   PROFILE ARROW
+========================================================= */
+
+.profile-arrow {
+  width: 20px;
+  height: 20px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #64748b;
+
+  font-size: 8px;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sidebar-user-card:hover
+.profile-arrow {
+  color: #a5b4fc;
+
+  transform:
+    translateX(2px);
+}
+
+.sidebar-user-card.profile-active
+.profile-arrow {
+  color: #818cf8;
 }
 
 /* =========================================================
@@ -406,14 +600,14 @@
 .sidebar-section-label {
   padding:
     12px
-    22px
-    8px;
+    21px
+    7px;
 
   color: #475569;
 
   font-size: 9px;
 
-  font-weight: 800;
+  font-weight: 850;
 
   letter-spacing: 1.5px;
 }
@@ -429,11 +623,10 @@
 
   padding:
     5px
-    12px;
-
-  overflow-y: auto;
+    10px;
 
   overflow-x: hidden;
+  overflow-y: auto;
 
   scrollbar-width: none;
 }
@@ -449,7 +642,7 @@
 .sidebar-menu a {
   position: relative;
 
-  min-height: 48px;
+  min-height: 46px;
 
   display: flex;
   align-items: center;
@@ -468,17 +661,17 @@
     1px solid
     transparent;
 
-  border-radius: 14px;
+  border-radius: 13px;
 
   color: #7f8da5;
 
   text-decoration: none;
 
   transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease;
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease;
 }
 
 .sidebar-menu a:hover {
@@ -490,12 +683,9 @@
   border-color:
     rgba(255, 255, 255, 0.045);
 
-  transform: translateX(2px);
+  transform:
+    translateX(2px);
 }
-
-/* =========================================================
-   ACTIVE LINK
-========================================================= */
 
 .sidebar-menu a.active {
   color: #ffffff;
@@ -506,8 +696,8 @@
   background:
     linear-gradient(
       90deg,
-      rgba(99, 102, 241, 0.22),
-      rgba(99, 102, 241, 0.08)
+      rgba(99, 102, 241, 0.23),
+      rgba(99, 102, 241, 0.07)
     );
 
   box-shadow:
@@ -524,14 +714,17 @@
 .sidebar-active-indicator {
   position: absolute;
 
+  top: 9px;
   right: 0;
-
-  top: 10px;
-  bottom: 10px;
+  bottom: 9px;
 
   width: 3px;
 
-  border-radius: 5px 0 0 5px;
+  border-radius:
+    5px
+    0
+    0
+    5px;
 
   background:
     linear-gradient(
@@ -558,16 +751,19 @@
   display: grid;
   place-items: center;
 
-  font-size: 15px;
+  color: inherit;
+
+  font-size: 14px;
 
   transition:
-    transform 0.25s ease,
-    color 0.25s ease;
+    transform 0.22s ease,
+    color 0.22s ease;
 }
 
 .sidebar-menu a:hover
 .sidebar-icon {
-  transform: scale(1.08);
+  transform:
+    scale(1.08);
 }
 
 .sidebar-menu a.active
@@ -582,7 +778,9 @@
 .sidebar-link-text {
   overflow: hidden;
 
-  font-size: 12px;
+  color: inherit;
+
+  font-size: 11.5px;
 
   font-weight: 650;
 
@@ -592,21 +790,20 @@
 }
 
 /* =========================================================
-   BOTTOM
+   BOTTOM AREA
 ========================================================= */
 
 .sidebar-bottom {
   flex-shrink: 0;
 
-  padding:
-    12px;
+  padding: 11px;
 
   border-top:
     1px solid
     rgba(255, 255, 255, 0.055);
 
   background:
-    rgba(2, 6, 23, 0.16);
+    rgba(2, 6, 23, 0.18);
 }
 
 /* =========================================================
@@ -615,7 +812,6 @@
 
 .sidebar-collapse-button {
   width: 100%;
-
   min-height: 42px;
 
   display: flex;
@@ -623,11 +819,11 @@
 
   gap: 12px;
 
+  margin-bottom: 7px;
+
   padding:
     0
     13px;
-
-  margin-bottom: 7px;
 
   border:
     1px solid
@@ -642,16 +838,16 @@
 
   cursor: pointer;
 
-  font-size: 11px;
+  font-size: 10.5px;
 
   font-weight: 650;
 
   text-align: left;
 
   transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
 }
 
 .sidebar-collapse-button:hover {
@@ -661,16 +857,18 @@
     rgba(255, 255, 255, 0.055);
 
   border-color:
-    rgba(255, 255, 255, 0.08);
+    rgba(255, 255, 255, 0.09);
 }
 
 .collapse-icon {
   width: 21px;
 
+  flex-shrink: 0;
+
   display: grid;
   place-items: center;
 
-  flex-shrink: 0;
+  font-size: 10px;
 }
 
 /* =========================================================
@@ -680,7 +878,7 @@
 .logout-btn {
   width: 100%;
 
-  min-height: 46px;
+  min-height: 45px;
 
   display: flex;
   align-items: center;
@@ -704,16 +902,16 @@
 
   cursor: pointer;
 
-  font-size: 12px;
+  font-size: 11px;
 
   font-weight: 650;
 
   text-align: left;
 
   transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
 }
 
 .logout-btn:hover {
@@ -729,24 +927,24 @@
 .logout-icon {
   width: 21px;
 
+  flex-shrink: 0;
+
   display: grid;
   place-items: center;
-
-  flex-shrink: 0;
 }
 
 /* =========================================================
-   CLOSE MOBILE
+   MOBILE CLOSE
 ========================================================= */
 
 .close-sidebar {
   width: 34px;
   height: 34px;
 
+  flex-shrink: 0;
+
   display: grid;
   place-items: center;
-
-  flex-shrink: 0;
 
   border:
     1px solid
@@ -772,12 +970,14 @@
 }
 
 /* =========================================================
-   COLLAPSED MODE
+   COLLAPSED SIDEBAR
 ========================================================= */
 
 .sidebar.collapsed {
   width: var(--tf-sidebar-collapsed);
 }
+
+/* Header */
 
 .sidebar.collapsed
 .sidebar-header {
@@ -795,40 +995,70 @@
   justify-content: center;
 }
 
+/* Profile */
+
 .sidebar.collapsed
 .sidebar-user-card {
   justify-content: center;
 
   margin:
-    16px
-    10px;
+    15px
+    9px;
 
   padding: 8px;
+
+  min-height: auto;
+}
+
+.sidebar.collapsed
+.sidebar-user-card:hover {
+  transform:
+    translateY(-1px);
+}
+
+.sidebar.collapsed
+.sidebar-avatar-wrapper {
+  width: 42px;
+  height: 42px;
+}
+
+.sidebar.collapsed
+.profile-online-dot {
+  right: -1px;
+  bottom: -1px;
+}
+
+/* Navigation */
+
+.sidebar.collapsed
+.sidebar-section-label {
+  display: none;
 }
 
 .sidebar.collapsed
 .sidebar-menu {
   padding:
     5px
-    10px;
+    9px;
 }
 
 .sidebar.collapsed
 .sidebar-menu a {
   justify-content: center;
 
-  padding:
-    0;
-
   gap: 0;
+
+  padding: 0;
 }
 
 .sidebar.collapsed
 .sidebar-icon {
   width: 100%;
 
-  font-size: 16px;
+  font-size: 15px;
 }
+
+/* Bottom */
 
 .sidebar.collapsed
 .sidebar-bottom {
@@ -842,8 +1072,9 @@
 .logout-btn {
   justify-content: center;
 
-  padding:
-    0;
+  gap: 0;
+
+  padding: 0;
 }
 
 .sidebar.collapsed
@@ -853,7 +1084,7 @@
 
 .sidebar.collapsed
 .logout-btn {
-  min-height: 46px;
+  min-height: 45px;
 }
 
 /* =========================================================
@@ -868,7 +1099,7 @@
   z-index: 999;
 
   background:
-    rgba(2, 6, 23, 0.55);
+    rgba(2, 6, 23, 0.58);
 
   backdrop-filter:
     blur(5px);
@@ -903,7 +1134,7 @@
 
     box-shadow:
       20px 0 60px
-      rgba(2, 6, 23, 0.35);
+      rgba(2, 6, 23, 0.38);
   }
 
   .sidebar.expanded {
@@ -926,6 +1157,13 @@
       14px;
   }
 
+  .sidebar-user-card {
+    margin:
+      15px
+      14px
+      10px;
+  }
+
 }
 
 /* =========================================================
@@ -941,7 +1179,8 @@
   .sidebar-user-card {
     margin:
       14px
-      12px;
+      12px
+      10px;
   }
 
 }

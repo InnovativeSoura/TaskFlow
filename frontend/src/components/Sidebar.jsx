@@ -24,6 +24,10 @@ import { useAuth } from "../context/AuthContext";
 
 import "../styles/Sidebar.css";
 
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
 const menuItems = [
   {
     title: "Dashboard",
@@ -56,11 +60,6 @@ const menuItems = [
     path: "/reports",
   },
   {
-    title: "Profile",
-    icon: <FaUserCircle />,
-    path: "/profile",
-  },
-  {
     title: "Settings",
     icon: <FaCog />,
     path: "/settings",
@@ -71,6 +70,10 @@ const menuItems = [
     path: "/notifications",
   },
 ];
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 const Sidebar = ({
   sidebarOpen,
@@ -90,16 +93,7 @@ const Sidebar = ({
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
-
-      setIsMobile(mobile);
-
-      /*
-        On desktop, keep sidebar state controlled
-        by the user.
-
-        On mobile, sidebar is hidden by default.
-      */
+      setIsMobile(window.innerWidth <= 768);
     };
 
     handleResize();
@@ -109,20 +103,22 @@ const Sidebar = ({
       handleResize
     );
 
-    return () =>
+    return () => {
       window.removeEventListener(
         "resize",
         handleResize
       );
+    };
   }, []);
 
   /* =========================================================
-     INITIALS
+     USER INITIALS
   ========================================================= */
 
   const initials = user?.name
     ? user.name
         .split(" ")
+        .filter(Boolean)
         .map((name) => name[0])
         .join("")
         .substring(0, 2)
@@ -160,7 +156,9 @@ const Sidebar = ({
       return;
     }
 
-    setSidebarOpen((previous) => !previous);
+    setSidebarOpen(
+      (previous) => !previous
+    );
   };
 
   /* =========================================================
@@ -168,6 +166,18 @@ const Sidebar = ({
   ========================================================= */
 
   const closeMobile = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
+
+  /* =========================================================
+     PROFILE CLICK
+  ========================================================= */
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+
     if (isMobile) {
       setSidebarOpen(false);
     }
@@ -227,7 +237,7 @@ const Sidebar = ({
         }}
       >
         {/* ===================================================
-            BRAND / COLLAPSE CONTROL
+            HEADER / TASKFLOW LOGO
         =================================================== */}
 
         <div className="sidebar-header">
@@ -290,7 +300,7 @@ const Sidebar = ({
             </AnimatePresence>
           </button>
 
-          {/* Mobile close button */}
+          {/* Mobile close */}
 
           {isMobile && sidebarOpen && (
             <button
@@ -307,27 +317,50 @@ const Sidebar = ({
         </div>
 
         {/* ===================================================
-            WORKSPACE DIVIDER
+            DIVIDER
         =================================================== */}
 
         <div className="sidebar-divider" />
 
         {/* ===================================================
-            USER PROFILE
+            CLICKABLE USER PROFILE
         =================================================== */}
 
-        <div className="sidebar-user-card">
-          {user?.avatar ? (
-            <img
-              src={user.avatar}
-              alt="User avatar"
-              className="sidebar-avatar"
-            />
-          ) : (
-            <div className="sidebar-avatar initials">
-              {initials}
-            </div>
-          )}
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `sidebar-user-card ${
+              isActive
+                ? "profile-active"
+                : ""
+            }`
+          }
+          onClick={handleProfileClick}
+          title={
+            !sidebarOpen
+              ? `Open ${user?.name || "profile"}`
+              : undefined
+          }
+        >
+          {/* Avatar */}
+
+          <div className="sidebar-avatar-wrapper">
+            {user?.avatar ? (
+              <img
+                src={user.avatar}
+                alt="User avatar"
+                className="sidebar-avatar"
+              />
+            ) : (
+              <div className="sidebar-avatar initials">
+                {initials}
+              </div>
+            )}
+
+            <span className="profile-online-dot" />
+          </div>
+
+          {/* User information */}
 
           <AnimatePresence>
             {sidebarOpen && (
@@ -345,6 +378,9 @@ const Sidebar = ({
                   opacity: 0,
                   x: -8,
                 }}
+                transition={{
+                  duration: 0.18,
+                }}
               >
                 <strong>
                   {user?.name || "User"}
@@ -356,7 +392,29 @@ const Sidebar = ({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+
+          {/* Profile arrow */}
+
+          {sidebarOpen && (
+            <motion.span
+              className="profile-arrow"
+              initial={{
+                opacity: 0,
+                x: -4,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              exit={{
+                opacity: 0,
+                x: -4,
+              }}
+            >
+              <FaChevronRight />
+            </motion.span>
+          )}
+        </NavLink>
 
         {/* ===================================================
             NAVIGATION LABEL
@@ -461,7 +519,7 @@ const Sidebar = ({
         =================================================== */}
 
         <div className="sidebar-bottom">
-          {/* Collapse hint */}
+          {/* Collapse button */}
 
           {!isMobile && (
             <button
