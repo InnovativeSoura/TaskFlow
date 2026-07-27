@@ -1,86 +1,17 @@
 /* =========================================================
-   TASKFLOW — PREMIUM TESTIMONIALS SECTION
+   TASKFLOW — PREMIUM TESTIMONIALS
 ========================================================= */
 
 .testimonials-section {
   position: relative;
-  width: 100%;
 
-  padding: 150px 0 120px;
-
-  overflow: hidden;
-  isolation: isolate;
-}
-
-/* =========================================================
-   BACKGROUND GLOW
-========================================================= */
-
-.testimonials-section::before {
-  content: "";
-
-  position: absolute;
-
-  width: 700px;
-  height: 700px;
-
-  top: 20%;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 93, 252, 0.10),
-      transparent 68%
-    );
-
-  filter: blur(30px);
-
-  pointer-events: none;
-
-  z-index: -2;
-}
-
-.testimonials-section::after {
-  content: "";
-
-  position: absolute;
-
-  width: 500px;
-  height: 500px;
-
-  right: -220px;
-  top: 35%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(6, 182, 212, 0.07),
-      transparent 70%
-    );
-
-  filter: blur(25px);
-
-  pointer-events: none;
-
-  z-index: -2;
-}
-
-
-/* =========================================================
-   CONTAINER
-========================================================= */
-
-.testimonials-container {
   width: min(1180px, calc(100% - 40px));
 
   margin: 0 auto;
 
-  position: relative;
+  padding: 105px 0 145px;
 
-  z-index: 2;
+  isolation: isolate;
 }
 
 
@@ -89,101 +20,60 @@
 ========================================================= */
 
 .testimonials-header {
-  position: relative;
+  max-width: 760px;
 
-  width: min(760px, 100%);
-
-  margin: 0 auto 70px;
+  margin: 0 auto 62px;
 
   text-align: center;
-
-  /* IMPORTANT:
-     Prevents the header from being pulled
-     underneath the previous section.
-  */
-
-  padding-top: 20px;
 }
 
-
-/* =========================================================
-   SMALL BADGE
-========================================================= */
-
-.testimonials-badge {
+.testimonials-eyebrow {
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
 
-  padding: 8px 17px;
+  padding: 8px 15px;
 
-  margin-bottom: 22px;
+  border: 1px solid rgba(139, 124, 255, 0.22);
 
   border-radius: 999px;
 
   background:
-    linear-gradient(
-      135deg,
-      rgba(109, 93, 252, 0.14),
-      rgba(59, 130, 246, 0.10)
-    );
+    rgba(109, 93, 252, 0.08);
 
-  border: 1px solid
-    rgba(139, 124, 255, 0.24);
-
-  box-shadow:
-    0 8px 30px rgba(109, 93, 252, 0.10);
-
-  color: #a9a1ff;
+  color: #9b91ff;
 
   font-size: 10px;
   font-weight: 800;
 
-  letter-spacing: 2px;
+  letter-spacing: 2.3px;
 
-  text-transform: uppercase;
+  box-shadow:
+    0 0 30px rgba(109, 93, 252, 0.08);
 }
-
-
-/* =========================================================
-   TITLE
-========================================================= */
 
 .testimonials-title {
-  margin: 0;
+  margin: 20px 0 16px;
 
-  font-size: clamp(
-    42px,
-    5vw,
-    68px
-  );
+  color: #ffffff;
 
-  line-height: 1.02;
+  font-size: clamp(38px, 5vw, 62px);
 
-  letter-spacing: -2.8px;
+  line-height: 1.04;
 
-  font-weight: 850;
+  font-weight: 800;
 
-  color: #f8fafc;
+  letter-spacing: -2.5px;
 }
-
-
-/* =========================================================
-   GRADIENT TITLE
-========================================================= */
 
 .testimonials-title span {
   display: block;
 
-  margin-top: 4px;
-
   background:
     linear-gradient(
-      90deg,
+      100deg,
       #8b7cff 0%,
-      #6366f1 42%,
-      #3b82f6 75%,
+      #6d5dfc 40%,
       #22d3ee 100%
     );
 
@@ -191,49 +81,33 @@
   background-clip: text;
 
   -webkit-text-fill-color: transparent;
-
-  color: transparent;
 }
 
+.testimonials-subtitle {
+  max-width: 680px;
 
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.testimonials-description {
-  width: min(650px, 100%);
-
-  margin: 25px auto 0;
+  margin: 0 auto;
 
   color: #8f9ab2;
 
   font-size: 15px;
 
   line-height: 1.8;
-
-  font-weight: 500;
 }
 
-
-/* =========================================================
-   RATING DIVIDER
-========================================================= */
-
-.testimonials-rating {
+.testimonials-header-line {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  gap: 16px;
+  gap: 18px;
 
-  margin-top: 25px;
+  margin-top: 27px;
 }
 
-.testimonials-rating::before,
-.testimonials-rating::after {
-  content: "";
-
+.testimonials-header-line span {
   width: 80px;
   height: 1px;
 
@@ -241,29 +115,32 @@
     linear-gradient(
       90deg,
       transparent,
-      rgba(139, 124, 255, 0.35)
+      rgba(139, 124, 255, 0.4)
     );
 }
 
-.testimonials-rating::after {
+.testimonials-header-line span:last-child {
   background:
     linear-gradient(
       90deg,
-      rgba(139, 124, 255, 0.35),
+      rgba(34, 211, 238, 0.4),
       transparent
     );
 }
 
-.testimonials-rating span {
+.header-stars {
+  display: flex;
+  gap: 5px;
+
   color: #fbbf24;
 
-  font-size: 15px;
+  font-size: 12px;
 
-  letter-spacing: 4px;
-
-  text-shadow:
-    0 0 18px
-    rgba(251, 191, 36, 0.35);
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(251, 191, 36, 0.3)
+    );
 }
 
 
@@ -277,156 +154,163 @@
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 22px;
+  gap: 20px;
 
   align-items: stretch;
 }
 
 
 /* =========================================================
-   TESTIMONIAL CARD
+   CARD
 ========================================================= */
 
 .testimonial-card {
   position: relative;
 
-  min-height: 320px;
+  min-height: 335px;
 
-  padding: 30px;
+  padding: 28px;
+
+  overflow: hidden;
 
   border-radius: 24px;
 
-  overflow: hidden;
+  border: 1px solid
+    rgba(255, 255, 255, 0.09);
 
   background:
     linear-gradient(
       145deg,
-      rgba(25, 32, 60, 0.92),
-      rgba(9, 14, 32, 0.96)
+      rgba(20, 27, 52, 0.94),
+      rgba(7, 11, 28, 0.96)
     );
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
 
   box-shadow:
     0 25px 70px
     rgba(0, 0, 0, 0.28),
 
     inset 0 1px 0
-    rgba(255, 255, 255, 0.05);
+    rgba(255, 255, 255, 0.07);
 
   transition:
-    transform 0.4s ease,
-    border-color 0.4s ease,
-    box-shadow 0.4s ease;
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
 }
-
-
-/* =========================================================
-   CARD TOP GLOW
-========================================================= */
 
 .testimonial-card::before {
   content: "";
 
   position: absolute;
 
-  width: 260px;
-  height: 260px;
+  inset: 0;
 
-  top: -150px;
-  right: -100px;
+  border-radius: inherit;
 
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 93, 252, 0.20),
-      transparent 68%
-    );
-
-  pointer-events: none;
-}
-
-
-/* =========================================================
-   CARD SHINE
-========================================================= */
-
-.testimonial-card::after {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: -120%;
-
-  width: 70%;
-  height: 100%;
+  padding: 1px;
 
   background:
     linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.05),
-      transparent
+      135deg,
+      rgba(139, 124, 255, 0.3),
+      transparent 38%,
+      rgba(34, 211, 238, 0.16)
     );
 
-  transform: skewX(-20deg);
+  -webkit-mask:
+    linear-gradient(#fff 0 0)
+      content-box,
+    linear-gradient(#fff 0 0);
 
-  transition:
-    left 0.8s ease;
+  -webkit-mask-composite: xor;
+
+  mask-composite: exclude;
 
   pointer-events: none;
 }
 
-.testimonial-card:hover::after {
-  left: 150%;
-}
-
-
-/* =========================================================
-   CARD HOVER
-========================================================= */
-
 .testimonial-card:hover {
-  transform:
-    translateY(-10px);
-
   border-color:
-    rgba(139, 124, 255, 0.35);
+    rgba(139, 124, 255, 0.3);
 
   box-shadow:
     0 35px 90px
-    rgba(0, 0, 0, 0.40),
+    rgba(0, 0, 0, 0.42),
 
-    0 0 40px
-    rgba(109, 93, 252, 0.10),
+    0 0 45px
+    rgba(109, 93, 252, 0.1),
 
     inset 0 1px 0
-    rgba(255, 255, 255, 0.08);
+    rgba(255, 255, 255, 0.11);
 }
 
 
 /* =========================================================
-   CARD HEADER
+   CARD GLOW
 ========================================================= */
 
-.testimonial-card-header {
+.testimonial-card-glow {
+  position: absolute;
+
+  width: 190px;
+  height: 190px;
+
+  top: -100px;
+  right: -80px;
+
+  border-radius: 50%;
+
+  filter: blur(30px);
+
+  opacity: 0.3;
+
+  pointer-events: none;
+
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+}
+
+.testimonial-card:hover
+.testimonial-card-glow {
+  transform: scale(1.3);
+
+  opacity: 0.55;
+}
+
+.testimonial-purple
+.testimonial-card-glow {
+  background: #7c3aed;
+}
+
+.testimonial-blue
+.testimonial-card-glow {
+  background: #2563eb;
+}
+
+.testimonial-cyan
+.testimonial-card-glow {
+  background: #06b6d4;
+}
+
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.testimonial-top {
+  position: relative;
+
+  z-index: 2;
+
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
-  margin-bottom: 28px;
+  margin-bottom: 25px;
 }
-
-
-/* =========================================================
-   QUOTE ICON
-========================================================= */
 
 .testimonial-quote-icon {
   width: 48px;
@@ -437,41 +321,58 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 15px;
+  border-radius: 14px;
 
   color: white;
 
-  font-size: 19px;
+  font-size: 17px;
 
   background:
     linear-gradient(
       135deg,
-      #7c5cff,
+      #7c3aed,
       #6366f1
     );
 
   box-shadow:
-    0 12px 30px
-    rgba(109, 93, 252, 0.32);
+    0 10px 30px
+    rgba(109, 93, 252, 0.3);
 }
 
+.testimonial-blue
+.testimonial-quote-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #2563eb
+    );
+}
 
-/* =========================================================
-   STAR RATING
-========================================================= */
+.testimonial-cyan
+.testimonial-quote-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #06b6d4,
+      #0891b2
+    );
+}
 
-.testimonial-stars {
+.testimonial-rating {
   display: flex;
 
   gap: 4px;
 
   color: #fbbf24;
 
-  font-size: 13px;
+  font-size: 12px;
 
-  text-shadow:
-    0 0 12px
-    rgba(251, 191, 36, 0.25);
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(251, 191, 36, 0.25)
+    );
 }
 
 
@@ -480,15 +381,21 @@
 ========================================================= */
 
 .testimonial-quote {
+  position: relative;
+
+  z-index: 2;
+
+  min-height: 112px;
+
   margin: 0;
 
-  color: #d8deea;
+  color: #d7dbea;
 
-  font-size: 15px;
+  font-size: 14px;
 
-  line-height: 1.85;
+  line-height: 1.8;
 
-  font-weight: 500;
+  font-weight: 450;
 }
 
 
@@ -497,16 +404,18 @@
 ========================================================= */
 
 .testimonial-divider {
-  width: 100%;
+  position: relative;
+
+  z-index: 2;
 
   height: 1px;
 
-  margin: 26px 0;
+  margin: 20px 0;
 
   background:
     linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.1),
       transparent
     );
 }
@@ -517,6 +426,10 @@
 ========================================================= */
 
 .testimonial-user {
+  position: relative;
+
+  z-index: 2;
+
   display: flex;
 
   align-items: center;
@@ -524,14 +437,9 @@
   gap: 13px;
 }
 
-
-/* =========================================================
-   AVATAR
-========================================================= */
-
 .testimonial-avatar {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
 
   flex-shrink: 0;
 
@@ -544,267 +452,596 @@
 
   color: white;
 
-  font-size: 13px;
+  font-size: 12px;
+
   font-weight: 800;
 
   background:
     linear-gradient(
       135deg,
-      #6366f1,
-      #8b5cf6
+      #8b5cf6,
+      #6366f1
     );
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.12);
+  border: 2px solid
+    rgba(255, 255, 255, 0.13);
 
   box-shadow:
-    0 8px 25px
-    rgba(99, 102, 241, 0.25);
+    0 8px 22px
+    rgba(99, 102, 241, 0.3);
 }
 
+.testimonial-blue
+.testimonial-avatar {
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #2563eb
+    );
+}
 
-/* =========================================================
-   USER INFO
-========================================================= */
+.testimonial-cyan
+.testimonial-avatar {
+  background:
+    linear-gradient(
+      135deg,
+      #06b6d4,
+      #0891b2
+    );
+}
 
 .testimonial-user-info {
   display: flex;
 
   flex-direction: column;
 
-  gap: 3px;
+  min-width: 0;
 }
 
-.testimonial-user-name {
-  color: #f8fafc;
+.testimonial-user-info strong {
+  color: #ffffff;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  font-weight: 750;
+  font-weight: 700;
 }
 
-.testimonial-user-role {
-  color: #7f8aa3;
+.testimonial-user-info span {
+  margin-top: 3px;
+
+  color: #a4adc1;
 
   font-size: 11px;
+}
 
-  font-weight: 500;
+.testimonial-user-info small {
+  margin-top: 2px;
+
+  color: #69738a;
+
+  font-size: 10px;
 }
 
 
 /* =========================================================
-   BOTTOM STATS
+   DECORATIVE QUOTE
 ========================================================= */
 
-.testimonials-stats {
+.testimonial-large-quote {
+  position: absolute;
+
+  right: 22px;
+  bottom: 8px;
+
+  color: rgba(139, 124, 255, 0.07);
+
+  font-family: Georgia, serif;
+
+  font-size: 115px;
+
+  line-height: 1;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.testimonial-metrics {
   display: grid;
 
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 18px;
+  margin-top: 28px;
 
-  margin-top: 26px;
-}
+  padding: 5px;
 
-.testimonial-stat {
-  position: relative;
+  overflow: hidden;
 
-  padding: 26px 20px;
+  border-radius: 24px;
 
-  text-align: center;
-
-  border-radius: 20px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
 
   background:
-    linear-gradient(
-      145deg,
-      rgba(20, 27, 51, 0.92),
-      rgba(8, 12, 28, 0.96)
-    );
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.07);
+    rgba(8, 13, 31, 0.75);
 
   box-shadow:
-    0 20px 50px
-    rgba(0, 0, 0, 0.22);
+    0 25px 65px
+    rgba(0, 0, 0, 0.3),
 
-  transition:
-    transform 0.35s ease,
-    border-color 0.35s ease;
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.05);
 }
 
-.testimonial-stat:hover {
-  transform:
-    translateY(-5px);
+.testimonial-metric {
+  position: relative;
 
-  border-color:
-    rgba(99, 102, 241, 0.30);
-}
-
-.testimonial-stat strong {
-  display: block;
-
-  margin-bottom: 7px;
-
-  font-size: 30px;
-
-  font-weight: 800;
-
-  color: #f8fafc;
-}
-
-.testimonial-stat span {
-  color: #7f8aa3;
-
-  font-size: 11px;
-
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   AWARD BADGE
-========================================================= */
-
-.testimonials-award {
-  width: fit-content;
-
-  margin: 58px auto 0;
+  min-height: 125px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 15px;
+  gap: 20px;
 
-  padding: 15px 24px;
+  padding: 25px;
+
+  overflow: hidden;
 
   border-radius: 18px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(109, 93, 252, 0.13),
-      rgba(59, 130, 246, 0.08)
+      rgba(20, 28, 55, 0.8),
+      rgba(10, 15, 34, 0.8)
     );
 
-  border:
+  border-right:
     1px solid
-    rgba(139, 124, 255, 0.18);
+    rgba(255, 255, 255, 0.06);
 
-  box-shadow:
-    0 20px 50px
-    rgba(0, 0, 0, 0.20);
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-.testimonials-award-icon {
-  width: 38px;
-  height: 38px;
+.testimonial-metric:last-child {
+  border-right: 0;
+}
+
+.testimonial-metric:hover {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30, 38, 70, 0.95),
+      rgba(12, 19, 43, 0.95)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.07);
+}
+
+
+/* =========================================================
+   METRIC ICON
+========================================================= */
+
+.metric-icon {
+  position: relative;
+
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 12px;
+  border-radius: 16px;
 
-  color: #ffffff;
+  color: white;
+
+  font-size: 18px;
+
+  background:
+    rgba(109, 93, 252, 0.12);
+
+  border: 1px solid
+    rgba(139, 124, 255, 0.2);
+
+  box-shadow:
+    0 10px 30px
+    rgba(109, 93, 252, 0.12);
+}
+
+.metric-purple .metric-icon {
+  color: #a78bfa;
+}
+
+.metric-blue .metric-icon {
+  color: #60a5fa;
+
+  border-color:
+    rgba(59, 130, 246, 0.22);
+
+  background:
+    rgba(59, 130, 246, 0.1);
+}
+
+.metric-cyan .metric-icon {
+  color: #22d3ee;
+
+  border-color:
+    rgba(34, 211, 238, 0.22);
+
+  background:
+    rgba(34, 211, 238, 0.1);
+}
+
+
+/* =========================================================
+   METRIC CONTENT
+========================================================= */
+
+.metric-content {
+  min-width: 0;
+}
+
+.metric-value-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.metric-value-row strong {
+  color: white;
+
+  font-size: 28px;
+
+  line-height: 1;
+
+  letter-spacing: -1px;
+}
+
+.metric-stars {
+  display: flex;
+
+  gap: 3px;
+
+  color: #fbbf24;
+
+  font-size: 9px;
+}
+
+.metric-title {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #cbd5e1;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+}
+
+.metric-content p {
+  margin: 7px 0 0;
+
+  color: #68748d;
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   AWARD
+========================================================= */
+
+.award-wrapper {
+  display: flex;
+
+  justify-content: center;
+
+  /*
+     Increased spacing so the award sits
+     noticeably lower than the metrics.
+  */
+  margin-top: 72px;
+}
+
+.award-card {
+  position: relative;
+
+  min-width: 490px;
+
+  min-height: 76px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 17px;
+
+  padding: 15px 24px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  border: 1px solid
+    rgba(139, 124, 255, 0.22);
 
   background:
     linear-gradient(
       135deg,
-      #7c5cff,
-      #3b82f6
+      rgba(25, 19, 60, 0.95),
+      rgba(15, 20, 47, 0.96)
     );
 
   box-shadow:
-    0 8px 20px
-    rgba(99, 102, 241, 0.28);
+    0 20px 55px
+    rgba(0, 0, 0, 0.32),
+
+    0 0 40px
+    rgba(109, 93, 252, 0.08),
+
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.08);
 }
 
-.testimonials-award-content {
+.award-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 10% 50%,
+      rgba(139, 92, 246, 0.18),
+      transparent 35%
+    );
+
+  pointer-events: none;
+}
+
+.award-icon {
+  position: relative;
+
+  z-index: 2;
+
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #c4b5fd;
+
+  font-size: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #6366f1
+    );
+
+  box-shadow:
+    0 10px 30px
+    rgba(124, 58, 237, 0.35);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.award-content {
+  position: relative;
+
+  z-index: 2;
+
   display: flex;
 
   flex-direction: column;
-
-  gap: 3px;
 }
 
-.testimonials-award-content strong {
-  color: #f8fafc;
+.award-content strong {
+  color: #ffffff;
 
   font-size: 13px;
 
   font-weight: 750;
 }
 
-.testimonials-award-content span {
-  color: #8792aa;
+.award-content span {
+  margin-top: 5px;
 
-  font-size: 11px;
+  color: #818ca5;
+
+  font-size: 10px;
+}
+
+.award-shine {
+  position: absolute;
+
+  top: -100%;
+
+  left: -40%;
+
+  width: 30%;
+
+  height: 300%;
+
+  transform: rotate(25deg);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.08),
+      transparent
+    );
+
+  animation:
+    awardShine 5s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+@keyframes awardShine {
+  0% {
+    left: -40%;
+  }
+
+  45%,
+  100% {
+    left: 130%;
+  }
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE — TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
 
   .testimonials-section {
-    padding: 120px 0 90px;
-  }
-
-  .testimonials-header {
-    margin-bottom: 55px;
+    padding-top: 80px;
+    padding-bottom: 110px;
   }
 
   .testimonials-grid {
     grid-template-columns:
-      1fr;
+      repeat(2, minmax(0, 1fr));
   }
 
-  .testimonial-card {
-    min-height: auto;
+  .testimonial-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .testimonial-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-metric {
+    border-right: 0;
+
+    border-bottom:
+      1px solid
+      rgba(255, 255, 255, 0.06);
+  }
+
+  .testimonial-metric:last-child {
+    border-bottom: 0;
   }
 }
 
 
-@media (max-width: 650px) {
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 640px) {
 
   .testimonials-section {
-    padding: 100px 0 75px;
-  }
-
-  .testimonials-container {
     width: min(
       100% - 28px,
       1180px
     );
+
+    padding-top: 65px;
+    padding-bottom: 90px;
+  }
+
+  .testimonials-header {
+    margin-bottom: 40px;
   }
 
   .testimonials-title {
-    font-size: 40px;
+    font-size: 38px;
 
-    letter-spacing: -1.8px;
+    letter-spacing: -1.5px;
   }
 
-  .testimonials-description {
-    font-size: 14px;
+  .testimonials-subtitle {
+    font-size: 13px;
   }
 
-  .testimonials-stats {
-    grid-template-columns:
-      1fr;
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
   }
 
-  .testimonials-award {
+  .testimonial-card:last-child {
+    grid-column: auto;
+  }
+
+  .testimonial-card {
+    min-height: 315px;
+
+    padding: 23px;
+  }
+
+  .testimonial-quote {
+    min-height: auto;
+
+    font-size: 13px;
+  }
+
+  .testimonial-metric {
+    min-height: 120px;
+
+    padding: 20px;
+  }
+
+  .metric-value-row strong {
+    font-size: 25px;
+  }
+
+  .award-wrapper {
+    margin-top: 55px;
+  }
+
+  .award-card {
     width: 100%;
 
-    justify-content: center;
+    min-width: 0;
+
+    padding: 15px 17px;
+  }
+
+  .award-content strong {
+    font-size: 11px;
+  }
+
+  .award-content span {
+    font-size: 9px;
   }
 }
