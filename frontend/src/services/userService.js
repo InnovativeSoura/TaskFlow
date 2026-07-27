@@ -8,30 +8,33 @@ export const getUsers = async () => {
   const res = await api.get("/users");
 
   return {
-    success: true,
+    success: res.data?.success ?? true,
     data:
-      res.data.users ??
-      res.data.data ??
+      res.data?.users ??
+      res.data?.data ??
       res.data ??
       [],
   };
 };
 
 /* ==========================================
-   GET USER
+   GET USER BY ID
 ========================================== */
 
 export const getUser = async (id) => {
+  if (!id) {
+    throw new Error("User ID is required.");
+  }
+
   const res = await api.get(`/users/${id}`);
 
   return {
-    success: true,
+    success: res.data?.success ?? true,
     data:
-      res.data.user ??
-      res.data.data ??
+      res.data?.user ??
+      res.data?.data ??
       res.data,
-    statistics:
-      res.data.statistics ?? null,
+    statistics: res.data?.statistics ?? null,
   };
 };
 
@@ -43,7 +46,7 @@ export const getProfile = async () => {
   const res = await api.get("/users/profile");
 
   return {
-    success: res.data?.success ?? true,
+    success: res.data?.success ?? false,
     data:
       res.data?.user ??
       res.data?.data ??
@@ -62,8 +65,10 @@ export const updateProfile = async (data) => {
   );
 
   return {
-    success: res.data?.success ?? true,
-    message: res.data?.message,
+    success: res.data?.success ?? false,
+    message:
+      res.data?.message ||
+      "Profile updated successfully.",
     data:
       res.data?.user ??
       res.data?.data ??
@@ -79,10 +84,10 @@ export const createUser = async (data) => {
   const res = await api.post("/users", data);
 
   return {
-    success: true,
+    success: res.data?.success ?? true,
     data:
-      res.data.user ??
-      res.data.data ??
+      res.data?.user ??
+      res.data?.data ??
       res.data,
   };
 };
@@ -92,16 +97,20 @@ export const createUser = async (data) => {
 ========================================== */
 
 export const updateUser = async (id, data) => {
+  if (!id) {
+    throw new Error("User ID is required.");
+  }
+
   const res = await api.put(
     `/users/${id}`,
     data
   );
 
   return {
-    success: true,
+    success: res.data?.success ?? true,
     data:
-      res.data.user ??
-      res.data.data ??
+      res.data?.user ??
+      res.data?.data ??
       res.data,
   };
 };
@@ -111,5 +120,9 @@ export const updateUser = async (id, data) => {
 ========================================== */
 
 export const deleteUser = async (id) => {
+  if (!id) {
+    throw new Error("User ID is required.");
+  }
+
   return await api.delete(`/users/${id}`);
 };

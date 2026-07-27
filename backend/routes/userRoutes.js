@@ -29,7 +29,7 @@ const router = express.Router();
 router.use(protect);
 
 /* ==========================================
-   CURRENT LOGGED-IN USER
+   LOGGED-IN USER PROFILE
    IMPORTANT:
    These MUST come before /:id
 ========================================== */
@@ -45,10 +45,8 @@ router.put(
 );
 
 /* ==========================================
-   USER ROUTES
+   ALL AUTHENTICATED USERS
 ========================================== */
-
-/* All authenticated users */
 
 router.get(
   "/",
@@ -59,6 +57,10 @@ router.get(
   "/search",
   searchUsers
 );
+
+/* ==========================================
+   USER DETAILS
+========================================== */
 
 router.get(
   "/:id",
@@ -71,7 +73,7 @@ router.get(
 );
 
 /* ==========================================
-   ADMIN & MANAGER
+   ADMIN / MANAGER
 ========================================== */
 
 router.put(

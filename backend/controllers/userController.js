@@ -476,23 +476,11 @@ export const getUserSummary = async (
    GET LOGGED-IN USER PROFILE
 ========================================== */
 
-export const getProfile = async (
-  req,
-  res
-) => {
+export const getProfile = async (req, res) => {
   try {
-    if (!req.user?.id) {
-      return res.status(401).json({
-        success: false,
-        message:
-          "Authentication required",
-      });
-    }
-
-    const user =
-      await User.findById(
-        req.user.id
-      ).select("-password");
+    const user = await User.findById(
+      req.user.id
+    ).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -508,7 +496,7 @@ export const getProfile = async (
   } catch (error) {
     console.error(
       "Get Profile Error:",
-      error
+      error.message
     );
 
     return res.status(500).json({
@@ -527,18 +515,9 @@ export const updateProfile = async (
   res
 ) => {
   try {
-    if (!req.user?.id) {
-      return res.status(401).json({
-        success: false,
-        message:
-          "Authentication required",
-      });
-    }
-
-    const user =
-      await User.findById(
-        req.user.id
-      );
+    const user = await User.findById(
+      req.user.id
+    );
 
     if (!user) {
       return res.status(404).json({
@@ -546,15 +525,6 @@ export const updateProfile = async (
         message: "User not found",
       });
     }
-
-    /*
-      Only allow normal profile
-      information to be changed here.
-
-      Email, password, role, status,
-      provider and verification status
-      remain protected.
-    */
 
     const fields = [
       "name",
@@ -570,30 +540,22 @@ export const updateProfile = async (
         req.body[field] !== undefined
       ) {
         user[field] =
-          typeof req.body[field] ===
-          "string"
-            ? req.body[field].trim()
-            : req.body[field];
+          req.body[field];
       }
     });
 
     await user.save();
 
-    const updatedUser =
-      await User.findById(
-        user._id
-      ).select("-password");
-
     return res.status(200).json({
       success: true,
       message:
         "Profile updated successfully",
-      user: updatedUser,
+      user,
     });
   } catch (error) {
     console.error(
       "Update Profile Error:",
-      error
+      error.message
     );
 
     return res.status(500).json({
