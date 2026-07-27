@@ -16,66 +16,82 @@ const Home = () => {
   return (
     <div className="landing-page">
 
-      {/* ==========================================
-          ANIMATED BACKGROUND
-      ========================================== */}
+      {/* =====================================================
+          GLOBAL ANIMATED BACKGROUND
+          Stays behind every section
+      ===================================================== */}
       <BackgroundAnimation />
 
-      {/* ==========================================
-          NAVBAR
-      ========================================== */}
+      {/* =====================================================
+          FIXED LANDING NAVBAR
+      ===================================================== */}
       <LandingNavbar />
 
-      {/* ==========================================
+      {/* =====================================================
           MAIN LANDING CONTENT
-      ========================================== */}
+      ===================================================== */}
       <main className="landing-main">
 
-        {/* HERO */}
-        <section
+        {/* ===================================================
+            HERO
+        =================================================== */}
+        <div
           id="home"
           className="landing-section landing-hero-section"
         >
           <Hero />
-        </section>
+        </div>
 
-        {/* STATISTICS */}
-        <section
+
+        {/* ===================================================
+            STATISTICS
+        =================================================== */}
+        <div
           id="statistics"
           className="landing-section landing-statistics-section"
         >
           <Statistics />
-        </section>
+        </div>
 
-        {/* FEATURES */}
-        <section
+
+        {/* ===================================================
+            FEATURES
+        =================================================== */}
+        <div
           id="features"
           className="landing-section landing-features-section"
         >
           <Features />
-        </section>
+        </div>
 
-        {/* TESTIMONIALS */}
-        <section
+
+        {/* ===================================================
+            TESTIMONIALS
+        =================================================== */}
+        <div
           id="testimonials"
           className="landing-section landing-testimonials-section"
         >
           <Testimonials />
-        </section>
+        </div>
 
-        {/* CTA */}
-        <section
+
+        {/* ===================================================
+            CTA
+        =================================================== */}
+        <div
           id="contact"
           className="landing-section landing-cta-section"
         >
           <CTA />
-        </section>
+        </div>
 
       </main>
 
-      {/* ==========================================
+
+      {/* =====================================================
           FOOTER
-      ========================================== */}
+      ===================================================== */}
       <Footer />
 
     </div>
