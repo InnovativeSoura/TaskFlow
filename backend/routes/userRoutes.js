@@ -1,3 +1,5 @@
+// backend/routes/userRoutes.js
+
 import express from "express";
 
 import {
@@ -9,9 +11,12 @@ import {
   toggleUserStatus,
   searchUsers,
   getUserSummary,
+  getProfile,
+  updateProfile,
 } from "../controllers/userController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
+
 import {
   isAdmin,
   isAdminOrManager,
@@ -26,21 +31,84 @@ const router = express.Router();
 router.use(protect);
 
 /* ==========================================
-   USER ROUTES
+   LOGGED-IN USER PROFILE
 ========================================== */
 
-// All authenticated users
-router.get("/", getUsers);
-router.get("/search", searchUsers);
-router.get("/:id", getUserById);
-router.get("/:id/summary", getUserSummary);
+/*
+   IMPORTANT:
+   These routes must appear BEFORE /:id
+   because "profile" would otherwise be
+   interpreted as an ID.
+*/
 
-// Admin & Manager
-router.put("/:id", isAdminOrManager, updateUser);
-router.patch("/:id/role", isAdmin, changeUserRole);
-router.patch("/:id/status", isAdmin, toggleUserStatus);
+router.get(
+  "/profile",
+  getProfile
+);
 
-// Admin only
-router.delete("/:id", isAdmin, deleteUser);
+router.put(
+  "/profile",
+  updateProfile
+);
+
+/* ==========================================
+   ALL AUTHENTICATED USERS
+========================================== */
+
+router.get(
+  "/",
+  getUsers
+);
+
+router.get(
+  "/search",
+  searchUsers
+);
+
+/* ==========================================
+   USER BY ID
+========================================== */
+
+router.get(
+  "/:id",
+  getUserById
+);
+
+router.get(
+  "/:id/summary",
+  getUserSummary
+);
+
+/* ==========================================
+   ADMIN & MANAGER
+========================================== */
+
+router.put(
+  "/:id",
+  isAdminOrManager,
+  updateUser
+);
+
+/* ==========================================
+   ADMIN ONLY
+========================================== */
+
+router.patch(
+  "/:id/role",
+  isAdmin,
+  changeUserRole
+);
+
+router.patch(
+  "/:id/status",
+  isAdmin,
+  toggleUserStatus
+);
+
+router.delete(
+  "/:id",
+  isAdmin,
+  deleteUser
+);
 
 export default router;

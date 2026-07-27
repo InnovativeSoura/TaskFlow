@@ -1,3 +1,5 @@
+// src/services/userService.js
+
 import api from "../api/axios";
 
 /* ==========================================
@@ -18,11 +20,13 @@ export const getUsers = async () => {
 };
 
 /* ==========================================
-   GET USER
+   GET USER BY ID
 ========================================== */
 
 export const getUser = async (id) => {
-  const res = await api.get(`/users/${id}`);
+  const res = await api.get(
+    `/users/${id}`
+  );
 
   return {
     success: true,
@@ -38,7 +42,10 @@ export const getUser = async (id) => {
 ========================================== */
 
 export const createUser = async (data) => {
-  const res = await api.post("/users", data);
+  const res = await api.post(
+    "/users",
+    data
+  );
 
   return {
     success: true,
@@ -53,8 +60,14 @@ export const createUser = async (data) => {
    UPDATE USER
 ========================================== */
 
-export const updateUser = async (id, data) => {
-  const res = await api.put(`/users/${id}`, data);
+export const updateUser = async (
+  id,
+  data
+) => {
+  const res = await api.put(
+    `/users/${id}`,
+    data
+  );
 
   return {
     success: true,
@@ -70,5 +83,56 @@ export const updateUser = async (id, data) => {
 ========================================== */
 
 export const deleteUser = async (id) => {
-  return await api.delete(`/users/${id}`);
+  return await api.delete(
+    `/users/${id}`
+  );
+};
+
+/* ==========================================
+   GET LOGGED-IN USER PROFILE
+========================================== */
+
+export const getProfile = async () => {
+  const res = await api.get(
+    "/users/profile"
+  );
+
+  return {
+    success: Boolean(
+      res.data?.success
+    ),
+
+    data:
+      res.data?.user ??
+      res.data?.data ??
+      null,
+  };
+};
+
+/* ==========================================
+   UPDATE LOGGED-IN USER PROFILE
+========================================== */
+
+export const updateProfile = async (
+  data
+) => {
+  const res = await api.put(
+    "/users/profile",
+    data
+  );
+
+  return {
+    success: Boolean(
+      res.data?.success
+    ),
+
+    data:
+      res.data?.user ??
+      res.data?.data ??
+      null,
+
+    message:
+      res.data?.message ||
+      "Profile updated successfully.",
+  };
 };

@@ -1,3 +1,5 @@
+// src/api/axios.js
+
 import axios from "axios";
 
 /* ==========================================
@@ -8,13 +10,32 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000";
 
+/*
+  Supports both:
+
+  VITE_API_URL=http://localhost:5000
+
+  and
+
+  VITE_API_URL=http://localhost:5000/api
+*/
+
 const BASE_URL = API_URL.endsWith("/api")
   ? API_URL
-  : `${API_URL}/api`;
+  : `${API_URL.replace(/\/+$/, "")}/api`;
 
-console.log("====================================");
-console.log("🌐 API Base URL:", BASE_URL);
-console.log("====================================");
+console.log(
+  "===================================="
+);
+
+console.log(
+  "🌐 API Base URL:",
+  BASE_URL
+);
+
+console.log(
+  "===================================="
+);
 
 /* ==========================================
    AXIOS INSTANCE
@@ -22,10 +43,14 @@ console.log("====================================");
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: false, // JWT is sent in Authorization header
+
+  withCredentials: false,
+
   timeout: 15000,
+
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type":
+      "application/json",
   },
 });
 
@@ -35,28 +60,42 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers =
+        config.headers || {};
+
+      config.headers.Authorization =
+        `Bearer ${token}`;
     }
 
     console.log(
-      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+      `🚀 ${
+        config.method?.toUpperCase()
+      } ${config.baseURL}${config.url}`
     );
 
     console.log(
       "🔑 Token:",
-      token ? "Present" : "Missing"
+      token
+        ? "Present"
+        : "Missing"
     );
 
     if (config.data) {
-      console.log("📤 Request Body:", config.data);
+      console.log(
+        "📤 Request Body:",
+        config.data
+      );
     }
 
     return config;
   },
-  (error) => Promise.reject(error)
+
+  (error) =>
+    Promise.reject(error)
 );
 
 /* ==========================================
@@ -73,25 +112,55 @@ api.interceptors.response.use(
   },
 
   (error) => {
-    const status = error.response?.status;
-    const url = error.config?.url;
+    const status =
+      error.response?.status;
+
+    const url =
+      error.config?.url || "";
 
     console.error(
       "❌ API Error:",
       status,
-      error.response?.data || error.message
+      error.response?.data ||
+        error.message
     );
 
-    // Only clear auth if an authenticated endpoint fails
+    /*
+      Do not remove authentication
+      for login/register failures.
+    */
+
+    const publicAuthRoutes = [
+      "/auth/login",
+      "/auth/register",
+    ];
+
+    const isPublicAuthRoute =
+      publicAuthRoutes.some(
+        (route) =>
+          url.includes(route)
+      );
+
+    /*
+      If a protected endpoint returns
+      401, remove the stale token.
+    */
+
     if (
       status === 401 &&
-      url !== "/auth/login" &&
-      url !== "/auth/register"
+      !isPublicAuthRoute
     ) {
-      console.warn("⚠ Session expired.");
+      console.warn(
+        "⚠ Session expired or token invalid."
+      );
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      localStorage.removeItem(
+        "token"
+      );
+
+      localStorage.removeItem(
+        "user"
+      );
     }
 
     return Promise.reject(error);

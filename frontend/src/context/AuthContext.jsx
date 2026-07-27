@@ -1,3 +1,5 @@
+// src/context/AuthContext.jsx
+
 import {
   createContext,
   useContext,
@@ -8,7 +10,8 @@ import {
 
 import api from "../api/axios";
 
-const AuthContext = createContext();
+const AuthContext =
+  createContext(null);
 
 /* ==========================================
    GET STORED USER
@@ -16,12 +19,25 @@ const AuthContext = createContext();
 
 const getStoredUser = () => {
   try {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  } catch (error) {
-    console.error("Invalid stored user:", error);
+    const stored =
+      localStorage.getItem(
+        "user"
+      );
 
-    localStorage.removeItem("user");
+    if (!stored) {
+      return null;
+    }
+
+    return JSON.parse(stored);
+  } catch (error) {
+    console.error(
+      "Invalid stored user:",
+      error
+    );
+
+    localStorage.removeItem(
+      "user"
+    );
 
     return null;
   }
@@ -31,44 +47,64 @@ const getStoredUser = () => {
    PROVIDER
 ========================================== */
 
-export const AuthProvider = ({ children }) => {
-  /* ==========================================
-     STATE
-  ========================================== */
+export const AuthProvider = ({
+  children,
+}) => {
+  const [token, setToken] =
+    useState(() =>
+      localStorage.getItem(
+        "token"
+      )
+    );
 
-  const [token, setToken] = useState(
-    localStorage.getItem("token")
-  );
+  const [user, setUser] =
+    useState(getStoredUser);
 
-  const [user, setUser] = useState(
-    getStoredUser()
-  );
-
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] =
+    useState(true);
 
   /* ==========================================
      SAVE AUTH
   ========================================== */
 
-  const saveAuth = useCallback((jwt, currentUser) => {
-    localStorage.setItem("token", jwt);
+  const saveAuth = useCallback(
+    (jwt, currentUser) => {
+      if (jwt) {
+        localStorage.setItem(
+          "token",
+          jwt
+        );
+      }
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(currentUser)
-    );
+      if (currentUser) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(
+            currentUser
+          )
+        );
+      }
 
-    setToken(jwt);
-    setUser(currentUser);
-  }, []);
+      setToken(jwt || null);
+      setUser(
+        currentUser || null
+      );
+    },
+    []
+  );
 
   /* ==========================================
      CLEAR AUTH
   ========================================== */
 
   const clearAuth = useCallback(() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem(
+      "token"
+    );
+
+    localStorage.removeItem(
+      "user"
+    );
 
     setToken(null);
     setUser(null);
@@ -78,45 +114,59 @@ export const AuthProvider = ({ children }) => {
      LOAD CURRENT USER
   ========================================== */
 
-  const loadCurrentUser = useCallback(async () => {
-    const storedToken =
-      localStorage.getItem("token");
-
-    if (!storedToken) {
-      clearAuth();
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const { data } =
-        await api.get("/auth/me");
-
-      if (data.success) {
-        setUser(data.user);
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify(data.user)
+  const loadCurrentUser =
+    useCallback(async () => {
+      const storedToken =
+        localStorage.getItem(
+          "token"
         );
 
-        setToken(storedToken);
-      } else {
-        clearAuth();
+      if (!storedToken) {
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error(
-        "Load User Error:",
-        error.response?.data || error.message
-      );
 
-      clearAuth();
-    } finally {
-      setLoading(false);
-    }
-  }, [clearAuth]);
+      try {
+        setLoading(true);
+
+        const response =
+          await api.get(
+            "/auth/me"
+          );
+
+        if (
+          response.data?.success &&
+          response.data?.user
+        ) {
+          const currentUser =
+            response.data.user;
+
+          setToken(storedToken);
+
+          setUser(currentUser);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(
+              currentUser
+            )
+          );
+        } else {
+          clearAuth();
+        }
+      } catch (error) {
+        console.error(
+          "Load User Error:",
+          error.response
+            ?.data ||
+            error.message
+        );
+
+        clearAuth();
+      } finally {
+        setLoading(false);
+      }
+    }, [clearAuth]);
 
   /* ==========================================
      INITIAL LOAD
@@ -135,16 +185,24 @@ export const AuthProvider = ({ children }) => {
     password,
   }) => {
     try {
-      const { data } =
-        await api.post("/auth/login", {
-          email,
-          password,
-        });
+      const response =
+        await api.post(
+          "/auth/login",
+          {
+            email,
+            password,
+          }
+        );
 
-      if (!data.success) {
+      const data =
+        response.data;
+
+      if (!data?.success) {
         return {
           success: false,
-          message: data.message,
+          message:
+            data?.message ||
+            "Login failed.",
         };
       }
 
@@ -153,12 +211,20 @@ export const AuthProvider = ({ children }) => {
         data.user
       );
 
-      /* Verify Token */
+      /*
+        Fetch the latest database
+        version of the user.
+      */
 
       const me =
-        await api.get("/auth/me");
+        await api.get(
+          "/auth/me"
+        );
 
-      if (!me.data.success) {
+      if (
+        !me.data?.success ||
+        !me.data?.user
+      ) {
         clearAuth();
 
         return {
@@ -183,7 +249,8 @@ export const AuthProvider = ({ children }) => {
       return {
         success: false,
         message:
-          error.response?.data?.message ||
+          error.response?.data
+            ?.message ||
           "Login failed.",
       };
     }
@@ -200,7 +267,7 @@ export const AuthProvider = ({ children }) => {
     role = "Team Member",
   }) => {
     try {
-      const { data } =
+      const response =
         await api.post(
           "/auth/register",
           {
@@ -211,10 +278,15 @@ export const AuthProvider = ({ children }) => {
           }
         );
 
-      if (!data.success) {
+      const data =
+        response.data;
+
+      if (!data?.success) {
         return {
           success: false,
-          message: data.message,
+          message:
+            data?.message ||
+            "Registration failed.",
         };
       }
 
@@ -224,9 +296,14 @@ export const AuthProvider = ({ children }) => {
       );
 
       const me =
-        await api.get("/auth/me");
+        await api.get(
+          "/auth/me"
+        );
 
-      if (!me.data.success) {
+      if (
+        !me.data?.success ||
+        !me.data?.user
+      ) {
         clearAuth();
 
         return {
@@ -251,7 +328,8 @@ export const AuthProvider = ({ children }) => {
       return {
         success: false,
         message:
-          error.response?.data?.message ||
+          error.response?.data
+            ?.message ||
           "Registration failed.",
       };
     }
@@ -271,15 +349,32 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = useCallback(
     (updatedUser) => {
+      if (!updatedUser) {
+        return;
+      }
+
       setUser(updatedUser);
 
       localStorage.setItem(
         "user",
-        JSON.stringify(updatedUser)
+        JSON.stringify(
+          updatedUser
+        )
       );
     },
     []
   );
+
+  /* ==========================================
+     AUTHENTICATED STATUS
+  ========================================== */
+
+  const isAuthenticated =
+    Boolean(
+      token &&
+        user &&
+        user._id
+    );
 
   /* ==========================================
      PROVIDER
@@ -289,23 +384,24 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+
         token,
+
         loading,
 
         login,
+
         register,
+
         logout,
 
         updateUser,
 
         setUser,
+
         setToken,
 
-        isAuthenticated: Boolean(
-          token &&
-          user &&
-          user._id
-        ),
+        isAuthenticated,
       }}
     >
       {children}

@@ -1,3 +1,5 @@
+// backend/app.js
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -19,10 +21,14 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 const app = express();
 
 /* ==========================================
-   TRUST PROXY (Required for Render)
+   TRUST PROXY
+   Required for Render
 ========================================== */
 
-app.set("trust proxy", 1);
+app.set(
+  "trust proxy",
+  1
+);
 
 /* ==========================================
    SECURITY
@@ -40,8 +46,11 @@ app.use(
 
 const allowedOrigins = [
   "http://localhost:5173",
+
   "http://127.0.0.1:5173",
+
   process.env.CLIENT_URL,
+
   process.env.CLIENT_API_URL,
 ].filter(Boolean);
 
@@ -50,19 +59,43 @@ const allowedOrigins = [
 ========================================== */
 
 const corsOptions = {
-  origin(origin, callback) {
+  origin: (
+    origin,
+    callback
+  ) => {
+    /*
+      Allow requests without
+      an Origin header, such as
+      server-to-server requests.
+    */
+
     if (!origin) {
-      return callback(null, true);
+      return callback(
+        null,
+        true
+      );
     }
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    if (
+      allowedOrigins.includes(
+        origin
+      )
+    ) {
+      return callback(
+        null,
+        true
+      );
     }
 
-    console.log("Blocked Origin:", origin);
+    console.log(
+      "Blocked Origin:",
+      origin
+    );
 
     return callback(
-      new Error("Not allowed by CORS")
+      new Error(
+        "Not allowed by CORS"
+      )
     );
   },
 
@@ -83,19 +116,29 @@ const corsOptions = {
   ],
 };
 
-app.use(cors(corsOptions));
+app.use(
+  cors(corsOptions)
+);
 
-app.options("*", cors(corsOptions));
+app.options(
+  "*",
+  cors(corsOptions)
+);
 
 /* ==========================================
    BODY PARSER
 ========================================== */
 
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "2mb",
+  })
+);
 
 app.use(
   express.urlencoded({
     extended: true,
+    limit: "2mb",
   })
 );
 
@@ -103,7 +146,9 @@ app.use(
    COOKIE PARSER
 ========================================== */
 
-app.use(cookieParser());
+app.use(
+  cookieParser()
+);
 
 /* ==========================================
    EXPRESS SESSION
@@ -111,7 +156,9 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: process.env.JWT_SECRET,
+    secret:
+      process.env.JWT_SECRET ||
+      "taskflow-session-secret",
 
     resave: false,
 
@@ -144,29 +191,40 @@ app.use(
    PASSPORT
 ========================================== */
 
-app.use(passport.initialize());
+app.use(
+  passport.initialize()
+);
 
-app.use(passport.session());
+app.use(
+  passport.session()
+);
 
 /* ==========================================
    OTHER MIDDLEWARE
 ========================================== */
 
-app.use(compression());
+app.use(
+  compression()
+);
 
-app.use(morgan("dev"));
+app.use(
+  morgan("dev")
+);
 
 /* ==========================================
    ROOT
 ========================================== */
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message:
-      "TaskFlow Backend Running 🚀",
-  });
-});
+app.get(
+  "/",
+  (req, res) => {
+    return res.status(200).json({
+      success: true,
+      message:
+        "TaskFlow Backend Running 🚀",
+    });
+  }
+);
 
 /* ==========================================
    HEALTH CHECK
@@ -175,12 +233,14 @@ app.get("/", (req, res) => {
 app.get(
   "/api/health",
   (req, res) => {
-    res.json({
+    return res.status(200).json({
       success: true,
       status: "OK",
       environment:
-        process.env.NODE_ENV,
-      uptime: process.uptime(),
+        process.env.NODE_ENV ||
+        "development",
+      uptime:
+        process.uptime(),
       timestamp:
         new Date().toISOString(),
     });
@@ -188,45 +248,71 @@ app.get(
 );
 
 /* ==========================================
-   API ROUTES
+   AUTH
 ========================================== */
 
-app.use("/api/auth", authRoutes);
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
-/* OAuth */
+/* ==========================================
+   OAUTH
+========================================== */
 
-app.use("/api/auth", oauthRoutes);
+app.use(
+  "/api/auth",
+  oauthRoutes
+);
 
-/* Users */
+/* ==========================================
+   USERS
+========================================== */
 
-app.use("/api/users", userRoutes);
+app.use(
+  "/api/users",
+  userRoutes
+);
 
-/* Dashboard */
+/* ==========================================
+   DASHBOARD
+========================================== */
 
 app.use(
   "/api/dashboard",
   dashboardRoutes
 );
 
-/* Projects */
+/* ==========================================
+   PROJECTS
+========================================== */
 
 app.use(
   "/api/projects",
   projectRoutes
 );
 
-/* Tasks */
+/* ==========================================
+   TASKS
+========================================== */
 
-app.use("/api/tasks", taskRoutes);
+app.use(
+  "/api/tasks",
+  taskRoutes
+);
 
-/* Settings */
+/* ==========================================
+   SETTINGS
+========================================== */
 
 app.use(
   "/api/settings",
   settingsRoutes
 );
 
-/* Notifications */
+/* ==========================================
+   NOTIFICATIONS
+========================================== */
 
 app.use(
   "/api/notifications",
@@ -237,36 +323,47 @@ app.use(
    404
 ========================================== */
 
-app.use("*", (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route Not Found : ${req.method} ${req.originalUrl}`,
-  });
-});
+app.use(
+  "*",
+  (req, res) => {
+    return res.status(404).json({
+      success: false,
+      message:
+        `Route Not Found : ${req.method} ${req.originalUrl}`,
+    });
+  }
+);
 
 /* ==========================================
    GLOBAL ERROR HANDLER
 ========================================== */
 
 app.use(
-  (err, req, res, next) => {
+  (
+    err,
+    req,
+    res,
+    next
+  ) => {
     console.error(
-      "Server Error"
+      "Server Error:"
     );
 
     console.error(err);
 
-    res.status(
-      err.status || 500
-    ).json({
-      success: false,
+    return res
+      .status(
+        err.status || 500
+      )
+      .json({
+        success: false,
 
-      message:
-        process.env.NODE_ENV ===
-        "production"
-          ? "Internal Server Error"
-          : err.message,
-    });
+        message:
+          process.env.NODE_ENV ===
+          "production"
+            ? "Internal Server Error"
+            : err.message,
+      });
   }
 );
 
@@ -286,7 +383,9 @@ console.log(
   "Allowed Origins:"
 );
 
-console.log(allowedOrigins);
+console.log(
+  allowedOrigins
+);
 
 console.log(
   "========================================"
