@@ -12,323 +12,300 @@ import "./Testimonials.css";
 
 const testimonials = [
   {
-    quote:
-      "TaskFlow transformed the way our team manages projects. Collaboration and delivery are now significantly faster and more organized.",
     name: "Nicholas Johnson",
     role: "Project Manager",
     company: "TechNova",
     initials: "NJ",
-    iconClass: "purple",
+    quote:
+      "TaskFlow transformed the way our team manages projects. Collaboration and delivery are now significantly faster and more organized.",
+    variant: "purple",
   },
   {
-    quote:
-      "The dashboard, analytics and Kanban workflow have dramatically improved collaboration across our engineering teams.",
     name: "Michael Chen",
     role: "Product Lead",
     company: "InnovateX",
     initials: "MC",
-    iconClass: "blue",
+    quote:
+      "The dashboard, analytics and Kanban workflow have dramatically improved collaboration across our engineering teams.",
+    variant: "blue",
   },
   {
-    quote:
-      "TaskFlow is one of the most intuitive project management platforms we've used. Our productivity has increased tremendously.",
     name: "Emily Davis",
     role: "Operations Manager",
     company: "CloudWorks",
     initials: "ED",
-    iconClass: "cyan",
+    quote:
+      "TaskFlow is one of the most intuitive project management platforms we've used. Our productivity has increased tremendously.",
+    variant: "cyan",
   },
 ];
 
 const metrics = [
   {
+    icon: FaUsers,
     value: "4.9/5",
+    title: "Customer Satisfaction",
     description:
       "Average customer satisfaction from thousands of users worldwide.",
-    icon: FaUsers,
-    className: "purple",
+    stars: true,
+    variant: "purple",
   },
   {
+    icon: FaShieldAlt,
     value: "98%",
+    title: "Customer Retention",
     description:
       "Customer retention through better collaboration and streamlined workflows.",
-    icon: FaShieldAlt,
-    className: "blue",
+    variant: "blue",
   },
   {
+    icon: FaHeadset,
     value: "24/7",
+    title: "Always-On Support",
     description:
       "Reliable cloud platform with continuous monitoring and dedicated support.",
-    icon: FaHeadset,
-    className: "cyan",
+    variant: "cyan",
   },
 ];
 
 const Testimonials = () => {
   return (
-    <section
-      className="testimonials-section"
-      id="testimonials"
-    >
-      {/* ==========================================
-          BACKGROUND EFFECTS
-      ========================================== */}
+    <section className="testimonials-section">
 
-      <div className="testimonials-glow testimonials-glow-left" />
-      <div className="testimonials-glow testimonials-glow-right" />
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+      <motion.div
+        className="testimonials-header"
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.7 }}
+      >
+        <span className="testimonials-eyebrow">
+          TRUSTED BY MODERN TEAMS
+        </span>
 
-      <div className="testimonial-orb testimonial-orb-one" />
-      <div className="testimonial-orb testimonial-orb-two" />
+        <h2 className="testimonials-title">
+          Loved by teams that
+          <span> get things done.</span>
+        </h2>
 
-      <div className="testimonials-container">
+        <p className="testimonials-subtitle">
+          Businesses around the world rely on TaskFlow every day
+          to organize projects, improve collaboration and deliver
+          better results.
+        </p>
 
-        {/* ==========================================
-            HEADER
-        ========================================== */}
-
-        <motion.div
-          className="testimonials-header"
-          initial={{
-            opacity: 0,
-            y: 35,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.25,
-          }}
-          transition={{
-            duration: 0.7,
-          }}
-        >
-          <span className="testimonials-badge">
-            TESTIMONIALS
-          </span>
-
-          <div className="testimonials-heading-row">
-
-            <div className="heading-decoration left">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-
-            <h2>
-              Trusted by thousands
-              <br />
-              of{" "}
-              <span>
-                professionals
-              </span>
-            </h2>
-
-            <div className="heading-decoration right">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-
+        <div className="testimonials-header-line">
+          <span />
+          <div className="header-stars">
+            <FaStar />
+            <FaStar />
+            <FaStar />
+            <FaStar />
+            <FaStar />
           </div>
-
-          <p className="testimonials-subtitle">
-            Businesses around the world rely on TaskFlow
-            every day to organize projects and improve
-            collaboration.
-          </p>
-        </motion.div>
-
-        {/* ==========================================
-            TESTIMONIAL CARDS
-        ========================================== */}
-
-        <div className="testimonial-grid">
-
-          {testimonials.map((item, index) => {
-            return (
-              <motion.article
-                className={`testimonial-card ${item.iconClass}`}
-                key={item.name}
-                initial={{
-                  opacity: 0,
-                  y: 45,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                  amount: 0.2,
-                }}
-                transition={{
-                  duration: 0.65,
-                  delay: index * 0.12,
-                }}
-                whileHover={{
-                  y: -10,
-                }}
-              >
-
-                {/* Card top */}
-
-                <div className="testimonial-card-top">
-
-                  <div className="quote-icon">
-                    <FaQuoteLeft />
-                  </div>
-
-                  <div className="testimonial-stars">
-                    {[1, 2, 3, 4, 5].map(
-                      (star) => (
-                        <FaStar key={star} />
-                      )
-                    )}
-                  </div>
-
-                </div>
-
-                {/* Quote */}
-
-                <p className="testimonial-quote">
-                  "{item.quote}"
-                </p>
-
-                {/* User */}
-
-                <div className="testimonial-user">
-
-                  <div className="testimonial-avatar">
-                    {item.initials}
-                  </div>
-
-                  <div className="testimonial-user-info">
-                    <strong>
-                      {item.name}
-                    </strong>
-
-                    <span>
-                      {item.role}
-                    </span>
-
-                    <small>
-                      {item.company}
-                    </small>
-                  </div>
-
-                </div>
-
-                {/* Decorative quote */}
-
-                <FaQuoteLeft className="background-quote" />
-
-              </motion.article>
-            );
-          })}
-
+          <span />
         </div>
+      </motion.div>
 
-        {/* ==========================================
-            METRICS PANEL
-        ========================================== */}
 
-        <motion.div
-          className="testimonial-metrics"
-          initial={{
-            opacity: 0,
-            y: 45,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.2,
-          }}
-          transition={{
-            duration: 0.8,
-          }}
-        >
+      {/* =====================================================
+          TESTIMONIAL CARDS
+      ===================================================== */}
+      <div className="testimonials-grid">
 
-          <div className="metrics-wave metrics-wave-left" />
-          <div className="metrics-wave metrics-wave-right" />
+        {testimonials.map((testimonial, index) => (
+          <motion.article
+            key={testimonial.name}
+            className={`testimonial-card testimonial-${testimonial.variant}`}
+            initial={{
+              opacity: 0,
+              y: 55,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            transition={{
+              duration: 0.65,
+              delay: index * 0.12,
+            }}
+            whileHover={{
+              y: -10,
+            }}
+          >
 
-          {metrics.map((metric, index) => {
-            const Icon = metric.icon;
+            {/* Glow */}
+            <div className="testimonial-card-glow" />
 
-            return (
-              <motion.div
-                className={`metric-item ${metric.className}`}
-                key={metric.value}
-                whileHover={{
-                  scale: 1.025,
-                }}
-                transition={{
-                  duration: 0.25,
-                }}
-              >
+            {/* Top */}
+            <div className="testimonial-top">
 
-                <div className="metric-icon">
-                  <Icon />
-                </div>
+              <div className="testimonial-quote-icon">
+                <FaQuoteLeft />
+              </div>
 
-                <div className="metric-content">
+              <div className="testimonial-rating">
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </div>
 
-                  <div className="metric-value">
+            </div>
+
+
+            {/* Quote */}
+            <p className="testimonial-quote">
+              "{testimonial.quote}"
+            </p>
+
+
+            {/* Divider */}
+            <div className="testimonial-divider" />
+
+
+            {/* User */}
+            <div className="testimonial-user">
+
+              <div className="testimonial-avatar">
+                {testimonial.initials}
+              </div>
+
+              <div className="testimonial-user-info">
+                <strong>{testimonial.name}</strong>
+
+                <span>
+                  {testimonial.role}
+                </span>
+
+                <small>
+                  {testimonial.company}
+                </small>
+              </div>
+
+            </div>
+
+
+            {/* Decorative quote */}
+            <div className="testimonial-large-quote">
+              ”
+            </div>
+
+          </motion.article>
+        ))}
+
+      </div>
+
+
+      {/* =====================================================
+          METRICS
+      ===================================================== */}
+      <motion.div
+        className="testimonial-metrics"
+        initial={{
+          opacity: 0,
+          y: 45,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        transition={{
+          duration: 0.7,
+          delay: 0.15,
+        }}
+      >
+
+        {metrics.map((metric, index) => {
+          const Icon = metric.icon;
+
+          return (
+            <motion.div
+              key={metric.title}
+              className={`testimonial-metric metric-${metric.variant}`}
+              whileHover={{
+                y: -6,
+              }}
+              transition={{
+                duration: 0.25,
+              }}
+            >
+
+              <div className="metric-icon">
+                <Icon />
+              </div>
+
+              <div className="metric-content">
+
+                <div className="metric-value-row">
+                  <strong>
                     {metric.value}
-                  </div>
+                  </strong>
 
-                  <div className="metric-line" />
-
-                  <p>
-                    {metric.description}
-                  </p>
-
-                  {index === 0 && (
+                  {metric.stars && (
                     <div className="metric-stars">
-                      {[1, 2, 3, 4, 5].map(
-                        (star) => (
-                          <FaStar key={star} />
-                        )
-                      )}
+                      <FaStar />
+                      <FaStar />
+                      <FaStar />
+                      <FaStar />
+                      <FaStar />
                     </div>
                   )}
-
                 </div>
 
-              </motion.div>
-            );
-          })}
+                <span className="metric-title">
+                  {metric.title}
+                </span>
 
-        </motion.div>
+                <p>
+                  {metric.description}
+                </p>
 
-        {/* ==========================================
-            AWARD BADGE
-        ========================================== */}
+              </div>
 
-        <motion.div
-          className="award-badge"
-          initial={{
-            opacity: 0,
-            scale: 0.9,
-          }}
-          whileInView={{
-            opacity: 1,
-            scale: 1,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 0.15,
-          }}
-        >
+            </motion.div>
+          );
+        })}
+
+      </motion.div>
+
+
+      {/* =====================================================
+          AWARD BADGE
+      ===================================================== */}
+      <motion.div
+        className="award-wrapper"
+        initial={{
+          opacity: 0,
+          y: 35,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+          amount: 0.3,
+        }}
+        transition={{
+          duration: 0.65,
+          delay: 0.25,
+        }}
+      >
+
+        <div className="award-card">
 
           <div className="award-icon">
             <FaAward />
@@ -340,14 +317,16 @@ const Testimonials = () => {
             </strong>
 
             <span>
-              Helping teams deliver projects faster
-              every day.
+              Helping teams deliver projects faster every day.
             </span>
           </div>
 
-        </motion.div>
+          <div className="award-shine" />
 
-      </div>
+        </div>
+
+      </motion.div>
+
     </section>
   );
 };
