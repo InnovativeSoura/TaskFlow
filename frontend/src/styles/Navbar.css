@@ -1218,6 +1218,59 @@ input:focus-visible {
   }
 }
 
+/*====================================================
+            PREMIUM THEME TOGGLE
+====================================================*/
+
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    135deg,
+    rgba(96, 165, 250, 0.22),
+    rgba(37, 99, 235, 0.28)
+  );
+
+  opacity: 0;
+  transition: 0.35s ease;
+}
+
+.theme-toggle:hover::before {
+  opacity: 1;
+}
+
+.theme-toggle svg {
+  position: relative;
+  z-index: 2;
+
+  transition:
+    transform 0.45s ease,
+    color 0.35s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(25deg) scale(1.15);
+}
+
+.theme-toggle.is-dark svg {
+  color: #fbbf24;
+  filter:
+    drop-shadow(
+      0 0 10px rgba(251, 191, 36, 0.45)
+    );
+}
+
+.theme-toggle.is-light svg {
+  color: #cbd5e1;
+}
+
 /* =========================================================
    END
    ========================================================= */

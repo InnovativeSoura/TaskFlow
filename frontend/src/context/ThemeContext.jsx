@@ -2,50 +2,86 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
 const ThemeContext = createContext(null);
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("taskflow-theme") || "light";
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      return true;
+    }
+
+    if (savedTheme === "light") {
+      return false;
+    }
+
+    return window.matchMedia?.(
+      "(prefers-color-scheme: dark)"
+    ).matches ?? false;
   });
+
+  /* ==========================================
+      APPLY THEME
+  ========================================== */
 
   useEffect(() => {
     const root = document.documentElement;
+    const body = document.body;
 
-    root.setAttribute("data-theme", theme);
+    if (darkMode) {
+      root.classList.add("dark-theme");
+      body.classList.add("dark-theme");
 
-    localStorage.setItem(
-      "taskflow-theme",
-      theme
-    );
-  }, [theme]);
+      root.setAttribute("data-theme", "dark");
+
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark-theme");
+      body.classList.remove("dark-theme");
+
+      root.setAttribute("data-theme", "light");
+
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  /* ==========================================
+      TOGGLE
+  ========================================== */
 
   const toggleTheme = () => {
-    setTheme((current) =>
-      current === "light"
-        ? "dark"
-        : "light"
-    );
+    setDarkMode((previous) => !previous);
   };
 
-  const isDark = theme === "dark";
+  /* ==========================================
+      VALUE
+  ========================================== */
+
+  const value = useMemo(
+    () => ({
+      darkMode,
+      setDarkMode,
+      toggleTheme,
+      theme: darkMode ? "dark" : "light",
+    }),
+    [darkMode]
+  );
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        isDark,
-        toggleTheme,
-        setTheme,
-      }}
-    >
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
 };
+
+/* ==========================================
+    HOOK
+========================================== */
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);

@@ -39,10 +39,15 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Navbar.css";
 
 
+/* =========================================================
+   TASKFLOW PREMIUM NAVBAR
+========================================================= */
+
 const Navbar = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,122 +55,171 @@ const Navbar = ({
 
   const menuRef = useRef(null);
 
-  /* ==========================================
+
+  /* =========================================================
      SEARCH
-  ========================================== */
+  ========================================================= */
 
   const [search, setSearch] = useState("");
 
 
-  /* ==========================================
+  /* =========================================================
      PROFILE MENU
-  ========================================== */
+  ========================================================= */
 
-  const [showProfileMenu, setShowProfileMenu] =
-    useState(false);
+  const [
+    showProfileMenu,
+    setShowProfileMenu,
+  ] = useState(false);
 
 
-  /* ==========================================
+  /* =========================================================
      MOBILE MENU
-  ========================================== */
+  ========================================================= */
 
-  const [mobileMenu, setMobileMenu] =
-    useState(false);
+  const [
+    mobileMenu,
+    setMobileMenu,
+  ] = useState(false);
 
 
-  /* ==========================================
-     THEME
-  ========================================== */
+  /* =========================================================
+     THEME INITIALIZATION
+  ========================================================= */
 
   const getInitialTheme = () => {
-    const savedTheme =
-      localStorage.getItem("theme");
 
-    if (savedTheme === "dark") {
-      return true;
+    try {
+
+      const savedTheme =
+        localStorage.getItem("theme");
+
+      if (savedTheme === "dark") {
+        return true;
+      }
+
+      if (savedTheme === "light") {
+        return false;
+      }
+
+      if (
+        window.matchMedia &&
+        window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches
+      ) {
+        return true;
+      }
+
+    } catch (error) {
+
+      console.warn(
+        "Unable to read saved theme:",
+        error
+      );
+
     }
 
-    if (savedTheme === "light") {
-      return false;
-    }
-
-    return window.matchMedia &&
-      window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
+    return false;
   };
+
 
   const [darkMode, setDarkMode] = useState(
     getInitialTheme
   );
 
 
-  /* ==========================================
-     APPLY THEME
-  ========================================== */
+  /* =========================================================
+     APPLY GLOBAL THEME
+     
+     IMPORTANT:
+     We intentionally DO NOT use ThemeProvider.
+     TaskFlow uses CSS variables + data-theme.
+  ========================================================= */
 
   useEffect(() => {
-    const root =
+
+    const html =
       document.documentElement;
 
     const body =
       document.body;
 
-    if (darkMode) {
-      root.classList.add("dark-theme");
-      body.classList.add("dark-theme");
+    const theme =
+      darkMode
+        ? "dark"
+        : "light";
 
-      root.setAttribute(
-        "data-theme",
-        "dark"
-      );
 
-      localStorage.setItem(
-        "theme",
-        "dark"
-      );
-    } else {
-      root.classList.remove("dark-theme");
-      body.classList.remove("dark-theme");
+    /* HTML DATA ATTRIBUTE */
 
-      root.setAttribute(
-        "data-theme",
-        "light"
-      );
+    html.setAttribute(
+      "data-theme",
+      theme
+    );
 
-      localStorage.setItem(
-        "theme",
-        "light"
-      );
-    }
 
-    /*
-      Notify other components that the theme
-      has changed.
+    /* HTML CLASS */
 
-      Profile page can listen to this event
-      if required.
-    */
+    html.classList.toggle(
+      "dark-theme",
+      darkMode
+    );
+
+
+    html.classList.toggle(
+      "light-theme",
+      !darkMode
+    );
+
+
+    /* BODY CLASS */
+
+    body.classList.toggle(
+      "dark-theme",
+      darkMode
+    );
+
+
+    body.classList.toggle(
+      "light-theme",
+      !darkMode
+    );
+
+
+    /* SAVE */
+
+    localStorage.setItem(
+      "theme",
+      theme
+    );
+
+
+    /* =====================================================
+       CUSTOM TASKFLOW THEME EVENT
+
+       Other TaskFlow components can listen to this.
+    ===================================================== */
 
     window.dispatchEvent(
       new CustomEvent(
         "taskflow-theme-change",
         {
           detail: {
-            theme: darkMode
-              ? "dark"
-              : "light",
+            theme,
+            darkMode,
           },
         }
       )
     );
 
+
   }, [darkMode]);
 
 
-  /* ==========================================
-     SYNC THEME BETWEEN COMPONENTS / TABS
-  ========================================== */
+  /* =========================================================
+     SYNC THEME FROM OTHER COMPONENTS / TABS
+  ========================================================= */
 
   useEffect(() => {
 
@@ -175,9 +229,19 @@ const Navbar = ({
         return;
       }
 
-      setDarkMode(
-        event.newValue === "dark"
-      );
+
+      if (event.newValue === "dark") {
+
+        setDarkMode(true);
+
+      } else if (
+        event.newValue === "light"
+      ) {
+
+        setDarkMode(false);
+
+      }
+
     };
 
 
@@ -186,14 +250,19 @@ const Navbar = ({
       const theme =
         event.detail?.theme;
 
-      if (
-        theme === "dark" ||
-        theme === "light"
-      ) {
-        setDarkMode(
-          theme === "dark"
-        );
+
+      if (theme === "dark") {
+
+        setDarkMode(true);
+
       }
+
+      if (theme === "light") {
+
+        setDarkMode(false);
+
+      }
+
     };
 
 
@@ -225,13 +294,15 @@ const Navbar = ({
   }, []);
 
 
-  /* ==========================================
-     CLOSE PROFILE MENU
-  ========================================== */
+  /* =========================================================
+     CLOSE PROFILE MENU WHEN CLICKING OUTSIDE
+  ========================================================= */
 
   useEffect(() => {
 
-    const handleOutsideClick = (event) => {
+    const handleOutsideClick = (
+      event
+    ) => {
 
       if (
         menuRef.current &&
@@ -239,7 +310,9 @@ const Navbar = ({
           event.target
         )
       ) {
+
         setShowProfileMenu(false);
+
       }
 
     };
@@ -263,9 +336,9 @@ const Navbar = ({
   }, []);
 
 
-  /* ==========================================
-     CLOSE MENUS ON ROUTE CHANGE
-  ========================================== */
+  /* =========================================================
+     CLOSE MENUS WHEN ROUTE CHANGES
+  ========================================================= */
 
   useEffect(() => {
 
@@ -275,25 +348,26 @@ const Navbar = ({
   }, [location.pathname]);
 
 
-  /* ==========================================
+  /* =========================================================
      USER INITIALS
-  ========================================== */
+  ========================================================= */
 
   const initials =
     user?.name
       ?.trim()
       ?.split(/\s+/)
       ?.map(
-        (name) => name[0]
+        (name) =>
+          name?.[0] || ""
       )
       ?.join("")
       ?.substring(0, 2)
       ?.toUpperCase() || "TF";
 
 
-  /* ==========================================
-     TOGGLE THEME
-  ========================================== */
+  /* =========================================================
+     THEME TOGGLE
+  ========================================================= */
 
   const toggleTheme = () => {
 
@@ -304,9 +378,23 @@ const Navbar = ({
   };
 
 
-  /* ==========================================
+  /* =========================================================
+     NAVIGATION HELPER
+  ========================================================= */
+
+  const handleNavigate = (path) => {
+
+    navigate(path);
+
+    setShowProfileMenu(false);
+    setMobileMenu(false);
+
+  };
+
+
+  /* =========================================================
      LOGOUT
-  ========================================== */
+  ========================================================= */
 
   const handleLogout = async () => {
 
@@ -324,10 +412,7 @@ const Navbar = ({
     }
 
 
-    /*
-      Extra cleanup to guarantee that
-      authentication state is removed.
-    */
+    /* Extra cleanup */
 
     localStorage.removeItem(
       "token"
@@ -338,6 +423,12 @@ const Navbar = ({
     );
 
 
+    /* Reset theme event listeners */
+
+    setShowProfileMenu(false);
+    setMobileMenu(false);
+
+
     navigate("/", {
       replace: true,
     });
@@ -345,23 +436,22 @@ const Navbar = ({
   };
 
 
-  /* ==========================================
-     SEARCH HANDLER
-  ========================================== */
+  /* =========================================================
+     SEARCH
+  ========================================================= */
 
   const handleSearch = (event) => {
 
-    const value =
-      event.target.value;
-
-    setSearch(value);
+    setSearch(
+      event.target.value
+    );
 
   };
 
 
-  /* ==========================================
-     KEYBOARD SEARCH
-  ========================================== */
+  /* =========================================================
+     SEARCH KEYBOARD
+  ========================================================= */
 
   const handleSearchKeyDown = (
     event
@@ -385,21 +475,12 @@ const Navbar = ({
   };
 
 
-  /* ==========================================
-     NAVIGATION HELPERS
-  ========================================== */
-
-  const handleNavigate = (path) => {
-
-    navigate(path);
-
-    setShowProfileMenu(false);
-    setMobileMenu(false);
-
-  };
-
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
+
     <header
       className={`navbar ${
         darkMode
@@ -408,15 +489,16 @@ const Navbar = ({
       }`}
     >
 
-      {/* ======================================
+      {/* =====================================================
           LEFT SECTION
-      ====================================== */}
+      ===================================================== */}
 
       <div className="navbar-left">
 
+
         {/* SIDEBAR BUTTON */}
 
-        <button
+        <motion.button
           type="button"
           className="menu-btn"
           aria-label={
@@ -431,15 +513,26 @@ const Navbar = ({
           }
           onClick={() =>
             setSidebarOpen(
-              !sidebarOpen
+              (previous) =>
+                !previous
             )
           }
+          whileHover={{
+            scale: 1.05,
+          }}
+          whileTap={{
+            scale: 0.92,
+          }}
         >
+
           <FaBars />
-        </button>
+
+        </motion.button>
 
 
-        {/* DESKTOP NAVIGATION */}
+        {/* =================================================
+            NAVIGATION
+        ================================================= */}
 
         <nav
           className={`navbar-links ${
@@ -449,6 +542,9 @@ const Navbar = ({
           }`}
         >
 
+
+          {/* DASHBOARD */}
+
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
@@ -457,13 +553,17 @@ const Navbar = ({
                 : ""
             }
           >
+
             <FaHome />
 
             <span>
               Dashboard
             </span>
+
           </NavLink>
 
+
+          {/* PROJECTS */}
 
           <NavLink
             to="/projects"
@@ -473,13 +573,17 @@ const Navbar = ({
                 : ""
             }
           >
+
             <FaProjectDiagram />
 
             <span>
               Projects
             </span>
+
           </NavLink>
 
+
+          {/* TASKS */}
 
           <NavLink
             to="/tasks"
@@ -489,13 +593,17 @@ const Navbar = ({
                 : ""
             }
           >
+
             <FaTasks />
 
             <span>
               Tasks
             </span>
+
           </NavLink>
 
+
+          {/* TEAM */}
 
           <NavLink
             to="/users"
@@ -505,11 +613,13 @@ const Navbar = ({
                 : ""
             }
           >
+
             <FaUsers />
 
             <span>
               Team
             </span>
+
           </NavLink>
 
         </nav>
@@ -517,9 +627,9 @@ const Navbar = ({
       </div>
 
 
-      {/* ======================================
+      {/* =====================================================
           SEARCH
-      ====================================== */}
+      ===================================================== */}
 
       <div className="navbar-search">
 
@@ -527,9 +637,10 @@ const Navbar = ({
           className="search-icon"
         />
 
+
         <input
           type="text"
-          aria-label="Search"
+          aria-label="Search TaskFlow"
           placeholder="Search projects, tasks..."
           value={search}
           onChange={handleSearch}
@@ -538,32 +649,55 @@ const Navbar = ({
           }
         />
 
-        {search && (
-          <button
-            type="button"
-            className="search-clear"
-            aria-label="Clear search"
-            onClick={() =>
-              setSearch("")
-            }
-          >
-            <FaTimes />
-          </button>
-        )}
+
+        {/* CLEAR SEARCH */}
+
+        <AnimatePresence>
+
+          {search && (
+
+            <motion.button
+              type="button"
+              className="search-clear"
+              aria-label="Clear search"
+              initial={{
+                opacity: 0,
+                scale: 0.7,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.7,
+              }}
+              onClick={() =>
+                setSearch("")
+              }
+            >
+
+              <FaTimes />
+
+            </motion.button>
+
+          )}
+
+        </AnimatePresence>
 
       </div>
 
 
-      {/* ======================================
+      {/* =====================================================
           RIGHT SECTION
-      ====================================== */}
+      ===================================================== */}
 
       <div className="navbar-right">
 
 
-        {/* ====================================
-            DAY / NIGHT THEME
-        ==================================== */}
+        {/* =================================================
+            DAY / NIGHT TOGGLE
+        ================================================= */}
 
         <motion.button
           type="button"
@@ -583,11 +717,12 @@ const Navbar = ({
               : "Switch to dark mode"
           }
           onClick={toggleTheme}
+          whileHover={{
+            scale: 1.06,
+            rotate: darkMode ? 5 : -5,
+          }}
           whileTap={{
             scale: 0.9,
-          }}
-          whileHover={{
-            scale: 1.05,
           }}
         >
 
@@ -600,6 +735,7 @@ const Navbar = ({
 
               <motion.span
                 key="sun"
+                className="theme-icon"
                 initial={{
                   opacity: 0,
                   rotate: -90,
@@ -616,16 +752,19 @@ const Navbar = ({
                   scale: 0.5,
                 }}
                 transition={{
-                  duration: 0.2,
+                  duration: 0.22,
                 }}
               >
+
                 <FaSun />
+
               </motion.span>
 
             ) : (
 
               <motion.span
                 key="moon"
+                className="theme-icon"
                 initial={{
                   opacity: 0,
                   rotate: 90,
@@ -642,10 +781,12 @@ const Navbar = ({
                   scale: 0.5,
                 }}
                 transition={{
-                  duration: 0.2,
+                  duration: 0.22,
                 }}
               >
+
                 <FaMoon />
+
               </motion.span>
 
             )}
@@ -655,18 +796,18 @@ const Navbar = ({
         </motion.button>
 
 
-        {/* ====================================
+        {/* =================================================
             NOTIFICATIONS
-        ==================================== */}
+        ================================================= */}
 
         <NotificationBell />
 
 
-        {/* ====================================
+        {/* =================================================
             SETTINGS
-        ==================================== */}
+        ================================================= */}
 
-        <button
+        <motion.button
           type="button"
           className="icon-btn"
           aria-label="Settings"
@@ -676,26 +817,38 @@ const Navbar = ({
               "/settings"
             )
           }
+          whileHover={{
+            scale: 1.05,
+            rotate: 5,
+          }}
+          whileTap={{
+            scale: 0.92,
+          }}
         >
+
           <FaCog />
-        </button>
+
+        </motion.button>
 
 
-        {/* ====================================
+        {/* =================================================
             PROFILE
-        ==================================== */}
+        ================================================= */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
 
+
+          {/* PROFILE TRIGGER */}
+
           <motion.button
             type="button"
             className={`profile-trigger ${
               darkMode
                 ? "profile-trigger-dark"
-                : ""
+                : "profile-trigger-light"
             }`}
             aria-label="Open profile menu"
             aria-expanded={
@@ -707,6 +860,9 @@ const Navbar = ({
                   !previous
               )
             }
+            whileHover={{
+              scale: 1.04,
+            }}
             whileTap={{
               scale: 0.94,
             }}
@@ -734,18 +890,24 @@ const Navbar = ({
           </motion.button>
 
 
-          {/* PROFILE DROPDOWN */}
+          {/* =================================================
+              PROFILE DROPDOWN
+          ================================================= */}
 
           <AnimatePresence>
 
             {showProfileMenu && (
 
               <motion.div
-                className="profile-dropdown"
+                className={`profile-dropdown ${
+                  darkMode
+                    ? "dropdown-dark"
+                    : "dropdown-light"
+                }`}
                 initial={{
                   opacity: 0,
-                  y: -10,
-                  scale: 0.96,
+                  y: -12,
+                  scale: 0.95,
                 }}
                 animate={{
                   opacity: 1,
@@ -755,17 +917,21 @@ const Navbar = ({
                 exit={{
                   opacity: 0,
                   y: -8,
-                  scale: 0.96,
+                  scale: 0.95,
                 }}
                 transition={{
-                  duration: 0.18,
+                  duration: 0.2,
                   ease: "easeOut",
                 }}
               >
 
+
                 {/* DROPDOWN HEADER */}
 
                 <div className="dropdown-header">
+
+
+                  {/* AVATAR */}
 
                   {user?.avatar ? (
 
@@ -783,6 +949,8 @@ const Navbar = ({
 
                   )}
 
+
+                  {/* USER INFO */}
 
                   <div className="dropdown-user-info">
 
@@ -815,11 +983,13 @@ const Navbar = ({
                     )
                   }
                 >
+
                   <FaUserCircle />
 
                   <span>
                     Profile
                   </span>
+
                 </button>
 
 
@@ -833,11 +1003,13 @@ const Navbar = ({
                     )
                   }
                 >
+
                   <FaCog />
 
                   <span>
                     Settings
                   </span>
+
                 </button>
 
 
@@ -855,11 +1027,13 @@ const Navbar = ({
                     handleLogout
                   }
                 >
+
                   <FaSignOutAlt />
 
                   <span>
                     Logout
                   </span>
+
                 </button>
 
               </motion.div>
@@ -871,11 +1045,11 @@ const Navbar = ({
         </div>
 
 
-        {/* ====================================
+        {/* =================================================
             MOBILE MENU
-        ==================================== */}
+        ================================================= */}
 
-        <button
+        <motion.button
           type="button"
           className="mobile-toggle"
           aria-label={
@@ -883,12 +1057,18 @@ const Navbar = ({
               ? "Close navigation menu"
               : "Open navigation menu"
           }
+          aria-expanded={
+            mobileMenu
+          }
           onClick={() =>
             setMobileMenu(
               (previous) =>
                 !previous
             )
           }
+          whileTap={{
+            scale: 0.9,
+          }}
         >
 
           {mobileMenu ? (
@@ -897,7 +1077,7 @@ const Navbar = ({
             <FaBars />
           )}
 
-        </button>
+        </motion.button>
 
       </div>
 
