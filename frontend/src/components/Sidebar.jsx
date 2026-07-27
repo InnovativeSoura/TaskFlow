@@ -2,7 +2,7 @@
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   FaTachometerAlt,
@@ -16,6 +16,7 @@ import {
   FaBell,
   FaSignOutAlt,
   FaTimes,
+  FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
 
@@ -79,11 +80,26 @@ const Sidebar = ({
 
   const { user, logout } = useAuth();
 
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth <= 768
+  );
+
+  /* =========================================================
+     RESPONSIVE CHECK
+  ========================================================= */
+
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768 && !sidebarOpen) {
-        setSidebarOpen(true);
-      }
+      const mobile = window.innerWidth <= 768;
+
+      setIsMobile(mobile);
+
+      /*
+        On desktop, keep sidebar state controlled
+        by the user.
+
+        On mobile, sidebar is hidden by default.
+      */
     };
 
     handleResize();
@@ -98,43 +114,32 @@ const Sidebar = ({
         "resize",
         handleResize
       );
-  }, [
-    sidebarOpen,
-    setSidebarOpen,
-  ]);
+  }, []);
+
+  /* =========================================================
+     INITIALS
+  ========================================================= */
 
   const initials = user?.name
     ? user.name
         .split(" ")
-        .map((n) => n[0])
+        .map((name) => name[0])
         .join("")
         .substring(0, 2)
         .toUpperCase()
     : "TF";
 
-  /* =====================================================
-     PROFILE CLICK
-  ===================================================== */
-
-  const handleProfileClick = () => {
-    navigate("/profile");
-
-    if (window.innerWidth <= 768) {
-      setSidebarOpen(false);
-    }
-  };
-
-  /* =====================================================
+  /* =========================================================
      LOGOUT
-  ===================================================== */
+  ========================================================= */
 
   const handleLogout = async () => {
     try {
       await logout();
-    } catch (err) {
+    } catch (error) {
       console.error(
         "Logout error:",
-        err
+        error
       );
     }
 
@@ -146,80 +151,112 @@ const Sidebar = ({
     });
   };
 
-  /* =====================================================
-     MOBILE NAV
-  ===================================================== */
+  /* =========================================================
+     COLLAPSE / EXPAND
+  ========================================================= */
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      return;
+    }
+
+    setSidebarOpen((previous) => !previous);
+  };
+
+  /* =========================================================
+     MOBILE CLOSE
+  ========================================================= */
 
   const closeMobile = () => {
-    if (window.innerWidth <= 768) {
+    if (isMobile) {
       setSidebarOpen(false);
     }
   };
 
   return (
     <>
-      {/* =================================================
+      {/* =====================================================
           MOBILE OVERLAY
-      ================================================= */}
+      ===================================================== */}
 
       <AnimatePresence>
-        {sidebarOpen &&
-          window.innerWidth <= 768 && (
-            <motion.div
-              className="sidebar-overlay"
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.25,
-              }}
-              onClick={() =>
-                setSidebarOpen(false)
-              }
-            />
-          )}
+        {isMobile && sidebarOpen && (
+          <motion.div
+            className="sidebar-overlay"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            onClick={() =>
+              setSidebarOpen(false)
+            }
+          />
+        )}
       </AnimatePresence>
 
-      {/* =================================================
+      {/* =====================================================
           SIDEBAR
-      ================================================= */}
+      ===================================================== */}
 
       <motion.aside
         className={`sidebar ${
           sidebarOpen
             ? "expanded"
             : "collapsed"
-        }`}
+        } ${isMobile ? "mobile" : ""}`}
         animate={{
-          width:
-            window.innerWidth <= 768
-              ? sidebarOpen
-                ? 270
-                : 0
-              : sidebarOpen
+          width: isMobile
+            ? sidebarOpen
               ? 270
-              : 85,
+              : 0
+            : sidebarOpen
+            ? 260
+            : 84,
         }}
         transition={{
           duration: 0.3,
           ease: [0.4, 0, 0.2, 1],
         }}
       >
-        {/* =================================================
-            HEADER
-        ================================================= */}
+        {/* ===================================================
+            BRAND / COLLAPSE CONTROL
+        =================================================== */}
 
         <div className="sidebar-header">
-          <div className="sidebar-brand">
-            <div className="brand-logo">
-              TF
-            </div>
+          <button
+            type="button"
+            className="sidebar-brand-button"
+            onClick={toggleSidebar}
+            title={
+              sidebarOpen
+                ? "Collapse sidebar"
+                : "Expand sidebar"
+            }
+            aria-label={
+              sidebarOpen
+                ? "Collapse sidebar"
+                : "Expand sidebar"
+            }
+          >
+            <motion.div
+              className="brand-logo"
+              whileHover={{
+                scale: 1.06,
+              }}
+              whileTap={{
+                scale: 0.94,
+              }}
+            >
+              <span>TF</span>
+            </motion.div>
 
             <AnimatePresence>
               {sidebarOpen && (
@@ -237,73 +274,53 @@ const Sidebar = ({
                     opacity: 0,
                     x: -10,
                   }}
+                  transition={{
+                    duration: 0.2,
+                  }}
                 >
-                  <h2>
+                  <strong>
                     TaskFlow
-                  </h2>
+                  </strong>
 
-                  <small>
+                  <span>
                     Workspace
-                  </small>
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </button>
 
-          {window.innerWidth <= 768 &&
-            sidebarOpen && (
-              <button
-                type="button"
-                className="close-sidebar"
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                aria-label="Close sidebar"
-              >
-                <FaTimes />
-              </button>
-            )}
+          {/* Mobile close button */}
+
+          {isMobile && sidebarOpen && (
+            <button
+              type="button"
+              className="close-sidebar"
+              onClick={() =>
+                setSidebarOpen(false)
+              }
+              aria-label="Close sidebar"
+            >
+              <FaTimes />
+            </button>
+          )}
         </div>
 
-        {/* =================================================
-            CLICKABLE PROFILE / ADMIN CARD
-        ================================================= */}
+        {/* ===================================================
+            WORKSPACE DIVIDER
+        =================================================== */}
 
-        <motion.button
-          type="button"
-          className={`sidebar-user-card ${
-            window.location.pathname ===
-            "/profile"
-              ? "profile-active"
-              : ""
-          }`}
-          onClick={handleProfileClick}
-          whileHover={
-            sidebarOpen
-              ? {
-                  y: -2,
-                }
-              : {}
-          }
-          whileTap={{
-            scale: 0.98,
-          }}
-          title={
-            sidebarOpen
-              ? "Open Profile"
-              : user?.name ||
-                "Open Profile"
-          }
-        >
-          {/* Avatar */}
+        <div className="sidebar-divider" />
 
+        {/* ===================================================
+            USER PROFILE
+        =================================================== */}
+
+        <div className="sidebar-user-card">
           {user?.avatar ? (
             <img
               src={user.avatar}
-              alt={
-                user?.name ||
-                "User avatar"
-              }
+              alt="User avatar"
               className="sidebar-avatar"
             />
           ) : (
@@ -311,8 +328,6 @@ const Sidebar = ({
               {initials}
             </div>
           )}
-
-          {/* User Information */}
 
           <AnimatePresence>
             {sidebarOpen && (
@@ -331,27 +346,44 @@ const Sidebar = ({
                   x: -8,
                 }}
               >
-                <div className="sidebar-user-text">
-                  <h4>
-                    {user?.name ||
-                      "Souradipta Patra"}
-                  </h4>
+                <strong>
+                  {user?.name || "User"}
+                </strong>
 
-                  <span>
-                    {user?.role ||
-                      "Admin"}
-                  </span>
-                </div>
-
-                <FaChevronRight className="profile-arrow" />
+                <span>
+                  {user?.role || "Member"}
+                </span>
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.button>
+        </div>
 
-        {/* =================================================
+        {/* ===================================================
+            NAVIGATION LABEL
+        =================================================== */}
+
+        <AnimatePresence>
+          {sidebarOpen && (
+            <motion.div
+              className="sidebar-section-label"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+              WORKSPACE
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ===================================================
             NAVIGATION
-        ================================================= */}
+        =================================================== */}
 
         <nav className="sidebar-menu">
           {menuItems.map(
@@ -360,7 +392,7 @@ const Sidebar = ({
                 key={item.path}
                 initial={{
                   opacity: 0,
-                  x: -15,
+                  x: -12,
                 }}
                 animate={{
                   opacity: 1,
@@ -373,8 +405,14 @@ const Sidebar = ({
               >
                 <NavLink
                   to={item.path}
-                  title={item.title}
-                  onClick={closeMobile}
+                  title={
+                    !sidebarOpen
+                      ? item.title
+                      : undefined
+                  }
+                  onClick={
+                    closeMobile
+                  }
                   className={({
                     isActive,
                   }) =>
@@ -383,61 +421,105 @@ const Sidebar = ({
                       : ""
                   }
                 >
-                  <div className="sidebar-icon">
+                  <span className="sidebar-icon">
                     {item.icon}
-                  </div>
+                  </span>
 
                   <AnimatePresence>
                     {sidebarOpen && (
                       <motion.span
+                        className="sidebar-link-text"
                         initial={{
                           opacity: 0,
+                          x: -6,
                         }}
                         animate={{
                           opacity: 1,
+                          x: 0,
                         }}
                         exit={{
                           opacity: 0,
+                          x: -6,
                         }}
                       >
                         {item.title}
                       </motion.span>
                     )}
                   </AnimatePresence>
+
+                  {sidebarOpen && (
+                    <span className="sidebar-active-indicator" />
+                  )}
                 </NavLink>
               </motion.div>
             )
           )}
         </nav>
 
-        {/* =================================================
-            FOOTER / LOGOUT
-        ================================================= */}
+        {/* ===================================================
+            BOTTOM AREA
+        =================================================== */}
 
-        <div className="sidebar-footer">
+        <div className="sidebar-bottom">
+          {/* Collapse hint */}
+
+          {!isMobile && (
+            <button
+              type="button"
+              className="sidebar-collapse-button"
+              onClick={toggleSidebar}
+              title={
+                sidebarOpen
+                  ? "Collapse sidebar"
+                  : "Expand sidebar"
+              }
+            >
+              <span className="collapse-icon">
+                {sidebarOpen ? (
+                  <FaChevronLeft />
+                ) : (
+                  <FaChevronRight />
+                )}
+              </span>
+
+              {sidebarOpen && (
+                <span>
+                  Collapse sidebar
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* Logout */}
+
           <button
             type="button"
             className="logout-btn"
             onClick={handleLogout}
             title={
-              sidebarOpen
+              !sidebarOpen
                 ? "Logout"
-                : "Logout"
+                : undefined
             }
           >
-            <FaSignOutAlt />
+            <span className="logout-icon">
+              <FaSignOutAlt />
+            </span>
 
             <AnimatePresence>
               {sidebarOpen && (
                 <motion.span
                   initial={{
                     opacity: 0,
+                    x: -5,
                   }}
                   animate={{
                     opacity: 1,
+                    x: 0,
                   }}
                   exit={{
                     opacity: 0,
+                    x: -5,
                   }}
                 >
                   Logout
