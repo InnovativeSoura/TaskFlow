@@ -32,13 +32,17 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-          <UserProvider>
-            <App />
-          </UserProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <UserProvider>
+          <ProjectProvider>
+            <TaskProvider>
+              <NotificationProvider>
+                <App />
+              </NotificationProvider>
+            </TaskProvider>
+          </ProjectProvider>
+        </UserProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
