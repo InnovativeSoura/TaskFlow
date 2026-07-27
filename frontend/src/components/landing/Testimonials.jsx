@@ -1,213 +1,355 @@
 import { motion } from "framer-motion";
 import {
   FaQuoteLeft,
+  FaStar,
   FaUsers,
-  FaAward,
+  FaShieldAlt,
   FaHeadset,
-  FaCheckCircle,
+  FaAward,
 } from "react-icons/fa";
 
 import "./Testimonials.css";
 
 const testimonials = [
   {
+    quote:
+      "TaskFlow transformed the way our team manages projects. Collaboration and delivery are now significantly faster and more organized.",
     name: "Nicholas Johnson",
     role: "Project Manager",
     company: "TechNova",
-    avatar: "NJ",
-    review:
-      "TaskFlow transformed the way our team manages projects. Planning, collaboration and delivery are now significantly faster and more organized.",
+    initials: "NJ",
+    iconClass: "purple",
   },
   {
+    quote:
+      "The dashboard, analytics and Kanban workflow have dramatically improved collaboration across our engineering teams.",
     name: "Michael Chen",
     role: "Product Lead",
     company: "InnovateX",
-    avatar: "MC",
-    review:
-      "The dashboard, analytics and Kanban workflow have dramatically improved collaboration across our engineering teams.",
+    initials: "MC",
+    iconClass: "blue",
   },
   {
+    quote:
+      "TaskFlow is one of the most intuitive project management platforms we've used. Our productivity has increased tremendously.",
     name: "Emily Davis",
     role: "Operations Manager",
     company: "CloudWorks",
-    avatar: "ED",
-    review:
-      "TaskFlow is one of the most intuitive project management platforms we've used. Our productivity has increased tremendously.",
+    initials: "ED",
+    iconClass: "cyan",
   },
 ];
 
-const summaryCards = [
+const metrics = [
   {
-    icon: <FaAward />,
-    title: "4.9/5",
+    value: "4.9/5",
     description:
       "Average customer satisfaction from thousands of users worldwide.",
+    icon: FaUsers,
+    className: "purple",
   },
   {
-    icon: <FaUsers />,
-    title: "98%",
+    value: "98%",
     description:
       "Customer retention through better collaboration and streamlined workflows.",
+    icon: FaShieldAlt,
+    className: "blue",
   },
   {
-    icon: <FaHeadset />,
-    title: "24/7",
+    value: "24/7",
     description:
       "Reliable cloud platform with continuous monitoring and dedicated support.",
+    icon: FaHeadset,
+    className: "cyan",
   },
 ];
 
-function Testimonials() {
+const Testimonials = () => {
   return (
     <section
-      id="testimonials"
       className="testimonials-section"
+      id="testimonials"
     >
-      <motion.div
-        className="section-heading"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-      >
-        <span className="section-tag">
-          Testimonials
-        </span>
+      {/* ==========================================
+          BACKGROUND EFFECTS
+      ========================================== */}
 
-        <h2>
-          Trusted by thousands of professionals
-        </h2>
+      <div className="testimonials-glow testimonials-glow-left" />
+      <div className="testimonials-glow testimonials-glow-right" />
 
-        <p>
-          Businesses around the world rely on TaskFlow
-          every day to organize projects and improve
-          collaboration.
-        </p>
-      </motion.div>
+      <div className="testimonial-orb testimonial-orb-one" />
+      <div className="testimonial-orb testimonial-orb-two" />
 
-      <div className="testimonials-grid">
-        {testimonials.map((item, index) => (
-          <motion.div
-            key={item.name}
-            className="testimonial-card"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              delay: index * 0.15,
-              duration: 0.6,
-            }}
-            whileHover={{ y: -10 }}
-          >
-            <div className="quote-icon">
-              <FaQuoteLeft />
-            </div>
+      <div className="testimonials-container">
 
-            <div className="testimonial-rating">
-              <FaCheckCircle />
-              <FaCheckCircle />
-              <FaCheckCircle />
-              <FaCheckCircle />
-              <FaCheckCircle />
-            </div>
+        {/* ==========================================
+            HEADER
+        ========================================== */}
 
-            <p className="testimonial-review">
-              "{item.review}"
-            </p>
-
-            <div className="testimonial-user">
-              <div className="testimonial-avatar">
-                {item.avatar}
-              </div>
-
-              <div>
-                <h4>{item.name}</h4>
-                <span>{item.role}</span>
-                <small>{item.company}</small>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.div
-        className="testimonial-summary"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        {summaryCards.map((card) => (
-          <motion.div
-            key={card.title}
-            className="summary-card"
-            whileHover={{ y: -8 }}
-          >
-            <div className="summary-stars">
-              {card.icon}
-            </div>
-
-            <h2>{card.title}</h2>
-
-            {card.title === "4.9/5" && (
-              <div className="summary-stars">
-                <FaCheckCircle />
-                <FaCheckCircle />
-                <FaCheckCircle />
-                <FaCheckCircle />
-                <FaCheckCircle />
-              </div>
-            )}
-
-            <p>{card.description}</p>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      <motion.div
-        style={{
-          marginTop: "70px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "15px",
-            padding: "20px 28px",
-            borderRadius: "18px",
-            background: "rgba(255,255,255,.05)",
-            border: "1px solid rgba(255,255,255,.08)",
-            backdropFilter: "blur(15px)",
+        <motion.div
+          className="testimonials-header"
+          initial={{
+            opacity: 0,
+            y: 35,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.25,
+          }}
+          transition={{
+            duration: 0.7,
           }}
         >
-          <FaAward
-            style={{
-              fontSize: 26,
-              color: "#7c4dff",
-            }}
-          />
+          <span className="testimonials-badge">
+            TESTIMONIALS
+          </span>
 
-          <div>
+          <div className="testimonials-heading-row">
+
+            <div className="heading-decoration left">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+
+            <h2>
+              Trusted by thousands
+              <br />
+              of{" "}
+              <span>
+                professionals
+              </span>
+            </h2>
+
+            <div className="heading-decoration right">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+
+          </div>
+
+          <p className="testimonials-subtitle">
+            Businesses around the world rely on TaskFlow
+            every day to organize projects and improve
+            collaboration.
+          </p>
+        </motion.div>
+
+        {/* ==========================================
+            TESTIMONIAL CARDS
+        ========================================== */}
+
+        <div className="testimonial-grid">
+
+          {testimonials.map((item, index) => {
+            return (
+              <motion.article
+                className={`testimonial-card ${item.iconClass}`}
+                key={item.name}
+                initial={{
+                  opacity: 0,
+                  y: 45,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.65,
+                  delay: index * 0.12,
+                }}
+                whileHover={{
+                  y: -10,
+                }}
+              >
+
+                {/* Card top */}
+
+                <div className="testimonial-card-top">
+
+                  <div className="quote-icon">
+                    <FaQuoteLeft />
+                  </div>
+
+                  <div className="testimonial-stars">
+                    {[1, 2, 3, 4, 5].map(
+                      (star) => (
+                        <FaStar key={star} />
+                      )
+                    )}
+                  </div>
+
+                </div>
+
+                {/* Quote */}
+
+                <p className="testimonial-quote">
+                  "{item.quote}"
+                </p>
+
+                {/* User */}
+
+                <div className="testimonial-user">
+
+                  <div className="testimonial-avatar">
+                    {item.initials}
+                  </div>
+
+                  <div className="testimonial-user-info">
+                    <strong>
+                      {item.name}
+                    </strong>
+
+                    <span>
+                      {item.role}
+                    </span>
+
+                    <small>
+                      {item.company}
+                    </small>
+                  </div>
+
+                </div>
+
+                {/* Decorative quote */}
+
+                <FaQuoteLeft className="background-quote" />
+
+              </motion.article>
+            );
+          })}
+
+        </div>
+
+        {/* ==========================================
+            METRICS PANEL
+        ========================================== */}
+
+        <motion.div
+          className="testimonial-metrics"
+          initial={{
+            opacity: 0,
+            y: 45,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+          }}
+        >
+
+          <div className="metrics-wave metrics-wave-left" />
+          <div className="metrics-wave metrics-wave-right" />
+
+          {metrics.map((metric, index) => {
+            const Icon = metric.icon;
+
+            return (
+              <motion.div
+                className={`metric-item ${metric.className}`}
+                key={metric.value}
+                whileHover={{
+                  scale: 1.025,
+                }}
+                transition={{
+                  duration: 0.25,
+                }}
+              >
+
+                <div className="metric-icon">
+                  <Icon />
+                </div>
+
+                <div className="metric-content">
+
+                  <div className="metric-value">
+                    {metric.value}
+                  </div>
+
+                  <div className="metric-line" />
+
+                  <p>
+                    {metric.description}
+                  </p>
+
+                  {index === 0 && (
+                    <div className="metric-stars">
+                      {[1, 2, 3, 4, 5].map(
+                        (star) => (
+                          <FaStar key={star} />
+                        )
+                      )}
+                    </div>
+                  )}
+
+                </div>
+
+              </motion.div>
+            );
+          })}
+
+        </motion.div>
+
+        {/* ==========================================
+            AWARD BADGE
+        ========================================== */}
+
+        <motion.div
+          className="award-badge"
+          initial={{
+            opacity: 0,
+            scale: 0.9,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: 0.15,
+          }}
+        >
+
+          <div className="award-icon">
+            <FaAward />
+          </div>
+
+          <div className="award-content">
             <strong>
               Award Winning Productivity Platform
             </strong>
 
-            <p
-              style={{
-                color: "#94a3b8",
-                marginTop: 6,
-              }}
-            >
-              Helping teams deliver projects
-              faster every day.
-            </p>
+            <span>
+              Helping teams deliver projects faster
+              every day.
+            </span>
           </div>
-        </div>
-      </motion.div>
+
+        </motion.div>
+
+      </div>
     </section>
   );
-}
+};
 
 export default Testimonials;
