@@ -39,83 +39,54 @@ import "../styles/Navbar.css";
 /* =========================================================
    TASKFLOW PREMIUM NAVBAR
 
-   IMPORTANT:
+   IMPORTANT
    ---------------------------------------------------------
-   1. Sidebar collapse / expand is controlled ONLY
-      by the TaskFlow logo inside Sidebar.jsx.
-
-   2. Navbar does NOT contain a sidebar hamburger.
-
-   3. Navbar does NOT contain a global search bar.
-
-   4. Dashboard search is handled inside Dashboard.jsx.
-
-   5. Navbar automatically detects the Sidebar width
-      so it NEVER overlaps the TaskFlow logo.
-
-   DESKTOP SIDEBAR:
-      Expanded  = 260px
-      Collapsed = 84px
-
-   MOBILE SIDEBAR:
-      Drawer = 270px
+   - Sidebar collapse/expand is controlled ONLY by
+     Sidebar.jsx through the TaskFlow logo.
+   - Navbar does NOT receive sidebarOpen.
+   - Navbar does NOT receive setSidebarOpen.
+   - Navbar does NOT contain a sidebar hamburger.
+   - Dashboard search remains inside Dashboard.jsx.
 ========================================================= */
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, logout } = useAuth();
+  const auth = useAuth();
+
+  const user = auth?.user;
+
+  /*
+    Defensive logout reference.
+
+    This prevents the navbar from directly trying to call
+    something that is undefined or not a function.
+  */
+  const logout =
+    typeof auth?.logout === "function"
+      ? auth.logout
+      : null;
 
   const menuRef = useRef(null);
-  const navbarRef = useRef(null);
 
   /* =========================================================
      PROFILE MENU
   ========================================================= */
 
-  const [showProfileMenu, setShowProfileMenu] =
-    useState(false);
+  const [
+    showProfileMenu,
+    setShowProfileMenu,
+  ] = useState(false);
 
   /* =========================================================
      MOBILE TOP NAVIGATION
-     
-     IMPORTANT:
-     This controls ONLY:
-       Dashboard
-       Projects
-       Tasks
-       Team
-
-     It does NOT control the Sidebar.
   ========================================================= */
 
-  const [mobileMenu, setMobileMenu] =
-    useState(false);
-
-  /* =========================================================
-     SIDEBAR OFFSET
-     
-     This is the important fix for the overlap.
-
-     Default desktop collapsed width:
-        84px
-
-     When Sidebar expands:
-        ResizeObserver detects 260px
-
-     Navbar then moves automatically:
-        left: 260px
-  ========================================================= */
-
-  const [sidebarWidth, setSidebarWidth] =
-    useState(84);
-
-  const [isMobile, setIsMobile] =
-    useState(
-      typeof window !== "undefined" &&
-        window.innerWidth <= 768
-    );
+  const [
+    mobileMenu,
+    setMobileMenu,
+  ] = useState(false);
 
   /* =========================================================
      THEME INITIALIZATION
@@ -135,6 +106,7 @@ const Navbar = () => {
       }
 
       if (
+        typeof window !== "undefined" &&
         window.matchMedia &&
         window.matchMedia(
           "(prefers-color-scheme: dark)"
@@ -152,118 +124,10 @@ const Navbar = () => {
     return false;
   };
 
-  const [darkMode, setDarkMode] =
-    useState(getInitialTheme);
-
-  /* =========================================================
-     RESPONSIVE CHECK
-  ========================================================= */
-
-  useEffect(() => {
-    const handleResize = () => {
-      const mobile =
-        window.innerWidth <= 768;
-
-      setIsMobile(mobile);
-
-      /*
-        On mobile the navbar must occupy
-        the full viewport width because the
-        sidebar becomes a drawer.
-      */
-      if (mobile) {
-        setSidebarWidth(0);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener(
-      "resize",
-      handleResize
-    );
-
-    return () => {
-      window.removeEventListener(
-        "resize",
-        handleResize
-      );
-    };
-  }, []);
-
-  /* =========================================================
-     DETECT SIDEBAR WIDTH
-     
-     ResizeObserver allows Navbar to follow
-     Sidebar's Framer Motion width animation.
-
-     Sidebar.jsx:
-       expanded  -> 260px
-       collapsed -> 84px
-
-     Navbar:
-       left      -> sidebar width
-  ========================================================= */
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
-
-    if (window.innerWidth <= 768) {
-      setSidebarWidth(0);
-      return undefined;
-    }
-
-    const sidebar =
-      document.querySelector(
-        ".sidebar"
-      );
-
-    if (!sidebar) {
-      setSidebarWidth(84);
-      return undefined;
-    }
-
-    const updateSidebarWidth = () => {
-      const width =
-        sidebar.getBoundingClientRect()
-          .width;
-
-      /*
-        Prevent tiny fractional values
-        during the Framer Motion animation.
-      */
-      if (width > 0) {
-        setSidebarWidth(
-          Math.round(width)
-        );
-      }
-    };
-
-    updateSidebarWidth();
-
-    const observer =
-      new ResizeObserver(() => {
-        updateSidebarWidth();
-      });
-
-    observer.observe(sidebar);
-
-    /*
-      Extra fallback for environments where
-      ResizeObserver does not immediately fire.
-    */
-    const interval = setInterval(
-      updateSidebarWidth,
-      100
-    );
-
-    return () => {
-      observer.disconnect();
-      clearInterval(interval);
-    };
-  }, [location.pathname, isMobile]);
+  const [
+    darkMode,
+    setDarkMode,
+  ] = useState(getInitialTheme);
 
   /* =========================================================
      APPLY GLOBAL THEME
@@ -281,15 +145,11 @@ const Navbar = () => {
         ? "dark"
         : "light";
 
-    /* HTML DATA ATTRIBUTE */
-
     html.setAttribute(
       "data-theme",
       theme
     );
 
-    /* HTML CLASS */
-
     html.classList.toggle(
       "dark-theme",
       darkMode
@@ -299,8 +159,6 @@ const Navbar = () => {
       "light-theme",
       !darkMode
     );
-
-    /* BODY CLASS */
 
     body.classList.toggle(
       "dark-theme",
@@ -312,14 +170,17 @@ const Navbar = () => {
       !darkMode
     );
 
-    /* SAVE THEME */
-
-    localStorage.setItem(
-      "theme",
-      theme
-    );
-
-    /* TASKFLOW THEME EVENT */
+    try {
+      localStorage.setItem(
+        "theme",
+        theme
+      );
+    } catch (error) {
+      console.warn(
+        "Unable to save theme:",
+        error
+      );
+    }
 
     window.dispatchEvent(
       new CustomEvent(
@@ -335,7 +196,7 @@ const Navbar = () => {
   }, [darkMode]);
 
   /* =========================================================
-     SYNC THEME FROM OTHER COMPONENTS / TABS
+     SYNC THEME FROM OTHER TABS / COMPONENTS
   ========================================================= */
 
   useEffect(() => {
@@ -460,6 +321,10 @@ const Navbar = () => {
   ========================================================= */
 
   const handleNavigate = (path) => {
+    if (!path) {
+      return;
+    }
+
     navigate(path);
 
     setShowProfileMenu(false);
@@ -472,7 +337,9 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      if (typeof logout === "function") {
+        await logout();
+      }
     } catch (error) {
       console.error(
         "Logout error:",
@@ -480,13 +347,20 @@ const Navbar = () => {
       );
     }
 
-    localStorage.removeItem(
-      "token"
-    );
+    try {
+      localStorage.removeItem(
+        "token"
+      );
 
-    localStorage.removeItem(
-      "user"
-    );
+      localStorage.removeItem(
+        "user"
+      );
+    } catch (error) {
+      console.warn(
+        "Unable to clear local storage:",
+        error
+      );
+    }
 
     setShowProfileMenu(false);
     setMobileMenu(false);
@@ -497,55 +371,23 @@ const Navbar = () => {
   };
 
   /* =========================================================
-     NAVBAR POSITION
-     
-     Desktop:
-       left = actual Sidebar width
-
-     Mobile:
-       left = 0
-
-     This prevents Navbar from covering
-     the TaskFlow logo.
-  ========================================================= */
-
-  const navbarStyle = {
-    "--navbar-sidebar-offset": isMobile
-      ? "0px"
-      : `${sidebarWidth}px`,
-  };
-
-  /* =========================================================
      RENDER
   ========================================================= */
 
   return (
     <header
-      ref={navbarRef}
       className={`navbar ${
         darkMode
           ? "navbar-dark"
           : "navbar-light"
-      } ${
-        isMobile
-          ? "navbar-mobile"
-          : "navbar-desktop"
       }`}
-      style={navbarStyle}
     >
 
       {/* =====================================================
           LEFT SECTION
-          
-          NO SIDEBAR HAMBURGER.
-          NO GLOBAL SEARCH.
       ===================================================== */}
 
       <div className="navbar-left">
-
-        {/* =================================================
-            TOP NAVIGATION
-        ================================================= */}
 
         <nav
           className={`navbar-links ${
@@ -645,7 +487,7 @@ const Navbar = () => {
       <div className="navbar-right">
 
         {/* =================================================
-            DAY / NIGHT TOGGLE
+            THEME TOGGLE
         ================================================= */}
 
         <motion.button
@@ -676,12 +518,10 @@ const Navbar = () => {
             scale: 0.9,
           }}
         >
-
           <AnimatePresence
             mode="wait"
             initial={false}
           >
-
             {darkMode ? (
               <motion.span
                 key="sun"
@@ -733,9 +573,7 @@ const Navbar = () => {
                 <FaMoon />
               </motion.span>
             )}
-
           </AnimatePresence>
-
         </motion.button>
 
         {/* =================================================
@@ -754,9 +592,7 @@ const Navbar = () => {
           aria-label="Settings"
           title="Settings"
           onClick={() =>
-            handleNavigate(
-              "/settings"
-            )
+            handleNavigate("/settings")
           }
           whileHover={{
             scale: 1.05,
@@ -777,8 +613,6 @@ const Navbar = () => {
           className="profile-wrapper"
           ref={menuRef}
         >
-
-          {/* PROFILE TRIGGER */}
 
           <motion.button
             type="button"
@@ -804,7 +638,6 @@ const Navbar = () => {
               scale: 0.94,
             }}
           >
-
             {user?.avatar ? (
               <img
                 src={user.avatar}
@@ -819,7 +652,6 @@ const Navbar = () => {
                 {initials}
               </div>
             )}
-
           </motion.button>
 
           {/* =================================================
@@ -859,8 +691,6 @@ const Navbar = () => {
 
                 <div className="dropdown-header">
 
-                  {/* AVATAR */}
-
                   {user?.avatar ? (
                     <img
                       src={user.avatar}
@@ -872,8 +702,6 @@ const Navbar = () => {
                       {initials}
                     </div>
                   )}
-
-                  {/* USER INFO */}
 
                   <div className="dropdown-user-info">
 
@@ -925,8 +753,6 @@ const Navbar = () => {
                   </span>
                 </button>
 
-                {/* DIVIDER */}
-
                 <hr />
 
                 {/* LOGOUT */}
@@ -952,10 +778,11 @@ const Navbar = () => {
         </div>
 
         {/* =================================================
-            MOBILE TOP NAVIGATION TOGGLE
+            MOBILE TOP NAVIGATION
 
             IMPORTANT:
-            This does NOT control the Sidebar.
+            This controls ONLY the navbar links.
+            It does NOT control Sidebar.jsx.
         ================================================= */}
 
         <motion.button
