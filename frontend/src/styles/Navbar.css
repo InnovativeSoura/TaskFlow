@@ -1,401 +1,52 @@
 /* =========================================================
-   TASKFLOW — PREMIUM NAVBAR
-   ========================================================= */
-
-/* =========================================================
-   ROOT NAVBAR
-   ========================================================= */
-
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 72px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 24px;
-
-  z-index: 1000;
-
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.07);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-/* =========================================================
-   DARK NAVBAR
-   ========================================================= */
-
-.navbar-dark {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(7, 13, 29, 0.97) 0%,
-      rgba(8, 14, 29, 0.92) 100%
-    );
-
-  border-bottom-color:
-    rgba(108, 92, 231, 0.12);
-
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.18);
-}
-
-/* =========================================================
-   LIGHT NAVBAR
-   ========================================================= */
-
-.navbar-light {
-  background:
-    rgba(255, 255, 255, 0.94);
-
-  border-bottom-color:
-    rgba(15, 23, 42, 0.08);
-
-  box-shadow:
-    0 8px 25px rgba(15, 23, 42, 0.07);
-}
-
-/* =========================================================
-   NAVBAR LEFT
-   ========================================================= */
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-
-  min-width: 0;
-  height: 100%;
-}
-
-/* =========================================================
-   NAVIGATION LINKS
-   ========================================================= */
-
-.navbar-links {
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 7px;
-}
-
-/* =========================================================
-   NAV LINK
-   ========================================================= */
-
-.navbar-links a {
-  position: relative;
-
-  height: 44px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  padding: 0 17px;
-
-  border-radius: 12px;
-
-  color: #7f8ba6;
-
-  text-decoration: none;
-
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-/* =========================================================
-   NAV ICON
-   ========================================================= */
-
-.navbar-links a svg {
-  width: 15px;
-  height: 15px;
-
-  flex-shrink: 0;
-
-  opacity: 0.82;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease,
-    opacity 0.25s ease;
-}
-
-/* =========================================================
-   HOVER
-   ========================================================= */
-
-.navbar-links a:hover {
-  color: #ffffff;
-
-  background:
-    rgba(124, 92, 255, 0.10);
-
-  transform: translateY(-1px);
-}
-
-.navbar-links a:hover svg {
-  color: #8b6cff;
-  opacity: 1;
-
-  transform: scale(1.08);
-}
-
-/* =========================================================
-   ACTIVE LINK
-   ========================================================= */
-
-.navbar-dark .navbar-links a.active {
-  color: #ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(105, 78, 255, 0.22),
-      rgba(124, 92, 255, 0.10)
-    );
-
-  box-shadow:
-    inset 0 0 0 1px
-      rgba(124, 92, 255, 0.13),
-    0 5px 18px
-      rgba(89, 67, 190, 0.08);
-}
-
-.navbar-dark .navbar-links a.active svg {
-  color: #8b6cff;
-  opacity: 1;
-}
-
-/* =========================================================
-   ACTIVE INDICATOR
-   ========================================================= */
-
-.navbar-dark .navbar-links a.active::after {
-  content: "";
-
-  position: absolute;
-
-  left: 18px;
-  right: 18px;
-  bottom: 3px;
-
-  height: 2px;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #6d4aff,
-      #9a7cff
-    );
-
-  box-shadow:
-    0 0 10px
-      rgba(124, 92, 255, 0.55);
-}
-
-/* =========================================================
-   LIGHT ACTIVE
-   ========================================================= */
-
-.navbar-light .navbar-links a {
-  color: #64748b;
-}
-
-.navbar-light .navbar-links a:hover {
-  color: #4f46e5;
-
-  background:
-    rgba(99, 102, 241, 0.08);
-}
-
-.navbar-light .navbar-links a.active {
-  color: #4f46e5;
-
-  background:
-    rgba(99, 102, 241, 0.09);
-
-  box-shadow:
-    inset 0 0 0 1px
-      rgba(99, 102, 241, 0.08);
-}
-
-.navbar-light .navbar-links a.active svg {
-  color: #6366f1;
-}
-
-.navbar-light .navbar-links a.active::after {
-  content: "";
-
-  position: absolute;
-
-  left: 18px;
-  right: 18px;
-  bottom: 3px;
-
-  height: 2px;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #6366f1,
-      #8b5cf6
-    );
-}
-
-/* =========================================================
-   RIGHT SECTION
-   ========================================================= */
+   NAVBAR RIGHT SECTION
+========================================================= */
 
 .navbar-right {
   height: 100%;
 
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 
   gap: 10px;
+
+  padding-right: 6px;
 
   flex-shrink: 0;
 }
 
-/* =========================================================
-   ICON BUTTON
-   ========================================================= */
 
-.icon-btn {
+/* =========================================================
+   PROFILE WRAPPER
+========================================================= */
+
+.profile-wrapper {
+  position: relative;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 2px;
+}
+
+
+/* =========================================================
+   PROFILE BUTTON
+========================================================= */
+
+.profile-trigger {
   position: relative;
 
   width: 42px;
   height: 42px;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
-
-  border-radius: 12px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  color: #8d9ab5;
-
-  cursor: pointer;
-
-  font-size: 15px;
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-}
-
-.icon-btn:hover {
-  color: #ffffff;
-
-  background:
-    rgba(124, 92, 255, 0.13);
-
-  border-color:
-    rgba(124, 92, 255, 0.22);
-
-  box-shadow:
-    0 5px 18px
-      rgba(83, 61, 180, 0.14);
-}
-
-/* =========================================================
-   THEME BUTTON
-   ========================================================= */
-
-.theme-toggle {
-  overflow: hidden;
-}
-
-.theme-toggle.theme-active {
-  color: #ffd45c;
-
-  background:
-    rgba(255, 193, 7, 0.07);
-
-  border-color:
-    rgba(255, 193, 7, 0.12);
-}
-
-.theme-toggle.theme-active:hover {
-  color: #ffd45c;
-
-  background:
-    rgba(255, 193, 7, 0.12);
-}
-
-/* =========================================================
-   THEME ICON
-   ========================================================= */
-
-.theme-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  height: 100%;
-}
-
-/* =========================================================
-   PROFILE WRAPPER
-   ========================================================= */
-
-.profile-wrapper {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
-  margin-left: 2px;
-}
-
-/* =========================================================
-   PROFILE TRIGGER
-   ========================================================= */
-
-.profile-trigger {
-  position: relative;
-
-  width: 44px;
-  height: 44px;
+  min-width: 42px;
+  min-height: 42px;
 
   padding: 2px;
 
@@ -403,75 +54,114 @@
   align-items: center;
   justify-content: center;
 
+  overflow: visible;
+
   border-radius: 50%;
 
-  border: 2px solid
-    rgba(124, 92, 255, 0.55);
+  border: 2px solid rgba(124, 92, 255, 0.65);
 
   background:
     linear-gradient(
       145deg,
       rgba(124, 92, 255, 0.22),
-      rgba(91, 66, 190, 0.08)
+      rgba(91, 66, 190, 0.10)
     );
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.18),
+    0 0 0 3px rgba(124, 92, 255, 0.05);
 
   cursor: pointer;
 
+  box-sizing: border-box;
+
   transition:
+    transform 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease,
     background 0.25s ease;
 }
 
-.profile-trigger:hover {
-  border-color:
-    rgba(145, 117, 255, 0.95);
-
-  box-shadow:
-    0 0 0 4px
-      rgba(124, 92, 255, 0.08),
-    0 8px 24px
-      rgba(88, 64, 190, 0.22);
-}
 
 /* =========================================================
-   AVATAR
-   ========================================================= */
+   PROFILE BUTTON HOVER
+========================================================= */
 
-.avatar {
+.profile-trigger:hover {
+  border-color: rgba(150, 125, 255, 0.95);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(124, 92, 255, 0.30),
+      rgba(91, 66, 190, 0.16)
+    );
+
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.22),
+    0 0 0 4px rgba(124, 92, 255, 0.09),
+    0 0 18px rgba(124, 92, 255, 0.16);
+}
+
+
+/* =========================================================
+   PROFILE AVATAR
+========================================================= */
+
+.profile-trigger .avatar {
   width: 36px;
   height: 36px;
+
+  min-width: 36px;
+  min-height: 36px;
+
+  max-width: 36px;
+  max-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 50%;
 
   object-fit: cover;
 
-  display: block;
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  box-sizing: border-box;
 }
 
-.avatar.initials {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
+/* =========================================================
+   INITIALS AVATAR
+========================================================= */
+
+.profile-trigger .avatar.initials {
   background:
     linear-gradient(
       145deg,
-      #7657ff,
-      #6843e8
+      #7858ff 0%,
+      #6844e8 100%
     );
 
   color: #ffffff;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
 
-  letter-spacing: 0.03em;
+  line-height: 1;
+
+  letter-spacing: 0.02em;
+
+  text-align: center;
 }
 
+
 /* =========================================================
-   PROFILE ONLINE INDICATOR
-   ========================================================= */
+   ONLINE STATUS DOT
+========================================================= */
 
 .profile-trigger::after {
   content: "";
@@ -479,7 +169,7 @@
   position: absolute;
 
   right: -1px;
-  bottom: 1px;
+  bottom: 0px;
 
   width: 9px;
   height: 9px;
@@ -490,19 +180,23 @@
 
   border: 2px solid #080e1d;
 
+  box-sizing: content-box;
+
   box-shadow:
-    0 0 8px
-      rgba(32, 217, 150, 0.45);
+    0 0 7px rgba(32, 217, 150, 0.55);
+
+  z-index: 5;
 }
+
 
 /* =========================================================
    PROFILE DROPDOWN
-   ========================================================= */
+========================================================= */
 
 .profile-dropdown {
   position: absolute;
 
-  top: calc(100% + 12px);
+  top: calc(100% + 10px);
   right: 0;
 
   width: 250px;
@@ -517,17 +211,19 @@
 
   transform-origin: top right;
 
+  box-sizing: border-box;
+
   box-shadow:
-    0 20px 50px
-      rgba(0, 0, 0, 0.38);
+    0 20px 50px rgba(0, 0, 0, 0.40);
 
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
+
 /* =========================================================
    DARK DROPDOWN
-   ========================================================= */
+========================================================= */
 
 .dropdown-dark {
   background:
@@ -537,29 +233,27 @@
       rgba(10, 17, 33, 0.98)
     );
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 
 /* =========================================================
    LIGHT DROPDOWN
-   ========================================================= */
+========================================================= */
 
 .dropdown-light {
-  background:
-    rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.98);
 
-  border: 1px solid
-    rgba(15, 23, 42, 0.09);
+  border: 1px solid rgba(15, 23, 42, 0.09);
 
   box-shadow:
-    0 20px 50px
-      rgba(15, 23, 42, 0.18);
+    0 20px 50px rgba(15, 23, 42, 0.18);
 }
 
+
 /* =========================================================
-   DROPDOWN HEADER
-   ========================================================= */
+   PROFILE DROPDOWN HEADER
+========================================================= */
 
 .dropdown-header {
   display: flex;
@@ -571,27 +265,31 @@
 
   margin-bottom: 6px;
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.dropdown-light .dropdown-header {
-  border-bottom-color:
-    rgba(15, 23, 42, 0.08);
-}
 
 /* =========================================================
    DROPDOWN AVATAR
-   ========================================================= */
+========================================================= */
 
 .dropdown-avatar {
   width: 42px;
   height: 42px;
 
+  min-width: 42px;
+  min-height: 42px;
+
+  max-width: 42px;
+  max-height: 42px;
+
   border-radius: 50%;
 
   object-fit: cover;
+
+  flex-shrink: 0;
 }
+
 
 .dropdown-avatar.initials {
   display: flex;
@@ -601,8 +299,8 @@
   background:
     linear-gradient(
       145deg,
-      #7657ff,
-      #6843e8
+      #7858ff,
+      #6844e8
     );
 
   color: #ffffff;
@@ -611,421 +309,141 @@
   font-weight: 800;
 }
 
-/* =========================================================
-   USER INFORMATION
-   ========================================================= */
-
-.dropdown-user-info {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 3px;
-}
-
-.dropdown-user-info h4 {
-  margin: 0;
-
-  overflow: hidden;
-
-  color: #ffffff;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.dropdown-user-info small {
-  color: #7f8ba6;
-
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.dropdown-light .dropdown-user-info h4 {
-  color: #172033;
-}
-
-.dropdown-light .dropdown-user-info small {
-  color: #64748b;
-}
 
 /* =========================================================
-   DROPDOWN BUTTONS
-   ========================================================= */
-
-.profile-dropdown > button {
-  width: 100%;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 11px;
-
-  padding: 0 12px;
-
-  border: 0;
-  border-radius: 10px;
-
-  background: transparent;
-
-  color: #8d9ab5;
-
-  font-family: inherit;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  text-align: left;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.profile-dropdown > button svg {
-  width: 15px;
-  height: 15px;
-
-  color: #8a6cff;
-}
-
-.profile-dropdown > button:hover {
-  color: #ffffff;
-
-  background:
-    rgba(124, 92, 255, 0.10);
-
-  transform: translateX(2px);
-}
-
-.dropdown-light > button {
-  color: #475569;
-}
-
-.dropdown-light > button:hover {
-  color: #4f46e5;
-
-  background:
-    rgba(99, 102, 241, 0.08);
-}
-
-/* =========================================================
-   DROPDOWN DIVIDER
-   ========================================================= */
-
-.profile-dropdown hr {
-  height: 1px;
-
-  margin: 8px 4px;
-
-  border: 0;
-
-  background:
-    rgba(255, 255, 255, 0.07);
-}
-
-.dropdown-light hr {
-  background:
-    rgba(15, 23, 42, 0.08);
-}
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-.profile-dropdown .logout-menu-btn {
-  color: #ff7080;
-}
-
-.profile-dropdown .logout-menu-btn svg {
-  color: #ff6072;
-}
-
-.profile-dropdown .logout-menu-btn:hover {
-  color: #ff7b89;
-
-  background:
-    rgba(255, 82, 105, 0.08);
-}
-
-/* =========================================================
-   MOBILE TOGGLE
-   ========================================================= */
-
-.mobile-toggle {
-  display: none;
-
-  width: 42px;
-  height: 42px;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 11px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.08);
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  color: #8d9ab5;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.mobile-toggle:hover {
-  color: #ffffff;
-
-  background:
-    rgba(124, 92, 255, 0.12);
-
-  border-color:
-    rgba(124, 92, 255, 0.2);
-}
-
-/* =========================================================
-   LIGHT MOBILE TOGGLE
-   ========================================================= */
-
-.navbar-light .mobile-toggle {
-  color: #64748b;
-
-  background:
-    rgba(15, 23, 42, 0.035);
-
-  border-color:
-    rgba(15, 23, 42, 0.08);
-}
-
-.navbar-light .mobile-toggle:hover {
-  color: #4f46e5;
-
-  background:
-    rgba(99, 102, 241, 0.08);
-}
-
-/* =========================================================
-   RESPONSIVE — TABLET
-   ========================================================= */
+   TABLET
+========================================================= */
 
 @media (max-width: 1000px) {
-  .navbar {
-    height: 68px;
-
-    padding: 0 18px;
-  }
-
-  .navbar-links {
-    gap: 4px;
-  }
-
-  .navbar-links a {
-    padding: 0 13px;
-
-    font-size: 13px;
-  }
-
-  .navbar-links a svg {
-    width: 14px;
-    height: 14px;
-  }
 
   .navbar-right {
-    gap: 7px;
+    gap: 8px;
+
+    padding-right: 5px;
   }
 
-  .icon-btn {
-    width: 40px;
-    height: 40px;
+  .profile-wrapper {
+    width: 44px;
+    height: 44px;
   }
 
   .profile-trigger {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .profile-trigger .avatar {
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+    min-height: 34px;
+
+    max-width: 34px;
+    max-height: 34px;
   }
 }
 
+
 /* =========================================================
-   RESPONSIVE — MOBILE
-   ========================================================= */
+   MOBILE
+========================================================= */
 
 @media (max-width: 768px) {
-  .navbar {
-    height: 64px;
-
-    padding: 0 12px;
-  }
-
-  .navbar-left {
-    flex: 1;
-  }
 
   .navbar-right {
     gap: 6px;
+
+    padding-right: 3px;
   }
 
-  /* -----------------------------------------
-     MOBILE NAVIGATION
-  ----------------------------------------- */
-
-  .navbar-links {
-    position: absolute;
-
-    top: calc(100% + 8px);
-    left: 12px;
-    right: 12px;
-
-    height: auto;
-
-    display: none;
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 5px;
-
-    padding: 10px;
-
-    border-radius: 16px;
-
-    background:
-      rgba(10, 17, 33, 0.98);
-
-    border: 1px solid
-      rgba(255, 255, 255, 0.08);
-
-    box-shadow:
-      0 20px 45px
-        rgba(0, 0, 0, 0.35);
-
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+  .profile-wrapper {
+    width: 42px;
+    height: 42px;
   }
-
-  .navbar-links.active {
-    display: flex;
-  }
-
-  .navbar-links a {
-    width: 100%;
-    height: 44px;
-
-    justify-content: flex-start;
-
-    padding: 0 14px;
-  }
-
-  .navbar-links a.active::after {
-    display: none;
-  }
-
-  /* -----------------------------------------
-     MOBILE TOGGLE
-  ----------------------------------------- */
-
-  .mobile-toggle {
-    display: flex;
-  }
-
-  /* -----------------------------------------
-     PROFILE
-  ----------------------------------------- */
 
   .profile-trigger {
     width: 40px;
     height: 40px;
+
+    min-width: 40px;
+    min-height: 40px;
   }
 
-  .avatar {
-    width: 33px;
-    height: 33px;
-  }
+  .profile-trigger .avatar {
+    width: 34px;
+    height: 34px;
 
-  .profile-dropdown {
-    right: -4px;
+    min-width: 34px;
+    min-height: 34px;
 
-    width: 235px;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 0 9px;
-  }
-
-  .navbar-right {
-    gap: 4px;
-  }
-
-  .icon-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .profile-trigger {
-    width: 38px;
-    height: 38px;
-  }
-
-  .avatar {
-    width: 31px;
-    height: 31px;
+    max-width: 34px;
+    max-height: 34px;
   }
 
   .profile-trigger::after {
     width: 8px;
     height: 8px;
+
+    right: -1px;
+    bottom: 0;
+  }
+
+  .profile-dropdown {
+    right: -2px;
+
+    width: 235px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .navbar-right {
+    gap: 4px;
+
+    padding-right: 2px;
+  }
+
+  .profile-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .profile-trigger {
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .profile-trigger .avatar {
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+    min-height: 32px;
+
+    max-width: 32px;
+    max-height: 32px;
+  }
+
+  .profile-trigger::after {
+    width: 7px;
+    height: 7px;
   }
 
   .profile-dropdown {
     right: -2px;
 
     width: 220px;
-  }
-}
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-.navbar button:focus-visible,
-.navbar a:focus-visible {
-  outline: 2px solid
-    rgba(139, 108, 255, 0.85);
-
-  outline-offset: 3px;
-}
-
-/* =========================================================
-   REDUCE MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar,
-  .navbar *,
-  .navbar-links a,
-  .icon-btn,
-  .profile-trigger,
-  .mobile-toggle {
-    transition: none !important;
-    animation: none !important;
   }
 }
