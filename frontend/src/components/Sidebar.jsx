@@ -1,8 +1,19 @@
 // src/components/Sidebar.jsx
 
-import { NavLink, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import {
+  NavLink,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
+
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import {
   FaTachometerAlt,
@@ -11,12 +22,10 @@ import {
   FaColumns,
   FaUsers,
   FaChartBar,
-  FaUserCircle,
   FaCog,
   FaBell,
   FaSignOutAlt,
   FaTimes,
-  FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
 
@@ -81,7 +90,10 @@ const Sidebar = ({
 }) => {
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const {
+    user,
+    logout,
+  } = useAuth();
 
   const [isMobile, setIsMobile] = useState(
     window.innerWidth <= 768
@@ -93,7 +105,9 @@ const Sidebar = ({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(
+        window.innerWidth <= 768
+      );
     };
 
     handleResize();
@@ -119,39 +133,22 @@ const Sidebar = ({
     ? user.name
         .split(" ")
         .filter(Boolean)
-        .map((name) => name[0])
+        .map(
+          (name) => name[0]
+        )
         .join("")
         .substring(0, 2)
         .toUpperCase()
     : "TF";
 
   /* =========================================================
-     LOGOUT
+     TASKFLOW LOGO
+     
+     THIS IS NOW THE ONLY DESKTOP SIDEBAR
+     COLLAPSE / EXPAND CONTROL.
   ========================================================= */
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error(
-        "Logout error:",
-        error
-      );
-    }
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    navigate("/", {
-      replace: true,
-    });
-  };
-
-  /* =========================================================
-     COLLAPSE / EXPAND
-  ========================================================= */
-
-  const toggleSidebar = () => {
+  const handleLogoClick = () => {
     if (isMobile) {
       return;
     }
@@ -183,6 +180,33 @@ const Sidebar = ({
     }
   };
 
+  /* =========================================================
+     LOGOUT
+  ========================================================= */
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error(
+        "Logout error:",
+        error
+      );
+    }
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    localStorage.removeItem(
+      "user"
+    );
+
+    navigate("/", {
+      replace: true,
+    });
+  };
+
   return (
     <>
       {/* =====================================================
@@ -190,26 +214,27 @@ const Sidebar = ({
       ===================================================== */}
 
       <AnimatePresence>
-        {isMobile && sidebarOpen && (
-          <motion.div
-            className="sidebar-overlay"
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.2,
-            }}
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        )}
+        {isMobile &&
+          sidebarOpen && (
+            <motion.div
+              className="sidebar-overlay"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{
+                duration: 0.2,
+              }}
+              onClick={() =>
+                setSidebarOpen(false)
+              }
+            />
+          )}
       </AnimatePresence>
 
       {/* =====================================================
@@ -221,7 +246,11 @@ const Sidebar = ({
           sidebarOpen
             ? "expanded"
             : "collapsed"
-        } ${isMobile ? "mobile" : ""}`}
+        } ${
+          isMobile
+            ? "mobile"
+            : ""
+        }`}
         animate={{
           width: isMobile
             ? sidebarOpen
@@ -233,7 +262,12 @@ const Sidebar = ({
         }}
         transition={{
           duration: 0.3,
-          ease: [0.4, 0, 0.2, 1],
+          ease: [
+            0.4,
+            0,
+            0.2,
+            1,
+          ],
         }}
       >
         {/* ===================================================
@@ -244,18 +278,28 @@ const Sidebar = ({
           <button
             type="button"
             className="sidebar-brand-button"
-            onClick={toggleSidebar}
+            onClick={handleLogoClick}
             title={
-              sidebarOpen
+              isMobile
+                ? "TaskFlow"
+                : sidebarOpen
                 ? "Collapse sidebar"
                 : "Expand sidebar"
             }
             aria-label={
-              sidebarOpen
+              isMobile
+                ? "TaskFlow"
+                : sidebarOpen
                 ? "Collapse sidebar"
                 : "Expand sidebar"
             }
           >
+            {/* =================================================
+                TASKFLOW LOGO
+
+                CLICK THIS TO COLLAPSE / EXPAND
+            ================================================= */}
+
             <motion.div
               className="brand-logo"
               whileHover={{
@@ -265,8 +309,14 @@ const Sidebar = ({
                 scale: 0.94,
               }}
             >
-              <span>TF</span>
+              <span>
+                TF
+              </span>
             </motion.div>
+
+            {/* =================================================
+                TASKFLOW TEXT
+            ================================================= */}
 
             <AnimatePresence>
               {sidebarOpen && (
@@ -300,20 +350,25 @@ const Sidebar = ({
             </AnimatePresence>
           </button>
 
-          {/* Mobile close */}
+          {/* =================================================
+              MOBILE CLOSE ONLY
 
-          {isMobile && sidebarOpen && (
-            <button
-              type="button"
-              className="close-sidebar"
-              onClick={() =>
-                setSidebarOpen(false)
-              }
-              aria-label="Close sidebar"
-            >
-              <FaTimes />
-            </button>
-          )}
+              This is NOT the desktop collapse control.
+          ================================================= */}
+
+          {isMobile &&
+            sidebarOpen && (
+              <button
+                type="button"
+                className="close-sidebar"
+                onClick={() =>
+                  setSidebarOpen(false)
+                }
+                aria-label="Close sidebar"
+              >
+                <FaTimes />
+              </button>
+            )}
         </div>
 
         {/* ===================================================
@@ -323,7 +378,7 @@ const Sidebar = ({
         <div className="sidebar-divider" />
 
         {/* ===================================================
-            CLICKABLE USER PROFILE
+            USER PROFILE
         =================================================== */}
 
         <NavLink
@@ -335,10 +390,15 @@ const Sidebar = ({
                 : ""
             }`
           }
-          onClick={handleProfileClick}
+          onClick={
+            handleProfileClick
+          }
           title={
             !sidebarOpen
-              ? `Open ${user?.name || "profile"}`
+              ? `Open ${
+                  user?.name ||
+                  "profile"
+                }`
               : undefined
           }
         >
@@ -383,11 +443,13 @@ const Sidebar = ({
                 }}
               >
                 <strong>
-                  {user?.name || "User"}
+                  {user?.name ||
+                    "User"}
                 </strong>
 
                 <span>
-                  {user?.role || "Member"}
+                  {user?.role ||
+                    "Member"}
                 </span>
               </motion.div>
             )}
@@ -458,7 +520,8 @@ const Sidebar = ({
                 }}
                 transition={{
                   delay:
-                    index * 0.035,
+                    index *
+                    0.035,
                 }}
               >
                 <NavLink
@@ -479,9 +542,13 @@ const Sidebar = ({
                       : ""
                   }
                 >
+                  {/* Icon */}
+
                   <span className="sidebar-icon">
                     {item.icon}
                   </span>
+
+                  {/* Text */}
 
                   <AnimatePresence>
                     {sidebarOpen && (
@@ -500,10 +567,14 @@ const Sidebar = ({
                           x: -6,
                         }}
                       >
-                        {item.title}
+                        {
+                          item.title
+                        }
                       </motion.span>
                     )}
                   </AnimatePresence>
+
+                  {/* Active indicator */}
 
                   {sidebarOpen && (
                     <span className="sidebar-active-indicator" />
@@ -519,41 +590,25 @@ const Sidebar = ({
         =================================================== */}
 
         <div className="sidebar-bottom">
-          {/* Collapse button */}
 
-          {!isMobile && (
-            <button
-              type="button"
-              className="sidebar-collapse-button"
-              onClick={toggleSidebar}
-              title={
-                sidebarOpen
-                  ? "Collapse sidebar"
-                  : "Expand sidebar"
-              }
-            >
-              <span className="collapse-icon">
-                {sidebarOpen ? (
-                  <FaChevronLeft />
-                ) : (
-                  <FaChevronRight />
-                )}
-              </span>
+          {/* =================================================
+              IMPORTANT
 
-              {sidebarOpen && (
-                <span>
-                  Collapse sidebar
-                </span>
-              )}
-            </button>
-          )}
+              The old "Collapse sidebar" button has been
+              completely removed.
+
+              Sidebar collapse now happens ONLY by clicking
+              the TaskFlow logo.
+          ================================================= */}
 
           {/* Logout */}
 
           <button
             type="button"
             className="logout-btn"
-            onClick={handleLogout}
+            onClick={
+              handleLogout
+            }
             title={
               !sidebarOpen
                 ? "Logout"

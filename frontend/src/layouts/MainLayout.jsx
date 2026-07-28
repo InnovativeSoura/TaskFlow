@@ -1,4 +1,4 @@
-// src/components/MainLayout.jsx
+// src/layouts/MainLayout.jsx
 
 import { useState } from "react";
 
@@ -8,8 +8,18 @@ import Navbar from "../components/Navbar";
 import "./MainLayout.css";
 
 const MainLayout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(true);
+  /*
+  =========================================================
+  SIDEBAR STATE
+  =========================================================
+  true  = expanded
+  false = collapsed
+
+  The state is controlled by the TaskFlow logo inside
+  Sidebar.jsx.
+  */
+
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     <div
@@ -19,10 +29,18 @@ const MainLayout = ({ children }) => {
           : "sidebar-collapsed"
       }`}
     >
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
+
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
+
+      {/* =====================================================
+          MAIN APPLICATION AREA
+      ===================================================== */}
 
       <div
         className={`main-content ${
@@ -31,10 +49,19 @@ const MainLayout = ({ children }) => {
             : "sidebar-collapsed"
         }`}
       >
-        <Navbar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
+        {/* ===================================================
+            TOP NAVBAR
+
+            IMPORTANT:
+            Navbar no longer needs to control the sidebar.
+            Do NOT add a hamburger/collapse button there.
+        =================================================== */}
+
+        <Navbar />
+
+        {/* ===================================================
+            PAGE CONTENT
+        =================================================== */}
 
         <main className="page-content">
           {children}
