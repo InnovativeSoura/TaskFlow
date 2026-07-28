@@ -1,72 +1,47 @@
 // src/layouts/MainLayout.jsx
 
-import { useState } from "react";
-
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "./MainLayout.css";
+import "../styles/MainLayout.css";
 
 const MainLayout = ({ children }) => {
-  /*
-  =========================================================
-  SIDEBAR STATE
-  =========================================================
-  true  = expanded
-  false = collapsed
-
-  The state is controlled by the TaskFlow logo inside
-  Sidebar.jsx.
-  */
-
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
   return (
-    <div
-      className={`layout ${
-        sidebarOpen
-          ? "sidebar-expanded"
-          : "sidebar-collapsed"
-      }`}
-    >
+    <div className="taskflow-layout">
+
       {/* =====================================================
           SIDEBAR
+          Fixed independently.
+          Collapse / expand is controlled from Sidebar logo.
       ===================================================== */}
 
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      <Sidebar />
 
       {/* =====================================================
-          MAIN APPLICATION AREA
+          MAIN AREA
       ===================================================== */}
 
-      <div
-        className={`main-content ${
-          sidebarOpen
-            ? "sidebar-expanded"
-            : "sidebar-collapsed"
-        }`}
-      >
-        {/* ===================================================
-            TOP NAVBAR
+      <div className="taskflow-main">
 
-            IMPORTANT:
-            Navbar no longer needs to control the sidebar.
-            Do NOT add a hamburger/collapse button there.
-        =================================================== */}
+        {/* =================================================
+            NAVBAR
+
+            Navbar belongs INSIDE the main area so it
+            never overlaps the sidebar.
+        ================================================= */}
 
         <Navbar />
 
-        {/* ===================================================
+        {/* =================================================
             PAGE CONTENT
-        =================================================== */}
+        ================================================= */}
 
-        <main className="page-content">
+        <main className="taskflow-page-content">
           {children}
         </main>
+
       </div>
+
     </div>
   );
 };

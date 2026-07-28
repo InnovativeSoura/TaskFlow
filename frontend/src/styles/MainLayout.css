@@ -1,0 +1,169 @@
+/* =========================================================
+   TASKFLOW MAIN LAYOUT
+========================================================= */
+
+:root {
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 76px;
+
+  --navbar-height: 68px;
+
+  --layout-bg:
+    linear-gradient(
+      135deg,
+      #f7faff 0%,
+      #eef4ff 45%,
+      #f8faff 100%
+    );
+}
+
+/* =========================================================
+   ROOT LAYOUT
+========================================================= */
+
+.taskflow-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  background: var(--layout-bg);
+
+  position: relative;
+}
+
+/* =========================================================
+   MAIN CONTENT AREA
+
+   IMPORTANT:
+   Sidebar occupies its own width.
+
+   Navbar is INSIDE this element.
+========================================================= */
+
+.taskflow-main {
+  width: calc(100% - var(--sidebar-width));
+
+  min-width: 0;
+
+  min-height: 100vh;
+
+  margin-left: var(--sidebar-width);
+
+  display: flex;
+
+  flex-direction: column;
+
+  position: relative;
+
+  transition:
+    margin-left 0.3s ease,
+    width 0.3s ease;
+}
+
+/* =========================================================
+   PAGE CONTENT
+========================================================= */
+
+.taskflow-page-content {
+  width: 100%;
+
+  min-height:
+    calc(100vh - var(--navbar-height));
+
+  padding: 0;
+
+  position: relative;
+
+  z-index: 1;
+}
+
+/* =========================================================
+   SIDEBAR COLLAPSED STATE
+
+   This supports the existing TaskFlow logo
+   collapse/expand behavior.
+========================================================= */
+
+body.sidebar-collapsed .taskflow-main,
+html.sidebar-collapsed .taskflow-main {
+  width:
+    calc(100% - var(--sidebar-collapsed-width));
+
+  margin-left:
+    var(--sidebar-collapsed-width);
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html[data-theme="dark"] .taskflow-layout,
+body.dark-theme .taskflow-layout {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(79, 70, 229, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #080d19,
+      #0b1220 55%,
+      #080d18
+    );
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  :root {
+    --sidebar-width: 76px;
+  }
+
+  .taskflow-main {
+    width:
+      calc(100% - var(--sidebar-width));
+
+    margin-left:
+      var(--sidebar-width);
+  }
+
+  body.sidebar-collapsed .taskflow-main,
+  html.sidebar-collapsed .taskflow-main {
+    width:
+      calc(100% - var(--sidebar-width));
+
+    margin-left:
+      var(--sidebar-width);
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .taskflow-main {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  body.sidebar-collapsed .taskflow-main,
+  html.sidebar-collapsed .taskflow-main {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  .taskflow-page-content {
+    min-height: 100vh;
+  }
+
+}

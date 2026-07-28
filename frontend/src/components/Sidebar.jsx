@@ -95,19 +95,36 @@ const Sidebar = ({
     logout,
   } = useAuth();
 
+  /* =======================================================
+     MOBILE STATE
+  ======================================================= */
+
   const [isMobile, setIsMobile] = useState(
     window.innerWidth <= 768
   );
 
-  /* =========================================================
+  /* =======================================================
      RESPONSIVE CHECK
-  ========================================================= */
+  ======================================================= */
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(
-        window.innerWidth <= 768
-      );
+      const mobile =
+        window.innerWidth <= 768;
+
+      setIsMobile(mobile);
+
+      /*
+       * On desktop we keep the current
+       * sidebar state.
+       *
+       * On mobile the sidebar is closed
+       * automatically when moving from
+       * desktop-sized viewport.
+       */
+      if (!mobile) {
+        return;
+      }
     };
 
     handleResize();
@@ -125,28 +142,30 @@ const Sidebar = ({
     };
   }, []);
 
-  /* =========================================================
+  /* =======================================================
      USER INITIALS
-  ========================================================= */
+  ======================================================= */
 
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .filter(Boolean)
-        .map(
-          (name) => name[0]
-        )
-        .join("")
-        .substring(0, 2)
-        .toUpperCase()
-    : "TF";
+  const initials =
+    user?.name
+      ?.trim()
+      ?.split(/\s+/)
+      ?.filter(Boolean)
+      ?.map(
+        (name) =>
+          name?.[0] || ""
+      )
+      ?.join("")
+      ?.substring(0, 2)
+      ?.toUpperCase() || "TF";
 
-  /* =========================================================
-     TASKFLOW LOGO
-     
-     THIS IS NOW THE ONLY DESKTOP SIDEBAR
-     COLLAPSE / EXPAND CONTROL.
-  ========================================================= */
+  /* =======================================================
+     DESKTOP SIDEBAR TOGGLE
+
+     IMPORTANT:
+     The TaskFlow logo is the ONLY desktop
+     collapse / expand control.
+  ======================================================= */
 
   const handleLogoClick = () => {
     if (isMobile) {
@@ -158,9 +177,9 @@ const Sidebar = ({
     );
   };
 
-  /* =========================================================
+  /* =======================================================
      MOBILE CLOSE
-  ========================================================= */
+  ======================================================= */
 
   const closeMobile = () => {
     if (isMobile) {
@@ -168,9 +187,9 @@ const Sidebar = ({
     }
   };
 
-  /* =========================================================
+  /* =======================================================
      PROFILE CLICK
-  ========================================================= */
+  ======================================================= */
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -180,9 +199,9 @@ const Sidebar = ({
     }
   };
 
-  /* =========================================================
+  /* =======================================================
      LOGOUT
-  ========================================================= */
+  ======================================================= */
 
   const handleLogout = async () => {
     try {
@@ -206,6 +225,32 @@ const Sidebar = ({
       replace: true,
     });
   };
+
+  /* =======================================================
+     SIDEBAR WIDTH
+     
+     These values must match the layout CSS.
+     
+     Desktop:
+       Expanded = 260px
+       Collapsed = 84px
+
+     Mobile:
+       Open = 270px
+       Closed = 0px
+  ======================================================= */
+
+  const sidebarWidth = isMobile
+    ? sidebarOpen
+      ? 270
+      : 0
+    : sidebarOpen
+    ? 260
+    : 84;
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <>
@@ -239,6 +284,14 @@ const Sidebar = ({
 
       {/* =====================================================
           SIDEBAR
+
+          IMPORTANT FIX:
+          z-index is intentionally higher than the navbar
+          so the TaskFlow logo cannot be visually covered
+          by the navbar layer.
+
+          The matching Sidebar.css below also makes the
+          sidebar occupy its own fixed column.
       ===================================================== */}
 
       <motion.aside
@@ -252,14 +305,9 @@ const Sidebar = ({
             : ""
         }`}
         animate={{
-          width: isMobile
-            ? sidebarOpen
-              ? 270
-              : 0
-            : sidebarOpen
-            ? 260
-            : 84,
+          width: sidebarWidth,
         }}
+        initial={false}
         transition={{
           duration: 0.3,
           ease: [
@@ -269,12 +317,30 @@ const Sidebar = ({
             1,
           ],
         }}
+        style={{
+          zIndex: isMobile
+            ? 1200
+            : 1100,
+        }}
       >
+
         {/* ===================================================
             HEADER / TASKFLOW LOGO
         =================================================== */}
 
         <div className="sidebar-header">
+
+          {/* =================================================
+              TASKFLOW BRAND BUTTON
+              
+              Desktop:
+              Click = collapse / expand
+
+              Mobile:
+              Does nothing because mobile has a
+              dedicated close button.
+          ================================================= */}
+
           <button
             type="button"
             className="sidebar-brand-button"
@@ -294,10 +360,9 @@ const Sidebar = ({
                 : "Expand sidebar"
             }
           >
+
             {/* =================================================
                 TASKFLOW LOGO
-
-                CLICK THIS TO COLLAPSE / EXPAND
             ================================================= */}
 
             <motion.div
@@ -348,12 +413,13 @@ const Sidebar = ({
                 </motion.div>
               )}
             </AnimatePresence>
+
           </button>
 
           {/* =================================================
-              MOBILE CLOSE ONLY
+              MOBILE CLOSE BUTTON
 
-              This is NOT the desktop collapse control.
+              This is ONLY for mobile.
           ================================================= */}
 
           {isMobile &&
@@ -369,6 +435,7 @@ const Sidebar = ({
                 <FaTimes />
               </button>
             )}
+
         </div>
 
         {/* ===================================================
@@ -402,9 +469,13 @@ const Sidebar = ({
               : undefined
           }
         >
-          {/* Avatar */}
+
+          {/* =================================================
+              AVATAR
+          ================================================= */}
 
           <div className="sidebar-avatar-wrapper">
+
             {user?.avatar ? (
               <img
                 src={user.avatar}
@@ -418,9 +489,12 @@ const Sidebar = ({
             )}
 
             <span className="profile-online-dot" />
+
           </div>
 
-          {/* User information */}
+          {/* =================================================
+              USER INFORMATION
+          ================================================= */}
 
           <AnimatePresence>
             {sidebarOpen && (
@@ -442,6 +516,7 @@ const Sidebar = ({
                   duration: 0.18,
                 }}
               >
+
                 <strong>
                   {user?.name ||
                     "User"}
@@ -451,11 +526,14 @@ const Sidebar = ({
                   {user?.role ||
                     "Member"}
                 </span>
+
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Profile arrow */}
+          {/* =================================================
+              PROFILE ARROW
+          ================================================= */}
 
           {sidebarOpen && (
             <motion.span
@@ -476,10 +554,11 @@ const Sidebar = ({
               <FaChevronRight />
             </motion.span>
           )}
+
         </NavLink>
 
         {/* ===================================================
-            NAVIGATION LABEL
+            WORKSPACE LABEL
         =================================================== */}
 
         <AnimatePresence>
@@ -506,6 +585,7 @@ const Sidebar = ({
         =================================================== */}
 
         <nav className="sidebar-menu">
+
           {menuItems.map(
             (item, index) => (
               <motion.div
@@ -524,6 +604,7 @@ const Sidebar = ({
                     0.035,
                 }}
               >
+
                 <NavLink
                   to={item.path}
                   title={
@@ -534,21 +615,24 @@ const Sidebar = ({
                   onClick={
                     closeMobile
                   }
-                  className={({
-                    isActive,
-                  }) =>
+                  className={({ isActive }) =>
                     isActive
                       ? "active"
                       : ""
                   }
                 >
-                  {/* Icon */}
+
+                  {/* =================================================
+                      ICON
+                  ================================================= */}
 
                   <span className="sidebar-icon">
                     {item.icon}
                   </span>
 
-                  {/* Text */}
+                  {/* =================================================
+                      TEXT
+                  ================================================= */}
 
                   <AnimatePresence>
                     {sidebarOpen && (
@@ -567,22 +651,25 @@ const Sidebar = ({
                           x: -6,
                         }}
                       >
-                        {
-                          item.title
-                        }
+                        {item.title}
                       </motion.span>
                     )}
                   </AnimatePresence>
 
-                  {/* Active indicator */}
+                  {/* =================================================
+                      ACTIVE INDICATOR
+                  ================================================= */}
 
                   {sidebarOpen && (
                     <span className="sidebar-active-indicator" />
                   )}
+
                 </NavLink>
+
               </motion.div>
             )
           )}
+
         </nav>
 
         {/* ===================================================
@@ -592,16 +679,8 @@ const Sidebar = ({
         <div className="sidebar-bottom">
 
           {/* =================================================
-              IMPORTANT
-
-              The old "Collapse sidebar" button has been
-              completely removed.
-
-              Sidebar collapse now happens ONLY by clicking
-              the TaskFlow logo.
+              LOGOUT
           ================================================= */}
-
-          {/* Logout */}
 
           <button
             type="button"
@@ -615,6 +694,7 @@ const Sidebar = ({
                 : undefined
             }
           >
+
             <span className="logout-icon">
               <FaSignOutAlt />
             </span>
@@ -639,8 +719,11 @@ const Sidebar = ({
                 </motion.span>
               )}
             </AnimatePresence>
+
           </button>
+
         </div>
+
       </motion.aside>
     </>
   );

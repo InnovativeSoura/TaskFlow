@@ -40,10 +40,25 @@ import "../styles/Navbar.css";
    TASKFLOW PREMIUM NAVBAR
 
    IMPORTANT:
-   - Sidebar collapse/expand is controlled ONLY
-     from the TaskFlow logo inside Sidebar.jsx.
-   - Navbar does NOT contain a global search bar.
-   - Dashboard search is handled inside Dashboard.jsx.
+   ---------------------------------------------------------
+   1. Sidebar collapse / expand is controlled ONLY
+      by the TaskFlow logo inside Sidebar.jsx.
+
+   2. Navbar does NOT contain a sidebar hamburger.
+
+   3. Navbar does NOT contain a global search bar.
+
+   4. Dashboard search is handled inside Dashboard.jsx.
+
+   5. Navbar automatically detects the Sidebar width
+      so it NEVER overlaps the TaskFlow logo.
+
+   DESKTOP SIDEBAR:
+      Expanded  = 260px
+      Collapsed = 84px
+
+   MOBILE SIDEBAR:
+      Drawer = 270px
 ========================================================= */
 
 const Navbar = () => {
@@ -53,6 +68,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   const menuRef = useRef(null);
+  const navbarRef = useRef(null);
 
   /* =========================================================
      PROFILE MENU
@@ -62,11 +78,44 @@ const Navbar = () => {
     useState(false);
 
   /* =========================================================
-     MOBILE NAVIGATION
+     MOBILE TOP NAVIGATION
+     
+     IMPORTANT:
+     This controls ONLY:
+       Dashboard
+       Projects
+       Tasks
+       Team
+
+     It does NOT control the Sidebar.
   ========================================================= */
 
   const [mobileMenu, setMobileMenu] =
     useState(false);
+
+  /* =========================================================
+     SIDEBAR OFFSET
+     
+     This is the important fix for the overlap.
+
+     Default desktop collapsed width:
+        84px
+
+     When Sidebar expands:
+        ResizeObserver detects 260px
+
+     Navbar then moves automatically:
+        left: 260px
+  ========================================================= */
+
+  const [sidebarWidth, setSidebarWidth] =
+    useState(84);
+
+  const [isMobile, setIsMobile] =
+    useState(
+      typeof window !== "undefined" &&
+        window.innerWidth <= 768
+    );
 
   /* =========================================================
      THEME INITIALIZATION
@@ -105,6 +154,116 @@ const Navbar = () => {
 
   const [darkMode, setDarkMode] =
     useState(getInitialTheme);
+
+  /* =========================================================
+     RESPONSIVE CHECK
+  ========================================================= */
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile =
+        window.innerWidth <= 768;
+
+      setIsMobile(mobile);
+
+      /*
+        On mobile the navbar must occupy
+        the full viewport width because the
+        sidebar becomes a drawer.
+      */
+      if (mobile) {
+        setSidebarWidth(0);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
+
+    return () => {
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+    };
+  }, []);
+
+  /* =========================================================
+     DETECT SIDEBAR WIDTH
+     
+     ResizeObserver allows Navbar to follow
+     Sidebar's Framer Motion width animation.
+
+     Sidebar.jsx:
+       expanded  -> 260px
+       collapsed -> 84px
+
+     Navbar:
+       left      -> sidebar width
+  ========================================================= */
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    if (window.innerWidth <= 768) {
+      setSidebarWidth(0);
+      return undefined;
+    }
+
+    const sidebar =
+      document.querySelector(
+        ".sidebar"
+      );
+
+    if (!sidebar) {
+      setSidebarWidth(84);
+      return undefined;
+    }
+
+    const updateSidebarWidth = () => {
+      const width =
+        sidebar.getBoundingClientRect()
+          .width;
+
+      /*
+        Prevent tiny fractional values
+        during the Framer Motion animation.
+      */
+      if (width > 0) {
+        setSidebarWidth(
+          Math.round(width)
+        );
+      }
+    };
+
+    updateSidebarWidth();
+
+    const observer =
+      new ResizeObserver(() => {
+        updateSidebarWidth();
+      });
+
+    observer.observe(sidebar);
+
+    /*
+      Extra fallback for environments where
+      ResizeObserver does not immediately fire.
+    */
+    const interval = setInterval(
+      updateSidebarWidth,
+      100
+    );
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
+  }, [location.pathname, isMobile]);
 
   /* =========================================================
      APPLY GLOBAL THEME
@@ -338,29 +497,54 @@ const Navbar = () => {
   };
 
   /* =========================================================
+     NAVBAR POSITION
+     
+     Desktop:
+       left = actual Sidebar width
+
+     Mobile:
+       left = 0
+
+     This prevents Navbar from covering
+     the TaskFlow logo.
+  ========================================================= */
+
+  const navbarStyle = {
+    "--navbar-sidebar-offset": isMobile
+      ? "0px"
+      : `${sidebarWidth}px`,
+  };
+
+  /* =========================================================
      RENDER
   ========================================================= */
 
   return (
     <header
+      ref={navbarRef}
       className={`navbar ${
         darkMode
           ? "navbar-dark"
           : "navbar-light"
+      } ${
+        isMobile
+          ? "navbar-mobile"
+          : "navbar-desktop"
       }`}
+      style={navbarStyle}
     >
 
       {/* =====================================================
           LEFT SECTION
-
-          NO SEARCH BAR.
+          
           NO SIDEBAR HAMBURGER.
+          NO GLOBAL SEARCH.
       ===================================================== */}
 
       <div className="navbar-left">
 
         {/* =================================================
-            DESKTOP / MOBILE NAVIGATION
+            TOP NAVIGATION
         ================================================= */}
 
         <nav
@@ -380,6 +564,9 @@ const Navbar = () => {
                 ? "active"
                 : ""
             }
+            onClick={() =>
+              setMobileMenu(false)
+            }
           >
             <FaHome />
 
@@ -396,6 +583,9 @@ const Navbar = () => {
               isActive
                 ? "active"
                 : ""
+            }
+            onClick={() =>
+              setMobileMenu(false)
             }
           >
             <FaProjectDiagram />
@@ -414,6 +604,9 @@ const Navbar = () => {
                 ? "active"
                 : ""
             }
+            onClick={() =>
+              setMobileMenu(false)
+            }
           >
             <FaTasks />
 
@@ -430,6 +623,9 @@ const Navbar = () => {
               isActive
                 ? "active"
                 : ""
+            }
+            onClick={() =>
+              setMobileMenu(false)
             }
           >
             <FaUsers />
@@ -756,9 +952,10 @@ const Navbar = () => {
         </div>
 
         {/* =================================================
-            MOBILE NAVIGATION TOGGLE
+            MOBILE TOP NAVIGATION TOGGLE
 
-            Controls TOP NAVIGATION links only.
+            IMPORTANT:
+            This does NOT control the Sidebar.
         ================================================= */}
 
         <motion.button
