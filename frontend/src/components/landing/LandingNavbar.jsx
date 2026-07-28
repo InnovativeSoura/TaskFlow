@@ -21,34 +21,14 @@ import {
   FaTimes,
   FaTasks,
   FaArrowRight,
-  FaMoon,
-  FaSun,
 } from "react-icons/fa";
-
-import { useTheme } from "../../context/ThemeContext";
 
 import "./LandingNavbar.css";
 
-/* =========================================================
-   LANDING NAVBAR
-========================================================= */
-
 const LandingNavbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  /* =======================================================
-     GLOBAL THEME
-  ======================================================= */
-
-  const {
-    darkMode,
-    toggleTheme,
-  } = useTheme();
-
-  /* =======================================================
-     STATE
-  ======================================================= */
+  /* ==========================================
+      STATE
+  ========================================== */
 
   const [menuOpen, setMenuOpen] =
     useState(false);
@@ -56,12 +36,16 @@ const LandingNavbar = () => {
   const [scrolled, setScrolled] =
     useState(false);
 
-  const [activeSection, setActiveSection] =
-    useState("home");
+  /* ==========================================
+      ROUTER
+  ========================================== */
 
-  /* =======================================================
-     SCROLL DETECTION
-  ======================================================= */
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  /* ==========================================
+      SCROLL DETECTION
+  ========================================== */
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,13 +54,13 @@ const LandingNavbar = () => {
       );
     };
 
-    handleScroll();
-
     window.addEventListener(
       "scroll",
-      handleScroll,
-      { passive: true }
+      handleScroll
     );
+
+    // Set initial state
+    handleScroll();
 
     return () => {
       window.removeEventListener(
@@ -86,89 +70,27 @@ const LandingNavbar = () => {
     };
   }, []);
 
-  /* =======================================================
-     ACTIVE SECTION DETECTION
-  ======================================================= */
-
-  useEffect(() => {
-    if (location.pathname !== "/") {
-      return;
-    }
-
-    const sectionIds = [
-      "home",
-      "features",
-      "statistics",
-      "testimonials",
-      "footer",
-    ];
-
-    const handleActiveSection = () => {
-      const scrollPosition =
-        window.scrollY + 180;
-
-      let currentSection = "home";
-
-      sectionIds.forEach(
-        (id) => {
-          const section =
-            document.getElementById(id);
-
-          if (!section) {
-            return;
-          }
-
-          if (
-            section.offsetTop <=
-            scrollPosition
-          ) {
-            currentSection = id;
-          }
-        }
-      );
-
-      setActiveSection(
-        currentSection
-      );
-    };
-
-    handleActiveSection();
-
-    window.addEventListener(
-      "scroll",
-      handleActiveSection,
-      { passive: true }
-    );
-
-    return () => {
-      window.removeEventListener(
-        "scroll",
-        handleActiveSection
-      );
-    };
-  }, [location.pathname]);
-
-  /* =======================================================
-     CLOSE MOBILE MENU
-  ======================================================= */
+  /* ==========================================
+      CLOSE MOBILE MENU
+  ========================================== */
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
-  /* =======================================================
-     TOGGLE MOBILE MENU
-  ======================================================= */
+  /* ==========================================
+      TOGGLE MOBILE MENU
+  ========================================== */
 
   const toggleMenu = () => {
     setMenuOpen(
-      (previous) => !previous
+      (prev) => !prev
     );
   };
 
-  /* =======================================================
-     SECTION SCROLL
-  ======================================================= */
+  /* ==========================================
+      SCROLL TO NORMAL LANDING SECTIONS
+  ========================================== */
 
   const handleSectionScroll = (
     id
@@ -176,7 +98,8 @@ const LandingNavbar = () => {
     closeMenu();
 
     /*
-      Already on landing page.
+      If we are already on the landing page,
+      scroll directly to the section.
     */
 
     if (
@@ -196,16 +119,19 @@ const LandingNavbar = () => {
     }
 
     /*
-      Navigate home first.
+      If we are somewhere else in the
+      application, return to the landing
+      page first.
     */
 
     navigate("/");
 
     /*
-      Wait for Home page to mount.
+      Wait for the landing page to mount,
+      then scroll to the requested section.
     */
 
-    window.setTimeout(() => {
+    setTimeout(() => {
       const section =
         document.querySelector(id);
 
@@ -215,20 +141,22 @@ const LandingNavbar = () => {
           block: "start",
         });
       }
-    }, 350);
+    }, 300);
   };
 
-  /* =======================================================
-     EXPLORE PLATFORM
-     -------------------------------------------------------
-     Opens Login mode inside AuthCard.
-  ======================================================= */
+  /* ==========================================
+      EXPLORE PLATFORM
+      -------------------------------
+      Scrolls to the AuthCard inside Hero
+      and activates LOGIN mode.
+  ========================================== */
 
   const handleExplorePlatform = () => {
     closeMenu();
 
     /*
-      Already on landing page.
+      If already on the landing page,
+      directly request the AuthCard.
     */
 
     if (
@@ -249,16 +177,17 @@ const LandingNavbar = () => {
     }
 
     /*
-      Navigate home.
+      If the user is on another page,
+      return to the landing page first.
     */
 
     navigate("/");
 
     /*
-      Wait for landing page.
+      Give React time to mount Hero/AuthCard.
     */
 
-    window.setTimeout(() => {
+    setTimeout(() => {
       window.dispatchEvent(
         new CustomEvent(
           "taskflow-scroll-auth",
@@ -269,15 +198,19 @@ const LandingNavbar = () => {
           }
         )
       );
-    }, 400);
+    }, 350);
   };
 
-  /* =======================================================
-     LOGO CLICK
-  ======================================================= */
+  /* ==========================================
+      LOGO CLICK
+  ========================================== */
 
   const handleLogoClick = () => {
     closeMenu();
+
+    /*
+      If already on home, scroll to top.
+    */
 
     if (
       location.pathname === "/"
@@ -289,33 +222,17 @@ const LandingNavbar = () => {
     }
   };
 
-  /* =======================================================
-     NAV ITEM
-  ======================================================= */
-
-  const isActive = (section) => {
-    if (
-      location.pathname !== "/"
-    ) {
-      return false;
-    }
-
-    return (
-      activeSection === section
-    );
-  };
-
-  /* =======================================================
-     RENDER
-  ======================================================= */
+  /* ==========================================
+      RENDER
+  ========================================== */
 
   return (
     <motion.header
-      className={`
-        landing-navbar
-        ${scrolled ? "scrolled" : ""}
-        ${darkMode ? "dark" : "light"}
-      `}
+      className={`landing-navbar ${
+        scrolled
+          ? "scrolled"
+          : ""
+      }`}
       initial={{
         y: -80,
         opacity: 0,
@@ -332,9 +249,9 @@ const LandingNavbar = () => {
 
       <div className="landing-navbar-container">
 
-        {/* =================================================
+        {/* ==================================================
             LOGO
-        ================================================= */}
+        ================================================== */}
 
         <Link
           to="/"
@@ -344,18 +261,9 @@ const LandingNavbar = () => {
           }
         >
 
-          <motion.div
-            className="landing-logo-icon"
-            whileHover={{
-              rotate: 8,
-              scale: 1.06,
-            }}
-            whileTap={{
-              scale: 0.94,
-            }}
-          >
+          <div className="landing-logo-icon">
             <FaTasks />
-          </motion.div>
+          </div>
 
           <div className="landing-logo-text">
 
@@ -372,235 +280,106 @@ const LandingNavbar = () => {
         </Link>
 
 
-        {/* =================================================
+        {/* ==================================================
             DESKTOP / MOBILE NAVIGATION
-        ================================================= */}
+        ================================================== */}
 
         <nav
-          className={`
-            landing-nav
-            ${menuOpen ? "open" : ""}
-          `}
+          className={`landing-nav ${
+            menuOpen
+              ? "open"
+              : ""
+          }`}
         >
 
-          {/* ===============================================
+          {/* ==============================
               HOME
-          =============================================== */}
+          =============================== */}
 
           <button
             type="button"
-            className={`
-              landing-nav-link
-              ${isActive("home")
-                ? "active"
-                : ""}
-            `}
+            className="landing-nav-link"
             onClick={() =>
               handleSectionScroll(
                 "#home"
               )
             }
           >
-            <span>
-              Home
-            </span>
+            Home
           </button>
 
 
-          {/* ===============================================
+          {/* ==============================
               FEATURES
-          =============================================== */}
+          =============================== */}
 
           <button
             type="button"
-            className={`
-              landing-nav-link
-              ${isActive("features")
-                ? "active"
-                : ""}
-            `}
+            className="landing-nav-link"
             onClick={() =>
               handleSectionScroll(
                 "#features"
               )
             }
           >
-            <span>
-              Features
-            </span>
+            Features
           </button>
 
 
-          {/* ===============================================
+          {/* ==============================
               STATISTICS
-          =============================================== */}
+          =============================== */}
 
           <button
             type="button"
-            className={`
-              landing-nav-link
-              ${isActive("statistics")
-                ? "active"
-                : ""}
-            `}
+            className="landing-nav-link"
             onClick={() =>
               handleSectionScroll(
                 "#statistics"
               )
             }
           >
-            <span>
-              Statistics
-            </span>
+            Statistics
           </button>
 
 
-          {/* ===============================================
+          {/* ==============================
               TESTIMONIALS
-          =============================================== */}
+          =============================== */}
 
           <button
             type="button"
-            className={`
-              landing-nav-link
-              ${isActive("testimonials")
-                ? "active"
-                : ""}
-            `}
+            className="landing-nav-link"
             onClick={() =>
               handleSectionScroll(
                 "#testimonials"
               )
             }
           >
-            <span>
-              Testimonials
-            </span>
+            Testimonials
           </button>
 
 
-          {/* ===============================================
+          {/* ==============================
               CONTACT
-          =============================================== */}
+          =============================== */}
 
           <button
             type="button"
-            className={`
-              landing-nav-link
-              ${isActive("footer")
-                ? "active"
-                : ""}
-            `}
+            className="landing-nav-link"
             onClick={() =>
               handleSectionScroll(
                 "#footer"
               )
             }
           >
-            <span>
-              Contact
-            </span>
+            Contact
           </button>
 
 
-          {/* =================================================
-              THEME TOGGLE
-          ================================================= */}
-
-          <motion.button
-            type="button"
-            className={`
-              landing-theme-toggle
-              ${darkMode
-                ? "theme-dark"
-                : "theme-light"}
-            `}
-            aria-label={
-              darkMode
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
-            title={
-              darkMode
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
-            onClick={toggleTheme}
-            whileHover={{
-              scale: 1.05,
-            }}
-            whileTap={{
-              scale: 0.92,
-            }}
-          >
-
-            <AnimatePresence
-              mode="wait"
-              initial={false}
-            >
-
-              {darkMode ? (
-
-                <motion.span
-                  key="sun"
-                  initial={{
-                    opacity: 0,
-                    rotate: -90,
-                    scale: 0.5,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                    scale: 1,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: 90,
-                    scale: 0.5,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
-                >
-                  <FaSun />
-                </motion.span>
-
-              ) : (
-
-                <motion.span
-                  key="moon"
-                  initial={{
-                    opacity: 0,
-                    rotate: 90,
-                    scale: 0.5,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                    scale: 1,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: -90,
-                    scale: 0.5,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
-                >
-                  <FaMoon />
-                </motion.span>
-
-              )}
-
-            </AnimatePresence>
-
-          </motion.button>
-
-
-          {/* =================================================
+          {/* ==================================================
               EXPLORE PLATFORM
-          ================================================= */}
+          ================================================== */}
 
           <div className="landing-auth-buttons">
 
@@ -639,9 +418,9 @@ const LandingNavbar = () => {
         </nav>
 
 
-        {/* =================================================
+        {/* ==================================================
             MOBILE MENU TOGGLE
-        ================================================= */}
+        ================================================== */}
 
         <button
           type="button"
@@ -715,9 +494,9 @@ const LandingNavbar = () => {
         </button>
 
 
-        {/* =================================================
-            MOBILE OVERLAY
-        ================================================= */}
+        {/* ==================================================
+            MOBILE BACKGROUND OVERLAY
+        ================================================== */}
 
         <AnimatePresence>
 
