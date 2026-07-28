@@ -1,245 +1,146 @@
 /* =========================================================
    TASKFLOW PREMIUM NAVBAR
-   ========================================================= */
-
-/* =========================================================
-   ROOT VARIABLES
 ========================================================= */
 
 :root {
   --navbar-height: 64px;
 
-  --navbar-bg-light: rgba(255, 255, 255, 0.94);
-  --navbar-bg-dark: rgba(7, 12, 25, 0.96);
+  --navbar-bg:
+    rgba(6, 11, 24, 0.94);
 
-  --navbar-border-light: rgba(15, 23, 42, 0.07);
-  --navbar-border-dark: rgba(148, 163, 184, 0.08);
+  --navbar-border:
+    rgba(148, 163, 184, 0.09);
 
-  --navbar-text-light: #334155;
-  --navbar-text-dark: #94a3b8;
+  --navbar-text:
+    #94a3b8;
 
-  --navbar-muted-light: #64748b;
-  --navbar-muted-dark: #64748b;
+  --navbar-active:
+    #ffffff;
 
-  --navbar-primary: #6d5dfc;
-  --navbar-primary-dark: #5b4ce6;
-
-  --navbar-purple: #7c3aed;
-
-  --navbar-shadow-light:
-    0 8px 30px rgba(15, 23, 42, 0.06);
-
-  --navbar-shadow-dark:
-    0 8px 30px rgba(0, 0, 0, 0.2);
-
-  --navbar-radius: 14px;
-
-  --navbar-transition:
-    0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --navbar-primary:
+    #7c5cff;
 }
 
 /* =========================================================
-   GLOBAL NAVBAR
+   NAVBAR
 ========================================================= */
 
 .navbar {
   position: fixed;
 
-  /*
-    IMPORTANT:
-    Sidebar occupies the left side.
-
-    Navbar starts AFTER the sidebar,
-    preventing overlap with TaskFlow logo.
-  */
   top: 0;
-  left: 84px;
+  left: 0;
   right: 0;
+
+  width: 100%;
 
   height: var(--navbar-height);
 
-  z-index: 900;
+  z-index: 1100;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  padding: 0 18px;
+  padding:
+    0 18px;
 
-  border-bottom: 1px solid transparent;
+  background:
+    var(--navbar-bg);
 
-  transition:
-    left var(--navbar-transition),
-    background var(--navbar-transition),
-    border-color var(--navbar-transition),
-    box-shadow var(--navbar-transition);
+  border-bottom:
+    1px solid
+    var(--navbar-border);
 
-  isolation: isolate;
+  backdrop-filter:
+    blur(20px);
+
+  -webkit-backdrop-filter:
+    blur(20px);
+
+  box-shadow:
+    0 8px 30px
+    rgba(0, 0, 0, 0.10);
 }
 
 /* =========================================================
-   LIGHT / DARK NAVBAR
-========================================================= */
-
-.navbar-light {
-  background: var(--navbar-bg-light);
-
-  border-bottom-color:
-    var(--navbar-border-light);
-
-  box-shadow:
-    var(--navbar-shadow-light);
-
-  color: var(--navbar-text-light);
-}
-
-.navbar-dark {
-  background: var(--navbar-bg-dark);
-
-  border-bottom-color:
-    var(--navbar-border-dark);
-
-  box-shadow:
-    var(--navbar-shadow-dark);
-
-  color: var(--navbar-text-dark);
-}
-
-/* =========================================================
-   NAVBAR LEFT
+   LEFT
 ========================================================= */
 
 .navbar-left {
-  min-width: 0;
-
   display: flex;
+
   align-items: center;
+
+  min-width: 0;
 
   height: 100%;
 }
 
 /* =========================================================
-   NAVBAR LINKS
+   LINKS
 ========================================================= */
 
 .navbar-links {
   height: 100%;
 
   display: flex;
+
   align-items: center;
 
   gap: 6px;
 }
 
-/* =========================================================
-   NAVBAR LINK
-========================================================= */
-
 .navbar-links a {
   position: relative;
 
-  height: 40px;
+  height: 38px;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
 
   gap: 8px;
 
-  padding: 0 14px;
+  padding:
+    0 12px;
 
-  border-radius: 11px;
+  border-radius: 9px;
 
   text-decoration: none;
 
-  font-size: 13px;
+  color: var(--navbar-text);
+
+  font-size: 11px;
+
   font-weight: 600;
 
-  white-space: nowrap;
-
   transition:
-    color var(--navbar-transition),
-    background var(--navbar-transition),
-    transform var(--navbar-transition);
+    color 0.25s ease,
+    background 0.25s ease;
 }
-
-/* =========================================================
-   LIGHT LINKS
-========================================================= */
-
-.navbar-light .navbar-links a {
-  color: var(--navbar-text-light);
-}
-
-.navbar-light .navbar-links a:hover {
-  color: var(--navbar-primary);
-
-  background:
-    rgba(109, 93, 252, 0.07);
-
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   DARK LINKS
-========================================================= */
-
-.navbar-dark .navbar-links a {
-  color: #8c9ab2;
-}
-
-.navbar-dark .navbar-links a:hover {
-  color: #ffffff;
-
-  background:
-    rgba(109, 93, 252, 0.1);
-
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   NAVBAR ICON
-========================================================= */
 
 .navbar-links a svg {
-  flex-shrink: 0;
-
-  font-size: 12px;
-
-  transition:
-    color var(--navbar-transition),
-    transform var(--navbar-transition);
+  font-size: 10px;
 }
 
-.navbar-links a:hover svg {
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   ACTIVE NAVBAR LINK
-========================================================= */
-
-.navbar-links a.active {
-  color: #ffffff !important;
+.navbar-links a:hover {
+  color: #e2e8f0;
 
   background:
-    linear-gradient(
-      135deg,
-      #6d5dfc,
-      #7c3aed
-    );
-
-  box-shadow:
-    0 8px 20px
-    rgba(109, 93, 252, 0.24);
+    rgba(255, 255, 255, 0.045);
 }
 
-.navbar-links a.active svg {
-  color: #ffffff;
+.navbar-links a.active {
+  color: var(--navbar-active);
+
+  background:
+    rgba(124, 92, 255, 0.10);
 }
 
 /* =========================================================
-   ACTIVE LINK GLOW
+   ACTIVE LINE
 ========================================================= */
 
 .navbar-links a.active::after {
@@ -247,36 +148,39 @@
 
   position: absolute;
 
-  left: 50%;
+  left: 12px;
+  right: 12px;
+
   bottom: -1px;
 
-  width: 22px;
-  height: 3px;
-
-  transform: translateX(-50%);
+  height: 2px;
 
   border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.8);
+  background:
+    linear-gradient(
+      90deg,
+      #6d5dfc,
+      #8b5cf6
+    );
 
-  opacity: 0.8;
+  box-shadow:
+    0 0 10px
+    rgba(124, 92, 255, 0.5);
 }
 
 /* =========================================================
-   NAVBAR RIGHT
+   RIGHT
 ========================================================= */
 
 .navbar-right {
-  position: relative;
+  height: 100%;
 
   display: flex;
+
   align-items: center;
 
   gap: 8px;
-
-  height: 100%;
-
-  flex-shrink: 0;
 }
 
 /* =========================================================
@@ -284,93 +188,42 @@
 ========================================================= */
 
 .icon-btn {
-  position: relative;
+  width: 36px;
+  height: 36px;
 
-  width: 38px;
-  height: 38px;
-
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid transparent;
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.08);
 
-  border-radius: 11px;
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: #94a3b8;
 
   cursor: pointer;
 
-  font-size: 14px;
+  font-size: 12px;
 
   transition:
-    background var(--navbar-transition),
-    color var(--navbar-transition),
-    border-color var(--navbar-transition),
-    box-shadow var(--navbar-transition),
-    transform var(--navbar-transition);
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* =========================================================
-   LIGHT ICON BUTTON
-========================================================= */
-
-.navbar-light .icon-btn {
-  color: #64748b;
-
-  background:
-    rgba(241, 245, 249, 0.8);
-
-  border-color:
-    rgba(15, 23, 42, 0.06);
-}
-
-.navbar-light .icon-btn:hover {
-  color: var(--navbar-primary);
-
-  background:
-    rgba(109, 93, 252, 0.09);
-
-  border-color:
-    rgba(109, 93, 252, 0.15);
-
-  box-shadow:
-    0 7px 18px
-    rgba(109, 93, 252, 0.12);
-}
-
-/* =========================================================
-   DARK ICON BUTTON
-========================================================= */
-
-.navbar-dark .icon-btn {
-  color: #8794aa;
-
-  background:
-    rgba(18, 27, 45, 0.9);
-
-  border-color:
-    rgba(148, 163, 184, 0.07);
-}
-
-.navbar-dark .icon-btn:hover {
+.icon-btn:hover {
   color: #ffffff;
 
   background:
-    rgba(109, 93, 252, 0.16);
+    rgba(124, 92, 255, 0.12);
 
   border-color:
-    rgba(109, 93, 252, 0.22);
-
-  box-shadow:
-    0 7px 20px
-    rgba(109, 93, 252, 0.14);
-}
-
-/* =========================================================
-   THEME TOGGLE
-========================================================= */
-
-.theme-toggle {
-  overflow: hidden;
+    rgba(124, 92, 255, 0.20);
 }
 
 .theme-toggle.theme-active {
@@ -378,19 +231,7 @@
 }
 
 /* =========================================================
-   THEME ICON
-========================================================= */
-
-.theme-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  line-height: 1;
-}
-
-/* =========================================================
-   PROFILE WRAPPER
+   PROFILE
 ========================================================= */
 
 .profile-wrapper {
@@ -398,18 +239,11 @@
 
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  z-index: 1000;
 }
 
-/* =========================================================
-   PROFILE TRIGGER
-========================================================= */
-
 .profile-trigger {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
 
   padding: 2px;
 
@@ -417,87 +251,29 @@
   align-items: center;
   justify-content: center;
 
+  border: none;
+
   border-radius: 50%;
 
-  border: 2px solid transparent;
+  background:
+    linear-gradient(
+      135deg,
+      #6d5dfc,
+      #8b5cf6
+    );
 
   cursor: pointer;
 
-  transition:
-    border-color var(--navbar-transition),
-    box-shadow var(--navbar-transition),
-    transform var(--navbar-transition);
-}
-
-/* =========================================================
-   PROFILE LIGHT
-========================================================= */
-
-.profile-trigger-light {
-  background:
-    linear-gradient(
-      135deg,
-      #ffffff,
-      #f1f5f9
-    );
-
-  border-color:
-    rgba(109, 93, 252, 0.15);
-
-  box-shadow:
-    0 5px 15px
-    rgba(15, 23, 42, 0.08);
-}
-
-.profile-trigger-light:hover {
-  border-color:
-    rgba(109, 93, 252, 0.45);
-
   box-shadow:
     0 8px 22px
-    rgba(109, 93, 252, 0.18);
+    rgba(124, 92, 255, 0.28);
 }
-
-/* =========================================================
-   PROFILE DARK
-========================================================= */
-
-.profile-trigger-dark {
-  background:
-    linear-gradient(
-      135deg,
-      #111a2e,
-      #17233b
-    );
-
-  border-color:
-    rgba(109, 93, 252, 0.25);
-
-  box-shadow:
-    0 5px 18px
-    rgba(0, 0, 0, 0.22);
-}
-
-.profile-trigger-dark:hover {
-  border-color:
-    rgba(109, 93, 252, 0.65);
-
-  box-shadow:
-    0 8px 24px
-    rgba(109, 93, 252, 0.25);
-}
-
-/* =========================================================
-   AVATAR
-========================================================= */
 
 .avatar {
   width: 34px;
   height: 34px;
 
   border-radius: 50%;
-
-  display: block;
 
   object-fit: cover;
 }
@@ -507,21 +283,18 @@
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
-
-  font-size: 12px;
-  font-weight: 800;
-
   background:
     linear-gradient(
       135deg,
       #6d5dfc,
-      #7c3aed
+      #8b5cf6
     );
 
-  box-shadow:
-    inset 0 0 0 1px
-    rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 800;
 }
 
 /* =========================================================
@@ -531,55 +304,30 @@
 .profile-dropdown {
   position: absolute;
 
-  top: calc(100% + 12px);
+  top: calc(
+    100% + 10px
+  );
+
   right: 0;
 
-  width: 245px;
+  width: 230px;
 
   padding: 10px;
 
   border-radius: 16px;
 
-  overflow: hidden;
+  background:
+    #111a2a;
 
-  transform-origin:
-    top right;
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.10);
 
   box-shadow:
     0 25px 60px
-    rgba(0, 0, 0, 0.22);
-
-  border: 1px solid transparent;
+    rgba(0, 0, 0, 0.35);
 
   z-index: 1200;
-}
-
-/* =========================================================
-   DROPDOWN LIGHT
-========================================================= */
-
-.dropdown-light {
-  background:
-    rgba(255, 255, 255, 0.98);
-
-  border-color:
-    rgba(15, 23, 42, 0.07);
-
-  color: #1e293b;
-}
-
-/* =========================================================
-   DROPDOWN DARK
-========================================================= */
-
-.dropdown-dark {
-  background:
-    rgba(15, 23, 42, 0.98);
-
-  border-color:
-    rgba(148, 163, 184, 0.09);
-
-  color: #e2e8f0;
 }
 
 /* =========================================================
@@ -588,48 +336,23 @@
 
 .dropdown-header {
   display: flex;
+
   align-items: center;
 
-  gap: 12px;
+  gap: 10px;
 
-  padding: 10px;
+  padding: 8px;
 
-  margin-bottom: 7px;
-
-  border-radius: 12px;
+  margin-bottom: 6px;
 }
-
-/* =========================================================
-   DROPDOWN HEADER LIGHT
-========================================================= */
-
-.dropdown-light .dropdown-header {
-  background:
-    #f8fafc;
-}
-
-/* =========================================================
-   DROPDOWN HEADER DARK
-========================================================= */
-
-.dropdown-dark .dropdown-header {
-  background:
-    rgba(30, 41, 59, 0.65);
-}
-
-/* =========================================================
-   DROPDOWN AVATAR
-========================================================= */
 
 .dropdown-avatar {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
 
-  flex-shrink: 0;
+  border-radius: 10px;
 
   object-fit: cover;
-
-  border-radius: 50%;
 }
 
 .dropdown-avatar.initials {
@@ -637,68 +360,46 @@
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
-
-  font-size: 13px;
-  font-weight: 800;
-
   background:
     linear-gradient(
       135deg,
       #6d5dfc,
-      #7c3aed
+      #8b5cf6
     );
-}
 
-/* =========================================================
-   DROPDOWN USER INFO
-========================================================= */
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
 
 .dropdown-user-info {
   min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 3px;
 }
 
 .dropdown-user-info h4 {
   margin: 0;
 
+  color: #f8fafc;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
   overflow: hidden;
 
-  font-size: 13px;
-  font-weight: 700;
-
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .dropdown-user-info small {
-  font-size: 11px;
+  display: block;
 
-  font-weight: 500;
-}
+  margin-top: 3px;
 
-/* =========================================================
-   USER INFO COLORS
-========================================================= */
-
-.dropdown-light .dropdown-user-info h4 {
-  color: #0f172a;
-}
-
-.dropdown-light .dropdown-user-info small {
   color: #64748b;
-}
 
-.dropdown-dark .dropdown-user-info h4 {
-  color: #f8fafc;
-}
-
-.dropdown-dark .dropdown-user-info small {
-  color: #8492a8;
+  font-size: 10px;
 }
 
 /* =========================================================
@@ -708,125 +409,69 @@
 .profile-dropdown > button {
   width: 100%;
 
-  min-height: 40px;
+  height: 38px;
 
   display: flex;
   align-items: center;
 
-  gap: 11px;
+  gap: 10px;
 
-  padding: 0 11px;
+  padding:
+    0 10px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
   background: transparent;
 
+  color: #94a3b8;
+
   cursor: pointer;
 
-  font-family: inherit;
+  font-size: 11px;
 
-  font-size: 12px;
   font-weight: 600;
 
   text-align: left;
 
   transition:
-    background var(--navbar-transition),
-    color var(--navbar-transition),
-    transform var(--navbar-transition);
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-/* =========================================================
-   LIGHT DROPDOWN BUTTONS
-========================================================= */
-
-.dropdown-light > button {
-  color: #475569;
-}
-
-.dropdown-light > button:hover {
-  color: #6d5dfc;
-
-  background:
-    rgba(109, 93, 252, 0.08);
-
-  transform: translateX(2px);
-}
-
-/* =========================================================
-   DARK DROPDOWN BUTTONS
-========================================================= */
-
-.dropdown-dark > button {
-  color: #a3aec0;
-}
-
-.dropdown-dark > button:hover {
+.profile-dropdown > button:hover {
   color: #ffffff;
 
   background:
-    rgba(109, 93, 252, 0.12);
-
-  transform: translateX(2px);
+    rgba(255, 255, 255, 0.05);
 }
-
-/* =========================================================
-   DROPDOWN ICON
-========================================================= */
 
 .profile-dropdown > button svg {
-  width: 15px;
+  width: 14px;
 
-  flex-shrink: 0;
-
-  font-size: 13px;
+  color: #8b7cff;
 }
-
-/* =========================================================
-   DROPDOWN DIVIDER
-========================================================= */
 
 .profile-dropdown hr {
-  height: 1px;
-
-  margin: 8px 4px;
+  margin:
+    7px 0;
 
   border: none;
-}
 
-/* =========================================================
-   LIGHT DIVIDER
-========================================================= */
-
-.dropdown-light hr {
-  background:
-    rgba(15, 23, 42, 0.07);
-}
-
-/* =========================================================
-   DARK DIVIDER
-========================================================= */
-
-.dropdown-dark hr {
-  background:
+  border-top:
+    1px solid
     rgba(148, 163, 184, 0.08);
 }
 
-/* =========================================================
-   LOGOUT BUTTON
-========================================================= */
-
-.profile-dropdown .logout-menu-btn {
-  color: #ef4444;
+.profile-dropdown
+.logout-menu-btn {
+  color: #f87171;
 }
 
-.profile-dropdown .logout-menu-btn:hover {
-  color: #dc2626;
-
-  background:
-    rgba(239, 68, 68, 0.08);
+.profile-dropdown
+.logout-menu-btn svg {
+  color: #f87171;
 }
 
 /* =========================================================
@@ -836,130 +481,22 @@
 .mobile-toggle {
   display: none;
 
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
 
   align-items: center;
   justify-content: center;
 
   border: none;
 
-  border-radius: 11px;
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  color: #94a3b8;
 
   cursor: pointer;
-
-  font-size: 15px;
-
-  transition:
-    background var(--navbar-transition),
-    color var(--navbar-transition);
-}
-
-/* =========================================================
-   MOBILE TOGGLE LIGHT
-========================================================= */
-
-.navbar-light .mobile-toggle {
-  color: #475569;
-
-  background:
-    #f1f5f9;
-}
-
-.navbar-light .mobile-toggle:hover {
-  color: #6d5dfc;
-
-  background:
-    rgba(109, 93, 252, 0.09);
-}
-
-/* =========================================================
-   MOBILE TOGGLE DARK
-========================================================= */
-
-.navbar-dark .mobile-toggle {
-  color: #a4afc2;
-
-  background:
-    rgba(18, 27, 45, 0.9);
-}
-
-.navbar-dark .mobile-toggle:hover {
-  color: #ffffff;
-
-  background:
-    rgba(109, 93, 252, 0.14);
-}
-
-/* =========================================================
-   NOTIFICATION BELL SUPPORT
-========================================================= */
-
-/*
-   NotificationBell may contain its own classes.
-   These rules provide safe alignment without
-   forcing its internal design.
-*/
-
-.navbar-right > * {
-  flex-shrink: 0;
-}
-
-.navbar-right .notification-wrapper,
-.navbar-right .notification-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* =========================================================
-   NAVBAR RESPONSIVE
-========================================================= */
-
-@media (max-width: 1100px) {
-  .navbar {
-    left: 84px;
-
-    padding:
-      0 15px;
-  }
-
-  .navbar-links {
-    gap: 3px;
-  }
-
-  .navbar-links a {
-    padding:
-      0 11px;
-  }
-
-  .navbar-links a span {
-    font-size: 12px;
-  }
-
-  .navbar-right {
-    gap: 6px;
-  }
-}
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 900px) {
-  .navbar-links a {
-    width: 38px;
-
-    padding: 0;
-  }
-
-  .navbar-links a span {
-    display: none;
-  }
-
-  .navbar-links a.active::after {
-    display: none;
-  }
 }
 
 /* =========================================================
@@ -968,260 +505,94 @@
 
 @media (max-width: 768px) {
   .navbar {
-    left: 0;
-
-    height: 60px;
+    height: var(--navbar-height);
 
     padding:
       0 12px;
   }
 
   .navbar-left {
-    position: static;
+    position: relative;
   }
-
-  /* =======================================================
-     MOBILE NAVIGATION PANEL
-  ======================================================= */
 
   .navbar-links {
     position: fixed;
 
-    top: 60px;
+    top: var(--navbar-height);
+
     left: 10px;
     right: 10px;
 
     height: auto;
 
+    padding: 10px;
+
     display: none;
 
     flex-direction: column;
+
     align-items: stretch;
 
-    gap: 5px;
+    gap: 4px;
 
-    padding: 10px;
+    border:
+      1px solid
+      rgba(148, 163, 184, 0.10);
 
-    border-radius: 16px;
+    border-radius: 14px;
 
-    z-index: 1100;
+    background:
+      rgba(12, 19, 33, 0.98);
 
     box-shadow:
       0 20px 50px
-      rgba(0, 0, 0, 0.18);
-
-    border: 1px solid transparent;
+      rgba(0, 0, 0, 0.35);
   }
 
   .navbar-links.active {
     display: flex;
   }
 
-  /* =======================================================
-     MOBILE LIGHT MENU
-  ======================================================= */
-
-  .navbar-light .navbar-links {
-    background:
-      rgba(255, 255, 255, 0.98);
-
-    border-color:
-      rgba(15, 23, 42, 0.07);
-  }
-
-  /* =======================================================
-     MOBILE DARK MENU
-  ======================================================= */
-
-  .navbar-dark .navbar-links {
-    background:
-      rgba(15, 23, 42, 0.98);
-
-    border-color:
-      rgba(148, 163, 184, 0.08);
-  }
-
-  /* =======================================================
-     MOBILE LINKS
-  ======================================================= */
-
   .navbar-links a {
     width: 100%;
-    height: 44px;
 
-    justify-content: flex-start;
-
-    padding:
-      0 13px;
-
-    gap: 12px;
-
-    border-radius: 10px;
-  }
-
-  .navbar-links a span {
-    display: inline;
-
-    font-size: 13px;
+    height: 42px;
   }
 
   .navbar-links a.active::after {
-    display: none;
+    left: 0;
+    right: auto;
+
+    top: 10px;
+    bottom: 10px;
+
+    width: 3px;
+    height: auto;
   }
 
-  /* =======================================================
-     MOBILE RIGHT
-  ======================================================= */
+  .mobile-toggle {
+    display: flex;
+  }
+}
 
+@media (max-width: 480px) {
   .navbar-right {
     gap: 5px;
   }
 
+  .navbar-right
   .icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
 
   .profile-trigger {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   .avatar {
     width: 32px;
     height: 32px;
   }
-
-  .mobile-toggle {
-    display: inline-flex;
-  }
-
-  /* =======================================================
-     MOBILE DROPDOWN
-  ======================================================= */
-
-  .profile-dropdown {
-    position: fixed;
-
-    top: 69px;
-    right: 10px;
-
-    width:
-      min(
-        245px,
-        calc(100vw - 20px)
-      );
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 500px) {
-  .navbar {
-    padding:
-      0 9px;
-  }
-
-  .navbar-right {
-    gap: 3px;
-  }
-
-  .icon-btn {
-    width: 34px;
-    height: 34px;
-
-    border-radius: 9px;
-  }
-
-  .profile-trigger {
-    width: 36px;
-    height: 36px;
-  }
-
-  .avatar {
-    width: 30px;
-    height: 30px;
-  }
-
-  .mobile-toggle {
-    width: 34px;
-    height: 34px;
-
-    border-radius: 9px;
-  }
-}
-
-/* =========================================================
-   VERY SMALL SCREENS
-========================================================= */
-
-@media (max-width: 380px) {
-  .navbar-right .icon-btn:nth-child(3) {
-    display: none;
-  }
-
-  .profile-dropdown {
-    right: 7px;
-    top: 66px;
-  }
-}
-
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
-.navbar button:focus-visible,
-.navbar a:focus-visible {
-  outline: 2px solid #7c3aed;
-
-  outline-offset: 2px;
-}
-
-/* =========================================================
-   REDUCE MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar,
-  .navbar *,
-  .navbar *::before,
-  .navbar *::after {
-    transition: none !important;
-
-    animation: none !important;
-  }
-}
-
-/* =========================================================
-   IMPORTANT LAYOUT FIX
-========================================================= */
-
-/*
-   The navbar intentionally begins at 84px because the
-   collapsed Sidebar is 84px wide.
-
-   When Sidebar is expanded to 260px, add the class
-   `.sidebar-expanded-layout` to your main app wrapper if
-   you want the navbar to dynamically move to 260px.
-
-   The current fixed 84px positioning guarantees that the
-   Navbar never sits over the TaskFlow logo.
-*/
-
-.navbar {
-  box-sizing: border-box;
-
-  overflow: visible;
-}
-
-/* =========================================================
-   SELECTION
-========================================================= */
-
-.navbar ::selection {
-  background: #6d5dfc;
-
-  color: #ffffff;
 }

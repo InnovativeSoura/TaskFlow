@@ -1,27 +1,26 @@
 /* =========================================================
-   TASKFLOW PREMIUM SIDEBAR
+   TASKFLOW SIDEBAR
 ========================================================= */
 
 :root {
-  --sidebar-width-expanded: 260px;
-  --sidebar-width-collapsed: 84px;
+  --navbar-height: 64px;
 
-  --sidebar-bg: #08101f;
-  --sidebar-bg-secondary: #0d1728;
+  --sidebar-expanded-width: 260px;
+  --sidebar-collapsed-width: 84px;
 
-  --sidebar-border: rgba(148, 163, 184, 0.08);
+  --sidebar-bg: #0b1220;
+  --sidebar-border: rgba(
+    148,
+    163,
+    184,
+    0.10
+  );
 
   --sidebar-text: #94a3b8;
-  --sidebar-text-active: #ffffff;
+  --sidebar-muted: #64748b;
 
   --sidebar-primary: #7c5cff;
-  --sidebar-primary-dark: #6847ed;
-
-  --sidebar-hover: rgba(124, 92, 255, 0.09);
-  --sidebar-active: rgba(124, 92, 255, 0.16);
-
-  --sidebar-shadow:
-    15px 0 45px rgba(0, 0, 0, 0.18);
+  --sidebar-primary-dark: #6241f2;
 }
 
 /* =========================================================
@@ -31,55 +30,43 @@
 .sidebar {
   position: fixed;
 
-  top: 0;
   left: 0;
+
+  /*
+    CRITICAL FIX:
+    Sidebar starts BELOW navbar.
+  */
+
+  top: var(--navbar-height);
+
   bottom: 0;
 
-  width: var(--sidebar-width-expanded);
+  width: var(
+    --sidebar-expanded-width
+  );
 
-  z-index: 1200;
+  z-index: 900;
 
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   background:
-    radial-gradient(
-      circle at 20% 5%,
-      rgba(124, 92, 255, 0.08),
-      transparent 30%
-    ),
     linear-gradient(
       180deg,
-      #091121 0%,
-      #07101e 55%,
-      #06101d 100%
+      #0d1525 0%,
+      #09111e 100%
     );
 
   border-right:
-    1px solid var(--sidebar-border);
+    1px solid
+    var(--sidebar-border);
 
   box-shadow:
-    var(--sidebar-shadow);
-
-  color: var(--sidebar-text);
-
-  transition:
-    width 0.3s cubic-bezier(
-      0.4,
-      0,
-      0.2,
-      1
-    );
-}
-
-/* =========================================================
-   COLLAPSED
-========================================================= */
-
-.sidebar.collapsed {
-  width: var(--sidebar-width-collapsed);
+    8px 0 35px
+    rgba(0, 0, 0, 0.18);
 }
 
 /* =========================================================
@@ -87,56 +74,43 @@
 ========================================================= */
 
 .sidebar-header {
-  position: relative;
+  min-height: 74px;
 
-  height: 76px;
-  min-height: 76px;
+  padding:
+    12px 14px;
 
   display: flex;
-
   align-items: center;
+  justify-content: space-between;
 
-  justify-content: center;
-
-  padding: 0 12px;
-
-  border-bottom:
-    1px solid rgba(148, 163, 184, 0.06);
-
-  overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* =========================================================
-   BRAND BUTTON
+   TASKFLOW BUTTON
 ========================================================= */
 
 .sidebar-brand-button {
   width: 100%;
-  height: 52px;
+
+  min-height: 50px;
 
   display: flex;
-
   align-items: center;
 
-  justify-content: flex-start;
+  gap: 12px;
 
-  gap: 13px;
-
-  padding: 5px;
+  padding: 6px;
 
   border: none;
-
-  outline: none;
 
   border-radius: 15px;
 
   background: transparent;
 
-  color: inherit;
+  color: #ffffff;
 
   cursor: pointer;
-
-  overflow: hidden;
 
   text-align: left;
 
@@ -147,85 +121,75 @@
 
 .sidebar-brand-button:hover {
   background:
-    rgba(124, 92, 255, 0.08);
-}
-
-.sidebar.collapsed
-  .sidebar-brand-button {
-  justify-content: center;
-
-  padding: 5px;
+    rgba(124, 92, 255, 0.10);
 }
 
 /* =========================================================
    TASKFLOW LOGO
+
+   CLICK THIS TO COLLAPSE / EXPAND
 ========================================================= */
 
 .brand-logo {
-  flex: 0 0 44px;
+  width: 42px;
+  height: 42px;
 
-  width: 44px;
-  height: 44px;
+  min-width: 42px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   background:
     linear-gradient(
       135deg,
-      #4f8cff 0%,
-      #7c5cff 50%,
-      #8b5cf6 100%
+      #6d5dfc,
+      #8b5cf6
     );
-
-  box-shadow:
-    0 8px 24px
-    rgba(124, 92, 255, 0.34);
 
   color: #ffffff;
 
   font-size: 14px;
+
   font-weight: 800;
 
-  letter-spacing: -0.4px;
+  box-shadow:
+    0 8px 24px
+    rgba(124, 92, 255, 0.30);
 
   user-select: none;
 }
 
 .brand-logo span {
-  display: block;
+  line-height: 1;
 }
 
 /* =========================================================
-   BRAND CONTENT
+   BRAND TEXT
 ========================================================= */
 
 .brand-content {
-  min-width: 0;
-
   display: flex;
 
   flex-direction: column;
 
-  justify-content: center;
+  min-width: 0;
 
-  white-space: nowrap;
+  overflow: hidden;
 }
 
 .brand-content strong {
-  color: #ffffff;
+  color: #f8fafc;
 
-  font-size: 16px;
-
-  line-height: 1.15;
+  font-size: 15px;
 
   font-weight: 800;
 
-  letter-spacing: -0.3px;
+  line-height: 1.2;
+
+  white-space: nowrap;
 }
 
 .brand-content span {
@@ -235,13 +199,9 @@
 
   font-size: 10px;
 
-  line-height: 1;
-
   font-weight: 500;
 
-  text-transform: uppercase;
-
-  letter-spacing: 0.8px;
+  white-space: nowrap;
 }
 
 /* =========================================================
@@ -254,41 +214,38 @@
   height: 1px;
 
   margin:
-    12px auto 12px;
+    0 14px 14px;
 
   background:
-    rgba(148, 163, 184, 0.07);
+    rgba(148, 163, 184, 0.08);
 
   flex-shrink: 0;
 }
 
 /* =========================================================
-   USER PROFILE
+   USER CARD
 ========================================================= */
 
 .sidebar-user-card {
   position: relative;
 
-  display: flex;
+  margin:
+    0 12px 14px;
 
+  padding: 10px;
+
+  min-height: 62px;
+
+  display: flex;
   align-items: center;
 
-  gap: 12px;
-
-  min-height: 64px;
-
-  margin:
-    0 10px 12px;
-
-  padding: 9px 10px;
+  gap: 10px;
 
   border-radius: 14px;
 
   text-decoration: none;
 
   color: inherit;
-
-  overflow: hidden;
 
   transition:
     background 0.25s ease,
@@ -297,27 +254,14 @@
 
 .sidebar-user-card:hover {
   background:
-    rgba(124, 92, 255, 0.08);
+    rgba(255, 255, 255, 0.045);
+
+  transform: translateX(2px);
 }
 
 .sidebar-user-card.profile-active {
   background:
-    rgba(124, 92, 255, 0.12);
-
-  box-shadow:
-    inset 0 0 0 1px
-    rgba(124, 92, 255, 0.08);
-}
-
-.sidebar.collapsed
-  .sidebar-user-card {
-  justify-content: center;
-
-  margin-left: 8px;
-  margin-right: 8px;
-
-  padding:
-    9px 4px;
+    rgba(124, 92, 255, 0.09);
 }
 
 /* =========================================================
@@ -327,48 +271,38 @@
 .sidebar-avatar-wrapper {
   position: relative;
 
-  flex: 0 0 auto;
-
-  width: 42px;
-  height: 42px;
+  flex-shrink: 0;
 }
 
 .sidebar-avatar {
   width: 42px;
   height: 42px;
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
   border-radius: 12px;
 
   object-fit: cover;
+
+  display: block;
 }
 
 .sidebar-avatar.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
   background:
     linear-gradient(
       135deg,
-      #536dfe,
-      #7c4dff
+      #6547f5,
+      #8b5cf6
     );
-
-  color: #ffffff;
 
   font-size: 13px;
 
   font-weight: 800;
-
-  box-shadow:
-    0 6px 18px
-    rgba(124, 92, 255, 0.25);
 }
-
-/* =========================================================
-   ONLINE DOT
-========================================================= */
 
 .profile-online-dot {
   position: absolute;
@@ -376,23 +310,20 @@
   right: -1px;
   bottom: -1px;
 
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
 
   border-radius: 50%;
 
   background: #10b981;
 
   border:
-    2px solid #091121;
-
-  box-shadow:
-    0 0 8px
-    rgba(16, 185, 129, 0.45);
+    2px solid
+    #0b1220;
 }
 
 /* =========================================================
-   USER INFO
+   USER INFORMATION
 ========================================================= */
 
 .sidebar-user-info {
@@ -401,7 +332,6 @@
   flex: 1;
 
   display: flex;
-
   flex-direction: column;
 
   overflow: hidden;
@@ -410,7 +340,7 @@
 .sidebar-user-info strong {
   color: #e2e8f0;
 
-  font-size: 13px;
+  font-size: 12px;
 
   font-weight: 700;
 
@@ -429,12 +359,6 @@
   font-size: 10px;
 
   white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  text-transform: capitalize;
 }
 
 /* =========================================================
@@ -442,12 +366,7 @@
 ========================================================= */
 
 .profile-arrow {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  color: #475569;
+  color: #64748b;
 
   font-size: 10px;
 
@@ -460,7 +379,7 @@
 
 .sidebar-section-label {
   padding:
-    5px 20px 8px;
+    0 22px 8px;
 
   color: #475569;
 
@@ -474,12 +393,10 @@
 }
 
 /* =========================================================
-   NAVIGATION
+   MENU
 ========================================================= */
 
 .sidebar-menu {
-  flex: 1;
-
   display: flex;
 
   flex-direction: column;
@@ -489,61 +406,39 @@
   padding:
     0 10px;
 
-  overflow-x: hidden;
-
   overflow-y: auto;
 
-  scrollbar-width: thin;
-
-  scrollbar-color:
-    rgba(148, 163, 184, 0.15)
-    transparent;
+  flex: 1;
 }
 
-.sidebar-menu::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar-menu::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb {
-  background:
-    rgba(148, 163, 184, 0.15);
-
-  border-radius: 20px;
+.sidebar-menu > div {
+  width: 100%;
 }
 
 /* =========================================================
    NAV LINK
 ========================================================= */
 
-.sidebar-menu > div {
-  width: 100%;
-}
-
 .sidebar-menu a {
   position: relative;
 
-  min-height: 46px;
+  width: 100%;
+
+  min-height: 44px;
 
   display: flex;
-
   align-items: center;
 
   gap: 13px;
 
   padding:
-    0 14px;
+    0 12px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   text-decoration: none;
 
-  color: #718096;
-
-  overflow: hidden;
+  color: var(--sidebar-text);
 
   transition:
     color 0.25s ease,
@@ -552,14 +447,17 @@
 }
 
 .sidebar-menu a:hover {
-  color: #dbe4f0;
+  color: #e2e8f0;
 
   background:
-    rgba(124, 92, 255, 0.08);
+    rgba(255, 255, 255, 0.045);
 
-  transform:
-    translateX(2px);
+  transform: translateX(2px);
 }
+
+/* =========================================================
+   ACTIVE
+========================================================= */
 
 .sidebar-menu a.active {
   color: #ffffff;
@@ -567,8 +465,8 @@
   background:
     linear-gradient(
       90deg,
-      rgba(124, 92, 255, 0.20),
-      rgba(124, 92, 255, 0.08)
+      rgba(124, 92, 255, 0.19),
+      rgba(124, 92, 255, 0.06)
     );
 
   box-shadow:
@@ -577,64 +475,48 @@
 }
 
 /* =========================================================
-   COLLAPSED NAV
-========================================================= */
-
-.sidebar.collapsed
-  .sidebar-menu {
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
-.sidebar.collapsed
-  .sidebar-menu a {
-  justify-content: center;
-
-  gap: 0;
-
-  padding:
-    0 8px;
-}
-
-/* =========================================================
    ICON
 ========================================================= */
 
 .sidebar-icon {
-  width: 20px;
-  min-width: 20px;
+  width: 22px;
 
-  height: 20px;
+  min-width: 22px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  color: currentColor;
+  font-size: 13px;
 
-  font-size: 14px;
+  color: #64748b;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sidebar-menu a:hover
+.sidebar-icon {
+  color: #a78bfa;
 }
 
 .sidebar-menu a.active
-  .sidebar-icon {
+.sidebar-icon {
   color: #8b7cff;
+}
 
-  filter:
-    drop-shadow(
-      0 0 6px
-      rgba(139, 124, 255, 0.35)
-    );
+.sidebar-menu a:hover
+.sidebar-icon {
+  transform: scale(1.08);
 }
 
 /* =========================================================
-   LINK TEXT
+   TEXT
 ========================================================= */
 
 .sidebar-link-text {
   flex: 1;
-
-  min-width: 0;
 
   color: inherit;
 
@@ -654,27 +536,22 @@
 
   right: 0;
 
-  top: 50%;
-
   width: 3px;
-  height: 24px;
-
-  transform:
-    translateY(-50%);
+  height: 20px;
 
   border-radius:
-    5px 0 0 5px;
+    4px 0 0 4px;
 
   background:
     linear-gradient(
       180deg,
       #8b7cff,
-      #6d4aff
+      #6d5dfc
     );
 
   box-shadow:
     0 0 12px
-    rgba(124, 92, 255, 0.6);
+    rgba(124, 92, 255, 0.55);
 }
 
 /* =========================================================
@@ -685,10 +562,13 @@
   padding:
     12px 10px 16px;
 
-  border-top:
-    1px solid rgba(148, 163, 184, 0.06);
+  margin-top: auto;
 
   flex-shrink: 0;
+
+  border-top:
+    1px solid
+    rgba(148, 163, 184, 0.07);
 }
 
 /* =========================================================
@@ -701,17 +581,16 @@
   min-height: 44px;
 
   display: flex;
-
   align-items: center;
 
   gap: 13px;
 
   padding:
-    0 14px;
+    0 12px;
 
   border: none;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   background: transparent;
 
@@ -725,8 +604,7 @@
 
   transition:
     background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease;
+    color 0.25s ease;
 }
 
 .logout-btn:hover {
@@ -734,69 +612,16 @@
 
   background:
     rgba(239, 68, 68, 0.08);
-
-  transform:
-    translateX(2px);
-}
-
-.sidebar.collapsed
-  .logout-btn {
-  justify-content: center;
-
-  padding:
-    0 8px;
 }
 
 .logout-icon {
-  width: 20px;
-  min-width: 20px;
+  width: 22px;
+  min-width: 22px;
 
   display: flex;
-
-  align-items: center;
   justify-content: center;
 
-  font-size: 14px;
-}
-
-/* =========================================================
-   MOBILE CLOSE
-========================================================= */
-
-.close-sidebar {
-  position: absolute;
-
-  right: 10px;
-  top: 50%;
-
-  transform:
-    translateY(-50%);
-
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.05);
-
-  color: #94a3b8;
-
-  cursor: pointer;
-}
-
-.close-sidebar:hover {
-  color: #ffffff;
-
-  background:
-    rgba(255, 255, 255, 0.09);
+  font-size: 13px;
 }
 
 /* =========================================================
@@ -808,13 +633,157 @@
 
   inset: 0;
 
-  z-index: 1100;
+  z-index: 899;
 
   background:
-    rgba(2, 6, 23, 0.62);
+    rgba(0, 0, 0, 0.55);
 
   backdrop-filter:
     blur(3px);
+}
+
+/* =========================================================
+   MOBILE CLOSE
+========================================================= */
+
+.close-sidebar {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #94a3b8;
+
+  cursor: pointer;
+}
+
+.close-sidebar:hover {
+  color: #ffffff;
+
+  background:
+    rgba(255, 255, 255, 0.10);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.sidebar::-webkit-scrollbar,
+.sidebar-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background:
+    rgba(148, 163, 184, 0.16);
+
+  border-radius: 20px;
+}
+
+/* =========================================================
+   COLLAPSED STATE
+========================================================= */
+
+.sidebar.collapsed {
+  width:
+    var(--sidebar-collapsed-width);
+}
+
+/*
+  Keep the logo perfectly centred
+  when collapsed.
+*/
+
+.sidebar.collapsed
+.sidebar-header {
+  padding:
+    12px 13px;
+}
+
+.sidebar.collapsed
+.sidebar-brand-button {
+  justify-content: center;
+
+  padding: 4px;
+}
+
+.sidebar.collapsed
+.brand-content {
+  display: none;
+}
+
+.sidebar.collapsed
+.sidebar-divider {
+  width: calc(100% - 24px);
+
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.sidebar.collapsed
+.sidebar-user-card {
+  justify-content: center;
+
+  margin-left: 10px;
+  margin-right: 10px;
+
+  padding: 8px;
+}
+
+.sidebar.collapsed
+.sidebar-user-info,
+.sidebar.collapsed
+.profile-arrow {
+  display: none;
+}
+
+.sidebar.collapsed
+.sidebar-section-label {
+  display: none;
+}
+
+.sidebar.collapsed
+.sidebar-menu {
+  padding:
+    0 10px;
+}
+
+.sidebar.collapsed
+.sidebar-menu a {
+  justify-content: center;
+
+  padding:
+    0 10px;
+}
+
+.sidebar.collapsed
+.sidebar-link-text,
+.sidebar.collapsed
+.sidebar-active-indicator {
+  display: none;
+}
+
+.sidebar.collapsed
+.logout-btn {
+  justify-content: center;
+
+  padding:
+    0 10px;
 }
 
 /* =========================================================
@@ -822,60 +791,37 @@
 ========================================================= */
 
 @media (max-width: 768px) {
-
   .sidebar {
-    z-index: 1500;
+    top: var(--navbar-height);
 
-    width: 270px;
+    width: 0;
+
+    border-right: none;
 
     box-shadow:
-      20px 0 60px
-      rgba(0, 0, 0, 0.35);
+      15px 0 45px
+      rgba(0, 0, 0, 0.30);
+
+    z-index: 1000;
   }
 
-  .sidebar.collapsed {
+  .sidebar.mobile.expanded {
+    width: 260px;
+  }
+
+  .sidebar.mobile.collapsed {
     width: 0;
+
+    visibility: hidden;
   }
 
+  .sidebar.mobile
   .sidebar-header {
-    min-width: 270px;
+    min-width: 260px;
   }
 
+  .sidebar.mobile
   .sidebar-menu {
-    min-width: 270px;
-  }
-
-  .sidebar-bottom {
-    min-width: 270px;
-  }
-
-}
-
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
-.sidebar-brand-button:focus-visible,
-.sidebar-menu a:focus-visible,
-.sidebar-user-card:focus-visible,
-.logout-btn:focus-visible {
-  outline:
-    2px solid #7c5cff;
-
-  outline-offset: 2px;
-}
-
-/* =========================================================
-   REDUCE MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .sidebar,
-  .sidebar-brand-button,
-  .sidebar-menu a,
-  .logout-btn,
-  .sidebar-user-card {
-    transition: none;
+    min-width: 260px;
   }
 }

@@ -4,379 +4,265 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+
+import {
+  useState,
+  useEffect,
+} from "react";
+
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+
+import Dashboard from "../pages/Dashboard";
+import Projects from "../pages/Projects";
+import Tasks from "../pages/Tasks";
+import KanbanBoard from "../pages/KanbanBoard";
+import Users from "../pages/Users";
+import Profile from "../pages/Profile";
+import Settings from "../pages/Settings";
+import Notifications from "../pages/Notifications";
+
+/*
+  Import your existing authentication page.
+  Change this import only if your actual filename is different.
+*/
+import AuthPage from "../pages/AuthPage";
 
 import { useAuth } from "../context/AuthContext";
 
-import ProtectedRoute from "../components/ProtectedRoute";
+import "../styles/AppLayout.css";
 
-/* ===========================
-   PUBLIC PAGES
-=========================== */
+/* =========================================================
+   AUTHENTICATED LAYOUT
+========================================================= */
 
-import Home from "../pages/Home";
-import AuthPage from "../pages/AuthPage";
-import Pricing from "../pages/Pricing";
-import OAuthSuccess from "../pages/OAuthSuccess";
-
-/* ===========================
-   DASHBOARDS
-=========================== */
-
-import Dashboard from "../pages/Dashboard";
-import AdminDashboard from "../pages/AdminDashboard";
-
-/* ===========================
-   PROJECTS
-=========================== */
-
-import Projects from "../pages/Projects";
-import ProjectList from "../pages/ProjectList";
-
-/* ===========================
-   TASKS
-=========================== */
-
-import Tasks from "../pages/Tasks";
-import TaskList from "../pages/TaskList";
-
-/* ===========================
-   TEAM
-=========================== */
-
-import Users from "../pages/Users";
-import Team from "../pages/Team";
-
-/* ===========================
-   PROFILE
-=========================== */
-
-import Profile from "../pages/Profile";
-
-/* ===========================
-   REPORTS
-=========================== */
-
-import Reports from "../pages/Reports";
-import Analytics from "../pages/Analytics";
-
-/* ===========================
-   PRODUCTIVITY
-=========================== */
-
-import KanbanBoard from "../pages/KanbanBoard";
-import CalendarPage from "../pages/CalendarPage";
-import TeamChat from "../pages/TeamChat";
-import AIInsights from "../pages/AIInsights";
-import GanttPage from "../pages/GanttPage";
-
-/* ===========================
-   SETTINGS
-=========================== */
-
-import Settings from "../pages/Settings";
-import Notifications from "../pages/Notifications";
-import ActivityFeed from "../pages/ActivityFeed";
-import Workspaces from "../pages/Workspaces";
-import Subscription from "../pages/Subscription";
-import Upgrade from "../pages/Upgrade";
-
-const AppRoutes = () => {
+const AppLayout = () => {
   const {
-    loading,
-    token,
     user,
+    loading,
   } = useAuth();
+
+  const location = useLocation();
+
+  /*
+    Desktop:
+      true  = expanded
+      false = collapsed
+
+    Mobile:
+      true  = open
+      false = closed
+  */
+  const [sidebarOpen, setSidebarOpen] =
+    useState(true);
+
+  const [isMobile, setIsMobile] =
+    useState(
+      window.innerWidth <= 768
+    );
+
+  /* =======================================================
+     RESPONSIVE CHECK
+  ======================================================= */
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile =
+        window.innerWidth <= 768;
+
+      setIsMobile(mobile);
+
+      /*
+        On desktop the sidebar is open by default.
+        On mobile it should be closed.
+      */
+      if (mobile) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
+
+    return () => {
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+    };
+  }, []);
+
+  /* =======================================================
+     CLOSE MOBILE SIDEBAR WHEN ROUTE CHANGES
+  ======================================================= */
+
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  }, [
+    location.pathname,
+    isMobile,
+  ]);
+
+  /* =======================================================
+     LOADING
+  ======================================================= */
 
   if (loading) {
     return (
-      <div className="page-loader">
-        <div className="spinner"></div>
+      <div className="app-loading">
+        <div className="app-loading-spinner" />
       </div>
     );
   }
 
-  const authenticated =
-    !!token && !!user;
+  /* =======================================================
+     AUTHENTICATION
+  ======================================================= */
 
+  if (!user) {
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
+  }
+
+  /* =======================================================
+     APPLICATION
+  ======================================================= */
+
+  return (
+    <div
+      className={`app-shell ${
+        sidebarOpen
+          ? "sidebar-is-open"
+          : "sidebar-is-collapsed"
+      } ${
+        isMobile
+          ? "app-mobile"
+          : ""
+      }`}
+    >
+
+      {/* =================================================
+          FIXED TOP NAVBAR
+      ================================================= */}
+
+      <Navbar />
+
+      {/* =================================================
+          SIDEBAR
+
+          Sidebar begins BELOW navbar.
+      ================================================= */}
+
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={
+          setSidebarOpen
+        }
+      />
+
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
+
+      <main className="app-main">
+        <div className="app-page">
+          <Routes>
+
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/projects"
+              element={<Projects />}
+            />
+
+            <Route
+              path="/tasks"
+              element={<Tasks />}
+            />
+
+            <Route
+              path="/kanban"
+              element={<KanbanBoard />}
+            />
+
+            <Route
+              path="/users"
+              element={<Users />}
+            />
+
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
+
+            <Route
+              path="/settings"
+              element={<Settings />}
+            />
+
+            <Route
+              path="/notifications"
+              element={<Notifications />}
+            />
+
+            <Route
+              path="*"
+              element={
+                <Navigate
+                  to="/dashboard"
+                  replace
+                />
+              }
+            />
+
+          </Routes>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+/* =========================================================
+   ROUTES
+========================================================= */
+
+const AppRoutes = () => {
   return (
     <Routes>
 
-      {/* ===========================
-          PUBLIC ROUTES
-      ============================ */}
+      {/* =================================================
+          PUBLIC
+      ================================================= */}
 
       <Route
         path="/"
-        element={<Home />}
+        element={<AuthPage />}
       />
 
-      <Route
-        path="/login"
-        element={
-          authenticated ? (
-            <Navigate
-              to="/dashboard"
-              replace
-            />
-          ) : (
-            <AuthPage />
-          )
-        }
-      />
+      {/* =================================================
+          APPLICATION
+      ================================================= */}
 
       <Route
-        path="/register"
-        element={
-          authenticated ? (
-            <Navigate
-              to="/dashboard"
-              replace
-            />
-          ) : (
-            <AuthPage />
-          )
-        }
-      />
-
-      <Route
-        path="/pricing"
-        element={<Pricing />}
-      />
-
-      <Route
-        path="/home"
-        element={
-          <Navigate
-            to="/"
-            replace
-          />
-        }
-      />
-
-      {/* ===========================
-          OAUTH CALLBACK
-      ============================ */}
-
-      <Route
-        path="/oauth-success"
-        element={<OAuthSuccess />}
-      />
-
-      {/* ===========================
-          PROTECTED ROUTES
-      ============================ */}
-
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin-dashboard"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/projects"
-        element={
-          <ProtectedRoute>
-            <Projects />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/project-list"
-        element={
-          <ProtectedRoute>
-            <ProjectList />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/tasks"
-        element={
-          <ProtectedRoute>
-            <Tasks />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/task-list"
-        element={
-          <ProtectedRoute>
-            <TaskList />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <Users />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/team"
-        element={
-          <ProtectedRoute>
-            <Team />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/reports"
-        element={
-          <ProtectedRoute>
-            <Reports />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/analytics"
-        element={
-          <ProtectedRoute>
-            <Analytics />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/kanban"
-        element={
-          <ProtectedRoute>
-            <KanbanBoard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/calendar"
-        element={
-          <ProtectedRoute>
-            <CalendarPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <TeamChat />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/ai"
-        element={
-          <ProtectedRoute>
-            <AIInsights />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/gantt"
-        element={
-          <ProtectedRoute>
-            <GanttPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/activity"
-        element={
-          <ProtectedRoute>
-            <ActivityFeed />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/workspaces"
-        element={
-          <ProtectedRoute>
-            <Workspaces />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/subscription"
-        element={
-          <ProtectedRoute>
-            <Subscription />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/upgrade"
-        element={
-          <ProtectedRoute>
-            <Upgrade />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Notifications />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* ===========================
-          404
-      ============================ */}
-
-      <Route
-        path="*"
-        element={
-          <Navigate
-            to="/"
-            replace
-          />
-        }
+        path="/*"
+        element={<AppLayout />}
       />
 
     </Routes>
