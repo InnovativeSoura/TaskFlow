@@ -15,15 +15,14 @@ import {
 import {
   FaCog,
   FaMoon,
-  FaSearch,
   FaSignOutAlt,
   FaSun,
   FaTasks,
-  FaTimes,
   FaUserCircle,
   FaUsers,
   FaProjectDiagram,
   FaHome,
+  FaTimes,
 } from "react-icons/fa";
 
 import {
@@ -41,10 +40,10 @@ import "../styles/Navbar.css";
    TASKFLOW PREMIUM NAVBAR
 
    IMPORTANT:
-   Sidebar collapse/expand is controlled ONLY
-   from the TaskFlow logo inside Sidebar.jsx.
-
-   Navbar intentionally has NO hamburger/sidebar button.
+   - Sidebar collapse/expand is controlled ONLY
+     from the TaskFlow logo inside Sidebar.jsx.
+   - Navbar does NOT contain a global search bar.
+   - Dashboard search is handled inside Dashboard.jsx.
 ========================================================= */
 
 const Navbar = () => {
@@ -54,12 +53,6 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   const menuRef = useRef(null);
-
-  /* =========================================================
-     SEARCH
-  ========================================================= */
-
-  const [search, setSearch] = useState("");
 
   /* =========================================================
      PROFILE MENU
@@ -345,37 +338,6 @@ const Navbar = () => {
   };
 
   /* =========================================================
-     SEARCH
-  ========================================================= */
-
-  const handleSearch = (event) => {
-    setSearch(
-      event.target.value
-    );
-  };
-
-  /* =========================================================
-     SEARCH KEYBOARD
-  ========================================================= */
-
-  const handleSearchKeyDown = (
-    event
-  ) => {
-    if (
-      event.key === "Enter" &&
-      search.trim()
-    ) {
-      navigate(
-        `/tasks?search=${encodeURIComponent(
-          search.trim()
-        )}`
-      );
-
-      setSearch("");
-    }
-  };
-
-  /* =========================================================
      RENDER
   ========================================================= */
 
@@ -391,16 +353,14 @@ const Navbar = () => {
       {/* =====================================================
           LEFT SECTION
 
-          NO SIDEBAR HAMBURGER HERE.
-
-          Sidebar is controlled from the TaskFlow
-          logo inside Sidebar.jsx.
+          NO SEARCH BAR.
+          NO SIDEBAR HAMBURGER.
       ===================================================== */}
 
       <div className="navbar-left">
 
         {/* =================================================
-            DESKTOP NAVIGATION
+            DESKTOP / MOBILE NAVIGATION
         ================================================= */}
 
         <nav
@@ -480,58 +440,6 @@ const Navbar = () => {
           </NavLink>
 
         </nav>
-      </div>
-
-      {/* =====================================================
-          SEARCH
-      ===================================================== */}
-
-      <div className="navbar-search">
-
-        <FaSearch
-          className="search-icon"
-        />
-
-        <input
-          type="text"
-          aria-label="Search TaskFlow"
-          placeholder="Search projects, tasks..."
-          value={search}
-          onChange={handleSearch}
-          onKeyDown={
-            handleSearchKeyDown
-          }
-        />
-
-        {/* CLEAR SEARCH */}
-
-        <AnimatePresence>
-          {search && (
-            <motion.button
-              type="button"
-              className="search-clear"
-              aria-label="Clear search"
-              initial={{
-                opacity: 0,
-                scale: 0.7,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.7,
-              }}
-              onClick={() =>
-                setSearch("")
-              }
-            >
-              <FaTimes />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
       </div>
 
       {/* =====================================================
@@ -850,8 +758,7 @@ const Navbar = () => {
         {/* =================================================
             MOBILE NAVIGATION TOGGLE
 
-            This controls the TOP NAVIGATION LINKS only.
-            It does NOT collapse/expand the sidebar.
+            Controls TOP NAVIGATION links only.
         ================================================= */}
 
         <motion.button
