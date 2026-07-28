@@ -32,7 +32,7 @@ import AuthPage from "../pages/AuthPage";
 
 import { useAuth } from "../context/AuthContext";
 
-import "../styles/AppLayout.css";
+
 
 /* =========================================================
    AUTHENTICATED LAYOUT
