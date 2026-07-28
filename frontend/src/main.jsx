@@ -3,7 +3,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { BrowserRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+} from "react-router-dom";
+
+/* =========================================================
+   APP
+========================================================= */
 
 import App from "./App";
 
@@ -11,17 +17,37 @@ import App from "./App";
    CONTEXT PROVIDERS
 ========================================================= */
 
-import { AuthProvider } from "./context/AuthContext";
-import { UserProvider } from "./context/UserContext";
-import { NotificationProvider } from "./context/NotificationContext";
-import { ProjectProvider } from "./context/ProjectContext";
-import { TaskProvider } from "./context/TaskContext";
+import {
+  ThemeProvider,
+} from "./context/ThemeContext";
+
+import {
+  AuthProvider,
+} from "./context/AuthContext";
+
+import {
+  UserProvider,
+} from "./context/UserContext";
+
+import {
+  NotificationProvider,
+} from "./context/NotificationContext";
+
+import {
+  ProjectProvider,
+} from "./context/ProjectContext";
+
+import {
+  TaskProvider,
+} from "./context/TaskContext";
 
 /* =========================================================
    TOAST
 ========================================================= */
 
-import { ToastContainer } from "react-toastify";
+import {
+  ToastContainer,
+} from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -34,9 +60,8 @@ import "./styles/Global.css";
 import "./styles/Auth.css";
 import "./styles/Landing.css";
 
-
 /* =========================================================
-   TASKFLOW CLIENT STARTUP
+   STARTUP
 ========================================================= */
 
 console.log(
@@ -51,253 +76,93 @@ console.log(
   "===================================="
 );
 
-
-/* =========================================================
-   INITIAL THEME
-========================================================= */
-
-/*
-  Navbar controls the theme after the application
-  has loaded.
-
-  We initialize the HTML element here so there
-  is no visible flash between themes.
-*/
-
-const initializeTheme = () => {
-
-  try {
-
-    const savedTheme =
-      localStorage.getItem("theme");
-
-
-    /* -----------------------------------------
-       SAVED DARK THEME
-    ----------------------------------------- */
-
-    if (savedTheme === "dark") {
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        "dark"
-      );
-
-      document.documentElement.classList.add(
-        "dark-theme"
-      );
-
-      document.documentElement.classList.remove(
-        "light-theme"
-      );
-
-      document.body?.classList.add(
-        "dark-theme"
-      );
-
-      document.body?.classList.remove(
-        "light-theme"
-      );
-
-      return;
-
-    }
-
-
-    /* -----------------------------------------
-       SAVED LIGHT THEME
-    ----------------------------------------- */
-
-    if (savedTheme === "light") {
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        "light"
-      );
-
-      document.documentElement.classList.add(
-        "light-theme"
-      );
-
-      document.documentElement.classList.remove(
-        "dark-theme"
-      );
-
-      document.body?.classList.add(
-        "light-theme"
-      );
-
-      document.body?.classList.remove(
-        "dark-theme"
-      );
-
-      return;
-
-    }
-
-
-    /* -----------------------------------------
-       SYSTEM PREFERENCE
-    ----------------------------------------- */
-
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-
-
-    const theme =
-      prefersDark
-        ? "dark"
-        : "light";
-
-
-    document.documentElement.setAttribute(
-      "data-theme",
-      theme
-    );
-
-
-    document.documentElement.classList.toggle(
-      "dark-theme",
-      prefersDark
-    );
-
-
-    document.documentElement.classList.toggle(
-      "light-theme",
-      !prefersDark
-    );
-
-
-    document.body?.classList.toggle(
-      "dark-theme",
-      prefersDark
-    );
-
-
-    document.body?.classList.toggle(
-      "light-theme",
-      !prefersDark
-    );
-
-
-  } catch (error) {
-
-    console.warn(
-      "⚠️ Theme initialization failed:",
-      error
-    );
-
-  }
-
-};
-
-
-/* =========================================================
-   APPLY INITIAL THEME
-========================================================= */
-
-initializeTheme();
-
-
 /* =========================================================
    ROOT
 ========================================================= */
 
-const rootElement =
-  document.getElementById("root");
-
-
-if (!rootElement) {
-
-  throw new Error(
-    "❌ TaskFlow root element (#root) was not found."
-  );
-
-}
-
-
 const root =
   ReactDOM.createRoot(
-    rootElement
+    document.getElementById("root")
   );
-
 
 /* =========================================================
    APPLICATION
 ========================================================= */
 
 root.render(
-
   <React.StrictMode>
 
     <BrowserRouter>
 
-      {/* =================================================
-          AUTH PROVIDER
-      ================================================= */}
+      {/* ==========================================
+          GLOBAL THEME PROVIDER
 
-      <AuthProvider>
+          IMPORTANT:
+          This must wrap every component that
+          uses useTheme().
+      ========================================== */}
 
-        {/* ===============================================
-            USER PROVIDER
-        =============================================== */}
+      <ThemeProvider>
 
-        <UserProvider>
+        {/* ========================================
+            AUTH
+        ======================================== */}
 
-          {/* =============================================
-              NOTIFICATION PROVIDER
-          ============================================= */}
+        <AuthProvider>
 
-          <NotificationProvider>
+          {/* ======================================
+              USER
+          ====================================== */}
 
-            {/* ===========================================
-                PROJECT PROVIDER
-            =========================================== */}
+          <UserProvider>
 
-            <ProjectProvider>
+            {/* ====================================
+                NOTIFICATIONS
+            ==================================== */}
 
-              {/* =========================================
-                  TASK PROVIDER
-              ========================================= */}
+            <NotificationProvider>
 
-              <TaskProvider>
+              {/* ==================================
+                  PROJECTS
+              ================================== */}
 
-                {/* =======================================
-                    MAIN APPLICATION
-                ======================================= */}
+              <ProjectProvider>
 
-                <App />
+                {/* ================================
+                    TASKS
+                ================================== */}
 
+                <TaskProvider>
 
-                {/* =======================================
-                    GLOBAL TOAST
-                ======================================= */}
+                  <App />
 
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  newestOnTop
-                  closeOnClick
-                  pauseOnHover
-                  draggable
-                  theme="colored"
-                />
+                  {/* ==============================
+                      TOAST
+                  ============================== */}
 
-              </TaskProvider>
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    newestOnTop
+                    closeOnClick
+                    pauseOnHover
+                    draggable
+                    theme="colored"
+                  />
 
-            </ProjectProvider>
+                </TaskProvider>
 
-          </NotificationProvider>
+              </ProjectProvider>
 
-        </UserProvider>
+            </NotificationProvider>
 
-      </AuthProvider>
+          </UserProvider>
+
+        </AuthProvider>
+
+      </ThemeProvider>
 
     </BrowserRouter>
 
   </React.StrictMode>
-
 );
