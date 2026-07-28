@@ -12,6 +12,7 @@ import {
 
 import {
   FaArrowUp,
+  FaArrowRight,
   FaPlus,
   FaTasks,
   FaProjectDiagram,
@@ -19,6 +20,10 @@ import {
   FaCheckCircle,
   FaClock,
   FaChartLine,
+  FaBolt,
+  FaCalendarAlt,
+  FaChevronRight,
+  FaCircle,
 } from "react-icons/fa";
 
 import {
@@ -31,18 +36,23 @@ import PageHeader from "../components/PageHeader";
 import SearchBar from "../components/SearchBar";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
-import StatCard from "../components/StatCard";
 
 import DashboardOverviewChart from "../components/dashboard/DashboardOverviewChart";
 import ProjectProgressChart from "../components/projects/ProjectProgressChart";
 import TaskStatusChart from "../components/tasks/TaskStatusChart";
 
 import { useAuth } from "../context/AuthContext";
+
 import {
   getDashboardStats,
 } from "../services/dashboardService";
 
 import "../styles/Dashboard.css";
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,13 +61,6 @@ const Dashboard = () => {
 
   const [loading, setLoading] =
     useState(true);
-
-  /* =========================================================
-     DASHBOARD SEARCH
-
-     This is now the ONLY global search input.
-     It appears below the welcome message.
-  ========================================================= */
 
   const [search, setSearch] =
     useState("");
@@ -81,6 +84,7 @@ const Dashboard = () => {
       active: 0,
     });
 
+
   /* =========================================================
      LOAD DASHBOARD
   ========================================================= */
@@ -88,6 +92,7 @@ const Dashboard = () => {
   useEffect(() => {
     loadDashboard();
   }, []);
+
 
   const loadDashboard = async () => {
     try {
@@ -111,9 +116,24 @@ const Dashboard = () => {
         data?.tasks ||
         [];
 
-      setUsers(usersData);
-      setProjects(projectsData);
-      setTasks(tasksData);
+      setUsers(
+        Array.isArray(usersData)
+          ? usersData
+          : []
+      );
+
+      setProjects(
+        Array.isArray(projectsData)
+          ? projectsData
+          : []
+      );
+
+      setTasks(
+        Array.isArray(tasksData)
+          ? tasksData
+          : []
+      );
+
 
       /* =====================================================
          CALCULATE STATISTICS
@@ -126,6 +146,7 @@ const Dashboard = () => {
             "Completed"
         ).length;
 
+
       const pending =
         tasksData.filter(
           (task) =>
@@ -135,12 +156,14 @@ const Dashboard = () => {
               "To Do"
         ).length;
 
+
       const active =
         projectsData.filter(
           (project) =>
             project.status ===
             "Active"
         ).length;
+
 
       setStats({
         users:
@@ -158,10 +181,12 @@ const Dashboard = () => {
 
         active,
       });
-    } catch (err) {
+
+    } catch (error) {
+
       console.error(
         "Dashboard loading error:",
-        err
+        error
       );
 
       setUsers([]);
@@ -176,10 +201,14 @@ const Dashboard = () => {
         pending: 0,
         active: 0,
       });
+
     } finally {
+
       setLoading(false);
+
     }
   };
+
 
   /* =========================================================
      SEARCH PROJECTS
@@ -187,6 +216,7 @@ const Dashboard = () => {
 
   const filteredProjects =
     useMemo(() => {
+
       const query =
         search
           .trim()
@@ -198,6 +228,7 @@ const Dashboard = () => {
 
       return projects.filter(
         (project) => {
+
           const title =
             project.title ||
             project.name ||
@@ -211,13 +242,19 @@ const Dashboard = () => {
             title
               .toLowerCase()
               .includes(query) ||
+
             description
               .toLowerCase()
               .includes(query)
           );
         }
       );
-    }, [projects, search]);
+
+    }, [
+      projects,
+      search,
+    ]);
+
 
   /* =========================================================
      SEARCH TASKS
@@ -225,6 +262,7 @@ const Dashboard = () => {
 
   const filteredTasks =
     useMemo(() => {
+
       const query =
         search
           .trim()
@@ -236,6 +274,7 @@ const Dashboard = () => {
 
       return tasks.filter(
         (task) => {
+
           const title =
             task.title ||
             task.name ||
@@ -249,26 +288,44 @@ const Dashboard = () => {
             title
               .toLowerCase()
               .includes(query) ||
+
             description
               .toLowerCase()
               .includes(query)
           );
         }
       );
-    }, [tasks, search]);
+
+    }, [
+      tasks,
+      search,
+    ]);
+
 
   /* =========================================================
      PRODUCTIVITY
   ========================================================= */
 
   const completion =
-    stats.tasks
+    stats.tasks > 0
       ? Math.round(
           (stats.completed /
             stats.tasks) *
             100
         )
       : 0;
+
+
+  /* =========================================================
+     GREETING
+  ========================================================= */
+
+  const firstName =
+    user?.name
+      ?.trim()
+      ?.split(/\s+/)?.[0] ||
+    "there";
+
 
   /* =========================================================
      LOADING
@@ -278,6 +335,7 @@ const Dashboard = () => {
     return <Loader />;
   }
 
+
   /* =========================================================
      RENDER
   ========================================================= */
@@ -286,13 +344,14 @@ const Dashboard = () => {
     <MainLayout>
 
       {/* =====================================================
-          PAGE HEADER
+          PREMIUM DASHBOARD HEADER
       ===================================================== */}
 
-      <motion.div
+      <motion.section
+        className="dashboard-hero"
         initial={{
           opacity: 0,
-          y: -30,
+          y: -20,
         }}
         animate={{
           opacity: 1,
@@ -303,45 +362,108 @@ const Dashboard = () => {
         }}
       >
 
-        <PageHeader
-          title={`Welcome back, ${
-            user?.name ||
-            "User"
-          } 👋`}
-          subtitle="Here's what's happening across your workspace today."
-        />
+        <div className="dashboard-hero-content">
 
-      </motion.div>
+          <div>
+
+            <div className="dashboard-eyebrow">
+
+              <span className="eyebrow-dot">
+                <FaCircle />
+              </span>
+
+              WORKSPACE OVERVIEW
+
+            </div>
+
+
+            <h1>
+              Welcome back,{" "}
+              <span>
+                {firstName}
+              </span>{" "}
+              👋
+            </h1>
+
+
+            <p>
+              Here's what's happening
+              across your workspace today.
+            </p>
+
+          </div>
+
+
+          {/* HEADER ACTIONS */}
+
+          <div className="dashboard-header-actions">
+
+            <motion.button
+              type="button"
+              className="dashboard-secondary-action"
+              onClick={() =>
+                navigate("/tasks")
+              }
+              whileHover={{
+                y: -2,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+            >
+              <FaTasks />
+
+              <span>
+                View Tasks
+              </span>
+            </motion.button>
+
+
+            <motion.button
+              type="button"
+              className="dashboard-primary-action"
+              onClick={() =>
+                navigate("/projects")
+              }
+              whileHover={{
+                y: -2,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+            >
+              <FaPlus />
+
+              <span>
+                New Project
+              </span>
+            </motion.button>
+
+          </div>
+
+        </div>
+
+      </motion.section>
+
 
       {/* =====================================================
-          SEARCH + QUICK ACTIONS
-
-          Search is now located directly under
-          the welcome heading.
-
-          Layout:
-
-          [ 🔍 Search projects or tasks... ]
-                         [ + New Project ]
-                         [ + New Task ]
+          SEARCH BAR
       ===================================================== */}
 
-      <motion.div
-        className="dashboard-toolbar"
+      <motion.section
+        className="dashboard-toolbar premium-toolbar"
         initial={{
           opacity: 0,
-          y: 20,
+          y: 15,
         }}
         animate={{
           opacity: 1,
           y: 0,
         }}
         transition={{
-          delay: 0.15,
+          delay: 0.1,
         }}
       >
-
-        {/* DASHBOARD SEARCH */}
 
         <div className="dashboard-search-wrapper">
 
@@ -357,150 +479,202 @@ const Dashboard = () => {
 
         </div>
 
-        {/* QUICK ACTIONS */}
 
-        <div className="quick-actions">
+        <div className="toolbar-status">
 
-          {/* NEW PROJECT */}
+          <span className="status-live-dot" />
 
-          <motion.button
-            type="button"
-            className="primary-btn"
-            onClick={() =>
-              navigate(
-                "/projects"
-              )
-            }
-            whileHover={{
-              y: -2,
-            }}
-            whileTap={{
-              scale: 0.97,
-            }}
-          >
-            <FaPlus />
-
-            <span>
-              New Project
-            </span>
-          </motion.button>
-
-          {/* NEW TASK */}
-
-          <motion.button
-            type="button"
-            className="secondary-btn"
-            onClick={() =>
-              navigate(
-                "/tasks"
-              )
-            }
-            whileHover={{
-              y: -2,
-            }}
-            whileTap={{
-              scale: 0.97,
-            }}
-          >
-            <FaTasks />
-
-            <span>
-              New Task
-            </span>
-          </motion.button>
+          <span>
+            Workspace Live
+          </span>
 
         </div>
 
-      </motion.div>
+      </motion.section>
+
 
       {/* =====================================================
-          STATS GRID
+          STATISTICS
       ===================================================== */}
 
-      <motion.div
-        className="stats-grid"
+      <motion.section
+        className="premium-stats-grid"
         initial={{
           opacity: 0,
+          y: 20,
         }}
         animate={{
           opacity: 1,
+          y: 0,
         }}
         transition={{
-          delay: 0.3,
+          delay: 0.15,
         }}
       >
 
-        <StatCard
-          title="Projects"
-          value={stats.projects}
-          color="blue"
-          icon={
-            <FaProjectDiagram />
-          }
-        />
+        {/* PROJECTS */}
 
-        <StatCard
-          title="Tasks"
-          value={stats.tasks}
-          color="orange"
-          icon={
-            <FaTasks />
-          }
-        />
+        <motion.div
+          className="premium-stat-card"
+          whileHover={{
+            y: -5,
+          }}
+        >
 
-        <StatCard
-          title="Completed"
-          value={
-            stats.completed
-          }
-          color="green"
-          icon={
-            <FaCheckCircle />
-          }
-        />
+          <div className="stat-card-top">
 
-        <StatCard
-          title="Pending"
-          value={
-            stats.pending
-          }
-          color="red"
-          icon={
-            <FaClock />
-          }
-        />
+            <div className="stat-icon blue">
+              <FaProjectDiagram />
+            </div>
 
-        <StatCard
-          title="Members"
-          value={
-            stats.users
-          }
-          color="purple"
-          icon={
-            <FaUsers />
-          }
-        />
+            <span className="stat-trend">
+              <FaArrowUp />
+              Active
+            </span>
 
-        <StatCard
-          title="Productivity"
-          value={`${completion}%`}
-          color="dark"
-          icon={
-            <FaChartLine />
-          }
-        />
+          </div>
 
-      </motion.div>
+
+          <div className="stat-card-value">
+            {stats.projects}
+          </div>
+
+          <div className="stat-card-label">
+            Total Projects
+          </div>
+
+          <div className="stat-card-footer">
+            {stats.active} active workspace projects
+          </div>
+
+        </motion.div>
+
+
+        {/* TASKS */}
+
+        <motion.div
+          className="premium-stat-card"
+          whileHover={{
+            y: -5,
+          }}
+        >
+
+          <div className="stat-card-top">
+
+            <div className="stat-icon orange">
+              <FaTasks />
+            </div>
+
+            <span className="stat-trend">
+              <FaBolt />
+              Workload
+            </span>
+
+          </div>
+
+
+          <div className="stat-card-value">
+            {stats.tasks}
+          </div>
+
+          <div className="stat-card-label">
+            Total Tasks
+          </div>
+
+          <div className="stat-card-footer">
+            {stats.pending} tasks need attention
+          </div>
+
+        </motion.div>
+
+
+        {/* COMPLETED */}
+
+        <motion.div
+          className="premium-stat-card"
+          whileHover={{
+            y: -5,
+          }}
+        >
+
+          <div className="stat-card-top">
+
+            <div className="stat-icon green">
+              <FaCheckCircle />
+            </div>
+
+            <span className="stat-trend positive">
+              <FaArrowUp />
+              Progress
+            </span>
+
+          </div>
+
+
+          <div className="stat-card-value">
+            {stats.completed}
+          </div>
+
+          <div className="stat-card-label">
+            Completed Tasks
+          </div>
+
+          <div className="stat-card-footer">
+            {completion}% workspace completion
+          </div>
+
+        </motion.div>
+
+
+        {/* MEMBERS */}
+
+        <motion.div
+          className="premium-stat-card"
+          whileHover={{
+            y: -5,
+          }}
+        >
+
+          <div className="stat-card-top">
+
+            <div className="stat-icon purple">
+              <FaUsers />
+            </div>
+
+            <span className="stat-trend">
+              <FaUsers />
+              Team
+            </span>
+
+          </div>
+
+
+          <div className="stat-card-value">
+            {stats.users}
+          </div>
+
+          <div className="stat-card-label">
+            Team Members
+          </div>
+
+          <div className="stat-card-footer">
+            Collaborators in workspace
+          </div>
+
+        </motion.div>
+
+      </motion.section>
+
 
       {/* =====================================================
-          ANALYTICS
+          PRODUCTIVITY OVERVIEW
       ===================================================== */}
 
-      <motion.div
-        className="dashboard-analytics"
+      <motion.section
+        className="productivity-banner"
         initial={{
           opacity: 0,
-          y: 30,
+          y: 20,
         }}
         whileInView={{
           opacity: 1,
@@ -509,91 +683,229 @@ const Dashboard = () => {
         viewport={{
           once: true,
         }}
-        transition={{
-          duration: 0.5,
-        }}
       >
 
-        {/* WORKSPACE OVERVIEW */}
+        <div className="productivity-left">
 
-        <div className="analytics-card large-card">
+          <div className="productivity-icon">
+            <FaChartLine />
+          </div>
 
-          <div className="card-header">
+
+          <div>
+
+            <span>
+              WORKSPACE PRODUCTIVITY
+            </span>
 
             <h2>
-              Workspace Overview
+              {completion}% complete
             </h2>
 
+            <p>
+              Keep the momentum going.
+              Your workspace is making progress.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div className="productivity-progress-area">
+
+          <div className="productivity-progress-header">
+
+            <span>
+              Overall completion
+            </span>
+
+            <strong>
+              {completion}%
+            </strong>
+
+          </div>
+
+
+          <div className="productivity-progress">
+
+            <motion.div
+              initial={{
+                width: 0,
+              }}
+              animate={{
+                width: `${completion}%`,
+              }}
+              transition={{
+                duration: 1.2,
+                ease: "easeOut",
+              }}
+            />
+
+          </div>
+
+        </div>
+
+      </motion.section>
+
+
+      {/* =====================================================
+          ANALYTICS
+      ===================================================== */}
+
+      <section className="dashboard-analytics premium-analytics">
+
+        {/* OVERVIEW */}
+
+        <motion.div
+          className="analytics-card large-card"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+        >
+
+          <div className="card-header premium-card-header">
+
+            <div>
+
+              <span className="card-kicker">
+                PERFORMANCE
+              </span>
+
+              <h2>
+                Workspace Overview
+              </h2>
+
+            </div>
+
+
             <span className="live-badge">
+              <span />
               Live
             </span>
 
           </div>
 
+
           <DashboardOverviewChart
-            projects={
-              projects
-            }
+            projects={projects}
             tasks={tasks}
           />
 
-        </div>
+        </motion.div>
+
 
         {/* TASK STATUS */}
 
-        <div className="analytics-card">
+        <motion.div
+          className="analytics-card"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+        >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Task Status
-            </h2>
+            <div>
+
+              <span className="card-kicker">
+                TASKS
+              </span>
+
+              <h2>
+                Task Status
+              </h2>
+
+            </div>
+
+            <FaTasks className="header-card-icon" />
 
           </div>
+
 
           <TaskStatusChart
             tasks={tasks}
           />
 
-        </div>
+        </motion.div>
+
 
         {/* PROJECT PROGRESS */}
 
-        <div className="analytics-card">
+        <motion.div
+          className="analytics-card"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+        >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Project Progress
-            </h2>
+            <div>
+
+              <span className="card-kicker">
+                PROJECTS
+              </span>
+
+              <h2>
+                Project Progress
+              </h2>
+
+            </div>
+
+            <FaProjectDiagram className="header-card-icon" />
 
           </div>
 
+
           <ProjectProgressChart
-            projects={
-              projects
-            }
+            projects={projects}
           />
 
-        </div>
+        </motion.div>
 
-      </motion.div>
+      </section>
+
 
       {/* =====================================================
           RECENT PROJECTS + RECENT TASKS
       ===================================================== */}
 
-      <div className="dashboard-sections">
+      <section className="dashboard-sections premium-two-column">
 
         {/* =================================================
             RECENT PROJECTS
         ================================================= */}
 
         <motion.div
-          className="dashboard-card"
+          className="dashboard-card premium-list-card"
           initial={{
             opacity: 0,
-            x: -25,
+            x: -20,
           }}
           whileInView={{
             opacity: 1,
@@ -604,70 +916,87 @@ const Dashboard = () => {
           }}
         >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Recent Projects
-            </h2>
+            <div>
+
+              <span className="card-kicker">
+                WORKSPACE
+              </span>
+
+              <h2>
+                Recent Projects
+              </h2>
+
+            </div>
+
 
             <button
               type="button"
+              className="view-all-btn"
               onClick={() =>
-                navigate(
-                  "/projects"
-                )
+                navigate("/projects")
               }
             >
               View All
+              <FaArrowRight />
             </button>
 
           </div>
 
-          {filteredProjects.length ===
-          0 ? (
 
-            <EmptyState
-              title={
-                search
-                  ? "No Projects Found"
-                  : "No Projects Found"
-              }
-            />
+          {filteredProjects.length === 0 ? (
+
+            <div className="premium-empty-state">
+              <EmptyState
+                title={
+                  search
+                    ? "No Projects Found"
+                    : "No Projects Found"
+                }
+              />
+            </div>
 
           ) : (
 
-            filteredProjects
-              .slice(0, 6)
-              .map(
-                (project) => (
+            <div className="premium-list">
+
+              {filteredProjects
+                .slice(0, 5)
+                .map((project) => (
 
                   <motion.div
+                    key={project._id}
+                    className="premium-list-item"
                     whileHover={{
-                      scale: 1.02,
+                      x: 4,
                     }}
-                    key={
-                      project._id
-                    }
-                    className="list-item"
                   >
 
-                    <div>
+                    <div className="list-item-icon project">
+                      <FaProjectDiagram />
+                    </div>
+
+
+                    <div className="list-item-content">
 
                       <h3>
                         {project.title ||
-                          project.name}
+                          project.name ||
+                          "Untitled Project"}
                       </h3>
 
                       <p>
                         {project.description
                           ? project.description.substring(
                               0,
-                              90
+                              70
                             )
-                          : "No description"}
+                          : "No description available"}
                       </p>
 
                     </div>
+
 
                     <span
                       className={`badge ${(
@@ -686,22 +1015,24 @@ const Dashboard = () => {
 
                   </motion.div>
 
-                )
-              )
+                ))}
+
+            </div>
 
           )}
 
         </motion.div>
+
 
         {/* =================================================
             RECENT TASKS
         ================================================= */}
 
         <motion.div
-          className="dashboard-card"
+          className="dashboard-card premium-list-card"
           initial={{
             opacity: 0,
-            x: 25,
+            x: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -712,75 +1043,90 @@ const Dashboard = () => {
           }}
         >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Recent Tasks
-            </h2>
+            <div>
+
+              <span className="card-kicker">
+                WORKLOAD
+              </span>
+
+              <h2>
+                Recent Tasks
+              </h2>
+
+            </div>
+
 
             <button
               type="button"
+              className="view-all-btn"
               onClick={() =>
-                navigate(
-                  "/tasks"
-                )
+                navigate("/tasks")
               }
             >
               View All
+              <FaArrowRight />
             </button>
 
           </div>
 
-          {filteredTasks.length ===
-          0 ? (
 
-            <EmptyState
-              title={
-                search
-                  ? "No Tasks Found"
-                  : "No Tasks Found"
-              }
-            />
+          {filteredTasks.length === 0 ? (
+
+            <div className="premium-empty-state">
+              <EmptyState
+                title={
+                  search
+                    ? "No Tasks Found"
+                    : "No Tasks Found"
+                }
+              />
+            </div>
 
           ) : (
 
-            filteredTasks
-              .slice(0, 6)
-              .map(
-                (task) => (
+            <div className="premium-list">
+
+              {filteredTasks
+                .slice(0, 5)
+                .map((task) => (
 
                   <motion.div
-                    key={
-                      task._id
-                    }
+                    key={task._id}
+                    className="premium-list-item"
                     whileHover={{
-                      scale: 1.02,
+                      x: 4,
                     }}
-                    className="deadline-item"
                   >
 
-                    <div>
+                    <div className="list-item-icon task">
+                      <FaTasks />
+                    </div>
+
+
+                    <div className="list-item-content">
 
                       <h3>
                         {task.title ||
-                          task.name}
+                          task.name ||
+                          "Untitled Task"}
                       </h3>
 
                       <p>
 
-                        Due :
-
-                        {" "}
+                        <FaCalendarAlt />
 
                         {task.dueDate
                           ? new Date(
                               task.dueDate
                             ).toLocaleDateString()
-                          : "No Due Date"}
+                          : "No due date"}
 
                       </p>
 
                     </div>
+
 
                     <span
                       className={`badge ${(
@@ -794,205 +1140,205 @@ const Dashboard = () => {
 
                   </motion.div>
 
-                )
-              )
+                ))}
+
+            </div>
 
           )}
 
         </motion.div>
 
-      </div>
+      </section>
+
 
       {/* =====================================================
-          PROGRESS CARD
+          TEAM + SUMMARY
       ===================================================== */}
 
-      <motion.div
-        className="dashboard-card"
-        initial={{
-          opacity: 0,
-          y: 30,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        viewport={{
-          once: true,
-        }}
-      >
+      <section className="dashboard-bottom premium-two-column">
 
-        <div className="card-header">
-
-          <h2>
-            Workspace Completion
-          </h2>
-
-          <FaArrowUp />
-
-        </div>
-
-        <div className="progress-wrapper">
-
-          <div className="progress-bar">
-
-            <motion.div
-              className="progress-fill"
-              initial={{
-                width: 0,
-              }}
-              animate={{
-                width: `${completion}%`,
-              }}
-              transition={{
-                duration: 1.4,
-              }}
-            />
-
-          </div>
-
-          <h2>
-            {completion}%
-            {" "}
-            Completed
-          </h2>
-
-        </div>
-
-      </motion.div>
-
-      {/* =====================================================
-          TEAM OVERVIEW
-      ===================================================== */}
-
-      <div className="dashboard-bottom">
-
-        {/* TEAM MEMBERS */}
+        {/* =================================================
+            TEAM MEMBERS
+        ================================================= */}
 
         <motion.div
-          className="dashboard-card"
+          className="dashboard-card premium-list-card"
           initial={{
             opacity: 0,
-            x: -25,
+            y: 25,
           }}
           whileInView={{
             opacity: 1,
-            x: 0,
+            y: 0,
           }}
           viewport={{
             once: true,
           }}
         >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Team Members
-            </h2>
+            <div>
 
-            <span>
-              {users.length}
-              {" "}
-              Members
+              <span className="card-kicker">
+                COLLABORATION
+              </span>
+
+              <h2>
+                Team Members
+              </h2>
+
+            </div>
+
+
+            <span className="member-count">
+              {users.length} Members
             </span>
 
           </div>
 
-          {users.length ===
-          0 ? (
 
-            <EmptyState
-              title="No Team Members Found"
-            />
+          {users.length === 0 ? (
+
+            <div className="premium-empty-state">
+              <EmptyState
+                title="No Team Members Found"
+              />
+            </div>
 
           ) : (
 
-            users
-              .slice(0, 6)
-              .map(
-                (member) => (
+            <div className="premium-list">
 
-                  <motion.div
-                    key={
-                      member._id
-                    }
-                    whileHover={{
-                      scale: 1.02,
-                    }}
-                    className="member-item"
-                  >
+              {users
+                .slice(0, 5)
+                .map((member) => {
 
-                    <div className="member-left">
+                  const memberInitials =
+                    member.name
+                      ?.trim()
+                      ?.split(/\s+/)
+                      ?.map(
+                        (name) =>
+                          name?.[0] ||
+                          ""
+                      )
+                      ?.join("")
+                      ?.substring(
+                        0,
+                        2
+                      )
+                      ?.toUpperCase() ||
+                    "U";
 
-                      <div className="member-avatar">
 
-                        {member.name
-                          ?.substring(
-                            0,
-                            2
-                          )
-                          .toUpperCase()}
+                  return (
+                    <motion.div
+                      key={member._id}
+                      className="premium-list-item member-row"
+                      whileHover={{
+                        x: 4,
+                      }}
+                    >
+
+                      <div className="member-avatar premium-avatar">
+
+                        {member.avatar ? (
+
+                          <img
+                            src={
+                              member.avatar
+                            }
+                            alt={
+                              member.name ||
+                              "Member"
+                            }
+                          />
+
+                        ) : (
+
+                          memberInitials
+
+                        )}
 
                       </div>
 
-                      <div>
+
+                      <div className="list-item-content">
 
                         <h3>
-                          {member.name}
+                          {member.name ||
+                            "Unknown Member"}
                         </h3>
 
                         <p>
-                          {member.email}
+                          {member.email ||
+                            "No email available"}
                         </p>
 
                       </div>
 
-                    </div>
 
-                    <span className="badge completed">
-                      {member.status ||
-                        "Active"}
-                    </span>
+                      <span className="member-online">
+                        <span />
+                        {member.status ||
+                          "Active"}
+                      </span>
 
-                  </motion.div>
+                    </motion.div>
+                  );
+                })}
 
-                )
-              )
+            </div>
 
           )}
 
         </motion.div>
 
+
         {/* =================================================
-            QUICK SUMMARY
+            WORKSPACE SUMMARY
         ================================================= */}
 
         <motion.div
-          className="dashboard-card"
+          className="dashboard-card summary-premium-card"
           initial={{
             opacity: 0,
-            x: 25,
+            y: 25,
           }}
           whileInView={{
             opacity: 1,
-            x: 0,
+            y: 0,
           }}
           viewport={{
             once: true,
           }}
         >
 
-          <div className="card-header">
+          <div className="card-header premium-card-header">
 
-            <h2>
-              Workspace Summary
-            </h2>
+            <div>
+
+              <span className="card-kicker">
+                AT A GLANCE
+              </span>
+
+              <h2>
+                Workspace Summary
+              </h2>
+
+            </div>
 
           </div>
 
-          <div className="summary-grid">
+
+          <div className="summary-grid premium-summary-grid">
 
             <div className="summary-box">
+
+              <div className="summary-icon blue">
+                <FaProjectDiagram />
+              </div>
 
               <h1>
                 {stats.projects}
@@ -1004,7 +1350,12 @@ const Dashboard = () => {
 
             </div>
 
+
             <div className="summary-box">
+
+              <div className="summary-icon orange">
+                <FaTasks />
+              </div>
 
               <h1>
                 {stats.tasks}
@@ -1016,7 +1367,12 @@ const Dashboard = () => {
 
             </div>
 
+
             <div className="summary-box">
+
+              <div className="summary-icon green">
+                <FaCheckCircle />
+              </div>
 
               <h1>
                 {stats.completed}
@@ -1028,7 +1384,12 @@ const Dashboard = () => {
 
             </div>
 
+
             <div className="summary-box">
+
+              <div className="summary-icon red">
+                <FaClock />
+              </div>
 
               <h1>
                 {stats.pending}
@@ -1040,7 +1401,12 @@ const Dashboard = () => {
 
             </div>
 
+
             <div className="summary-box">
+
+              <div className="summary-icon purple">
+                <FaUsers />
+              </div>
 
               <h1>
                 {stats.users}
@@ -1052,7 +1418,12 @@ const Dashboard = () => {
 
             </div>
 
+
             <div className="summary-box">
+
+              <div className="summary-icon dark">
+                <FaChartLine />
+              </div>
 
               <h1>
                 {completion}%
@@ -1068,17 +1439,18 @@ const Dashboard = () => {
 
         </motion.div>
 
-      </div>
+      </section>
+
 
       {/* =====================================================
           RECENT ACTIVITY
       ===================================================== */}
 
-      <motion.div
-        className="dashboard-card"
+      <motion.section
+        className="dashboard-card activity-premium-card"
         initial={{
           opacity: 0,
-          y: 35,
+          y: 25,
         }}
         whileInView={{
           opacity: 1,
@@ -1089,21 +1461,38 @@ const Dashboard = () => {
         }}
       >
 
-        <div className="card-header">
+        <div className="card-header premium-card-header">
 
-          <h2>
-            Recent Activity
-          </h2>
+          <div>
+
+            <span className="card-kicker">
+              WORKSPACE PULSE
+            </span>
+
+            <h2>
+              Recent Activity
+            </h2>
+
+          </div>
+
+
+          <div className="activity-live">
+            <span />
+            Live updates
+          </div>
 
         </div>
 
-        <div className="activity-list">
 
-          {/* PROJECT ACTIVITY */}
+        <div className="activity-list premium-activity-list">
+
+          {/* PROJECTS */}
 
           <div className="activity-item">
 
-            <div className="activity-dot blue" />
+            <div className="activity-icon blue">
+              <FaProjectDiagram />
+            </div>
 
             <div>
 
@@ -1112,22 +1501,23 @@ const Dashboard = () => {
               </h4>
 
               <p>
-                {stats.projects}
-                {" "}
-                active project(s)
-                {" "}
-                available.
+                {stats.projects} project(s)
+                currently available in your
+                workspace.
               </p>
 
             </div>
 
           </div>
 
-          {/* COMPLETED TASKS */}
+
+          {/* COMPLETED */}
 
           <div className="activity-item">
 
-            <div className="activity-dot green" />
+            <div className="activity-icon green">
+              <FaCheckCircle />
+            </div>
 
             <div>
 
@@ -1136,21 +1526,23 @@ const Dashboard = () => {
               </h4>
 
               <p>
-                {stats.completed}
-                {" "}
-                task(s) have been
-                completed successfully.
+                {stats.completed} task(s)
+                have been completed
+                successfully.
               </p>
 
             </div>
 
           </div>
 
-          {/* PENDING TASKS */}
+
+          {/* PENDING */}
 
           <div className="activity-item">
 
-            <div className="activity-dot orange" />
+            <div className="activity-icon orange">
+              <FaClock />
+            </div>
 
             <div>
 
@@ -1159,21 +1551,22 @@ const Dashboard = () => {
               </h4>
 
               <p>
-                {stats.pending}
-                {" "}
-                task(s) are waiting
-                for completion.
+                {stats.pending} task(s)
+                are waiting for completion.
               </p>
 
             </div>
 
           </div>
 
-          {/* TEAM MEMBERS */}
+
+          {/* TEAM */}
 
           <div className="activity-item">
 
-            <div className="activity-dot purple" />
+            <div className="activity-icon purple">
+              <FaUsers />
+            </div>
 
             <div>
 
@@ -1182,10 +1575,9 @@ const Dashboard = () => {
               </h4>
 
               <p>
-                {stats.users}
-                {" "}
-                member(s) are working
-                together.
+                {stats.users} member(s)
+                are collaborating in your
+                workspace.
               </p>
 
             </div>
@@ -1194,10 +1586,72 @@ const Dashboard = () => {
 
         </div>
 
-      </motion.div>
+      </motion.section>
+
+
+      {/* =====================================================
+          FINAL CTA
+      ===================================================== */}
+
+      <motion.section
+        className="dashboard-final-cta"
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+      >
+
+        <div>
+
+          <span>
+            READY TO MOVE FORWARD?
+          </span>
+
+          <h2>
+            Keep your workspace moving.
+          </h2>
+
+          <p>
+            Create a project, assign tasks,
+            and keep your team aligned.
+          </p>
+
+        </div>
+
+
+        <motion.button
+          type="button"
+          onClick={() =>
+            navigate("/projects")
+          }
+          whileHover={{
+            x: 4,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
+        >
+
+          <span>
+            Open Projects
+          </span>
+
+          <FaChevronRight />
+
+        </motion.button>
+
+      </motion.section>
 
     </MainLayout>
   );
 };
+
 
 export default Dashboard;
