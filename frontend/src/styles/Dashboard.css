@@ -31,6 +31,10 @@
 
   --dash-radius: 18px;
 
+  /* IMPORTANT */
+  --dashboard-navbar-height: 72px;
+  --dashboard-sidebar-width: 174px;
+
   --dash-shadow:
     0 15px 45px rgba(0, 0, 0, 0.22);
 }
@@ -67,45 +71,6 @@
 
 
 /* =========================================================
-   IMPORTANT GLOBAL OVERFLOW FIX
-========================================================= */
-
-html,
-body,
-#root {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-
-/* =========================================================
-   TASKFLOW PAGE CONTENT
-========================================================= */
-
-.taskflow-page-content {
-  position: relative;
-
-  width: 100%;
-  min-width: 0;
-
-  margin: 0;
-  padding: 0;
-
-  overflow-x: hidden;
-}
-
-
-/* =========================================================
    DASHBOARD PAGE
 ========================================================= */
 
@@ -114,50 +79,49 @@ body {
 
   width: 100%;
   min-width: 0;
-  min-height: 100%;
-
-  margin: 0;
-  padding: 0;
+  min-height: 100vh;
 
   overflow-x: hidden;
+
+  background: var(--dash-bg);
 }
 
 
 /* =========================================================
-   MAIN DASHBOARD AREA — FIXED
+   MAIN DASHBOARD AREA
+   IMPORTANT:
+   Navbar is fixed, therefore dashboard starts AFTER it.
 ========================================================= */
 
 .dashboard-main {
   position: relative;
 
   /*
-    DO NOT USE width: 70%.
+    DO NOT use width: 70%.
+    That was causing the dashboard to behave incorrectly
+    relative to the sidebar/navbar.
 
-    The page content already sits beside the sidebar.
-    100% makes the dashboard use exactly the available area.
+    The main content occupies the remaining viewport width.
   */
-  width: 100%;
+  width: calc(100% - var(--dashboard-sidebar-width));
 
   min-width: 0;
 
-  min-height: calc(100vh - 72px);
-
-  margin: 0;
-
   /*
-    TOP:
-    Gives enough space below the navbar.
-
-    LEFT / RIGHT:
-    Creates the premium breathing room you wanted.
-
-    BOTTOM:
-    Prevents the final cards from touching the screen edge.
+    THIS IS THE IMPORTANT FIX.
+    Content begins below the fixed navbar.
   */
-  padding:
-    34px
-    34px
-    60px;
+  margin-left: var(--dashboard-sidebar-width);
+
+  padding-top: calc(
+    var(--dashboard-navbar-height) + 28px
+  );
+
+  padding-right: 38px;
+  padding-bottom: 55px;
+  padding-left: 38px;
+
+  min-height: 100vh;
 
   color: var(--dash-text);
 
@@ -179,13 +143,12 @@ body {
       #060c17 100%
     );
 
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow-x: clip;
 }
 
 
 /* =========================================================
-   DASHBOARD BACKGROUND GLOW
+   BACKGROUND GLOW
 ========================================================= */
 
 .dashboard-main::before {
@@ -247,17 +210,11 @@ body {
 
   width: 100%;
 
-  min-width: 0;
-
   max-width: 1760px;
 
-  margin:
-    0 auto;
+  margin: 0 auto;
 
-  /*
-    Extra safety against grid/flex overflow.
-  */
-  overflow: visible;
+  min-width: 0;
 }
 
 
@@ -268,20 +225,17 @@ body {
 .dashboard-hero {
   position: relative;
 
-  z-index: 5;
-
   width: 100%;
 
-  min-width: 0;
-
   /*
-    IMPORTANT:
-    This ensures the Welcome section starts below
-    the navbar instead of hiding behind it.
+    Extra protection against fixed navbar overlap.
   */
-  margin-top: 4px;
+  margin-top: 0;
 
   margin-bottom: 24px;
+
+  scroll-margin-top:
+    calc(var(--dashboard-navbar-height) + 20px);
 }
 
 
@@ -293,7 +247,6 @@ body {
   display: flex;
 
   align-items: center;
-
   justify-content: space-between;
 
   gap: 35px;
@@ -2281,11 +2234,20 @@ body {
 ========================================================= */
 
 @media (min-width: 1600px) {
+  :root {
+    --dashboard-navbar-height: 72px;
+    --dashboard-sidebar-width: 174px;
+  }
+
   .dashboard-main {
-    padding:
-      40px
-      48px
-      70px;
+    padding-top: calc(var(--dashboard-navbar-height) + 28px);
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-bottom: 65px;
+  }
+
+  .dashboard-content {
+    max-width: 1760px;
   }
 
   .premium-stats-grid,
@@ -2302,10 +2264,12 @@ body {
 
 @media (max-width: 1400px) {
   .dashboard-main {
-    padding:
-      32px
-      30px
-      55px;
+    padding-top: calc(var(--dashboard-navbar-height) + 28px);
+
+    padding-right: 30px;
+    padding-left: 30px;
+
+    padding-bottom: 50px;
   }
 
   .premium-analytics {
@@ -2331,10 +2295,13 @@ body {
 
 @media (max-width: 1100px) {
   .dashboard-main {
-    padding:
-      30px
-      26px
-      50px;
+    padding-top: calc(
+    var(--dashboard-navbar-height) + 28px);
+
+    padding-right: 26px;
+    padding-left: 26px;
+
+    padding-bottom: 45px;
   }
 
   .premium-stats-grid {
@@ -2357,16 +2324,23 @@ body {
 }
 
 
+
 /* =========================================================
    900px
 ========================================================= */
-
 @media (max-width: 900px) {
   .dashboard-main {
-    padding:
-      28px
-      20px
-      45px;
+    width: calc(100% - var(--dashboard-sidebar-width));
+    margin-left: var(--dashboard-sidebar-width);
+
+    padding-top: calc(
+      var(--dashboard-navbar-height) + 28px
+    );
+
+    padding-right: 20px;
+    padding-left: 20px;
+
+    padding-bottom: 40px;
   }
 
   .dashboard-hero-content {
@@ -2406,16 +2380,23 @@ body {
 }
 
 
+
 /* =========================================================
    700px
 ========================================================= */
 
 @media (max-width: 700px) {
   .dashboard-main {
-    padding:
-      24px
-      16px
-      40px;
+    width: 100%;
+
+    margin-left: 0;
+
+    padding-top: 88px;
+
+    padding-right: 16px;
+    padding-left: 16px;
+
+    padding-bottom: 35px;
   }
 
   .dashboard-hero h1 {
@@ -2476,10 +2457,16 @@ body {
 
 @media (max-width: 500px) {
   .dashboard-main {
-    padding:
-      20px
-      12px
-      35px;
+    width: 100%;
+
+    margin-left: 0;
+
+    padding-top: 82px;
+
+    padding-right: 12px;
+    padding-left: 12px;
+
+    padding-bottom: 30px;
   }
 
   .dashboard-hero-content {
@@ -2550,10 +2537,16 @@ body {
 
 @media (max-width: 380px) {
   .dashboard-main {
-    padding:
-      18px
-      10px
-      30px;
+    width: 100%;
+
+    margin-left: 0;
+
+    padding-top: 78px;
+
+    padding-right: 10px;
+    padding-left: 10px;
+
+    padding-bottom: 26px;
   }
 
   .dashboard-hero-content {
