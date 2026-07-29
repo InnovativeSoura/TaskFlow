@@ -17,21 +17,25 @@ const MainLayout = ({ children }) => {
       </aside>
 
       {/* ==========================================
-          MAIN APPLICATION AREA
+          APPLICATION AREA
       ========================================== */}
-      <section className="taskflow-main">
+      <div className="taskflow-main">
 
-        {/* FIXED TOP NAVBAR */}
+        {/* ========================================
+            TOP NAVBAR
+        ======================================== */}
         <header className="taskflow-navbar">
           <Navbar />
         </header>
 
-        {/* SCROLLABLE PAGE AREA */}
+        {/* ========================================
+            PAGE CONTENT
+        ======================================== */}
         <main className="taskflow-page-content">
           {children}
         </main>
 
-      </section>
+      </div>
 
     </div>
   );

@@ -1,9 +1,11 @@
 /* =========================================================
    TASKFLOW — MAIN APPLICATION LAYOUT
+   Stable layout for Sidebar + Navbar + Dashboard
 ========================================================= */
 
 :root {
   --tf-sidebar-width: 174px;
+  --tf-sidebar-collapsed-width: 52px;
   --tf-navbar-height: 58px;
 
   --tf-bg: #070d19;
@@ -26,23 +28,60 @@
 
 
 /* =========================================================
+   GLOBAL BOX SIZING
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
    ROOT
+========================================================= */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+  overflow-x: hidden;
+
+  color: var(--tf-text);
+
+  background: var(--tf-bg);
+}
+
+
+/* =========================================================
+   APPLICATION SHELL
 ========================================================= */
 
 .taskflow-layout {
   position: relative;
 
-  width: 100%;
-  min-height: 100vh;
-
   display: flex;
 
-  color: var(--tf-text);
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
 
   background:
+    radial-gradient(
+      circle at 85% 0%,
+      rgba(91, 140, 255, 0.07),
+      transparent 30%
+    ),
     #070d19;
-
-  overflow: hidden;
 }
 
 
@@ -59,32 +98,32 @@
 
   width: var(--tf-sidebar-width);
 
-  z-index: 1000;
+  z-index: 1100;
 
   flex-shrink: 0;
 
-  overflow: hidden;
+  overflow: visible;
+
+  background: #09111f;
 }
 
 
 /* =========================================================
-   MAIN
+   MAIN APPLICATION
 ========================================================= */
 
 .taskflow-main {
   position: relative;
 
+  display: flex;
+  flex-direction: column;
+
   width: calc(100% - var(--tf-sidebar-width));
 
   min-width: 0;
-
   min-height: 100vh;
 
   margin-left: var(--tf-sidebar-width);
-
-  display: flex;
-
-  flex-direction: column;
 
   background:
     linear-gradient(
@@ -93,7 +132,9 @@
       #070d18 100%
     );
 
-  overflow: hidden;
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
 }
 
 
@@ -106,29 +147,29 @@
 
   top: 0;
   right: 0;
-
   left: var(--tf-sidebar-width);
 
   height: var(--tf-navbar-height);
 
-  z-index: 900;
+  z-index: 1000;
 
   display: flex;
-
   align-items: center;
 
+  min-width: 0;
+
   background:
-    rgba(7, 13, 25, 0.92);
+    rgba(7, 13, 25, 0.94);
 
   border-bottom:
     1px solid
     rgba(148, 163, 184, 0.08);
 
-  backdrop-filter:
-    blur(18px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  -webkit-backdrop-filter:
-    blur(18px);
+  transition:
+    left 0.25s ease;
 }
 
 
@@ -140,70 +181,86 @@
   position: relative;
 
   width: 100%;
-
   min-width: 0;
+
+  /*
+     Navbar is fixed, therefore content needs
+     to start below it.
+  */
+  padding-top: var(--tf-navbar-height);
 
   min-height: 100vh;
 
-  margin-top: var(--tf-navbar-height);
-
-  padding: 0;
-
   overflow-x: hidden;
-  overflow-y: auto;
 
-  scrollbar-width: thin;
-
-  scrollbar-color:
-    #26344d
-    transparent;
-}
-
-
-.taskflow-page-content::-webkit-scrollbar {
-  width: 7px;
-}
-
-
-.taskflow-page-content::-webkit-scrollbar-track {
   background: transparent;
 }
 
 
-.taskflow-page-content::-webkit-scrollbar-thumb {
-  background: #26344d;
-
-  border-radius: 20px;
-}
-
-
-.taskflow-page-content::-webkit-scrollbar-thumb:hover {
-  background: #344564;
-}
-
-
 /* =========================================================
-   IMPORTANT:
-   Dashboard itself owns the page padding.
+   DIRECT PAGE CHILD
 ========================================================= */
 
 .taskflow-page-content > * {
+  width: 100%;
   min-width: 0;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   SIDEBAR COLLAPSED STATE
+
+   Supports common classes used by Sidebar components.
+========================================================= */
+
+.taskflow-layout.sidebar-collapsed {
+  --tf-sidebar-width: var(--tf-sidebar-collapsed-width);
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  :root {
+    --tf-sidebar-width: 174px;
+  }
+
+  .taskflow-main {
+    width: calc(100% - var(--tf-sidebar-width));
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — SMALL TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
 
   :root {
-    --tf-sidebar-width: 76px;
+    --tf-sidebar-width: 64px;
+  }
+
+  .taskflow-main {
+    width: calc(100% - var(--tf-sidebar-width));
+
+    margin-left: var(--tf-sidebar-width);
+  }
+
+  .taskflow-navbar {
+    left: var(--tf-sidebar-width);
   }
 
 }
 
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
 
 @media (max-width: 700px) {
 
@@ -229,11 +286,17 @@
 }
 
 
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
+
     animation-duration: 0.01ms !important;
 
     animation-iteration-count: 1 !important;
