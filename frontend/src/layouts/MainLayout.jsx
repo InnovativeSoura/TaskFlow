@@ -9,38 +9,29 @@ const MainLayout = ({ children }) => {
   return (
     <div className="taskflow-layout">
 
-      {/* =====================================================
+      {/* ==========================================
           SIDEBAR
-          Fixed independently.
-          Collapse / expand is controlled from Sidebar logo.
-      ===================================================== */}
+      ========================================== */}
+      <aside className="taskflow-sidebar">
+        <Sidebar />
+      </aside>
 
-      <Sidebar />
+      {/* ==========================================
+          MAIN APPLICATION AREA
+      ========================================== */}
+      <section className="taskflow-main">
 
-      {/* =====================================================
-          MAIN AREA
-      ===================================================== */}
+        {/* FIXED TOP NAVBAR */}
+        <header className="taskflow-navbar">
+          <Navbar />
+        </header>
 
-      <div className="taskflow-main">
-
-        {/* =================================================
-            NAVBAR
-
-            Navbar belongs INSIDE the main area so it
-            never overlaps the sidebar.
-        ================================================= */}
-
-        <Navbar />
-
-        {/* =================================================
-            PAGE CONTENT
-        ================================================= */}
-
+        {/* SCROLLABLE PAGE AREA */}
         <main className="taskflow-page-content">
           {children}
         </main>
 
-      </div>
+      </section>
 
     </div>
   );

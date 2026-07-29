@@ -1,205 +1,134 @@
 /* =========================================================
-   TASKFLOW — PREMIUM MAIN LAYOUT
-   Stable sidebar + content synchronization
+   TASKFLOW — MAIN APPLICATION LAYOUT
 ========================================================= */
 
 :root {
-  --sidebar-width: 270px;
-  --sidebar-collapsed-width: 86px;
-  --navbar-height: 72px;
+  --tf-sidebar-width: 174px;
+  --tf-navbar-height: 58px;
 
-  --page-background: #f4f7fc;
+  --tf-bg: #070d19;
+  --tf-surface: #0d1628;
+  --tf-surface-2: #111c30;
 
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
+  --tf-text: #f8fafc;
+  --tf-muted: #8190aa;
 
-  --blue: #2563eb;
-  --blue-light: #3b82f6;
+  --tf-border: rgba(148, 163, 184, 0.12);
 
-  --border-light: rgba(148, 163, 184, 0.18);
+  --tf-primary: #5b8cff;
+  --tf-secondary: #7657ff;
 
-  --shadow-soft:
-    0 20px 60px rgba(15, 23, 42, 0.07);
+  --tf-radius: 18px;
 
-  --shadow-medium:
-    0 25px 70px rgba(15, 23, 42, 0.1);
+  --tf-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.22);
 }
 
 
 /* =========================================================
-   GLOBAL RESET
+   ROOT
 ========================================================= */
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
-
-.layout {
+.taskflow-layout {
   position: relative;
-
-  display: flex;
 
   width: 100%;
   min-height: 100vh;
 
-  background:
-    radial-gradient(
-      circle at 5% 5%,
-      rgba(59, 130, 246, 0.1),
-      transparent 27%
-    ),
-    radial-gradient(
-      circle at 95% 95%,
-      rgba(99, 102, 241, 0.1),
-      transparent 28%
-    ),
-    linear-gradient(
-      180deg,
-      #eef4ff 0%,
-      #f7faff 48%,
-      #f4f7fc 100%
-    );
+  display: flex;
 
-  overflow-x: hidden;
+  color: var(--tf-text);
+
+  background:
+    #070d19;
+
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   BACKGROUND GLOW — TOP LEFT
+   SIDEBAR
 ========================================================= */
 
-.layout::before {
-  content: "";
-
+.taskflow-sidebar {
   position: fixed;
 
-  width: 500px;
-  height: 500px;
+  top: 0;
+  left: 0;
+  bottom: 0;
 
-  top: -260px;
-  left: -220px;
+  width: var(--tf-sidebar-width);
 
-  border-radius: 50%;
+  z-index: 1000;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(59, 130, 246, 0.13),
-      transparent 70%
-    );
+  flex-shrink: 0;
 
-  filter: blur(10px);
-
-  pointer-events: none;
-
-  z-index: 0;
-
-  animation:
-    layoutGlowOne
-    16s
-    ease-in-out
-    infinite;
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   BACKGROUND GLOW — BOTTOM RIGHT
+   MAIN
 ========================================================= */
 
-.layout::after {
-  content: "";
-
-  position: fixed;
-
-  width: 520px;
-  height: 520px;
-
-  right: -250px;
-  bottom: -260px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(124, 58, 237, 0.1),
-      transparent 70%
-    );
-
-  pointer-events: none;
-
-  z-index: 0;
-
-  animation:
-    layoutGlowTwo
-    18s
-    ease-in-out
-    infinite;
-}
-
-
-/* ==========================================================
-   MAIN CONTENT
-========================================================== */
-
-.main-content {
+.taskflow-main {
   position: relative;
 
-  z-index: 2;
-
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
+  width: calc(100% - var(--tf-sidebar-width));
 
   min-width: 0;
 
   min-height: 100vh;
 
-  margin-left: var(--sidebar-width);
+  margin-left: var(--tf-sidebar-width);
 
-  transition:
-    margin-left 0.3s
-    cubic-bezier(0.4, 0, 0.2, 1);
-}
+  display: flex;
 
-.main-content.sidebar-collapsed {
-  margin-left: var(--sidebar-collapsed);
-}
+  flex-direction: column;
 
-.main-content.sidebar-expanded {
-  margin-left: var(--sidebar-width);
+  background:
+    linear-gradient(
+      180deg,
+      #080e1b 0%,
+      #070d18 100%
+    );
+
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   COLLAPSED STATE
+   NAVBAR
 ========================================================= */
 
-.layout.sidebar-collapsed .main-content {
-  width: calc(
-    100% - var(--sidebar-collapsed-width)
-  );
+.taskflow-navbar {
+  position: fixed;
 
-  margin-left: var(--sidebar-collapsed-width);
+  top: 0;
+  right: 0;
+
+  left: var(--tf-sidebar-width);
+
+  height: var(--tf-navbar-height);
+
+  z-index: 900;
+
+  display: flex;
+
+  align-items: center;
+
+  background:
+    rgba(7, 13, 25, 0.92);
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.08);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
 }
 
 
@@ -207,316 +136,109 @@ body {
    PAGE CONTENT
 ========================================================= */
 
-.page-content {
+.taskflow-page-content {
   position: relative;
-  z-index: 2;
-
-  flex: 1;
 
   width: 100%;
 
   min-width: 0;
 
-  margin-top: var(--navbar-height);
-
-  padding: 30px;
-
-  overflow-x: hidden;
-
-  animation:
-    pageEnter
-    0.45s
-    ease;
-}
-
-
-/* =========================================================
-   INNER PAGE CONTAINER
-========================================================= */
-
-.page-inner {
-  position: relative;
-
-  width: 100%;
-
-  min-height:
-    calc(
-      100vh - var(--navbar-height) - 60px
-    );
-}
-
-
-/* =========================================================
-   OPTIONAL PAGE WRAPPER
-========================================================= */
-
-.page-wrapper {
-  position: relative;
-
-  width: 100%;
-
-  min-height:
-    calc(
-      100vh - var(--navbar-height) - 60px
-    );
-
-  padding: 30px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.7);
-
-  border-radius: 24px;
-
-  background:
-    rgba(255, 255, 255, 0.62);
-
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-
-  box-shadow:
-    var(--shadow-soft);
-}
-
-
-/* =========================================================
-   DASHBOARD MAIN
-========================================================= */
-
-.dashboard-main {
-  position: relative;
-
-  width: 100%;
-
   min-height: 100vh;
 
-  animation:
-    pageEnter
-    0.45s
-    ease;
+  margin-top: var(--tf-navbar-height);
+
+  padding: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #26344d
+    transparent;
 }
 
 
-/* =========================================================
-   CONTENT WIDTH SAFETY
-========================================================= */
-
-.page-content img,
-.page-content table,
-.page-content canvas,
-.page-content iframe {
-  max-width: 100%;
+.taskflow-page-content::-webkit-scrollbar {
+  width: 7px;
 }
 
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-.page-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.page-content::-webkit-scrollbar-track {
+.taskflow-page-content::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.page-content::-webkit-scrollbar-thumb {
-  border-radius: 999px;
 
-  background:
-    rgba(100, 116, 139, 0.28);
-}
+.taskflow-page-content::-webkit-scrollbar-thumb {
+  background: #26344d;
 
-.page-content::-webkit-scrollbar-thumb:hover {
-  background:
-    rgba(37, 99, 235, 0.5);
+  border-radius: 20px;
 }
 
 
-/* =========================================================
-   SELECTION
-========================================================= */
-
-::selection {
-  color: #ffffff;
-
-  background:
-    rgba(37, 99, 235, 0.85);
+.taskflow-page-content::-webkit-scrollbar-thumb:hover {
+  background: #344564;
 }
 
 
 /* =========================================================
-   TABLET
+   IMPORTANT:
+   Dashboard itself owns the page padding.
 ========================================================= */
 
-@media (max-width: 1100px) {
+.taskflow-page-content > * {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
   :root {
-    --sidebar-width: 250px;
-    --sidebar-collapsed-width: 82px;
+    --tf-sidebar-width: 76px;
   }
 
-  .main-content {
-    width: calc(
-      100% - var(--sidebar-width)
-    );
-
-    margin-left: var(--sidebar-width);
-  }
-
-  .layout.sidebar-collapsed .main-content {
-    width: calc(
-      100% - var(--sidebar-collapsed-width)
-    );
-
-    margin-left: var(--sidebar-collapsed-width);
-  }
-
-  .page-content {
-    padding: 26px;
-  }
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+@media (max-width: 700px) {
 
-@media (max-width: 768px) {
-  .layout {
-    display: block;
-
-    min-height: 100vh;
+  :root {
+    --tf-sidebar-width: 0px;
+    --tf-navbar-height: 58px;
   }
 
-  .main-content,
-  .layout.sidebar-collapsed .main-content {
+  .taskflow-sidebar {
+    display: none;
+  }
+
+  .taskflow-main {
     width: 100%;
 
     margin-left: 0;
   }
 
-  .page-content {
-    width: 100%;
-
-    margin-top: var(--navbar-height);
-
-    padding: 22px 18px 30px;
+  .taskflow-navbar {
+    left: 0;
   }
 
-  .page-inner {
-    min-height:
-      calc(
-        100vh - var(--navbar-height) - 52px
-      );
-  }
-
-  .page-wrapper {
-    padding: 22px;
-
-    border-radius: 20px;
-  }
 }
 
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-  .page-content {
-    padding:
-      18px
-      14px
-      28px;
-  }
-
-  .page-wrapper {
-    padding: 18px;
-
-    border-radius: 18px;
-  }
-}
-
-
-/* =========================================================
-   PAGE ANIMATION
-========================================================= */
-
-@keyframes pageEnter {
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0);
-  }
-}
-
-
-/* =========================================================
-   BACKGROUND ANIMATIONS
-========================================================= */
-
-@keyframes layoutGlowOne {
-  0% {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-  }
-
-  50% {
-    transform:
-      translate3d(70px, 50px, 0)
-      scale(1.1);
-  }
-
-  100% {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-  }
-}
-
-@keyframes layoutGlowTwo {
-  0% {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-  }
-
-  50% {
-    transform:
-      translate3d(-60px, -50px, 0)
-      scale(1.08);
-  }
-
-  100% {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-  }
-}
-
-
-/* =========================================================
-   REDUCE MOTION
-========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .layout::before,
-  .layout::after,
-  .page-content {
-    animation: none;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
   }
 
-  .main-content {
-    transition: none;
-  }
 }
