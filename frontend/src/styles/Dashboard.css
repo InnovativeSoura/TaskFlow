@@ -98,35 +98,18 @@
 .dashboard-main {
   position: relative;
 
-  /*
-    IMPORTANT FIX
-
-    Do NOT use width: 70%.
-
-    The dashboard needs to occupy the available content
-    area next to the sidebar instead of arbitrarily using
-    70% of the viewport.
-  */
   width: 100%;
-
-  min-width: 0;
-
   min-height: 100vh;
 
   /*
-    TOP:
-    96px guarantees the hero starts BELOW the navbar.
-
-    LEFT / RIGHT:
-    Gives the dashboard breathing room.
-
-    BOTTOM:
-    Prevents the final cards from touching the screen edge.
+    IMPORTANT:
+    Do NOT use overflow-y: auto here.
+    The browser/page should handle vertical scrolling.
   */
-  padding:
-    var(--dashboard-top-space)
-    38px
-    60px;
+  overflow-x: hidden;
+  overflow-y: visible;
+
+  padding: 34px 38px 55px;
 
   color: var(--dash-text);
 
@@ -148,9 +131,21 @@
       #060c17 100%
     );
 
-  overflow-x: hidden;
+  /*
+    Prevent the dashboard from creating
+    its own independent scrollbar.
+  */
+  scrollbar-width: none;
 }
 
+
+/* Chrome / Edge / Safari */
+
+.dashboard-main::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
 
 /* =========================================================
    BACKGROUND GLOW
