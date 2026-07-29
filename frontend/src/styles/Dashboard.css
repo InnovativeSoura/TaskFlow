@@ -2240,7 +2240,7 @@
   }
 
   .dashboard-main {
-    padding-top: calc(var(--dashboard-navbar-height) + 28px);
+    padding-top: calc(var(--dashboard-navbar-height) + 58px);
     padding-left: 48px;
     padding-right: 48px;
     padding-bottom: 65px;
@@ -2264,7 +2264,7 @@
 
 @media (max-width: 1400px) {
   .dashboard-main {
-    padding-top: calc(var(--dashboard-navbar-height) + 28px);
+    padding-top: calc(var(--dashboard-navbar-height) + 58px);
 
     padding-right: 30px;
     padding-left: 30px;
@@ -2296,7 +2296,7 @@
 @media (max-width: 1100px) {
   .dashboard-main {
     padding-top: calc(
-    var(--dashboard-navbar-height) + 28px);
+    var(--dashboard-navbar-height) + 58px);
 
     padding-right: 26px;
     padding-left: 26px;
