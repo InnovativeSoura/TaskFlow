@@ -1,20 +1,71 @@
+// src/components/StatCard.jsx
+
 import { motion } from "framer-motion";
 
-function StatCard({ title, value }) {
+const StatCard = ({
+  title,
+  value,
+  icon,
+  color = "blue",
+  subtitle,
+  trend,
+}) => {
   return (
     <motion.div
-      whileHover={{ scale: 1.03 }}
-      className="bg-slate-900 border border-slate-800 rounded-3xl p-6"
+      className={`stat-card stat-card-${color}`}
+      initial={{
+        opacity: 0,
+        y: 18,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      whileHover={{
+        y: -5,
+        scale: 1.01,
+      }}
+      transition={{
+        duration: 0.3,
+      }}
     >
-      <p className="text-slate-400">
-        {title}
-      </p>
+      {/* Decorative glow */}
+      <div className="stat-card-glow" />
 
-      <h2 className="text-4xl font-bold mt-4">
+      {/* Top row */}
+      <div className="stat-card-top">
+        <div className="stat-card-title">
+          {title}
+        </div>
+
+        {icon && (
+          <div className="stat-card-icon">
+            {icon}
+          </div>
+        )}
+      </div>
+
+      {/* Value */}
+      <div className="stat-card-value">
         {value}
-      </h2>
+      </div>
+
+      {/* Bottom information */}
+      <div className="stat-card-bottom">
+        {subtitle && (
+          <span className="stat-card-subtitle">
+            {subtitle}
+          </span>
+        )}
+
+        {trend && (
+          <span className="stat-card-trend">
+            {trend}
+          </span>
+        )}
+      </div>
     </motion.div>
   );
-}
+};
 
 export default StatCard;

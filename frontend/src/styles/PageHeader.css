@@ -1,31 +1,152 @@
-.page-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+/* =========================================================
+   TASKFLOW PAGE HEADER
+========================================================= */
+
+.page-header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 22px;
+
+  position: relative;
+  z-index: 2;
 }
 
-.page-header h1{
-font-size:34px;
-margin-bottom:8px;
-color:#111827;
+.page-header-content {
+  min-width: 0;
 }
 
-.page-header p{
-color:#6b7280;
+.page-header-eyebrow {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 9px;
+
+  color: #7c8aa5;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-.primary-btn{
-padding:12px 22px;
-border:none;
-border-radius:10px;
-background:#2563eb;
-color:white;
-cursor:pointer;
-font-weight:600;
-transition:.3s;
+.page-header-status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #4f8cff;
+
+  box-shadow:
+    0 0 0 4px
+      rgba(79, 140, 255, 0.12),
+    0 0 12px
+      rgba(79, 140, 255, 0.35);
 }
 
-.primary-btn:hover{
-background:#1d4ed8;
+.page-header h1 {
+  margin: 0;
+
+  color: #f8fafc;
+
+  font-size: clamp(26px, 2.2vw, 36px);
+
+  line-height: 1.15;
+
+  font-weight: 750;
+
+  letter-spacing: -0.035em;
+}
+
+.page-header p {
+  margin: 8px 0 0;
+
+  max-width: 650px;
+
+  color: #8290aa;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.page-header-action {
+  flex-shrink: 0;
+
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 11px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #5b8cff,
+      #7657ff
+    );
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px
+      rgba(79, 140, 255, 0.2);
+
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.page-header-action:hover {
+  box-shadow:
+    0 14px 32px
+      rgba(79, 140, 255, 0.3);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .page-header-action {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 12px;
+  }
 }

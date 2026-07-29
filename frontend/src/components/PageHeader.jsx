@@ -1,3 +1,7 @@
+// src/components/PageHeader.jsx
+
+import { motion } from "framer-motion";
+
 import "../styles/PageHeader.css";
 
 const PageHeader = ({
@@ -7,26 +11,55 @@ const PageHeader = ({
   onClick,
 }) => {
   return (
-    <div className="page-header">
+    <motion.div
+      className="page-header"
+      initial={{
+        opacity: 0,
+        y: -15,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        duration: 0.45,
+      }}
+    >
+      <div className="page-header-content">
 
-      <div>
+        <div className="page-header-eyebrow">
+          <span className="page-header-status-dot" />
+          WORKSPACE OVERVIEW
+        </div>
 
-        <h1>{title}</h1>
+        <h1>
+          {title}
+        </h1>
 
-        {subtitle && <p>{subtitle}</p>}
+        {subtitle && (
+          <p>
+            {subtitle}
+          </p>
+        )}
 
       </div>
 
       {buttonText && (
-        <button
-          className="primary-btn"
+        <motion.button
+          type="button"
+          className="page-header-action"
           onClick={onClick}
+          whileHover={{
+            y: -2,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
         >
           {buttonText}
-        </button>
+        </motion.button>
       )}
-
-    </div>
+    </motion.div>
   );
 };
 

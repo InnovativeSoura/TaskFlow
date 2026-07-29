@@ -1,4 +1,9 @@
-import { FaSearch, FaTimes } from "react-icons/fa";
+// src/components/SearchBar.jsx
+
+import {
+  FaSearch,
+  FaTimes,
+} from "react-icons/fa";
 
 import "../styles/SearchBar.css";
 
@@ -27,6 +32,7 @@ const SearchBar = ({
 
   return (
     <div className="search-container">
+
       <FaSearch className="search-icon" />
 
       <input
@@ -50,9 +56,9 @@ const SearchBar = ({
           <FaTimes />
         </button>
       )}
+
     </div>
   );
 };
 
 export default SearchBar;
-
