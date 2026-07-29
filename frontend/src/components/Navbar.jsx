@@ -39,14 +39,20 @@ import "../styles/Navbar.css";
 /* =========================================================
    TASKFLOW PREMIUM NAVBAR
 
-   IMPORTANT
+   SIDEBAR BEHAVIOUR
    ---------------------------------------------------------
-   - Sidebar collapse/expand is controlled ONLY by
-     Sidebar.jsx through the TaskFlow logo.
-   - Navbar does NOT receive sidebarOpen.
-   - Navbar does NOT receive setSidebarOpen.
-   - Navbar does NOT contain a sidebar hamburger.
-   - Dashboard search remains inside Dashboard.jsx.
+   Navbar listens to:
+
+   taskflow-sidebar-change
+
+   emitted by Sidebar.jsx.
+
+   This allows Navbar to automatically adjust when the
+   sidebar changes between:
+
+   Expanded  -> 260px
+   Collapsed -> 76px
+   Mobile    -> 0px / 260px
 ========================================================= */
 
 const Navbar = () => {
@@ -57,18 +63,75 @@ const Navbar = () => {
 
   const user = auth?.user;
 
-  /*
-    Defensive logout reference.
-
-    This prevents the navbar from directly trying to call
-    something that is undefined or not a function.
-  */
   const logout =
     typeof auth?.logout === "function"
       ? auth.logout
       : null;
 
   const menuRef = useRef(null);
+
+  /* =========================================================
+     SIDEBAR STATE
+  ========================================================= */
+
+  const [
+    sidebarCollapsed,
+    setSidebarCollapsed,
+  ] = useState(
+    typeof document !== "undefined"
+      ? document.body.classList.contains(
+          "sidebar-collapsed"
+        )
+      : false
+  );
+
+  const [
+    sidebarWidth,
+    setSidebarWidth,
+  ] = useState(
+    typeof window !== "undefined"
+      ? getComputedStyle(
+          document.documentElement
+        ).getPropertyValue(
+          "--taskflow-sidebar-width"
+        ) || "260px"
+      : "260px"
+  );
+
+  /* =========================================================
+     LISTEN FOR SIDEBAR CHANGES
+  ========================================================= */
+
+  useEffect(() => {
+    const handleSidebarChange = (
+      event
+    ) => {
+      const detail =
+        event.detail || {};
+
+      setSidebarCollapsed(
+        Boolean(
+          detail.collapsed
+        )
+      );
+
+      setSidebarWidth(
+        `${detail.width ?? 260}px`
+      );
+    };
+
+    window.addEventListener(
+      "taskflow-sidebar-change",
+      handleSidebarChange
+    );
+
+    return () => {
+      window.removeEventListener(
+        "taskflow-sidebar-change",
+        handleSidebarChange
+      );
+    };
+  }, []);
 
   /* =========================================================
      PROFILE MENU
@@ -89,28 +152,39 @@ const Navbar = () => {
   ] = useState(false);
 
   /* =========================================================
-     THEME INITIALIZATION
+     THEME
   ========================================================= */
 
   const getInitialTheme = () => {
     try {
       const savedTheme =
-        localStorage.getItem("theme");
+        localStorage.getItem(
+          "theme"
+        );
 
-      if (savedTheme === "dark") {
+      if (
+        savedTheme ===
+        "dark"
+      ) {
         return true;
       }
 
-      if (savedTheme === "light") {
+      if (
+        savedTheme ===
+        "light"
+      ) {
         return false;
       }
 
       if (
-        typeof window !== "undefined" &&
+        typeof window !==
+          "undefined" &&
         window.matchMedia &&
-        window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches
+        window
+          .matchMedia(
+            "(prefers-color-scheme: dark)"
+          )
+          .matches
       ) {
         return true;
       }
@@ -127,10 +201,12 @@ const Navbar = () => {
   const [
     darkMode,
     setDarkMode,
-  ] = useState(getInitialTheme);
+  ] = useState(
+    getInitialTheme
+  );
 
   /* =========================================================
-     APPLY GLOBAL THEME
+     APPLY THEME
   ========================================================= */
 
   useEffect(() => {
@@ -196,33 +272,50 @@ const Navbar = () => {
   }, [darkMode]);
 
   /* =========================================================
-     SYNC THEME FROM OTHER TABS / COMPONENTS
+     SYNC THEME
   ========================================================= */
 
   useEffect(() => {
-    const handleStorage = (event) => {
-      if (event.key !== "theme") {
+    const handleStorage = (
+      event
+    ) => {
+      if (
+        event.key !==
+        "theme"
+      ) {
         return;
       }
 
-      if (event.newValue === "dark") {
+      if (
+        event.newValue ===
+        "dark"
+      ) {
         setDarkMode(true);
       }
 
-      if (event.newValue === "light") {
+      if (
+        event.newValue ===
+        "light"
+      ) {
         setDarkMode(false);
       }
     };
 
-    const handleThemeChange = (event) => {
+    const handleThemeChange = (
+      event
+    ) => {
       const theme =
         event.detail?.theme;
 
-      if (theme === "dark") {
+      if (
+        theme === "dark"
+      ) {
         setDarkMode(true);
       }
 
-      if (theme === "light") {
+      if (
+        theme === "light"
+      ) {
         setDarkMode(false);
       }
     };
@@ -251,7 +344,7 @@ const Navbar = () => {
   }, []);
 
   /* =========================================================
-     CLOSE PROFILE MENU WHEN CLICKING OUTSIDE
+     CLOSE PROFILE MENU OUTSIDE
   ========================================================= */
 
   useEffect(() => {
@@ -264,7 +357,9 @@ const Navbar = () => {
           event.target
         )
       ) {
-        setShowProfileMenu(false);
+        setShowProfileMenu(
+          false
+        );
       }
     };
 
@@ -282,13 +377,18 @@ const Navbar = () => {
   }, []);
 
   /* =========================================================
-     CLOSE MENUS WHEN ROUTE CHANGES
+     ROUTE CHANGE
   ========================================================= */
 
   useEffect(() => {
-    setShowProfileMenu(false);
+    setShowProfileMenu(
+      false
+    );
+
     setMobileMenu(false);
-  }, [location.pathname]);
+  }, [
+    location.pathname,
+  ]);
 
   /* =========================================================
      USER INITIALS
@@ -303,7 +403,10 @@ const Navbar = () => {
           name?.[0] || ""
       )
       ?.join("")
-      ?.substring(0, 2)
+      ?.substring(
+        0,
+        2
+      )
       ?.toUpperCase() || "TF";
 
   /* =========================================================
@@ -312,22 +415,28 @@ const Navbar = () => {
 
   const toggleTheme = () => {
     setDarkMode(
-      (previous) => !previous
+      (previous) =>
+        !previous
     );
   };
 
   /* =========================================================
-     NAVIGATION HELPER
+     NAVIGATION
   ========================================================= */
 
-  const handleNavigate = (path) => {
+  const handleNavigate = (
+    path
+  ) => {
     if (!path) {
       return;
     }
 
     navigate(path);
 
-    setShowProfileMenu(false);
+    setShowProfileMenu(
+      false
+    );
+
     setMobileMenu(false);
   };
 
@@ -335,40 +444,49 @@ const Navbar = () => {
      LOGOUT
   ========================================================= */
 
-  const handleLogout = async () => {
-    try {
-      if (typeof logout === "function") {
-        await logout();
+  const handleLogout =
+    async () => {
+      try {
+        if (
+          typeof logout ===
+          "function"
+        ) {
+          await logout();
+        }
+      } catch (error) {
+        console.error(
+          "Logout error:",
+          error
+        );
       }
-    } catch (error) {
-      console.error(
-        "Logout error:",
-        error
-      );
-    }
 
-    try {
-      localStorage.removeItem(
-        "token"
+      try {
+        localStorage.removeItem(
+          "token"
+        );
+
+        localStorage.removeItem(
+          "user"
+        );
+      } catch (error) {
+        console.warn(
+          "Unable to clear local storage:",
+          error
+        );
+      }
+
+      setShowProfileMenu(
+        false
       );
 
-      localStorage.removeItem(
-        "user"
+      setMobileMenu(
+        false
       );
-    } catch (error) {
-      console.warn(
-        "Unable to clear local storage:",
-        error
-      );
-    }
 
-    setShowProfileMenu(false);
-    setMobileMenu(false);
-
-    navigate("/", {
-      replace: true,
-    });
-  };
+      navigate("/", {
+        replace: true,
+      });
+    };
 
   /* =========================================================
      RENDER
@@ -380,11 +498,18 @@ const Navbar = () => {
         darkMode
           ? "navbar-dark"
           : "navbar-light"
+      } ${
+        sidebarCollapsed
+          ? "navbar-sidebar-collapsed"
+          : "navbar-sidebar-expanded"
       }`}
+      style={{
+        "--current-sidebar-width":
+          sidebarWidth,
+      }}
     >
-
       {/* =====================================================
-          LEFT SECTION
+          LEFT
       ===================================================== */}
 
       <div className="navbar-left">
@@ -396,7 +521,6 @@ const Navbar = () => {
               : ""
           }`}
         >
-
           {/* DASHBOARD */}
 
           <NavLink
@@ -407,7 +531,9 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(false)
+              setMobileMenu(
+                false
+              )
             }
           >
             <FaHome />
@@ -427,7 +553,9 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(false)
+              setMobileMenu(
+                false
+              )
             }
           >
             <FaProjectDiagram />
@@ -447,7 +575,9 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(false)
+              setMobileMenu(
+                false
+              )
             }
           >
             <FaTasks />
@@ -467,7 +597,9 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(false)
+              setMobileMenu(
+                false
+              )
             }
           >
             <FaUsers />
@@ -478,17 +610,16 @@ const Navbar = () => {
           </NavLink>
 
         </nav>
+
       </div>
 
       {/* =====================================================
-          RIGHT SECTION
+          RIGHT
       ===================================================== */}
 
       <div className="navbar-right">
 
-        {/* =================================================
-            THEME TOGGLE
-        ================================================= */}
+        {/* THEME */}
 
         <motion.button
           type="button"
@@ -507,7 +638,9 @@ const Navbar = () => {
               ? "Switch to light mode"
               : "Switch to dark mode"
           }
-          onClick={toggleTheme}
+          onClick={
+            toggleTheme
+          }
           whileHover={{
             scale: 1.06,
             rotate: darkMode
@@ -541,9 +674,6 @@ const Navbar = () => {
                   rotate: 90,
                   scale: 0.5,
                 }}
-                transition={{
-                  duration: 0.22,
-                }}
               >
                 <FaSun />
               </motion.span>
@@ -566,9 +696,6 @@ const Navbar = () => {
                   rotate: -90,
                   scale: 0.5,
                 }}
-                transition={{
-                  duration: 0.22,
-                }}
               >
                 <FaMoon />
               </motion.span>
@@ -576,15 +703,11 @@ const Navbar = () => {
           </AnimatePresence>
         </motion.button>
 
-        {/* =================================================
-            NOTIFICATIONS
-        ================================================= */}
+        {/* NOTIFICATIONS */}
 
         <NotificationBell />
 
-        {/* =================================================
-            SETTINGS
-        ================================================= */}
+        {/* SETTINGS */}
 
         <motion.button
           type="button"
@@ -592,7 +715,9 @@ const Navbar = () => {
           aria-label="Settings"
           title="Settings"
           onClick={() =>
-            handleNavigate("/settings")
+            handleNavigate(
+              "/settings"
+            )
           }
           whileHover={{
             scale: 1.05,
@@ -605,15 +730,12 @@ const Navbar = () => {
           <FaCog />
         </motion.button>
 
-        {/* =================================================
-            PROFILE
-        ================================================= */}
+        {/* PROFILE */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
-
           <motion.button
             type="button"
             className={`profile-trigger ${
@@ -654,9 +776,7 @@ const Navbar = () => {
             )}
           </motion.button>
 
-          {/* =================================================
-              PROFILE DROPDOWN
-          ================================================= */}
+          {/* PROFILE DROPDOWN */}
 
           <AnimatePresence>
             {showProfileMenu && (
@@ -686,14 +806,15 @@ const Navbar = () => {
                   ease: "easeOut",
                 }}
               >
-
-                {/* DROPDOWN HEADER */}
+                {/* HEADER */}
 
                 <div className="dropdown-header">
 
                   {user?.avatar ? (
                     <img
-                      src={user.avatar}
+                      src={
+                        user.avatar
+                      }
                       alt=""
                       className="dropdown-avatar"
                     />
@@ -774,16 +895,9 @@ const Navbar = () => {
               </motion.div>
             )}
           </AnimatePresence>
-
         </div>
 
-        {/* =================================================
-            MOBILE TOP NAVIGATION
-
-            IMPORTANT:
-            This controls ONLY the navbar links.
-            It does NOT control Sidebar.jsx.
-        ================================================= */}
+        {/* MOBILE NAV */}
 
         <motion.button
           type="button"

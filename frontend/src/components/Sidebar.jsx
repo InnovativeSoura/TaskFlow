@@ -27,11 +27,20 @@ import {
   FaSignOutAlt,
   FaTimes,
   FaChevronRight,
+  FaChevronLeft,
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Sidebar.css";
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const SIDEBAR_EXPANDED_WIDTH = 260;
+const SIDEBAR_COLLAPSED_WIDTH = 76;
+const MOBILE_BREAKPOINT = 768;
 
 /* =========================================================
    NAVIGATION
@@ -97,10 +106,6 @@ const Sidebar = ({
 
   /* =======================================================
      INTERNAL FALLBACK STATE
-
-     This prevents:
-     "TypeError: t is not a function"
-     if the parent does not provide the setter correctly.
   ======================================================= */
 
   const [
@@ -125,15 +130,72 @@ const Sidebar = ({
   };
 
   /* =======================================================
-     MOBILE
+     MOBILE STATE
   ======================================================= */
 
-  const [isMobile, setIsMobile] =
-    useState(
-      typeof window !== "undefined"
-        ? window.innerWidth <= 768
-        : false
+  const [
+    isMobile,
+    setIsMobile,
+  ] = useState(
+    typeof window !== "undefined"
+      ? window.innerWidth <= MOBILE_BREAKPOINT
+      : false
+  );
+
+  /* =======================================================
+     PUBLISH SIDEBAR STATE
+     
+     This allows Navbar/MainLayout/CSS to react to the
+     sidebar width without requiring another context.
+  ======================================================= */
+
+  useEffect(() => {
+    const width = isMobile
+      ? sidebarOpen
+        ? SIDEBAR_EXPANDED_WIDTH
+        : 0
+      : sidebarOpen
+      ? SIDEBAR_EXPANDED_WIDTH
+      : SIDEBAR_COLLAPSED_WIDTH;
+
+    document.documentElement.style.setProperty(
+      "--taskflow-sidebar-width",
+      `${width}px`
     );
+
+    document.body.classList.toggle(
+      "sidebar-expanded",
+      !isMobile && sidebarOpen
+    );
+
+    document.body.classList.toggle(
+      "sidebar-collapsed",
+      !isMobile && !sidebarOpen
+    );
+
+    document.body.classList.toggle(
+      "sidebar-mobile-open",
+      isMobile && sidebarOpen
+    );
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "taskflow-sidebar-change",
+        {
+          detail: {
+            open: sidebarOpen,
+            collapsed:
+              !sidebarOpen,
+            width,
+            mobile: isMobile,
+          },
+        }
+      )
+    );
+  }, [
+    sidebarOpen,
+    isMobile,
+  ]);
 
   /* =======================================================
      RESPONSIVE
@@ -142,14 +204,10 @@ const Sidebar = ({
   useEffect(() => {
     const handleResize = () => {
       const mobile =
-        window.innerWidth <= 768;
+        window.innerWidth <= MOBILE_BREAKPOINT;
 
       setIsMobile(mobile);
 
-      /*
-       * When moving from desktop to mobile,
-       * keep the sidebar closed until opened.
-       */
       if (mobile) {
         setSidebarOpen(false);
       }
@@ -183,26 +241,24 @@ const Sidebar = ({
           name?.[0] || ""
       )
       ?.join("")
-      ?.substring(0, 2)
+      ?.substring(
+        0,
+        2
+      )
       ?.toUpperCase() || "TF";
 
   /* =======================================================
-     TF LOGO — DESKTOP TOGGLE
+     SIDEBAR TOGGLE
   ======================================================= */
 
-  const handleLogoClick = () => {
+  const toggleSidebar = () => {
     if (isMobile) {
-      /*
-       * On mobile the TF logo opens the sidebar.
-       */
-      setSidebarOpen(true);
+      setSidebarOpen(
+        !sidebarOpen
+      );
       return;
     }
 
-    /*
-     * Desktop:
-     * TF logo toggles expanded / collapsed.
-     */
     setSidebarOpen(
       !sidebarOpen
     );
@@ -236,7 +292,12 @@ const Sidebar = ({
 
   const handleLogout = async () => {
     try {
-      await logout();
+      if (
+        typeof logout ===
+        "function"
+      ) {
+        await logout();
+      }
     } catch (error) {
       console.error(
         "Logout error:",
@@ -256,6 +317,10 @@ const Sidebar = ({
       replace: true,
     });
   };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <>
@@ -301,11 +366,11 @@ const Sidebar = ({
         animate={{
           width: isMobile
             ? sidebarOpen
-              ? 260
+              ? SIDEBAR_EXPANDED_WIDTH
               : 0
             : sidebarOpen
-            ? 260
-            : 76,
+            ? SIDEBAR_EXPANDED_WIDTH
+            : SIDEBAR_COLLAPSED_WIDTH,
         }}
         transition={{
           duration: 0.28,
@@ -317,9 +382,8 @@ const Sidebar = ({
           ],
         }}
       >
-
         {/* =================================================
-            HEADER / TF LOGO
+            HEADER
         ================================================= */}
 
         <div className="sidebar-header">
@@ -328,25 +392,28 @@ const Sidebar = ({
             type="button"
             className="sidebar-brand-button"
             onClick={
-              handleLogoClick
+              toggleSidebar
             }
             title={
               isMobile
-                ? "Open TaskFlow sidebar"
+                ? sidebarOpen
+                  ? "Close sidebar"
+                  : "Open sidebar"
                 : sidebarOpen
                 ? "Collapse sidebar"
                 : "Expand sidebar"
             }
             aria-label={
               isMobile
-                ? "Open TaskFlow sidebar"
+                ? sidebarOpen
+                  ? "Close sidebar"
+                  : "Open sidebar"
                 : sidebarOpen
                 ? "Collapse sidebar"
                 : "Expand sidebar"
             }
           >
-
-            {/* TF LOGO */}
+            {/* LOGO */}
 
             <motion.div
               className="brand-logo"
@@ -360,7 +427,7 @@ const Sidebar = ({
               <span>TF</span>
             </motion.div>
 
-            {/* BRAND TEXT */}
+            {/* BRAND */}
 
             <AnimatePresence>
               {sidebarOpen && (
@@ -393,6 +460,31 @@ const Sidebar = ({
               )}
             </AnimatePresence>
 
+            {/* DESKTOP COLLAPSE ICON */}
+
+            {!isMobile && (
+              <AnimatePresence>
+                {sidebarOpen && (
+                  <motion.span
+                    className="sidebar-collapse-icon"
+                    initial={{
+                      opacity: 0,
+                      scale: 0.8,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.8,
+                    }}
+                  >
+                    <FaChevronLeft />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            )}
           </button>
 
           {/* MOBILE CLOSE */}
@@ -440,7 +532,6 @@ const Sidebar = ({
               : undefined
           }
         >
-
           <div className="sidebar-avatar-wrapper">
 
             {user?.avatar ? (
@@ -502,7 +593,6 @@ const Sidebar = ({
               <FaChevronRight />
             </motion.span>
           )}
-
         </NavLink>
 
         {/* =================================================
@@ -535,7 +625,10 @@ const Sidebar = ({
         <nav className="sidebar-menu">
 
           {menuItems.map(
-            (item, index) => (
+            (
+              item,
+              index
+            ) => (
               <motion.div
                 key={item.path}
                 initial={{
@@ -551,7 +644,6 @@ const Sidebar = ({
                     index * 0.025,
                 }}
               >
-
                 <NavLink
                   to={item.path}
                   title={
@@ -568,7 +660,6 @@ const Sidebar = ({
                       : ""
                   }
                 >
-
                   <span className="sidebar-icon">
                     {item.icon}
                   </span>
@@ -598,9 +689,7 @@ const Sidebar = ({
                   {sidebarOpen && (
                     <span className="sidebar-active-indicator" />
                   )}
-
                 </NavLink>
-
               </motion.div>
             )
           )}
@@ -625,7 +714,6 @@ const Sidebar = ({
                 : undefined
             }
           >
-
             <span className="logout-icon">
               <FaSignOutAlt />
             </span>
@@ -650,11 +738,9 @@ const Sidebar = ({
                 </motion.span>
               )}
             </AnimatePresence>
-
           </button>
 
         </div>
-
       </motion.aside>
     </>
   );
