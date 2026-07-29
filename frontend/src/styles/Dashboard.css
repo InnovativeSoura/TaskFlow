@@ -2272,38 +2272,21 @@
 
 /* =========================================================
    SCROLLBAR
+   DASHBOARD USES THE PAGE SCROLLBAR
 ========================================================= */
 
 .dashboard-main {
-  scrollbar-width: thin;
+  overflow-x: hidden;
+  overflow-y: visible;
 
-  scrollbar-color:
-    #26344d
-    transparent;
+  scrollbar-width: none;
 }
-
 
 .dashboard-main::-webkit-scrollbar {
-  width: 7px;
+  display: none;
+  width: 0;
+  height: 0;
 }
-
-
-.dashboard-main::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-
-.dashboard-main::-webkit-scrollbar-thumb {
-  background: #26344d;
-
-  border-radius: 20px;
-}
-
-
-.dashboard-main::-webkit-scrollbar-thumb:hover {
-  background: #344564;
-}
-
 
 /* =========================================================
    ANIMATIONS
