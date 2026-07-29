@@ -73,7 +73,7 @@
   position: relative;
 
   width: 70%;
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - 25px);
 
   /*
     IMPORTANT:
