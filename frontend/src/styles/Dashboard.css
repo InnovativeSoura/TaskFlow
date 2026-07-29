@@ -1,7 +1,8 @@
 /* =========================================================
-   TASKFLOW — DASHBOARD
-   PREMIUM / SPACED / RESPONSIVE LAYOUT
-   Sidebar + Navbar are intentionally NOT modified
+   TASKFLOW DASHBOARD — LAYOUT FIX
+   IMPORTANT:
+   Sidebar + Navbar are controlled by their own CSS.
+   Dashboard occupies ONLY the remaining page area.
 ========================================================= */
 
 :root {
@@ -29,13 +30,6 @@
   --dash-purple: #8b5cf6;
 
   --dash-radius: 18px;
-
-  /*
-    IMPORTANT:
-    This creates guaranteed clearance below the
-    fixed/sticky navbar.
-  */
-  --dashboard-top-space: 150px;
 
   --dash-shadow:
     0 15px 45px rgba(0, 0, 0, 0.22);
@@ -73,43 +67,97 @@
 
 
 /* =========================================================
-   DASHBOARD PAGE WRAPPER
+   IMPORTANT GLOBAL OVERFLOW FIX
 ========================================================= */
 
-.dashboard-page {
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   TASKFLOW PAGE CONTENT
+========================================================= */
+
+.taskflow-page-content {
   position: relative;
 
   width: 100%;
-  min-height: 100vh;
+  min-width: 0;
 
   margin: 0;
   padding: 0;
-
-  background: var(--dash-bg);
 
   overflow-x: hidden;
 }
 
 
 /* =========================================================
-   MAIN DASHBOARD AREA
+   DASHBOARD PAGE
+========================================================= */
+
+.dashboard-page {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   MAIN DASHBOARD AREA — FIXED
 ========================================================= */
 
 .dashboard-main {
   position: relative;
 
+  /*
+    DO NOT USE width: 70%.
+
+    The page content already sits beside the sidebar.
+    100% makes the dashboard use exactly the available area.
+  */
   width: 100%;
-  min-height: 100vh;
+
+  min-width: 0;
+
+  min-height: calc(100vh - 72px);
+
+  margin: 0;
 
   /*
-    IMPORTANT:
-    Do NOT use overflow-y: auto here.
-    The browser/page should handle vertical scrolling.
-  */
-  overflow-x: hidden;
-  overflow-y: visible;
+    TOP:
+    Gives enough space below the navbar.
 
-  padding: 34px 38px 55px;
+    LEFT / RIGHT:
+    Creates the premium breathing room you wanted.
+
+    BOTTOM:
+    Prevents the final cards from touching the screen edge.
+  */
+  padding:
+    34px
+    34px
+    60px;
 
   color: var(--dash-text);
 
@@ -131,24 +179,13 @@
       #060c17 100%
     );
 
-  /*
-    Prevent the dashboard from creating
-    its own independent scrollbar.
-  */
-  scrollbar-width: none;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
-
-/* Chrome / Edge / Safari */
-
-.dashboard-main::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
 
 /* =========================================================
-   BACKGROUND GLOW
+   DASHBOARD BACKGROUND GLOW
 ========================================================= */
 
 .dashboard-main::before {
@@ -210,18 +247,17 @@
 
   width: 100%;
 
-  /*
-    Prevents the dashboard from becoming excessively wide
-    on large desktop screens.
-  */
+  min-width: 0;
+
   max-width: 1760px;
 
-  margin: 0 auto;
+  margin:
+    0 auto;
 
   /*
-    Extra vertical breathing room.
+    Extra safety against grid/flex overflow.
   */
-  padding-top: 6px;
+  overflow: visible;
 }
 
 
@@ -236,27 +272,33 @@
 
   width: 100%;
 
+  min-width: 0;
+
   /*
-    Extra separation from navbar and next section.
+    IMPORTANT:
+    This ensures the Welcome section starts below
+    the navbar instead of hiding behind it.
   */
-  margin-top: 10px;
-  margin-bottom: 28px;
+  margin-top: 4px;
+
+  margin-bottom: 24px;
 }
 
 
 .dashboard-hero-content {
   position: relative;
 
-  min-height: 155px;
+  min-height: 150px;
 
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 35px;
 
-  padding: 34px 36px;
+  padding: 30px 32px;
 
   overflow: hidden;
 
@@ -311,7 +353,7 @@
   width: 280px;
   height: 2px;
 
-  left: 36px;
+  left: 32px;
   bottom: 0;
 
   background:
@@ -338,7 +380,7 @@
 
   gap: 8px;
 
-  margin-bottom: 11px;
+  margin-bottom: 10px;
 
   color: #8998b3;
 
@@ -411,7 +453,7 @@
 
   z-index: 2;
 
-  margin: 11px 0 0;
+  margin: 10px 0 0;
 
   color: #77869e;
 
@@ -536,9 +578,12 @@
 
   width: 100%;
 
+  min-width: 0;
+
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 20px;
@@ -553,6 +598,8 @@
   width: 330px;
 
   max-width: 100%;
+
+  min-width: 0;
 }
 
 
@@ -569,7 +616,6 @@
 
 .dashboard-search-wrapper .search-bar {
   width: 100%;
-
   height: 43px;
 
   padding: 0 40px;
@@ -707,6 +753,29 @@
 
 
 /* =========================================================
+   IMPORTANT GRID OVERFLOW PROTECTION
+========================================================= */
+
+.premium-stats-grid,
+.premium-analytics,
+.premium-two-column,
+.premium-activity-list,
+.premium-summary-grid {
+  width: 100%;
+  min-width: 0;
+}
+
+
+.premium-stats-grid > *,
+.premium-analytics > *,
+.premium-two-column > *,
+.premium-activity-list > *,
+.premium-summary-grid > * {
+  min-width: 0;
+}
+
+
+/* =========================================================
    STATISTICS
 ========================================================= */
 
@@ -801,6 +870,7 @@
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 10px;
@@ -824,33 +894,25 @@
 
 .stat-icon.blue {
   color: #76a7ff;
-
-  background:
-    rgba(59, 130, 246, 0.12);
+  background: rgba(59, 130, 246, 0.12);
 }
 
 
 .stat-icon.orange {
   color: #fbbf58;
-
-  background:
-    rgba(245, 158, 11, 0.12);
+  background: rgba(245, 158, 11, 0.12);
 }
 
 
 .stat-icon.green {
   color: #61e294;
-
-  background:
-    rgba(34, 197, 94, 0.12);
+  background: rgba(34, 197, 94, 0.12);
 }
 
 
 .stat-icon.purple {
   color: #aa91ff;
-
-  background:
-    rgba(139, 92, 246, 0.12);
+  background: rgba(139, 92, 246, 0.12);
 }
 
 
@@ -939,10 +1001,12 @@
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 35px;
 
+  min-width: 0;
   min-height: 125px;
 
   margin-bottom: 20px;
@@ -1227,10 +1291,6 @@
 }
 
 
-/* =========================================================
-   CARD HEADER
-========================================================= */
-
 .premium-card-header {
   position: relative;
 
@@ -1239,6 +1299,7 @@
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 15px;
@@ -1282,10 +1343,6 @@
 }
 
 
-/* =========================================================
-   RECHARTS
-========================================================= */
-
 .analytics-card .recharts-responsive-container {
   min-height: 220px;
 }
@@ -1319,7 +1376,7 @@
 
 
 /* =========================================================
-   GENERAL DASHBOARD CARDS
+   GENERAL CARDS
 ========================================================= */
 
 .dashboard-card {
@@ -1408,22 +1465,6 @@
   font-weight: 650;
 
   cursor: pointer;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-
-.view-all-btn:hover {
-  color: #b4baff;
-
-  border-color:
-    rgba(99, 102, 241, 0.28);
-
-  background:
-    rgba(99, 102, 241, 0.12);
 }
 
 
@@ -1439,6 +1480,8 @@
   display: flex;
 
   flex-direction: column;
+
+  min-width: 0;
 }
 
 
@@ -1485,17 +1528,13 @@
 
 .list-item-icon.project {
   color: #7ea7ff;
-
-  background:
-    rgba(59, 130, 246, 0.10);
+  background: rgba(59, 130, 246, 0.10);
 }
 
 
 .list-item-icon.task {
   color: #f5b84f;
-
-  background:
-    rgba(245, 158, 11, 0.10);
+  background: rgba(245, 158, 11, 0.10);
 }
 
 
@@ -1564,9 +1603,7 @@
 
   padding: 4px 8px;
 
-  border:
-    1px solid
-    transparent;
+  border: 1px solid transparent;
 
   border-radius: 20px;
 
@@ -1584,78 +1621,50 @@
 
 .planning {
   color: #8db7ff;
-
-  border-color:
-    rgba(59, 130, 246, 0.18);
-
-  background:
-    rgba(59, 130, 246, 0.09);
+  border-color: rgba(59, 130, 246, 0.18);
+  background: rgba(59, 130, 246, 0.09);
 }
 
 
 .active {
   color: #b59cff;
-
-  border-color:
-    rgba(139, 92, 246, 0.18);
-
-  background:
-    rgba(139, 92, 246, 0.09);
+  border-color: rgba(139, 92, 246, 0.18);
+  background: rgba(139, 92, 246, 0.09);
 }
 
 
 .completed {
   color: #6ee7a0;
-
-  border-color:
-    rgba(34, 197, 94, 0.18);
-
-  background:
-    rgba(34, 197, 94, 0.09);
+  border-color: rgba(34, 197, 94, 0.18);
+  background: rgba(34, 197, 94, 0.09);
 }
 
 
 .archived {
   color: #94a3b8;
-
-  border-color:
-    rgba(148, 163, 184, 0.12);
-
-  background:
-    rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.12);
+  background: rgba(148, 163, 184, 0.06);
 }
 
 
 .low {
   color: #7fb0ff;
-
-  border-color:
-    rgba(59, 130, 246, 0.18);
-
-  background:
-    rgba(59, 130, 246, 0.09);
+  border-color: rgba(59, 130, 246, 0.18);
+  background: rgba(59, 130, 246, 0.09);
 }
 
 
 .medium {
   color: #b49cff;
-
-  border-color:
-    rgba(139, 92, 246, 0.18);
-
-  background:
-    rgba(139, 92, 246, 0.09);
+  border-color: rgba(139, 92, 246, 0.18);
+  background: rgba(139, 92, 246, 0.09);
 }
 
 
 .high {
   color: #ff8585;
-
-  border-color:
-    rgba(239, 68, 68, 0.18);
-
-  background:
-    rgba(239, 68, 68, 0.09);
+  border-color: rgba(239, 68, 68, 0.18);
+  background: rgba(239, 68, 68, 0.09);
 }
 
 
@@ -1674,11 +1683,15 @@
 
   align-items: center;
   justify-content: center;
+
+  min-width: 0;
 }
 
 
 .premium-empty-state > * {
   width: 100%;
+
+  max-width: 100%;
 }
 
 
@@ -1828,18 +1841,6 @@
       rgba(23, 37, 61, 0.86),
       rgba(13, 25, 43, 0.86)
     );
-
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
-}
-
-
-.summary-box:hover {
-  transform: translateY(-3px);
-
-  border-color:
-    rgba(99, 102, 241, 0.22);
 }
 
 
@@ -1862,49 +1863,37 @@
 
 .summary-icon.blue {
   color: #75a5ff;
-
-  background:
-    rgba(59, 130, 246, 0.10);
+  background: rgba(59, 130, 246, 0.10);
 }
 
 
 .summary-icon.orange {
   color: #f5b84f;
-
-  background:
-    rgba(245, 158, 11, 0.10);
+  background: rgba(245, 158, 11, 0.10);
 }
 
 
 .summary-icon.green {
   color: #5fdf90;
-
-  background:
-    rgba(34, 197, 94, 0.10);
+  background: rgba(34, 197, 94, 0.10);
 }
 
 
 .summary-icon.red {
   color: #ff8585;
-
-  background:
-    rgba(239, 68, 68, 0.10);
+  background: rgba(239, 68, 68, 0.10);
 }
 
 
 .summary-icon.purple {
   color: #a78bfa;
-
-  background:
-    rgba(139, 92, 246, 0.10);
+  background: rgba(139, 92, 246, 0.10);
 }
 
 
 .summary-icon.dark {
   color: #8fa6c8;
-
-  background:
-    rgba(100, 116, 139, 0.10);
+  background: rgba(100, 116, 139, 0.10);
 }
 
 
@@ -2019,33 +2008,25 @@
 
 .activity-icon.blue {
   color: #72a3ff;
-
-  background:
-    rgba(59, 130, 246, 0.10);
+  background: rgba(59, 130, 246, 0.10);
 }
 
 
 .activity-icon.green {
   color: #62dc91;
-
-  background:
-    rgba(34, 197, 94, 0.10);
+  background: rgba(34, 197, 94, 0.10);
 }
 
 
 .activity-icon.orange {
   color: #f5b84f;
-
-  background:
-    rgba(245, 158, 11, 0.10);
+  background: rgba(245, 158, 11, 0.10);
 }
 
 
 .activity-icon.purple {
   color: #a78bfa;
-
-  background:
-    rgba(139, 92, 246, 0.10);
+  background: rgba(139, 92, 246, 0.10);
 }
 
 
@@ -2081,20 +2062,16 @@
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 30px;
 
+  min-width: 0;
   min-height: 130px;
 
-  /*
-    Extra space before final CTA.
-  */
-  margin-top: 4px;
+  margin-top: 2px;
 
-  /*
-    Extra bottom space is supplied by dashboard-main.
-  */
   padding: 27px 30px;
 
   overflow: hidden;
@@ -2144,6 +2121,8 @@
   position: relative;
 
   z-index: 2;
+
+  min-width: 0;
 }
 
 
@@ -2220,19 +2199,6 @@
   font-weight: 650;
 
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-.dashboard-final-cta button:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 15px 32px
-    rgba(99, 102, 241, 0.32);
 }
 
 
@@ -2246,6 +2212,7 @@
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   background: var(--dash-bg);
@@ -2271,22 +2238,14 @@
 
 
 /* =========================================================
-   SCROLLBAR
-   DASHBOARD USES THE PAGE SCROLLBAR
+   REMOVE DASHBOARD'S OWN SCROLLBAR
+   Browser/page should handle scrolling.
 ========================================================= */
 
 .dashboard-main {
-  overflow-x: hidden;
-  overflow-y: visible;
-
-  scrollbar-width: none;
+  scrollbar-width: auto;
 }
 
-.dashboard-main::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
 
 /* =========================================================
    ANIMATIONS
@@ -2296,13 +2255,11 @@
   0%,
   100% {
     opacity: 1;
-
     transform: scale(1);
   }
 
   50% {
     opacity: 0.55;
-
     transform: scale(0.85);
   }
 }
@@ -2326,13 +2283,9 @@
 @media (min-width: 1600px) {
   .dashboard-main {
     padding:
-      110px
+      40px
       48px
       70px;
-  }
-
-  .dashboard-content {
-    max-width: 1760px;
   }
 
   .premium-stats-grid,
@@ -2350,7 +2303,7 @@
 @media (max-width: 1400px) {
   .dashboard-main {
     padding:
-      100px
+      32px
       30px
       55px;
   }
@@ -2379,7 +2332,7 @@
 @media (max-width: 1100px) {
   .dashboard-main {
     padding:
-      96px
+      30px
       26px
       50px;
   }
@@ -2411,13 +2364,9 @@
 @media (max-width: 900px) {
   .dashboard-main {
     padding:
-      90px
+      28px
       20px
       45px;
-  }
-
-  .dashboard-hero {
-    margin-top: 8px;
   }
 
   .dashboard-hero-content {
@@ -2427,7 +2376,7 @@
 
     min-height: auto;
 
-    padding: 28px;
+    padding: 26px;
   }
 
   .dashboard-header-actions {
@@ -2464,15 +2413,9 @@
 @media (max-width: 700px) {
   .dashboard-main {
     padding:
-      84px
+      24px
       16px
       40px;
-  }
-
-  .dashboard-hero {
-    margin-top: 6px;
-
-    margin-bottom: 22px;
   }
 
   .dashboard-hero h1 {
@@ -2534,13 +2477,13 @@
 @media (max-width: 500px) {
   .dashboard-main {
     padding:
-      78px
+      20px
       12px
-      32px;
+      35px;
   }
 
   .dashboard-hero-content {
-    padding: 22px;
+    padding: 21px;
   }
 
   .dashboard-hero h1 {
@@ -2608,9 +2551,9 @@
 @media (max-width: 380px) {
   .dashboard-main {
     padding:
-      72px
+      18px
       10px
-      28px;
+      30px;
   }
 
   .dashboard-hero-content {
