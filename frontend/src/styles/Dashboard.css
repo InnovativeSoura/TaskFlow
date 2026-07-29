@@ -35,7 +35,7 @@
     This creates guaranteed clearance below the
     fixed/sticky navbar.
   */
-  --dashboard-top-space: 96px;
+  --dashboard-top-space: 105px;
 
   --dash-shadow:
     0 15px 45px rgba(0, 0, 0, 0.22);
