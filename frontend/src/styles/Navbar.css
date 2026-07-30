@@ -1,30 +1,25 @@
 /* =========================================================
-   TASKFLOW PREMIUM NAVBAR v2
+   TASKFLOW PREMIUM NAVBAR v3
 ========================================================= */
 
 :root{
 
     --navbar-height:72px;
 
-    --navbar-bg:
-        rgba(10,16,32,.82);
-
-    --navbar-light:
-        rgba(255,255,255,.90);
-
-    --glass-border:
-        rgba(255,255,255,.08);
-
-    --glass-light:
-        rgba(15,23,42,.08);
-
     --primary:#6D5DF6;
     --primary-light:#8B7BFF;
 
-    --success:#10b981;
+    --dark-bg:
+        rgba(11,18,32,.88);
 
-    --text:#ffffff;
-    --text-light:#94a3b8;
+    --light-bg:
+        rgba(255,255,255,.92);
+
+    --dark-border:
+        rgba(255,255,255,.08);
+
+    --light-border:
+        rgba(15,23,42,.08);
 
     --transition:
         .28s cubic-bezier(.4,0,.2,1);
@@ -43,10 +38,12 @@
     height:100%;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:0 34px;
+    padding:0 18px;
 
     box-sizing:border-box;
 
@@ -55,7 +52,6 @@
 
     transition:all var(--transition);
 
-    z-index:100;
 }
 
 /* =========================================================
@@ -64,13 +60,13 @@
 
 .navbar-dark{
 
-    background:var(--navbar-bg);
+    background:var(--dark-bg);
 
     border-bottom:
-        1px solid var(--glass-border);
+        1px solid var(--dark-border);
 
     box-shadow:
-        0 10px 40px rgba(0,0,0,.28);
+        0 10px 40px rgba(0,0,0,.30);
 
 }
 
@@ -80,10 +76,10 @@
 
 .navbar-light{
 
-    background:var(--navbar-light);
+    background:var(--light-bg);
 
     border-bottom:
-        1px solid var(--glass-light);
+        1px solid var(--light-border);
 
     box-shadow:
         0 10px 30px rgba(15,23,42,.08);
@@ -91,128 +87,22 @@
 }
 
 /* =========================================================
-   LEFT
+   LEFT SIDE
 ========================================================= */
 
 .navbar-left{
 
-    display:flex;
-
-    align-items:center;
-
-    gap:40px;
-
     flex:1;
 
-}
-
-/* =========================================================
-   BRAND
-========================================================= */
-
-.navbar-brand{
-
     display:flex;
 
     align-items:center;
 
-    gap:14px;
+    justify-content:flex-start;
 
-    cursor:pointer;
+    margin-left:0;
 
-    user-select:none;
-
-}
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-.brand-logo{
-
-    width:46px;
-    height:46px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:14px;
-
-    font-size:18px;
-    font-weight:800;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6D5DF6,
-            #8B7BFF
-        );
-
-    box-shadow:
-        0 8px 22px
-        rgba(109,93,246,.35);
-
-    transition:all var(--transition);
-
-}
-
-.brand-logo:hover{
-
-    transform:rotate(-5deg)
-              scale(1.05);
-
-}
-
-/* =========================================================
-   BRAND TEXT
-========================================================= */
-
-.brand-text{
-
-    display:flex;
-
-    flex-direction:column;
-
-    line-height:1.15;
-
-}
-
-.brand-text h2{
-
-    margin:0;
-
-    font-size:20px;
-
-    font-weight:700;
-
-    letter-spacing:.3px;
-
-}
-
-.navbar-dark .brand-text h2{
-
-    color:#fff;
-
-}
-
-.navbar-light .brand-text h2{
-
-    color:#0f172a;
-
-}
-
-.brand-text span{
-
-    font-size:12px;
-
-    font-weight:500;
-
-    color:#94a3b8;
-
-    letter-spacing:.4px;
+    padding-left:0;
 
 }
 
@@ -226,75 +116,79 @@
 
     align-items:center;
 
-    gap:8px;
+    justify-content:flex-start;
+
+    gap:14px;
+
+    margin:0;
+
+    padding:0;
 
 }
 
 /* =========================================================
-   LINK
+   DIVIDER
+========================================================= */
+
+.nav-divider{
+
+    color:#6b7280;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    user-select:none;
+
+}
+
+/* =========================================================
+   LINKS
 ========================================================= */
 
 .navbar-links a{
 
     position:relative;
 
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    height:46px;
-
-    padding:0 18px;
-
-    border-radius:14px;
-
     text-decoration:none;
 
-    font-size:14px;
+    font-size:15px;
 
     font-weight:600;
 
-    transition:all .25s ease;
+    padding:10px 2px;
+
+    transition:.25s;
 
 }
 
-/* =========================================================
-   DARK LINKS
-========================================================= */
+/* Dark */
 
 .navbar-dark .navbar-links a{
 
-    color:#9ca9c4;
+    color:#b6c3df;
 
 }
 
-.navbar-dark .navbar-links a:hover{
-
-    color:#fff;
-
-    background:
-        rgba(109,93,246,.14);
-
-}
-
-/* =========================================================
-   LIGHT LINKS
-========================================================= */
+/* Light */
 
 .navbar-light .navbar-links a{
 
-    color:#64748b;
+    color:#475569;
+
+}
+
+/* Hover */
+
+.navbar-dark .navbar-links a:hover{
+
+    color:#ffffff;
 
 }
 
 .navbar-light .navbar-links a:hover{
 
     color:#4f46e5;
-
-    background:
-        rgba(99,102,241,.08);
 
 }
 
@@ -304,18 +198,7 @@
 
 .navbar-links a.active{
 
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(109,93,246,.22),
-            rgba(109,93,246,.10)
-        );
-
-    box-shadow:
-        inset 0 0 0 1px
-        rgba(255,255,255,.05);
+    color:#ffffff;
 
 }
 
@@ -331,11 +214,11 @@
 
     position:absolute;
 
-    left:16px;
-    right:16px;
-    bottom:5px;
+    left:0;
+    right:0;
+    bottom:-6px;
 
-    height:2px;
+    height:3px;
 
     border-radius:999px;
 
@@ -348,12 +231,15 @@
 
 }
 
-.navbar-links svg{
+/* =========================================================
+   REMOVE OLD LOGO STYLES
+========================================================= */
 
-    width:17px;
-    height:17px;
+.navbar-brand,
+.brand-logo,
+.brand-text{
 
-    flex-shrink:0;
+    display:none !important;
 
 }
 /* =========================================================
@@ -363,44 +249,47 @@
 .navbar-right{
 
     display:flex;
+
     align-items:center;
+
     justify-content:flex-end;
 
     gap:12px;
 
     flex-shrink:0;
 
+    margin-left:auto;
+
 }
 
 /* =========================================================
-   ICON BUTTON
+   ICON BUTTONS
 ========================================================= */
 
 .icon-btn{
 
     position:relative;
 
-    width:46px;
-    height:46px;
+    width:44px;
+    height:44px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
     border:none;
+
     outline:none;
 
     border-radius:14px;
 
     cursor:pointer;
 
-    transition:all var(--transition);
-
-    overflow:hidden;
+    transition:all .25s ease;
 
 }
 
-/* Dark */
+/* ---------------- DARK ---------------- */
 
 .navbar-dark .icon-btn{
 
@@ -410,16 +299,16 @@
     border:
         1px solid rgba(255,255,255,.08);
 
-    color:#9fb0ce;
+    color:#b8c6e3;
 
 }
 
-/* Light */
+/* ---------------- LIGHT ---------------- */
 
 .navbar-light .icon-btn{
 
     background:
-        rgba(15,23,42,.03);
+        rgba(15,23,42,.04);
 
     border:
         1px solid rgba(15,23,42,.08);
@@ -428,7 +317,7 @@
 
 }
 
-/* Hover */
+/* ---------------- HOVER ---------------- */
 
 .icon-btn:hover{
 
@@ -436,26 +325,26 @@
         translateY(-2px);
 
     background:
-        rgba(109,93,246,.15);
+        rgba(109,93,246,.16);
 
     border-color:
         rgba(109,93,246,.35);
 
     box-shadow:
-        0 10px 24px
+        0 8px 22px
         rgba(109,93,246,.25);
 
 }
 
 .navbar-dark .icon-btn:hover{
 
-    color:#fff;
+    color:#ffffff;
 
 }
 
 .navbar-light .icon-btn:hover{
 
-    color:#4f46e5;
+    color:#5b4ff3;
 
 }
 
@@ -481,22 +370,23 @@
     color:#FFD54F !important;
 
     background:
-        rgba(255,200,0,.12);
+        rgba(255,193,7,.12);
 
     border-color:
-        rgba(255,200,0,.18);
+        rgba(255,193,7,.18);
 
 }
 
 .theme-icon{
 
+    width:100%;
+    height:100%;
+
     display:flex;
 
     align-items:center;
-    justify-content:center;
 
-    width:100%;
-    height:100%;
+    justify-content:center;
 
 }
 
@@ -512,8 +402,6 @@
 
     align-items:center;
 
-    justify-content:center;
-
     margin-left:4px;
 
 }
@@ -526,41 +414,31 @@
 
     position:relative;
 
-    width:50px;
-    height:50px;
+    display:flex;
 
-    padding:3px;
+    align-items:center;
 
-    border-radius:50%;
+    gap:8px;
+
+    padding:4px;
 
     border:none;
 
+    border-radius:999px;
+
     cursor:pointer;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:
+        rgba(109,93,246,.10);
 
     transition:all .25s ease;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(109,93,246,.35),
-            rgba(139,123,255,.12)
-        );
-
-    box-shadow:
-        0 10px 24px
-        rgba(109,93,246,.25);
 
 }
 
 .profile-trigger:hover{
 
-    transform:
-        translateY(-2px)
-        scale(1.04);
+    background:
+        rgba(109,93,246,.18);
 
 }
 
@@ -570,8 +448,8 @@
 
 .avatar{
 
-    width:100%;
-    height:100%;
+    width:42px;
+    height:42px;
 
     border-radius:50%;
 
@@ -588,14 +466,16 @@
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
-    width:100%;
-    height:100%;
+    width:42px;
+    height:42px;
 
     border-radius:50%;
 
     font-size:14px;
+
     font-weight:700;
 
     color:#fff;
@@ -610,7 +490,7 @@
 }
 
 /* =========================================================
-   ONLINE INDICATOR
+   ONLINE DOT
 ========================================================= */
 
 .profile-trigger::after{
@@ -619,26 +499,42 @@
 
     position:absolute;
 
-    width:11px;
-    height:11px;
+    width:10px;
+    height:10px;
 
-    bottom:0;
-    right:0;
+    right:3px;
+    bottom:3px;
 
     border-radius:50%;
 
-    background:var(--success);
+    background:#10b981;
 
-    border:2px solid #08101d;
-
-    box-shadow:
-        0 0 12px
-        rgba(16,185,129,.55);
+    border:2px solid #0f172a;
 
 }
 
 /* =========================================================
-   ICON ANIMATION
+   PROFILE ARROW
+========================================================= */
+
+.profile-arrow{
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+    transition:.25s;
+
+}
+
+.profile-trigger:hover .profile-arrow{
+
+    transform:rotate(180deg);
+
+}
+
+/* =========================================================
+   BUTTON RIPPLE
 ========================================================= */
 
 .icon-btn::before{
@@ -653,13 +549,13 @@
 
     background:
         radial-gradient(
-            rgba(255,255,255,.18),
+            rgba(255,255,255,.20),
             transparent 70%
         );
 
     opacity:0;
 
-    transition:.35s;
+    transition:.25s;
 
 }
 
@@ -670,35 +566,7 @@
 }
 
 /* =========================================================
-   BRAND ANIMATION
-========================================================= */
-
-.navbar-brand:hover .brand-logo{
-
-    transform:
-        rotate(-6deg)
-        scale(1.06);
-
-    box-shadow:
-        0 12px 32px
-        rgba(109,93,246,.45);
-
-}
-
-.navbar-brand:hover h2{
-
-    color:#8B7BFF;
-
-}
-
-.navbar-light .navbar-brand:hover h2{
-
-    color:#5B4FF3;
-
-}
-
-/* =========================================================
-   NAVBAR SHADOW
+   NAVBAR BOTTOM BORDER
 ========================================================= */
 
 .navbar::after{
@@ -721,10 +589,7 @@
             transparent
         );
 
-    opacity:.6;
-
 }
-
 /* =========================================================
    PROFILE DROPDOWN
 ========================================================= */
@@ -733,52 +598,54 @@
 
     position:absolute;
 
-    top:calc(100% + 14px);
+    top:calc(100% + 12px);
     right:0;
 
     width:280px;
 
     padding:10px;
 
-    border-radius:20px;
+    border-radius:18px;
 
     overflow:hidden;
 
-    transform-origin:top right;
-
     z-index:1200;
 
-    backdrop-filter:blur(24px);
-    -webkit-backdrop-filter:blur(24px);
+    transform-origin:top right;
 
-    animation:dropdownFade .25s ease;
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    animation:dropdownFade .22s ease;
 
 }
+
+/* ---------------- DARK ---------------- */
 
 .dropdown-dark{
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(18,27,48,.98),
-            rgba(9,16,31,.98)
-        );
+        rgba(15,23,42,.98);
 
-    border:1px solid rgba(255,255,255,.08);
+    border:
+        1px solid rgba(255,255,255,.08);
 
     box-shadow:
-        0 25px 60px rgba(0,0,0,.45);
+        0 20px 60px rgba(0,0,0,.40);
 
 }
 
+/* ---------------- LIGHT ---------------- */
+
 .dropdown-light{
 
-    background:#fff;
+    background:#ffffff;
 
-    border:1px solid rgba(15,23,42,.08);
+    border:
+        1px solid rgba(15,23,42,.08);
 
     box-shadow:
-        0 20px 50px rgba(15,23,42,.12);
+        0 18px 50px rgba(15,23,42,.10);
 
 }
 
@@ -789,21 +656,23 @@
 .dropdown-header{
 
     display:flex;
+
     align-items:center;
 
     gap:14px;
 
-    padding:14px;
+    padding:12px;
 
-    border-radius:16px;
+    margin-bottom:8px;
 
-    margin-bottom:10px;
+    border-radius:14px;
 
 }
 
 .dropdown-dark .dropdown-header{
 
-    background:rgba(255,255,255,.04);
+    background:
+        rgba(255,255,255,.04);
 
 }
 
@@ -815,8 +684,8 @@
 
 .dropdown-avatar{
 
-    width:50px;
-    height:50px;
+    width:48px;
+    height:48px;
 
     border-radius:50%;
 
@@ -827,8 +696,12 @@
 .dropdown-avatar.initials{
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
+    font-size:14px;
 
     font-weight:700;
 
@@ -846,9 +719,8 @@
 .dropdown-user-info{
 
     display:flex;
-    flex-direction:column;
 
-    min-width:0;
+    flex-direction:column;
 
 }
 
@@ -862,15 +734,15 @@
 
 }
 
-.dropdown-dark h4{
+.dropdown-dark .dropdown-user-info h4{
 
     color:#fff;
 
 }
 
-.dropdown-light h4{
+.dropdown-light .dropdown-user-info h4{
 
-    color:#172033;
+    color:#111827;
 
 }
 
@@ -883,38 +755,36 @@
 }
 
 /* =========================================================
-   MENU BUTTONS
+   DROPDOWN BUTTONS
 ========================================================= */
 
 .profile-dropdown button{
 
     width:100%;
 
-    height:48px;
+    height:46px;
 
     display:flex;
 
     align-items:center;
 
-    gap:14px;
+    gap:12px;
 
-    padding:0 16px;
+    padding:0 14px;
 
     border:none;
 
-    border-radius:14px;
-
-    cursor:pointer;
+    border-radius:12px;
 
     background:transparent;
+
+    cursor:pointer;
 
     transition:.25s;
 
     font-size:14px;
 
     font-weight:600;
-
-    text-align:left;
 
 }
 
@@ -932,7 +802,7 @@
 
 .profile-dropdown button:hover{
 
-    transform:translateX(4px);
+    transform:translateX(3px);
 
     background:
         rgba(109,93,246,.12);
@@ -947,14 +817,14 @@
 
 .dropdown-light button:hover{
 
-    color:#4f46e5;
+    color:#5b4ff3;
 
 }
 
 .profile-dropdown button svg{
 
-    width:17px;
-    height:17px;
+    width:16px;
+    height:16px;
 
     color:#8B7BFF;
 
@@ -970,17 +840,10 @@
 
     height:1px;
 
-    margin:10px 4px;
+    margin:10px 6px;
 
     background:
-        rgba(255,255,255,.08);
-
-}
-
-.dropdown-light hr{
-
-    background:
-        rgba(15,23,42,.08);
+        rgba(148,163,184,.18);
 
 }
 
@@ -1008,7 +871,7 @@
 }
 
 /* =========================================================
-   MOBILE
+   MOBILE MENU
 ========================================================= */
 
 .mobile-toggle{
@@ -1020,22 +883,22 @@
 
     border:none;
 
-    border-radius:14px;
+    border-radius:12px;
 
     cursor:pointer;
 
     align-items:center;
-    justify-content:center;
 
-    transition:.25s;
+    justify-content:center;
 
 }
 
 .navbar-dark .mobile-toggle{
 
-    background:rgba(255,255,255,.05);
+    background:
+        rgba(255,255,255,.05);
 
-    color:#cbd5e1;
+    color:#fff;
 
 }
 
@@ -1047,17 +910,6 @@
 
 }
 
-.mobile-toggle:hover{
-
-    background:
-        rgba(109,93,246,.15);
-
-}
-
-/* =========================================================
-   MOBILE OVERLAY
-========================================================= */
-
 .navbar-mobile-overlay{
 
     position:fixed;
@@ -1067,7 +919,7 @@
     background:
         rgba(0,0,0,.45);
 
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(6px);
 
     z-index:999;
 
@@ -1081,7 +933,7 @@
 
     padding:16px;
 
-    border-radius:22px;
+    border-radius:20px;
 
     display:flex;
 
@@ -1093,34 +945,28 @@
 
 .mobile-dark{
 
-    background:#101b30;
-
-    border:1px solid rgba(255,255,255,.08);
+    background:#111827;
 
 }
 
 .mobile-light{
 
-    background:#fff;
-
-    border:1px solid rgba(15,23,42,.08);
+    background:#ffffff;
 
 }
 
 .navbar-mobile-menu a,
 .mobile-logout-btn{
 
-    height:50px;
+    height:48px;
 
     display:flex;
 
     align-items:center;
 
-    gap:14px;
-
     padding:0 16px;
 
-    border-radius:14px;
+    border-radius:12px;
 
     text-decoration:none;
 
@@ -1170,51 +1016,23 @@
    RESPONSIVE
 ========================================================= */
 
-@media (max-width:1200px){
+@media (max-width:992px){
 
     .navbar{
 
-        padding:0 24px;
-
-    }
-
-    .navbar-left{
-
-        gap:28px;
-
-    }
-
-}
-
-@media (max-width:992px){
-
-    .brand-text span{
-
-        display:none;
+        padding:0 14px;
 
     }
 
     .navbar-links{
 
-        gap:4px;
-
-    }
-
-    .navbar-links a{
-
-        padding:0 14px;
+        gap:10px;
 
     }
 
 }
 
 @media (max-width:768px){
-
-    .navbar{
-
-        padding:0 16px;
-
-    }
 
     .navbar-links{
 
@@ -1240,27 +1058,28 @@
 
     .navbar{
 
-        padding:0 12px;
-
-    }
-
-    .brand-text{
-
-        display:none;
+        padding:0 10px;
 
     }
 
     .icon-btn{
 
-        width:42px;
-        height:42px;
+        width:40px;
+        height:40px;
 
     }
 
     .profile-trigger{
 
-        width:44px;
-        height:44px;
+        padding:3px;
+
+    }
+
+    .avatar,
+    .avatar.initials{
+
+        width:38px;
+        height:38px;
 
     }
 
