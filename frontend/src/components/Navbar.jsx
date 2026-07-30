@@ -1,5 +1,3 @@
-// src/components/Navbar.jsx
-
 import {
   useEffect,
   useRef,
@@ -13,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import {
+  FaBars,
   FaCog,
   FaMoon,
   FaSignOutAlt,
@@ -36,27 +35,12 @@ import { useAuth } from "../context/AuthContext";
 
 import "../styles/Navbar.css";
 
-/* =========================================================
-   TASKFLOW PREMIUM NAVBAR
-
-   SIDEBAR BEHAVIOUR
-   ---------------------------------------------------------
-   Navbar listens to:
-
-   taskflow-sidebar-change
-
-   emitted by Sidebar.jsx.
-
-   This allows Navbar to automatically adjust when the
-   sidebar changes between:
-
-   Expanded  -> 260px
-   Collapsed -> 76px
-   Mobile    -> 0px / 260px
-========================================================= */
-
-const Navbar = () => {
+const Navbar = ({
+  sidebarCollapsed = false,
+  onSidebarToggle,
+}) => {
   const navigate = useNavigate();
+
   const location = useLocation();
 
   const auth = useAuth();
@@ -70,156 +54,78 @@ const Navbar = () => {
 
   const menuRef = useRef(null);
 
-  /* =========================================================
-     SIDEBAR STATE
-  ========================================================= */
-
-  const [
-    sidebarCollapsed,
-    setSidebarCollapsed,
-  ] = useState(
-    typeof document !== "undefined"
-      ? document.body.classList.contains(
-          "sidebar-collapsed"
-        )
-      : false
-  );
-
-  const [
-    sidebarWidth,
-    setSidebarWidth,
-  ] = useState(
-    typeof window !== "undefined"
-      ? getComputedStyle(
-          document.documentElement
-        ).getPropertyValue(
-          "--taskflow-sidebar-width"
-        ) || "260px"
-      : "260px"
-  );
-
-  /* =========================================================
-     LISTEN FOR SIDEBAR CHANGES
-  ========================================================= */
-
-  useEffect(() => {
-    const handleSidebarChange = (
-      event
-    ) => {
-      const detail =
-        event.detail || {};
-
-      setSidebarCollapsed(
-        Boolean(
-          detail.collapsed
-        )
-      );
-
-      setSidebarWidth(
-        `${detail.width ?? 260}px`
-      );
-    };
-
-    window.addEventListener(
-      "taskflow-sidebar-change",
-      handleSidebarChange
-    );
-
-    return () => {
-      window.removeEventListener(
-        "taskflow-sidebar-change",
-        handleSidebarChange
-      );
-    };
-  }, []);
-
-  /* =========================================================
-     PROFILE MENU
-  ========================================================= */
+  /* ==========================================
+      PROFILE MENU
+  ========================================== */
 
   const [
     showProfileMenu,
     setShowProfileMenu,
   ] = useState(false);
 
-  /* =========================================================
-     MOBILE TOP NAVIGATION
-  ========================================================= */
+  /* ==========================================
+      MOBILE NAVIGATION
+  ========================================== */
 
   const [
     mobileMenu,
     setMobileMenu,
   ] = useState(false);
 
-  /* =========================================================
-     THEME
-  ========================================================= */
+  /* ==========================================
+      THEME
+  ========================================== */
 
   const getInitialTheme = () => {
     try {
       const savedTheme =
-        localStorage.getItem(
-          "theme"
-        );
+        localStorage.getItem("theme");
 
-      if (
-        savedTheme ===
-        "dark"
-      ) {
-        return true;
-      }
+      if (savedTheme === "dark") return true;
 
-      if (
-        savedTheme ===
-        "light"
-      ) {
-        return false;
-      }
+      if (savedTheme === "light") return false;
 
-      if (
-        typeof window !==
-          "undefined" &&
+      return (
         window.matchMedia &&
-        window
-          .matchMedia(
-            "(prefers-color-scheme: dark)"
-          )
-          .matches
-      ) {
-        return true;
-      }
-    } catch (error) {
-      console.warn(
-        "Unable to read saved theme:",
-        error
+        window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches
       );
+    } catch {
+      return false;
     }
-
-    return false;
   };
 
   const [
     darkMode,
     setDarkMode,
-  ] = useState(
-    getInitialTheme
-  );
+  ] = useState(getInitialTheme);
 
-  /* =========================================================
-     APPLY THEME
-  ========================================================= */
+  /* ==========================================
+      USER INITIALS
+  ========================================== */
+
+  const initials =
+    user?.name
+      ?.trim()
+      ?.split(/\s+/)
+      ?.map(
+        (part) => part[0]
+      )
+      ?.join("")
+      ?.substring(0, 2)
+      ?.toUpperCase() || "TF";
+        /* ==========================================
+      APPLY THEME
+  ========================================== */
 
   useEffect(() => {
-    const html =
-      document.documentElement;
+    const html = document.documentElement;
+    const body = document.body;
 
-    const body =
-      document.body;
-
-    const theme =
-      darkMode
-        ? "dark"
-        : "light";
+    const theme = darkMode
+      ? "dark"
+      : "light";
 
     html.setAttribute(
       "data-theme",
@@ -271,20 +177,18 @@ const Navbar = () => {
     );
   }, [darkMode]);
 
-  /* =========================================================
-     SYNC THEME
-  ========================================================= */
+  /* ==========================================
+      SYNC THEME
+  ========================================== */
 
   useEffect(() => {
     const handleStorage = (
       event
     ) => {
       if (
-        event.key !==
-        "theme"
-      ) {
+        event.key !== "theme"
+      )
         return;
-      }
 
       if (
         event.newValue ===
@@ -307,9 +211,7 @@ const Navbar = () => {
       const theme =
         event.detail?.theme;
 
-      if (
-        theme === "dark"
-      ) {
+      if (theme === "dark") {
         setDarkMode(true);
       }
 
@@ -343,9 +245,9 @@ const Navbar = () => {
     };
   }, []);
 
-  /* =========================================================
-     CLOSE PROFILE MENU OUTSIDE
-  ========================================================= */
+  /* ==========================================
+      CLOSE PROFILE MENU
+  ========================================== */
 
   useEffect(() => {
     const handleOutsideClick = (
@@ -376,9 +278,9 @@ const Navbar = () => {
     };
   }, []);
 
-  /* =========================================================
-     ROUTE CHANGE
-  ========================================================= */
+  /* ==========================================
+      CLOSE MENUS ON ROUTE CHANGE
+  ========================================== */
 
   useEffect(() => {
     setShowProfileMenu(
@@ -386,32 +288,11 @@ const Navbar = () => {
     );
 
     setMobileMenu(false);
-  }, [
-    location.pathname,
-  ]);
+  }, [location.pathname]);
 
-  /* =========================================================
-     USER INITIALS
-  ========================================================= */
-
-  const initials =
-    user?.name
-      ?.trim()
-      ?.split(/\s+/)
-      ?.map(
-        (name) =>
-          name?.[0] || ""
-      )
-      ?.join("")
-      ?.substring(
-        0,
-        2
-      )
-      ?.toUpperCase() || "TF";
-
-  /* =========================================================
-     THEME TOGGLE
-  ========================================================= */
+  /* ==========================================
+      TOGGLE THEME
+  ========================================== */
 
   const toggleTheme = () => {
     setDarkMode(
@@ -420,16 +301,14 @@ const Navbar = () => {
     );
   };
 
-  /* =========================================================
-     NAVIGATION
-  ========================================================= */
+  /* ==========================================
+      NAVIGATION
+  ========================================== */
 
   const handleNavigate = (
     path
   ) => {
-    if (!path) {
-      return;
-    }
+    if (!path) return;
 
     navigate(path);
 
@@ -440,22 +319,19 @@ const Navbar = () => {
     setMobileMenu(false);
   };
 
-  /* =========================================================
-     LOGOUT
-  ========================================================= */
+  /* ==========================================
+      LOGOUT
+  ========================================== */
 
   const handleLogout =
     async () => {
       try {
-        if (
-          typeof logout ===
-          "function"
-        ) {
+        if (logout) {
           await logout();
         }
       } catch (error) {
         console.error(
-          "Logout error:",
+          "Logout Error:",
           error
         );
       }
@@ -470,7 +346,7 @@ const Navbar = () => {
         );
       } catch (error) {
         console.warn(
-          "Unable to clear local storage:",
+          "Unable to clear localStorage:",
           error
         );
       }
@@ -479,18 +355,15 @@ const Navbar = () => {
         false
       );
 
-      setMobileMenu(
-        false
-      );
+      setMobileMenu(false);
 
       navigate("/", {
         replace: true,
       });
     };
-
-  /* =========================================================
-     RENDER
-  ========================================================= */
+      /* ==========================================
+      RENDER
+  ========================================== */
 
   return (
     <header
@@ -503,16 +376,31 @@ const Navbar = () => {
           ? "navbar-sidebar-collapsed"
           : "navbar-sidebar-expanded"
       }`}
-      style={{
-        "--current-sidebar-width":
-          sidebarWidth,
-      }}
     >
-      {/* =====================================================
+      {/* ======================================
           LEFT
-      ===================================================== */}
+      ====================================== */}
 
       <div className="navbar-left">
+
+        {/* SIDEBAR TOGGLE */}
+
+        <motion.button
+          type="button"
+          className="sidebar-toggle-btn"
+          onClick={onSidebarToggle}
+          aria-label="Toggle Sidebar"
+          whileHover={{
+            scale: 1.05,
+          }}
+          whileTap={{
+            scale: 0.92,
+          }}
+        >
+          <FaBars />
+        </motion.button>
+
+        {/* DESKTOP NAVIGATION */}
 
         <nav
           className={`navbar-links ${
@@ -531,9 +419,7 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(
-                false
-              )
+              setMobileMenu(false)
             }
           >
             <FaHome />
@@ -553,9 +439,7 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(
-                false
-              )
+              setMobileMenu(false)
             }
           >
             <FaProjectDiagram />
@@ -575,9 +459,7 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(
-                false
-              )
+              setMobileMenu(false)
             }
           >
             <FaTasks />
@@ -587,7 +469,7 @@ const Navbar = () => {
             </span>
           </NavLink>
 
-          {/* TEAM */}
+          {/* USERS */}
 
           <NavLink
             to="/users"
@@ -597,9 +479,7 @@ const Navbar = () => {
                 : ""
             }
             onClick={() =>
-              setMobileMenu(
-                false
-              )
+              setMobileMenu(false)
             }
           >
             <FaUsers />
@@ -613,13 +493,14 @@ const Navbar = () => {
 
       </div>
 
-      {/* =====================================================
+      {/* ======================================
           RIGHT
-      ===================================================== */}
+      ====================================== */}
 
       <div className="navbar-right">
-
-        {/* THEME */}
+                {/* ======================================
+            THEME TOGGLE
+        ====================================== */}
 
         <motion.button
           type="button"
@@ -628,6 +509,7 @@ const Navbar = () => {
               ? "theme-active"
               : ""
           }`}
+          onClick={toggleTheme}
           aria-label={
             darkMode
               ? "Switch to light mode"
@@ -638,17 +520,12 @@ const Navbar = () => {
               ? "Switch to light mode"
               : "Switch to dark mode"
           }
-          onClick={
-            toggleTheme
-          }
           whileHover={{
             scale: 1.06,
-            rotate: darkMode
-              ? 5
-              : -5,
+            rotate: darkMode ? 5 : -5,
           }}
           whileTap={{
-            scale: 0.9,
+            scale: 0.92,
           }}
         >
           <AnimatePresence
@@ -703,11 +580,15 @@ const Navbar = () => {
           </AnimatePresence>
         </motion.button>
 
-        {/* NOTIFICATIONS */}
+        {/* ======================================
+            NOTIFICATIONS
+        ====================================== */}
 
         <NotificationBell />
 
-        {/* SETTINGS */}
+        {/* ======================================
+            SETTINGS
+        ====================================== */}
 
         <motion.button
           type="button"
@@ -715,9 +596,7 @@ const Navbar = () => {
           aria-label="Settings"
           title="Settings"
           onClick={() =>
-            handleNavigate(
-              "/settings"
-            )
+            handleNavigate("/settings")
           }
           whileHover={{
             scale: 1.05,
@@ -730,7 +609,9 @@ const Navbar = () => {
           <FaCog />
         </motion.button>
 
-        {/* PROFILE */}
+        {/* ======================================
+            PROFILE
+        ====================================== */}
 
         <div
           className="profile-wrapper"
@@ -744,13 +625,10 @@ const Navbar = () => {
                 : "profile-trigger-light"
             }`}
             aria-label="Open profile menu"
-            aria-expanded={
-              showProfileMenu
-            }
+            aria-expanded={showProfileMenu}
             onClick={() =>
               setShowProfileMenu(
-                (previous) =>
-                  !previous
+                (prev) => !prev
               )
             }
             whileHover={{
@@ -776,8 +654,6 @@ const Navbar = () => {
             )}
           </motion.button>
 
-          {/* PROFILE DROPDOWN */}
-
           <AnimatePresence>
             {showProfileMenu && (
               <motion.div
@@ -788,8 +664,8 @@ const Navbar = () => {
                 }`}
                 initial={{
                   opacity: 0,
-                  y: -12,
-                  scale: 0.95,
+                  y: -10,
+                  scale: 0.96,
                 }}
                 animate={{
                   opacity: 1,
@@ -799,22 +675,18 @@ const Navbar = () => {
                 exit={{
                   opacity: 0,
                   y: -8,
-                  scale: 0.95,
+                  scale: 0.96,
                 }}
                 transition={{
                   duration: 0.2,
-                  ease: "easeOut",
                 }}
               >
                 {/* HEADER */}
 
                 <div className="dropdown-header">
-
                   {user?.avatar ? (
                     <img
-                      src={
-                        user.avatar
-                      }
+                      src={user.avatar}
                       alt=""
                       className="dropdown-avatar"
                     />
@@ -825,7 +697,6 @@ const Navbar = () => {
                   )}
 
                   <div className="dropdown-user-info">
-
                     <h4>
                       {user?.name ||
                         "User"}
@@ -835,9 +706,7 @@ const Navbar = () => {
                       {user?.role ||
                         "Member"}
                     </small>
-
                   </div>
-
                 </div>
 
                 {/* PROFILE */}
@@ -891,13 +760,13 @@ const Navbar = () => {
                     Logout
                   </span>
                 </button>
-
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-
-        {/* MOBILE NAV */}
+        {/* ======================================
+            MOBILE NAVIGATION TOGGLE
+        ====================================== */}
 
         <motion.button
           type="button"
@@ -907,13 +776,10 @@ const Navbar = () => {
               ? "Close navigation menu"
               : "Open navigation menu"
           }
-          aria-expanded={
-            mobileMenu
-          }
+          aria-expanded={mobileMenu}
           onClick={() =>
             setMobileMenu(
-              (previous) =>
-                !previous
+              (previous) => !previous
             )
           }
           whileTap={{
@@ -928,6 +794,112 @@ const Navbar = () => {
         </motion.button>
 
       </div>
+
+      {/* ==========================================
+          MOBILE NAVIGATION OVERLAY
+      ========================================== */}
+
+      <AnimatePresence>
+        {mobileMenu && (
+          <motion.div
+            className="navbar-mobile-overlay"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+          >
+            <motion.div
+              className={`navbar-mobile-menu ${
+                darkMode
+                  ? "mobile-dark"
+                  : "mobile-light"
+              }`}
+              initial={{
+                y: -20,
+                opacity: 0,
+              }}
+              animate={{
+                y: 0,
+                opacity: 1,
+              }}
+              exit={{
+                y: -20,
+                opacity: 0,
+              }}
+              transition={{
+                duration: 0.25,
+              }}
+            >
+              <NavLink
+                to="/dashboard"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+              >
+                <FaHome />
+                <span>Dashboard</span>
+              </NavLink>
+
+              <NavLink
+                to="/projects"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+              >
+                <FaProjectDiagram />
+                <span>Projects</span>
+              </NavLink>
+
+              <NavLink
+                to="/tasks"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+              >
+                <FaTasks />
+                <span>Tasks</span>
+              </NavLink>
+
+              <NavLink
+                to="/users"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+              >
+                <FaUsers />
+                <span>Team</span>
+              </NavLink>
+
+              <NavLink
+                to="/settings"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+              >
+                <FaCog />
+                <span>Settings</span>
+              </NavLink>
+
+              <button
+                type="button"
+                className="mobile-logout-btn"
+                onClick={handleLogout}
+              >
+                <FaSignOutAlt />
+                <span>Logout</span>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

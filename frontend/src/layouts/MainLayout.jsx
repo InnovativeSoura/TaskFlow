@@ -11,6 +11,10 @@ const MainLayout = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] =
     useState(false);
 
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => !prev);
+  };
+
   return (
     <div
       className={`taskflow-layout ${
@@ -26,12 +30,9 @@ const MainLayout = ({ children }) => {
       <aside className="taskflow-sidebar">
         <Sidebar
           collapsed={sidebarCollapsed}
-          onToggle={() =>
-            setSidebarCollapsed((prev) => !prev)
-          }
+          onToggle={toggleSidebar}
         />
       </aside>
-
 
       {/* ==========================================
           MAIN APPLICATION
@@ -39,23 +40,20 @@ const MainLayout = ({ children }) => {
 
       <section className="taskflow-main">
 
-        {/* ========================================
-            FIXED / STICKY NAVBAR
-        ======================================== */}
+        {/* ======================================
+            NAVBAR
+        ====================================== */}
 
         <header className="taskflow-navbar">
           <Navbar
             sidebarCollapsed={sidebarCollapsed}
-            onSidebarToggle={() =>
-              setSidebarCollapsed((prev) => !prev)
-            }
+            onSidebarToggle={toggleSidebar}
           />
         </header>
 
-
-        {/* ========================================
+        {/* ======================================
             PAGE CONTENT
-        ======================================== */}
+        ====================================== */}
 
         <main className="taskflow-page-content">
           {children}
