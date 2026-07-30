@@ -1,41 +1,39 @@
 /* =========================================================
-   TASKFLOW PREMIUM NAVBAR
-   ========================================================= */
+   TASKFLOW PREMIUM NAVBAR v2
+========================================================= */
 
-:root {
-  --navbar-height: 72px;
+:root{
 
-  --navbar-bg-dark:
-    rgba(10, 16, 32, 0.88);
+    --navbar-height:72px;
 
-  --navbar-bg-light:
-    rgba(255, 255, 255, 0.92);
+    --navbar-bg:
+        rgba(10,16,32,.82);
 
-  --navbar-border-dark:
-    rgba(255,255,255,.08);
+    --navbar-light:
+        rgba(255,255,255,.90);
 
-  --navbar-border-light:
-    rgba(15,23,42,.08);
+    --glass-border:
+        rgba(255,255,255,.08);
 
-  --navbar-shadow-dark:
-    0 12px 40px rgba(0,0,0,.28);
+    --glass-light:
+        rgba(15,23,42,.08);
 
-  --navbar-shadow-light:
-    0 12px 35px rgba(15,23,42,.08);
+    --primary:#6D5DF6;
+    --primary-light:#8B7BFF;
 
-  --primary:#6D5DF6;
-  --primary-light:#8B7BFF;
+    --success:#10b981;
 
-  --success:#10b981;
-  --danger:#ef4444;
+    --text:#ffffff;
+    --text-light:#94a3b8;
 
-  --transition:.28s cubic-bezier(.4,0,.2,1);
+    --transition:
+        .28s cubic-bezier(.4,0,.2,1);
+
 }
 
-
 /* =========================================================
-   ROOT NAVBAR
-   ========================================================= */
+   NAVBAR
+========================================================= */
 
 .navbar{
 
@@ -48,57 +46,53 @@
     align-items:center;
     justify-content:space-between;
 
-    padding:0 24px;
-
-    transition:all var(--transition);
+    padding:0 34px;
 
     box-sizing:border-box;
 
-    user-select:none;
-}
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
 
+    transition:all var(--transition);
+
+    z-index:100;
+}
 
 /* =========================================================
    DARK
-   ========================================================= */
+========================================================= */
 
 .navbar-dark{
 
-    background:var(--navbar-bg-dark);
+    background:var(--navbar-bg);
 
-    border-bottom:1px solid var(--navbar-border-dark);
+    border-bottom:
+        1px solid var(--glass-border);
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.28);
 
-    box-shadow:var(--navbar-shadow-dark);
-
-    color:#fff;
 }
-
 
 /* =========================================================
    LIGHT
-   ========================================================= */
+========================================================= */
 
 .navbar-light{
 
-    background:var(--navbar-bg-light);
+    background:var(--navbar-light);
 
-    border-bottom:1px solid var(--navbar-border-light);
+    border-bottom:
+        1px solid var(--glass-light);
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.08);
 
-    box-shadow:var(--navbar-shadow-light);
-
-    color:#1e293b;
 }
-
 
 /* =========================================================
    LEFT
-   ========================================================= */
+========================================================= */
 
 .navbar-left{
 
@@ -106,15 +100,125 @@
 
     align-items:center;
 
-    min-width:0;
+    gap:40px;
 
     flex:1;
+
 }
 
+/* =========================================================
+   BRAND
+========================================================= */
+
+.navbar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    cursor:pointer;
+
+    user-select:none;
+
+}
 
 /* =========================================================
-   LINKS
-   ========================================================= */
+   LOGO
+========================================================= */
+
+.brand-logo{
+
+    width:46px;
+    height:46px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    font-size:18px;
+    font-weight:800;
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6D5DF6,
+            #8B7BFF
+        );
+
+    box-shadow:
+        0 8px 22px
+        rgba(109,93,246,.35);
+
+    transition:all var(--transition);
+
+}
+
+.brand-logo:hover{
+
+    transform:rotate(-5deg)
+              scale(1.05);
+
+}
+
+/* =========================================================
+   BRAND TEXT
+========================================================= */
+
+.brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    line-height:1.15;
+
+}
+
+.brand-text h2{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    letter-spacing:.3px;
+
+}
+
+.navbar-dark .brand-text h2{
+
+    color:#fff;
+
+}
+
+.navbar-light .brand-text h2{
+
+    color:#0f172a;
+
+}
+
+.brand-text span{
+
+    font-size:12px;
+
+    font-weight:500;
+
+    color:#94a3b8;
+
+    letter-spacing:.4px;
+
+}
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
 
 .navbar-links{
 
@@ -122,13 +226,13 @@
 
     align-items:center;
 
-    gap:10px;
-}
+    gap:8px;
 
+}
 
 /* =========================================================
    LINK
-   ========================================================= */
+========================================================= */
 
 .navbar-links a{
 
@@ -140,7 +244,7 @@
 
     gap:10px;
 
-    height:44px;
+    height:46px;
 
     padding:0 18px;
 
@@ -152,17 +256,18 @@
 
     font-weight:600;
 
-    transition:all var(--transition);
+    transition:all .25s ease;
 
-    white-space:nowrap;
 }
 
-
-/* DARK */
+/* =========================================================
+   DARK LINKS
+========================================================= */
 
 .navbar-dark .navbar-links a{
 
-    color:#93a4bf;
+    color:#9ca9c4;
+
 }
 
 .navbar-dark .navbar-links a:hover{
@@ -170,15 +275,18 @@
     color:#fff;
 
     background:
-    rgba(109,93,246,.15);
+        rgba(109,93,246,.14);
+
 }
 
-
-/* LIGHT */
+/* =========================================================
+   LIGHT LINKS
+========================================================= */
 
 .navbar-light .navbar-links a{
 
     color:#64748b;
+
 }
 
 .navbar-light .navbar-links a:hover{
@@ -186,45 +294,36 @@
     color:#4f46e5;
 
     background:
-    rgba(99,102,241,.08);
+        rgba(99,102,241,.08);
+
 }
 
-
 /* =========================================================
-   ACTIVE LINK
-   ========================================================= */
+   ACTIVE
+========================================================= */
 
 .navbar-links a.active{
 
     color:#fff;
 
     background:
-    linear-gradient(
-        135deg,
-        rgba(109,93,246,.22),
-        rgba(139,123,255,.12)
-    );
+        linear-gradient(
+            135deg,
+            rgba(109,93,246,.22),
+            rgba(109,93,246,.10)
+        );
 
     box-shadow:
-    inset 0 0 0 1px
-    rgba(139,123,255,.15);
+        inset 0 0 0 1px
+        rgba(255,255,255,.05);
+
 }
 
 .navbar-light .navbar-links a.active{
 
     color:#4f46e5;
 
-    background:
-    rgba(99,102,241,.12);
 }
-
-.navbar-links a.active svg{
-
-    color:var(--primary-light);
-}
-
-
-/* indicator */
 
 .navbar-links a.active::after{
 
@@ -232,8 +331,8 @@
 
     position:absolute;
 
-    left:18px;
-    right:18px;
+    left:16px;
+    right:16px;
     bottom:5px;
 
     height:2px;
@@ -241,39 +340,37 @@
     border-radius:999px;
 
     background:
-    linear-gradient(
-        90deg,
-        var(--primary),
-        var(--primary-light)
-    );
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
 }
-
-
-/* =========================================================
-   ICON
-   ========================================================= */
 
 .navbar-links svg{
 
-    width:16px;
-
-    height:16px;
+    width:17px;
+    height:17px;
 
     flex-shrink:0;
-}
 
+}
 /* =========================================================
    RIGHT SECTION
 ========================================================= */
 
 .navbar-right{
+
     display:flex;
     align-items:center;
     justify-content:flex-end;
-    gap:12px;
-    flex-shrink:0;
-}
 
+    gap:12px;
+
+    flex-shrink:0;
+
+}
 
 /* =========================================================
    ICON BUTTON
@@ -283,61 +380,53 @@
 
     position:relative;
 
-    width:44px;
-    height:44px;
+    width:46px;
+    height:46px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    padding:0;
-
     border:none;
+    outline:none;
 
     border-radius:14px;
 
     cursor:pointer;
 
-    outline:none;
-
     transition:all var(--transition);
 
     overflow:hidden;
 
-    background:
-        rgba(255,255,255,.05);
-
-    color:#9ba8c5;
 }
-
 
 /* Dark */
 
 .navbar-dark .icon-btn{
 
-    border:1px solid
-        rgba(255,255,255,.08);
-
     background:
-        rgba(255,255,255,.04);
+        rgba(255,255,255,.05);
 
-    color:#a6b3d1;
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:#9fb0ce;
+
 }
-
 
 /* Light */
 
 .navbar-light .icon-btn{
 
-    border:1px solid
-        rgba(15,23,42,.08);
-
     background:
         rgba(15,23,42,.03);
 
-    color:#475569;
-}
+    border:
+        1px solid rgba(15,23,42,.08);
 
+    color:#475569;
+
+}
 
 /* Hover */
 
@@ -346,44 +435,36 @@
     transform:
         translateY(-2px);
 
-    color:#fff;
+    background:
+        rgba(109,93,246,.15);
 
     border-color:
         rgba(109,93,246,.35);
 
-    background:
-        rgba(109,93,246,.14);
-
     box-shadow:
-        0 8px 22px
-        rgba(109,93,246,.22);
+        0 10px 24px
+        rgba(109,93,246,.25);
+
 }
 
+.navbar-dark .icon-btn:hover{
+
+    color:#fff;
+
+}
 
 .navbar-light .icon-btn:hover{
 
     color:#4f46e5;
 
-    background:
-        rgba(99,102,241,.08);
 }
-
-
-/* Active */
-
-.icon-btn:active{
-
-    transform:
-        scale(.94);
-}
-
 
 .icon-btn svg{
 
     width:18px;
     height:18px;
-}
 
+}
 
 /* =========================================================
    THEME BUTTON
@@ -392,45 +473,35 @@
 .theme-toggle{
 
     overflow:hidden;
+
 }
 
+.theme-active{
 
-.theme-toggle.theme-active{
-
-    color:#ffd34f;
+    color:#FFD54F !important;
 
     background:
-        rgba(255,196,0,.10);
+        rgba(255,200,0,.12);
 
     border-color:
-        rgba(255,196,0,.18);
+        rgba(255,200,0,.18);
+
 }
-
-
-.theme-toggle.theme-active:hover{
-
-    background:
-        rgba(255,196,0,.16);
-}
-
-
-/* =========================================================
-   THEME ICON
-========================================================= */
 
 .theme-icon{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
 
     width:100%;
     height:100%;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
 }
 
-
 /* =========================================================
-   PROFILE WRAPPER
+   PROFILE
 ========================================================= */
 
 .profile-wrapper{
@@ -438,12 +509,14 @@
     position:relative;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     margin-left:4px;
-}
 
+}
 
 /* =========================================================
    PROFILE BUTTON
@@ -453,50 +526,43 @@
 
     position:relative;
 
-    width:48px;
-    height:48px;
+    width:50px;
+    height:50px;
+
+    padding:3px;
+
+    border-radius:50%;
+
+    border:none;
+
+    cursor:pointer;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    padding:3px;
-
-    cursor:pointer;
-
-    border-radius:50%;
-
-    outline:none;
-
-    overflow:visible;
-
-    transition:all var(--transition);
-
-    border:2px solid
-        rgba(109,93,246,.55);
+    transition:all .25s ease;
 
     background:
         linear-gradient(
-            145deg,
-            rgba(109,93,246,.24),
-            rgba(109,93,246,.10)
+            135deg,
+            rgba(109,93,246,.35),
+            rgba(139,123,255,.12)
         );
-}
 
+    box-shadow:
+        0 10px 24px
+        rgba(109,93,246,.25);
+
+}
 
 .profile-trigger:hover{
 
     transform:
-        translateY(-2px);
+        translateY(-2px)
+        scale(1.04);
 
-    border-color:
-        rgba(139,123,255,.9);
-
-    box-shadow:
-        0 10px 28px
-        rgba(109,93,246,.30);
 }
-
 
 /* =========================================================
    AVATAR
@@ -507,13 +573,11 @@
     width:100%;
     height:100%;
 
-    display:block;
-
     border-radius:50%;
 
     object-fit:cover;
-}
 
+}
 
 /* =========================================================
    INITIALS
@@ -522,6 +586,7 @@
 .avatar.initials{
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -531,18 +596,18 @@
     border-radius:50%;
 
     font-size:14px;
-    font-weight:800;
+    font-weight:700;
 
     color:#fff;
 
     background:
         linear-gradient(
             135deg,
-            var(--primary),
-            var(--primary-light)
+            #6D5DF6,
+            #8B7BFF
         );
-}
 
+}
 
 /* =========================================================
    ONLINE INDICATOR
@@ -554,22 +619,110 @@
 
     position:absolute;
 
-    width:10px;
-    height:10px;
+    width:11px;
+    height:11px;
 
-    right:-1px;
-    bottom:-1px;
+    bottom:0;
+    right:0;
 
     border-radius:50%;
 
     background:var(--success);
 
-    border:2px solid
-        #08101d;
+    border:2px solid #08101d;
 
     box-shadow:
-        0 0 10px
+        0 0 12px
         rgba(16,185,129,.55);
+
+}
+
+/* =========================================================
+   ICON ANIMATION
+========================================================= */
+
+.icon-btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    background:
+        radial-gradient(
+            rgba(255,255,255,.18),
+            transparent 70%
+        );
+
+    opacity:0;
+
+    transition:.35s;
+
+}
+
+.icon-btn:hover::before{
+
+    opacity:1;
+
+}
+
+/* =========================================================
+   BRAND ANIMATION
+========================================================= */
+
+.navbar-brand:hover .brand-logo{
+
+    transform:
+        rotate(-6deg)
+        scale(1.06);
+
+    box-shadow:
+        0 12px 32px
+        rgba(109,93,246,.45);
+
+}
+
+.navbar-brand:hover h2{
+
+    color:#8B7BFF;
+
+}
+
+.navbar-light .navbar-brand:hover h2{
+
+    color:#5B4FF3;
+
+}
+
+/* =========================================================
+   NAVBAR SHADOW
+========================================================= */
+
+.navbar::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:-1px;
+
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(109,93,246,.45),
+            transparent
+        );
+
+    opacity:.6;
+
 }
 
 /* =========================================================
@@ -580,34 +733,27 @@
 
     position:absolute;
 
-    top:calc(100% + 12px);
+    top:calc(100% + 14px);
     right:0;
 
-    width:270px;
+    width:280px;
 
     padding:10px;
 
-    border-radius:18px;
+    border-radius:20px;
 
     overflow:hidden;
 
-    z-index:1200;
-
     transform-origin:top right;
+
+    z-index:1200;
 
     backdrop-filter:blur(24px);
     -webkit-backdrop-filter:blur(24px);
 
-    box-sizing:border-box;
+    animation:dropdownFade .25s ease;
 
-    animation:
-        dropdownFade .22s ease;
 }
-
-
-/* =========================================================
-   DARK DROPDOWN
-========================================================= */
 
 .dropdown-dark{
 
@@ -615,88 +761,68 @@
         linear-gradient(
             180deg,
             rgba(18,27,48,.98),
-            rgba(10,17,33,.98)
+            rgba(9,16,31,.98)
         );
 
-    border:1px solid
-        rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
 
     box-shadow:
-        0 24px 60px
-        rgba(0,0,0,.45);
+        0 25px 60px rgba(0,0,0,.45);
+
 }
-
-
-/* =========================================================
-   LIGHT DROPDOWN
-========================================================= */
 
 .dropdown-light{
 
-    background:
-        rgba(255,255,255,.98);
+    background:#fff;
 
-    border:1px solid
-        rgba(15,23,42,.08);
+    border:1px solid rgba(15,23,42,.08);
 
     box-shadow:
-        0 20px 50px
-        rgba(15,23,42,.12);
+        0 20px 50px rgba(15,23,42,.12);
+
 }
 
-
 /* =========================================================
-   DROPDOWN HEADER
+   HEADER
 ========================================================= */
 
 .dropdown-header{
 
     display:flex;
-
     align-items:center;
 
     gap:14px;
 
-    padding:12px;
+    padding:14px;
 
-    margin-bottom:8px;
+    border-radius:16px;
 
-    border-radius:14px;
+    margin-bottom:10px;
 
-    background:
-        rgba(255,255,255,.03);
-
-    border:1px solid
-        rgba(255,255,255,.05);
 }
 
+.dropdown-dark .dropdown-header{
+
+    background:rgba(255,255,255,.04);
+
+}
 
 .dropdown-light .dropdown-header{
 
-    background:
-        rgba(15,23,42,.025);
+    background:#f8fafc;
 
-    border-color:
-        rgba(15,23,42,.06);
 }
-
-
-/* =========================================================
-   DROPDOWN AVATAR
-========================================================= */
 
 .dropdown-avatar{
 
-    width:48px;
-    height:48px;
-
-    flex-shrink:0;
+    width:50px;
+    height:50px;
 
     border-radius:50%;
 
     object-fit:cover;
-}
 
+}
 
 .dropdown-avatar.initials{
 
@@ -704,7 +830,6 @@
     align-items:center;
     justify-content:center;
 
-    font-size:14px;
     font-weight:700;
 
     color:#fff;
@@ -712,26 +837,20 @@
     background:
         linear-gradient(
             135deg,
-            var(--primary),
-            var(--primary-light)
+            #6D5DF6,
+            #8B7BFF
         );
+
 }
 
-
-/* =========================================================
-   USER INFO
-========================================================= */
-
 .dropdown-user-info{
-
-    min-width:0;
 
     display:flex;
     flex-direction:column;
 
-    gap:4px;
-}
+    min-width:0;
 
+}
 
 .dropdown-user-info h4{
 
@@ -741,39 +860,27 @@
 
     font-weight:700;
 
-    color:#fff;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
 }
 
+.dropdown-dark h4{
+
+    color:#fff;
+
+}
+
+.dropdown-light h4{
+
+    color:#172033;
+
+}
 
 .dropdown-user-info small{
 
-    color:#8ea0bd;
+    margin-top:4px;
 
-    font-size:12px;
+    color:#94a3b8;
 
-    font-weight:500;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
 }
-
-
-.dropdown-light .dropdown-user-info h4{
-
-    color:#172033;
-}
-
-
-.dropdown-light .dropdown-user-info small{
-
-    color:#64748b;
-}
-
 
 /* =========================================================
    MENU BUTTONS
@@ -783,23 +890,25 @@
 
     width:100%;
 
-    height:46px;
+    height:48px;
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
-    padding:0 14px;
+    padding:0 16px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:14px;
+
+    cursor:pointer;
 
     background:transparent;
 
-    cursor:pointer;
+    transition:.25s;
 
     font-size:14px;
 
@@ -807,48 +916,49 @@
 
     text-align:left;
 
-    transition:all var(--transition);
-
-    color:#a3b2cd;
 }
 
+.dropdown-dark button{
 
-.profile-dropdown button svg{
+    color:#cbd5e1;
 
-    width:16px;
-    height:16px;
-
-    flex-shrink:0;
-
-    color:var(--primary-light);
 }
-
-
-.profile-dropdown button:hover{
-
-    background:
-        rgba(109,93,246,.12);
-
-    color:#fff;
-
-    transform:translateX(3px);
-}
-
 
 .dropdown-light button{
 
     color:#475569;
+
 }
 
+.profile-dropdown button:hover{
+
+    transform:translateX(4px);
+
+    background:
+        rgba(109,93,246,.12);
+
+}
+
+.dropdown-dark button:hover{
+
+    color:#fff;
+
+}
 
 .dropdown-light button:hover{
 
     color:#4f46e5;
 
-    background:
-        rgba(99,102,241,.08);
 }
 
+.profile-dropdown button svg{
+
+    width:17px;
+    height:17px;
+
+    color:#8B7BFF;
+
+}
 
 /* =========================================================
    DIVIDER
@@ -856,48 +966,318 @@
 
 .profile-dropdown hr{
 
+    border:none;
+
     height:1px;
 
-    margin:10px 6px;
-
-    border:none;
+    margin:10px 4px;
 
     background:
         rgba(255,255,255,.08);
-}
 
+}
 
 .dropdown-light hr{
 
     background:
         rgba(15,23,42,.08);
+
 }
 
-
 /* =========================================================
-   LOGOUT BUTTON
+   LOGOUT
 ========================================================= */
 
 .logout-menu-btn{
 
-    color:#ff6b81 !important;
-}
+    color:#ef4444 !important;
 
+}
 
 .logout-menu-btn svg{
 
-    color:#ff5c74 !important;
-}
+    color:#ef4444 !important;
 
+}
 
 .logout-menu-btn:hover{
 
     background:
-        rgba(239,68,68,.10) !important;
+        rgba(239,68,68,.08) !important;
 
-    color:#ff8fa1 !important;
 }
 
+/* =========================================================
+   MOBILE
+========================================================= */
+
+.mobile-toggle{
+
+    display:none;
+
+    width:44px;
+    height:44px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    align-items:center;
+    justify-content:center;
+
+    transition:.25s;
+
+}
+
+.navbar-dark .mobile-toggle{
+
+    background:rgba(255,255,255,.05);
+
+    color:#cbd5e1;
+
+}
+
+.navbar-light .mobile-toggle{
+
+    background:#f1f5f9;
+
+    color:#475569;
+
+}
+
+.mobile-toggle:hover{
+
+    background:
+        rgba(109,93,246,.15);
+
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+========================================================= */
+
+.navbar-mobile-overlay{
+
+    position:fixed;
+
+    inset:72px 0 0;
+
+    background:
+        rgba(0,0,0,.45);
+
+    backdrop-filter:blur(8px);
+
+    z-index:999;
+
+}
+
+.navbar-mobile-menu{
+
+    width:min(360px,92vw);
+
+    margin:24px auto;
+
+    padding:16px;
+
+    border-radius:22px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.mobile-dark{
+
+    background:#101b30;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.mobile-light{
+
+    background:#fff;
+
+    border:1px solid rgba(15,23,42,.08);
+
+}
+
+.navbar-mobile-menu a,
+.mobile-logout-btn{
+
+    height:50px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:0 16px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.mobile-dark a{
+
+    color:#cbd5e1;
+
+}
+
+.mobile-light a{
+
+    color:#475569;
+
+}
+
+.mobile-dark a:hover{
+
+    background:
+        rgba(109,93,246,.15);
+
+}
+
+.mobile-light a:hover{
+
+    background:
+        rgba(99,102,241,.08);
+
+}
+
+.mobile-logout-btn{
+
+    color:#ef4444;
+
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width:1200px){
+
+    .navbar{
+
+        padding:0 24px;
+
+    }
+
+    .navbar-left{
+
+        gap:28px;
+
+    }
+
+}
+
+@media (max-width:992px){
+
+    .brand-text span{
+
+        display:none;
+
+    }
+
+    .navbar-links{
+
+        gap:4px;
+
+    }
+
+    .navbar-links a{
+
+        padding:0 14px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .navbar{
+
+        padding:0 16px;
+
+    }
+
+    .navbar-links{
+
+        display:none;
+
+    }
+
+    .mobile-toggle{
+
+        display:flex;
+
+    }
+
+    .profile-dropdown{
+
+        width:250px;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .navbar{
+
+        padding:0 12px;
+
+    }
+
+    .brand-text{
+
+        display:none;
+
+    }
+
+    .icon-btn{
+
+        width:42px;
+        height:42px;
+
+    }
+
+    .profile-trigger{
+
+        width:44px;
+        height:44px;
+
+    }
+
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.navbar a:focus-visible,
+.navbar button:focus-visible{
+
+    outline:2px solid #6D5DF6;
+
+    outline-offset:3px;
+
+}
 
 /* =========================================================
    ANIMATION
@@ -912,6 +1292,7 @@
         transform:
             translateY(-10px)
             scale(.96);
+
     }
 
     to{
@@ -921,312 +1302,10 @@
         transform:
             translateY(0)
             scale(1);
+
     }
 
 }
-/* =========================================================
-   MOBILE TOGGLE
-========================================================= */
-
-.mobile-toggle{
-    display:none;
-
-    width:44px;
-    height:44px;
-
-    align-items:center;
-    justify-content:center;
-
-    border:none;
-
-    border-radius:14px;
-
-    cursor:pointer;
-
-    color:#9fb0ce;
-
-    background:rgba(255,255,255,.05);
-
-    transition:all var(--transition);
-}
-
-.mobile-toggle:hover{
-    background:rgba(109,93,246,.15);
-    color:#fff;
-}
-
-
-/* =========================================================
-   MOBILE OVERLAY
-========================================================= */
-
-.navbar-mobile-overlay{
-
-    position:fixed;
-
-    top:72px;
-    left:0;
-    right:0;
-    bottom:0;
-
-    z-index:1100;
-
-    background:
-        rgba(0,0,0,.45);
-
-    backdrop-filter:blur(6px);
-}
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-.navbar-mobile-menu{
-
-    width:min(360px,92vw);
-
-    margin:20px auto;
-
-    border-radius:20px;
-
-    padding:16px;
-
-    display:flex;
-    flex-direction:column;
-
-    gap:8px;
-
-    overflow:hidden;
-}
-
-
-.mobile-dark{
-
-    background:
-        linear-gradient(
-            180deg,
-            #101b30,
-            #0b1323
-        );
-
-    border:1px solid
-        rgba(255,255,255,.08);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.35);
-}
-
-
-.mobile-light{
-
-    background:#ffffff;
-
-    border:1px solid
-        rgba(15,23,42,.08);
-
-    box-shadow:
-        0 20px 50px
-        rgba(15,23,42,.10);
-}
-
-
-/* =========================================================
-   MOBILE LINKS
-========================================================= */
-
-.navbar-mobile-menu a,
-.mobile-logout-btn{
-
-    height:48px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:0 16px;
-
-    border-radius:14px;
-
-    text-decoration:none;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:all var(--transition);
-
-    background:transparent;
-}
-
-
-.mobile-dark a{
-
-    color:#b5c2dc;
-}
-
-.mobile-dark a:hover{
-
-    background:
-        rgba(109,93,246,.15);
-
-    color:#fff;
-}
-
-
-.mobile-light a{
-
-    color:#475569;
-}
-
-.mobile-light a:hover{
-
-    background:
-        rgba(99,102,241,.08);
-
-    color:#4f46e5;
-}
-
-
-.navbar-mobile-menu a.active{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(109,93,246,.18),
-            rgba(109,93,246,.08)
-        );
-
-    color:#fff;
-}
-
-
-.mobile-light a.active{
-
-    color:#4f46e5;
-}
-
-
-/* =========================================================
-   MOBILE LOGOUT
-========================================================= */
-
-.mobile-logout-btn{
-
-    width:100%;
-
-    border:none;
-
-    cursor:pointer;
-
-    text-align:left;
-
-    color:#ef4444;
-
-    background:transparent;
-}
-
-.mobile-logout-btn:hover{
-
-    background:
-        rgba(239,68,68,.08);
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width:1024px){
-
-    .navbar{
-
-        padding:0 18px;
-    }
-
-    .navbar-links{
-
-        gap:6px;
-    }
-
-    .navbar-links a{
-
-        padding:0 14px;
-    }
-
-}
-
-
-@media (max-width:768px){
-
-    .navbar{
-
-        padding:0 14px;
-    }
-
-    .navbar-links{
-
-        display:none;
-    }
-
-    .mobile-toggle{
-
-        display:flex;
-    }
-
-    .profile-dropdown{
-
-        right:0;
-
-        width:250px;
-    }
-
-}
-
-
-@media (max-width:480px){
-
-    .navbar{
-
-        padding:0 10px;
-    }
-
-    .icon-btn{
-
-        width:40px;
-        height:40px;
-    }
-
-    .profile-trigger{
-
-        width:42px;
-        height:42px;
-    }
-
-    .profile-dropdown{
-
-        width:220px;
-    }
-
-}
-
-
-/* =========================================================
-   FOCUS
-========================================================= */
-
-.navbar button:focus-visible,
-.navbar a:focus-visible{
-
-    outline:2px solid
-        rgba(109,93,246,.8);
-
-    outline-offset:3px;
-}
-
 
 /* =========================================================
    REDUCED MOTION
@@ -1241,6 +1320,7 @@
         transition:none !important;
 
         scroll-behavior:auto !important;
+
     }
 
 }

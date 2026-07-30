@@ -11,17 +11,16 @@ import {
 } from "react-router-dom";
 
 import {
-  FaBars,
   FaCog,
   FaMoon,
-  FaSignOutAlt,
   FaSun,
+  FaSignOutAlt,
   FaTasks,
-  FaUserCircle,
   FaUsers,
   FaProjectDiagram,
   FaHome,
   FaTimes,
+  FaUserCircle,
 } from "react-icons/fa";
 
 import {
@@ -30,17 +29,13 @@ import {
 } from "framer-motion";
 
 import NotificationBell from "./NotificationBell";
-
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Navbar.css";
 
-const Navbar = ({
-  sidebarCollapsed = false,
-  onSidebarToggle,
-}) => {
-  const navigate = useNavigate();
+const Navbar = () => {
 
+  const navigate = useNavigate();
   const location = useLocation();
 
   const auth = useAuth();
@@ -78,12 +73,15 @@ const Navbar = ({
 
   const getInitialTheme = () => {
     try {
-      const savedTheme =
+
+      const saved =
         localStorage.getItem("theme");
 
-      if (savedTheme === "dark") return true;
+      if (saved === "dark")
+        return true;
 
-      if (savedTheme === "light") return false;
+      if (saved === "light")
+        return false;
 
       return (
         window.matchMedia &&
@@ -91,8 +89,11 @@ const Navbar = ({
           "(prefers-color-scheme: dark)"
         ).matches
       );
+
     } catch {
+
       return false;
+
     }
   };
 
@@ -109,23 +110,24 @@ const Navbar = ({
     user?.name
       ?.trim()
       ?.split(/\s+/)
-      ?.map(
-        (part) => part[0]
-      )
+      ?.map(word => word[0])
       ?.join("")
-      ?.substring(0, 2)
+      ?.substring(0,2)
       ?.toUpperCase() || "TF";
-        /* ==========================================
+
+  /* ==========================================
       APPLY THEME
   ========================================== */
 
   useEffect(() => {
+
     const html = document.documentElement;
     const body = document.body;
 
-    const theme = darkMode
-      ? "dark"
-      : "light";
+    const theme =
+      darkMode
+        ? "dark"
+        : "light";
 
     html.setAttribute(
       "data-theme",
@@ -152,17 +154,10 @@ const Navbar = ({
       !darkMode
     );
 
-    try {
-      localStorage.setItem(
-        "theme",
-        theme
-      );
-    } catch (error) {
-      console.warn(
-        "Unable to save theme:",
-        error
-      );
-    }
+    localStorage.setItem(
+      "theme",
+      theme
+    );
 
     window.dispatchEvent(
       new CustomEvent(
@@ -175,6 +170,7 @@ const Navbar = ({
         }
       )
     );
+
   }, [darkMode]);
 
   /* ==========================================
@@ -182,100 +178,92 @@ const Navbar = ({
   ========================================== */
 
   useEffect(() => {
-    const handleStorage = (
-      event
+
+    const storageListener = (
+      e
     ) => {
-      if (
-        event.key !== "theme"
-      )
+
+      if (e.key !== "theme")
         return;
 
-      if (
-        event.newValue ===
-        "dark"
-      ) {
-        setDarkMode(true);
-      }
+      setDarkMode(
+        e.newValue === "dark"
+      );
 
-      if (
-        event.newValue ===
-        "light"
-      ) {
-        setDarkMode(false);
-      }
     };
 
-    const handleThemeChange = (
-      event
+    const themeListener = (
+      e
     ) => {
-      const theme =
-        event.detail?.theme;
 
-      if (theme === "dark") {
-        setDarkMode(true);
-      }
+      if (!e.detail) return;
 
-      if (
-        theme === "light"
-      ) {
-        setDarkMode(false);
-      }
+      setDarkMode(
+        e.detail.theme === "dark"
+      );
+
     };
 
     window.addEventListener(
       "storage",
-      handleStorage
+      storageListener
     );
 
     window.addEventListener(
       "taskflow-theme-change",
-      handleThemeChange
+      themeListener
     );
 
     return () => {
+
       window.removeEventListener(
         "storage",
-        handleStorage
+        storageListener
       );
 
       window.removeEventListener(
         "taskflow-theme-change",
-        handleThemeChange
+        themeListener
       );
+
     };
+
   }, []);
 
   /* ==========================================
-      CLOSE PROFILE MENU
+      CLOSE PROFILE
   ========================================== */
 
   useEffect(() => {
-    const handleOutsideClick = (
+
+    const outside = (
       event
     ) => {
+
       if (
         menuRef.current &&
         !menuRef.current.contains(
           event.target
         )
       ) {
-        setShowProfileMenu(
-          false
-        );
+
+        setShowProfileMenu(false);
+
       }
+
     };
 
     document.addEventListener(
       "mousedown",
-      handleOutsideClick
+      outside
     );
 
-    return () => {
+    return () =>
       document.removeEventListener(
         "mousedown",
-        handleOutsideClick
+        outside
       );
-    };
+
   }, []);
 
   /* ==========================================
@@ -283,23 +271,18 @@ const Navbar = ({
   ========================================== */
 
   useEffect(() => {
-    setShowProfileMenu(
-      false
-    );
 
+    setShowProfileMenu(false);
     setMobileMenu(false);
+
   }, [location.pathname]);
 
   /* ==========================================
       TOGGLE THEME
   ========================================== */
 
-  const toggleTheme = () => {
-    setDarkMode(
-      (previous) =>
-        !previous
-    );
-  };
+  const toggleTheme = () =>
+    setDarkMode(prev => !prev);
 
   /* ==========================================
       NAVIGATION
@@ -308,60 +291,42 @@ const Navbar = ({
   const handleNavigate = (
     path
   ) => {
-    if (!path) return;
 
     navigate(path);
 
-    setShowProfileMenu(
-      false
-    );
-
     setMobileMenu(false);
+    setShowProfileMenu(false);
+
   };
 
   /* ==========================================
       LOGOUT
   ========================================== */
 
-  const handleLogout =
-    async () => {
-      try {
-        if (logout) {
-          await logout();
-        }
-      } catch (error) {
-        console.error(
-          "Logout Error:",
-          error
-        );
+  const handleLogout = async () => {
+
+    try {
+
+      if (logout) {
+        await logout();
       }
 
-      try {
-        localStorage.removeItem(
-          "token"
-        );
+    } catch (err) {
 
-        localStorage.removeItem(
-          "user"
-        );
-      } catch (error) {
-        console.warn(
-          "Unable to clear localStorage:",
-          error
-        );
-      }
+      console.error(err);
 
-      setShowProfileMenu(
-        false
-      );
+    }
 
-      setMobileMenu(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-      navigate("/", {
-        replace: true,
-      });
-    };
-      /* ==========================================
+    navigate("/", {
+      replace: true,
+    });
+
+  };
+
+    /* ==========================================
       RENDER
   ========================================== */
 
@@ -371,122 +336,88 @@ const Navbar = ({
         darkMode
           ? "navbar-dark"
           : "navbar-light"
-      } ${
-        sidebarCollapsed
-          ? "navbar-sidebar-collapsed"
-          : "navbar-sidebar-expanded"
       }`}
     >
+
       {/* ======================================
-          LEFT
+          LEFT SIDE
       ====================================== */}
 
       <div className="navbar-left">
 
-        {/* SIDEBAR TOGGLE */}
+        {/* ======================================
+            LOGO
+        ====================================== */}
 
-        <motion.button
-          type="button"
-          className="sidebar-toggle-btn"
-          onClick={onSidebarToggle}
-          aria-label="Toggle Sidebar"
-          whileHover={{
-            scale: 1.05,
-          }}
-          whileTap={{
-            scale: 0.92,
-          }}
+        <motion.div
+          className="navbar-brand"
+          onClick={() => navigate("/dashboard")}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <FaBars />
-        </motion.button>
+          <div className="brand-logo">
+            TF
+          </div>
 
-        {/* DESKTOP NAVIGATION */}
+          <div className="brand-text">
 
-        <nav
-          className={`navbar-links ${
-            mobileMenu
-              ? "active"
-              : ""
-          }`}
-        >
-          {/* DASHBOARD */}
+            <h2>TaskFlow</h2>
+
+            <span>
+              Project Management
+            </span>
+
+          </div>
+        </motion.div>
+
+        {/* ======================================
+            DESKTOP NAVIGATION
+        ====================================== */}
+
+        <nav className="navbar-links">
 
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              isActive
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setMobileMenu(false)
+              isActive ? "active" : ""
             }
           >
             <FaHome />
 
-            <span>
-              Dashboard
-            </span>
+            <span>Dashboard</span>
           </NavLink>
-
-          {/* PROJECTS */}
 
           <NavLink
             to="/projects"
             className={({ isActive }) =>
-              isActive
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setMobileMenu(false)
+              isActive ? "active" : ""
             }
           >
             <FaProjectDiagram />
 
-            <span>
-              Projects
-            </span>
+            <span>Projects</span>
           </NavLink>
-
-          {/* TASKS */}
 
           <NavLink
             to="/tasks"
             className={({ isActive }) =>
-              isActive
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setMobileMenu(false)
+              isActive ? "active" : ""
             }
           >
             <FaTasks />
 
-            <span>
-              Tasks
-            </span>
+            <span>Tasks</span>
           </NavLink>
-
-          {/* USERS */}
 
           <NavLink
             to="/users"
             className={({ isActive }) =>
-              isActive
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setMobileMenu(false)
+              isActive ? "active" : ""
             }
           >
             <FaUsers />
 
-            <span>
-              Team
-            </span>
+            <span>Team</span>
           </NavLink>
 
         </nav>
@@ -494,13 +425,12 @@ const Navbar = ({
       </div>
 
       {/* ======================================
-          RIGHT
+          RIGHT SIDE
       ====================================== */}
 
       <div className="navbar-right">
-                {/* ======================================
-            THEME TOGGLE
-        ====================================== */}
+
+        {/* THEME */}
 
         <motion.button
           type="button"
@@ -510,91 +440,82 @@ const Navbar = ({
               : ""
           }`}
           onClick={toggleTheme}
-          aria-label={
-            darkMode
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
-          title={
-            darkMode
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
           whileHover={{
-            scale: 1.06,
-            rotate: darkMode ? 5 : -5,
+            scale: 1.08,
+            rotate: darkMode ? 8 : -8,
           }}
           whileTap={{
             scale: 0.92,
           }}
         >
+
           <AnimatePresence
             mode="wait"
             initial={false}
           >
+
             {darkMode ? (
+
               <motion.span
                 key="sun"
                 className="theme-icon"
                 initial={{
-                  opacity: 0,
                   rotate: -90,
-                  scale: 0.5,
+                  opacity: 0,
+                  scale: .5,
                 }}
                 animate={{
-                  opacity: 1,
                   rotate: 0,
+                  opacity: 1,
                   scale: 1,
                 }}
                 exit={{
-                  opacity: 0,
                   rotate: 90,
-                  scale: 0.5,
+                  opacity: 0,
+                  scale: .5,
                 }}
               >
                 <FaSun />
               </motion.span>
+
             ) : (
+
               <motion.span
                 key="moon"
                 className="theme-icon"
                 initial={{
-                  opacity: 0,
                   rotate: 90,
-                  scale: 0.5,
+                  opacity: 0,
+                  scale: .5,
                 }}
                 animate={{
-                  opacity: 1,
                   rotate: 0,
+                  opacity: 1,
                   scale: 1,
                 }}
                 exit={{
-                  opacity: 0,
                   rotate: -90,
-                  scale: 0.5,
+                  opacity: 0,
+                  scale: .5,
                 }}
               >
                 <FaMoon />
               </motion.span>
+
             )}
+
           </AnimatePresence>
+
         </motion.button>
 
-        {/* ======================================
-            NOTIFICATIONS
-        ====================================== */}
+        {/* NOTIFICATIONS */}
 
         <NotificationBell />
 
-        {/* ======================================
-            SETTINGS
-        ====================================== */}
+        {/* SETTINGS */}
 
         <motion.button
-          type="button"
           className="icon-btn"
-          aria-label="Settings"
-          title="Settings"
           onClick={() =>
             handleNavigate("/settings")
           }
@@ -603,59 +524,56 @@ const Navbar = ({
             rotate: 5,
           }}
           whileTap={{
-            scale: 0.92,
+            scale: .92,
           }}
         >
           <FaCog />
         </motion.button>
 
-        {/* ======================================
-            PROFILE
-        ====================================== */}
+        {/* PROFILE */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
+
           <motion.button
-            type="button"
-            className={`profile-trigger ${
-              darkMode
-                ? "profile-trigger-dark"
-                : "profile-trigger-light"
-            }`}
-            aria-label="Open profile menu"
-            aria-expanded={showProfileMenu}
+            className="profile-trigger"
             onClick={() =>
               setShowProfileMenu(
-                (prev) => !prev
+                prev => !prev
               )
             }
             whileHover={{
-              scale: 1.04,
+              scale: 1.05,
             }}
             whileTap={{
-              scale: 0.94,
+              scale: .95,
             }}
           >
+
             {user?.avatar ? (
+
               <img
                 src={user.avatar}
-                alt={
-                  user?.name ||
-                  "User avatar"
-                }
+                alt={user.name}
                 className="avatar"
               />
+
             ) : (
+
               <div className="avatar initials">
                 {initials}
               </div>
+
             )}
+
           </motion.button>
 
           <AnimatePresence>
+
             {showProfileMenu && (
+
               <motion.div
                 className={`profile-dropdown ${
                   darkMode
@@ -665,7 +583,7 @@ const Navbar = ({
                 initial={{
                   opacity: 0,
                   y: -10,
-                  scale: 0.96,
+                  scale: .96,
                 }}
                 animate={{
                   opacity: 1,
@@ -674,112 +592,111 @@ const Navbar = ({
                 }}
                 exit={{
                   opacity: 0,
-                  y: -8,
-                  scale: 0.96,
-                }}
-                transition={{
-                  duration: 0.2,
+                  y: -10,
+                  scale: .96,
                 }}
               >
-                {/* HEADER */}
+
+                {/* Header */}
 
                 <div className="dropdown-header">
+
                   {user?.avatar ? (
+
                     <img
                       src={user.avatar}
                       alt=""
                       className="dropdown-avatar"
                     />
+
                   ) : (
+
                     <div className="dropdown-avatar initials">
                       {initials}
                     </div>
+
                   )}
 
                   <div className="dropdown-user-info">
+
                     <h4>
-                      {user?.name ||
-                        "User"}
+                      {user?.name || "User"}
                     </h4>
 
                     <small>
-                      {user?.role ||
-                        "Member"}
+                      {user?.role || "Member"}
                     </small>
+
                   </div>
+
                 </div>
 
-                {/* PROFILE */}
+                                {/* ===========================
+                    PROFILE
+                ============================ */}
 
                 <button
                   type="button"
                   onClick={() =>
-                    handleNavigate(
-                      "/profile"
-                    )
+                    handleNavigate("/profile")
                   }
                 >
                   <FaUserCircle />
-
-                  <span>
-                    Profile
-                  </span>
+                  <span>Profile</span>
                 </button>
 
-                {/* SETTINGS */}
+                {/* ===========================
+                    SETTINGS
+                ============================ */}
 
                 <button
                   type="button"
                   onClick={() =>
-                    handleNavigate(
-                      "/settings"
-                    )
+                    handleNavigate("/settings")
                   }
                 >
                   <FaCog />
-
-                  <span>
-                    Settings
-                  </span>
+                  <span>Settings</span>
                 </button>
 
                 <hr />
 
-                {/* LOGOUT */}
+                {/* ===========================
+                    LOGOUT
+                ============================ */}
 
                 <button
                   type="button"
                   className="logout-menu-btn"
-                  onClick={
-                    handleLogout
-                  }
+                  onClick={handleLogout}
                 >
                   <FaSignOutAlt />
-
-                  <span>
-                    Logout
-                  </span>
+                  <span>Logout</span>
                 </button>
+
               </motion.div>
+
             )}
+
           </AnimatePresence>
+
         </div>
-        {/* ======================================
-            MOBILE NAVIGATION TOGGLE
-        ====================================== */}
+
+        {/* ===========================
+            MOBILE MENU BUTTON
+        ============================ */}
 
         <motion.button
           type="button"
           className="mobile-toggle"
           aria-label={
             mobileMenu
-              ? "Close navigation menu"
-              : "Open navigation menu"
+              ? "Close Navigation"
+              : "Open Navigation"
           }
-          aria-expanded={mobileMenu}
           onClick={() =>
             setMobileMenu(
-              (previous) => !previous
+              (prev) => !prev
             )
           }
           whileTap={{
@@ -796,11 +713,13 @@ const Navbar = ({
       </div>
 
       {/* ==========================================
-          MOBILE NAVIGATION OVERLAY
+          MOBILE NAVIGATION
       ========================================== */}
 
       <AnimatePresence>
+
         {mobileMenu && (
+
           <motion.div
             className="navbar-mobile-overlay"
             initial={{
@@ -813,9 +732,10 @@ const Navbar = ({
               opacity: 0,
             }}
             transition={{
-              duration: 0.2,
+              duration: .2,
             }}
           >
+
             <motion.div
               className={`navbar-mobile-menu ${
                 darkMode
@@ -823,21 +743,22 @@ const Navbar = ({
                   : "mobile-light"
               }`}
               initial={{
-                y: -20,
                 opacity: 0,
+                y: -25,
               }}
               animate={{
-                y: 0,
                 opacity: 1,
+                y: 0,
               }}
               exit={{
-                y: -20,
                 opacity: 0,
+                y: -25,
               }}
               transition={{
-                duration: 0.25,
+                duration: .25,
               }}
             >
+
               <NavLink
                 to="/dashboard"
                 onClick={() =>
@@ -896,11 +817,15 @@ const Navbar = ({
                 <FaSignOutAlt />
                 <span>Logout</span>
               </button>
+
             </motion.div>
+
           </motion.div>
+
         )}
+
       </AnimatePresence>
-    </header>
+        </header>
   );
 };
 
