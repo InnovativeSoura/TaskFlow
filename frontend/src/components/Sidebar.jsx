@@ -1,7 +1,7 @@
 // src/components/Sidebar.jsx
 
 import React, { useState } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   FaThLarge,
@@ -13,7 +13,6 @@ import {
   FaCog,
   FaBell,
   FaSignOutAlt,
-  FaChevronRight,
   FaChevronLeft,
 } from "react-icons/fa";
 
@@ -24,55 +23,71 @@ import "../styles/Sidebar.css";
 
 const Sidebar = () => {
 
+
   const [collapsed, setCollapsed] = useState(false);
 
+
   const navigate = useNavigate();
+
 
   const { user, logout } = useAuth();
 
 
-  const menuItems = [
-    {
-      name: "Dashboard",
-      path: "/dashboard",
-      icon: <FaThLarge />,
-    },
-    {
-      name: "Projects",
-      path: "/projects",
-      icon: <FaFolder />,
-    },
-    {
-      name: "Tasks",
-      path: "/tasks",
-      icon: <FaTasks />,
-    },
-    {
-      name: "Kanban",
-      path: "/kanban",
-      icon: <FaColumns />,
-    },
-    {
-      name: "Users",
-      path: "/users",
-      icon: <FaUsers />,
-    },
-    {
-      name: "Reports",
-      path: "/reports",
-      icon: <FaChartBar />,
-    },
-    {
-      name: "Settings",
-      path: "/settings",
-      icon: <FaCog />,
-    },
-    {
-      name: "Notifications",
-      path: "/notifications",
-      icon: <FaBell />,
-    },
-  ];
+
+  const username =
+    user?.name ||
+    user?.username ||
+    "Souradipta Patra";
+
+
+
+  const role =
+    user?.role ||
+    "Administrator";
+
+
+
+
+  // =========================
+  // AUTO PROFILE INITIALS
+  // =========================
+
+  const getInitials = (name) => {
+
+    if (!name) return "U";
+
+
+    const words =
+      name
+        .trim()
+        .split(" ")
+        .filter(Boolean);
+
+
+
+    if (words.length === 1) {
+
+      return words[0]
+        .charAt(0)
+        .toUpperCase();
+
+    }
+
+
+
+    return (
+      words[0].charAt(0) +
+      words[words.length - 1].charAt(0)
+    )
+    .toUpperCase();
+
+  };
+
+
+
+  const avatarInitials =
+    getInitials(username);
+
 
 
 
@@ -83,18 +98,58 @@ const Sidebar = () => {
     navigate("/");
 
   };
+    const menuItems = [
 
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: <FaThLarge />,
+    },
 
+    {
+      name: "Projects",
+      path: "/projects",
+      icon: <FaFolder />,
+    },
 
-  const username =
-    user?.name ||
-    user?.username ||
-    "Souradipta Patra";
+    {
+      name: "Tasks",
+      path: "/tasks",
+      icon: <FaTasks />,
+    },
 
+    {
+      name: "Kanban",
+      path: "/kanban",
+      icon: <FaColumns />,
+    },
 
-  const role =
-    user?.role ||
-    "Administrator";
+    {
+      name: "Users",
+      path: "/users",
+      icon: <FaUsers />,
+    },
+
+    {
+      name: "Reports",
+      path: "/reports",
+      icon: <FaChartBar />,
+    },
+
+    {
+      name: "Settings",
+      path: "/settings",
+      icon: <FaCog />,
+    },
+
+    {
+      name: "Notifications",
+      path: "/notifications",
+      icon: <FaBell />,
+    },
+
+  ];
+
 
 
 
@@ -107,19 +162,25 @@ const Sidebar = () => {
     >
 
 
+
       {/* =========================
           HEADER
       ========================== */}
+
 
       <div className="sidebar-header">
 
 
         <button
+
           className="sidebar-brand-button"
+
           onClick={() =>
             setCollapsed(!collapsed)
           }
+
         >
+
 
           <div className="brand-logo">
 
@@ -131,6 +192,7 @@ const Sidebar = () => {
 
 
 
+
           {!collapsed && (
 
             <div className="brand-content">
@@ -139,13 +201,16 @@ const Sidebar = () => {
                 TaskFlow
               </strong>
 
+
               <span>
                 Workspace
               </span>
 
+
             </div>
 
           )}
+
 
 
 
@@ -160,44 +225,45 @@ const Sidebar = () => {
           )}
 
 
+
         </button>
 
 
       </div>
-
             {/* =========================
           PROFILE SECTION
       ========================== */}
+
 
       <div className="sidebar-profile">
 
 
         <div className="profile-avatar">
 
-          {
-            username
-              .split(" ")
-              .map((word) => word[0])
-              .join("")
-              .substring(0,2)
-              .toUpperCase()
-          }
+          {avatarInitials}
 
         </div>
 
 
 
+
         {!collapsed && (
 
-          <div className="profile-details">
+          <div className="profile-content">
+
 
             <h4>
+
               {username}
+
             </h4>
 
 
+
             <span>
+
               {role}
+
             </span>
 
 
@@ -211,15 +277,17 @@ const Sidebar = () => {
 
 
 
+
       {/* =========================
-          MENU SECTION
+          NAVIGATION MENU
       ========================== */}
 
-      <nav className="sidebar-menu">
+
+      <nav className="sidebar-navigation">
 
 
         {
-          menuItems.map((item)=>(
+          menuItems.map((item) => (
 
             <NavLink
 
@@ -227,11 +295,17 @@ const Sidebar = () => {
 
               to={item.path}
 
-              className={({isActive}) =>
+
+              className={({ isActive }) =>
+
                 isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+
+                  ? "sidebar-link active"
+
+                  : "sidebar-link"
+
               }
+
 
             >
 
@@ -246,13 +320,14 @@ const Sidebar = () => {
 
               {!collapsed && (
 
-                <span className="sidebar-text">
+                <span className="sidebar-label">
 
                   {item.name}
 
                 </span>
 
               )}
+
 
 
             </NavLink>
@@ -264,16 +339,22 @@ const Sidebar = () => {
 
       </nav>
             {/* =========================
-          SIDEBAR FOOTER
+          FOOTER
+          LOGOUT SECTION
       ========================== */}
+
 
       <div className="sidebar-footer">
 
 
         <button
+
           className="logout-button"
+
           onClick={handleLogout}
+
         >
+
 
           <span className="sidebar-icon">
 
@@ -285,7 +366,7 @@ const Sidebar = () => {
 
           {!collapsed && (
 
-            <span className="sidebar-text">
+            <span className="sidebar-label">
 
               Logout
 
@@ -294,10 +375,12 @@ const Sidebar = () => {
           )}
 
 
+
         </button>
 
 
       </div>
+
 
 
     </aside>
