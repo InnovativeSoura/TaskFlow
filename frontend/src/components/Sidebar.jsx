@@ -1,180 +1,309 @@
+// src/components/Sidebar.jsx
+
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 
 import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaTachometerAlt,
-  FaProjectDiagram,
+  FaThLarge,
+  FaFolder,
   FaTasks,
+  FaColumns,
   FaUsers,
   FaChartBar,
   FaCog,
+  FaBell,
   FaSignOutAlt,
+  FaChevronRight,
+  FaChevronLeft,
 } from "react-icons/fa";
 
-import "./Sidebar.css";
+import { useAuth } from "../context/AuthContext";
+
+import "../styles/Sidebar.css";
 
 
 const Sidebar = () => {
+
   const [collapsed, setCollapsed] = useState(false);
 
   const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
 
 
   const menuItems = [
     {
       name: "Dashboard",
-      icon: <FaTachometerAlt />,
       path: "/dashboard",
+      icon: <FaThLarge />,
     },
     {
       name: "Projects",
-      icon: <FaProjectDiagram />,
       path: "/projects",
+      icon: <FaFolder />,
     },
     {
       name: "Tasks",
-      icon: <FaTasks />,
       path: "/tasks",
+      icon: <FaTasks />,
+    },
+    {
+      name: "Kanban",
+      path: "/kanban",
+      icon: <FaColumns />,
     },
     {
       name: "Users",
-      icon: <FaUsers />,
       path: "/users",
+      icon: <FaUsers />,
     },
     {
-      name: "Analytics",
+      name: "Reports",
+      path: "/reports",
       icon: <FaChartBar />,
-      path: "/analytics",
     },
     {
       name: "Settings",
-      icon: <FaCog />,
       path: "/settings",
+      icon: <FaCog />,
+    },
+    {
+      name: "Notifications",
+      path: "/notifications",
+      icon: <FaBell />,
     },
   ];
 
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
 
-    navigate("/login");
+  const handleLogout = () => {
+
+    logout();
+
+    navigate("/");
+
   };
 
 
+
+  const username =
+    user?.name ||
+    user?.username ||
+    "Souradipta Patra";
+
+
+  const role =
+    user?.role ||
+    "Administrator";
+
+
+
   return (
+
     <aside
-      className={`sidebar ${collapsed ? "collapsed" : ""}`}
+      className={`sidebar ${
+        collapsed ? "collapsed" : ""
+      }`}
     >
 
-      {/* Collapse Button */}
-      <button
-        className="sidebar-toggle"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? (
-          <FaChevronRight />
-        ) : (
-          <FaChevronLeft />
-        )}
-      </button>
+
+      {/* =========================
+          HEADER
+      ========================== */}
+
+      <div className="sidebar-header">
 
 
-      {/* Profile Section */}
-      <div className="sidebar-profile">
+        <button
+          className="sidebar-brand-button"
+          onClick={() =>
+            setCollapsed(!collapsed)
+          }
+        >
 
-        <div className="profile-avatar">
-          SP
-        </div>
-
-        {!collapsed && (
-          <div className="profile-info">
-            <h3>
-              Souradipta
-            </h3>
+          <div className="brand-logo">
 
             <span>
-              Admin
+              TF
             </span>
+
           </div>
+
+
+
+          {!collapsed && (
+
+            <div className="brand-content">
+
+              <strong>
+                TaskFlow
+              </strong>
+
+              <span>
+                Workspace
+              </span>
+
+            </div>
+
+          )}
+
+
+
+          {!collapsed && (
+
+            <div className="collapse-arrow">
+
+              <FaChevronLeft />
+
+            </div>
+
+          )}
+
+
+        </button>
+
+
+      </div>
+
+            {/* =========================
+          PROFILE SECTION
+      ========================== */}
+
+      <div className="sidebar-profile">
+
+
+        <div className="profile-avatar">
+
+          {
+            username
+              .split(" ")
+              .map((word) => word[0])
+              .join("")
+              .substring(0,2)
+              .toUpperCase()
+          }
+
+        </div>
+
+
+
+        {!collapsed && (
+
+          <div className="profile-details">
+
+            <h4>
+              {username}
+            </h4>
+
+
+            <span>
+              {role}
+            </span>
+
+
+          </div>
+
         )}
+
 
       </div>
 
 
 
-      {/* Workspace */}
-      {!collapsed && (
-        <div className="workspace-section">
 
-          <p className="section-title">
-            WORKSPACE
-          </p>
+      {/* =========================
+          MENU SECTION
+      ========================== */}
 
-        </div>
-      )}
-
-
-
-      {/* Navigation */}
       <nav className="sidebar-menu">
 
+
         {
-          menuItems.map((item) => (
+          menuItems.map((item)=>(
+
             <NavLink
+
               key={item.name}
+
               to={item.path}
+
               className={({isActive}) =>
                 isActive
-                  ? "sidebar-link active"
-                  : "sidebar-link"
+                ? "sidebar-link active"
+                : "sidebar-link"
               }
+
             >
 
-              <span className="menu-icon">
+
+              <span className="sidebar-icon">
+
                 {item.icon}
+
               </span>
 
 
+
               {!collapsed && (
-                <span className="menu-text">
+
+                <span className="sidebar-text">
+
                   {item.name}
+
                 </span>
+
               )}
 
+
             </NavLink>
+
+
           ))
         }
 
+
       </nav>
+            {/* =========================
+          SIDEBAR FOOTER
+      ========================== */}
 
+      <div className="sidebar-footer">
 
-
-      {/* Logout Bottom */}
-      <div className="sidebar-bottom">
 
         <button
-          className="logout-btn"
+          className="logout-button"
           onClick={handleLogout}
         >
 
-          <FaSignOutAlt />
+          <span className="sidebar-icon">
+
+            <FaSignOutAlt />
+
+          </span>
+
+
 
           {!collapsed && (
-            <span>
+
+            <span className="sidebar-text">
+
               Logout
+
             </span>
+
           )}
 
+
         </button>
+
 
       </div>
 
 
     </aside>
+
   );
+
 };
 
 
