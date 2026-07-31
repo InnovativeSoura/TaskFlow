@@ -171,7 +171,8 @@ const Sidebar = ({
             mobile: isMobile,
           },
         }
-      );
+      )
+    )
 
   }, [sidebarOpen, isMobile]);
 
