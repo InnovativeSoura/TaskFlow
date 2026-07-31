@@ -8,8 +8,7 @@ import Navbar from "../components/Navbar";
 import "../styles/MainLayout.css";
 
 const MainLayout = ({ children }) => {
-  const [sidebarCollapsed, setSidebarCollapsed] =
-    useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
@@ -23,44 +22,35 @@ const MainLayout = ({ children }) => {
           : "sidebar-expanded"
       }`}
     >
-      {/* ==========================================
-          SIDEBAR
-      ========================================== */}
+      {/* FULL WIDTH NAVBAR */}
 
-      <aside className="taskflow-sidebar">
-        <Sidebar
-          collapsed={sidebarCollapsed}
-          onToggle={toggleSidebar}
+      <header className="taskflow-navbar">
+        <Navbar
+          sidebarCollapsed={sidebarCollapsed}
+          onSidebarToggle={toggleSidebar}
         />
-      </aside>
+      </header>
 
-      {/* ==========================================
-          MAIN APPLICATION
-      ========================================== */}
+      {/* BODY */}
 
-      <section className="taskflow-main">
+      <div className="taskflow-body">
 
-        {/* ======================================
-            NAVBAR
-        ====================================== */}
+        {/* SIDEBAR */}
 
-        <header className="taskflow-navbar">
-          <Navbar
-            sidebarCollapsed={sidebarCollapsed}
-            onSidebarToggle={toggleSidebar}
+        <aside className="taskflow-sidebar">
+          <Sidebar
+            collapsed={sidebarCollapsed}
+            onToggle={toggleSidebar}
           />
-        </header>
+        </aside>
 
-        {/* ======================================
-            PAGE CONTENT
-        ====================================== */}
+        {/* PAGE */}
 
         <main className="taskflow-page-content">
           {children}
         </main>
 
-      </section>
-
+      </div>
     </div>
   );
 };
