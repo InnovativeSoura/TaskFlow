@@ -4,7 +4,7 @@
 
 :root{
 
-    --sidebar-expanded-width:260px;
+    --sidebar-expanded-width:100px;
     --sidebar-collapsed-width:76px;
 
     --sidebar-bg:#0b1220;
