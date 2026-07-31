@@ -1,21 +1,20 @@
 // src/components/Sidebar.jsx
 
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
 
 import {
-    FaTachometerAlt,
-    FaProjectDiagram,
-    FaTasks,
-    FaColumns,
-    FaUsers,
-    FaChartBar,
-    FaCog,
-    FaBell,
-    FaSignOutAlt,
-    FaChevronLeft,
-    FaChevronRight,
+  FaTachometerAlt,
+  FaProjectDiagram,
+  FaTasks,
+  FaColumns,
+  FaUsers,
+  FaChartBar,
+  FaCog,
+  FaBell,
+  FaSignOutAlt,
+  FaChevronLeft,
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
@@ -27,291 +26,335 @@ import "../styles/Sidebar.css";
 ========================================================= */
 
 const menuItems = [
-    {
-        title: "Dashboard",
-        icon: <FaTachometerAlt />,
-        path: "/dashboard",
-    },
-    {
-        title: "Projects",
-        icon: <FaProjectDiagram />,
-        path: "/projects",
-    },
-    {
-        title: "Tasks",
-        icon: <FaTasks />,
-        path: "/tasks",
-    },
-    {
-        title: "Kanban",
-        icon: <FaColumns />,
-        path: "/kanban",
-    },
-    {
-        title: "Users",
-        icon: <FaUsers />,
-        path: "/users",
-    },
-    {
-        title: "Reports",
-        icon: <FaChartBar />,
-        path: "/reports",
-    },
-    {
-        title: "Settings",
-        icon: <FaCog />,
-        path: "/settings",
-    },
-    {
-        title: "Notifications",
-        icon: <FaBell />,
-        path: "/notifications",
-    },
+  {
+    title: "Dashboard",
+    icon: <FaTachometerAlt />,
+    path: "/dashboard",
+  },
+  {
+    title: "Projects",
+    icon: <FaProjectDiagram />,
+    path: "/projects",
+  },
+  {
+    title: "Tasks",
+    icon: <FaTasks />,
+    path: "/tasks",
+  },
+  {
+    title: "Kanban",
+    icon: <FaColumns />,
+    path: "/kanban",
+  },
+  {
+    title: "Users",
+    icon: <FaUsers />,
+    path: "/users",
+  },
+  {
+    title: "Reports",
+    icon: <FaChartBar />,
+    path: "/reports",
+  },
+  {
+    title: "Settings",
+    icon: <FaCog />,
+    path: "/settings",
+  },
+  {
+    title: "Notifications",
+    icon: <FaBell />,
+    path: "/notifications",
+  },
 ];
 /* =========================================================
    SIDEBAR COMPONENT
 ========================================================= */
 
 const Sidebar = ({
-    collapsed,
-    onToggle,
+  collapsed = false,
+  onToggle,
 }) => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const {
-        user,
-        logout,
-    } = useAuth();
+  const {
+    user,
+    logout,
+  } = useAuth();
 
-    /* =====================================================
-       USER INITIALS
-    ===================================================== */
+  /* =====================================================
+     USER INITIALS
+  ===================================================== */
 
-    const initials =
-        user?.name
-            ?.trim()
-            ?.split(/\s+/)
-            ?.map((word) => word[0])
-            ?.join("")
-            ?.substring(0, 2)
-            ?.toUpperCase() || "TF";
+  const initials =
+    user?.name
+      ?.trim()
+      ?.split(" ")
+      ?.map((word) => word[0])
+      ?.join("")
+      ?.substring(0, 2)
+      ?.toUpperCase() || "TF";
 
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
+  /* =====================================================
+     TOGGLE SIDEBAR
+  ===================================================== */
 
-    const handleLogout = async () => {
+  const handleToggle = () => {
 
-        try {
+    if (typeof onToggle === "function") {
+      onToggle();
+    }
 
-            if (typeof logout === "function") {
-                await logout();
-            }
+  };
 
-        } catch (error) {
+  /* =====================================================
+     LOGOUT
+  ===================================================== */
 
-            console.error(
-                "Logout Error:",
-                error
-            );
+  const handleLogout = async () => {
 
-        }
+    try {
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+      if (logout) {
+        await logout();
+      }
 
-        navigate("/", {
-            replace: true,
-        });
+    } catch (err) {
 
-    };
+      console.error(
+        "Logout Error:",
+        err
+      );
 
-    /* =====================================================
-       TOGGLE SIDEBAR
-    ===================================================== */
+    }
 
-    const toggleSidebar = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-        if (typeof onToggle === "function") {
-            onToggle();
-        }
+    navigate("/", {
+      replace: true,
+    });
 
-    };
+  };
 
-    /* =====================================================
-       RENDER
-    ===================================================== */
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
-      return (
-    <>
-      {/* ================= Overlay ================= */}
+  return (
 
-      <AnimatePresence>
-        {isMobile && sidebarOpen && (
+    <motion.aside
+      className={`sidebar ${
+        collapsed
+          ? "collapsed"
+          : "expanded"
+      }`}
+      initial={false}
+      animate={{
+        width: collapsed
+          ? 64
+          : 220,
+      }}
+      transition={{
+        duration: 0.28,
+      }}
+    >
+            {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <div className="sidebar-header">
+
+        <button
+          type="button"
+          className="sidebar-brand-button"
+          onClick={handleToggle}
+          aria-label="Toggle Sidebar"
+        >
+
+          {/* Logo */}
+
           <motion.div
-            className="sidebar-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* ================= Sidebar ================= */}
-
-      <motion.aside
-        className={`sidebar ${
-          sidebarOpen ? "expanded" : "collapsed"
-        } ${isMobile ? "mobile" : ""}`}
-        animate={{
-          width: isMobile
-            ? sidebarOpen
-              ? 260
-              : 0
-            : sidebarOpen
-            ? 260
-            : 76,
-        }}
-        transition={{
-          duration: 0.28,
-        }}
-      >
-        {/* ================= Header ================= */}
-
-        <div className="sidebar-header">
-
-          <button
-            type="button"
-            className="sidebar-brand-button"
-            onClick={toggleSidebar}
-            aria-label="Toggle Sidebar"
+            className="brand-logo"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="brand-logo">
-              TF
+            TF
+          </motion.div>
+
+          {/* Brand */}
+
+          {!collapsed && (
+
+            <div className="brand-content">
+
+              <strong>
+                TaskFlow
+              </strong>
+
+              <span>
+                Workspace
+              </span>
+
             </div>
 
-            {sidebarOpen && (
-              <div className="brand-content">
-                <strong>TaskFlow</strong>
-                <span>Workspace</span>
-              </div>
-            )}
-
-            {!isMobile && sidebarOpen && (
-              <FaChevronLeft className="collapse-arrow" />
-            )}
-
-            {!isMobile && !sidebarOpen && (
-              <FaChevronRight className="collapse-arrow" />
-            )}
-          </button>
-
-          {isMobile && sidebarOpen && (
-            <button
-              className="close-sidebar"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <FaTimes />
-            </button>
           )}
 
-        </div>
+          {/* Collapse Icon */}
 
-        <div className="sidebar-divider" />
+          {!collapsed && (
 
-        {/* ================= Profile ================= */}
+            <FaChevronLeft
+              className="collapse-arrow"
+            />
 
-        <NavLink
-          to="/profile"
-          className="sidebar-user-card"
-          onClick={closeMobile}
-        >
-          <div className="sidebar-avatar-wrapper">
+          )}
 
-            <div className="sidebar-avatar initials">
+        </button>
+
+      </div>
+
+      <div className="sidebar-divider" />
+
+      {/* =====================================================
+          USER PROFILE
+      ===================================================== */}
+
+      <NavLink
+        to="/profile"
+        className="sidebar-user-card"
+      >
+
+        <div className="sidebar-avatar-wrapper">
+
+          {user?.avatar ? (
+
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="sidebar-avatar"
+            />
+
+          ) : (
+
+            <div className="sidebar-avatar">
               {initials}
             </div>
 
-            <span className="profile-online-dot" />
-
-          </div>
-
-          {sidebarOpen && (
-            <>
-              <div className="sidebar-user-info">
-                <strong>{user?.name}</strong>
-                <span>{user?.role}</span>
-              </div>
-
-              <FaChevronRight className="profile-arrow" />
-            </>
           )}
-        </NavLink>
 
-        {sidebarOpen && (
-          <div className="sidebar-section-label">
-            WORKSPACE
-          </div>
-        )}
-
-        {/* ================= Menu ================= */}
-
-        <nav className="sidebar-menu">
-                  {menuItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={closeMobile}
-              className={({ isActive }) =>
-                isActive ? "active" : ""
-              }
-            >
-              <span className="sidebar-icon">
-                {item.icon}
-              </span>
-
-              {sidebarOpen && (
-                <>
-                  <span className="sidebar-link-text">
-                    {item.title}
-                  </span>
-
-                  <span className="sidebar-active-indicator" />
-                </>
-              )}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* =====================================================
-            BOTTOM
-        ===================================================== */}
-
-        <div className="sidebar-bottom">
-
-          <button
-            type="button"
-            className="logout-btn"
-            onClick={handleLogout}
-          >
-            <span className="logout-icon">
-              <FaSignOutAlt />
-            </span>
-
-            {sidebarOpen && (
-              <span>
-                Logout
-              </span>
-            )}
-          </button>
+          <span className="profile-online-dot" />
 
         </div>
 
-      </motion.aside>
+        {!collapsed && (
 
-    </>
+          <>
+
+            <div className="sidebar-user-info">
+
+              <strong>
+                {user?.name || "User"}
+              </strong>
+
+              <span>
+                {user?.role || "Member"}
+              </span>
+
+            </div>
+
+          </>
+
+        )}
+
+      </NavLink>
+
+      {/* =====================================================
+          SECTION LABEL
+      ===================================================== */}
+
+      {!collapsed && (
+
+        <div className="sidebar-section-label">
+          WORKSPACE
+        </div>
+
+      )}
+
+      {/* =====================================================
+          MENU
+      ===================================================== */}
+
+      <nav className="sidebar-menu">
+                {menuItems.map((item) => (
+
+          <NavLink
+            key={item.path}
+            to={item.path}
+            end={item.path === "/dashboard"}
+            className={({ isActive }) =>
+              isActive ? "active" : ""
+            }
+          >
+
+            {/* ================= Icon ================= */}
+
+            <span className="sidebar-icon">
+              {item.icon}
+            </span>
+
+            {/* ================= Text ================= */}
+
+            {!collapsed && (
+
+              <span className="sidebar-link-text">
+                {item.title}
+              </span>
+
+            )}
+
+            {/* ================= Active Indicator ================= */}
+
+            {!collapsed && (
+
+              <span className="sidebar-active-indicator" />
+
+            )}
+
+          </NavLink>
+
+        ))}
+
+      </nav>
+            {/* =====================================================
+          BOTTOM
+      ===================================================== */}
+
+      <div className="sidebar-bottom">
+
+        <button
+          type="button"
+          className="logout-btn"
+          onClick={handleLogout}
+        >
+
+          <span className="logout-icon">
+            <FaSignOutAlt />
+          </span>
+
+          {!collapsed && (
+            <span>
+              Logout
+            </span>
+          )}
+
+        </button>
+
+      </div>
+
+    </motion.aside>
+
   );
 
 };
