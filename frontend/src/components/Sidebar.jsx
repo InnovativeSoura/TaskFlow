@@ -1,347 +1,166 @@
-// src/components/Sidebar.jsx
-
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { motion } from "framer-motion";
-
 import {
+  FaChevronLeft,
+  FaChevronRight,
   FaTachometerAlt,
   FaProjectDiagram,
   FaTasks,
-  FaColumns,
   FaUsers,
   FaChartBar,
   FaCog,
-  FaBell,
   FaSignOutAlt,
-  FaChevronLeft,
 } from "react-icons/fa";
 
-import { useAuth } from "../context/AuthContext";
+import "./Sidebar.css";
 
-import "../styles/Sidebar.css";
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-const menuItems = [
-  {
-    title: "Dashboard",
-    icon: <FaTachometerAlt />,
-    path: "/dashboard",
-  },
-  {
-    title: "Projects",
-    icon: <FaProjectDiagram />,
-    path: "/projects",
-  },
-  {
-    title: "Tasks",
-    icon: <FaTasks />,
-    path: "/tasks",
-  },
-  {
-    title: "Kanban",
-    icon: <FaColumns />,
-    path: "/kanban",
-  },
-  {
-    title: "Users",
-    icon: <FaUsers />,
-    path: "/users",
-  },
-  {
-    title: "Reports",
-    icon: <FaChartBar />,
-    path: "/reports",
-  },
-  {
-    title: "Settings",
-    icon: <FaCog />,
-    path: "/settings",
-  },
-  {
-    title: "Notifications",
-    icon: <FaBell />,
-    path: "/notifications",
-  },
-];
-/* =========================================================
-   SIDEBAR COMPONENT
-========================================================= */
-
-const Sidebar = ({
-  collapsed = false,
-  onToggle,
-}) => {
+const Sidebar = () => {
+  const [collapsed, setCollapsed] = useState(false);
 
   const navigate = useNavigate();
 
-  const {
-    user,
-    logout,
-  } = useAuth();
 
-  /* =====================================================
-     USER INITIALS
-  ===================================================== */
+  const menuItems = [
+    {
+      name: "Dashboard",
+      icon: <FaTachometerAlt />,
+      path: "/dashboard",
+    },
+    {
+      name: "Projects",
+      icon: <FaProjectDiagram />,
+      path: "/projects",
+    },
+    {
+      name: "Tasks",
+      icon: <FaTasks />,
+      path: "/tasks",
+    },
+    {
+      name: "Users",
+      icon: <FaUsers />,
+      path: "/users",
+    },
+    {
+      name: "Analytics",
+      icon: <FaChartBar />,
+      path: "/analytics",
+    },
+    {
+      name: "Settings",
+      icon: <FaCog />,
+      path: "/settings",
+    },
+  ];
 
-  const initials =
-    user?.name
-      ?.trim()
-      ?.split(" ")
-      ?.map((word) => word[0])
-      ?.join("")
-      ?.substring(0, 2)
-      ?.toUpperCase() || "TF";
 
-  /* =====================================================
-     TOGGLE SIDEBAR
-  ===================================================== */
-
-  const handleToggle = () => {
-
-    if (typeof onToggle === "function") {
-      onToggle();
-    }
-
-  };
-
-  /* =====================================================
-     LOGOUT
-  ===================================================== */
-
-  const handleLogout = async () => {
-
-    try {
-
-      if (logout) {
-        await logout();
-      }
-
-    } catch (err) {
-
-      console.error(
-        "Logout Error:",
-        err
-      );
-
-    }
-
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    navigate("/", {
-      replace: true,
-    });
-
+    navigate("/login");
   };
 
-  /* =====================================================
-     RENDER
-  ===================================================== */
 
   return (
-
-    <motion.aside
-      className={`sidebar ${
-        collapsed
-          ? "collapsed"
-          : "expanded"
-      }`}
-      initial={false}
-      animate={{
-        width: collapsed
-          ? 64
-          : 220,
-      }}
-      transition={{
-        duration: 0.28,
-      }}
+    <aside
+      className={`sidebar ${collapsed ? "collapsed" : ""}`}
     >
-            {/* =====================================================
-          HEADER
-      ===================================================== */}
 
-      <div className="sidebar-header">
-
-        <button
-          type="button"
-          className="sidebar-brand-button"
-          onClick={handleToggle}
-          aria-label="Toggle Sidebar"
-        >
-
-          {/* Logo */}
-
-          <motion.div
-            className="brand-logo"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            TF
-          </motion.div>
-
-          {/* Brand */}
-
-          {!collapsed && (
-
-            <div className="brand-content">
-
-              <strong>
-                TaskFlow
-              </strong>
-
-              <span>
-                Workspace
-              </span>
-
-            </div>
-
-          )}
-
-          {/* Collapse Icon */}
-
-          {!collapsed && (
-
-            <FaChevronLeft
-              className="collapse-arrow"
-            />
-
-          )}
-
-        </button>
-
-      </div>
-
-      <div className="sidebar-divider" />
-
-      {/* =====================================================
-          USER PROFILE
-      ===================================================== */}
-
-      <NavLink
-        to="/profile"
-        className="sidebar-user-card"
+      {/* Collapse Button */}
+      <button
+        className="sidebar-toggle"
+        onClick={() => setCollapsed(!collapsed)}
       >
+        {collapsed ? (
+          <FaChevronRight />
+        ) : (
+          <FaChevronLeft />
+        )}
+      </button>
 
-        <div className="sidebar-avatar-wrapper">
 
-          {user?.avatar ? (
+      {/* Profile Section */}
+      <div className="sidebar-profile">
 
-            <img
-              src={user.avatar}
-              alt={user.name}
-              className="sidebar-avatar"
-            />
-
-          ) : (
-
-            <div className="sidebar-avatar">
-              {initials}
-            </div>
-
-          )}
-
-          <span className="profile-online-dot" />
-
+        <div className="profile-avatar">
+          SP
         </div>
 
         {!collapsed && (
+          <div className="profile-info">
+            <h3>
+              Souradipta
+            </h3>
 
-          <>
-
-            <div className="sidebar-user-info">
-
-              <strong>
-                {user?.name || "User"}
-              </strong>
-
-              <span>
-                {user?.role || "Member"}
-              </span>
-
-            </div>
-
-          </>
-
+            <span>
+              Admin
+            </span>
+          </div>
         )}
 
-      </NavLink>
+      </div>
 
-      {/* =====================================================
-          SECTION LABEL
-      ===================================================== */}
 
+
+      {/* Workspace */}
       {!collapsed && (
+        <div className="workspace-section">
 
-        <div className="sidebar-section-label">
-          WORKSPACE
+          <p className="section-title">
+            WORKSPACE
+          </p>
+
         </div>
-
       )}
 
-      {/* =====================================================
-          MENU
-      ===================================================== */}
 
+
+      {/* Navigation */}
       <nav className="sidebar-menu">
-                {menuItems.map((item) => (
 
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.path === "/dashboard"}
-            className={({ isActive }) =>
-              isActive ? "active" : ""
-            }
-          >
+        {
+          menuItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              className={({isActive}) =>
+                isActive
+                  ? "sidebar-link active"
+                  : "sidebar-link"
+              }
+            >
 
-            {/* ================= Icon ================= */}
-
-            <span className="sidebar-icon">
-              {item.icon}
-            </span>
-
-            {/* ================= Text ================= */}
-
-            {!collapsed && (
-
-              <span className="sidebar-link-text">
-                {item.title}
+              <span className="menu-icon">
+                {item.icon}
               </span>
 
-            )}
 
-            {/* ================= Active Indicator ================= */}
+              {!collapsed && (
+                <span className="menu-text">
+                  {item.name}
+                </span>
+              )}
 
-            {!collapsed && (
-
-              <span className="sidebar-active-indicator" />
-
-            )}
-
-          </NavLink>
-
-        ))}
+            </NavLink>
+          ))
+        }
 
       </nav>
-            {/* =====================================================
-          BOTTOM
-      ===================================================== */}
 
+
+
+      {/* Logout Bottom */}
       <div className="sidebar-bottom">
 
         <button
-          type="button"
           className="logout-btn"
           onClick={handleLogout}
         >
 
-          <span className="logout-icon">
-            <FaSignOutAlt />
-          </span>
+          <FaSignOutAlt />
 
           {!collapsed && (
             <span>
@@ -353,10 +172,10 @@ const Sidebar = ({
 
       </div>
 
-    </motion.aside>
 
+    </aside>
   );
-
 };
+
 
 export default Sidebar;
