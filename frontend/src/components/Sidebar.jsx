@@ -1,7 +1,8 @@
 // src/components/Sidebar.jsx
 
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   FaThLarge,
@@ -14,380 +15,437 @@ import {
   FaBell,
   FaSignOutAlt,
   FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
-
 import "../styles/Sidebar.css";
 
-
 const Sidebar = () => {
-
-
   const [collapsed, setCollapsed] = useState(false);
 
-
   const navigate = useNavigate();
-
+  const location = useLocation();
 
   const { user, logout } = useAuth();
-
-
 
   const username =
     user?.name ||
     user?.username ||
     "Souradipta Patra";
 
-
-
   const role =
     user?.role ||
     "Administrator";
 
+  const avatarInitials = useMemo(() => {
+    const name = username?.trim();
 
+    if (!name) return "TF";
 
+    const words = name
+      .split(" ")
+      .filter(Boolean);
 
-  // =========================
-  // AUTO PROFILE INITIALS
-  // =========================
-
-  const getInitials = (name) => {
-
-    if (!name) return "U";
-
-
-    const words =
-      name
-        .trim()
-        .split(" ")
-        .filter(Boolean);
-
-
-
-    if (words.length === 1) {
-
-      return words[0]
-        .charAt(0)
-        .toUpperCase();
-
-    }
-
-
+    if (words.length === 1)
+      return words[0][0].toUpperCase();
 
     return (
-      words[0].charAt(0) +
-      words[words.length - 1].charAt(0)
-    )
-    .toUpperCase();
-
-  };
-
-
-
-  const avatarInitials =
-    getInitials(username);
-
-
-
+      words[0][0] +
+      words[words.length - 1][0]
+    ).toUpperCase();
+  }, [username]);
 
   const handleLogout = () => {
-
     logout();
-
     navigate("/");
-
   };
-    const menuItems = [
 
+  const menuItems = [
     {
       name: "Dashboard",
       path: "/dashboard",
       icon: <FaThLarge />,
     },
-
     {
       name: "Projects",
       path: "/projects",
       icon: <FaFolder />,
     },
-
     {
       name: "Tasks",
       path: "/tasks",
       icon: <FaTasks />,
     },
-
     {
       name: "Kanban",
       path: "/kanban",
       icon: <FaColumns />,
     },
-
     {
       name: "Users",
       path: "/users",
       icon: <FaUsers />,
     },
-
     {
       name: "Reports",
       path: "/reports",
       icon: <FaChartBar />,
     },
-
     {
       name: "Settings",
       path: "/settings",
       icon: <FaCog />,
     },
-
     {
       name: "Notifications",
       path: "/notifications",
       icon: <FaBell />,
     },
-
   ];
 
+  const sidebarVariants = {
+    expanded: {
+      width: 290,
+      transition: {
+        duration: 0.35,
+        ease: "easeInOut",
+      },
+    },
 
+    collapsed: {
+      width: 92,
+      transition: {
+        duration: 0.35,
+        ease: "easeInOut",
+      },
+    },
+  };
 
+  const textVariants = {
+    hidden: {
+      opacity: 0,
+      x: -15,
+    },
+
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.25,
+      },
+    },
+  };
 
   return (
-
-    <aside
-      className={`sidebar ${
-        collapsed ? "collapsed" : ""
-      }`}
+    <motion.aside
+      className={`sidebar ${collapsed ? "collapsed" : ""}`}
+      variants={sidebarVariants}
+      animate={collapsed ? "collapsed" : "expanded"}
+      initial={false}
     >
+      <div className="sidebar-inner">
+                {/* =========================================
+                    WORKSPACE CARD
+        ========================================= */}
 
-
-
-      {/* =========================
-          HEADER
-      ========================== */}
-
-
-      <div className="sidebar-header">
-
-
-        <button
-
-          className="sidebar-brand-button"
-
-          onClick={() =>
-            setCollapsed(!collapsed)
-          }
-
+        <motion.div
+          className="workspace-card"
+          whileHover={{
+            y: -2,
+            transition: { duration: 0.2 },
+          }}
         >
+          <button
+            className="workspace-button"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {/* Logo */}
 
+            <div className="workspace-left">
 
-          <div className="brand-logo">
+              <div className="workspace-logo">
 
-            <span>
-              TF
-            </span>
+                <span>TF</span>
 
-          </div>
+                <div className="workspace-status"></div>
 
+              </div>
 
+              <AnimatePresence mode="wait">
 
+                {!collapsed && (
 
-          {!collapsed && (
+                  <motion.div
+                    className="workspace-content"
+                    variants={textVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
 
-            <div className="brand-content">
+                    <h3>TaskFlow</h3>
 
-              <strong>
-                TaskFlow
-              </strong>
+                    <p>Workspace</p>
 
+                  </motion.div>
 
-              <span>
-                Workspace
-              </span>
+                )}
 
-
-            </div>
-
-          )}
-
-
-
-
-          {!collapsed && (
-
-            <div className="collapse-arrow">
-
-              <FaChevronLeft />
+              </AnimatePresence>
 
             </div>
 
-          )}
-
-
-
-        </button>
-
-
-      </div>
-            {/* =========================
-          PROFILE SECTION
-      ========================== */}
-
-
-      <div className="sidebar-profile">
-
-
-        <div className="profile-avatar">
-
-          {avatarInitials}
-
-        </div>
-
-
-
-
-        {!collapsed && (
-
-          <div className="profile-content">
-
-
-            <h4>
-
-              {username}
-
-            </h4>
-
-
-
-            <span>
-
-              {role}
-
-            </span>
-
-
-          </div>
-
-        )}
-
-
-      </div>
-
-
-
-
-
-      {/* =========================
-          NAVIGATION MENU
-      ========================== */}
-
-
-      <nav className="sidebar-navigation">
-
-
-        {
-          menuItems.map((item) => (
-
-            <NavLink
-
-              key={item.name}
-
-              to={item.path}
-
-
-              className={({ isActive }) =>
-
-                isActive
-
-                  ? "sidebar-link active"
-
-                  : "sidebar-link"
-
-              }
-
-
-            >
-
-
-              <span className="sidebar-icon">
-
-                {item.icon}
-
-              </span>
-
-
+            <AnimatePresence>
 
               {!collapsed && (
 
-                <span className="sidebar-label">
+                <motion.div
+                  className="workspace-arrow"
+                  initial={{
+                    opacity: 0,
+                    rotate: -180,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    rotate: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    rotate: -180,
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
+                >
 
-                  {item.name}
+                  <FaChevronLeft />
 
-                </span>
+                </motion.div>
 
               )}
 
+            </AnimatePresence>
 
+            {collapsed && (
 
-            </NavLink>
+              <motion.div
+                className="workspace-arrow collapsed-arrow"
+                initial={{
+                  opacity: 0,
+                  rotate: 180,
+                }}
+                animate={{
+                  opacity: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  duration: 0.25,
+                }}
+              >
 
+                <FaChevronRight />
 
-          ))
-        }
+              </motion.div>
 
+            )}
 
-      </nav>
-            {/* =========================
-          FOOTER
-          LOGOUT SECTION
-      ========================== */}
+          </button>
 
+        </motion.div>
+                {/* =========================================
+                    PROFILE CARD
+        ========================================= */}
 
-      <div className="sidebar-footer">
-
-
-        <button
-
-          className="logout-button"
-
-          onClick={handleLogout}
-
+        <motion.div
+          className="profile-card"
+          initial={false}
+          whileHover={{
+            y: -2,
+            transition: { duration: 0.2 },
+          }}
         >
 
+          <div className="profile-left">
 
-          <span className="sidebar-icon">
+            <div className="profile-avatar">
 
-            <FaSignOutAlt />
+              <span>{avatarInitials}</span>
 
-          </span>
+              <div className="profile-online"></div>
+
+            </div>
+
+            <AnimatePresence mode="wait">
+
+              {!collapsed && (
+
+                <motion.div
+                  className="profile-info"
+                  variants={textVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+
+                  <h4>{username}</h4>
+
+                  <span>{role}</span>
+
+                </motion.div>
+
+              )}
+
+            </AnimatePresence>
+
+          </div>
+
+        </motion.div>
 
 
+
+        {/* =========================================
+                    MENU TITLE
+        ========================================= */}
+
+        <AnimatePresence>
 
           {!collapsed && (
 
-            <span className="sidebar-label">
+            <motion.div
+              className="menu-title"
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
 
-              Logout
+              MENU
 
-            </span>
+            </motion.div>
 
           )}
 
+        </AnimatePresence>
 
 
-        </button>
 
+        {/* =========================================
+                    NAVIGATION
+        ========================================= */}
+
+        <nav className="sidebar-navigation">
+
+          {menuItems.map((item) => {
+
+            const active =
+              location.pathname === item.path;
+
+            return (
+
+              <NavLink
+                key={item.name}
+                to={item.path}
+                className={`sidebar-link ${
+                  active ? "active" : ""
+                }`}
+              >
+
+                {active && (
+
+                  <motion.div
+                    layoutId="activeIndicator"
+                    className="active-indicator"
+                  />
+
+                )}
+
+                <span className="sidebar-icon">
+
+                  {item.icon}
+
+                </span>
+
+                <AnimatePresence>
+
+                  {!collapsed && (
+
+                    <motion.span
+                      className="sidebar-label"
+                      variants={textVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+
+                      {item.name}
+
+                    </motion.span>
+
+                  )}
+
+                </AnimatePresence>
+
+              </NavLink>
+
+            );
+
+          })}
+
+        </nav>
+                {/* =========================================
+                    FOOTER
+        ========================================= */}
+
+        <div className="sidebar-footer">
+
+          <motion.button
+            className="logout-button"
+            onClick={handleLogout}
+            whileHover={{
+              scale: 1.03,
+            }}
+            whileTap={{
+              scale: 0.97,
+            }}
+          >
+
+            <span className="sidebar-icon">
+
+              <FaSignOutAlt />
+
+            </span>
+
+            <AnimatePresence mode="wait">
+
+              {!collapsed && (
+
+                <motion.span
+                  className="sidebar-label"
+                  variants={textVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+
+                  Logout
+
+                </motion.span>
+
+              )}
+
+            </AnimatePresence>
+
+          </motion.button>
+
+        </div>
 
       </div>
 
-
-
-    </aside>
+    </motion.aside>
 
   );
 
 };
-
 
 export default Sidebar;
