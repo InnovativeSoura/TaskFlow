@@ -20,6 +20,14 @@ import {
   FaCalendarAlt,
   FaChevronRight,
   FaCircle,
+
+  /* Premium CTA Icons */
+
+  FaRocket,
+  FaLayerGroup,
+  FaShieldAlt,
+  FaArrowTrendUp,
+
 } from "react-icons/fa";
 
 import { useNavigate } from "react-router-dom";
@@ -42,6 +50,7 @@ import {
 
 import "../styles/Dashboard.css";
 
+
 /* =========================================================
    DASHBOARD
 ========================================================= */
@@ -63,21 +72,32 @@ const Dashboard = () => {
   const [users, setUsers] = useState([]);
 
   const [stats, setStats] = useState({
+
     users: 0,
+
     projects: 0,
+
     tasks: 0,
+
     completed: 0,
+
     pending: 0,
+
     active: 0,
+
   });
+
 
   /* =========================================================
       LOAD DASHBOARD
   ========================================================= */
 
   useEffect(() => {
+
     loadDashboard();
+
   }, []);
+
 
   const loadDashboard = async () => {
 
@@ -85,7 +105,8 @@ const Dashboard = () => {
 
       setLoading(true);
 
-      const data = await getDashboardStats();
+      const data =
+        await getDashboardStats();
 
       const usersData =
         data?.users?.users ||
@@ -102,17 +123,20 @@ const Dashboard = () => {
         data?.tasks ||
         [];
 
-      const safeUsers = Array.isArray(usersData)
-        ? usersData
-        : [];
+      const safeUsers =
+        Array.isArray(usersData)
+          ? usersData
+          : [];
 
-      const safeProjects = Array.isArray(projectsData)
-        ? projectsData
-        : [];
+      const safeProjects =
+        Array.isArray(projectsData)
+          ? projectsData
+          : [];
 
-      const safeTasks = Array.isArray(tasksData)
-        ? tasksData
-        : [];
+      const safeTasks =
+        Array.isArray(tasksData)
+          ? tasksData
+          : [];
 
       setUsers(safeUsers);
 
@@ -122,29 +146,44 @@ const Dashboard = () => {
 
       const completed =
         safeTasks.filter(
-          (task) => task.status === "Completed"
+          (task) =>
+            task.status ===
+            "Completed"
         ).length;
 
       const pending =
         safeTasks.filter(
           (task) =>
-            task.status === "Pending" ||
-            task.status === "To Do"
+            task.status ===
+              "Pending" ||
+            task.status ===
+              "To Do"
         ).length;
 
       const active =
         safeProjects.filter(
           (project) =>
-            project.status === "Active"
+            project.status ===
+            "Active"
         ).length;
 
       setStats({
-        users: safeUsers.length,
-        projects: safeProjects.length,
-        tasks: safeTasks.length,
+
+        users:
+          safeUsers.length,
+
+        projects:
+          safeProjects.length,
+
+        tasks:
+          safeTasks.length,
+
         completed,
+
         pending,
+
         active,
+
       });
 
     } catch (error) {
@@ -161,12 +200,19 @@ const Dashboard = () => {
       setTasks([]);
 
       setStats({
+
         users: 0,
+
         projects: 0,
+
         tasks: 0,
+
         completed: 0,
+
         pending: 0,
+
         active: 0,
+
       });
 
     } finally {
@@ -176,71 +222,98 @@ const Dashboard = () => {
     }
 
   };
-
-  /* =========================================================
+    /* =========================================================
       SEARCH
   ========================================================= */
 
   const searchQuery =
-    search.trim().toLowerCase();
+    search
+      .trim()
+      .toLowerCase();
 
-  const filteredProjects = useMemo(() => {
+  const filteredProjects =
+    useMemo(() => {
 
-    if (!searchQuery) return projects;
+      if (!searchQuery) {
 
-    return projects.filter((project) => {
+        return projects;
 
-      const title =
-        project.title ||
-        project.name ||
-        "";
+      }
 
-      const description =
-        project.description ||
-        "";
+      return projects.filter(
+        (project) => {
 
-      return (
-        title
-          .toLowerCase()
-          .includes(searchQuery) ||
+          const title =
+            project.title ||
+            project.name ||
+            "";
 
-        description
-          .toLowerCase()
-          .includes(searchQuery)
+          const description =
+            project.description ||
+            "";
+
+          return (
+
+            title
+              .toLowerCase()
+              .includes(searchQuery) ||
+
+            description
+              .toLowerCase()
+              .includes(searchQuery)
+
+          );
+
+        }
       );
 
-    });
+    }, [
+      projects,
+      searchQuery,
+    ]);
 
-  }, [projects, searchQuery]);
 
-  const filteredTasks = useMemo(() => {
+  const filteredTasks =
+    useMemo(() => {
 
-    if (!searchQuery) return tasks;
+      if (!searchQuery) {
 
-    return tasks.filter((task) => {
+        return tasks;
 
-      const title =
-        task.title ||
-        task.name ||
-        "";
+      }
 
-      const description =
-        task.description ||
-        "";
+      return tasks.filter(
+        (task) => {
 
-      return (
-        title
-          .toLowerCase()
-          .includes(searchQuery) ||
+          const title =
+            task.title ||
+            task.name ||
+            "";
 
-        description
-          .toLowerCase()
-          .includes(searchQuery)
+          const description =
+            task.description ||
+            "";
+
+          return (
+
+            title
+              .toLowerCase()
+              .includes(searchQuery) ||
+
+            description
+              .toLowerCase()
+              .includes(searchQuery)
+
+          );
+
+        }
       );
 
-    });
+    }, [
+      tasks,
+      searchQuery,
+    ]);
 
-  }, [tasks, searchQuery]);
 
   /* =========================================================
       PRODUCTIVITY
@@ -255,6 +328,7 @@ const Dashboard = () => {
         )
       : 0;
 
+
   /* =========================================================
       USER
   ========================================================= */
@@ -264,6 +338,7 @@ const Dashboard = () => {
       ?.trim()
       ?.split(/\s+/)?.[0] ||
     "there";
+
 
   /* =========================================================
       LOADING
@@ -275,111 +350,127 @@ const Dashboard = () => {
 
   }
 
+
   return (
 
     <MainLayout>
 
       <div className="dashboard-page">
-                {/* ===================================================
-            HERO
+
+
+        {/* ===================================================
+            PREMIUM HERO
         =================================================== */}
 
         <motion.section
-          className="dashboard-hero"
+          className="dashboard-hero premium-hero"
           initial={{
             opacity: 0,
-            y: -18,
+            y: -25,
           }}
           animate={{
             opacity: 1,
             y: 0,
           }}
           transition={{
-            duration: 0.45,
+            duration: 0.6,
           }}
         >
 
-          <div className="dashboard-hero-content">
+          <div className="hero-left">
 
-            <div className="dashboard-hero-text">
+            <div className="hero-badge">
 
-              <div className="dashboard-eyebrow">
+              <FaBolt />
 
-                <span className="eyebrow-dot">
-
-                  <FaCircle />
-
-                </span>
+              <span>
 
                 WORKSPACE OVERVIEW
 
-              </div>
-
-              <h1>
-
-                Welcome back,
-
-                <span>
-
-                  {" "}{firstName}
-
-                </span>
-
-                👋
-
-              </h1>
-
-              <p>
-
-                Here's everything happening across
-                your workspace today. Monitor
-                projects, manage tasks, collaborate
-                with teammates and keep everything
-                moving from one place.
-
-              </p>
+              </span>
 
             </div>
 
-            <div className="dashboard-header-actions">
 
-              <motion.button
-                type="button"
-                className="dashboard-secondary-action"
-                onClick={() => navigate("/tasks")}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-              >
+            <h1>
 
-                <FaTasks />
+              Welcome back,
 
-                <span>
+              <span>
 
-                  View Tasks
+                {" "}
 
-                </span>
+                {firstName}
 
-              </motion.button>
+              </span>
 
-              <motion.button
-                type="button"
-                className="dashboard-primary-action"
-                onClick={() => navigate("/projects")}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-              >
+              👋
 
-                <FaPlus />
+            </h1>
 
-                <span>
 
-                  New Project
+            <p>
 
-                </span>
+              Track projects, monitor team
+              performance and manage your
+              workflow from one premium
+              dashboard.
 
-              </motion.button>
+            </p>
 
-            </div>
+          </div>
+
+
+
+          <div className="hero-right">
+
+            <motion.button
+              className="hero-secondary-btn"
+              whileHover={{
+                y: -3,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              onClick={() =>
+                navigate("/tasks")
+              }
+            >
+
+              <FaTasks />
+
+              <span>
+
+                View Tasks
+
+              </span>
+
+            </motion.button>
+
+
+
+            <motion.button
+              className="hero-primary-btn"
+              whileHover={{
+                y: -3,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              onClick={() =>
+                navigate("/projects")
+              }
+            >
+
+              <FaPlus />
+
+              <span>
+
+                New Project
+
+              </span>
+
+            </motion.button>
 
           </div>
 
@@ -402,61 +493,69 @@ const Dashboard = () => {
             y: 0,
           }}
           transition={{
-            delay: 0.08,
+            delay: 0.15,
           }}
         >
 
-          <div className="dashboard-search-wrapper">
+          <div className="toolbar-search">
 
             <SearchBar
               value={search}
               onChange={(event) =>
-                setSearch(event.target.value)
+                setSearch(
+                  event.target.value
+                )
               }
               placeholder="Search projects, tasks or members..."
             />
 
           </div>
 
-          <div className="toolbar-status">
 
-            <span className="status-live-dot"></span>
+          <div className="toolbar-right">
 
-            Workspace Live
+            <div className="workspace-status">
+
+              <span className="status-dot" />
+
+              Workspace Live
+
+            </div>
 
           </div>
 
         </motion.section>
-
-
-
-        {/* ===================================================
-            STATISTICS
+                {/* ===================================================
+            PREMIUM KPI CARDS
         =================================================== */}
 
         <motion.section
           className="premium-stats-grid"
           initial={{
             opacity: 0,
-            y: 18,
+            y: 20,
           }}
           animate={{
             opacity: 1,
             y: 0,
           }}
           transition={{
-            delay: 0.12,
+            delay: 0.2,
           }}
         >
 
-          {/* Projects */}
+          {/* =========================================
+              PROJECTS
+          ========================================= */}
 
           <motion.div
             className="premium-stat-card"
-            whileHover={{ y: -5 }}
+            whileHover={{
+              y: -8,
+            }}
           >
 
-            <div className="stat-card-top">
+            <div className="stat-header">
 
               <div className="stat-icon blue">
 
@@ -464,89 +563,145 @@ const Dashboard = () => {
 
               </div>
 
-              <span className="stat-trend">
+              <div className="stat-trend positive">
 
-                <FaArrowUp />
+                <FaArrowTrendUp />
 
-                Active
+                <span>12%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Total Projects
 
               </span>
 
-            </div>
+              <h2>
 
-            <div className="stat-card-value">
+                {stats.projects}
 
-              {stats.projects}
-
-            </div>
-
-            <div className="stat-card-label">
-
-              Total Projects
+              </h2>
 
             </div>
 
-            <div className="stat-card-footer">
+            <div className="stat-footer">
 
-              {stats.active} Active Workspace Projects
+              <span>
+
+                {stats.active} Active Projects
+
+              </span>
+
+              <div className="mini-chart blue-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
 
             </div>
 
           </motion.div>
 
-          {/* Tasks */}
+
+
+          {/* =========================================
+              TASKS
+          ========================================= */}
 
           <motion.div
             className="premium-stat-card"
-            whileHover={{ y: -5 }}
+            whileHover={{
+              y: -8,
+            }}
           >
 
-            <div className="stat-card-top">
+            <div className="stat-header">
 
-              <div className="stat-icon orange">
+              <div className="stat-icon cyan">
 
                 <FaTasks />
 
               </div>
 
-              <span className="stat-trend">
+              <div className="stat-trend positive">
 
-                <FaBolt />
+                <FaArrowTrendUp />
 
-                Workload
+                <span>8%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Total Tasks
 
               </span>
 
-            </div>
+              <h2>
 
-            <div className="stat-card-value">
+                {stats.tasks}
 
-              {stats.tasks}
-
-            </div>
-
-            <div className="stat-card-label">
-
-              Total Tasks
+              </h2>
 
             </div>
 
-            <div className="stat-card-footer">
+            <div className="stat-footer">
 
-              {stats.pending} Pending Tasks
+              <span>
+
+                {stats.pending} Pending
+
+              </span>
+
+              <div className="mini-chart cyan-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
 
             </div>
 
           </motion.div>
 
-          {/* Completed */}
+
+
+          {/* =========================================
+              COMPLETED
+          ========================================= */}
 
           <motion.div
             className="premium-stat-card"
-            whileHover={{ y: -5 }}
+            whileHover={{
+              y: -8,
+            }}
           >
 
-            <div className="stat-card-top">
+            <div className="stat-header">
 
               <div className="stat-icon green">
 
@@ -554,44 +709,150 @@ const Dashboard = () => {
 
               </div>
 
-              <span className="stat-trend positive">
+              <div className="stat-trend positive">
 
-                <FaArrowUp />
+                <FaArrowTrendUp />
 
-                Progress
+                <span>16%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Completed Tasks
 
               </span>
 
-            </div>
+              <h2>
 
-            <div className="stat-card-value">
+                {stats.completed}
 
-              {stats.completed}
-
-            </div>
-
-            <div className="stat-card-label">
-
-              Completed Tasks
+              </h2>
 
             </div>
 
-            <div className="stat-card-footer">
+            <div className="stat-footer">
 
-              {completion}% Workspace Completion
+              <span>
+
+                {completion}% Completed
+
+              </span>
+
+              <div className="mini-chart green-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
 
             </div>
 
           </motion.div>
 
-          {/* Team */}
+
+
+          {/* =========================================
+              PENDING
+          ========================================= */}
 
           <motion.div
             className="premium-stat-card"
-            whileHover={{ y: -5 }}
+            whileHover={{
+              y: -8,
+            }}
           >
 
-            <div className="stat-card-top">
+            <div className="stat-header">
+
+              <div className="stat-icon orange">
+
+                <FaClock />
+
+              </div>
+
+              <div className="stat-trend negative">
+
+                <FaArrowUp
+                  style={{
+                    transform:
+                      "rotate(180deg)",
+                  }}
+                />
+
+                <span>4%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Pending Tasks
+
+              </span>
+
+              <h2>
+
+                {stats.pending}
+
+              </h2>
+
+            </div>
+
+            <div className="stat-footer">
+
+              <span>
+
+                Need Attention
+
+              </span>
+
+              <div className="mini-chart orange-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
+
+            </div>
+
+          </motion.div>
+
+
+
+          {/* =========================================
+              TEAM
+          ========================================= */}
+
+          <motion.div
+            className="premium-stat-card"
+            whileHover={{
+              y: -8,
+            }}
+          >
+
+            <div className="stat-header">
 
               <div className="stat-icon purple">
 
@@ -599,49 +860,141 @@ const Dashboard = () => {
 
               </div>
 
-              <span className="stat-trend">
+              <div className="stat-trend positive">
 
-                <FaUsers />
+                <FaArrowTrendUp />
 
-                Team
+                <span>2%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Team Members
 
               </span>
 
-            </div>
+              <h2>
 
-            <div className="stat-card-value">
+                {stats.users}
 
-              {stats.users}
-
-            </div>
-
-            <div className="stat-card-label">
-
-              Team Members
+              </h2>
 
             </div>
 
-            <div className="stat-card-footer">
+            <div className="stat-footer">
 
-              Collaborating Across Workspace
+              <span>
+
+                Active Members
+
+              </span>
+
+              <div className="mini-chart purple-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
+
+            </div>
+
+          </motion.div>
+
+
+
+          {/* =========================================
+              EFFICIENCY
+          ========================================= */}
+
+          <motion.div
+            className="premium-stat-card"
+            whileHover={{
+              y: -8,
+            }}
+          >
+
+            <div className="stat-header">
+
+              <div className="stat-icon sky">
+
+                <FaChartLine />
+
+              </div>
+
+              <div className="stat-trend positive">
+
+                <FaArrowTrendUp />
+
+                <span>10%</span>
+
+              </div>
+
+            </div>
+
+            <div className="stat-body">
+
+              <span className="stat-title">
+
+                Workspace Efficiency
+
+              </span>
+
+              <h2>
+
+                {completion}%
+
+              </h2>
+
+            </div>
+
+            <div className="stat-footer">
+
+              <span>
+
+                Overall Performance
+
+              </span>
+
+              <div className="mini-chart sky-chart">
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+                <span />
+
+              </div>
 
             </div>
 
           </motion.div>
 
         </motion.section>
-
-
-
-        {/* ===================================================
-            PRODUCTIVITY
+                {/* ===================================================
+            PRODUCTIVITY BANNER
         =================================================== */}
 
         <motion.section
-          className="productivity-banner"
+          className="premium-productivity-banner"
           initial={{
             opacity: 0,
-            y: 18,
+            y: 30,
           }}
           whileInView={{
             opacity: 1,
@@ -650,45 +1003,164 @@ const Dashboard = () => {
           viewport={{
             once: true,
           }}
+          transition={{
+            duration: 0.6,
+          }}
         >
 
-          <div className="productivity-left">
+          {/* =========================
+              LEFT CONTENT
+          ========================= */}
 
-            <div className="productivity-icon">
+          <div className="productivity-content">
 
-              <FaChartLine />
+            <div className="productivity-badge">
 
-            </div>
-
-            <div>
+              <FaRocket />
 
               <span>
 
-                WORKSPACE PRODUCTIVITY
+                PERFORMANCE REPORT
 
               </span>
 
-              <h2>
+            </div>
 
-                {completion}% Complete
+            <h2>
 
-              </h2>
+              Great Progress
 
-              <p>
+              <span>
 
-                Keep the momentum going.
-                Every completed task moves your
-                workspace one step closer to success.
+                {" "}This Week 🚀
 
-              </p>
+              </span>
+
+            </h2>
+
+            <p>
+
+              Your workspace is performing
+              better than last week.
+
+              Keep assigning tasks,
+
+              completing milestones,
+
+              and collaborating with your team.
+
+            </p>
+
+
+            {/* Feature Tags */}
+
+            <div className="productivity-tags">
+
+              <div className="productivity-tag">
+
+                <FaCheckCircle />
+
+                <span>
+
+                  {stats.completed} Completed
+
+                </span>
+
+              </div>
+
+
+              <div className="productivity-tag">
+
+                <FaTasks />
+
+                <span>
+
+                  {stats.pending} Pending
+
+                </span>
+
+              </div>
+
+
+              <div className="productivity-tag">
+
+                <FaUsers />
+
+                <span>
+
+                  {stats.users} Members
+
+                </span>
+
+              </div>
 
             </div>
 
           </div>
 
-          <div className="productivity-progress-area">
 
-            <div className="productivity-progress-header">
+
+          {/* =========================
+              RIGHT CARD
+          ========================= */}
+
+          <motion.div
+            className="productivity-score-card"
+            whileHover={{
+              y: -6,
+            }}
+          >
+
+            <div className="score-card-header">
+
+              <div>
+
+                <span>
+
+                  Workspace Score
+
+                </span>
+
+                <h2>
+
+                  {completion}%
+
+                </h2>
+
+              </div>
+
+              <div className="score-icon">
+
+                <FaChartLine />
+
+              </div>
+
+            </div>
+
+
+
+            {/* Progress */}
+
+            <div className="score-progress">
+
+              <motion.div
+                className="score-progress-fill"
+                initial={{
+                  width: 0,
+                }}
+                whileInView={{
+                  width: `${completion}%`,
+                }}
+                transition={{
+                  duration: 1.4,
+                  ease: "easeOut",
+                }}
+              />
+
+            </div>
+
+
+            <div className="score-labels">
 
               <span>
 
@@ -704,33 +1176,93 @@ const Dashboard = () => {
 
             </div>
 
-            <div className="productivity-progress">
 
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{
-                  width: `${completion}%`,
-                }}
-                transition={{
-                  duration: 1.2,
-                  ease: "easeOut",
-                }}
-              />
+
+            {/* Statistics */}
+
+            <div className="score-stats">
+
+              <div className="score-stat">
+
+                <strong>
+
+                  {stats.projects}
+
+                </strong>
+
+                <span>
+
+                  Projects
+
+                </span>
+
+              </div>
+
+              <div className="score-stat">
+
+                <strong>
+
+                  {stats.tasks}
+
+                </strong>
+
+                <span>
+
+                  Tasks
+
+                </span>
+
+              </div>
+
+              <div className="score-stat">
+
+                <strong>
+
+                  {stats.users}
+
+                </strong>
+
+                <span>
+
+                  Members
+
+                </span>
+
+              </div>
 
             </div>
 
-          </div>
+
+
+            {/* Footer */}
+
+            <div className="score-footer">
+
+              <FaArrowTrendUp />
+
+              <span>
+
+                Productivity increased this week
+
+              </span>
+
+            </div>
+
+          </motion.div>
 
         </motion.section>
-                {/* ===================================================
+
+
+
+        {/* ===================================================
             ANALYTICS
         =================================================== */}
 
         <section className="dashboard-analytics premium-analytics">
 
-          {/* ================================
-              WORKSPACE OVERVIEW
-          ================================= */}
+          {/* =====================================
+              OVERVIEW
+          ===================================== */}
 
           <motion.div
             className="analytics-card large-card"
@@ -753,7 +1285,7 @@ const Dashboard = () => {
 
                 <span className="card-kicker">
 
-                  PERFORMANCE
+                  ANALYTICS
 
                 </span>
 
@@ -765,13 +1297,11 @@ const Dashboard = () => {
 
               </div>
 
-              <span className="live-badge">
+              <div className="header-icon">
 
-                <span />
+                <FaChartLine />
 
-                Live
-
-              </span>
+              </div>
 
             </div>
 
@@ -782,9 +1312,11 @@ const Dashboard = () => {
 
           </motion.div>
 
-          {/* ================================
+
+
+          {/* =====================================
               TASK STATUS
-          ================================= */}
+          ===================================== */}
 
           <motion.div
             className="analytics-card"
@@ -813,13 +1345,17 @@ const Dashboard = () => {
 
                 <h2>
 
-                  Task Status
+                  Task Distribution
 
                 </h2>
 
               </div>
 
-              <FaTasks className="header-card-icon" />
+              <div className="header-icon">
+
+                <FaTasks />
+
+              </div>
 
             </div>
 
@@ -829,9 +1365,11 @@ const Dashboard = () => {
 
           </motion.div>
 
-          {/* ================================
+
+
+          {/* =====================================
               PROJECT PROGRESS
-          ================================= */}
+          ===================================== */}
 
           <motion.div
             className="analytics-card"
@@ -866,7 +1404,11 @@ const Dashboard = () => {
 
               </div>
 
-              <FaProjectDiagram className="header-card-icon" />
+              <div className="header-icon">
+
+                <FaProjectDiagram />
+
+              </div>
 
             </div>
 
@@ -878,20 +1420,20 @@ const Dashboard = () => {
 
         </section>
                 {/* ===================================================
-            RECENT PROJECTS / TASKS
+            RECENT PROJECTS & RECENT TASKS
         =================================================== */}
 
         <section className="dashboard-sections premium-two-column">
 
-          {/* =========================================
+          {/* ==========================================
               RECENT PROJECTS
-          ========================================= */}
+          ========================================== */}
 
           <motion.div
             className="dashboard-card premium-list-card"
             initial={{
               opacity: 0,
-              x: -15,
+              x: -20,
             }}
             whileInView={{
               opacity: 1,
@@ -908,29 +1450,36 @@ const Dashboard = () => {
 
                 <span className="card-kicker">
 
-                  WORKSPACE
+                  RECENT PROJECTS
 
                 </span>
 
                 <h2>
 
-                  Recent Projects
+                  Active Workspace
 
                 </h2>
 
               </div>
 
-              <button
-                type="button"
+              <motion.button
                 className="view-all-btn"
-                onClick={() => navigate("/projects")}
+                whileHover={{
+                  x: 4,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                onClick={() =>
+                  navigate("/projects")
+                }
               >
 
                 View All
 
                 <FaArrowRight />
 
-              </button>
+              </motion.button>
 
             </div>
 
@@ -939,11 +1488,7 @@ const Dashboard = () => {
               <div className="premium-empty-state">
 
                 <EmptyState
-                  title={
-                    search
-                      ? "No Projects Found"
-                      : "No Projects Found"
-                  }
+                  title="No Projects Found"
                 />
 
               </div>
@@ -960,7 +1505,8 @@ const Dashboard = () => {
                       key={project._id}
                       className="premium-list-item"
                       whileHover={{
-                        x: 4,
+                        y: -3,
+                        x: 3,
                       }}
                     >
 
@@ -983,24 +1529,32 @@ const Dashboard = () => {
                         <p>
 
                           {project.description
-                            ? project.description.substring(0, 70)
+                            ? project.description.substring(0, 75)
                             : "No description available"}
 
                         </p>
 
                       </div>
 
-                      <span
-                        className={`badge ${(
-                          project.status || "Planning"
-                        )
-                          .toLowerCase()
-                          .replace(/\s/g, "")}`}
-                      >
+                      <div className="list-item-right">
 
-                        {project.status || "Planning"}
+                        <span
+                          className={`badge ${(
+                            project.status ||
+                            "Planning"
+                          )
+                            .toLowerCase()
+                            .replace(/\s/g, "")}`}
+                        >
 
-                      </span>
+                          {project.status ||
+                            "Planning"}
+
+                        </span>
+
+                        <FaChevronRight />
+
+                      </div>
 
                     </motion.div>
 
@@ -1014,15 +1568,15 @@ const Dashboard = () => {
 
 
 
-          {/* =========================================
+          {/* ==========================================
               RECENT TASKS
-          ========================================= */}
+          ========================================== */}
 
           <motion.div
             className="dashboard-card premium-list-card"
             initial={{
               opacity: 0,
-              x: 15,
+              x: 20,
             }}
             whileInView={{
               opacity: 1,
@@ -1039,29 +1593,36 @@ const Dashboard = () => {
 
                 <span className="card-kicker">
 
-                  WORKLOAD
+                  RECENT TASKS
 
                 </span>
 
                 <h2>
 
-                  Recent Tasks
+                  Today's Work
 
                 </h2>
 
               </div>
 
-              <button
-                type="button"
+              <motion.button
                 className="view-all-btn"
-                onClick={() => navigate("/tasks")}
+                whileHover={{
+                  x: 4,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                onClick={() =>
+                  navigate("/tasks")
+                }
               >
 
                 View All
 
                 <FaArrowRight />
 
-              </button>
+              </motion.button>
 
             </div>
 
@@ -1087,7 +1648,8 @@ const Dashboard = () => {
                       key={task._id}
                       className="premium-list-item"
                       whileHover={{
-                        x: 4,
+                        y: -3,
+                        x: 3,
                       }}
                     >
 
@@ -1117,21 +1679,29 @@ const Dashboard = () => {
                             ? new Date(
                                 task.dueDate
                               ).toLocaleDateString()
-                            : "No due date"}
+                            : "No Due Date"}
 
                         </p>
 
                       </div>
 
-                      <span
-                        className={`badge ${(
-                          task.priority || "medium"
-                        ).toLowerCase()}`}
-                      >
+                      <div className="list-item-right">
 
-                        {task.priority || "Medium"}
+                        <span
+                          className={`badge ${(
+                            task.priority ||
+                            "medium"
+                          ).toLowerCase()}`}
+                        >
 
-                      </span>
+                          {task.priority ||
+                            "Medium"}
+
+                        </span>
+
+                        <FaChevronRight />
+
+                      </div>
 
                     </motion.div>
 
@@ -1145,20 +1715,28 @@ const Dashboard = () => {
 
         </section>
                 {/* ===================================================
-            TEAM + SUMMARY
+            TEAM MEMBERS + WORKSPACE SUMMARY
         =================================================== */}
 
         <section className="dashboard-bottom premium-two-column">
 
-          {/* ===========================
+          {/* ==========================================
               TEAM MEMBERS
-          ============================ */}
+          ========================================== */}
 
           <motion.div
             className="dashboard-card premium-list-card"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
           >
 
             <div className="card-header premium-card-header">
@@ -1167,7 +1745,7 @@ const Dashboard = () => {
 
                 <span className="card-kicker">
 
-                  COLLABORATION
+                  TEAM
 
                 </span>
 
@@ -1201,72 +1779,78 @@ const Dashboard = () => {
 
               <div className="premium-list">
 
-                {users.slice(0, 5).map((member) => {
+                {users
+                  .slice(0, 5)
+                  .map((member) => {
 
-                  const memberInitials =
-                    member.name
-                      ?.trim()
-                      ?.split(/\s+/)
-                      ?.map((word) => word[0])
-                      ?.join("")
-                      ?.substring(0, 2)
-                      ?.toUpperCase() || "U";
+                    const initials =
+                      member.name
+                        ?.trim()
+                        ?.split(/\s+/)
+                        ?.map((word) => word[0])
+                        ?.join("")
+                        ?.substring(0, 2)
+                        ?.toUpperCase() || "U";
 
-                  return (
+                    return (
 
-                    <motion.div
-                      key={member._id}
-                      className="premium-list-item member-row"
-                      whileHover={{ x: 4 }}
-                    >
+                      <motion.div
+                        key={member._id}
+                        className="premium-list-item member-row"
+                        whileHover={{
+                          y: -3,
+                          x: 3,
+                        }}
+                      >
 
-                      <div className="member-avatar premium-avatar">
+                        <div className="member-avatar premium-avatar">
 
-                        {member.avatar ? (
+                          {member.avatar ? (
 
-                          <img
-                            src={member.avatar}
-                            alt={member.name}
-                          />
+                            <img
+                              src={member.avatar}
+                              alt={member.name}
+                            />
 
-                        ) : (
+                          ) : (
 
-                          memberInitials
+                            initials
 
-                        )}
+                          )}
 
-                      </div>
+                        </div>
 
-                      <div className="list-item-content">
+                        <div className="list-item-content">
 
-                        <h3>
+                          <h3>
 
-                          {member.name || "Unknown"}
+                            {member.name ||
+                              "Unknown User"}
 
-                        </h3>
+                          </h3>
 
-                        <p>
+                          <p>
 
-                          {member.email ||
-                            "No email available"}
+                            {member.email}
 
-                        </p>
+                          </p>
 
-                      </div>
+                        </div>
 
-                      <span className="member-online">
+                        <span className="member-online">
 
-                        <span />
+                          <span />
 
-                        {member.status || "Active"}
+                          {member.status ||
+                            "Online"}
 
-                      </span>
+                        </span>
 
-                    </motion.div>
+                      </motion.div>
 
-                  );
+                    );
 
-                })}
+                  })}
 
               </div>
 
@@ -1276,15 +1860,23 @@ const Dashboard = () => {
 
 
 
-          {/* ===========================
+          {/* ==========================================
               WORKSPACE SUMMARY
-          ============================ */}
+          ========================================== */}
 
           <motion.div
             className="dashboard-card summary-premium-card"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
           >
 
             <div className="card-header premium-card-header">
@@ -1293,7 +1885,7 @@ const Dashboard = () => {
 
                 <span className="card-kicker">
 
-                  AT A GLANCE
+                  SUMMARY
 
                 </span>
 
@@ -1317,9 +1909,17 @@ const Dashboard = () => {
 
                 </div>
 
-                <h1>{stats.projects}</h1>
+                <h2>
 
-                <span>Projects</span>
+                  {stats.projects}
+
+                </h2>
+
+                <span>
+
+                  Projects
+
+                </span>
 
               </div>
 
@@ -1331,9 +1931,17 @@ const Dashboard = () => {
 
                 </div>
 
-                <h1>{stats.tasks}</h1>
+                <h2>
 
-                <span>Tasks</span>
+                  {stats.tasks}
+
+                </h2>
+
+                <span>
+
+                  Tasks
+
+                </span>
 
               </div>
 
@@ -1345,9 +1953,17 @@ const Dashboard = () => {
 
                 </div>
 
-                <h1>{stats.completed}</h1>
+                <h2>
 
-                <span>Completed</span>
+                  {stats.completed}
+
+                </h2>
+
+                <span>
+
+                  Completed
+
+                </span>
 
               </div>
 
@@ -1359,9 +1975,17 @@ const Dashboard = () => {
 
                 </div>
 
-                <h1>{stats.pending}</h1>
+                <h2>
 
-                <span>Pending</span>
+                  {stats.pending}
+
+                </h2>
+
+                <span>
+
+                  Pending
+
+                </span>
 
               </div>
 
@@ -1373,23 +1997,39 @@ const Dashboard = () => {
 
                 </div>
 
-                <h1>{stats.users}</h1>
+                <h2>
 
-                <span>Members</span>
+                  {stats.users}
+
+                </h2>
+
+                <span>
+
+                  Members
+
+                </span>
 
               </div>
 
               <div className="summary-box">
 
-                <div className="summary-icon dark">
+                <div className="summary-icon cyan">
 
                   <FaChartLine />
 
                 </div>
 
-                <h1>{completion}%</h1>
+                <h2>
 
-                <span>Efficiency</span>
+                  {completion}%
+
+                </h2>
+
+                <span>
+
+                  Efficiency
+
+                </span>
 
               </div>
 
@@ -1407,9 +2047,17 @@ const Dashboard = () => {
 
         <motion.section
           className="dashboard-card activity-premium-card"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
         >
 
           <div className="card-header premium-card-header">
@@ -1418,13 +2066,13 @@ const Dashboard = () => {
 
               <span className="card-kicker">
 
-                WORKSPACE PULSE
+                LIVE ACTIVITY
 
               </span>
 
               <h2>
 
-                Recent Activity
+                Workspace Timeline
 
               </h2>
 
@@ -1434,13 +2082,13 @@ const Dashboard = () => {
 
               <span />
 
-              Live Updates
+              Live
 
             </div>
 
           </div>
 
-          <div className="activity-list premium-activity-list">
+          <div className="activity-list">
 
             <div className="activity-item">
 
@@ -1452,12 +2100,16 @@ const Dashboard = () => {
 
               <div>
 
-                <h4>Projects Created</h4>
+                <h4>
+
+                  Projects Created
+
+                </h4>
 
                 <p>
 
-                  {stats.projects} project(s) currently
-                  available in your workspace.
+                  {stats.projects} active projects
+                  are available in your workspace.
 
                 </p>
 
@@ -1475,12 +2127,16 @@ const Dashboard = () => {
 
               <div>
 
-                <h4>Completed Tasks</h4>
+                <h4>
+
+                  Completed Tasks
+
+                </h4>
 
                 <p>
 
-                  {stats.completed} task(s)
-                  completed successfully.
+                  {stats.completed} tasks have
+                  been successfully completed.
 
                 </p>
 
@@ -1498,12 +2154,16 @@ const Dashboard = () => {
 
               <div>
 
-                <h4>Pending Tasks</h4>
+                <h4>
+
+                  Pending Tasks
+
+                </h4>
 
                 <p>
 
-                  {stats.pending} task(s)
-                  waiting for completion.
+                  {stats.pending} tasks are waiting
+                  to be completed.
 
                 </p>
 
@@ -1521,12 +2181,16 @@ const Dashboard = () => {
 
               <div>
 
-                <h4>Workspace Members</h4>
+                <h4>
+
+                  Team Collaboration
+
+                </h4>
 
                 <p>
 
-                  {stats.users} active member(s)
-                  collaborating together.
+                  {stats.users} members are
+                  actively collaborating.
 
                 </p>
 
@@ -1538,14 +2202,14 @@ const Dashboard = () => {
 
         </motion.section>
                 {/* ===================================================
-            PREMIUM WORKSPACE CTA
+            PREMIUM CTA
         =================================================== */}
 
         <motion.section
-          className="dashboard-final-cta premium-workspace-cta"
+          className="dashboard-premium-cta"
           initial={{
             opacity: 0,
-            y: 25,
+            y: 30,
           }}
           whileInView={{
             opacity: 1,
@@ -1555,79 +2219,170 @@ const Dashboard = () => {
             once: true,
           }}
           transition={{
-            duration: 0.6,
+            duration: 0.7,
           }}
         >
+
+          {/* Background Effects */}
+
+          <div className="cta-background">
+
+            <div className="cta-glow glow-purple"></div>
+
+            <div className="cta-glow glow-blue"></div>
+
+            <div className="cta-grid"></div>
+
+          </div>
+
+
 
           {/* ==========================
               LEFT CONTENT
           ========================== */}
 
-          <div className="workspace-cta-left">
+          <div className="cta-left">
 
-            <div className="workspace-badge">
+            <div className="cta-pill">
 
-              <FaBolt />
+              <FaRocket />
 
               <span>
 
-                READY TO MOVE FORWARD?
+                READY TO BUILD
 
               </span>
 
             </div>
 
+
             <h2>
 
-              Keep your workspace moving 🚀
+              Create your next
+
+              <span>
+
+                {" "}successful project.
+
+              </span>
 
             </h2>
 
+
             <p>
 
-              Create projects, organize tasks,
-              invite teammates and monitor progress
-              from one beautiful workspace.
+              Plan projects, assign tasks,
+              monitor progress and collaborate
+              with your team using one modern,
+              intelligent workspace.
 
             </p>
 
-            <div className="workspace-feature-list">
 
-              <div className="feature-chip">
+
+            <div className="cta-features">
+
+              <div className="cta-chip">
 
                 <FaProjectDiagram />
 
                 <span>
 
-                  Create Projects
+                  Unlimited Projects
 
                 </span>
 
               </div>
 
-              <div className="feature-chip">
+              <div className="cta-chip">
 
                 <FaTasks />
 
                 <span>
 
-                  Assign Tasks
+                  Smart Task Tracking
 
                 </span>
 
               </div>
 
-              <div className="feature-chip">
+              <div className="cta-chip">
 
                 <FaUsers />
 
                 <span>
 
-                  Invite Team
+                  Team Collaboration
 
                 </span>
 
               </div>
+
+              <div className="cta-chip">
+
+                <FaShieldAlt />
+
+                <span>
+
+                  Secure Workspace
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <div className="cta-buttons">
+
+              <motion.button
+                className="cta-primary-btn"
+                whileHover={{
+                  y: -3,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                onClick={() =>
+                  navigate("/projects")
+                }
+              >
+
+                <FaPlus />
+
+                <span>
+
+                  New Project
+
+                </span>
+
+              </motion.button>
+
+
+
+              <motion.button
+                className="cta-secondary-btn"
+                whileHover={{
+                  y: -3,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                onClick={() =>
+                  navigate("/tasks")
+                }
+              >
+
+                <span>
+
+                  View Tasks
+
+                </span>
+
+                <FaArrowRight />
+
+              </motion.button>
 
             </div>
 
@@ -1636,36 +2391,19 @@ const Dashboard = () => {
 
 
           {/* ==========================
-              RIGHT SIDE
+              RIGHT CARD
           ========================== */}
 
-          <div className="workspace-cta-right">
+          <motion.div
+            className="workspace-health-card"
+            whileHover={{
+              y: -8,
+            }}
+          >
 
-            <motion.button
-              className="workspace-create-btn"
-              type="button"
-              onClick={() => navigate("/projects")}
-              whileHover={{
-                scale: 1.04,
-              }}
-              whileTap={{
-                scale: 0.97,
-              }}
-            >
+            <div className="health-header">
 
-              <FaPlus />
-
-              <span>
-
-                New Project
-
-              </span>
-
-            </motion.button>
-
-            <div className="workspace-progress-card">
-
-              <div className="workspace-progress-header">
+              <div>
 
                 <span>
 
@@ -1673,47 +2411,140 @@ const Dashboard = () => {
 
                 </span>
 
-                <strong>
+                <h2>
 
                   {completion}%
 
-                </strong>
+                </h2>
 
               </div>
 
-              <div className="workspace-progress">
+              <div className="health-icon">
 
-                <motion.div
-                  className="workspace-progress-fill"
-                  initial={{
-                    width: 0,
-                  }}
-                  whileInView={{
-                    width: `${completion}%`,
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    ease: "easeOut",
-                  }}
-                />
+                <FaArrowTrendUp />
 
               </div>
-
-              <small>
-
-                {completion >= 90
-                  ? "Excellent! Your workspace is performing exceptionally well."
-                  : completion >= 70
-                  ? "Great progress. Keep completing tasks to reach your goals."
-                  : completion >= 40
-                  ? "You're making steady progress. Stay consistent."
-                  : "Create projects and complete tasks to improve workspace health."}
-
-              </small>
 
             </div>
 
-          </div>
+
+
+            <div className="health-progress">
+
+              <motion.div
+                className="health-progress-fill"
+                initial={{
+                  width: 0,
+                }}
+                whileInView={{
+                  width: `${completion}%`,
+                }}
+                transition={{
+                  duration: 1.4,
+                }}
+              />
+
+            </div>
+
+
+
+            <div className="health-status">
+
+              {completion >= 90
+                ? "Excellent Performance"
+                : completion >= 70
+                ? "Great Progress"
+                : completion >= 40
+                ? "Good Progress"
+                : "Getting Started"}
+
+            </div>
+
+
+
+            <div className="health-items">
+
+              <div className="health-item">
+
+                <div className="health-item-icon blue">
+
+                  <FaProjectDiagram />
+
+                </div>
+
+                <div>
+
+                  <strong>
+
+                    {stats.projects}
+
+                  </strong>
+
+                  <span>
+
+                    Projects
+
+                  </span>
+
+                </div>
+
+              </div>
+
+              <div className="health-item">
+
+                <div className="health-item-icon green">
+
+                  <FaTasks />
+
+                </div>
+
+                <div>
+
+                  <strong>
+
+                    {stats.tasks}
+
+                  </strong>
+
+                  <span>
+
+                    Tasks
+
+                  </span>
+
+                </div>
+
+              </div>
+
+              <div className="health-item">
+
+                <div className="health-item-icon purple">
+
+                  <FaUsers />
+
+                </div>
+
+                <div>
+
+                  <strong>
+
+                    {stats.users}
+
+                  </strong>
+
+                  <span>
+
+                    Members
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </motion.div>
 
         </motion.section>
 
