@@ -12,11 +12,12 @@ import {
   FaCheckCircle,
   FaArchive,
   FaChartLine,
-  FaArrowTrendUp,
   FaExclamationTriangle,
   FaThLarge,
   FaList,
 } from "react-icons/fa";
+
+import { FaArrowTrendUp } from "react-icons/fa6";
 
 import MainLayout from "../layouts/MainLayout";
 
