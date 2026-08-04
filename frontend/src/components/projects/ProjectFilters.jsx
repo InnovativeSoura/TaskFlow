@@ -1,182 +1,227 @@
+// src/components/projects/ProjectFilters.jsx
+
+import { motion } from "framer-motion";
+
 import {
-  FaSearch,
-  FaFilter,
-  FaSortAmountDown,
+    FaSearch,
+    FaFilter,
+    FaSortAmountDown,
+    FaFlag,
+    FaTimes,
 } from "react-icons/fa";
 
 const ProjectFilters = ({
-  search,
-  setSearch,
+    search,
+    setSearch,
 
-  statusFilter,
-  setStatusFilter,
+    statusFilter,
+    setStatusFilter,
 
-  priorityFilter,
-  setPriorityFilter,
+    priorityFilter,
+    setPriorityFilter,
 
-  sortBy,
-  setSortBy,
-
-  totalProjects = 0,
+    sortBy,
+    setSortBy,
 }) => {
-  return (
-    <div className="project-toolbar">
 
-      {/* SEARCH */}
-      <div className="toolbar-search">
+    const clearFilters = () => {
 
-        <FaSearch />
+        setSearch("");
 
-        <input
-          type="text"
-          placeholder="Search projects..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
+        setStatusFilter("All");
 
-      </div>
+        setPriorityFilter("All");
 
+        setSortBy("Newest");
 
-      {/* STATUS FILTER */}
-      <div className="toolbar-select">
+    };
+        return (
 
-        <FaFilter />
-
-        <select
-          value={statusFilter}
-          onChange={(e) =>
-            setStatusFilter(e.target.value)
-          }
+        <motion.div
+            className="project-filters"
+            initial={{
+                opacity: 0,
+                y: 15,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+            }}
+            transition={{
+                duration: 0.35,
+            }}
         >
 
-          <option value="All">
-            All Status
-          </option>
+            {/* ===============================
+                SEARCH
+            ================================ */}
 
-          <option value="Planning">
-            Planning
-          </option>
+            <div className="filter-search">
 
-          <option value="Active">
-            Active
-          </option>
+                <FaSearch className="filter-icon" />
 
-          <option value="On Hold">
-            On Hold
-          </option>
+                <input
+                    type="text"
+                    placeholder="Search projects..."
+                    value={search}
+                    onChange={(e) =>
+                        setSearch(e.target.value)
+                    }
+                />
 
-          <option value="Completed">
-            Completed
-          </option>
+            </div>
 
-          <option value="Archived">
-            Archived
-          </option>
+            {/* ===============================
+                STATUS
+            ================================ */}
 
-        </select>
+            <div className="filter-group">
 
-      </div>
+                <FaFilter className="filter-group-icon" />
 
+                <select
+                    value={statusFilter}
+                    onChange={(e) =>
+                        setStatusFilter(
+                            e.target.value
+                        )
+                    }
+                >
 
-      {/* PRIORITY FILTER */}
-      <div className="toolbar-select">
+                    <option value="All">
+                        All Status
+                    </option>
 
-        <FaFilter />
+                    <option value="Planning">
+                        Planning
+                    </option>
 
-        <select
-          value={priorityFilter}
-          onChange={(e) =>
-            setPriorityFilter(
-              e.target.value
-            )
-          }
-        >
+                    <option value="Active">
+                        Active
+                    </option>
 
-          <option value="All">
-            All Priority
-          </option>
+                    <option value="Completed">
+                        Completed
+                    </option>
 
-          <option value="Critical">
-            Critical
-          </option>
+                    <option value="Archived">
+                        Archived
+                    </option>
 
-          <option value="High">
-            High
-          </option>
+                </select>
 
-          <option value="Medium">
-            Medium
-          </option>
+            </div>
 
-          <option value="Low">
-            Low
-          </option>
+            {/* ===============================
+                PRIORITY
+            ================================ */}
 
-        </select>
+            <div className="filter-group">
 
-      </div>
+                <FaFlag className="filter-group-icon" />
 
+                <select
+                    value={priorityFilter}
+                    onChange={(e) =>
+                        setPriorityFilter(
+                            e.target.value
+                        )
+                    }
+                >
 
-      {/* SORT */}
-      <div className="toolbar-select">
+                    <option value="All">
+                        All Priority
+                    </option>
 
-        <FaSortAmountDown />
+                    <option value="Low">
+                        Low
+                    </option>
 
-        <select
-          value={sortBy}
-          onChange={(e) =>
-            setSortBy(e.target.value)
-          }
-        >
+                    <option value="Medium">
+                        Medium
+                    </option>
 
-          <option value="Newest">
-            Newest
-          </option>
+                    <option value="High">
+                        High
+                    </option>
 
-          <option value="Oldest">
-            Oldest
-          </option>
+                    <option value="Critical">
+                        Critical
+                    </option>
 
-          <option value="A-Z">
-            A - Z
-          </option>
+                </select>
 
-          <option value="Z-A">
-            Z - A
-          </option>
+            </div>
 
-          <option value="Priority">
-            Priority
-          </option>
+            {/* ===============================
+                SORT
+            ================================ */}
 
-          <option value="Progress">
-            Progress
-          </option>
+            <div className="filter-group">
 
-        </select>
+                <FaSortAmountDown className="filter-group-icon" />
 
-      </div>
+                <select
+                    value={sortBy}
+                    onChange={(e) =>
+                        setSortBy(
+                            e.target.value
+                        )
+                    }
+                >
 
+                    <option value="Newest">
+                        Newest
+                    </option>
 
-      {/* COUNT */}
-      <div className="toolbar-count">
+                    <option value="Oldest">
+                        Oldest
+                    </option>
 
-        <span>
-          Total Projects
-        </span>
+                    <option value="A-Z">
+                        A - Z
+                    </option>
 
-        <strong>
-          {totalProjects}
-        </strong>
+                    <option value="Z-A">
+                        Z - A
+                    </option>
 
-      </div>
+                    <option value="Priority">
+                        Priority
+                    </option>
 
+                    <option value="Progress">
+                        Progress
+                    </option>
 
-    </div>
-  );
-};
+                </select>
 
+            </div>
+
+            {/* ===============================
+                CLEAR
+            ================================ */}
+
+            <motion.button
+                type="button"
+                className="clear-filters-btn"
+                whileHover={{
+                    scale: 1.03,
+                }}
+                whileTap={{
+                    scale: 0.96,
+                }}
+                onClick={clearFilters}
+            >
+
+                <FaTimes />
+
+                Clear
+
+            </motion.button>
+
+        </motion.div>
+    );
+  };
 
 export default ProjectFilters;
