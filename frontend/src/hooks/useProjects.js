@@ -135,19 +135,34 @@ const useProjects = () => {
         res?.data?.project ||
         res?.data?.data;
 
-      if (project) {
-        setProjects((prev) => {
-          const exists = prev.some(
-            (item) => item._id === project._id
-          );
+      if(project){
 
-          if (exists) return prev;
+        setProjects(prev=>{
 
-          return [project, ...prev];
+          const exists =
+                prev.find(
+                  p=>p._id===project._id
+              );
+
+            if(exists){
+
+              return prev.map(p=>
+
+                p._id===project._id
+
+                    ? project
+
+                    : p
+
+              );
+
+            }
+
+          return [ project,...prev,];
+
         });
-      }
 
-      return project;
+      }
     } catch (err) {
       const message =
         err.response?.data?.message ||

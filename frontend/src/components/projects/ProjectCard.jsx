@@ -1,392 +1,490 @@
+// src/components/projects/ProjectCard.jsx
+
+import { memo, useMemo } from "react";
+import { motion } from "framer-motion";
+
 import {
-  FaEdit,
-  FaTrash,
-  FaFolderOpen,
-  FaUserTie,
   FaUsers,
   FaCalendarAlt,
+  FaEdit,
+  FaTrash,
+  FaChartLine,
+  FaCheckCircle,
+  FaClock,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
+import "../../styles/ProjectCard.css";
 
 const ProjectCard = ({
   project,
   onEdit,
   onDelete,
-  canManage = true,
+  canManage = false,
 }) => {
 
+  /* ==========================================
+      DEFAULT VALUES
+  ========================================== */
 
-  const getBadgeClass = (status = "") => {
+  const {
+    title = "Untitled Project",
+    description = "No description available.",
+    status = "Planning",
+    priority = "Medium",
+    progress = 0,
+    members = [],
+    createdAt,
+    endDate,
+    color = "#4F46E5",
+  } = project || {};
 
-    switch(status.toLowerCase()) {
+  /* ==========================================
+      STATUS CONFIG
+  ========================================== */
 
-      case "planning":
-        return "planning";
+  const statusConfig = useMemo(() => {
 
-      case "active":
-        return "active";
+    switch (status) {
 
-      case "completed":
-        return "completed";
+      case "Completed":
+        return {
+          icon: <FaCheckCircle />,
+          className: "completed",
+        };
 
-      case "archived":
-        return "archived";
+      case "Active":
+        return {
+          icon: <FaChartLine />,
+          className: "active",
+        };
+
+      case "Planning":
+        return {
+          icon: <FaClock />,
+          className: "planning",
+        };
+
+      case "Archived":
+        return {
+          icon: <FaClock />,
+          className: "archived",
+        };
 
       default:
-        return "planning";
+        return {
+          icon: <FaClock />,
+          className: "planning",
+        };
 
     }
 
-  };
+  }, [status]);
 
+  /* ==========================================
+      PRIORITY CONFIG
+  ========================================== */
 
+  const priorityConfig = useMemo(() => {
 
-  const getPriorityClass = (priority = "") => {
+    switch (priority) {
 
-    switch(priority.toLowerCase()) {
+      case "Critical":
+        return {
+          className: "critical",
+          icon: <FaExclamationTriangle />,
+        };
 
+      case "High":
+        return {
+          className: "high",
+          icon: <FaExclamationTriangle />,
+        };
 
-      case "critical":
-        return "priority-critical";
-
-
-      case "high":
-        return "priority-high";
-
-
-      case "medium":
-        return "priority-medium";
-
-
-      case "low":
-        return "priority-low";
-
+      case "Medium":
+        return {
+          className: "medium",
+          icon: <FaChartLine />,
+        };
 
       default:
-        return "priority-medium";
+        return {
+          className: "low",
+          icon: <FaChartLine />,
+        };
 
     }
 
+  }, [priority]);
+    /* ==========================================
+      DATE FORMATTER
+  ========================================== */
+
+  const formatDate = (date) => {
+
+    if (!date) return "--";
+
+    return new Date(date).toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }
+    );
+
   };
 
+  /* ==========================================
+      USER INITIALS
+  ========================================== */
 
+  const getInitials = (name = "") => {
+
+    return name
+      .trim()
+      .split(" ")
+      .filter(Boolean)
+      .map((word) => word[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+
+  };
+
+  /* ==========================================
+      MEMBERS
+  ========================================== */
+
+  const visibleMembers = members.slice(0, 4);
+
+  const remainingMembers =
+    members.length - visibleMembers.length;
+
+  /* ==========================================
+      PROGRESS COLOR
+  ========================================== */
+
+  const progressColor = useMemo(() => {
+
+    if (progress >= 100)
+      return "#22c55e";
+
+    if (progress >= 70)
+      return "#3b82f6";
+
+    if (progress >= 40)
+      return "#f59e0b";
+
+    return "#ef4444";
+
+  }, [progress]);
+
+  /* ==========================================
+      CARD ANIMATION
+  ========================================== */
+
+  const cardVariants = {
+
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.35,
+      },
+    },
+
+  };
+
+  /* ==========================================
+      JSX
+  ========================================== */
 
   return (
 
-    <div className="project-card">
-
-
-      {/* COLOR BAR */}
+    <motion.article
+      className="project-card"
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{
+        y: -6,
+      }}
+    >
 
       <div
-
-        className="project-color-bar"
-
+        className="project-card-top"
         style={{
-          background:
-          project.color || "#6366f1"
+          borderTop: `4px solid ${color}`,
         }}
+      >
 
-      />
+        <div className="project-title-section">
 
+          <h3 className="project-title">
+            {title}
+          </h3>
 
+          <div className="project-badges">
 
+            <span
+              className={`status-badge ${statusConfig.className}`}
+            >
+              {statusConfig.icon}
 
-      {/* HEADER */}
+              {status}
+            </span>
 
-      <div className="project-card-header">
+            <span
+              className={`priority-badge ${priorityConfig.className}`}
+            >
+              {priorityConfig.icon}
 
-
-        <div className="project-card-title">
-
-
-          <FaFolderOpen />
-
-
-          <div>
-
-
-            <h3>
-
-              {project.title}
-
-            </h3>
-
-
-            <p>
-
-              {
-                project.description
-
-                ?
-
-                project.description.length > 90
-
-                ?
-
-                `${project.description.substring(0,90)}...`
-
-                :
-
-                project.description
-
-                :
-
-                "No description"
-
-              }
-
-            </p>
-
+              {priority}
+            </span>
 
           </div>
 
-
         </div>
 
+        <p className="project-description">
 
+          {description}
 
-      </div>
+        </p>
+                {/* ==========================================
+            PROGRESS
+        ========================================== */}
 
+        <div className="project-progress-section">
 
+          <div className="progress-header">
 
+            <span>Progress</span>
 
+            <strong>{progress}%</strong>
 
-      {/* STATUS */}
+          </div>
 
-      <div className="project-card-row">
+          <div className="progress-track">
 
-
-        <span
-
-          className={
-            `badge ${
-              getBadgeClass(
-                project.status
-              )
-            }`
-          }
-
-        >
-
-          {
-            project.status ||
-            "Planning"
-          }
-
-        </span>
-
-
-
-
-
-        <span
-
-          className={
-            `priority-badge ${
-              getPriorityClass(
-                project.priority
-              )
-            }`
-          }
-
-        >
-
-          {
-            project.priority ||
-            "Medium"
-          }
-
-        </span>
-
-
-      </div>
-
-
-
-
-
-
-
-      {/* PROGRESS */}
-
-      <div className="project-card-progress">
-
-
-        <div className="progress-wrapper">
-
-
-          <div className="progress-bar">
-
-
-            <div
-
+            <motion.div
               className="progress-fill"
-
-              style={{
-                width:
-                `${project.progress || 0}%`
+              initial={{ width: 0 }}
+              animate={{
+                width: `${progress}%`,
+                backgroundColor: progressColor,
               }}
-
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+              }}
             />
 
+          </div>
+
+        </div>
+
+        {/* ==========================================
+            PROJECT INFO
+        ========================================== */}
+
+        <div className="project-meta">
+
+          <div className="meta-item">
+
+            <FaCalendarAlt />
+
+            <div>
+
+              <small>Created</small>
+
+              <strong>
+                {formatDate(createdAt)}
+              </strong>
+
+            </div>
 
           </div>
 
+          <div className="meta-item">
 
+            <FaClock />
 
-          <span className="progress-text">
+            <div>
 
-            {
-              project.progress || 0
-            }%
+              <small>Deadline</small>
 
-          </span>
+              <strong>
+                {formatDate(endDate)}
+              </strong>
 
+            </div>
 
+          </div>
 
         </div>
 
+        {/* ==========================================
+            TEAM MEMBERS
+        ========================================== */}
+
+        <div className="project-members">
+
+          <div className="members-left">
+
+            <FaUsers className="members-icon" />
+
+            <span>
+
+              Team
+
+              <strong>
+                {" "}
+                ({members.length})
+              </strong>
+
+            </span>
+
+          </div>
+
+          <div className="members-avatars">
+
+            {visibleMembers.length > 0 ? (
+
+              visibleMembers.map((member, index) => (
+
+                <div
+                  key={member._id || index}
+                  className="member-avatar"
+                  title={member.name}
+                  style={{
+                    marginLeft:
+                      index === 0 ? 0 : -10,
+                  }}
+                >
+
+                  {member.avatar ? (
+
+                    <img
+                      src={member.avatar}
+                      alt={member.name}
+                    />
+
+                  ) : (
+
+                    getInitials(member.name)
+
+                  )}
+
+                </div>
+
+              ))
+
+            ) : (
+
+              <div className="no-members">
+                No Members
+              </div>
+
+            )}
+
+            {remainingMembers > 0 && (
+
+              <div className="member-avatar more-members">
+
+                +{remainingMembers}
+
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+                {/* ==========================================
+            FOOTER
+        ========================================== */}
+
+        <div className="project-card-footer">
+
+          <div className="footer-left">
+
+            <small>
+              Project Status
+            </small>
+
+            <span
+              className={`footer-status ${statusConfig.className}`}
+            >
+              {statusConfig.icon}
+
+              {status}
+            </span>
+
+          </div>
+
+          <div className="footer-right">
+
+            {canManage && (
+
+              <motion.button
+                type="button"
+                className="action-btn edit-btn"
+                whileHover={{
+                  scale: 1.08,
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.95,
+                }}
+                onClick={() => onEdit(project)}
+                title="Edit Project"
+              >
+                <FaEdit />
+              </motion.button>
+
+            )}
+
+            {canManage && (
+
+              <motion.button
+                type="button"
+                className="action-btn delete-btn"
+                whileHover={{
+                  scale: 1.08,
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.95,
+                }}
+                onClick={() => onDelete(project)}
+                title="Delete Project"
+              >
+                <FaTrash />
+              </motion.button>
+
+            )}
+
+          </div>
+
+        </div>
 
       </div>
 
-
-
-
-
-
-
-      {/* DETAILS */}
-
-
-      <div className="project-card-details">
-
-
-        <div>
-
-          <FaUserTie />
-
-          {
-            project.manager?.name ||
-            project.owner?.name ||
-            "Unassigned"
-          }
-
-        </div>
-
-
-
-
-        <div>
-
-          <FaUsers />
-
-          {
-            project.members?.length || 0
-          }
-          {" "}
-          Members
-
-        </div>
-
-
-
-
-        <div>
-
-          <FaCalendarAlt />
-
-          {
-
-            project.endDate
-
-            ?
-
-            new Date(
-              project.endDate
-            )
-            .toLocaleDateString()
-
-            :
-
-            "--"
-
-          }
-
-        </div>
-
-
-      </div>
-
-
-
-
-
-
-
-
-      {/* ACTIONS */}
-
-
-      {
-
-        canManage &&
-
-        <div className="project-card-actions">
-
-
-          <button
-
-            className="edit-btn"
-
-            onClick={()=>
-              onEdit(project)
-            }
-
-          >
-
-            <FaEdit />
-
-            Edit
-
-          </button>
-
-
-
-
-
-          <button
-
-            className="delete-btn"
-
-            onClick={()=>
-              onDelete(project)
-            }
-
-          >
-
-            <FaTrash />
-
-            Delete
-
-          </button>
-
-
-        </div>
-
-
-      }
-
-
-
-
-
-    </div>
-
+    </motion.article>
 
   );
 
 };
 
+/* ==========================================
+    PERFORMANCE
+========================================== */
 
-export default ProjectCard;
+export default memo(ProjectCard);

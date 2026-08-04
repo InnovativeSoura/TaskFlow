@@ -49,6 +49,18 @@ export const getProjects = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
+      
+      const formattedProjects = projects.map(project => {
+
+        const obj = project.toObject();
+
+        obj.memberCount = project.members.length + 1;
+
+        obj.taskCount = 0;
+
+        return obj;
+
+      });
 
     res.status(200).json({
       success: true,
@@ -224,10 +236,15 @@ export const createProject = async (req, res) => {
       .populate("owner", "name email avatar")
       .populate("members", "name email avatar");
 
+    const projectObject = populatedProject.toObject();
+
+    projectObject.memberCount = populatedProject.members.length + 1;
+    projectObject.taskCount = 0;
+
     res.status(201).json({
       success: true,
       message: "Project created successfully",
-      project: populatedProject,
+      project: projectObject,
     });
   } catch (error) {
     console.error("Create Project:", error);
@@ -275,10 +292,16 @@ export const updateProject = async (req, res) => {
       .populate("owner", "name email avatar")
       .populate("members", "name email avatar");
 
+    const projectObject = project.toObject();
+
+    projectObject.memberCount = project.members.length + 1;
+
+    projectObject.taskCount = 0;
+
     res.status(200).json({
-      success: true,
-      message: "Project updated",
-      project,
+      success:true,
+      message:"Project updated",
+      project:projectObject,
     });
   } catch (error) {
     console.error("Update Project:", error);

@@ -1,0 +1,345 @@
+/* ==========================================================
+   PROJECT CARD
+========================================================== */
+
+.project-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  padding: 22px;
+
+  background: var(--surface, #ffffff);
+
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.project-card:hover {
+  border-color: rgba(99, 102, 241, .25);
+
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, .12);
+}
+
+/* ==========================================================
+   TOP ACCENT
+========================================================== */
+
+.project-card-accent {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.project-title-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-title {
+  margin: 0;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  color: var(--heading-color, #111827);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-description {
+  margin-top: 10px;
+
+  color: var(--text-secondary, #6b7280);
+
+  font-size: .93rem;
+  line-height: 1.65;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* ==========================================================
+   BADGES
+========================================================== */
+
+.project-badge-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  align-items: flex-end;
+}
+
+.status-badge,
+.priority-badge {
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 90px;
+
+  padding: 7px 14px;
+
+  border-radius: 999px;
+
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+/* STATUS */
+
+.status-badge.planning{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.status-badge.active{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.status-badge.completed{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.status-badge.archived{
+  background:#e5e7eb;
+  color:#374151;
+}
+
+.status-badge.hold{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+/* PRIORITY */
+
+.priority-badge.low{
+  background:#ecfdf5;
+  color:#047857;
+}
+
+.priority-badge.medium{
+  background:#eff6ff;
+  color:#2563eb;
+}
+
+.priority-badge.high{
+  background:#fef3c7;
+  color:#b45309;
+}
+
+.priority-badge.critical{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+/* ==========================================================
+   PROGRESS
+========================================================== */
+
+.project-progress-section{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.progress-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:.92rem;
+  font-weight:600;
+
+  color:var(--text-primary,#374151);
+}
+
+.progress-title svg{
+  color:#6366f1;
+}
+
+.progress-top strong{
+  font-size:.95rem;
+  font-weight:700;
+  color:var(--heading-color,#111827);
+}
+
+.progress-track{
+  width:100%;
+  height:10px;
+
+  background:#eef2ff;
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0;
+
+  border-radius:999px;
+
+  transition:width .8s ease;
+}
+
+/* ==========================================================
+   INFORMATION GRID
+========================================================== */
+
+.project-info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.project-info-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  padding:16px;
+
+  border-radius:16px;
+
+  background:#f8fafc;
+
+  border:1px solid #edf2f7;
+
+  transition:.25s;
+}
+
+.project-info-card:hover{
+  transform:translateY(-2px);
+  border-color:#dbe4ff;
+  background:#ffffff;
+}
+
+/* ==========================================================
+   ICON
+========================================================== */
+
+.info-icon{
+  width:48px;
+  height:48px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:14px;
+
+  background:linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+  );
+
+  color:#fff;
+
+  font-size:18px;
+
+  flex-shrink:0;
+}
+
+/* ==========================================================
+   OWNER AVATAR
+========================================================== */
+
+.owner-avatar{
+  width:48px;
+  height:48px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#fff;
+
+  font-weight:700;
+  font-size:15px;
+
+  overflow:hidden;
+
+  flex-shrink:0;
+}
+
+.owner-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* ==========================================================
+   INFO CONTENT
+========================================================== */
+
+.info-content{
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+}
+
+.info-content small{
+  font-size:.72rem;
+  color:#6b7280;
+  margin-bottom:2px;
+}
+
+.info-content strong{
+  font-size:.95rem;
+  font-weight:700;
+  color:#111827;
+}
+
+.info-content span{
+  margin-top:2px;
+
+  font-size:.78rem;
+
+  color:#9ca3af;
+}
