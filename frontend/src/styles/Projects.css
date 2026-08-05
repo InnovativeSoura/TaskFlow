@@ -314,18 +314,16 @@
 }
 
 /* ==========================================================
-   STATISTICS GRID
+   PROJECT STATS
 ========================================================== */
 
 .projects-stats{
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(auto-fit,minmax(230px,1fr));
-
-  gap:22px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:24px;
+    margin-top:8px;
 }
+
 /* ==========================================================
    INSIGHTS
 ========================================================== */
@@ -416,26 +414,35 @@
 
 .projects-toolbar{
 
-  display:flex;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-  justify-content:space-between;
+    gap:20px;
 
-  align-items:center;
+    padding:18px 24px;
 
-  gap:20px;
+    background:var(--surface,#171f2e);
 
-  flex-wrap:wrap;
+    border:1px solid rgba(255,255,255,.08);
 
-  padding:20px 24px;
+    border-radius:18px;
+}
 
-  border-radius:20px;
+.projects-count{
 
-  background:var(--surface,#fff);
+    display:flex;
+    align-items:center;
+    gap:8px;
 
-  border:1px solid rgba(148,163,184,.15);
+    font-size:.95rem;
+    color:#aab4d2;
+}
 
-  box-shadow:
-    0 8px 24px rgba(15,23,42,.05);
+.projects-count strong{
+
+    color:#4f8cff;
+    font-size:1.15rem;
 }
 
 /* ==========================================================
@@ -468,50 +475,47 @@
 
 .view-toggle{
 
-  display:flex;
+    display:flex;
 
-  overflow:hidden;
+    background:#111827;
 
-  border-radius:14px;
+    border-radius:12px;
 
-  border:1px solid rgba(148,163,184,.20);
+    overflow:hidden;
 
-  background:#f8fafc;
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .view-toggle button{
 
-  width:48px;
-  height:48px;
+    width:46px;
+    height:46px;
 
-  border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-  background:transparent;
+    background:transparent;
 
-  color:#64748b;
+    border:none;
 
-  cursor:pointer;
+    color:#9ca3af;
 
-  transition:.25s;
+    cursor:pointer;
+
+    transition:.25s;
 }
 
 .view-toggle button:hover{
 
-  background:#eef4ff;
-
-  color:#2563eb;
+    color:white;
 }
 
 .view-toggle button.active{
 
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #4f46e5
-    );
+    background:#4f8cff;
 
-  color:#fff;
+    color:white;
 }
 
 /* ==========================================================
@@ -520,24 +524,21 @@
 
 .project-filters{
 
-  display:flex;
+    display:flex;
 
-  flex-wrap:wrap;
+    flex-wrap:wrap;
 
-  align-items:center;
+    align-items:center;
 
-  gap:18px;
+    gap:16px;
 
-  padding:22px;
+    padding:22px;
 
-  border-radius:22px;
+    border-radius:18px;
 
-  background:var(--surface,#fff);
+    background:#171f2e;
 
-  border:1px solid rgba(148,163,184,.15);
-
-  box-shadow:
-    0 8px 24px rgba(15,23,42,.05);
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .project-filters .search-box{
@@ -1213,70 +1214,46 @@
     justify-content:center;
     align-items:center;
 
-    min-height:420px;
-
-    padding:30px;
+    padding:80px 30px;
 }
 
-.projects-empty{
+.empty-card{
 
-    background:var(--surface,#fff);
+    width:100%;
+    max-width:700px;
 
-    border:1px dashed rgba(148,163,184,.25);
+    background:#171f2e;
 
-    border-radius:28px;
+    border:1px solid rgba(255,255,255,.08);
 
-    flex-direction:column;
+    border-radius:22px;
+
+    padding:70px;
 
     text-align:center;
-
-    box-shadow:
-        0 20px 40px rgba(15,23,42,.05);
 }
 
-.projects-empty .empty-icon{
+.empty-card svg{
 
-    width:90px;
-    height:90px;
+    font-size:70px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    color:#4f8cff;
 
-    border-radius:50%;
-
-    margin-bottom:24px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #4f46e5
-        );
-
-    color:#fff;
-
-    font-size:2.4rem;
+    margin-bottom:20px;
 }
 
-.projects-empty h2{
+.empty-card h2{
 
-    font-size:2rem;
-
-    color:var(--heading-color,#111827);
+    color:white;
 
     margin-bottom:12px;
 }
 
-.projects-empty p{
+.empty-card p{
 
-    max-width:560px;
+    color:#8c97b3;
 
-    color:#6b7280;
-
-    line-height:1.8;
-
-    margin-bottom:30px;
+    margin-bottom:28px;
 }
 
 /* ==========================================================
@@ -1653,9 +1630,31 @@
 
     .project-insights{
 
-        grid-template-columns:1fr;
-    }
+    display:grid;
 
+    grid-template-columns:repeat(3,1fr);
+
+    gap:24px;
+}
+
+.insight-card{
+
+    min-height:110px;
+
+    padding:28px;
+
+    border-radius:20px;
+
+    background:#171f2e;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
     .form-grid{
 
         grid-template-columns:1fr;
