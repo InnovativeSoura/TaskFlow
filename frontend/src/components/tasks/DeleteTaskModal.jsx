@@ -4,141 +4,338 @@ import {
   FaTrashAlt,
   FaTimes,
   FaExclamationTriangle,
+  FaCalendarAlt,
+  FaFolderOpen,
+  FaFlag,
 } from "react-icons/fa";
 
-const DeleteTaskModal = ({
+import "../../styles/DeleteTaskModal.css";
+
+function DeleteTaskModal({
   open,
   task,
   loading = false,
   onClose,
   onConfirm,
-}) => {
-  if (!open || !task) return null;
+}) {
+  /* ==========================================================
+      ANIMATION
+  ========================================================== */
 
-  return (
+  const backdropVariants = {
+    hidden: {
+      opacity: 0,
+    },
+
+    visible: {
+      opacity: 1,
+    },
+
+    exit: {
+      opacity: 0,
+    },
+  };
+
+  const modalVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      scale: 0.92,
+    },
+
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+
+      transition: {
+        duration: 0.28,
+      },
+    },
+
+    exit: {
+      opacity: 0,
+      y: 20,
+      scale: 0.95,
+
+      transition: {
+        duration: 0.18,
+      },
+    },
+  };
+
+  if (!open) return null;
+
+  const dueDate = task?.dueDate
+    ? new Date(task.dueDate).toLocaleDateString()
+    : null;
+  const dueDate = task?.dueDate
+    ? new Date(task.dueDate).toLocaleDateString()
+    : null;  
+    return (
     <AnimatePresence>
 
       <motion.div
-        className="modal-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        className="delete-modal-backdrop"
+        variants={backdropVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        onClick={onClose}
       >
 
         <motion.div
-          className="modal-content delete-modal"
-          initial={{
-            scale: 0.9,
-            opacity: 0,
-            y: 30,
-          }}
-          animate={{
-            scale: 1,
-            opacity: 1,
-            y: 0,
-          }}
-          exit={{
-            scale: 0.9,
-            opacity: 0,
-            y: 20,
-          }}
-          transition={{
-            duration: 0.25,
-          }}
+          className="delete-modal"
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          onClick={(e) => e.stopPropagation()}
         >
 
-          {/* Header */}
+          {/* ==========================================
+              HEADER
+          ========================================== */}
 
-          <div className="modal-header">
+          <div className="delete-modal-header">
 
-            <h2 className="modal-title">
-              Delete Task
-            </h2>
+            <div className="delete-header-left">
+
+              <motion.div
+                className="delete-icon"
+                initial={{
+                  rotate: -15,
+                  scale: 0.8,
+                }}
+                animate={{
+                  rotate: 0,
+                  scale: 1,
+                }}
+                transition={{
+                  duration: 0.35,
+                }}
+              >
+
+                <FaTrashAlt />
+
+              </motion.div>
+
+              <div>
+
+                <h2>Delete Task</h2>
+
+                <p>
+                  This action is permanent and cannot be undone.
+                </p>
+
+              </div>
+
+            </div>
 
             <button
               type="button"
-              className="modal-close"
+              className="delete-close"
               onClick={onClose}
               disabled={loading}
             >
+
               <FaTimes />
+
             </button>
 
           </div>
 
-          {/* Body */}
+          {/* ==========================================
+              WARNING CARD
+          ========================================== */}
 
-          <div className="delete-body">
+          <motion.div
+            className="delete-warning"
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+          >
 
-            <div className="delete-icon">
-              <FaTrashAlt />
+            <FaExclamationTriangle />
+
+            <div>
+
+              <h3>
+                Are you sure?
+              </h3>
+
+              <p>
+                Deleting this task will permanently remove
+                all associated information from your workspace.
+              </p>
+
             </div>
 
-            <h3
-              style={{
-                marginTop: "20px",
-              }}
-            >
-              Delete this task?
-            </h3>
+          </motion.div>
+                    {/* ==========================================
+              TASK PREVIEW
+          ========================================== */}
 
-            <p
-              className="text-muted"
-              style={{
-                marginTop: "12px",
-              }}
-            >
-              This action cannot be undone.
-              The task and its related
-              information will be removed
-              permanently.
-            </p>
+          <motion.div
+            className="delete-task-preview"
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.1,
+            }}
+          >
 
-            <div className="task-delete-preview">
+            <div className="preview-top">
 
-              <FaExclamationTriangle />
+              <div>
 
-              <span>
-                {task.title}
+                <h3>
+                  {task?.title || "Untitled Task"}
+                </h3>
+
+                <p>
+                  {task?.description?.trim()
+                    ? task.description
+                    : "No description available for this task."}
+                </p>
+
+              </div>
+
+              <span
+                className={`priority-badge priority-${(
+                  task?.priority || "Medium"
+                )
+                  .toLowerCase()
+                  .replace(/\s/g, "-")}`}
+              >
+                {task?.priority || "Medium"}
               </span>
 
             </div>
 
-            <p className="warning-text">
-              Once deleted, this task
-              cannot be recovered.
-            </p>
-                        {/* Footer */}
+            {/* ==========================================
+                META INFORMATION
+            ========================================== */}
 
-            <div className="modal-footer">
+            <div className="preview-meta">
 
-              <button
-                type="button"
-                className="btn-task btn-secondary"
-                onClick={onClose}
-                disabled={loading}
-              >
-                Cancel
-              </button>
+              <div className="meta-item">
 
-              <button
-                type="button"
-                className="btn-task btn-danger"
-                onClick={onConfirm}
-                disabled={loading}
-              >
-                {loading ? (
-                  "Deleting..."
-                ) : (
-                  <>
-                    <FaTrashAlt />
-                    {" "}
-                    Delete Task
-                  </>
-                )}
-              </button>
+                <FaFlag />
+
+                <div>
+
+                  <span className="meta-label">
+                    Status
+                  </span>
+
+                  <strong>
+                    {task?.status || "Pending"}
+                  </strong>
+
+                </div>
+
+              </div>
+
+              {dueDate && (
+
+                <div className="meta-item">
+
+                  <FaCalendarAlt />
+
+                  <div>
+
+                    <span className="meta-label">
+                      Due Date
+                    </span>
+
+                    <strong>
+                      {dueDate}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+              )}
+
+              {task?.project && (
+
+                <div className="meta-item">
+
+                  <FaFolderOpen />
+
+                  <div>
+
+                    <span className="meta-label">
+                      Project
+                    </span>
+
+                    <strong>
+                      {task.project.title ||
+                        task.project.name ||
+                        "Untitled Project"}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+              )}
 
             </div>
+
+          </motion.div>
+                    {/* ==========================================
+              FOOTER
+          ========================================== */}
+
+          <div className="delete-modal-footer">
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={onConfirm}
+              disabled={loading}
+            >
+
+              {loading ? (
+
+                <>
+                  <span className="btn-spinner" />
+                  Deleting...
+                </>
+
+              ) : (
+
+                <>
+                  <FaTrashAlt />
+                  Delete Task
+                </>
+
+              )}
+
+            </button>
 
           </div>
 
@@ -148,6 +345,6 @@ const DeleteTaskModal = ({
 
     </AnimatePresence>
   );
-};
+}
 
 export default DeleteTaskModal;

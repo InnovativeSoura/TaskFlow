@@ -1,0 +1,879 @@
+/* ==========================================================
+   DELETE TASK MODAL
+   Premium Linear / Jira Style
+========================================================== */
+
+.delete-modal-backdrop{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:32px;
+
+    backdrop-filter:blur(12px);
+
+    background:
+        rgba(8,12,22,.72);
+
+    animation:
+        backdropFade .25s ease;
+}
+
+/* ==========================================================
+   MODAL
+========================================================== */
+
+.delete-modal{
+
+    position:relative;
+
+    width:100%;
+
+    max-width:620px;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1d2434 0%,
+            #171d2c 100%
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 40px 80px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.05);
+
+    animation:
+        modalPopup .28s ease;
+}
+
+/* ==========================================================
+   DECORATIVE GLOW
+========================================================== */
+
+.delete-modal::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-140px;
+    right:-120px;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            rgba(239,68,68,.16),
+            transparent 72%
+        );
+
+    pointer-events:none;
+}
+
+.delete-modal::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-120px;
+    left:-100px;
+
+    width:220px;
+    height:220px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            rgba(99,102,241,.12),
+            transparent 72%
+        );
+
+    pointer-events:none;
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes backdropFade{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes modalPopup{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(24px)
+            scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.delete-modal-header{
+
+    position:relative;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:28px 32px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.04),
+            transparent
+        );
+}
+
+/* ==========================================================
+   HEADER LEFT
+========================================================== */
+
+.delete-header-left{
+
+    display:flex;
+    align-items:center;
+
+    gap:18px;
+
+    flex:1;
+}
+
+/* ==========================================================
+   DELETE ICON
+========================================================== */
+
+.delete-icon{
+
+    width:64px;
+    height:64px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:18px;
+
+    color:#ffffff;
+
+    font-size:1.4rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+        );
+
+    box-shadow:
+        0 18px 35px rgba(239,68,68,.35);
+}
+
+.delete-icon svg{
+
+    font-size:1.4rem;
+}
+
+/* ==========================================================
+   TITLE
+========================================================== */
+
+.delete-header-left h2{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:1.55rem;
+
+    font-weight:700;
+
+    letter-spacing:-.02em;
+}
+
+.delete-header-left p{
+
+    margin-top:6px;
+
+    color:#9ca3af;
+
+    line-height:1.6;
+
+    font-size:.94rem;
+}
+
+/* ==========================================================
+   CLOSE BUTTON
+========================================================== */
+
+.delete-close{
+
+    width:46px;
+    height:46px;
+
+    border:none;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    color:#d1d5db;
+
+    background:
+        rgba(255,255,255,.05);
+
+    transition:.28s;
+}
+
+.delete-close:hover{
+
+    background:#ef4444;
+
+    color:#ffffff;
+
+    transform:
+        rotate(90deg)
+        scale(1.08);
+
+    box-shadow:
+        0 12px 24px rgba(239,68,68,.30);
+}
+
+/* ==========================================================
+   WARNING BOX
+========================================================== */
+
+.delete-warning{
+
+    margin:28px 32px 0;
+
+    display:flex;
+    align-items:flex-start;
+
+    gap:16px;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(239,68,68,.15);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(239,68,68,.10),
+            rgba(239,68,68,.04)
+        );
+}
+
+.delete-warning svg{
+
+    margin-top:2px;
+
+    color:#ef4444;
+
+    font-size:1.45rem;
+
+    flex-shrink:0;
+}
+
+.delete-warning h3{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:1.05rem;
+
+    font-weight:700;
+}
+
+.delete-warning p{
+
+    margin-top:8px;
+
+    color:#b6bfd0;
+
+    line-height:1.7;
+
+    font-size:.92rem;
+}
+/* ==========================================================
+   TASK PREVIEW CARD
+========================================================== */
+
+.delete-task-preview{
+
+    margin:24px 32px;
+
+    padding:24px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.05),
+            rgba(255,255,255,.02)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:all .3s ease;
+}
+
+.delete-task-preview:hover{
+
+    transform:translateY(-2px);
+
+    border-color:rgba(99,102,241,.25);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.18);
+}
+
+/* Decorative Glow */
+
+.delete-task-preview::before{
+
+    content:"";
+
+    position:absolute;
+
+    right:-60px;
+    top:-60px;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            rgba(99,102,241,.12),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+/* ==========================================================
+   TOP SECTION
+========================================================== */
+
+.preview-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:18px;
+
+    margin-bottom:24px;
+}
+
+.preview-top h3{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:1.25rem;
+
+    font-weight:700;
+
+    line-height:1.4;
+}
+
+.preview-top p{
+
+    margin-top:10px;
+
+    color:#9ca3af;
+
+    line-height:1.75;
+
+    font-size:.94rem;
+}
+
+/* ==========================================================
+   PRIORITY BADGE
+========================================================== */
+
+.priority-badge{
+
+    flex-shrink:0;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:.78rem;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+}
+
+/* Low */
+
+.priority-low{
+
+    color:#22c55e;
+
+    background:
+        rgba(34,197,94,.14);
+}
+
+/* Medium */
+
+.priority-medium{
+
+    color:#f59e0b;
+
+    background:
+        rgba(245,158,11,.14);
+}
+
+/* High */
+
+.priority-high{
+
+    color:#ef4444;
+
+    background:
+        rgba(239,68,68,.15);
+}
+
+/* Critical */
+
+.priority-critical{
+
+    color:#ec4899;
+
+    background:
+        rgba(236,72,153,.16);
+}
+
+/* ==========================================================
+   META GRID
+========================================================== */
+
+.preview-meta{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:18px;
+}
+
+/* ==========================================================
+   META ITEM
+========================================================== */
+
+.meta-item{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid rgba(255,255,255,.05);
+
+    transition:.25s;
+}
+
+.meta-item:hover{
+
+    transform:translateY(-2px);
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+.meta-item svg{
+
+    margin-top:2px;
+
+    color:#818cf8;
+
+    font-size:1rem;
+
+    flex-shrink:0;
+}
+
+.meta-label{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#8d99ae;
+
+    font-size:.76rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+.meta-item strong{
+
+    display:block;
+
+    color:#ffffff;
+
+    font-size:.92rem;
+
+    font-weight:600;
+
+    line-height:1.5;
+}
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+.delete-modal-footer{
+
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+
+    gap:16px;
+
+    padding:28px 32px 32px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent,
+            rgba(255,255,255,.02)
+        );
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.delete-modal-footer .btn{
+
+    min-width:170px;
+    height:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    border:none;
+    outline:none;
+
+    cursor:pointer;
+
+    border-radius:14px;
+
+    font-size:.95rem;
+    font-weight:600;
+
+    transition:all .28s ease;
+}
+
+/* ==========================================================
+   CANCEL BUTTON
+========================================================== */
+
+.delete-modal-footer .btn-secondary{
+
+    color:#d1d5db;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.delete-modal-footer .btn-secondary:hover{
+
+    background:
+        rgba(255,255,255,.08);
+
+    transform:translateY(-2px);
+}
+
+/* ==========================================================
+   DELETE BUTTON
+========================================================== */
+
+.delete-modal-footer .btn-danger{
+
+    color:#ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+        );
+
+    box-shadow:
+        0 14px 30px rgba(239,68,68,.30);
+}
+
+.delete-modal-footer .btn-danger:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 20px 42px rgba(239,68,68,.40);
+}
+
+.delete-modal-footer .btn-danger:active{
+
+    transform:scale(.98);
+}
+
+/* ==========================================================
+   DISABLED
+========================================================== */
+
+.delete-modal-footer .btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+}
+
+/* ==========================================================
+   ICONS
+========================================================== */
+
+.delete-modal-footer svg{
+
+    font-size:1rem;
+}
+
+/* ==========================================================
+   LOADING SPINNER
+========================================================== */
+
+.btn-spinner{
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    border:2px solid rgba(255,255,255,.25);
+
+    border-top-color:#ffffff;
+
+    animation:deleteSpinner .8s linear infinite;
+}
+
+@keyframes deleteSpinner{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width:900px){
+
+    .preview-meta{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .delete-modal{
+
+        max-width:95%;
+    }
+
+    .delete-modal-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        padding:24px;
+    }
+
+    .delete-close{
+
+        position:absolute;
+
+        top:18px;
+        right:18px;
+    }
+
+    .delete-warning{
+
+        margin:24px;
+    }
+
+    .delete-task-preview{
+
+        margin:24px;
+    }
+
+    .preview-top{
+
+        flex-direction:column;
+    }
+
+    .priority-badge{
+
+        align-self:flex-start;
+    }
+
+    .delete-modal-footer{
+
+        flex-direction:column-reverse;
+
+        padding:24px;
+    }
+
+    .delete-modal-footer .btn{
+
+        width:100%;
+    }
+
+}
+
+@media (max-width:480px){
+
+    .delete-modal-backdrop{
+
+        padding:16px;
+    }
+
+    .delete-icon{
+
+        width:54px;
+        height:54px;
+
+        font-size:1.15rem;
+    }
+
+    .delete-header-left h2{
+
+        font-size:1.25rem;
+    }
+
+    .preview-top h3{
+
+        font-size:1.05rem;
+    }
+
+    .delete-warning{
+
+        padding:18px;
+    }
+
+    .meta-item{
+
+        padding:14px;
+    }
+
+}
