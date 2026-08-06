@@ -8,18 +8,25 @@ import {
   FaCalendarAlt,
   FaChartLine,
   FaEdit,
-  FaFolderOpen,
   FaTrash,
-  FaUser,
+  FaFolderOpen,
+  FaUserCircle,
+  FaGripVertical,
   FaExclamationTriangle,
 } from "react-icons/fa";
 
-const TaskCard = ({
+const priorityColors = {
+  Low: "#22c55e",
+  Medium: "#3b82f6",
+  High: "#f59e0b",
+  Critical: "#ef4444",
+};
+
+function TaskCard({
   task,
-  canManage = true,
   onEdit,
   onDelete,
-}) => {
+}) {
   const {
     attributes,
     listeners,
@@ -34,56 +41,43 @@ const TaskCard = ({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.55 : 1,
+    opacity: isDragging ? 0.6 : 1,
   };
 
-  const priority = (task.priority || "Medium")
-    .replace(/\s+/g, "-")
-    .toLowerCase();
-
-  const status = (task.status || "Pending")
-    .replace(/\s+/g, "-")
-    .toLowerCase();
-
+  const priority = task.priority || "Medium";
+  const status = task.status || "Pending";
   const progress = task.progress ?? 0;
 
   const dueDate = task.dueDate
     ? new Date(task.dueDate)
     : null;
 
-  const isOverdue =
+  const overdue =
     dueDate &&
     dueDate < new Date() &&
-    status !== "completed";
+    status !== "Completed";
 
-  const assigneeName =
+  const assignee =
     task.assignee?.name || "Unassigned";
 
   const initials =
-    assigneeName !== "Unassigned"
-      ? assigneeName
+    assignee !== "Unassigned"
+      ? assignee
           .split(" ")
-          .map((word) => word[0])
+          .map((n) => n[0])
           .join("")
           .substring(0, 2)
           .toUpperCase()
-      : null;
-
-  const handleEdit = (e) => {
-    e.stopPropagation();
-    onEdit?.(task);
-  };
-
-  const handleDelete = (e) => {
-    e.stopPropagation();
-    onDelete?.(task);
-  };
+      : "";
 
   return (
     <motion.div
       ref={setNodeRef}
-      style={style}
       layout
+      style={style}
+      className={`task-card ${
+        isDragging ? "dragging" : ""
+      }`}
       initial={{
         opacity: 0,
         y: 20,
@@ -92,127 +86,113 @@ const TaskCard = ({
         opacity: 1,
         y: 0,
       }}
-      exit={{
-        opacity: 0,
-        scale: 0.95,
-      }}
       whileHover={{
         y: -6,
       }}
       transition={{
         duration: 0.25,
       }}
-      className={`task-card ${status} ${
-        isDragging ? "dragging" : ""
-      }`}
       {...attributes}
       {...listeners}
     >
-      {/* ==========================
-          HEADER
-      ========================== */}
+      {/* Left Accent */}
+
+      <div
+        className="task-priority-strip"
+        style={{
+          background:
+            priorityColors[priority],
+        }}
+      />
+
+      {/* Header */}
 
       <div className="task-card-header">
 
-        <div className="task-title-wrapper">
+        <div className="task-title-group">
 
-          <h3 className="task-title">
-            {task.title}
-          </h3>
+          <FaGripVertical className="drag-icon" />
 
-          {isOverdue && (
-            <div className="task-overdue">
-
-              <FaExclamationTriangle />
-
-              <span>
-                Overdue
-              </span>
-
-            </div>
-          )}
+          <h3>{task.title}</h3>
 
         </div>
 
-        <div className="task-badges">
+        <div className="task-chip-group">
 
           <span
-            className={`badge priority-${priority}`}
+            className="priority-chip"
+            style={{
+              background:
+                priorityColors[priority],
+            }}
           >
-            {task.priority || "Medium"}
+            {priority}
           </span>
 
-          <span
-            className={`badge status-${status}`}
-          >
-            {task.status || "Pending"}
+          <span className="status-chip">
+            {status}
           </span>
 
         </div>
 
       </div>
 
-      {/* ==========================
-          DESCRIPTION
-      ========================== */}
+      {/* Description */}
 
       <p className="task-description">
         {task.description ||
-          "No description provided for this task."}
+          "No description available."}
       </p>
 
-      {/* ==========================
-          META INFORMATION
-      ========================== */}
+      {/* Meta */}
 
       <div className="task-meta">
 
         {task.project && (
-
-          <div className="task-project">
-
+          <div className="meta-item">
             <FaFolderOpen />
 
             <span>
               {task.project.title ||
                 task.project.name}
             </span>
-
           </div>
-
         )}
 
         {dueDate && (
-
           <div
-            className={`task-date ${
-              isOverdue ? "text-danger" : ""
+            className={`meta-item ${
+              overdue
+                ? "meta-danger"
+                : ""
             }`}
           >
-
             <FaCalendarAlt />
 
             <span>
               {dueDate.toLocaleDateString()}
             </span>
 
+            {overdue && (
+              <FaExclamationTriangle />
+            )}
           </div>
-
         )}
 
       </div>
-            {/* ==========================
-          PROGRESS
-      ========================== */}
+
+      {/* Progress */}
 
       <div className="task-progress">
 
-        <div className="progress-header">
+        <div className="progress-top">
 
           <span>
+
             <FaChartLine />
-            {" "}
+
             Progress
+
           </span>
 
           <span>{progress}%</span>
@@ -223,7 +203,9 @@ const TaskCard = ({
 
           <motion.div
             className="progress-fill"
-            initial={{ width: 0 }}
+            initial={{
+              width: 0,
+            }}
             animate={{
               width: `${progress}%`,
             }}
@@ -236,81 +218,64 @@ const TaskCard = ({
 
       </div>
 
-      {/* ==========================
-          FOOTER
-      ========================== */}
+      {/* Footer */}
 
       <div className="task-footer">
 
         <div className="assignee">
 
-          <div className="assignee-avatar">
+          <div className="avatar">
 
-            {task.assignee?.avatar ? (
-
-              <img
-                src={task.assignee.avatar}
-                alt={assigneeName}
-              />
-
-            ) : initials ? (
-
-              <span>
-                {initials}
-              </span>
-
+            {initials ? (
+              initials
             ) : (
-
-              <FaUser />
-
+              <FaUserCircle />
             )}
 
           </div>
 
           <div>
 
-            <div className="assignee-name">
-              {assigneeName}
-            </div>
+            <strong>
+              {assignee}
+            </strong>
 
-            <small className="text-muted">
-              Assigned User
+            <small>
+              Assignee
             </small>
 
           </div>
 
         </div>
 
-        {canManage && (
+        <div className="task-actions">
 
-          <div className="task-actions">
+          <button
+            className="action-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(task);
+            }}
+          >
+            <FaEdit />
+          </button>
 
-            <button
-              type="button"
-              className="icon-btn"
-              title="Edit Task"
-              onClick={handleEdit}
-            >
-              <FaEdit />
-            </button>
+          <button
+            className="action-btn delete"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(task);
+            }}
+          >
+            <FaTrash />
+          </button>
 
-            <button
-              type="button"
-              className="icon-btn delete"
-              title="Delete Task"
-              onClick={handleDelete}
-            >
-              <FaTrash />
-            </button>
-
-          </div>
-
-        )}
+        </div>
 
       </div>
 
     </motion.div>
   );
-};
+}
 
 export default memo(TaskCard);

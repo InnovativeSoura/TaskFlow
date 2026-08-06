@@ -9,24 +9,23 @@ const TaskFilters = ({
   search,
   setSearch,
 
-  status,
-  setStatus,
+  statusFilter,
+  setStatusFilter,
 
-  priority,
-  setPriority,
+  priorityFilter,
+  setPriorityFilter,
 
-  sort,
-  setSort,
+  sortBy,
+  setSortBy,
 
   totalTasks = 0,
+
   onClearFilters,
 }) => {
   return (
     <div className="tasks-toolbar">
 
-      {/* =========================
-          LEFT
-      ========================= */}
+      {/* ================= LEFT ================= */}
 
       <div className="toolbar-left">
 
@@ -34,7 +33,7 @@ const TaskFilters = ({
 
         <div className="toolbar-search">
 
-          <FaSearch />
+          <FaSearch className="search-icon" />
 
           <input
             type="text"
@@ -51,9 +50,9 @@ const TaskFilters = ({
 
         <select
           className="task-filter"
-          value={status}
+          value={statusFilter}
           onChange={(e) =>
-            setStatus(e.target.value)
+            setStatusFilter(e.target.value)
           }
         >
           <option value="All">
@@ -82,9 +81,9 @@ const TaskFilters = ({
 
         <select
           className="task-filter"
-          value={priority}
+          value={priorityFilter}
           onChange={(e) =>
-            setPriority(e.target.value)
+            setPriorityFilter(e.target.value)
           }
         >
           <option value="All">
@@ -108,13 +107,14 @@ const TaskFilters = ({
           </option>
 
         </select>
-                {/* Sort */}
+
+        {/* Sort */}
 
         <select
           className="task-filter"
-          value={sort}
+          value={sortBy}
           onChange={(e) =>
-            setSort(e.target.value)
+            setSortBy(e.target.value)
           }
         >
           <option value="Newest">
@@ -129,8 +129,8 @@ const TaskFilters = ({
             Priority
           </option>
 
-          <option value="Progress">
-            Progress
+          <option value="Due Date">
+            Due Date
           </option>
 
           <option value="A-Z">
@@ -145,15 +145,13 @@ const TaskFilters = ({
 
       </div>
 
-      {/* =========================
-          RIGHT
-      ========================= */}
+      {/* ================= RIGHT ================= */}
 
       <div className="toolbar-right">
 
-        {/* Task Count */}
+        {/* Total */}
 
-        <div className="task-count-chip">
+        <div className="toolbar-chip">
 
           <FaFilter />
 
@@ -164,28 +162,27 @@ const TaskFilters = ({
 
         </div>
 
-        {/* Sort Indicator */}
+        {/* Sort */}
 
-        <div className="task-count-chip">
+        <div className="toolbar-chip">
 
           <FaSortAmountDown />
 
-          <span>
-            {sort}
-          </span>
+          <span>{sortBy}</span>
 
         </div>
 
-        {/* Clear Filters */}
+        {/* Clear */}
 
         <button
+          className="clear-filter-btn"
           type="button"
-          className="btn-task btn-secondary"
           onClick={onClearFilters}
         >
+
           <FaTimes />
 
-          Clear Filters
+          <span>Clear</span>
 
         </button>
 

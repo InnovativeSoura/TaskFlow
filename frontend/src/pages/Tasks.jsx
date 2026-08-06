@@ -7,18 +7,15 @@ import {
   FaTasks,
   FaCheckCircle,
   FaClock,
+  FaSpinner,
   FaExclamationTriangle,
-  FaChartLine,
-  FaRocket,
-  FaThLarge,
-  FaList,
 } from "react-icons/fa";
-
-import { FaArrowTrendUp } from "react-icons/fa6";
 
 import MainLayout from "../layouts/MainLayout";
 
+import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
+
 import TaskFilters from "../components/tasks/TaskFilters";
 import TaskModal from "../components/tasks/TaskModal";
 import DeleteTaskModal from "../components/tasks/DeleteTaskModal";
@@ -29,71 +26,98 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Tasks.css";
 
 function Tasks() {
+
+  /* ===========================================================
+      CONFIG
+  =========================================================== */
+
   const API_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("token");
 
   const { user } = useAuth();
 
-  /* =====================================================
-      DATA
-  ===================================================== */
+  /* ===========================================================
+      STATES
+  =========================================================== */
 
   const [tasks, setTasks] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
-  /* =====================================================
-      FILTERS
-  ===================================================== */
-
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [priorityFilter, setPriorityFilter] = useState("All");
-  const [sortBy, setSortBy] = useState("Newest");
-
-  /* =====================================================
-      VIEW
-  ===================================================== */
-
-  const [viewMode, setViewMode] = useState("kanban");
-
-  /* =====================================================
-      MODALS
-  ===================================================== */
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  const [selectedTask, setSelectedTask] = useState(null);
-
   const [saving, setSaving] = useState(false);
+
   const [deleting, setDeleting] = useState(false);
 
-  /* =====================================================
+  /* ===========================================================
+      FILTERS
+  =========================================================== */
+
+  const [search, setSearch] = useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState("All");
+
+  const [priorityFilter, setPriorityFilter] =
+    useState("All");
+
+  const [sortBy, setSortBy] =
+    useState("Newest");
+
+  /* ===========================================================
+      VIEW
+  =========================================================== */
+
+  const [viewMode, setViewMode] =
+    useState("kanban");
+
+  /* ===========================================================
+      PAGINATION
+  =========================================================== */
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const TASKS_PER_PAGE = 12;
+
+  /* ===========================================================
+      MODALS
+  =========================================================== */
+
+  const [modalOpen, setModalOpen] =
+    useState(false);
+
+  const [deleteModalOpen, setDeleteModalOpen] =
+    useState(false);
+
+  const [selectedTask, setSelectedTask] =
+    useState(null);
+
+  /* ===========================================================
       PAGE ANIMATION
-  ===================================================== */
+  =========================================================== */
 
   const pageVariants = {
     hidden: {
       opacity: 0,
-      y: 25,
+      y: 30,
     },
-
     visible: {
       opacity: 1,
       y: 0,
-
       transition: {
-        duration: 0.45,
+        duration: .45,
       },
     },
   };
 
-  /* =====================================================
+  /* ===========================================================
       FETCH TASKS
-  ===================================================== */
+  =========================================================== */
 
   const fetchTasks = async () => {
+
     try {
+
       setLoading(true);
 
       const { data } = await axios.get(
@@ -106,128 +130,193 @@ function Tasks() {
       );
 
       setTasks(data.tasks || data || []);
+
     } catch (err) {
-      console.error(err);
+
+      console.error(
+        "Unable to fetch tasks",
+        err
+      );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
   useEffect(() => {
+
     fetchTasks();
+
   }, []);
 
-  /* =====================================================
-      CREATE / UPDATE
-  ===================================================== */
+  /* ===========================================================
+      CREATE TASK
+  =========================================================== */
+
+  const handleCreate = () => {
+
+    setSelectedTask(null);
+
+    setModalOpen(true);
+
+  };
+
+  /* ===========================================================
+      EDIT TASK
+  =========================================================== */
+
+  const handleEdit = (task) => {
+
+    setSelectedTask(task);
+
+    setModalOpen(true);
+
+  };
+
+  /* ===========================================================
+      DELETE CONFIRM
+  =========================================================== */
+
+  const confirmDelete = (task) => {
+
+    setSelectedTask(task);
+
+    setDeleteModalOpen(true);
+
+  };
+
+  /* ===========================================================
+      SAVE TASK
+  =========================================================== */
 
   const handleSave = async (taskData) => {
+
     try {
+
       setSaving(true);
 
       if (selectedTask) {
+
         await axios.put(
+
           `${API_URL}/api/tasks/${selectedTask._id}`,
+
           taskData,
+
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
+
         );
+
       } else {
+
         await axios.post(
+
           `${API_URL}/api/tasks`,
+
           taskData,
+
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
+
         );
+
       }
 
       setModalOpen(false);
+
       setSelectedTask(null);
 
       fetchTasks();
+
     } catch (err) {
+
       console.error(err);
+
     } finally {
+
       setSaving(false);
+
     }
+
   };
 
-  /* =====================================================
-      EDIT
-  ===================================================== */
-
-  const handleEdit = (task) => {
-    setSelectedTask(task);
-    setModalOpen(true);
-  };
-
-  /* =====================================================
-      CREATE
-  ===================================================== */
-
-  const handleCreate = () => {
-    setSelectedTask(null);
-    setModalOpen(true);
-  };
-
-  /* =====================================================
-      DELETE
-  ===================================================== */
-
-  const confirmDelete = (task) => {
-    setSelectedTask(task);
-    setDeleteModalOpen(true);
-  };
+  /* ===========================================================
+      DELETE TASK
+  =========================================================== */
 
   const handleDelete = async () => {
+
+    if (!selectedTask) return;
+
     try {
+
       setDeleting(true);
 
       await axios.delete(
+
         `${API_URL}/api/tasks/${selectedTask._id}`,
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+
       );
 
       setDeleteModalOpen(false);
+
       setSelectedTask(null);
 
       fetchTasks();
+
     } catch (err) {
+
       console.error(err);
+
     } finally {
+
       setDeleting(false);
+
     }
+
   };
 
-  /* =====================================================
+  /* ===========================================================
       UPDATE STATUS
-  ===================================================== */
+  =========================================================== */
 
   const updateStatus = async (
     taskId,
     newStatus
   ) => {
+
     try {
+
       await axios.put(
+
         `${API_URL}/api/tasks/${taskId}`,
+
         {
           status: newStatus,
         },
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+
       );
 
       setTasks((prev) =>
@@ -240,38 +329,55 @@ function Tasks() {
             : task
         )
       );
+
     } catch (err) {
+
       console.error(err);
+
     }
+
+  };
+    /* ===========================================================
+      CLEAR FILTERS
+  =========================================================== */
+
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("All");
+    setPriorityFilter("All");
+    setSortBy("Newest");
   };
 
-  /* =====================================================
+  /* ===========================================================
       FILTER + SORT
-  ===================================================== */
+  =========================================================== */
 
   const filteredTasks = useMemo(() => {
     let data = [...tasks];
+
+    /* ---------------- Search ---------------- */
 
     if (search.trim()) {
       const keyword = search.toLowerCase();
 
       data = data.filter(
         (task) =>
-          task.title
-            ?.toLowerCase()
-            .includes(keyword) ||
+          task.title?.toLowerCase().includes(keyword) ||
           task.description
             ?.toLowerCase()
             .includes(keyword)
       );
     }
 
+    /* ---------------- Status ---------------- */
+
     if (statusFilter !== "All") {
       data = data.filter(
-        (task) =>
-          task.status === statusFilter
+        (task) => task.status === statusFilter
       );
     }
+
+    /* ---------------- Priority ---------------- */
 
     if (priorityFilter !== "All") {
       data = data.filter(
@@ -279,6 +385,8 @@ function Tasks() {
           task.priority === priorityFilter
       );
     }
+
+    /* ---------------- Sorting ---------------- */
 
     switch (sortBy) {
       case "Oldest":
@@ -302,7 +410,7 @@ function Tasks() {
         break;
 
       case "Priority": {
-        const priorityOrder = {
+        const priorityMap = {
           Critical: 4,
           High: 3,
           Medium: 2,
@@ -311,9 +419,10 @@ function Tasks() {
 
         data.sort(
           (a, b) =>
-            (priorityOrder[b.priority] || 0) -
-            (priorityOrder[a.priority] || 0)
+            (priorityMap[b.priority] || 0) -
+            (priorityMap[a.priority] || 0)
         );
+
         break;
       }
 
@@ -334,6 +443,7 @@ function Tasks() {
     }
 
     return data;
+
   }, [
     tasks,
     search,
@@ -342,718 +452,697 @@ function Tasks() {
     sortBy,
   ]);
 
-  /* =====================================================
-      STATISTICS
-  ===================================================== */
+  /* ===========================================================
+      DASHBOARD STATISTICS
+  =========================================================== */
 
   const stats = useMemo(() => {
+
+    const completed = filteredTasks.filter(
+      (task) => task.status === "Completed"
+    ).length;
+
+    const progress = filteredTasks.filter(
+      (task) => task.status === "In Progress"
+    ).length;
+
+    const review = filteredTasks.filter(
+      (task) => task.status === "Review"
+    ).length;
+
+    const pending = filteredTasks.filter(
+      (task) =>
+        task.status === "Pending" ||
+        task.status === "Todo"
+    ).length;
+
+    const critical = filteredTasks.filter(
+      (task) =>
+        task.priority === "Critical"
+    ).length;
+
+    const overdue = filteredTasks.filter((task) => {
+
+      if (!task.dueDate) return false;
+
+      return (
+        new Date(task.dueDate) < new Date() &&
+        task.status !== "Completed"
+      );
+
+    }).length;
+
     return {
+
       total: filteredTasks.length,
 
-      completed: filteredTasks.filter(
-        (task) =>
-          task.status === "Completed"
-      ).length,
+      completed,
 
-      inProgress: filteredTasks.filter(
-        (task) =>
-          task.status === "In Progress"
-      ).length,
+      progress,
 
-      pending: filteredTasks.filter(
-        (task) =>
-          task.status === "Pending" ||
-          task.status === "Todo"
-      ).length,
+      review,
 
-      review: filteredTasks.filter(
-        (task) =>
-          task.status === "Review"
-      ).length,
+      pending,
 
-      critical: filteredTasks.filter(
-        (task) =>
-          task.priority === "Critical"
-      ).length,
+      critical,
+
+      overdue,
+
     };
+
   }, [filteredTasks]);
+
+  /* ===========================================================
+      COMPLETION %
+  =========================================================== */
 
   const completion =
     stats.total === 0
       ? 0
       : Math.round(
-          (stats.completed / stats.total) *
+          (stats.completed /
+            stats.total) *
             100
         );
 
-  const productivityScore = Math.min(
-    100,
-    Math.round(
-      completion * 0.7 +
-      (stats.inProgress /
-        Math.max(stats.total, 1)) *
-        30
-    )
-  );
-
-  /* =====================================================
+  /* ===========================================================
       PAGINATION
-  ===================================================== */
-
-  const [currentPage, setCurrentPage] =
-    useState(1);
-
-  const tasksPerPage = 12;
+  =========================================================== */
 
   const totalPages = Math.ceil(
-    filteredTasks.length / tasksPerPage
+    filteredTasks.length /
+      TASKS_PER_PAGE
   );
 
   const paginatedTasks =
     filteredTasks.slice(
-      (currentPage - 1) * tasksPerPage,
-      currentPage * tasksPerPage
+      (currentPage - 1) *
+        TASKS_PER_PAGE,
+      currentPage *
+        TASKS_PER_PAGE
     );
 
   useEffect(() => {
+
     setCurrentPage(1);
+
   }, [
     search,
     statusFilter,
     priorityFilter,
     sortBy,
   ]);
-
-  /* =====================================================
-      JSX
-  ===================================================== */
+    /* ===========================================================
+      RETURN
+  =========================================================== */
 
   return (
+
     <MainLayout>
-  <motion.div
-    className="tasks-page"
-    variants={pageVariants}
-    initial="hidden"
-    animate="visible"
-  >
-
-    {/* =====================================================
-                        PREMIUM HERO
-    ====================================================== */}
-
-    <section className="tasks-hero">
-
-      <div className="hero-overlay" />
-
-      <div className="hero-left">
-
-        <span className="hero-badge">
-          <FaRocket />
-          Premium Workspace
-        </span>
-
-        <h1>
-          Welcome back,
-          <span>
-            {" "}
-            {user?.name || "User"}
-          </span>
-        </h1>
-
-        <p>
-          Manage projects, organize tasks,
-          collaborate with your team and
-          increase productivity with your
-          intelligent TaskFlow workspace.
-        </p>
-
-        <motion.button
-          className="create-task-btn"
-          whileHover={{
-            scale: 1.04,
-          }}
-          whileTap={{
-            scale: 0.96,
-          }}
-          onClick={handleCreate}
-        >
-          <FaPlus />
-          Create New Task
-        </motion.button>
-
-      </div>
-
-      <div className="hero-right">
-
-        <div className="workspace-summary">
-
-          <div>
-
-            <small>
-              Workspace Score
-            </small>
-
-            <h2>
-              {productivityScore}%
-            </h2>
-
-          </div>
-
-          <FaArrowTrendUp />
-
-        </div>
-
-        <div className="workspace-progress">
-
-          <div className="workspace-progress-track">
-
-            <motion.div
-              className="workspace-progress-fill"
-              initial={{
-                width: 0,
-              }}
-              animate={{
-                width: `${productivityScore}%`,
-              }}
-              transition={{
-                duration: 1,
-              }}
-            />
-
-          </div>
-
-        </div>
-
-        <div className="workspace-stats">
-
-          <div>
-
-            <span>
-              Completed
-            </span>
-
-            <strong>
-              {stats.completed}
-            </strong>
-
-          </div>
-
-          <div>
-
-            <span>
-              Active
-            </span>
-
-            <strong>
-              {stats.inProgress}
-            </strong>
-
-          </div>
-
-          <div>
-
-            <span>
-              Pending
-            </span>
-
-            <strong>
-              {stats.pending}
-            </strong>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    {/* =====================================================
-                        STATISTICS
-    ====================================================== */}
-
-    <section className="tasks-stats">
-
-      <StatCard
-        title="Tasks"
-        value={stats.total}
-        subtitle="Total Tasks"
-        icon={<FaTasks />}
-        color="blue"
-      />
-
-      <StatCard
-        title="Completed"
-        value={stats.completed}
-        subtitle="Finished"
-        icon={<FaCheckCircle />}
-        color="green"
-      />
-
-      <StatCard
-        title="In Progress"
-        value={stats.inProgress}
-        subtitle="Running"
-        icon={<FaChartLine />}
-        color="orange"
-      />
-
-      <StatCard
-        title="Pending"
-        value={stats.pending}
-        subtitle="Waiting"
-        icon={<FaClock />}
-        color="purple"
-      />
-
-      <StatCard
-        title="Critical"
-        value={stats.critical}
-        subtitle="High Priority"
-        icon={<FaExclamationTriangle />}
-        color="red"
-      />
-
-    </section>
-
-    {/* =====================================================
-                        ANALYTICS
-    ====================================================== */}
-
-    <section className="task-insights">
 
       <motion.div
-        className="insight-card"
-        whileHover={{
-          y: -5,
-        }}
+        className="tasks-page"
+        variants={pageVariants}
+        initial="hidden"
+        animate="visible"
       >
 
-        <FaChartLine />
+        {/* =====================================================
+            HERO SECTION
+        ====================================================== */}
 
-        <div>
+        <section className="tasks-hero">
 
-          <h2>
-            {completion}%
-          </h2>
+          <div className="tasks-hero-content">
 
-          <p>
-            Overall Completion
-          </p>
+            <div className="hero-left">
 
-        </div>
+              <PageHeader
+                title={`Welcome back, ${user?.name || "User"}`}
+                subtitle="Organize, prioritize and complete your work efficiently."
+              />
 
-      </motion.div>
+              <div className="hero-chips">
 
-      <motion.div
-        className="insight-card"
-        whileHover={{
-          y: -5,
-        }}
-      >
+                <span className="hero-chip hero-blue">
 
-        <FaClock />
+                  <FaTasks />
 
-        <div>
+                  {stats.total} Tasks
 
-          <h2>
-            {stats.pending}
-          </h2>
+                </span>
 
-          <p>
-            Pending Tasks
-          </p>
+                <span className="hero-chip hero-orange">
 
-        </div>
+                  <FaSpinner />
 
-      </motion.div>
+                  {stats.progress} In Progress
 
-      <motion.div
-        className="insight-card"
-        whileHover={{
-          y: -5,
-        }}
-      >
+                </span>
 
-        <FaExclamationTriangle />
+                <span className="hero-chip hero-green">
 
-        <div>
+                  <FaCheckCircle />
 
-          <h2>
-            {stats.critical}
-          </h2>
+                  {stats.completed} Completed
 
-          <p>
-            Critical Tasks
-          </p>
+                </span>
 
-        </div>
+                <span className="hero-chip hero-red">
 
-      </motion.div>
+                  <FaExclamationTriangle />
 
-    </section>
+                  {stats.overdue} Overdue
 
-    {/* =====================================================
-                        FILTERS
-    ====================================================== */}
+                </span>
 
-    <TaskFilters
-      search={search}
-      setSearch={setSearch}
-      statusFilter={statusFilter}
-      setStatusFilter={setStatusFilter}
-      priorityFilter={priorityFilter}
-      setPriorityFilter={setPriorityFilter}
-      sortBy={sortBy}
-      setSortBy={setSortBy}
-      totalTasks={filteredTasks.length}
-    />
+              </div>
 
-    {/* =====================================================
-                        TOOLBAR
-    ====================================================== */}
+            </div>
 
-    <section className="tasks-toolbar">
+            <div className="hero-right">
 
-      <div className="tasks-count">
+              <button
+                className="primary-btn"
+                onClick={handleCreate}
+              >
 
-        <strong>
-          {filteredTasks.length}
-        </strong>
+                <FaPlus />
 
-        {" "}
-        Task
-        {filteredTasks.length !== 1 && "s"}
+                New Task
 
-      </div>
+              </button>
 
-      <div className="view-toggle">
+            </div>
 
-        <button
-          className={
-            viewMode === "kanban"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setViewMode("kanban")
-          }
-        >
-          <FaThLarge />
-        </button>
+          </div>
 
-        <button
-          className={
-            viewMode === "list"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setViewMode("list")
-          }
-        >
-          <FaList />
-        </button>
+        </section>
 
-      </div>
-
-    </section>
-
-    {/* =====================================================
-                        CONTENT
-    ====================================================== */}
-
-    <AnimatePresence mode="wait">
-
-      {loading ? (
+        {/* =====================================================
+            STATISTICS
+        ====================================================== */}
 
         <motion.div
-          className="tasks-loading"
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-        >
 
-          <div className="loader" />
+          className="stats-grid"
 
-          <p>
-            Loading Tasks...
-          </p>
-
-        </motion.div>
-
-      ) : filteredTasks.length === 0 ? (
-
-        <motion.div
-          className="tasks-empty"
           initial={{
             opacity: 0,
             y: 20,
           }}
+
           animate={{
             opacity: 1,
             y: 0,
           }}
+
+          transition={{
+            delay: .15,
+          }}
+
         >
 
-          <FaTasks className="empty-icon" />
+          <StatCard
+            title="Total Tasks"
+            value={stats.total}
+            color="blue"
+            icon={<FaTasks />}
+            subtitle="Current workspace"
+          />
 
-          <h2>
-            No Tasks Found
-          </h2>
+          <StatCard
+            title="Completed"
+            value={stats.completed}
+            color="green"
+            icon={<FaCheckCircle />}
+            subtitle="Successfully finished"
+          />
 
-          <p>
-            Create your first task and
-            start organizing your workflow.
-          </p>
+          <StatCard
+            title="In Progress"
+            value={stats.progress}
+            color="orange"
+            icon={<FaSpinner />}
+            subtitle="Currently active"
+          />
 
-          <button
-            className="create-task-btn"
-            onClick={handleCreate}
-          >
+          <StatCard
+            title="Pending"
+            value={stats.pending}
+            color="red"
+            icon={<FaClock />}
+            subtitle="Waiting to start"
+          />
 
-            <FaPlus />
-
-            Create Task
-
-          </button>
-
-        </motion.div>
-
-      ) : viewMode === "kanban" ? (
-
-        <motion.div
-          key="kanban"
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-        >
-
-          <KanbanBoard
-            tasks={filteredTasks}
-            onEdit={handleEdit}
-            onDelete={confirmDelete}
-            onStatusChange={updateStatus}
+          <StatCard
+            title="Critical"
+            value={stats.critical}
+            color="purple"
+            icon={<FaExclamationTriangle />}
+            subtitle="Needs attention"
           />
 
         </motion.div>
 
-      ) : (
+        {/* =====================================================
+            PROGRESS CARD
+        ====================================================== */}
 
         <motion.div
-          key="list"
-          className="task-list"
+
+          className="dashboard-card progress-card"
+
           initial={{
             opacity: 0,
+            y: 25,
           }}
+
           animate={{
             opacity: 1,
+            y: 0,
           }}
+
+          transition={{
+            delay: .25,
+          }}
+
         >
-                    {paginatedTasks.map((task) => (
+
+          <div className="progress-header">
+
+            <div>
+
+              <h2>
+
+                Workspace Progress
+
+              </h2>
+
+              <p>
+
+                Overall completion across all active tasks
+
+              </p>
+
+            </div>
+
+            <div className="progress-percentage">
+
+              {completion}%
+
+            </div>
+
+          </div>
+
+          <div className="progress-track">
 
             <motion.div
-              key={task._id}
-              className="task-card"
-              whileHover={{
-                y: -5,
-                scale: 1.01,
+
+              className="progress-fill"
+
+              initial={{
+                width: 0,
               }}
-              layout
-            >
 
-              <div className="task-card-left">
+              animate={{
+                width: `${completion}%`,
+              }}
 
-                <div className="task-title-row">
+              transition={{
+                duration: 1,
+              }}
 
-                  <h3>
-                    {task.title}
-                  </h3>
+            />
 
-                  <span
-                    className={`task-status ${task.status
-                      ?.toLowerCase()
-                      .replace(/\s+/g, "-")}`}
-                  >
-                    {task.status}
-                  </span>
-
-                </div>
-
-                <p>
-                  {task.description ||
-                    "No description available."}
-                </p>
-
-                <div className="task-meta">
-
-                  <span
-                    className={`priority-badge ${task.priority?.toLowerCase()}`}
-                  >
-                    {task.priority}
-                  </span>
-
-                  {task.dueDate && (
-
-                    <span className="task-date">
-
-                      Due :
-
-                      {" "}
-
-                      {new Date(
-                        task.dueDate
-                      ).toLocaleDateString()}
-
-                    </span>
-
-                  )}
-
-                </div>
-
-              </div>
-
-              <div className="task-card-actions">
-
-                <button
-                  className="edit-btn"
-                  onClick={() =>
-                    handleEdit(task)
-                  }
-                >
-                  Edit
-                </button>
-
-                <button
-                  className="delete-btn"
-                  onClick={() =>
-                    confirmDelete(task)
-                  }
-                >
-                  Delete
-                </button>
-
-              </div>
-
-            </motion.div>
-
-          ))}
+          </div>
 
         </motion.div>
+                {/* =====================================================
+            FILTER TOOLBAR
+        ====================================================== */}
 
-      )}
+        <TaskFilters
+          search={search}
+          setSearch={setSearch}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          priorityFilter={priorityFilter}
+          setPriorityFilter={setPriorityFilter}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          totalTasks={filteredTasks.length}
+          onClearFilters={clearFilters}
+        />
 
-    </AnimatePresence>
+        {/* =====================================================
+            VIEW TOGGLE
+        ====================================================== */}
 
-    {/* =====================================================
-                        PAGINATION
-    ===================================================== */}
+        <div className="task-toolbar">
 
-    {viewMode === "list" &&
-      totalPages > 1 && (
-
-      <div className="pagination">
-
-        <button
-          disabled={currentPage === 1}
-          onClick={() =>
-            setCurrentPage((prev) =>
-              prev - 1
-            )
-          }
-        >
-          Previous
-        </button>
-
-        {Array.from(
-          {
-            length: totalPages,
-          },
-          (_, index) => (
+          <div className="view-toggle">
 
             <button
-              key={index}
               className={
-                currentPage === index + 1
+                viewMode === "kanban"
                   ? "active"
                   : ""
               }
               onClick={() =>
-                setCurrentPage(index + 1)
+                setViewMode("kanban")
               }
             >
-              {index + 1}
+              Kanban
             </button>
 
-          )
-        )}
+            <button
+              className={
+                viewMode === "list"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setViewMode("list")
+              }
+            >
+              List
+            </button>
 
-        <button
-          disabled={
-            currentPage === totalPages
-          }
-          onClick={() =>
-            setCurrentPage((prev) =>
-              prev + 1
-            )
-          }
-        >
-          Next
-        </button>
+          </div>
 
-      </div>
+        </div>
 
-    )}
+        {/* =====================================================
+            PAGE CONTENT
+        ====================================================== */}
 
-    {/* =====================================================
-                        MODALS
-    ===================================================== */}
+        <AnimatePresence mode="wait">
 
-    <TaskModal
-      open={modalOpen}
-      task={selectedTask}
-      loading={saving}
-      onClose={() => {
+          {/* =========================
+              LOADING
+          ========================= */}
 
-        setModalOpen(false);
+          {loading ? (
 
-        setSelectedTask(null);
+            <motion.div
+              className="page-loader"
+              key="loader"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
 
-      }}
-      onSave={handleSave}
-    />
+              <div className="spinner" />
 
-    <DeleteTaskModal
-      open={deleteModalOpen}
-      task={selectedTask}
-      loading={deleting}
-      onClose={() => {
+              <p>
+                Loading your tasks...
+              </p>
 
-        setDeleteModalOpen(false);
+            </motion.div>
 
-        setSelectedTask(null);
+          ) :
 
-      }}
-      onConfirm={handleDelete}
-    />
+          /* =========================
+              EMPTY
+          ========================= */
 
-  </motion.div>
+          filteredTasks.length === 0 ? (
 
-</MainLayout>
+            <motion.div
+              className="empty-state"
+              key="empty"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+            >
 
-);
+              <div className="empty-icon">
+
+                <FaTasks />
+
+              </div>
+
+              <h2>
+
+                No Tasks Found
+
+              </h2>
+
+              <p>
+
+                Try changing your filters
+                or create your first task.
+
+              </p>
+
+              <button
+                className="primary-btn"
+                onClick={handleCreate}
+              >
+
+                <FaPlus />
+
+                Create Task
+
+              </button>
+
+            </motion.div>
+
+          ) :
+
+          /* =========================
+              KANBAN
+          ========================= */
+
+          viewMode === "kanban" ? (
+
+            <motion.div
+              key="kanban"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+
+              <KanbanBoard
+                tasks={filteredTasks}
+                onUpdateStatus={
+                  updateStatus
+                }
+                onEdit={handleEdit}
+                onDelete={confirmDelete}
+              />
+
+            </motion.div>
+
+          ) :
+
+          /* =========================
+              LIST VIEW
+          ========================= */
+
+          (
+
+            <motion.div
+              key="list"
+              className="task-list"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+
+              {paginatedTasks.map((task) => (
+
+                <motion.div
+                  key={task._id}
+                  className="task-card"
+                  whileHover={{
+                    y: -6,
+                    scale: 1.01,
+                  }}
+                >
+
+                  <div className="task-card-left">
+
+                    <h3>
+
+                      {task.title}
+
+                    </h3>
+
+                    <p>
+
+                      {task.description ||
+                        "No description available."}
+
+                    </p>
+
+                  </div>
+
+                  <div className="task-card-right">
+
+                    <span
+                      className={`status-badge ${task.status
+                        ?.toLowerCase()
+                        .replace(/\s/g, "")}`}
+                    >
+                      {task.status}
+                    </span>
+
+                    <span
+                      className={`priority-badge ${task.priority?.toLowerCase()}`}
+                    >
+                      {task.priority}
+                    </span>
+
+                    <button
+                      className="edit-btn"
+                      onClick={() =>
+                        handleEdit(task)
+                      }
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() =>
+                        confirmDelete(task)
+                      }
+                    >
+                      Delete
+                    </button>
+
+                  </div>
+
+                </motion.div>
+
+              ))}
+
+            </motion.div>
+
+          )}
+
+        </AnimatePresence>
+                {/* =====================================================
+            PAGINATION
+        ====================================================== */}
+
+        {viewMode === "list" &&
+          totalPages > 1 && (
+
+            <motion.div
+              className="pagination"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+            >
+
+              <button
+                className="page-btn"
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage((prev) => prev - 1)
+                }
+              >
+                Previous
+              </button>
+
+              <div className="page-number">
+
+                Page
+
+                <strong>
+
+                  {currentPage}
+
+                </strong>
+
+                of
+
+                <strong>
+
+                  {totalPages}
+
+                </strong>
+
+              </div>
+
+              <button
+                className="page-btn"
+                disabled={
+                  currentPage === totalPages
+                }
+                onClick={() =>
+                  setCurrentPage((prev) => prev + 1)
+                }
+              >
+                Next
+              </button>
+
+            </motion.div>
+
+          )}
+
+        {/* =====================================================
+            TASK MODAL
+        ====================================================== */}
+
+        <TaskModal
+          open={modalOpen}
+          task={selectedTask}
+          loading={saving}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedTask(null);
+          }}
+          onSave={handleSave}
+        />
+
+        {/* =====================================================
+            DELETE MODAL
+        ====================================================== */}
+
+        <DeleteTaskModal
+          open={deleteModalOpen}
+          task={selectedTask}
+          loading={deleting}
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setSelectedTask(null);
+          }}
+          onConfirm={handleDelete}
+        />
+
+      </motion.div>
+
+    </MainLayout>
+
+  );
 
 }
 

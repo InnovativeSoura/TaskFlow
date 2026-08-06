@@ -7,49 +7,18 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import {
-  FaClipboardList,
-  FaSpinner,
-  FaSearch,
-  FaCheckCircle,
-} from "react-icons/fa";
-
 import TaskCard from "./TaskCard";
-
-/* ==========================================
-   COLUMN ICONS
-========================================== */
-
-const columnIcons = {
-  Pending: <FaClipboardList />,
-  "In Progress": <FaSpinner />,
-  Review: <FaSearch />,
-  Completed: <FaCheckCircle />,
-};
-
-/* ==========================================
-   COLUMN COLORS
-========================================== */
-
-const columnColors = {
-  Pending: "#6366f1",
-  "In Progress": "#f59e0b",
-  Review: "#06b6d4",
-  Completed: "#10b981",
-};
 
 const KanbanColumn = ({
   id,
   title,
+  color,
+  icon,
   tasks = [],
-  canManage = true,
   onEdit,
   onDelete,
 }) => {
-  const {
-    setNodeRef,
-    isOver,
-  } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id,
   });
 
@@ -62,7 +31,7 @@ const KanbanColumn = ({
       }`}
       initial={{
         opacity: 0,
-        y: 25,
+        y: 30,
       }}
       animate={{
         opacity: 1,
@@ -72,45 +41,52 @@ const KanbanColumn = ({
         duration: 0.35,
       }}
     >
-      {/* ==========================
+      {/* ===============================
           COLUMN HEADER
-      ========================== */}
+      =============================== */}
 
-      <div className="column-header">
-
-        <div className="column-title">
-
+      <div
+        className="kanban-column-header"
+        style={{
+          borderTop: `4px solid ${color}`,
+        }}
+      >
+        <div className="column-header-left">
           <div
             className="column-icon"
             style={{
-              background: columnColors[id],
+              background: color,
             }}
           >
-            {columnIcons[id]}
+            {icon}
           </div>
 
           <div>
-
             <h3>{title}</h3>
 
-            <small>
-              {tasks.length} Task
-              {tasks.length !== 1 && "s"}
-            </small>
-
+            <p>
+              {tasks.length}{" "}
+              {tasks.length === 1
+                ? "Task"
+                : "Tasks"}
+            </p>
           </div>
-
         </div>
 
-        <div className="column-count">
+        <div
+          className="column-counter"
+          style={{
+            color,
+            borderColor: color,
+          }}
+        >
           {tasks.length}
         </div>
-
       </div>
 
-      {/* ==========================
-          TASK LIST
-      ========================== */}
+      {/* ===============================
+          COLUMN BODY
+      =============================== */}
 
       <SortableContext
         items={tasks.map(
@@ -120,29 +96,20 @@ const KanbanColumn = ({
           verticalListSortingStrategy
         }
       >
-        <div className="column-body">
-
+        <div className="kanban-column-body">
           <AnimatePresence mode="popLayout">
-
             {tasks.length > 0 ? (
-
               tasks.map((task) => (
-
                 <TaskCard
                   key={task._id}
                   task={task}
-                  canManage={canManage}
                   onEdit={onEdit}
                   onDelete={onDelete}
                 />
-
               ))
-
             ) : (
-
               <motion.div
-                layout
-                className="tasks-empty"
+                className="kanban-empty"
                 initial={{
                   opacity: 0,
                   scale: 0.95,
@@ -155,73 +122,68 @@ const KanbanColumn = ({
                   opacity: 0,
                 }}
               >
-
                 <div
-                  className="empty-icon"
+                  className="kanban-empty-icon"
                   style={{
-                    color: columnColors[id],
+                    background: `${color}20`,
+                    color,
                   }}
                 >
-                  {columnIcons[id]}
+                  {icon}
                 </div>
 
-                <h4>No Tasks Yet</h4>
+                <h4>No Tasks</h4>
 
                 <p>
-                  Drag and drop tasks here
-                  or create a new one.
+                  Drag tasks here or create
+                  a new one.
                 </p>
 
-                {/* Keeps column droppable */}
+                {/* Keep Drop Zone Active */}
 
                 <div
                   style={{
+                    height: 60,
                     width: "100%",
-                    height: 40,
                   }}
                 />
-
               </motion.div>
-
             )}
-
           </AnimatePresence>
-
         </div>
-
       </SortableContext>
 
-      {/* ==========================
-          FOOTER
-      ========================== */}
+      {/* ===============================
+          COLUMN FOOTER
+      =============================== */}
 
-      <motion.div
-        className="column-footer"
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-      >
+      <div className="kanban-column-footer">
+        <div className="footer-left">
+          <span
+            className="footer-dot"
+            style={{
+              background: color,
+            }}
+          />
 
-        <span>
-          {tasks.length} /
-          {" "}
-          {tasks.length === 1
-            ? "Task"
-            : "Tasks"}
-        </span>
+          <span>
+            {tasks.length}{" "}
+            {tasks.length === 1
+              ? "task"
+              : "tasks"}
+          </span>
+        </div>
 
-        <div
-          className="column-footer-line"
-          style={{
-            background: columnColors[id],
-          }}
-        />
-
-      </motion.div>
-
+        <div className="footer-right">
+          {tasks.length > 0
+            ? `${Math.round(
+                (tasks.length /
+                  Math.max(tasks.length, 1)) *
+                  100
+              )}%`
+            : "0%"}
+        </div>
+      </div>
     </motion.section>
   );
 };
