@@ -43,7 +43,7 @@ import EmptyState from "../components/EmptyState";
 
 import DashboardOverviewChart from "../components/dashboard/DashboardOverviewChart";
 import ProjectProgressChart from "../components/projects/ProjectProgressChart";
-import TaskStatusChart from "../components/tasks/TaskStatusChart";
+import TaskStatusChart from "../components/tasks/TaskStatus";
 
 import { useAuth } from "../context/AuthContext";
 
