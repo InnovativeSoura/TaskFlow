@@ -67,12 +67,10 @@ function DeleteTaskModal({
   if (!open) return null;
 
   const dueDate = task?.dueDate
-    ? new Date(task.dueDate).toLocaleDateString()
-    : null;
-  const dueDate = task?.dueDate
-    ? new Date(task.dueDate).toLocaleDateString()
-    : null;  
-    return (
+      ? new Date(task.dueDate).toLocaleDateString()
+      : null;
+
+  return (
     <AnimatePresence>
 
       <motion.div
@@ -83,7 +81,7 @@ function DeleteTaskModal({
         exit="exit"
         onClick={onClose}
       >
-
+        {open && (
         <motion.div
           className="delete-modal"
           variants={modalVariants}
@@ -341,8 +339,8 @@ function DeleteTaskModal({
 
         </motion.div>
 
+      )};
       </motion.div>
-
     </AnimatePresence>
   );
 }
