@@ -30,46 +30,44 @@ import {
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "../../styles/KanbanBoard.css";
+import "../styles/KanbanBoard.css";
 
 /* ============================================================
-   TASK CARD
+   CONSTANTS
 ============================================================ */
 
-function TaskCard({
-  task,
-  index,
-  onEdit,
-  onDelete,
-}) {
-  const priority =
-    task?.priority || "Medium";
+const STATUS = {
+  TODO: "Todo",
+  PROGRESS: "In Progress",
+  REVIEW: "Review",
+  COMPLETED: "Completed",
+};
 
-  const priorityClass = priority
-    .toLowerCase()
-    .replace(/\s+/g, "-");
+const EMPTY_FORM = {
+  title: "",
+  description: "",
+  priority: "Medium",
+  status: STATUS.TODO,
+  dueDate: "",
+  project: "",
+  assignee: "",
+};
 
-  const projectName =
-    task?.project?.name ||
-    task?.project?.title ||
-    "General";
+/* ============================================================
+   HELPERS
+============================================================ */
 
-  const assigneeName =
-    task?.assignee?.name ||
-    "Unassigned";
+const getProjectName = (task) =>
+  task?.project?.name ||
+  task?.project?.title ||
+  "General";
 
-  const dueDate = task?.dueDate
-    ? new Date(task.dueDate).toLocaleDateString(
-        "en-US",
-        {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }
-      )
-    : null;
+const getAssigneeName = (task) =>
+  task?.assignee?.name ||
+  "Unassigned";
 
-  const initials = assigneeName
+const getInitials = (name = "") =>
+  name
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
@@ -77,29 +75,56 @@ function TaskCard({
     .join("")
     .toUpperCase();
 
+const getPriorityClass = (priority = "Medium") =>
+  priority.toLowerCase().replace(/\s+/g, "-");
+
+const formatDueDate = (date) => {
+  if (!date) return null;
+
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+/* ============================================================
+   TASK CARD
+============================================================ */
+
+function TaskCard({ task, index, onEdit, onDelete }) {
+  const priority = task?.priority || "Medium";
+  const projectName = getProjectName(task);
+  const assigneeName = getAssigneeName(task);
+  const dueDate = formatDueDate(task?.dueDate);
+  const initials = getInitials(assigneeName);
+
+  const progress = Math.min(
+    Math.max(Number(task?.progress ?? 0), 0),
+    100
+  );
+
   return (
     <Draggable
       draggableId={String(task._id)}
       index={index}
     >
       {(provided, snapshot) => (
-        <div
+        <article
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={`kanban-task-card ${
-            snapshot.isDragging
-              ? "is-dragging"
-              : ""
+            snapshot.isDragging ? "is-dragging" : ""
           }`}
         >
-          {/* ========================================
-              CARD TOP
-          ======================================== */}
+          {/* CARD HEADER */}
 
           <div className="task-card-top">
             <span
-              className={`task-priority ${priorityClass}`}
+              className={`task-priority ${getPriorityClass(
+                priority
+              )}`}
             >
               {priority}
             </span>
@@ -113,17 +138,13 @@ function TaskCard({
             </button>
           </div>
 
-          {/* ========================================
-              TITLE
-          ======================================== */}
+          {/* TITLE */}
 
           <h3 className="task-card-title">
             {task?.title || "Untitled Task"}
           </h3>
 
-          {/* ========================================
-              DESCRIPTION
-          ======================================== */}
+          {/* DESCRIPTION */}
 
           <p className="task-card-description">
             {task?.description?.trim()
@@ -131,9 +152,7 @@ function TaskCard({
               : "No description available for this task."}
           </p>
 
-          {/* ========================================
-              PROJECT
-          ======================================== */}
+          {/* PROJECT */}
 
           <div className="task-project-info">
             <span className="task-project-icon">
@@ -145,48 +164,35 @@ function TaskCard({
             </span>
           </div>
 
-          {/* ========================================
-              PROGRESS
-          ======================================== */}
+          {/* PROGRESS */}
 
-          {task?.status === "In Progress" && (
+          {task?.status === STATUS.PROGRESS && (
             <div className="task-progress">
               <div className="task-progress-header">
                 <span>Progress</span>
-                <strong>
-                  {task?.progress ?? 0}%
-                </strong>
+
+                <strong>{progress}%</strong>
               </div>
 
               <div className="task-progress-track">
                 <div
                   className="task-progress-fill"
                   style={{
-                    width: `${Math.min(
-                      Math.max(
-                        Number(task?.progress ?? 0),
-                        0
-                      ),
-                      100
-                    )}%`,
+                    width: `${progress}%`,
                   }}
                 />
               </div>
             </div>
           )}
 
-          {/* ========================================
-              META
-          ======================================== */}
+          {/* META */}
 
           <div className="task-card-meta">
             {dueDate && (
               <div className="task-meta-item">
                 <FaCalendarAlt />
 
-                <span>
-                  {dueDate}
-                </span>
+                <span>{dueDate}</span>
               </div>
             )}
 
@@ -195,41 +201,38 @@ function TaskCard({
                 {initials || <FaUser />}
               </span>
 
-              <span>
-                {assigneeName}
-              </span>
+              <span>{assigneeName}</span>
             </div>
           </div>
 
-          {/* ========================================
-              ACTIONS
-          ======================================== */}
+          {/* ACTIONS */}
 
           <div className="task-card-actions">
             <button
               type="button"
               className="task-edit-action"
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={(event) => {
+                event.stopPropagation();
                 onEdit(task);
               }}
             >
               <FaPen />
-              Edit
+              <span>Edit</span>
             </button>
 
             <button
               type="button"
               className="task-delete-action"
-              onClick={(e) => {
-                e.stopPropagation();
+              aria-label="Delete task"
+              onClick={(event) => {
+                event.stopPropagation();
                 onDelete(task._id);
               }}
             >
               <FaTrashAlt />
             </button>
           </div>
-        </div>
+        </article>
       )}
     </Draggable>
   );
@@ -253,19 +256,17 @@ function KanbanColumn({
     <Droppable droppableId={id}>
       {(provided, snapshot) => (
         <section
+          ref={provided.innerRef}
+          {...provided.droppableProps}
           className={`kanban-column ${variant} ${
             snapshot.isDraggingOver
               ? "is-dragging-over"
               : ""
           }`}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
         >
-          {/* ======================================
-              COLUMN HEADER
-          ====================================== */}
+          {/* COLUMN HEADER */}
 
-          <div className="kanban-column-header">
+          <header className="kanban-column-header">
             <div className="column-title-group">
               <span className="column-status-icon">
                 {icon}
@@ -285,11 +286,9 @@ function KanbanColumn({
             >
               <FaEllipsisV />
             </button>
-          </div>
+          </header>
 
-          {/* ======================================
-              TASKS
-          ====================================== */}
+          {/* COLUMN BODY */}
 
           <div className="kanban-column-body">
             {tasks.length === 0 ? (
@@ -301,8 +300,7 @@ function KanbanColumn({
                 <h3>No tasks yet</h3>
 
                 <p>
-                  Drag a task here or create
-                  a new one.
+                  Drag a task here or create a new one.
                 </p>
 
                 <button
@@ -329,9 +327,7 @@ function KanbanColumn({
             {provided.placeholder}
           </div>
 
-          {/* ======================================
-              ADD TASK
-          ====================================== */}
+          {/* COLUMN FOOTER */}
 
           {tasks.length > 0 && (
             <button
@@ -356,72 +352,47 @@ function KanbanColumn({
 function KanbanBoard() {
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
 
-  const [tasks, setTasks] =
-    useState([]);
-
-  const [projects, setProjects] =
-    useState([]);
-
-  const [search, setSearch] =
-    useState("");
-
+  const [search, setSearch] = useState("");
   const [priorityFilter, setPriorityFilter] =
     useState("All");
-
   const [statusFilter, setStatusFilter] =
     useState("All");
 
-  const [showModal, setShowModal] =
-    useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [saving, setSaving] = useState(false);
 
-  const [editingTask, setEditingTask] =
-    useState(null);
-
-  const [saving, setSaving] =
-    useState(false);
-
-  const [taskForm, setTaskForm] =
-    useState({
-      title: "",
-      description: "",
-      priority: "Medium",
-      status: "Todo",
-      dueDate: "",
-      project: "",
-      assignee: "",
-    });
+  const [taskForm, setTaskForm] = useState({
+    ...EMPTY_FORM,
+  });
 
   /* ==========================================================
-     FETCH TASKS
+     FETCH DATA
   ========================================================== */
 
   const fetchTasks = async () => {
     try {
       setLoading(true);
 
-      const [taskRes, projectRes] =
+      const [taskResponse, projectResponse] =
         await Promise.all([
-          axios.get(
-            `${API_URL}/api/tasks`
-          ),
-
-          axios.get(
-            `${API_URL}/api/projects`
-          ),
+          axios.get(`${API_URL}/api/tasks`),
+          axios.get(`${API_URL}/api/projects`),
         ]);
 
       setTasks(
-        Array.isArray(taskRes.data)
-          ? taskRes.data
+        Array.isArray(taskResponse.data)
+          ? taskResponse.data
           : []
       );
 
       setProjects(
-        Array.isArray(projectRes.data)
-          ? projectRes.data
+        Array.isArray(projectResponse.data)
+          ? projectResponse.data
           : []
       );
     } catch (error) {
@@ -439,53 +410,46 @@ function KanbanBoard() {
   }, []);
 
   /* ==========================================================
-     FILTERED TASKS
+     FILTER TASKS
   ========================================================== */
 
   const filteredTasks = useMemo(() => {
-    const query =
-      search.trim().toLowerCase();
+    const query = search.trim().toLowerCase();
 
     return tasks.filter((task) => {
       const title =
-        task?.title
-          ?.toLowerCase() || "";
+        task?.title?.toLowerCase() || "";
 
       const description =
-        task?.description
-          ?.toLowerCase() || "";
+        task?.description?.toLowerCase() || "";
 
       const project =
-        task?.project?.name
-          ?.toLowerCase() ||
-        task?.project?.title
-          ?.toLowerCase() ||
+        task?.project?.name?.toLowerCase() ||
+        task?.project?.title?.toLowerCase() ||
         "";
 
       const assignee =
-        task?.assignee?.name
-          ?.toLowerCase() || "";
+        task?.assignee?.name?.toLowerCase() || "";
 
-      const searchMatch =
+      const matchesSearch =
         !query ||
         title.includes(query) ||
         description.includes(query) ||
         project.includes(query) ||
         assignee.includes(query);
 
-      const priorityMatch =
+      const matchesPriority =
         priorityFilter === "All" ||
-        task?.priority ===
-          priorityFilter;
+        task?.priority === priorityFilter;
 
-      const statusMatch =
+      const matchesStatus =
         statusFilter === "All" ||
         task?.status === statusFilter;
 
       return (
-        searchMatch &&
-        priorityMatch &&
-        statusMatch
+        matchesSearch &&
+        matchesPriority &&
+        matchesStatus
       );
     });
   }, [
@@ -499,68 +463,78 @@ function KanbanBoard() {
      COLUMN DATA
   ========================================================== */
 
-  const todo = filteredTasks.filter(
-    (task) => task.status === "Todo"
+  const todo = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) => task.status === STATUS.TODO
+      ),
+    [filteredTasks]
   );
 
-  const progress = filteredTasks.filter(
-    (task) =>
-      task.status === "In Progress"
+  const progress = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) => task.status === STATUS.PROGRESS
+      ),
+    [filteredTasks]
   );
 
-  const review = filteredTasks.filter(
-    (task) => task.status === "Review"
+  const review = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) => task.status === STATUS.REVIEW
+      ),
+    [filteredTasks]
   );
 
-  const completed = filteredTasks.filter(
-    (task) =>
-      task.status === "Completed"
+  const completed = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) => task.status === STATUS.COMPLETED
+      ),
+    [filteredTasks]
   );
 
   /* ==========================================================
      STATISTICS
   ========================================================== */
 
-  const totalTasks = tasks.length;
+  const statistics = useMemo(() => {
+    return {
+      total: tasks.length,
 
-  const activeTasks =
-    tasks.filter(
-      (task) =>
-        task.status === "In Progress"
-    ).length;
+      active: tasks.filter(
+        (task) => task.status === STATUS.PROGRESS
+      ).length,
 
-  const reviewTasks =
-    tasks.filter(
-      (task) =>
-        task.status === "Review"
-    ).length;
+      review: tasks.filter(
+        (task) => task.status === STATUS.REVIEW
+      ).length,
 
-  const completedTasks =
-    tasks.filter(
-      (task) =>
-        task.status === "Completed"
-    ).length;
+      completed: tasks.filter(
+        (task) => task.status === STATUS.COMPLETED
+      ).length,
+    };
+  }, [tasks]);
 
   /* ==========================================================
-     RESET FORM
+     FORM HELPERS
   ========================================================== */
+
+  const updateForm = (field, value) => {
+    setTaskForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
 
   const resetForm = () => {
     setEditingTask(null);
-
-    setTaskForm({
-      title: "",
-      description: "",
-      priority: "Medium",
-      status: "Todo",
-      dueDate: "",
-      project: "",
-      assignee: "",
-    });
+    setTaskForm({ ...EMPTY_FORM });
   };
 
   /* ==========================================================
-     CREATE MODAL
+     CREATE
   ========================================================== */
 
   const openCreateModal = () => {
@@ -569,7 +543,7 @@ function KanbanBoard() {
   };
 
   /* ==========================================================
-     EDIT MODAL
+     EDIT
   ========================================================== */
 
   const openEditModal = (task) => {
@@ -577,19 +551,14 @@ function KanbanBoard() {
 
     setTaskForm({
       title: task?.title || "",
-      description:
-        task?.description || "",
-      priority:
-        task?.priority || "Medium",
-      status:
-        task?.status || "Todo",
+      description: task?.description || "",
+      priority: task?.priority || "Medium",
+      status: task?.status || STATUS.TODO,
       dueDate: task?.dueDate
         ? task.dueDate.substring(0, 10)
         : "",
-      project:
-        task?.project?._id || "",
-      assignee:
-        task?.assignee?._id || "",
+      project: task?.project?._id || "",
+      assignee: task?.assignee?._id || "",
     });
 
     setShowModal(true);
@@ -607,11 +576,11 @@ function KanbanBoard() {
   };
 
   /* ==========================================================
-     FORM SUBMIT
+     SAVE TASK
   ========================================================== */
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
       setSaving(true);
@@ -638,7 +607,7 @@ function KanbanBoard() {
         error
       );
 
-      alert(
+      window.alert(
         "Failed to save task. Please try again."
       );
     } finally {
@@ -651,10 +620,9 @@ function KanbanBoard() {
   ========================================================== */
 
   const deleteTask = async (id) => {
-    const confirmed =
-      window.confirm(
-        "Are you sure you want to delete this task?"
-      );
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
 
     if (!confirmed) return;
 
@@ -670,7 +638,7 @@ function KanbanBoard() {
         error
       );
 
-      alert(
+      window.alert(
         "Failed to delete task."
       );
     }
@@ -690,8 +658,7 @@ function KanbanBoard() {
     if (!destination) return;
 
     if (
-      destination.droppableId ===
-        source.droppableId &&
+      destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
       return;
@@ -699,23 +666,18 @@ function KanbanBoard() {
 
     const movedTask = tasks.find(
       (task) =>
-        String(task._id) ===
-        String(draggableId)
+        String(task._id) === String(draggableId)
     );
 
     if (!movedTask) return;
 
-    const newStatus =
-      destination.droppableId;
+    const newStatus = destination.droppableId;
 
-    /* ==========================================
-       Optimistic UI update
-    ========================================== */
+    /* Optimistic update */
 
     setTasks((currentTasks) =>
       currentTasks.map((task) =>
-        String(task._id) ===
-        String(draggableId)
+        String(task._id) === String(draggableId)
           ? {
               ...task,
               status: newStatus,
@@ -743,7 +705,7 @@ function KanbanBoard() {
   };
 
   /* ==========================================================
-     LOADING SCREEN
+     LOADING
   ========================================================== */
 
   if (loading) {
@@ -754,9 +716,7 @@ function KanbanBoard() {
             <FaSpinner />
           </div>
 
-          <h2>
-            Loading your workspace
-          </h2>
+          <h2>Loading your workspace</h2>
 
           <p>
             Preparing your Kanban board...
@@ -770,17 +730,16 @@ function KanbanBoard() {
      RENDER
   ========================================================== */
 
-    return (
-      <div className="kanban-page">
+  return (
+    <div className="kanban-page">
+      {/* =====================================================
+          PREMIUM BACKGROUND
+      ===================================================== */}
 
-        {/* =====================================================
-            ANIMATED KANBAN BACKGROUND
-        ===================================================== */}
-
-        <div
-          className="kanban-background"
-          aria-hidden="true"
-        >
+      <div
+        className="kanban-background"
+        aria-hidden="true"
+      >
         <div className="kanban-bg-grid" />
 
         <div className="kanban-bg-orb kanban-bg-orb-1" />
@@ -793,47 +752,44 @@ function KanbanBoard() {
         <div className="kanban-bg-noise" />
       </div>
 
-    {/* =====================================================
-        SIDEBAR
-    ===================================================== */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
-    <Sidebar />
+      <Sidebar />
 
-    {/* =====================================================
-        MAIN APPLICATION AREA
-    ===================================================== */}
+      {/* =====================================================
+          MAIN APPLICATION
+      ===================================================== */}
 
-    <div className="kanban-main">
+      <div className="kanban-main">
+        <Navbar />
 
-      <Navbar />
-
-      <main className="kanban-container">
-
+        <main className="kanban-container">
           {/* ==================================================
               PAGE HEADER
           ================================================== */}
 
           <section className="kanban-page-header">
             <div className="kanban-title-section">
-
               <div className="kanban-title-icon">
                 <FaLayerGroup />
               </div>
 
               <div>
                 <div className="kanban-breadcrumb">
-                  Workspace
+                  <span>Workspace</span>
+
                   <FaArrowRight />
-                  Tasks
+
+                  <span>Tasks</span>
                 </div>
 
-                <h1>
-                  Kanban Board
-                </h1>
+                <h1>Kanban Board</h1>
 
                 <p>
-                  Visualize, organize and
-                  manage your project tasks.
+                  Visualize, organize and manage
+                  your project tasks.
                 </p>
               </div>
             </div>
@@ -847,9 +803,7 @@ function KanbanBoard() {
                 <FaPlus />
               </span>
 
-              <span>
-                Create Task
-              </span>
+              <span>Create Task</span>
             </button>
           </section>
 
@@ -858,20 +812,15 @@ function KanbanBoard() {
           ================================================== */}
 
           <section className="kanban-statistics">
-
             <div className="kanban-stat-card purple">
               <div className="stat-icon">
                 <FaTasks />
               </div>
 
               <div className="stat-content">
-                <span>
-                  Total Tasks
-                </span>
+                <span>Total Tasks</span>
 
-                <strong>
-                  {totalTasks}
-                </strong>
+                <strong>{statistics.total}</strong>
 
                 <small>
                   All workspace tasks
@@ -885,17 +834,11 @@ function KanbanBoard() {
               </div>
 
               <div className="stat-content">
-                <span>
-                  In Progress
-                </span>
+                <span>In Progress</span>
 
-                <strong>
-                  {activeTasks}
-                </strong>
+                <strong>{statistics.active}</strong>
 
-                <small>
-                  Currently active
-                </small>
+                <small>Currently active</small>
               </div>
             </div>
 
@@ -905,17 +848,11 @@ function KanbanBoard() {
               </div>
 
               <div className="stat-content">
-                <span>
-                  In Review
-                </span>
+                <span>In Review</span>
 
-                <strong>
-                  {reviewTasks}
-                </strong>
+                <strong>{statistics.review}</strong>
 
-                <small>
-                  Awaiting review
-                </small>
+                <small>Awaiting review</small>
               </div>
             </div>
 
@@ -925,12 +862,10 @@ function KanbanBoard() {
               </div>
 
               <div className="stat-content">
-                <span>
-                  Completed
-                </span>
+                <span>Completed</span>
 
                 <strong>
-                  {completedTasks}
+                  {statistics.completed}
                 </strong>
 
                 <small>
@@ -938,7 +873,6 @@ function KanbanBoard() {
                 </small>
               </div>
             </div>
-
           </section>
 
           {/* ==================================================
@@ -946,7 +880,6 @@ function KanbanBoard() {
           ================================================== */}
 
           <section className="kanban-toolbar">
-
             <div className="kanban-search">
               <FaSearch />
 
@@ -954,10 +887,8 @@ function KanbanBoard() {
                 type="text"
                 placeholder="Search tasks, projects or assignees..."
                 value={search}
-                onChange={(e) =>
-                  setSearch(
-                    e.target.value
-                  )
+                onChange={(event) =>
+                  setSearch(event.target.value)
                 }
               />
 
@@ -965,9 +896,8 @@ function KanbanBoard() {
                 <button
                   type="button"
                   className="clear-search"
-                  onClick={() =>
-                    setSearch("")
-                  }
+                  onClick={() => setSearch("")}
+                  aria-label="Clear search"
                 >
                   ×
                 </button>
@@ -975,15 +905,14 @@ function KanbanBoard() {
             </div>
 
             <div className="kanban-filter-group">
-
               <div className="kanban-select-wrapper">
                 <FaFilter />
 
                 <select
                   value={statusFilter}
-                  onChange={(e) =>
+                  onChange={(event) =>
                     setStatusFilter(
-                      e.target.value
+                      event.target.value
                     )
                   }
                 >
@@ -991,19 +920,19 @@ function KanbanBoard() {
                     All Status
                   </option>
 
-                  <option value="Todo">
+                  <option value={STATUS.TODO}>
                     Todo
                   </option>
 
-                  <option value="In Progress">
+                  <option value={STATUS.PROGRESS}>
                     In Progress
                   </option>
 
-                  <option value="Review">
+                  <option value={STATUS.REVIEW}>
                     Review
                   </option>
 
-                  <option value="Completed">
+                  <option value={STATUS.COMPLETED}>
                     Completed
                   </option>
                 </select>
@@ -1014,9 +943,9 @@ function KanbanBoard() {
 
                 <select
                   value={priorityFilter}
-                  onChange={(e) =>
+                  onChange={(event) =>
                     setPriorityFilter(
-                      e.target.value
+                      event.target.value
                     )
                   }
                 >
@@ -1037,13 +966,10 @@ function KanbanBoard() {
                   </option>
                 </select>
               </div>
-
             </div>
 
             <div className="kanban-toolbar-count">
-              <span>
-                Showing
-              </span>
+              <span>Showing</span>
 
               <strong>
                 {filteredTasks.length}
@@ -1061,22 +987,18 @@ function KanbanBoard() {
               className="kanban-sort-btn"
             >
               <FaSortAmountDown />
-              Sort
+              <span>Sort</span>
             </button>
-
           </section>
 
           {/* ==================================================
               BOARD
           ================================================== */}
 
-          <DragDropContext
-            onDragEnd={onDragEnd}
-          >
+          <DragDropContext onDragEnd={onDragEnd}>
             <section className="kanban-board">
-
               <KanbanColumn
-                id="Todo"
+                id={STATUS.TODO}
                 title="To Do"
                 tasks={todo}
                 variant="todo"
@@ -1087,7 +1009,7 @@ function KanbanBoard() {
               />
 
               <KanbanColumn
-                id="In Progress"
+                id={STATUS.PROGRESS}
                 title="In Progress"
                 tasks={progress}
                 variant="progress"
@@ -1098,7 +1020,7 @@ function KanbanBoard() {
               />
 
               <KanbanColumn
-                id="Review"
+                id={STATUS.REVIEW}
                 title="In Review"
                 tasks={review}
                 variant="review"
@@ -1109,7 +1031,7 @@ function KanbanBoard() {
               />
 
               <KanbanColumn
-                id="Completed"
+                id={STATUS.COMPLETED}
                 title="Completed"
                 tasks={completed}
                 variant="completed"
@@ -1118,316 +1040,285 @@ function KanbanBoard() {
                 onDelete={deleteTask}
                 onCreate={openCreateModal}
               />
-
             </section>
           </DragDropContext>
-
         </main>
+      </div>
 
-        {/* ====================================================
-            CREATE / EDIT MODAL
-        ==================================================== */}
+      {/* ======================================================
+          CREATE / EDIT MODAL
+      ====================================================== */}
 
-        {showModal && (
+      {showModal && (
+        <div
+          className="kanban-modal-overlay"
+          onClick={closeModal}
+        >
           <div
-            className="kanban-modal-overlay"
-            onClick={closeModal}
+            className="kanban-task-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
-            <div
-              className="kanban-task-modal"
-              onClick={(e) =>
-                e.stopPropagation()
-              }
+            {/* MODAL HEADER */}
+
+            <div className="kanban-modal-header">
+              <div>
+                <span className="modal-eyebrow">
+                  TASK MANAGEMENT
+                </span>
+
+                <h2>
+                  {editingTask
+                    ? "Edit Task"
+                    : "Create New Task"}
+                </h2>
+
+                <p>
+                  {editingTask
+                    ? "Update the task details below."
+                    : "Add a new task to your workspace."}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={closeModal}
+                disabled={saving}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* FORM */}
+
+            <form
+              onSubmit={handleSubmit}
+              className="kanban-task-form"
             >
+              {/* TITLE */}
 
-              {/* MODAL HEADER */}
+              <div className="form-group">
+                <label htmlFor="task-title">
+                  Task Title
+                </label>
 
-              <div className="kanban-modal-header">
+                <input
+                  id="task-title"
+                  type="text"
+                  required
+                  placeholder="Enter task title"
+                  value={taskForm.title}
+                  onChange={(event) =>
+                    updateForm(
+                      "title",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
 
-                <div>
-                  <span className="modal-eyebrow">
-                    TASK MANAGEMENT
-                  </span>
+              {/* DESCRIPTION */}
 
-                  <h2>
-                    {editingTask
-                      ? "Edit Task"
-                      : "Create New Task"}
-                  </h2>
+              <div className="form-group">
+                <label htmlFor="task-description">
+                  Description
+                </label>
 
-                  <p>
-                    {editingTask
-                      ? "Update the task details below."
-                      : "Add a new task to your workspace."}
-                  </p>
+                <textarea
+                  id="task-description"
+                  rows="4"
+                  placeholder="Describe what needs to be done..."
+                  value={taskForm.description}
+                  onChange={(event) =>
+                    updateForm(
+                      "description",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
+              {/* PRIORITY / STATUS */}
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="task-priority">
+                    Priority
+                  </label>
+
+                  <select
+                    id="task-priority"
+                    value={taskForm.priority}
+                    onChange={(event) =>
+                      updateForm(
+                        "priority",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value="Low">
+                      Low
+                    </option>
+
+                    <option value="Medium">
+                      Medium
+                    </option>
+
+                    <option value="High">
+                      High
+                    </option>
+                  </select>
                 </div>
 
+                <div className="form-group">
+                  <label htmlFor="task-status">
+                    Status
+                  </label>
+
+                  <select
+                    id="task-status"
+                    value={taskForm.status}
+                    onChange={(event) =>
+                      updateForm(
+                        "status",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value={STATUS.TODO}>
+                      Todo
+                    </option>
+
+                    <option value={STATUS.PROGRESS}>
+                      In Progress
+                    </option>
+
+                    <option value={STATUS.REVIEW}>
+                      Review
+                    </option>
+
+                    <option value={STATUS.COMPLETED}>
+                      Completed
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              {/* DATE / PROJECT */}
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="task-due-date">
+                    Due Date
+                  </label>
+
+                  <input
+                    id="task-due-date"
+                    type="date"
+                    value={taskForm.dueDate}
+                    onChange={(event) =>
+                      updateForm(
+                        "dueDate",
+                        event.target.value
+                      )
+                    }
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="task-project">
+                    Project
+                  </label>
+
+                  <select
+                    id="task-project"
+                    value={taskForm.project}
+                    onChange={(event) =>
+                      updateForm(
+                        "project",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value="">
+                      Select Project
+                    </option>
+
+                    {projects.map((project) => (
+                      <option
+                        key={project._id}
+                        value={project._id}
+                      >
+                        {project.name ||
+                          project.title ||
+                          "Untitled Project"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* ASSIGNEE */}
+
+              <div className="form-group">
+                <label htmlFor="task-assignee">
+                  Assignee ID
+                </label>
+
+                <input
+                  id="task-assignee"
+                  type="text"
+                  placeholder="Enter User ID"
+                  value={taskForm.assignee}
+                  onChange={(event) =>
+                    updateForm(
+                      "assignee",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
+              {/* ACTIONS */}
+
+              <div className="kanban-modal-actions">
                 <button
                   type="button"
-                  className="modal-close-btn"
+                  className="modal-cancel-btn"
                   onClick={closeModal}
                   disabled={saving}
                 >
-                  ×
+                  Cancel
                 </button>
 
+                <button
+                  type="submit"
+                  className="modal-save-btn"
+                  disabled={saving}
+                >
+                  {saving ? (
+                    <>
+                      <FaSpinner className="spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <FaPlus />
+
+                      {editingTask
+                        ? "Update Task"
+                        : "Create Task"}
+                    </>
+                  )}
+                </button>
               </div>
-
-              {/* FORM */}
-
-              <form
-                onSubmit={handleSubmit}
-                className="kanban-task-form"
-              >
-
-                {/* TITLE */}
-
-                <div className="form-group">
-                  <label>
-                    Task Title
-                  </label>
-
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter task title"
-                    value={taskForm.title}
-                    onChange={(e) =>
-                      setTaskForm({
-                        ...taskForm,
-                        title:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* DESCRIPTION */}
-
-                <div className="form-group">
-                  <label>
-                    Description
-                  </label>
-
-                  <textarea
-                    rows="4"
-                    placeholder="Describe what needs to be done..."
-                    value={
-                      taskForm.description
-                    }
-                    onChange={(e) =>
-                      setTaskForm({
-                        ...taskForm,
-                        description:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* PRIORITY / STATUS */}
-
-                <div className="form-row">
-
-                  <div className="form-group">
-                    <label>
-                      Priority
-                    </label>
-
-                    <select
-                      value={
-                        taskForm.priority
-                      }
-                      onChange={(e) =>
-                        setTaskForm({
-                          ...taskForm,
-                          priority:
-                            e.target.value,
-                        })
-                      }
-                    >
-                      <option value="Low">
-                        Low
-                      </option>
-
-                      <option value="Medium">
-                        Medium
-                      </option>
-
-                      <option value="High">
-                        High
-                      </option>
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label>
-                      Status
-                    </label>
-
-                    <select
-                      value={
-                        taskForm.status
-                      }
-                      onChange={(e) =>
-                        setTaskForm({
-                          ...taskForm,
-                          status:
-                            e.target.value,
-                        })
-                      }
-                    >
-                      <option value="Todo">
-                        Todo
-                      </option>
-
-                      <option value="In Progress">
-                        In Progress
-                      </option>
-
-                      <option value="Review">
-                        Review
-                      </option>
-
-                      <option value="Completed">
-                        Completed
-                      </option>
-                    </select>
-                  </div>
-
-                </div>
-
-                {/* DATE / PROJECT */}
-
-                <div className="form-row">
-
-                  <div className="form-group">
-                    <label>
-                      Due Date
-                    </label>
-
-                    <input
-                      type="date"
-                      value={
-                        taskForm.dueDate
-                      }
-                      onChange={(e) =>
-                        setTaskForm({
-                          ...taskForm,
-                          dueDate:
-                            e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>
-                      Project
-                    </label>
-
-                    <select
-                      value={
-                        taskForm.project
-                      }
-                      onChange={(e) =>
-                        setTaskForm({
-                          ...taskForm,
-                          project:
-                            e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">
-                        Select Project
-                      </option>
-
-                      {projects.map(
-                        (project) => (
-                          <option
-                            key={
-                              project._id
-                            }
-                            value={
-                              project._id
-                            }
-                          >
-                            {project.name ||
-                              project.title ||
-                              "Untitled Project"}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </div>
-
-                </div>
-
-                {/* ASSIGNEE */}
-
-                <div className="form-group">
-                  <label>
-                    Assignee ID
-                  </label>
-
-                  <input
-                    type="text"
-                    placeholder="Enter User ID"
-                    value={
-                      taskForm.assignee
-                    }
-                    onChange={(e) =>
-                      setTaskForm({
-                        ...taskForm,
-                        assignee:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* MODAL ACTIONS */}
-
-                <div className="kanban-modal-actions">
-
-                  <button
-                    type="button"
-                    className="modal-cancel-btn"
-                    onClick={closeModal}
-                    disabled={saving}
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="submit"
-                    className="modal-save-btn"
-                    disabled={saving}
-                  >
-                    {saving ? (
-                      <>
-                        <FaSpinner className="spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <FaPlus />
-                        {editingTask
-                          ? "Update Task"
-                          : "Create Task"}
-                      </>
-                    )}
-                  </button>
-
-                </div>
-
-              </form>
-
-            </div>
+            </form>
           </div>
-        )}
-
-      </div>
+        </div>
+      )}
     </div>
   );
 }
