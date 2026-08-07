@@ -770,14 +770,44 @@ function KanbanBoard() {
      RENDER
   ========================================================== */
 
-  return (
-    <div className="kanban-page">
-      <Sidebar />
+    return (
+      <div className="kanban-page">
 
-      <div className="kanban-main">
-        <Navbar />
+        {/* =====================================================
+            ANIMATED KANBAN BACKGROUND
+        ===================================================== */}
 
-        <main className="kanban-container">
+        <div
+          className="kanban-background"
+          aria-hidden="true"
+        >
+        <div className="kanban-bg-grid" />
+
+        <div className="kanban-bg-orb kanban-bg-orb-1" />
+        <div className="kanban-bg-orb kanban-bg-orb-2" />
+        <div className="kanban-bg-orb kanban-bg-orb-3" />
+
+        <div className="kanban-bg-glow kanban-bg-glow-1" />
+        <div className="kanban-bg-glow kanban-bg-glow-2" />
+
+        <div className="kanban-bg-noise" />
+      </div>
+
+    {/* =====================================================
+        SIDEBAR
+    ===================================================== */}
+
+    <Sidebar />
+
+    {/* =====================================================
+        MAIN APPLICATION AREA
+    ===================================================== */}
+
+    <div className="kanban-main">
+
+      <Navbar />
+
+      <main className="kanban-container">
 
           {/* ==================================================
               PAGE HEADER
