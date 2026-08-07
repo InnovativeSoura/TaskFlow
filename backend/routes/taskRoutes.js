@@ -28,21 +28,21 @@ router.use(protect);
 ========================================== */
 
 // Get all tasks (All authenticated users)
-router.get("/", getTasks);
+router.get("/", protect, getTasks);
 
 // Get single task (All authenticated users)
-router.get("/:id", getTaskById);
+router.get("/:id", protect, getTaskById);
 
 // Create task (Admin & Manager)
-router.post("/", isAdminOrManager, createTask);
+router.post("/", protect, isAdminOrManager, createTask);
 
 // Update entire task (Admin & Manager)
-router.put("/:id", isAdminOrManager, updateTask);
+router.put("/:id", protect, isAdminOrManager, updateTask);
 
 // Update task status (All authenticated users)
-router.patch("/:id/status", updateTaskStatus);
+router.patch("/:id/status", protect, updateTaskStatus);
 
 // Delete task (Admin only)
-router.delete("/:id", isAdmin, deleteTask);
+router.delete("/:id", protect, isAdmin, deleteTask);
 
 export default router;

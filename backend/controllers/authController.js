@@ -43,6 +43,129 @@ export const generateToken = (userId) => {
 };
 
 /* ======================================================
+   AUTHENTICATION MIDDLEWARE
+====================================================== */
+
+export const protect = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    console.log("\n================================");
+    console.log("AUTH MIDDLEWARE");
+    console.log("Authorization Header:", authHeader ? "Present" : "Missing");
+    console.log("================================");
+
+    /* ==========================================
+       CHECK AUTHORIZATION HEADER
+    ========================================== */
+
+    if (
+      !authHeader ||
+      !authHeader.startsWith("Bearer ")
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized. No token provided.",
+      });
+    }
+
+    /* ==========================================
+       EXTRACT TOKEN
+    ========================================== */
+
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized. Invalid token.",
+      });
+    }
+
+    /* ==========================================
+       VERIFY TOKEN
+    ========================================== */
+
+    if (!process.env.JWT_SECRET) {
+      console.error("❌ JWT_SECRET is missing.");
+
+      return res.status(500).json({
+        success: false,
+        message: "Server authentication configuration error.",
+      });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    console.log("✅ JWT Verified");
+    console.log("Decoded JWT:", decoded);
+
+    /* ==========================================
+       FIND USER
+    ========================================== */
+
+    const user = await User.findById(decoded.id)
+      .select("-password");
+
+    if (!user) {
+      console.log("❌ User associated with token not found.");
+
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized. User not found.",
+      });
+    }
+
+    /* ==========================================
+       CHECK USER STATUS
+    ========================================== */
+
+    if (user.status === "Inactive") {
+      return res.status(403).json({
+        success: false,
+        message: "Your account is inactive.",
+      });
+    }
+
+    /* ==========================================
+       ATTACH USER TO REQUEST
+    ========================================== */
+
+    req.user = user;
+
+    console.log("✅ Authenticated User:", user.email);
+
+    next();
+
+  } catch (error) {
+    console.error("❌ AUTH MIDDLEWARE ERROR:");
+    console.error(error);
+
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Session expired. Please login again.",
+      });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid authentication token.",
+      });
+    }
+
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized.",
+    });
+  }
+};
+
+/* ======================================================
    REGISTER
 ====================================================== */
 
