@@ -1,8 +1,10 @@
+// src/api/axios.js
+
 import axios from "axios";
 
-/* ==========================================
+/* =========================================================
    API URL
-========================================== */
+========================================================= */
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -13,61 +15,75 @@ const BASE_URL = API_URL.endsWith("/api")
   : `${API_URL}/api`;
 
 console.log("====================================");
-console.log("🌐 API Base URL:", BASE_URL);
+console.log("🌐 TaskFlow API Base URL:", BASE_URL);
 console.log("====================================");
 
-/* ==========================================
+/* =========================================================
    AXIOS INSTANCE
-========================================== */
+========================================================= */
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: false,
   timeout: 15000,
+  withCredentials: false,
 
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-/* ==========================================
+/* =========================================================
    REQUEST INTERCEPTOR
-========================================== */
+========================================================= */
 
 api.interceptors.request.use(
   (config) => {
-    const token =
-      localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
+    /*
+     * Always make sure headers exists.
+     */
+    config.headers = config.headers || {};
+
+    /*
+     * Attach JWT token to every protected request.
+     */
     if (token) {
-      config.headers = config.headers || {};
-
-      config.headers.Authorization =
-        `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      /*
+       * Make sure we don't accidentally send
+       * an old/undefined Authorization header.
+       */
+      delete config.headers.Authorization;
     }
 
+    console.log("====================================");
     console.log(
-      `🚀 ${config.method?.toUpperCase()} ${
-        config.baseURL
-      }${config.url}`
+      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
     );
-
     console.log(
       "🔑 Token:",
-      token ? "Present" : "Missing"
+      token ? "PRESENT" : "MISSING"
     );
+    console.log(
+      "🛡 Authorization:",
+      config.headers.Authorization
+        ? "Bearer token attached"
+        : "NOT ATTACHED"
+    );
+    console.log("====================================");
 
     return config;
   },
-
   (error) => {
     return Promise.reject(error);
   }
 );
 
-/* ==========================================
+/* =========================================================
    RESPONSE INTERCEPTOR
-========================================== */
+========================================================= */
 
 api.interceptors.response.use(
   (response) => {
@@ -79,43 +95,36 @@ api.interceptors.response.use(
   },
 
   (error) => {
-    const status =
-      error.response?.status;
+    const status = error.response?.status;
+    const url = error.config?.url || "";
 
-    const url =
-      error.config?.url || "";
-
-    console.error(
-      "❌ API Error:",
+    console.error("❌ API ERROR:", {
       status,
-      error.response?.data ||
-        error.message
-    );
+      url,
+      message:
+        error.response?.data?.message ||
+        error.message,
+    });
 
     /*
-     * Do not clear authentication for
-     * login/register failures.
+     * Authentication endpoints should not trigger
+     * global logout handling.
      */
-
     const isAuthRoute =
       url.includes("/auth/login") ||
       url.includes("/auth/register");
 
-    if (
-      status === 401 &&
-      !isAuthRoute
-    ) {
+    /*
+     * Only clear authentication when a protected
+     * request actually returns 401.
+     */
+    if (status === 401 && !isAuthRoute) {
       console.warn(
-        "⚠ Session expired."
+        "⚠️ Authentication rejected. Clearing session."
       );
 
-      localStorage.removeItem(
-        "token"
-      );
-
-      localStorage.removeItem(
-        "user"
-      );
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
 
     return Promise.reject(error);
