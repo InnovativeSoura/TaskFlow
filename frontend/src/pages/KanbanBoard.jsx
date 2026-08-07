@@ -30,7 +30,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "../styles/KanbanBoard.css";
+import "../../styles/KanbanBoard.css";
 
 /* ============================================================
    CONSTANTS
