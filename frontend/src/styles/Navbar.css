@@ -1,1090 +1,609 @@
 /* =========================================================
-   TASKFLOW PREMIUM NAVBAR v3
+   TASKFLOW NAVBAR — COMPACT VERSION
 ========================================================= */
 
-:root{
-
-    --navbar-height:72px;
-
-    --primary:#6D5DF6;
-    --primary-light:#8B7BFF;
-
-    --dark-bg:
-        rgba(11,18,32,.88);
-
-    --light-bg:
-        rgba(255,255,255,.92);
-
-    --dark-border:
-        rgba(255,255,255,.08);
-
-    --light-border:
-        rgba(15,23,42,.08);
-
-    --transition:
-        .28s cubic-bezier(.4,0,.2,1);
-
+:root {
+  --navbar-height: 72px;
+  --primary: #6d5df6;
+  --primary-light: #8b7bff;
+  --dark-bg: rgba(11, 18, 32, .88);
+  --light-bg: rgba(255, 255, 255, .92);
+  --dark-border: rgba(255, 255, 255, .08);
+  --light-border: rgba(15, 23, 42, .08);
+  --transition: .28s cubic-bezier(.4, 0, .2, 1);
 }
 
 /* =========================================================
    NAVBAR
 ========================================================= */
 
-.navbar{
+.navbar {
+  position: relative;
+  width: 100%;
+  height: var(--navbar-height);
+  min-height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: all var(--transition);
+}
 
-    position: relative;
+.navbar-dark {
+  background: var(--dark-bg);
+  border-bottom: 1px solid var(--dark-border);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+}
 
-    width: 100%;
-    height: var(--navbar-height);
-    min-height: var(--navbar-height);
+.navbar-light {
+  background: var(--light-bg);
+  border-bottom: 1px solid var(--light-border);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+}
 
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 18px;
-
-    box-sizing: border-box;
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    transition: all var(--transition);
-
-    flex-shrink: 0;
-
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(109, 93, 246, .45),
+    transparent
+  );
 }
 
 /* =========================================================
-   DARK
+   LEFT / NAV LINKS
 ========================================================= */
 
-.navbar-dark{
-
-    background:var(--dark-bg);
-
-    border-bottom:
-        1px solid var(--dark-border);
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,.30);
-
+.navbar-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* =========================================================
-   LIGHT
-========================================================= */
-
-.navbar-light{
-
-    background:var(--light-bg);
-
-    border-bottom:
-        1px solid var(--light-border);
-
-    box-shadow:
-        0 10px 30px rgba(15,23,42,.08);
-
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
 }
 
-/* =========================================================
-   LEFT SIDE
-========================================================= */
-
-.navbar-left{
-
-    flex:1;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    margin-left:0;
-
-    padding-left:0;
-
+.nav-item-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-/* =========================================================
-   NAV LINKS
-========================================================= */
-
-.navbar-links{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    gap:14px;
-
-    margin:0;
-
-    padding:0;
-
+.nav-divider {
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 500;
+  user-select: none;
 }
 
-/* =========================================================
-   DIVIDER
-========================================================= */
-
-.nav-divider{
-
-    color:#6b7280;
-
-    font-size:15px;
-
-    font-weight:500;
-
-    user-select:none;
-
+.navbar-links a {
+  position: relative;
+  padding: 10px 2px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: .25s;
 }
 
-/* =========================================================
-   LINKS
-========================================================= */
-
-.navbar-links a{
-
-    position:relative;
-
-    text-decoration:none;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    padding:10px 2px;
-
-    transition:.25s;
-
+.navbar-dark .navbar-links a {
+  color: #b6c3df;
 }
 
-/* Dark */
-
-.navbar-dark .navbar-links a{
-
-    color:#b6c3df;
-
+.navbar-light .navbar-links a {
+  color: #475569;
 }
 
-/* Light */
-
-.navbar-light .navbar-links a{
-
-    color:#475569;
-
+.navbar-dark .navbar-links a:hover,
+.navbar-links a.active {
+  color: #fff;
 }
 
-/* Hover */
-
-.navbar-dark .navbar-links a:hover{
-
-    color:#ffffff;
-
+.navbar-light .navbar-links a:hover,
+.navbar-light .navbar-links a.active {
+  color: #4f46e5;
 }
 
-.navbar-light .navbar-links a:hover{
-
-    color:#4f46e5;
-
+.navbar-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    var(--primary-light)
+  );
 }
 
-/* =========================================================
-   ACTIVE
-========================================================= */
-
-.navbar-links a.active{
-
-    color:#ffffff;
-
-}
-
-.navbar-light .navbar-links a.active{
-
-    color:#4f46e5;
-
-}
-
-.navbar-links a.active::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:-6px;
-
-    height:3px;
-
-    border-radius:999px;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--primary),
-            var(--primary-light)
-        );
-
-}
-
-/* =========================================================
-   REMOVE OLD LOGO STYLES
-========================================================= */
-
+/* Hide old branding if still present */
 .navbar-brand,
 .brand-logo,
-.brand-text{
-
-    display:none !important;
-
+.brand-text {
+  display: none !important;
 }
+
 /* =========================================================
-   RIGHT SECTION
+   RIGHT SIDE
 ========================================================= */
 
-.navbar-right{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-end;
-
-    gap:12px;
-
-    flex-shrink:0;
-
-    margin-left:auto;
-
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* =========================================================
    ICON BUTTONS
 ========================================================= */
 
-.icon-btn{
-
-    position:relative;
-
-    width:44px;
-    height:44px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:none;
-
-    outline:none;
-
-    border-radius:14px;
-
-    cursor:pointer;
-
-    transition:all .25s ease;
-
+.icon-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  outline: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all .25s ease;
+  overflow: hidden;
 }
 
-/* ---------------- DARK ---------------- */
-
-.navbar-dark .icon-btn{
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    color:#b8c6e3;
-
+.navbar-dark .icon-btn {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .08);
+  color: #b8c6e3;
 }
 
-/* ---------------- LIGHT ---------------- */
-
-.navbar-light .icon-btn{
-
-    background:
-        rgba(15,23,42,.04);
-
-    border:
-        1px solid rgba(15,23,42,.08);
-
-    color:#475569;
-
+.navbar-light .icon-btn {
+  background: rgba(15, 23, 42, .04);
+  border-color: rgba(15, 23, 42, .08);
+  color: #475569;
 }
 
-/* ---------------- HOVER ---------------- */
-
-.icon-btn:hover{
-
-    transform:
-        translateY(-2px);
-
-    background:
-        rgba(109,93,246,.16);
-
-    border-color:
-        rgba(109,93,246,.35);
-
-    box-shadow:
-        0 8px 22px
-        rgba(109,93,246,.25);
-
+.icon-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(109, 93, 246, .16);
+  border-color: rgba(109, 93, 246, .35);
+  box-shadow: 0 8px 22px rgba(109, 93, 246, .25);
 }
 
-.navbar-dark .icon-btn:hover{
-
-    color:#ffffff;
-
+.navbar-dark .icon-btn:hover {
+  color: #fff;
 }
 
-.navbar-light .icon-btn:hover{
-
-    color:#5b4ff3;
-
+.navbar-light .icon-btn:hover {
+  color: #5b4ff3;
 }
 
-.icon-btn svg{
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
 
-    width:18px;
-    height:18px;
+.icon-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    rgba(255, 255, 255, .2),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: .25s;
+}
 
+.icon-btn:hover::before {
+  opacity: 1;
 }
 
 /* =========================================================
-   THEME BUTTON
+   THEME
 ========================================================= */
 
-.theme-toggle{
-
-    overflow:hidden;
-
+.theme-toggle {
+  overflow: hidden;
 }
 
-.theme-active{
-
-    color:#FFD54F !important;
-
-    background:
-        rgba(255,193,7,.12);
-
-    border-color:
-        rgba(255,193,7,.18);
-
+.theme-active {
+  color: #ffd54f !important;
+  background: rgba(255, 193, 7, .12) !important;
+  border-color: rgba(255, 193, 7, .18) !important;
 }
 
-.theme-icon{
-
-    width:100%;
-    height:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
+.theme-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* =========================================================
    PROFILE
 ========================================================= */
 
-.profile-wrapper{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    margin-left:4px;
-
+.profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
 }
 
-/* =========================================================
-   PROFILE BUTTON
-========================================================= */
-
-.profile-trigger{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:4px;
-
-    border:none;
-
-    border-radius:999px;
-
-    cursor:pointer;
-
-    background:
-        rgba(109,93,246,.10);
-
-    transition:all .25s ease;
-
+.profile-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(109, 93, 246, .1);
+  transition: all .25s ease;
 }
 
-.profile-trigger:hover{
-
-    background:
-        rgba(109,93,246,.18);
-
+.profile-trigger:hover {
+  background: rgba(109, 93, 246, .18);
 }
 
-/* =========================================================
-   AVATAR
-========================================================= */
-
-.avatar{
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
+.avatar,
+.avatar.initials {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
 }
 
-/* =========================================================
-   INITIALS
-========================================================= */
-
-.avatar.initials{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    font-size:14px;
-
-    font-weight:700;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6D5DF6,
-            #8B7BFF
-        );
-
+.avatar {
+  object-fit: cover;
 }
 
-/* =========================================================
-   ONLINE DOT
-========================================================= */
-
-.profile-trigger::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:10px;
-    height:10px;
-
-    right:3px;
-    bottom:3px;
-
-    border-radius:50%;
-
-    background:#10b981;
-
-    border:2px solid #0f172a;
-
+.avatar.initials,
+.dropdown-avatar.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(
+    135deg,
+    #6d5df6,
+    #8b7bff
+  );
 }
 
-/* =========================================================
-   PROFILE ARROW
-========================================================= */
-
-.profile-arrow{
-
-    font-size:11px;
-
-    color:#94a3b8;
-
-    transition:.25s;
-
+.profile-trigger::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #0f172a;
 }
 
-.profile-trigger:hover .profile-arrow{
-
-    transform:rotate(180deg);
-
+.profile-arrow {
+  font-size: 11px;
+  color: #94a3b8;
+  transition: .25s;
 }
 
-/* =========================================================
-   BUTTON RIPPLE
-========================================================= */
-
-.icon-btn::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:inherit;
-
-    background:
-        radial-gradient(
-            rgba(255,255,255,.20),
-            transparent 70%
-        );
-
-    opacity:0;
-
-    transition:.25s;
-
+.profile-trigger:hover .profile-arrow {
+  transform: rotate(180deg);
 }
 
-.icon-btn:hover::before{
-
-    opacity:1;
-
-}
-
-/* =========================================================
-   NAVBAR BOTTOM BORDER
-========================================================= */
-
-.navbar::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:-1px;
-
-    height:1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(109,93,246,.45),
-            transparent
-        );
-
-}
 /* =========================================================
    PROFILE DROPDOWN
 ========================================================= */
 
-.profile-dropdown{
-
-    position:absolute;
-
-    top:calc(100% + 12px);
-    right:0;
-
-    width:280px;
-
-    padding:10px;
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-    z-index:1200;
-
-    transform-origin:top right;
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    animation:dropdownFade .22s ease;
-
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 280px;
+  padding: 10px;
+  border-radius: 18px;
+  overflow: hidden;
+  z-index: 1200;
+  transform-origin: top right;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-/* ---------------- DARK ---------------- */
-
-.dropdown-dark{
-
-    background:
-        rgba(15,23,42,.98);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.40);
-
+.dropdown-dark {
+  background: rgba(15, 23, 42, .98);
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
 }
 
-/* ---------------- LIGHT ---------------- */
-
-.dropdown-light{
-
-    background:#ffffff;
-
-    border:
-        1px solid rgba(15,23,42,.08);
-
-    box-shadow:
-        0 18px 50px rgba(15,23,42,.10);
-
+.dropdown-light {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, .08);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, .1);
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
-
-.dropdown-header{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:12px;
-
-    margin-bottom:8px;
-
-    border-radius:14px;
-
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 14px;
 }
 
-.dropdown-dark .dropdown-header{
-
-    background:
-        rgba(255,255,255,.04);
-
+.dropdown-dark .dropdown-header {
+  background: rgba(255, 255, 255, .04);
 }
 
-.dropdown-light .dropdown-header{
-
-    background:#f8fafc;
-
+.dropdown-light .dropdown-header {
+  background: #f8fafc;
 }
 
-.dropdown-avatar{
-
-    width:48px;
-    height:48px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
+.dropdown-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.dropdown-avatar.initials{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:14px;
-
-    font-weight:700;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6D5DF6,
-            #8B7BFF
-        );
-
+.dropdown-user-info {
+  display: flex;
+  flex-direction: column;
 }
 
-.dropdown-user-info{
-
-    display:flex;
-
-    flex-direction:column;
-
+.dropdown-user-info h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
 }
 
-.dropdown-user-info h4{
-
-    margin:0;
-
-    font-size:15px;
-
-    font-weight:700;
-
+.dropdown-dark .dropdown-user-info h4 {
+  color: #fff;
 }
 
-.dropdown-dark .dropdown-user-info h4{
-
-    color:#fff;
-
+.dropdown-light .dropdown-user-info h4 {
+  color: #111827;
 }
 
-.dropdown-light .dropdown-user-info h4{
-
-    color:#111827;
-
-}
-
-.dropdown-user-info small{
-
-    margin-top:4px;
-
-    color:#94a3b8;
-
+.dropdown-user-info small {
+  margin-top: 4px;
+  color: #94a3b8;
 }
 
 /* =========================================================
    DROPDOWN BUTTONS
 ========================================================= */
 
-.profile-dropdown button{
-
-    width:100%;
-
-    height:46px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:0 14px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:transparent;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-    font-size:14px;
-
-    font-weight:600;
-
+.profile-dropdown button {
+  width: 100%;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: .25s;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.dropdown-dark button{
-
-    color:#cbd5e1;
-
+.dropdown-dark button {
+  color: #cbd5e1;
 }
 
-.dropdown-light button{
-
-    color:#475569;
-
+.dropdown-light button {
+  color: #475569;
 }
 
-.profile-dropdown button:hover{
-
-    transform:translateX(3px);
-
-    background:
-        rgba(109,93,246,.12);
-
+.profile-dropdown button:hover {
+  transform: translateX(3px);
+  background: rgba(109, 93, 246, .12);
 }
 
-.dropdown-dark button:hover{
-
-    color:#fff;
-
+.dropdown-dark button:hover {
+  color: #fff;
 }
 
-.dropdown-light button:hover{
-
-    color:#5b4ff3;
-
+.dropdown-light button:hover {
+  color: #5b4ff3;
 }
 
-.profile-dropdown button svg{
+.profile-dropdown button svg {
+  width: 16px;
+  height: 16px;
+  color: #8b7bff;
+}
 
-    width:16px;
-    height:16px;
+.profile-dropdown hr {
+  height: 1px;
+  margin: 10px 6px;
+  border: 0;
+  background: rgba(148, 163, 184, .18);
+}
 
-    color:#8B7BFF;
+.logout-menu-btn {
+  color: #ef4444 !important;
+}
 
+.logout-menu-btn svg {
+  color: #ef4444 !important;
+}
+
+.logout-menu-btn:hover {
+  background: rgba(239, 68, 68, .08) !important;
 }
 
 /* =========================================================
-   DIVIDER
+   MOBILE TOGGLE
 ========================================================= */
 
-.profile-dropdown hr{
-
-    border:none;
-
-    height:1px;
-
-    margin:10px 6px;
-
-    background:
-        rgba(148,163,184,.18);
-
+.mobile-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
 }
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-.logout-menu-btn{
-
-    color:#ef4444 !important;
-
+.navbar-dark .mobile-toggle {
+  background: rgba(255, 255, 255, .05);
+  color: #fff;
 }
 
-.logout-menu-btn svg{
-
-    color:#ef4444 !important;
-
-}
-
-.logout-menu-btn:hover{
-
-    background:
-        rgba(239,68,68,.08) !important;
-
+.navbar-light .mobile-toggle {
+  background: #f1f5f9;
+  color: #475569;
 }
 
 /* =========================================================
    MOBILE MENU
 ========================================================= */
 
-.mobile-toggle{
-
-    display:none;
-
-    width:44px;
-    height:44px;
-
-    border:none;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    align-items:center;
-
-    justify-content:center;
-
+.navbar-mobile-overlay {
+  position: fixed;
+  inset: 72px 0 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(6px);
 }
 
-.navbar-dark .mobile-toggle{
-
-    background:
-        rgba(255,255,255,.05);
-
-    color:#fff;
-
+.navbar-mobile-menu {
+  width: min(360px, 92vw);
+  margin: 24px auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 20px;
 }
 
-.navbar-light .mobile-toggle{
-
-    background:#f1f5f9;
-
-    color:#475569;
-
+.mobile-dark {
+  background: #111827;
 }
 
-.navbar-mobile-overlay{
-
-    position:fixed;
-
-    inset:72px 0 0;
-
-    background:
-        rgba(0,0,0,.45);
-
-    backdrop-filter:blur(6px);
-
-    z-index:999;
-
-}
-
-.navbar-mobile-menu{
-
-    width:min(360px,92vw);
-
-    margin:24px auto;
-
-    padding:16px;
-
-    border-radius:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
-
-}
-
-.mobile-dark{
-
-    background:#111827;
-
-}
-
-.mobile-light{
-
-    background:#ffffff;
-
+.mobile-light {
+  background: #fff;
 }
 
 .navbar-mobile-menu a,
-.mobile-logout-btn{
-
-    height:48px;
-
-    display:flex;
-
-    align-items:center;
-
-    padding:0 16px;
-
-    border-radius:12px;
-
-    text-decoration:none;
-
-    border:none;
-
-    background:none;
-
-    cursor:pointer;
-
-    font-weight:600;
-
+.mobile-logout-btn {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-.mobile-dark a{
-
-    color:#cbd5e1;
-
+.mobile-dark a {
+  color: #cbd5e1;
 }
 
-.mobile-light a{
-
-    color:#475569;
-
+.mobile-light a {
+  color: #475569;
 }
 
-.mobile-dark a:hover{
-
-    background:
-        rgba(109,93,246,.15);
-
+.mobile-dark a:hover {
+  background: rgba(109, 93, 246, .15);
 }
 
-.mobile-light a:hover{
-
-    background:
-        rgba(99,102,241,.08);
-
+.mobile-light a:hover {
+  background: rgba(99, 102, 241, .08);
 }
 
-.mobile-logout-btn{
-
-    color:#ef4444;
-
+.mobile-logout-btn {
+  color: #ef4444;
 }
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media (max-width:992px){
+@media (max-width: 992px) {
+  .navbar {
+    padding: 0 14px;
+  }
 
-    .navbar{
+  .navbar-links {
+    gap: 10px;
+  }
 
-        padding:0 14px;
-
-    }
-
-    .navbar-links{
-
-        gap:10px;
-
-    }
-
+  .nav-item-group {
+    gap: 10px;
+  }
 }
 
-@media (max-width:768px){
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
 
-    .navbar-links{
+  .mobile-toggle {
+    display: flex;
+  }
 
-        display:none;
-
-    }
-
-    .mobile-toggle{
-
-        display:flex;
-
-    }
-
-    .profile-dropdown{
-
-        width:250px;
-
-    }
-
+  .profile-dropdown {
+    width: 250px;
+  }
 }
 
-@media (max-width:480px){
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 10px;
+  }
 
-    .navbar{
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
 
-        padding:0 10px;
+  .profile-trigger {
+    padding: 3px;
+  }
 
-    }
-
-    .icon-btn{
-
-        width:40px;
-        height:40px;
-
-    }
-
-    .profile-trigger{
-
-        padding:3px;
-
-    }
-
-    .avatar,
-    .avatar.initials{
-
-        width:38px;
-        height:38px;
-
-    }
-
+  .avatar,
+  .avatar.initials {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 /* =========================================================
@@ -1092,56 +611,21 @@
 ========================================================= */
 
 .navbar a:focus-visible,
-.navbar button:focus-visible{
-
-    outline:2px solid #6D5DF6;
-
-    outline-offset:3px;
-
-}
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-@keyframes dropdownFade{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(-10px)
-            scale(.96);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
+.navbar button:focus-visible {
+  outline: 2px solid #6d5df6;
+  outline-offset: 3px;
 }
 
 /* =========================================================
    REDUCED MOTION
 ========================================================= */
 
-@media (prefers-reduced-motion:reduce){
-
-    *{
-
-        animation:none !important;
-
-        transition:none !important;
-
-        scroll-behavior:auto !important;
-
-    }
-
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
