@@ -1,11 +1,11 @@
-// src/pages/KanbanBoard.jsx
-
 import React, {
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from "react";
+
+import { motion } from "framer-motion";
 
 import {
   DragDropContext,
@@ -14,26 +14,27 @@ import {
 } from "@hello-pangea/dnd";
 
 import {
-  FaArrowRight,
-  FaCalendarAlt,
-  FaCheckCircle,
-  FaClock,
-  FaEllipsisV,
-  FaEye,
-  FaFilter,
-  FaFolderOpen,
-  FaLayerGroup,
-  FaPen,
   FaPlus,
   FaSearch,
-  FaSpinner,
+  FaFilter,
+  FaSortAmountDown,
   FaTasks,
-  FaTrashAlt,
+  FaSpinner,
+  FaEllipsisV,
+  FaCalendarAlt,
+  FaFolderOpen,
   FaUser,
+  FaPen,
+  FaTrashAlt,
+  FaCheckCircle,
+  FaClock,
+  FaEye,
+  FaArrowRight,
+  FaLayerGroup,
 } from "react-icons/fa";
 
-import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
@@ -41,102 +42,84 @@ import Navbar from "../components/Navbar";
 import "../../styles/KanbanBoard.css";
 
 /* ============================================================
-   STATUS CONSTANTS
+   CONSTANTS
 ============================================================ */
 
-const STATUS = Object.freeze({
+const STATUS = {
   TODO: "Todo",
   PROGRESS: "In Progress",
   REVIEW: "Review",
   COMPLETED: "Completed",
-});
+};
 
-/* ============================================================
-   PRIORITY CONSTANTS
-============================================================ */
-
-const PRIORITY = Object.freeze({
+const PRIORITIES = {
   LOW: "Low",
   MEDIUM: "Medium",
   HIGH: "High",
-});
+};
 
-/* ============================================================
-   EMPTY TASK FORM
-============================================================ */
-
-const EMPTY_TASK_FORM = Object.freeze({
+const EMPTY_FORM = {
   title: "",
   description: "",
-  priority: PRIORITY.MEDIUM,
+  priority: PRIORITIES.MEDIUM,
   status: STATUS.TODO,
   dueDate: "",
   project: "",
   assignee: "",
-});
-
-/* ============================================================
-   COLUMN CONFIGURATION
-============================================================ */
-
-const KANBAN_COLUMNS = [
-  {
-    id: STATUS.TODO,
-    title: "To Do",
-    variant: "todo",
-    icon: <FaTasks />,
-  },
-  {
-    id: STATUS.PROGRESS,
-    title: "In Progress",
-    variant: "progress",
-    icon: <FaClock />,
-  },
-  {
-    id: STATUS.REVIEW,
-    title: "In Review",
-    variant: "review",
-    icon: <FaEye />,
-  },
-  {
-    id: STATUS.COMPLETED,
-    title: "Completed",
-    variant: "completed",
-    icon: <FaCheckCircle />,
-  },
-];
+};
 
 /* ============================================================
    HELPERS
 ============================================================ */
 
 const getProjectName = (task) => {
+  if (!task?.project) {
+    return "General";
+  }
+
+  if (typeof task.project === "string") {
+    return "Project";
+  }
+
   return (
-    task?.project?.name ||
-    task?.project?.title ||
+    task.project.name ||
+    task.project.title ||
     "General"
   );
 };
 
 const getAssigneeName = (task) => {
-  return (
-    task?.assignee?.name ||
-    "Unassigned"
-  );
+  if (!task?.assignee) {
+    return "Unassigned";
+  }
+
+  if (typeof task.assignee === "string") {
+    return "Assigned User";
+  }
+
+  return task.assignee.name || "Unassigned";
 };
 
 const getInitials = (name = "") => {
-  return name
+  const words = name
     .trim()
     .split(/\s+/)
-    .filter(Boolean)
+    .filter(Boolean);
+
+  if (!words.length) {
+    return "";
+  }
+
+  return words
     .slice(0, 2)
-    .map((part) => part.charAt(0))
+    .map((word) => word.charAt(0))
     .join("")
     .toUpperCase();
 };
 
-const getPriorityClass = (priority = PRIORITY.MEDIUM) => {
+const getPriorityClass = (
+  priority = PRIORITIES.MEDIUM
+) => {
   return priority
     .toLowerCase()
     .replace(/\s+/g, "-");
@@ -163,7 +146,7 @@ const formatDueDate = (date) => {
   );
 };
 
-const normalizeTasksResponse = (response) => {
+const getTaskArray = (response) => {
   const data = response?.data;
 
   if (Array.isArray(data)) {
@@ -181,7 +164,7 @@ const normalizeTasksResponse = (response) => {
   return [];
 };
 
-const normalizeProjectsResponse = (response) => {
+const getProjectArray = (response) => {
   const data = response?.data;
 
   if (Array.isArray(data)) {
@@ -210,7 +193,7 @@ function TaskCard({
   onDelete,
 }) {
   const priority =
-    task?.priority || PRIORITY.MEDIUM;
+    task?.priority || PRIORITIES.MEDIUM;
 
   const projectName =
     getProjectName(task);
@@ -238,7 +221,7 @@ function TaskCard({
       index={index}
     >
       {(provided, snapshot) => (
-        <article
+        <motion.article
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -247,6 +230,24 @@ function TaskCard({
               ? "is-dragging"
               : ""
           }`}
+          initial={{
+            opacity: 0,
+            y: 12,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.25,
+          }}
+          whileHover={
+            snapshot.isDragging
+              ? {}
+              : {
+                  y: -3,
+                }
+          }
         >
           <div className="task-card-top">
             <span
@@ -261,6 +262,9 @@ function TaskCard({
               type="button"
               className="task-more-btn"
               aria-label="Task options"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
             >
               <FaEllipsisV />
             </button>
@@ -287,7 +291,8 @@ function TaskCard({
             </span>
           </div>
 
-          {task?.status === STATUS.PROGRESS && (
+          {task?.status ===
+            STATUS.PROGRESS && (
             <div className="task-progress">
               <div className="task-progress-header">
                 <span>Progress</span>
@@ -360,7 +365,7 @@ function TaskCard({
               <FaTrashAlt />
             </button>
           </div>
-        </article>
+        </motion.article>
       )}
     </Draggable>
   );
@@ -371,34 +376,43 @@ function TaskCard({
 ============================================================ */
 
 function KanbanColumn({
-  column,
+  id,
+  title,
   tasks,
+  variant,
+  icon,
   onEdit,
   onDelete,
   onCreate,
 }) {
   return (
-    <Droppable
-      droppableId={column.id}
-    >
+    <Droppable droppableId={id}>
       {(provided, snapshot) => (
-        <section
+        <motion.section
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={`kanban-column ${column.variant} ${
+          className={`kanban-column ${variant} ${
             snapshot.isDraggingOver
               ? "is-dragging-over"
               : ""
           }`}
+          animate={{
+            scale: snapshot.isDraggingOver
+              ? 1.008
+              : 1,
+          }}
+          transition={{
+            duration: 0.18,
+          }}
         >
           <header className="kanban-column-header">
             <div className="column-title-group">
               <span className="column-status-icon">
-                {column.icon}
+                {icon}
               </span>
 
               <h2>
-                {column.title}
+                {title}
               </h2>
 
               <span className="column-count">
@@ -409,7 +423,7 @@ function KanbanColumn({
             <button
               type="button"
               className="column-menu-btn"
-              aria-label={`${column.title} options`}
+              aria-label={`${title} options`}
             >
               <FaEllipsisV />
             </button>
@@ -427,8 +441,8 @@ function KanbanColumn({
                 </h3>
 
                 <p>
-                  Drag a task here or create
-                  a new one.
+                  Drag a task here or
+                  create a new one.
                 </p>
 
                 <button
@@ -469,9 +483,243 @@ function KanbanColumn({
               Add Task
             </button>
           )}
-        </section>
+        </motion.section>
       )}
     </Droppable>
+  );
+}
+
+/* ============================================================
+   ANIMATED BACKGROUND
+============================================================ */
+
+function AnimatedKanbanBackground() {
+  const particles = [
+    ["7%", "18%"],
+    ["14%", "72%"],
+    ["21%", "42%"],
+    ["29%", "82%"],
+    ["37%", "20%"],
+    ["44%", "66%"],
+    ["51%", "12%"],
+    ["58%", "78%"],
+    ["65%", "35%"],
+    ["72%", "88%"],
+    ["79%", "22%"],
+    ["86%", "58%"],
+    ["93%", "31%"],
+    ["11%", "50%"],
+    ["27%", "13%"],
+    ["63%", "54%"],
+    ["88%", "75%"],
+    ["48%", "91%"],
+  ];
+
+  return (
+    <div
+      className="kanban-background"
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        overflow: "hidden",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    >
+      {/* PURPLE ORB */}
+
+      <motion.div
+        style={{
+          position: "absolute",
+          width: 560,
+          height: 560,
+          borderRadius: "50%",
+          top: -220,
+          left: "8%",
+          background:
+            "radial-gradient(circle, rgba(124,92,255,.20) 0%, rgba(124,92,255,.08) 38%, transparent 72%)",
+          filter: "blur(14px)",
+        }}
+        animate={{
+          x: [0, 80, 20, 0],
+          y: [0, 70, 20, 0],
+          scale: [1, 1.1, 0.96, 1],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* BLUE ORB */}
+
+      <motion.div
+        style={{
+          position: "absolute",
+          width: 620,
+          height: 620,
+          borderRadius: "50%",
+          right: -230,
+          top: "5%",
+          background:
+            "radial-gradient(circle, rgba(59,130,246,.15) 0%, rgba(59,130,246,.055) 38%, transparent 72%)",
+          filter: "blur(18px)",
+        }}
+        animate={{
+          x: [0, -70, -25, 0],
+          y: [0, 100, 35, 0],
+          scale: [1, 0.94, 1.08, 1],
+        }}
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* VIOLET BOTTOM ORB */}
+
+      <motion.div
+        style={{
+          position: "absolute",
+          width: 540,
+          height: 540,
+          borderRadius: "50%",
+          bottom: -250,
+          left: "35%",
+          background:
+            "radial-gradient(circle, rgba(168,85,247,.12) 0%, rgba(168,85,247,.04) 40%, transparent 72%)",
+          filter: "blur(20px)",
+        }}
+        animate={{
+          x: [0, -90, 60, 0],
+          y: [0, -50, -20, 0],
+          scale: [1, 1.08, 0.94, 1],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* PARTICLES */}
+
+      {particles.map(
+        ([left, top], index) => (
+          <motion.span
+            key={`${left}-${top}`}
+            style={{
+              position: "absolute",
+              left,
+              top,
+              width:
+                index % 3 === 0
+                  ? 4
+                  : 3,
+              height:
+                index % 3 === 0
+                  ? 4
+                  : 3,
+              borderRadius: "50%",
+              background:
+                index % 2 === 0
+                  ? "rgba(124,92,255,.48)"
+                  : "rgba(96,165,250,.38)",
+              boxShadow:
+                "0 0 14px rgba(124,92,255,.35)",
+            }}
+            animate={{
+              x: [
+                0,
+                index % 2 === 0
+                  ? 8
+                  : -8,
+                0,
+              ],
+              y: [
+                0,
+                -18,
+                8,
+                0,
+              ],
+              opacity: [
+                0.12,
+                0.7,
+                0.25,
+                0.12,
+              ],
+              scale: [
+                0.7,
+                1.25,
+                0.8,
+                0.7,
+              ],
+            }}
+            transition={{
+              duration:
+                5 + (index % 5),
+              delay:
+                index * 0.3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        )
+      )}
+
+      {/* GRID */}
+
+      <motion.div
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.2,
+          backgroundImage: `
+            linear-gradient(
+              rgba(124,92,255,.035) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(124,92,255,.035) 1px,
+              transparent 1px
+            )
+          `,
+          backgroundSize:
+            "48px 48px",
+          maskImage:
+            "linear-gradient(to bottom, black, transparent 88%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black, transparent 88%)",
+        }}
+        animate={{
+          backgroundPosition: [
+            "0px 0px",
+            "48px 48px",
+            "0px 0px",
+          ],
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
+
+      {/* ATMOSPHERIC OVERLAY */}
+
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(248,249,255,.035) 48%, rgba(238,241,250,.14) 100%)",
+        }}
+      />
+    </div>
   );
 }
 
@@ -480,10 +728,8 @@ function KanbanColumn({
 ============================================================ */
 
 function KanbanBoard() {
-  const {
-    token,
-    isAuthenticated,
-  } = useAuth();
+  const { token, isAuthenticated } =
+    useAuth();
 
   const [loading, setLoading] =
     useState(true);
@@ -507,40 +753,33 @@ function KanbanBoard() {
     setStatusFilter,
   ] = useState("All");
 
-  const [showModal, setShowModal] =
-    useState(false);
+  const [
+    showModal,
+    setShowModal,
+  ] = useState(false);
 
-  const [editingTask, setEditingTask] =
-    useState(null);
+  const [
+    editingTask,
+    setEditingTask,
+  ] = useState(null);
 
   const [saving, setSaving] =
     useState(false);
 
-  const [errorMessage, setErrorMessage] =
-    useState("");
-
-  const [taskForm, setTaskForm] =
-    useState({
-      ...EMPTY_TASK_FORM,
-    });
-
-  /* ==========================================================
-     AUTHENTICATION CHECK
-  ========================================================== */
-
-  const authenticated =
-    Boolean(
-      isAuthenticated &&
-      token
-    );
+  const [
+    taskForm,
+    setTaskForm,
+  ] = useState({
+    ...EMPTY_FORM,
+  });
 
   /* ==========================================================
-     FETCH TASKS + PROJECTS
+     FETCH DATA
   ========================================================== */
 
-  const fetchKanbanData =
-    useCallback(async () => {
-      if (!authenticated) {
+  const fetchTasks = useCallback(
+    async () => {
+      if (!token) {
         setTasks([]);
         setProjects([]);
         setLoading(false);
@@ -549,20 +788,6 @@ function KanbanBoard() {
 
       try {
         setLoading(true);
-        setErrorMessage("");
-
-        /*
-         * IMPORTANT:
-         *
-         * We intentionally use `api`
-         * instead of raw axios.
-         *
-         * src/api/axios.js automatically
-         * attaches:
-         *
-         * Authorization:
-         * Bearer <token>
-         */
 
         const [
           taskResponse,
@@ -573,13 +798,11 @@ function KanbanBoard() {
         ]);
 
         setTasks(
-          normalizeTasksResponse(
-            taskResponse
-          )
+          getTaskArray(taskResponse)
         );
 
         setProjects(
-          normalizeProjectsResponse(
+          getProjectArray(
             projectResponse
           )
         );
@@ -590,31 +813,30 @@ function KanbanBoard() {
         );
 
         if (
-          error?.response?.status ===
+          error.response?.status ===
           401
         ) {
-          setErrorMessage(
-            "Your session has expired. Please log in again."
-          );
-        } else {
-          setErrorMessage(
-            error?.response?.data
-              ?.message ||
-              "Unable to load Kanban data."
+          console.warn(
+            "Kanban request rejected: authentication token is missing or invalid."
           );
         }
       } finally {
         setLoading(false);
       }
-    }, [authenticated]);
-
-  /* ==========================================================
-     INITIAL DATA LOAD
-  ========================================================== */
+    },
+    [token]
+  );
 
   useEffect(() => {
-    fetchKanbanData();
-  }, [fetchKanbanData]);
+    if (isAuthenticated) {
+      fetchTasks();
+    } else {
+      setLoading(false);
+    }
+  }, [
+    isAuthenticated,
+    fetchTasks,
+  ]);
 
   /* ==========================================================
      FILTER TASKS
@@ -623,21 +845,17 @@ function KanbanBoard() {
   const filteredTasks =
     useMemo(() => {
       const query =
-        search
-          .trim()
-          .toLowerCase();
+        search.trim().toLowerCase();
 
       return tasks.filter(
         (task) => {
           const title =
             task?.title
-              ?.toLowerCase() ||
-            "";
+              ?.toLowerCase() || "";
 
           const description =
             task?.description
-              ?.toLowerCase() ||
-            "";
+              ?.toLowerCase() || "";
 
           const project =
             getProjectName(task)
@@ -655,14 +873,12 @@ function KanbanBoard() {
             assignee.includes(query);
 
           const matchesPriority =
-            priorityFilter ===
-              "All" ||
+            priorityFilter === "All" ||
             task?.priority ===
               priorityFilter;
 
           const matchesStatus =
-            statusFilter ===
-              "All" ||
+            statusFilter === "All" ||
             task?.status ===
               statusFilter;
 
@@ -681,25 +897,48 @@ function KanbanBoard() {
     ]);
 
   /* ==========================================================
-     COLUMN TASKS
+     COLUMN DATA
   ========================================================== */
 
-  const columnTasks =
-    useMemo(() => {
-      return KANBAN_COLUMNS.reduce(
-        (result, column) => {
-          result[column.id] =
-            filteredTasks.filter(
-              (task) =>
-                task?.status ===
-                column.id
-            );
+  const todo = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) =>
+          task.status ===
+          STATUS.TODO
+      ),
+    [filteredTasks]
+  );
 
-          return result;
-        },
-        {}
-      );
-    }, [filteredTasks]);
+  const progress = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) =>
+          task.status ===
+          STATUS.PROGRESS
+      ),
+    [filteredTasks]
+  );
+
+  const review = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) =>
+          task.status ===
+          STATUS.REVIEW
+      ),
+    [filteredTasks]
+  );
+
+  const completed = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) =>
+          task.status ===
+          STATUS.COMPLETED
+      ),
+    [filteredTasks]
+  );
 
   /* ==========================================================
      STATISTICS
@@ -712,26 +951,26 @@ function KanbanBoard() {
 
         active: tasks.filter(
           (task) =>
-            task?.status ===
+            task.status ===
             STATUS.PROGRESS
         ).length,
 
         review: tasks.filter(
           (task) =>
-            task?.status ===
+            task.status ===
             STATUS.REVIEW
         ).length,
 
         completed: tasks.filter(
           (task) =>
-            task?.status ===
+            task.status ===
             STATUS.COMPLETED
         ).length,
       };
     }, [tasks]);
 
   /* ==========================================================
-     FORM UPDATE
+     FORM
   ========================================================== */
 
   const updateForm = (
@@ -746,78 +985,55 @@ function KanbanBoard() {
     );
   };
 
-  /* ==========================================================
-     RESET FORM
-  ========================================================== */
-
   const resetForm = () => {
     setEditingTask(null);
 
     setTaskForm({
-      ...EMPTY_TASK_FORM,
+      ...EMPTY_FORM,
     });
   };
 
-  /* ==========================================================
-     CREATE MODAL
-  ========================================================== */
+  const openCreateModal = () => {
+    resetForm();
+    setShowModal(true);
+  };
 
-  const openCreateModal =
-    () => {
-      resetForm();
-      setShowModal(true);
-    };
+  const openEditModal = (
+    task
+  ) => {
+    setEditingTask(task);
 
-  /* ==========================================================
-     EDIT MODAL
-  ========================================================== */
+    setTaskForm({
+      title: task?.title || "",
+      description:
+        task?.description || "",
+      priority:
+        task?.priority ||
+        PRIORITIES.MEDIUM,
+      status:
+        task?.status ||
+        STATUS.TODO,
+      dueDate: task?.dueDate
+        ? String(
+            task.dueDate
+          ).substring(0, 10)
+        : "",
+      project:
+        typeof task?.project ===
+        "object"
+          ? task.project?._id ||
+            ""
+          : task?.project || "",
+      assignee:
+        typeof task?.assignee ===
+        "object"
+          ? task.assignee?._id ||
+            ""
+          : task?.assignee || "",
+    });
 
-  const openEditModal =
-    (task) => {
-      setEditingTask(task);
-
-      setTaskForm({
-        title:
-          task?.title || "",
-
-        description:
-          task?.description || "",
-
-        priority:
-          task?.priority ||
-          PRIORITY.MEDIUM,
-
-        status:
-          task?.status ||
-          STATUS.TODO,
-
-        dueDate:
-          task?.dueDate
-            ? String(
-                task.dueDate
-              ).substring(
-                0,
-                10
-              )
-            : "",
-
-        project:
-          task?.project?._id ||
-          task?.project ||
-          "",
-
-        assignee:
-          task?.assignee?._id ||
-          task?.assignee ||
-          "",
-      });
-
-      setShowModal(true);
-    };
-
-  /* ==========================================================
-     CLOSE MODAL
-  ========================================================== */
+    setShowModal(true);
+  };
 
   const closeModal = () => {
     if (saving) {
@@ -829,187 +1045,207 @@ function KanbanBoard() {
   };
 
   /* ==========================================================
-     SAVE TASK
+     CREATE / UPDATE
   ========================================================== */
 
-  const handleSubmit =
-    async (event) => {
-      event.preventDefault();
+  const handleSubmit = async (
+    event
+  ) => {
+    event.preventDefault();
 
-      if (!authenticated) {
-        setErrorMessage(
-          "You must be logged in to save a task."
-        );
-        return;
+    if (!token) {
+      window.alert(
+        "Your session has expired. Please log in again."
+      );
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const payload = {
+        ...taskForm,
+      };
+
+      if (
+        !payload.project
+      ) {
+        delete payload.project;
       }
 
-      try {
-        setSaving(true);
-        setErrorMessage("");
-
-        if (editingTask) {
-          await api.put(
-            `/tasks/${editingTask._id}`,
-            taskForm
-          );
-        } else {
-          await api.post(
-            "/tasks",
-            taskForm
-          );
-        }
-
-        setShowModal(false);
-        resetForm();
-
-        await fetchKanbanData();
-      } catch (error) {
-        console.error(
-          "Failed to save task:",
-          error
-        );
-
-        setErrorMessage(
-          error?.response?.data
-            ?.message ||
-            "Failed to save task."
-        );
-      } finally {
-        setSaving(false);
+      if (
+        !payload.assignee
+      ) {
+        delete payload.assignee;
       }
-    };
+
+      if (
+        editingTask
+      ) {
+        await api.put(
+          `/tasks/${editingTask._id}`,
+          payload
+        );
+      } else {
+        await api.post(
+          "/tasks",
+          payload
+        );
+      }
+
+      setShowModal(false);
+      resetForm();
+
+      await fetchTasks();
+    } catch (error) {
+      console.error(
+        "Failed to save task:",
+        error
+      );
+
+      window.alert(
+        error.response?.data
+          ?.message ||
+          "Failed to save task. Please try again."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   /* ==========================================================
-     DELETE TASK
+     DELETE
   ========================================================== */
 
-  const deleteTask =
-    async (taskId) => {
-      const confirmed =
-        window.confirm(
-          "Are you sure you want to delete this task?"
-        );
+  const deleteTask = async (
+    id
+  ) => {
+    const confirmed =
+      window.confirm(
+        "Are you sure you want to delete this task?"
+      );
 
-      if (!confirmed) {
-        return;
-      }
+    if (!confirmed) {
+      return;
+    }
 
-      try {
-        setErrorMessage("");
+    try {
+      await api.delete(
+        `/tasks/${id}`
+      );
 
-        await api.delete(
-          `/tasks/${taskId}`
-        );
+      await fetchTasks();
+    } catch (error) {
+      console.error(
+        "Failed to delete task:",
+        error
+      );
 
-        await fetchKanbanData();
-      } catch (error) {
-        console.error(
-          "Failed to delete task:",
-          error
-        );
-
-        setErrorMessage(
-          error?.response?.data
-            ?.message ||
-            "Failed to delete task."
-        );
-      }
-    };
+      window.alert(
+        error.response?.data
+          ?.message ||
+          "Failed to delete task."
+      );
+    }
+  };
 
   /* ==========================================================
      DRAG & DROP
   ========================================================== */
 
-  const onDragEnd =
-    async (result) => {
-      const {
-        destination,
-        source,
-        draggableId,
-      } = result;
+  const onDragEnd = async (
+    result
+  ) => {
+    const {
+      destination,
+      source,
+      draggableId,
+    } = result;
 
-      if (!destination) {
-        return;
-      }
+    if (!destination) {
+      return;
+    }
 
-      if (
-        destination.droppableId ===
-          source.droppableId &&
-        destination.index ===
-          source.index
-      ) {
-        return;
-      }
+    if (
+      destination.droppableId ===
+        source.droppableId &&
+      destination.index ===
+        source.index
+    ) {
+      return;
+    }
 
-      const movedTask =
-        tasks.find(
-          (task) =>
-            String(
-              task._id
-            ) ===
-            String(
-              draggableId
-            )
-        );
-
-      if (!movedTask) {
-        return;
-      }
-
-      const newStatus =
-        destination.droppableId;
-
-      const previousTasks =
-        [...tasks];
-
-      setTasks(
-        (currentTasks) =>
-          currentTasks.map(
-            (task) =>
-              String(
-                task._id
-              ) ===
-              String(
-                draggableId
-              )
-                ? {
-                    ...task,
-                    status:
-                      newStatus,
-                  }
-                : task
-          )
+    const movedTask =
+      tasks.find(
+        (task) =>
+          String(task._id) ===
+          String(draggableId)
       );
 
-      try {
-        await api.put(
-          `/tasks/${movedTask._id}`,
-          {
-            ...movedTask,
-            status:
-              newStatus,
-          }
-        );
-      } catch (error) {
-        console.error(
-          "Failed to update task status:",
-          error
-        );
+    if (!movedTask) {
+      return;
+    }
 
-        setTasks(
-          previousTasks
-        );
+    const newStatus =
+      destination.droppableId;
 
-        setErrorMessage(
-          error?.response?.data
-            ?.message ||
-            "Failed to move task."
-        );
-      }
-    };
+    const previousTasks = [
+      ...tasks,
+    ];
+
+    setTasks(
+      (currentTasks) =>
+        currentTasks.map(
+          (task) =>
+            String(task._id) ===
+            String(draggableId)
+              ? {
+                  ...task,
+                  status:
+                    newStatus,
+                }
+              : task
+        )
+    );
+
+    try {
+      await api.put(
+        `/tasks/${movedTask._id}`,
+        {
+          ...movedTask,
+          status: newStatus,
+          project:
+            typeof movedTask.project ===
+            "object"
+              ? movedTask.project?._id
+              : movedTask.project,
+          assignee:
+            typeof movedTask.assignee ===
+            "object"
+              ? movedTask.assignee?._id
+              : movedTask.assignee,
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Failed to update task status:",
+        error
+      );
+
+      setTasks(
+        previousTasks
+      );
+
+      window.alert(
+        error.response?.data
+          ?.message ||
+          "Failed to update task status."
+      );
+    }
+  };
 
   /* ==========================================================
-     LOADING SCREEN
+     LOADING
   ========================================================== */
 
   if (loading) {
@@ -1033,47 +1269,40 @@ function KanbanBoard() {
   }
 
   /* ==========================================================
-     MAIN RENDER
+     RENDER
   ========================================================== */
 
   return (
     <div className="kanban-page">
-      <div
-        className="kanban-background"
-        aria-hidden="true"
-      >
-        <div className="kanban-bg-grid" />
+      {/* =====================================================
+          ANIMATED BACKGROUND
+      ===================================================== */}
 
-        <div className="kanban-bg-orb kanban-bg-orb-1" />
+      <AnimatedKanbanBackground />
 
-        <div className="kanban-bg-orb kanban-bg-orb-2" />
-
-        <div className="kanban-bg-orb kanban-bg-orb-3" />
-
-        <div className="kanban-bg-glow kanban-bg-glow-1" />
-
-        <div className="kanban-bg-glow kanban-bg-glow-2" />
-
-        <div className="kanban-bg-noise" />
-      </div>
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <Sidebar />
 
-      <div className="kanban-main">
+      {/* =====================================================
+          MAIN APPLICATION
+      ===================================================== */}
+
+      <div
+        className="kanban-main"
+        style={{
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <Navbar />
 
         <main className="kanban-container">
-          {errorMessage && (
-            <div className="kanban-error-banner">
-              <strong>
-                Unable to continue
-              </strong>
-
-              <span>
-                {errorMessage}
-              </span>
-            </div>
-          )}
+          {/* ==================================================
+              PAGE HEADER
+          ================================================== */}
 
           <section className="kanban-page-header">
             <div className="kanban-title-section">
@@ -1099,18 +1328,26 @@ function KanbanBoard() {
                 </h1>
 
                 <p>
-                  Visualize, organize and
-                  manage your project tasks.
+                  Visualize, organize
+                  and manage your
+                  project tasks.
                 </p>
               </div>
             </div>
 
-            <button
+            <motion.button
               type="button"
               className="create-task-btn"
               onClick={
                 openCreateModal
               }
+              whileHover={{
+                y: -2,
+                scale: 1.01,
+              }}
+              whileTap={{
+                scale: 0.98,
+              }}
             >
               <span className="create-task-icon">
                 <FaPlus />
@@ -1119,8 +1356,12 @@ function KanbanBoard() {
               <span>
                 Create Task
               </span>
-            </button>
+            </motion.button>
           </section>
+
+          {/* ==================================================
+              STATISTICS
+          ================================================== */}
 
           <section className="kanban-statistics">
             <div className="kanban-stat-card purple">
@@ -1203,6 +1444,10 @@ function KanbanBoard() {
               </div>
             </div>
           </section>
+
+          {/* ==================================================
+              TOOLBAR
+          ================================================== */}
 
           <section className="kanban-toolbar">
             <div className="kanban-search">
@@ -1302,27 +1547,15 @@ function KanbanBoard() {
                     All Priorities
                   </option>
 
-                  <option
-                    value={
-                      PRIORITY.LOW
-                    }
-                  >
+                  <option value="Low">
                     Low
                   </option>
 
-                  <option
-                    value={
-                      PRIORITY.MEDIUM
-                    }
-                  >
+                  <option value="Medium">
                     Medium
                   </option>
 
-                  <option
-                    value={
-                      PRIORITY.HIGH
-                    }
-                  >
+                  <option value="High">
                     High
                   </option>
                 </select>
@@ -1345,40 +1578,402 @@ function KanbanBoard() {
                   : "tasks"}
               </span>
             </div>
+
+            <button
+              type="button"
+              className="kanban-sort-btn"
+            >
+              <FaSortAmountDown />
+
+              <span>
+                Sort
+              </span>
+            </button>
           </section>
 
+          {/* ==================================================
+              BOARD
+          ================================================== */}
+
           <DragDropContext
-            onDragEnd={
-              onDragEnd
-            }
+            onDragEnd={onDragEnd}
           >
             <section className="kanban-board">
-              {KANBAN_COLUMNS.map(
-                (column) => (
-                  <KanbanColumn
-                    key={column.id}
-                    column={column}
-                    tasks={
-                      columnTasks[
-                        column.id
-                      ] || []
-                    }
-                    onEdit={
-                      openEditModal
-                    }
-                    onDelete={
-                      deleteTask
-                    }
-                    onCreate={
-                      openCreateModal
-                    }
-                  />
-                )
-              )}
+              <KanbanColumn
+                id={STATUS.TODO}
+                title="To Do"
+                tasks={todo}
+                variant="todo"
+                icon={<FaTasks />}
+                onEdit={
+                  openEditModal
+                }
+                onDelete={
+                  deleteTask
+                }
+                onCreate={
+                  openCreateModal
+                }
+              />
+
+              <KanbanColumn
+                id={STATUS.PROGRESS}
+                title="In Progress"
+                tasks={progress}
+                variant="progress"
+                icon={<FaClock />}
+                onEdit={
+                  openEditModal
+                }
+                onDelete={
+                  deleteTask
+                }
+                onCreate={
+                  openCreateModal
+                }
+              />
+
+              <KanbanColumn
+                id={STATUS.REVIEW}
+                title="In Review"
+                tasks={review}
+                variant="review"
+                icon={<FaEye />}
+                onEdit={
+                  openEditModal
+                }
+                onDelete={
+                  deleteTask
+                }
+                onCreate={
+                  openCreateModal
+                }
+              />
+
+              <KanbanColumn
+                id={STATUS.COMPLETED}
+                title="Completed"
+                tasks={completed}
+                variant="completed"
+                icon={
+                  <FaCheckCircle />
+                }
+                onEdit={
+                  openEditModal
+                }
+                onDelete={
+                  deleteTask
+                }
+                onCreate={
+                  openCreateModal
+                }
+              />
             </section>
           </DragDropContext>
         </main>
       </div>
+
+      {/* ======================================================
+          CREATE / EDIT MODAL
+      ====================================================== */}
+
+      {showModal && (
+        <div
+          className="kanban-modal-overlay"
+          onClick={closeModal}
+        >
+          <div
+            className="kanban-task-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <div className="kanban-modal-header">
+              <div>
+                <span className="modal-eyebrow">
+                  TASK MANAGEMENT
+                </span>
+
+                <h2>
+                  {editingTask
+                    ? "Edit Task"
+                    : "Create New Task"}
+                </h2>
+
+                <p>
+                  {editingTask
+                    ? "Update the task details below."
+                    : "Add a new task to your workspace."}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={
+                  closeModal
+                }
+                disabled={saving}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
+            </div>
+
+            <form
+              onSubmit={
+                handleSubmit
+              }
+              className="kanban-task-form"
+            >
+              <div className="form-group">
+                <label htmlFor="task-title">
+                  Task Title
+                </label>
+
+                <input
+                  id="task-title"
+                  type="text"
+                  required
+                  placeholder="Enter task title"
+                  value={
+                    taskForm.title
+                  }
+                  onChange={(event) =>
+                    updateForm(
+                      "title",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="task-description">
+                  Description
+                </label>
+
+                <textarea
+                  id="task-description"
+                  rows="4"
+                  placeholder="Describe what needs to be done..."
+                  value={
+                    taskForm.description
+                  }
+                  onChange={(event) =>
+                    updateForm(
+                      "description",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="task-priority">
+                    Priority
+                  </label>
+
+                  <select
+                    id="task-priority"
+                    value={
+                      taskForm.priority
+                    }
+                    onChange={(event) =>
+                      updateForm(
+                        "priority",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value="Low">
+                      Low
+                    </option>
+
+                    <option value="Medium">
+                      Medium
+                    </option>
+
+                    <option value="High">
+                      High
+                    </option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="task-status">
+                    Status
+                  </label>
+
+                  <select
+                    id="task-status"
+                    value={
+                      taskForm.status
+                    }
+                    onChange={(event) =>
+                      updateForm(
+                        "status",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option
+                      value={
+                        STATUS.TODO
+                      }
+                    >
+                      Todo
+                    </option>
+
+                    <option
+                      value={
+                        STATUS.PROGRESS
+                      }
+                    >
+                      In Progress
+                    </option>
+
+                    <option
+                      value={
+                        STATUS.REVIEW
+                      }
+                    >
+                      Review
+                    </option>
+
+                    <option
+                      value={
+                        STATUS.COMPLETED
+                      }
+                    >
+                      Completed
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="task-due-date">
+                    Due Date
+                  </label>
+
+                  <input
+                    id="task-due-date"
+                    type="date"
+                    value={
+                      taskForm.dueDate
+                    }
+                    onChange={(event) =>
+                      updateForm(
+                        "dueDate",
+                        event.target.value
+                      )
+                    }
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="task-project">
+                    Project
+                  </label>
+
+                  <select
+                    id="task-project"
+                    value={
+                      taskForm.project
+                    }
+                    onChange={(event) =>
+                      updateForm(
+                        "project",
+                        event.target.value
+                      )
+                    }
+                  >
+                    <option value="">
+                      Select Project
+                    </option>
+
+                    {projects.map(
+                      (project) => (
+                        <option
+                          key={
+                            project._id
+                          }
+                          value={
+                            project._id
+                          }
+                        >
+                          {project.name ||
+                            project.title ||
+                            "Untitled Project"}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="task-assignee">
+                  Assignee ID
+                </label>
+
+                <input
+                  id="task-assignee"
+                  type="text"
+                  placeholder="Enter User ID"
+                  value={
+                    taskForm.assignee
+                  }
+                  onChange={(event) =>
+                    updateForm(
+                      "assignee",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
+              <div className="kanban-modal-actions">
+                <button
+                  type="button"
+                  className="modal-cancel-btn"
+                  onClick={
+                    closeModal
+                  }
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="modal-save-btn"
+                  disabled={saving}
+                >
+                  {saving ? (
+                    <>
+                      <FaSpinner className="spin" />
+
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <FaPlus />
+
+                      {editingTask
+                        ? "Update Task"
+                        : "Create Task"}
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
