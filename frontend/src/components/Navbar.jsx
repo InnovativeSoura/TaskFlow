@@ -2,33 +2,27 @@ import React, {
   useState,
   useEffect,
   useRef,
-} from "react";
-
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
-
-import React, {
-  useState,
-  useEffect,
-  useRef,
   useMemo,
   useCallback,
 } from "react";
 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+
 import {
-  FaCog,
-  FaMoon,
+  FaBars,
+  FaTimes,
   FaSun,
-  FaSignOutAlt,
-  FaUserCircle,
+  FaMoon,
+  FaCog,
   FaTasks,
+  FaSearch,
+  FaBell,
   FaChevronDown,
+  FaUser,
+  FaSignOutAlt,
 } from "react-icons/fa";
+
+// your other imports...
 import { motion, AnimatePresence } from "framer-motion";
 
 import NotificationBell from "./NotificationBell";
