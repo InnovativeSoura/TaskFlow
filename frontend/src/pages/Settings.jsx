@@ -20,7 +20,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
 
-import "../../styles/Settings.css";
+import "../styles/Settings.css";;
 
 /* ============================================================
    SETTINGS NAVIGATION
