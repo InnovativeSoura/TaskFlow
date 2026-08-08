@@ -1,24 +1,23 @@
 import React, { useMemo, useState } from "react";
+
 import {
   FaUser,
   FaPalette,
   FaBell,
   FaLock,
   FaInfoCircle,
-  FaShieldAlt,
-  FaCog,
-  FaChevronRight,
+  FaCheckCircle,
   FaMoon,
   FaSun,
-  FaCheckCircle,
-  FaDesktop,
-  FaGlobe,
-  FaEnvelope,
-  FaKey,
+  FaChevronRight,
+  FaShieldAlt,
+  FaCog,
   FaEye,
   FaEyeSlash,
-  FaSave,
-  FaCircle,
+  FaTasks,
+  FaProjectDiagram,
+  FaEnvelope,
+  FaDesktop,
 } from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar";
@@ -26,6 +25,10 @@ import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
 
 import "../styles/Settings.css";
+
+/* ============================================================
+   SETTINGS NAVIGATION
+============================================================ */
 
 const SETTINGS_ITEMS = [
   {
@@ -60,741 +63,834 @@ const SETTINGS_ITEMS = [
   },
 ];
 
+/* ============================================================
+   DEFAULT SETTINGS
+============================================================ */
+
+const DEFAULT_SETTINGS = {
+  darkMode: false,
+  emailNotifications: true,
+  taskNotifications: true,
+  projectNotifications: true,
+  desktopNotifications: false,
+};
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
 const getInitials = (name = "") => {
-  const cleanedName = String(name).trim();
+  const words = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
 
-  if (!cleanedName) {
-    return "TF";
+  if (!words.length) {
+    return "U";
   }
 
-  const parts = cleanedName.split(/\s+/);
-
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
-  }
-
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  return words
+    .slice(0, 2)
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase();
 };
 
 const getUserName = (user) => {
   return (
     user?.name ||
-    user?.username ||
     user?.fullName ||
+    user?.username ||
+    user?.displayName ||
     "TaskFlow User"
   );
 };
 
 const getUserEmail = (user) => {
-  return user?.email || user?.emailAddress || "No email available";
+  return user?.email || "No email available";
 };
 
 const getUserRole = (user) => {
-  return user?.role || "Administrator";
+  return user?.role || "Member";
 };
 
-const Settings = () => {
+/* ============================================================
+   SETTINGS PAGE
+============================================================ */
+
+function Settings() {
   const { user } = useAuth();
 
-  const [activeSection, setActiveSection] = useState("account");
+  const [activeSection, setActiveSection] =
+    useState("notifications");
 
-  const [theme, setTheme] = useState("system");
+  const [settings, setSettings] =
+    useState(DEFAULT_SETTINGS);
 
-  const [notifications, setNotifications] = useState({
-    taskAssignments: true,
-    taskUpdates: true,
-    projectUpdates: true,
-    emailNotifications: true,
-    desktopNotifications: false,
-  });
+  const [currentPassword, setCurrentPassword] =
+    useState("");
 
-  const [passwords, setPasswords] = useState({
-    current: "",
-    newPassword: "",
-    confirm: "",
-  });
+  const [newPassword, setNewPassword] =
+    useState("");
 
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    newPassword: false,
-    confirm: false,
-  });
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
 
-  const [saved, setSaved] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] =
+    useState(false);
 
-  const userName = useMemo(() => getUserName(user), [user]);
-  const userEmail = useMemo(() => getUserEmail(user), [user]);
-  const userRole = useMemo(() => getUserRole(user), [user]);
-  const initials = useMemo(() => getInitials(userName), [userName]);
+  const [showNewPassword, setShowNewPassword] =
+    useState(false);
 
-  const handleSave = () => {
-    setSaved(true);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
-    window.setTimeout(() => {
-      setSaved(false);
-    }, 2500);
-  };
+  const [passwordMessage, setPasswordMessage] =
+    useState("");
 
-  const handlePasswordChange = (field, value) => {
-    setPasswords((previous) => ({
-      ...previous,
-      [field]: value,
+  /* ==========================================================
+     USER DATA
+  ========================================================== */
+
+  const userName = useMemo(
+    () => getUserName(user),
+    [user]
+  );
+
+  const userEmail = useMemo(
+    () => getUserEmail(user),
+    [user]
+  );
+
+  const userRole = useMemo(
+    () => getUserRole(user),
+    [user]
+  );
+
+  const initials = useMemo(
+    () => getInitials(userName),
+    [userName]
+  );
+
+  /* ==========================================================
+     ACTIVE SECTION
+  ========================================================== */
+
+  const currentSection = useMemo(() => {
+    return (
+      SETTINGS_ITEMS.find(
+        (item) => item.id === activeSection
+      ) || SETTINGS_ITEMS[0]
+    );
+  }, [activeSection]);
+
+  /* ==========================================================
+     SETTING UPDATE
+  ========================================================== */
+
+  const updateSetting = (key, value) => {
+    setSettings((current) => ({
+      ...current,
+      [key]: value,
     }));
   };
 
-  const togglePasswordVisibility = (field) => {
-    setShowPasswords((previous) => ({
-      ...previous,
-      [field]: !previous[field],
-    }));
+  /* ==========================================================
+     PASSWORD HANDLER
+  ========================================================== */
+
+  const handlePasswordUpdate = (event) => {
+    event.preventDefault();
+
+    setPasswordMessage("");
+
+    if (!currentPassword) {
+      setPasswordMessage(
+        "Please enter your current password."
+      );
+      return;
+    }
+
+    if (!newPassword) {
+      setPasswordMessage(
+        "Please enter a new password."
+      );
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordMessage(
+        "New password must contain at least 6 characters."
+      );
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage(
+        "New password and confirmation do not match."
+      );
+      return;
+    }
+
+    /*
+      Connect this handler to your backend password
+      update endpoint when the API is available.
+    */
+
+    setPasswordMessage(
+      "Password validation completed successfully."
+    );
+
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
-  const toggleNotification = (field) => {
-    setNotifications((previous) => ({
-      ...previous,
-      [field]: !previous[field],
-    }));
+  /* ==========================================================
+     PASSWORD INPUT
+  ========================================================== */
+
+  const PasswordInput = ({
+    id,
+    label,
+    value,
+    onChange,
+    visible,
+    onToggle,
+    placeholder,
+  }) => {
+    return (
+      <div className="settings-password-field">
+        <label htmlFor={id}>
+          {label}
+        </label>
+
+        <div className="settings-password-input">
+          <input
+            id={id}
+            type={visible ? "text" : "password"}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            autoComplete="off"
+          />
+
+          <button
+            type="button"
+            className="settings-password-toggle"
+            onClick={onToggle}
+            aria-label={
+              visible
+                ? `Hide ${label}`
+                : `Show ${label}`
+            }
+          >
+            {visible ? (
+              <FaEyeSlash />
+            ) : (
+              <FaEye />
+            )}
+          </button>
+        </div>
+      </div>
+    );
   };
+
+  /* ==========================================================
+     ACCOUNT
+  ========================================================== */
 
   const renderAccountSection = () => {
     return (
-      <section className="settings-section-content">
-        <div className="section-heading">
+      <div className="settings-content-section">
+        <div className="settings-section-heading">
           <div>
-            <span className="section-eyebrow">ACCOUNT</span>
+            <span className="settings-eyebrow">
+              ACCOUNT
+            </span>
 
             <h2>Account information</h2>
 
             <p>
-              Manage and review the information connected to your
-              TaskFlow account.
+              View the information associated with
+              your TaskFlow account.
             </p>
           </div>
 
-          <div className="section-heading-icon">
+          <div className="settings-heading-icon">
             <FaUser />
           </div>
         </div>
 
-        <div className="account-profile-card">
-          <div className="account-avatar">
-            {initials}
-            <span className="avatar-status"></span>
-          </div>
+        <div className="settings-divider" />
 
-          <div className="account-profile-info">
-            <h3>{userName}</h3>
-
-            <p>{userEmail}</p>
-
-            <div className="account-active-status">
-              <FaCircle />
-              <span>Account active</span>
-            </div>
-          </div>
-
-          <div className="account-role">
-            {userRole}
-          </div>
-        </div>
-
-        <div className="account-details-grid">
-          <div className="detail-card">
-            <div className="detail-icon purple">
-              <FaUser />
+        <div className="settings-profile-card">
+          <div className="settings-profile-left">
+            <div className="settings-large-avatar">
+              {initials}
             </div>
 
-            <div>
-              <span>FULL NAME</span>
+            <div className="settings-profile-details">
               <strong>{userName}</strong>
+
+              <span>{userEmail}</span>
+
+              <div className="settings-profile-status">
+                <span />
+                Account active
+              </div>
             </div>
           </div>
 
-          <div className="detail-card">
-            <div className="detail-icon blue">
-              <FaEnvelope />
-            </div>
-
-            <div>
-              <span>EMAIL ADDRESS</span>
-              <strong>{userEmail}</strong>
-            </div>
-          </div>
-
-          <div className="detail-card">
-            <div className="detail-icon violet">
-              <FaShieldAlt />
-            </div>
-
-            <div>
-              <span>ROLE</span>
-              <strong>{userRole}</strong>
-            </div>
-          </div>
-
-          <div className="detail-card">
-            <div className="detail-icon green">
-              <FaCheckCircle />
-            </div>
-
-            <div>
-              <span>ACCOUNT STATUS</span>
-
-              <strong className="active-text">
-                <FaCircle />
-                Active
-              </strong>
-            </div>
-          </div>
+          <span className="settings-role-badge">
+            {userRole}
+          </span>
         </div>
 
-        <div className="security-banner">
-          <div className="security-banner-icon">
-            <FaShieldAlt />
+        <div className="settings-info-grid">
+          <div className="settings-info-card">
+            <span>FULL NAME</span>
+            <strong>{userName}</strong>
           </div>
 
-          <div>
-            <strong>Your account is protected</strong>
-
-            <p>
-              TaskFlow security features are active and your
-              workspace is protected.
-            </p>
+          <div className="settings-info-card">
+            <span>EMAIL ADDRESS</span>
+            <strong>{userEmail}</strong>
           </div>
 
-          <FaCheckCircle className="security-check" />
+          <div className="settings-info-card">
+            <span>ROLE</span>
+            <strong>{userRole}</strong>
+          </div>
+
+          <div className="settings-info-card">
+            <span>ACCOUNT STATUS</span>
+
+            <strong className="settings-status-active">
+              <span className="settings-status-dot" />
+              Active
+            </strong>
+          </div>
         </div>
-      </section>
+      </div>
     );
   };
 
+  /* ==========================================================
+     APPEARANCE
+  ========================================================== */
+
   const renderAppearanceSection = () => {
     return (
-      <section className="settings-section-content">
-        <div className="section-heading">
+      <div className="settings-content-section">
+        <div className="settings-section-heading">
           <div>
-            <span className="section-eyebrow">APPEARANCE</span>
+            <span className="settings-eyebrow">
+              APPEARANCE
+            </span>
 
             <h2>Workspace appearance</h2>
 
             <p>
-              Customize how TaskFlow looks across your workspace.
+              Customize how TaskFlow looks and feels.
             </p>
           </div>
 
-          <div className="section-heading-icon">
+          <div className="settings-heading-icon">
             <FaPalette />
           </div>
         </div>
 
-        <div className="preference-block">
-          <div className="preference-title">
-            <div>
-              <h3>Theme</h3>
-              <p>Choose your preferred interface appearance.</p>
+        <div className="settings-divider" />
+
+        <div className="settings-option-list">
+          <div className="settings-option">
+            <div className="settings-option-icon purple">
+              <FaSun />
+            </div>
+
+            <div className="settings-option-content">
+              <strong>Light interface</strong>
+
+              <span>
+                Keep TaskFlow bright, clean and
+                comfortable to use.
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className={`settings-switch ${
+                !settings.darkMode
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                updateSetting(
+                  "darkMode",
+                  false
+                )
+              }
+              aria-label="Enable light interface"
+            >
+              <span />
+            </button>
+          </div>
+
+          <div className="settings-option">
+            <div className="settings-option-icon dark">
+              <FaMoon />
+            </div>
+
+            <div className="settings-option-content">
+              <strong>Dark interface</strong>
+
+              <span>
+                Use a darker interface for low-light
+                environments.
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className={`settings-switch ${
+                settings.darkMode
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                updateSetting(
+                  "darkMode",
+                  true
+                )
+              }
+              aria-label="Enable dark interface"
+            >
+              <span />
+            </button>
+          </div>
+        </div>
+
+        <div className="settings-theme-preview">
+          <div className="theme-preview-header">
+            <div className="theme-preview-dots">
+              <i />
+              <i />
+              <i />
+            </div>
+
+            <span>
+              TaskFlow workspace preview
+            </span>
+          </div>
+
+          <div className="theme-preview-body">
+            <div className="theme-preview-sidebar">
+              <div className="theme-preview-logo">
+                TF
+              </div>
+
+              <div className="theme-preview-line active" />
+              <div className="theme-preview-line" />
+              <div className="theme-preview-line" />
+              <div className="theme-preview-line" />
+            </div>
+
+            <div className="theme-preview-content">
+              <div className="theme-preview-title" />
+
+              <div className="theme-preview-cards">
+                <div />
+                <div />
+                <div />
+              </div>
             </div>
           </div>
-
-          <div className="theme-grid">
-            <button
-              type="button"
-              className={`theme-option ${
-                theme === "light" ? "selected" : ""
-              }`}
-              onClick={() => setTheme("light")}
-            >
-              <div className="theme-preview light-preview">
-                <FaSun />
-              </div>
-
-              <div>
-                <strong>Light</strong>
-                <span>Bright workspace</span>
-              </div>
-
-              {theme === "light" && (
-                <FaCheckCircle className="theme-check" />
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`theme-option ${
-                theme === "dark" ? "selected" : ""
-              }`}
-              onClick={() => setTheme("dark")}
-            >
-              <div className="theme-preview dark-preview">
-                <FaMoon />
-              </div>
-
-              <div>
-                <strong>Dark</strong>
-                <span>Low-light workspace</span>
-              </div>
-
-              {theme === "dark" && (
-                <FaCheckCircle className="theme-check" />
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`theme-option ${
-                theme === "system" ? "selected" : ""
-              }`}
-              onClick={() => setTheme("system")}
-            >
-              <div className="theme-preview system-preview">
-                <FaDesktop />
-              </div>
-
-              <div>
-                <strong>System</strong>
-                <span>Follow device settings</span>
-              </div>
-
-              {theme === "system" && (
-                <FaCheckCircle className="theme-check" />
-              )}
-            </button>
-          </div>
         </div>
 
-        <div className="appearance-info-card">
-          <div className="appearance-info-icon">
-            <FaPalette />
-          </div>
+        <div className="settings-information-banner">
+          <FaCog />
 
           <div>
-            <strong>Premium workspace experience</strong>
-            <p>
-              TaskFlow uses a clean glass interface with subtle
-              gradients and smooth visual transitions.
-            </p>
+            <strong>
+              Workspace personalization
+            </strong>
+
+            <span>
+              Your interface preferences are saved
+              for this session.
+            </span>
           </div>
         </div>
-      </section>
+      </div>
     );
   };
 
-  const renderNotificationsSection = () => {
-    return (
-      <section className="settings-section-content">
-        <div className="section-heading">
-          <div>
-            <span className="section-eyebrow">NOTIFICATIONS</span>
+  /* ==========================================================
+     NOTIFICATIONS
+  ========================================================== */
 
-            <h2>Notification preferences</h2>
+  const renderNotificationsSection = () => {
+    const notificationItems = [
+      {
+        key: "taskNotifications",
+        title: "Task assignments",
+        description:
+          "Notify me when a task is assigned to me.",
+        icon: FaUser,
+        color: "purple",
+      },
+      {
+        key: "taskNotifications",
+        title: "Task updates",
+        description:
+          "Notify me when tasks assigned to me are updated.",
+        icon: FaTasks,
+        color: "blue",
+      },
+      {
+        key: "projectNotifications",
+        title: "Project updates",
+        description:
+          "Notify me about important project activity.",
+        icon: FaProjectDiagram,
+        color: "violet",
+      },
+      {
+        key: "emailNotifications",
+        title: "Email notifications",
+        description:
+          "Receive important TaskFlow updates by email.",
+        icon: FaEnvelope,
+        color: "green",
+      },
+      {
+        key: "desktopNotifications",
+        title: "Desktop notifications",
+        description:
+          "Show notifications directly on your device.",
+        icon: FaDesktop,
+        color: "orange",
+      },
+    ];
+
+    return (
+      <div className="settings-content-section">
+        <div className="settings-section-heading">
+          <div>
+            <span className="settings-eyebrow">
+              NOTIFICATIONS
+            </span>
+
+            <h2>
+              Notification preferences
+            </h2>
 
             <p>
               Decide which events should notify you.
             </p>
           </div>
 
-          <div className="section-heading-icon">
+          <div className="settings-heading-icon">
             <FaBell />
           </div>
         </div>
 
-        <div className="notification-list">
-          <div className="notification-item">
-            <div className="notification-icon purple">
-              <FaUser />
-            </div>
+        <div className="settings-divider" />
 
-            <div className="notification-copy">
-              <strong>Task assignments</strong>
-              <span>
-                Notify me when a task is assigned to me.
-              </span>
-            </div>
+        <div className="settings-notification-list">
+          {notificationItems.map(
+            (item, index) => {
+              const Icon = item.icon;
 
-            <button
-              type="button"
-              className={`toggle-switch ${
-                notifications.taskAssignments ? "active" : ""
-              }`}
-              onClick={() =>
-                toggleNotification("taskAssignments")
-              }
-              aria-label="Toggle task assignments notifications"
-            >
-              <span></span>
-            </button>
-          </div>
+              const isActive =
+                settings[item.key];
 
-          <div className="notification-item">
-            <div className="notification-icon blue">
-              <FaCog />
-            </div>
+              return (
+                <div
+                  className="settings-notification-card"
+                  key={`${item.title}-${index}`}
+                >
+                  <div
+                    className={`settings-notification-icon ${item.color}`}
+                  >
+                    <Icon />
+                  </div>
 
-            <div className="notification-copy">
-              <strong>Task updates</strong>
-              <span>
-                Notify me when tasks assigned to me are updated.
-              </span>
-            </div>
+                  <div className="settings-notification-content">
+                    <strong>
+                      {item.title}
+                    </strong>
 
-            <button
-              type="button"
-              className={`toggle-switch ${
-                notifications.taskUpdates ? "active" : ""
-              }`}
-              onClick={() => toggleNotification("taskUpdates")}
-              aria-label="Toggle task updates notifications"
-            >
-              <span></span>
-            </button>
-          </div>
+                    <span>
+                      {item.description}
+                    </span>
+                  </div>
 
-          <div className="notification-item">
-            <div className="notification-icon violet">
-              <FaGlobe />
-            </div>
-
-            <div className="notification-copy">
-              <strong>Project updates</strong>
-              <span>
-                Notify me about important project activity.
-              </span>
-            </div>
-
-            <button
-              type="button"
-              className={`toggle-switch ${
-                notifications.projectUpdates ? "active" : ""
-              }`}
-              onClick={() =>
-                toggleNotification("projectUpdates")
-              }
-              aria-label="Toggle project updates notifications"
-            >
-              <span></span>
-            </button>
-          </div>
-
-          <div className="notification-item">
-            <div className="notification-icon green">
-              <FaEnvelope />
-            </div>
-
-            <div className="notification-copy">
-              <strong>Email notifications</strong>
-              <span>
-                Receive important TaskFlow updates by email.
-              </span>
-            </div>
-
-            <button
-              type="button"
-              className={`toggle-switch ${
-                notifications.emailNotifications ? "active" : ""
-              }`}
-              onClick={() =>
-                toggleNotification("emailNotifications")
-              }
-              aria-label="Toggle email notifications"
-            >
-              <span></span>
-            </button>
-          </div>
-
-          <div className="notification-item">
-            <div className="notification-icon orange">
-              <FaDesktop />
-            </div>
-
-            <div className="notification-copy">
-              <strong>Desktop notifications</strong>
-              <span>
-                Show notifications directly on your device.
-              </span>
-            </div>
-
-            <button
-              type="button"
-              className={`toggle-switch ${
-                notifications.desktopNotifications ? "active" : ""
-              }`}
-              onClick={() =>
-                toggleNotification("desktopNotifications")
-              }
-              aria-label="Toggle desktop notifications"
-            >
-              <span></span>
-            </button>
-          </div>
+                  <button
+                    type="button"
+                    className={`settings-switch ${
+                      isActive
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      updateSetting(
+                        item.key,
+                        !settings[item.key]
+                      )
+                    }
+                    aria-label={`Toggle ${item.title}`}
+                  >
+                    <span />
+                  </button>
+                </div>
+              );
+            }
+          )}
         </div>
-      </section>
+      </div>
     );
   };
 
+  /* ==========================================================
+     SECURITY
+  ========================================================== */
+
   const renderSecuritySection = () => {
     return (
-      <section className="settings-section-content">
-        <div className="section-heading">
+      <div className="settings-content-section">
+        <div className="settings-section-heading">
           <div>
-            <span className="section-eyebrow">SECURITY</span>
+            <span className="settings-eyebrow">
+              SECURITY
+            </span>
 
             <h2>Password & security</h2>
 
             <p>
-              Keep your TaskFlow account protected with a strong
-              password.
+              Keep your TaskFlow account secure.
             </p>
           </div>
 
-          <div className="section-heading-icon">
+          <div className="settings-heading-icon">
             <FaLock />
           </div>
         </div>
 
-        <div className="security-form">
-          <div className="security-form-header">
-            <div className="security-form-icon">
-              <FaKey />
-            </div>
+        <div className="settings-divider" />
 
-            <div>
-              <h3>Change password</h3>
-              <p>
-                Use a strong password that you do not use elsewhere.
-              </p>
-            </div>
-          </div>
+        <form
+          className="settings-password-form"
+          onSubmit={handlePasswordUpdate}
+        >
+          <PasswordInput
+            id="current-password"
+            label="Current password"
+            value={currentPassword}
+            onChange={(event) =>
+              setCurrentPassword(
+                event.target.value
+              )
+            }
+            visible={showCurrentPassword}
+            onToggle={() =>
+              setShowCurrentPassword(
+                (current) => !current
+              )
+            }
+            placeholder="Enter current password"
+          />
 
-          <div className="password-grid">
-            <div className="password-field">
-              <label>Current password</label>
+          <PasswordInput
+            id="new-password"
+            label="New password"
+            value={newPassword}
+            onChange={(event) =>
+              setNewPassword(
+                event.target.value
+              )
+            }
+            visible={showNewPassword}
+            onToggle={() =>
+              setShowNewPassword(
+                (current) => !current
+              )
+            }
+            placeholder="Enter new password"
+          />
 
-              <div className="password-input-wrapper">
-                <input
-                  type={
-                    showPasswords.current
-                      ? "text"
-                      : "password"
-                  }
-                  value={passwords.current}
-                  onChange={(event) =>
-                    handlePasswordChange(
-                      "current",
-                      event.target.value
-                    )
-                  }
-                  placeholder="Enter current password"
-                />
+          <PasswordInput
+            id="confirm-password"
+            label="Confirm password"
+            value={confirmPassword}
+            onChange={(event) =>
+              setConfirmPassword(
+                event.target.value
+              )
+            }
+            visible={showConfirmPassword}
+            onToggle={() =>
+              setShowConfirmPassword(
+                (current) => !current
+              )
+            }
+            placeholder="Confirm new password"
+          />
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    togglePasswordVisibility("current")
-                  }
-                  aria-label="Toggle current password visibility"
-                >
-                  {showPasswords.current ? (
-                    <FaEyeSlash />
-                  ) : (
-                    <FaEye />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="password-field">
-              <label>New password</label>
-
-              <div className="password-input-wrapper">
-                <input
-                  type={
-                    showPasswords.newPassword
-                      ? "text"
-                      : "password"
-                  }
-                  value={passwords.newPassword}
-                  onChange={(event) =>
-                    handlePasswordChange(
-                      "newPassword",
-                      event.target.value
-                    )
-                  }
-                  placeholder="Enter new password"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    togglePasswordVisibility("newPassword")
-                  }
-                  aria-label="Toggle new password visibility"
-                >
-                  {showPasswords.newPassword ? (
-                    <FaEyeSlash />
-                  ) : (
-                    <FaEye />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="password-field">
-              <label>Confirm new password</label>
-
-              <div className="password-input-wrapper">
-                <input
-                  type={
-                    showPasswords.confirm
-                      ? "text"
-                      : "password"
-                  }
-                  value={passwords.confirm}
-                  onChange={(event) =>
-                    handlePasswordChange(
-                      "confirm",
-                      event.target.value
-                    )
-                  }
-                  placeholder="Confirm new password"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    togglePasswordVisibility("confirm")
-                  }
-                  aria-label="Toggle confirm password visibility"
-                >
-                  {showPasswords.confirm ? (
-                    <FaEyeSlash />
-                  ) : (
-                    <FaEye />
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="password-security-note">
-            <FaShieldAlt />
+          <div className="settings-password-requirement">
+            <FaCheckCircle />
 
             <span>
-              Your password should contain at least 8 characters
-              and include a combination of letters, numbers and
-              symbols.
+              Use at least 6 characters for your
+              password.
             </span>
           </div>
 
+          {passwordMessage && (
+            <div className="settings-password-message">
+              <FaCheckCircle />
+
+              <span>
+                {passwordMessage}
+              </span>
+            </div>
+          )}
+
           <button
-            type="button"
-            className="primary-action-button"
-            onClick={handleSave}
+            type="submit"
+            className="settings-primary-button"
           >
-            <FaSave />
-            Update password
+            <FaLock />
+
+            Update Password
           </button>
+        </form>
+
+        <div className="settings-security-notice">
+          <div className="settings-security-icon">
+            <FaShieldAlt />
+          </div>
+
+          <div>
+            <strong>
+              Your account is protected
+            </strong>
+
+            <p>
+              Use a strong password and never share
+              your login credentials.
+            </p>
+          </div>
+
+          <FaCheckCircle className="settings-security-check" />
         </div>
-      </section>
+      </div>
     );
   };
 
+  /* ==========================================================
+     APPLICATION
+  ========================================================== */
+
   const renderApplicationSection = () => {
     return (
-      <section className="settings-section-content">
-        <div className="section-heading">
+      <div className="settings-content-section">
+        <div className="settings-section-heading">
           <div>
-            <span className="section-eyebrow">APPLICATION</span>
+            <span className="settings-eyebrow">
+              APPLICATION
+            </span>
 
             <h2>About TaskFlow</h2>
 
             <p>
-              Information about your TaskFlow workspace.
+              Information about your project
+              management workspace.
             </p>
           </div>
 
-          <div className="section-heading-icon">
+          <div className="settings-heading-icon">
             <FaInfoCircle />
           </div>
         </div>
 
-        <div className="application-hero">
-          <div className="application-logo">
+        <div className="settings-divider" />
+
+        <div className="settings-app-brand">
+          <div className="settings-app-logo">
             TF
           </div>
 
           <div>
-            <span>PROJECT MANAGEMENT PLATFORM</span>
+            <strong>TaskFlow</strong>
 
-            <h3>TaskFlow</h3>
+            <span>
+              Project Management Workspace
+            </span>
 
-            <p>
-              A modern workspace for organizing projects,
-              managing tasks and collaborating with your team.
-            </p>
-          </div>
-
-          <div className="version-badge">
-            v1.0.0
+            <small>
+              Version 1.0.0
+            </small>
           </div>
         </div>
 
-        <div className="application-grid">
-          <div className="application-card">
-            <FaCog />
-
-            <div>
-              <span>PLATFORM</span>
-              <strong>TaskFlow Web</strong>
-            </div>
+        <div className="settings-info-grid">
+          <div className="settings-info-card">
+            <span>APPLICATION</span>
+            <strong>TaskFlow</strong>
           </div>
 
-          <div className="application-card">
-            <FaGlobe />
-
-            <div>
-              <span>ENVIRONMENT</span>
-              <strong>Production</strong>
-            </div>
+          <div className="settings-info-card">
+            <span>VERSION</span>
+            <strong>1.0.0</strong>
           </div>
 
-          <div className="application-card">
-            <FaShieldAlt />
-
-            <div>
-              <span>SECURITY</span>
-              <strong>Protected</strong>
-            </div>
+          <div className="settings-info-card">
+            <span>PLATFORM</span>
+            <strong>Web Application</strong>
           </div>
 
-          <div className="application-card">
+          <div className="settings-info-card">
+            <span>STATUS</span>
+
+            <strong className="settings-status-active">
+              <span className="settings-status-dot" />
+              Operational
+            </strong>
+          </div>
+        </div>
+
+        <div className="settings-about-card">
+          <div className="settings-about-icon">
             <FaCheckCircle />
-
-            <div>
-              <span>STATUS</span>
-              <strong className="active-text">
-                <FaCircle />
-                Operational
-              </strong>
-            </div>
           </div>
-        </div>
-
-        <div className="application-footer">
-          <span>
-            © 2026 TaskFlow. Built for productive teams.
-          </span>
 
           <div>
-            <span>Privacy</span>
-            <span>Terms</span>
-            <span>Support</span>
+            <strong>
+              Built for productive teams
+            </strong>
+
+            <p>
+              TaskFlow helps teams organize projects,
+              manage tasks and track progress from one
+              centralized workspace.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
     );
   };
 
-  const renderActiveSection = () => {
+  /* ==========================================================
+     CONTENT SWITCHER
+  ========================================================== */
+
+  const renderContent = () => {
     switch (activeSection) {
+      case "account":
+        return renderAccountSection();
+
       case "appearance":
         return renderAppearanceSection();
 
@@ -807,60 +903,106 @@ const Settings = () => {
       case "application":
         return renderApplicationSection();
 
-      case "account":
       default:
-        return renderAccountSection();
+        return renderNotificationsSection();
     }
   };
 
+  /* ==========================================================
+     RENDER
+  ========================================================== */
+
   return (
     <div className="settings-page">
-      <div className="settings-background">
-        <div className="settings-orb settings-orb-one"></div>
-        <div className="settings-orb settings-orb-two"></div>
-        <div className="settings-orb settings-orb-three"></div>
 
-        <div className="settings-grid-background"></div>
+      {/* ======================================================
+          BACKGROUND
+      ====================================================== */}
 
-        <div className="settings-glow settings-glow-one"></div>
-        <div className="settings-glow settings-glow-two"></div>
+      <div
+        className="settings-background"
+        aria-hidden="true"
+      >
+        <div className="settings-bg-grid" />
+
+        <div className="settings-bg-orb settings-bg-orb-1" />
+
+        <div className="settings-bg-orb settings-bg-orb-2" />
+
+        <div className="settings-bg-orb settings-bg-orb-3" />
+
+        <div className="settings-bg-glow settings-bg-glow-1" />
+
+        <div className="settings-bg-glow settings-bg-glow-2" />
       </div>
+
+      {/* ======================================================
+          SIDEBAR
+      ====================================================== */}
 
       <Sidebar />
 
+      {/* ======================================================
+          MAIN
+      ====================================================== */}
+
       <div className="settings-main">
+
         <Navbar />
 
-        <main className="settings-content">
-          <div className="settings-page-header">
-            <div>
-              <div className="settings-breadcrumb">
-                WORKSPACE
-                <span>/</span>
-                SETTINGS
+        <main className="settings-container">
+
+          {/* ==================================================
+              HEADER
+          ================================================== */}
+
+          <header className="settings-page-header">
+
+            <div className="settings-breadcrumb">
+              <span>WORKSPACE</span>
+
+              <FaChevronRight />
+
+              <span>SETTINGS</span>
+            </div>
+
+            <div className="settings-header-row">
+              <div>
+                <h1>Settings</h1>
+
+                <p>
+                  Manage your account, workspace
+                  preferences and security.
+                </p>
               </div>
 
-              <h1>Settings</h1>
+              <div className="settings-header-status">
+                <span />
 
-              <p>
-                Manage your account, workspace preferences and
-                security.
-              </p>
+                Workspace protected
+              </div>
             </div>
 
-            <div className="workspace-status">
-              <span></span>
-              Workspace secure
-            </div>
-          </div>
+          </header>
 
-          <div className="settings-layout">
+          {/* ==================================================
+              SETTINGS MAIN CARD
+          ================================================== */}
+
+          <section className="settings-panel">
+
+            {/* ================================================
+                LEFT NAVIGATION
+            ================================================ */}
+
             <aside className="settings-sidebar">
-              <div className="settings-sidebar-title">
+
+              <div className="settings-sidebar-label">
                 SETTINGS
               </div>
 
-              <div className="settings-navigation">
+              <nav className="settings-nav">
+
                 {SETTINGS_ITEMS.map((item) => {
                   const Icon = item.icon;
 
@@ -872,69 +1014,135 @@ const Settings = () => {
                       key={item.id}
                       type="button"
                       className={`settings-nav-item ${
-                        isActive ? "active" : ""
+                        isActive
+                          ? "active"
+                          : ""
                       }`}
                       onClick={() =>
-                        setActiveSection(item.id)
+                        setActiveSection(
+                          item.id
+                        )
                       }
                     >
-                      <div className="settings-nav-icon">
+                      <span className="settings-nav-icon">
                         <Icon />
-                      </div>
+                      </span>
 
-                      <div className="settings-nav-copy">
-                        <strong>{item.label}</strong>
-                        <span>{item.description}</span>
-                      </div>
+                      <span className="settings-nav-text">
+                        <strong>
+                          {item.label}
+                        </strong>
+
+                        <small>
+                          {item.description}
+                        </small>
+                      </span>
 
                       <FaChevronRight className="settings-nav-arrow" />
                     </button>
                   );
                 })}
-              </div>
 
-              <div className="protected-workspace">
-                <div className="protected-icon">
+              </nav>
+
+              {/* ============================================
+                  SIDEBAR PROTECTION
+              ============================================ */}
+
+              <div className="settings-sidebar-footer">
+
+                <div className="settings-footer-icon">
                   <FaShieldAlt />
                 </div>
 
                 <div>
-                  <strong>Protected workspace</strong>
+                  <strong>
+                    Protected workspace
+                  </strong>
 
                   <span>
                     Your TaskFlow account is secure.
                   </span>
                 </div>
 
-                <FaCheckCircle className="protected-check" />
+                <FaCheckCircle className="settings-footer-check" />
+
               </div>
+
             </aside>
 
-            <div className="settings-panel">
-              {renderActiveSection()}
-            </div>
-          </div>
+            {/* ================================================
+                RIGHT CONTENT
+            ================================================ */}
 
-          <div className="settings-save-bar">
-            <div>
-              <FaShieldAlt />
+            <section className="settings-content">
 
-              <span>
-                Your preferences are stored securely in TaskFlow.
-              </span>
-            </div>
+              <div className="settings-content-topline">
+                <span>
+                  {currentSection.label}
+                </span>
 
-            {saved && (
-              <div className="save-confirmation">
-                <FaCheckCircle />
-                Saved successfully
+                <div />
               </div>
-            )}
-          </div>
+
+              {renderContent()}
+
+            </section>
+
+          </section>
+
+          {/* ==================================================
+              LARGE SECURITY FOOTER
+          ================================================== */}
+
+          <footer className="settings-bottom-footer">
+
+            <div className="settings-bottom-footer-icon">
+              <FaShieldAlt />
+            </div>
+
+            <div className="settings-bottom-footer-content">
+
+              <span className="settings-bottom-footer-eyebrow">
+                TASKFLOW SECURITY
+              </span>
+
+              <strong>
+                Your preferences are stored securely
+                in TaskFlow.
+              </strong>
+
+              <p>
+                We respect your privacy and keep your
+                workspace information protected.
+              </p>
+
+            </div>
+
+            <div className="settings-bottom-footer-visual">
+
+              <div className="settings-footer-glow" />
+
+              <div className="settings-footer-lock">
+                <FaLock />
+              </div>
+
+              <div className="settings-footer-dots">
+                <span />
+                <span />
+                <span />
+              </div>
+
+            </div>
+
+          </footer>
+
         </main>
+
       </div>
+
     </div>
   );
-};
+}
 
 export default Settings;
