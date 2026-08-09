@@ -1,163 +1,763 @@
-/* =========================================================
-   TASKFLOW SETTINGS PAGE
-   Premium / Large Typography / Animated Background
+import { useMemo, useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import { useAuth } from "../context/AuthContext";
+
+import {
+  FaUser,
+  FaPalette,
+  FaBell,
+  FaLock,
+  FaInfoCircle,
+  FaShieldAlt,
+  FaEnvelope,
+  FaCheckCircle,
+  FaDesktop,
+  FaMoon,
+  FaSun,
+  FaCog,
+  FaChevronRight,
+  FaCircle,
+} from "react-icons/fa";
+
+import "../styles/Settings.css";
+
+const SETTINGS_ITEMS = [
+  {
+    id: "account",
+    label: "Account",
+    description: "Your profile information",
+    icon: FaUser,
+  },
+  {
+    id: "appearance",
+    label: "Appearance",
+    description: "Customize your workspace",
+    icon: FaPalette,
+  },
+  {
+    id: "notifications",
+    label: "Notifications",
+    description: "Manage your alerts",
+    icon: FaBell,
+  },
+  {
+    id: "security",
+    label: "Security",
+    description: "Password and security",
+    icon: FaLock,
+  },
+  {
+    id: "application",
+    label: "Application",
+    description: "TaskFlow information",
+    icon: FaInfoCircle,
+  },
+];
+
+function getInitials(name = "TaskFlow User") {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+}
+
+function SettingNavigation({ activeTab, setActiveTab }) {
+  return (
+    <aside className="settings-navigation">
+      <div className="settings-navigation-title">
+        <span>SETTINGS</span>
+      </div>
+
+      <div className="settings-navigation-list">
+        {SETTINGS_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const active = activeTab === item.id;
+
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={`settings-navigation-item ${
+                active ? "active" : ""
+              }`}
+              onClick={() => setActiveTab(item.id)}
+            >
+              <span className="settings-navigation-icon">
+                <Icon />
+              </span>
+
+              <span className="settings-navigation-content">
+                <strong>{item.label}</strong>
+                <small>{item.description}</small>
+              </span>
+
+              <FaChevronRight className="settings-navigation-arrow" />
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="settings-navigation-security">
+        <div className="security-mini-icon">
+          <FaShieldAlt />
+        </div>
+
+        <div className="security-mini-content">
+          <strong>Protected workspace</strong>
+          <span>Your TaskFlow account is secure.</span>
+        </div>
+
+        <span className="security-status-dot" />
+      </div>
+    </aside>
+  );
+}
+
+function AccountSection({ user }) {
+  const name =
+    user?.name ||
+    user?.username ||
+    user?.fullName ||
+    "Souradipta Patra";
+
+  const email =
+    user?.email ||
+    user?.emailAddress ||
+    "soura@gmail.com";
+
+  const role = user?.role || "Admin";
+  const initials = getInitials(name);
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-header">
+        <div>
+          <span className="section-eyebrow">ACCOUNT</span>
+
+          <h2>Account information</h2>
+
+          <p>
+            View the information associated with your TaskFlow account.
+          </p>
+        </div>
+
+        <div className="section-header-icon">
+          <FaUser />
+        </div>
+      </div>
+
+      <div className="settings-divider" />
+
+      <div className="account-profile-card">
+        <div className="account-avatar">{initials}</div>
+
+        <div className="account-profile-details">
+          <strong>{name}</strong>
+          <span>{email}</span>
+        </div>
+
+        <span className="account-role-badge">
+          {role}
+        </span>
+      </div>
+
+      <div className="account-details-grid">
+        <div className="account-detail-card">
+          <span className="detail-label">FULL NAME</span>
+          <strong>{name}</strong>
+        </div>
+
+        <div className="account-detail-card">
+          <span className="detail-label">EMAIL ADDRESS</span>
+          <strong>{email}</strong>
+        </div>
+
+        <div className="account-detail-card">
+          <span className="detail-label">ROLE</span>
+          <strong>{role}</strong>
+        </div>
+
+        <div className="account-detail-card">
+          <span className="detail-label">ACCOUNT STATUS</span>
+
+          <strong className="status-active">
+            <FaCircle />
+            Active
+          </strong>
+        </div>
+      </div>
+
+      <div className="protected-card">
+        <div className="protected-icon">
+          <FaShieldAlt />
+        </div>
+
+        <div>
+          <strong>Protected workspace</strong>
+
+          <span>
+            Your account information is securely associated with
+            your TaskFlow workspace.
+          </span>
+        </div>
+
+        <FaCheckCircle className="protected-check" />
+      </div>
+    </div>
+  );
+}
+
+function AppearanceSection() {
+  const [theme, setTheme] = useState("system");
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-header">
+        <div>
+          <span className="section-eyebrow">APPEARANCE</span>
+
+          <h2>Workspace appearance</h2>
+
+          <p>
+            Customize how your TaskFlow workspace looks.
+          </p>
+        </div>
+
+        <div className="section-header-icon">
+          <FaPalette />
+        </div>
+      </div>
+
+      <div className="settings-divider" />
+
+      <div className="appearance-options">
+        <button
+          type="button"
+          className={`appearance-option ${
+            theme === "light" ? "selected" : ""
+          }`}
+          onClick={() => setTheme("light")}
+        >
+          <div className="appearance-option-icon light">
+            <FaSun />
+          </div>
+
+          <div>
+            <strong>Light mode</strong>
+            <span>Use a bright workspace interface.</span>
+          </div>
+
+          <span className="appearance-radio">
+            {theme === "light" && <span />}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className={`appearance-option ${
+            theme === "dark" ? "selected" : ""
+          }`}
+          onClick={() => setTheme("dark")}
+        >
+          <div className="appearance-option-icon dark">
+            <FaMoon />
+          </div>
+
+          <div>
+            <strong>Dark mode</strong>
+            <span>Use a darker workspace interface.</span>
+          </div>
+
+          <span className="appearance-radio">
+            {theme === "dark" && <span />}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className={`appearance-option ${
+            theme === "system" ? "selected" : ""
+          }`}
+          onClick={() => setTheme("system")}
+        >
+          <div className="appearance-option-icon system">
+            <FaDesktop />
+          </div>
+
+          <div>
+            <strong>System default</strong>
+            <span>Follow your device appearance.</span>
+          </div>
+
+          <span className="appearance-radio">
+            {theme === "system" && <span />}
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function NotificationsSection() {
+  const [notifications, setNotifications] = useState({
+    assignments: true,
+    taskUpdates: true,
+    projectUpdates: true,
+    email: true,
+    desktop: false,
+  });
+
+  const toggleNotification = (key) => {
+    setNotifications((current) => ({
+      ...current,
+      [key]: !current[key],
+    }));
+  };
+
+  const items = [
+    {
+      key: "assignments",
+      title: "Task assignments",
+      description: "Notify me when a task is assigned to me.",
+      icon: FaUser,
+      color: "purple",
+    },
+    {
+      key: "taskUpdates",
+      title: "Task updates",
+      description: "Notify me when tasks assigned to me are updated.",
+      icon: FaCog,
+      color: "blue",
+    },
+    {
+      key: "projectUpdates",
+      title: "Project updates",
+      description: "Notify me about important project activity.",
+      icon: FaPalette,
+      color: "violet",
+    },
+    {
+      key: "email",
+      title: "Email notifications",
+      description: "Receive important TaskFlow updates by email.",
+      icon: FaEnvelope,
+      color: "green",
+    },
+    {
+      key: "desktop",
+      title: "Desktop notifications",
+      description: "Show notifications directly on your device.",
+      icon: FaDesktop,
+      color: "orange",
+    },
+  ];
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-header">
+        <div>
+          <span className="section-eyebrow">NOTIFICATIONS</span>
+
+          <h2>Notification preferences</h2>
+
+          <p>
+            Decide which events should notify you.
+          </p>
+        </div>
+
+        <div className="section-header-icon">
+          <FaBell />
+        </div>
+      </div>
+
+      <div className="settings-divider" />
+
+      <div className="notification-list">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const enabled = notifications[item.key];
+
+          return (
+            <div
+              className={`notification-row ${
+                enabled ? "enabled" : ""
+              }`}
+              key={item.key}
+            >
+              <div className={`notification-icon ${item.color}`}>
+                <Icon />
+              </div>
+
+              <div className="notification-content">
+                <strong>{item.title}</strong>
+                <span>{item.description}</span>
+              </div>
+
+              <button
+                type="button"
+                className={`toggle-switch ${
+                  enabled ? "on" : ""
+                }`}
+                onClick={() => toggleNotification(item.key)}
+                aria-label={`Toggle ${item.title}`}
+              >
+                <span />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SecuritySection() {
+  return (
+    <div className="settings-section">
+      <div className="settings-section-header">
+        <div>
+          <span className="section-eyebrow">SECURITY</span>
+
+          <h2>Security & protection</h2>
+
+          <p>
+            Manage account security and workspace protection.
+          </p>
+        </div>
+
+        <div className="section-header-icon">
+          <FaLock />
+        </div>
+      </div>
+
+      <div className="settings-divider" />
+
+      <div className="security-options">
+        <div className="security-option">
+          <div className="security-option-icon">
+            <FaLock />
+          </div>
+
+          <div>
+            <strong>Password</strong>
+            <span>
+              Keep your password secure and up to date.
+            </span>
+          </div>
+
+          <button type="button">Manage</button>
+        </div>
+
+        <div className="security-option">
+          <div className="security-option-icon">
+            <FaShieldAlt />
+          </div>
+
+          <div>
+            <strong>Workspace protection</strong>
+            <span>
+              Your TaskFlow workspace is protected.
+            </span>
+          </div>
+
+          <span className="secure-badge">
+            <FaCheckCircle />
+            Secure
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ApplicationSection() {
+  return (
+    <div className="settings-section">
+      <div className="settings-section-header">
+        <div>
+          <span className="section-eyebrow">APPLICATION</span>
+
+          <h2>TaskFlow information</h2>
+
+          <p>
+            Information about your TaskFlow workspace.
+          </p>
+        </div>
+
+        <div className="section-header-icon">
+          <FaInfoCircle />
+        </div>
+      </div>
+
+      <div className="settings-divider" />
+
+      <div className="application-grid">
+        <div className="application-card">
+          <span>APPLICATION</span>
+          <strong>TaskFlow</strong>
+        </div>
+
+        <div className="application-card">
+          <span>VERSION</span>
+          <strong>1.0.0</strong>
+        </div>
+
+        <div className="application-card">
+          <span>PLATFORM</span>
+          <strong>Web Application</strong>
+        </div>
+
+        <div className="application-card">
+          <span>STATUS</span>
+          <strong className="status-active">
+            <FaCircle />
+            Operational
+          </strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Settings() {
+  const { user } = useAuth();
+
+  const [activeTab, setActiveTab] = useState("account");
+
+  const activeItem = useMemo(
+    () =>
+      SETTINGS_ITEMS.find((item) => item.id === activeTab) ||
+      SETTINGS_ITEMS[0],
+    [activeTab]
+  );
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "appearance":
+        return <AppearanceSection />;
+
+      case "notifications":
+        return <NotificationsSection />;
+
+      case "security":
+        return <SecuritySection />;
+
+      case "application":
+        return <ApplicationSection />;
+
+      case "account":
+      default:
+        return <AccountSection user={user} />;
+    }
+  };
+
+  return (
+    <div className="settings-page">
+      {/* Premium animated background */}
+      <div className="settings-background" aria-hidden="true">
+        <div className="settings-orb settings-orb-one" />
+        <div className="settings-orb settings-orb-two" />
+        <div className="settings-orb settings-orb-three" />
+
+        <div className="settings-ring settings-ring-one" />
+        <div className="settings-ring settings-ring-two" />
+
+        <div className="settings-grid" />
+      </div>
+
+      {/* EXISTING TASKFLOW SHELL */}
+      <Sidebar />
+
+      <div className="settings-main-shell">
+        <Navbar />
+
+        <main className="settings-main">
+          <div className="settings-container">
+            <header className="settings-page-header">
+              <div className="settings-breadcrumb">
+                <span>WORKSPACE</span>
+                <span className="breadcrumb-separator">›</span>
+                <span>SETTINGS</span>
+              </div>
+
+              <h1>Settings</h1>
+
+              <p>
+                Manage your account, workspace preferences and security.
+              </p>
+            </header>
+
+            <section className="settings-card">
+              <SettingNavigation
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+              />
+
+              <div className="settings-content">
+                <div className="settings-content-mobile-heading">
+                  <span>{activeItem.label}</span>
+                </div>
+
+                {renderContent()}
+              </div>
+            </section>
+
+            <footer className="settings-footer">
+              <div className="settings-footer-icon">
+                <FaShieldAlt />
+              </div>
+
+              <div className="settings-footer-content">
+                <strong>Your preferences are stored securely</strong>
+
+                <span>
+                  TaskFlow keeps your workspace settings organized
+                  and protected.
+                </span>
+              </div>
+
+              <div className="settings-footer-status">
+                <FaCheckCircle />
+                <span>Secure</span>
+              </div>
+            </footer>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}/* =========================================================
+   TASKFLOW SETTINGS
+   Premium settings page
+   Sidebar + Navbar preserved
    ========================================================= */
 
 .settings-page {
-  position: relative;
-  min-height: calc(100vh - 0px);
+  min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  position: relative;
+  overflow-x: hidden;
   background:
-    radial-gradient(
-      circle at 15% 18%,
-      rgba(124, 92, 255, 0.16),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 88% 25%,
-      rgba(76, 130, 255, 0.14),
-      transparent 31%
-    ),
-    radial-gradient(
-      circle at 55% 90%,
-      rgba(145, 91, 255, 0.1),
-      transparent 34%
-    ),
-    #f8f9ff;
-  color: #17213d;
-  isolation: isolate;
+    linear-gradient(
+      135deg,
+      #f8f8ff 0%,
+      #f5f5ff 38%,
+      #f7f9ff 70%,
+      #f3f6ff 100%
+    );
+  color: #17213b;
 }
 
 /* =========================================================
-   ANIMATED BACKGROUND
+   BACKGROUND
    ========================================================= */
 
 .settings-background {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: -1;
-  overflow: hidden;
+  z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .settings-orb {
   position: absolute;
-  border-radius: 999px;
+  border-radius: 50%;
   filter: blur(2px);
-  opacity: 0.62;
+  opacity: 0.7;
   animation: settingsFloat 12s ease-in-out infinite;
 }
 
-.orb-one {
-  width: 280px;
-  height: 280px;
-  top: 60px;
-  left: 6%;
+.settings-orb-one {
+  width: 430px;
+  height: 430px;
+  top: 70px;
+  left: 210px;
   background:
     radial-gradient(
-      circle at 35% 30%,
-      rgba(159, 127, 255, 0.3),
-      rgba(112, 76, 255, 0.04) 66%,
+      circle,
+      rgba(124, 92, 255, 0.18) 0%,
+      rgba(124, 92, 255, 0.08) 42%,
       transparent 72%
     );
 }
 
-.orb-two {
-  width: 390px;
-  height: 390px;
-  top: 90px;
+.settings-orb-two {
+  width: 520px;
+  height: 520px;
   right: -90px;
+  top: 110px;
   background:
     radial-gradient(
-      circle at 50% 50%,
-      rgba(104, 145, 255, 0.17),
-      rgba(104, 145, 255, 0.03) 65%,
-      transparent 72%
+      circle,
+      rgba(77, 139, 255, 0.16) 0%,
+      rgba(77, 139, 255, 0.06) 45%,
+      transparent 74%
     );
   animation-delay: -4s;
 }
 
-.orb-three {
-  width: 300px;
-  height: 300px;
-  bottom: -100px;
-  left: 42%;
+.settings-orb-three {
+  width: 480px;
+  height: 480px;
+  left: 40%;
+  bottom: -230px;
   background:
     radial-gradient(
-      circle at 50% 50%,
-      rgba(154, 91, 255, 0.14),
-      transparent 70%
+      circle,
+      rgba(154, 91, 255, 0.14) 0%,
+      rgba(154, 91, 255, 0.05) 45%,
+      transparent 72%
     );
-  animation-delay: -7s;
+  animation-delay: -8s;
 }
 
 .settings-ring {
   position: absolute;
-  border: 1px solid rgba(113, 82, 255, 0.11);
+  border: 1px solid rgba(117, 103, 255, 0.13);
   border-radius: 50%;
-  transform: rotate(-15deg);
+  transform: rotate(-18deg);
   animation: ringFloat 16s ease-in-out infinite;
 }
 
-.ring-one {
+.settings-ring-one {
   width: 520px;
-  height: 250px;
-  right: -180px;
-  top: 30px;
-}
-
-.ring-two {
-  width: 430px;
   height: 220px;
-  left: -270px;
-  bottom: -40px;
-  animation-delay: -6s;
+  right: -170px;
+  top: 45px;
 }
 
-.settings-grid-pattern {
+.settings-ring-two {
+  width: 420px;
+  height: 180px;
+  left: -240px;
+  bottom: 30px;
+  animation-delay: -7s;
+}
+
+.settings-grid {
   position: absolute;
   inset: 0;
   opacity: 0.22;
   background-image:
     linear-gradient(
-      rgba(105, 83, 190, 0.035) 1px,
+      rgba(106, 93, 255, 0.035) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(105, 83, 190, 0.035) 1px,
+      rgba(106, 93, 255, 0.035) 1px,
       transparent 1px
     );
-  background-size: 48px 48px;
+  background-size: 52px 52px;
   mask-image: linear-gradient(
     to bottom,
-    black,
-    transparent 85%
+    rgba(0, 0, 0, 0.8),
+    transparent 90%
   );
-}
-
-.settings-glow {
-  position: absolute;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.18;
-  animation: glowPulse 7s ease-in-out infinite;
-}
-
-.glow-one {
-  top: 20%;
-  left: 35%;
-  background: #7954ff;
-}
-
-.glow-two {
-  right: 18%;
-  bottom: 10%;
-  background: #5891ff;
-  animation-delay: -3s;
 }
 
 @keyframes settingsFloat {
@@ -174,80 +774,81 @@
 @keyframes ringFloat {
   0%,
   100% {
-    transform: rotate(-15deg) translateY(0);
+    transform: rotate(-18deg) translate(0, 0);
   }
 
   50% {
-    transform: rotate(-9deg) translateY(-18px);
-  }
-}
-
-@keyframes glowPulse {
-  0%,
-  100% {
-    opacity: 0.14;
-    transform: scale(0.95);
-  }
-
-  50% {
-    opacity: 0.23;
-    transform: scale(1.08);
+    transform: rotate(-12deg) translate(-12px, -15px);
   }
 }
 
 /* =========================================================
-   MAIN CONTAINER
+   MAIN SHELL
    ========================================================= */
 
-.settings-container {
+.settings-main-shell {
   position: relative;
-  width: min(1180px, calc(100% - 54px));
+  z-index: 2;
+
+  /*
+    Sidebar width is handled by the existing Sidebar.
+    The main area remains flexible.
+  */
+  min-height: 100vh;
+}
+
+.settings-main {
+  position: relative;
+  min-height: calc(100vh - 70px);
+  padding: 42px 46px 70px;
+}
+
+.settings-container {
+  width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 34px 0 48px;
 }
 
 /* =========================================================
-   HEADER
+   PAGE HEADER
    ========================================================= */
 
 .settings-page-header {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .settings-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin-bottom: 8px;
-  color: #7d86a4;
+  gap: 10px;
+  margin-bottom: 9px;
+
+  color: #8c95ad;
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 2.1px;
-}
-
-.settings-breadcrumb span:first-child,
-.settings-breadcrumb span:last-child {
-  color: #727c9c;
-}
-
-.breadcrumb-arrow {
-  color: #7654ff;
-  font-size: 17px;
   line-height: 1;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.breadcrumb-separator {
+  color: #7457ff;
+  font-size: 15px;
+  line-height: 0;
 }
 
 .settings-page-header h1 {
   margin: 0;
-  color: #111a37;
+
+  color: #101a35;
   font-size: clamp(42px, 4vw, 58px);
-  line-height: 1;
+  line-height: 1.02;
   font-weight: 900;
-  letter-spacing: -2.7px;
+  letter-spacing: -2.8px;
 }
 
 .settings-page-header p {
   margin: 10px 0 0;
-  color: #8790aa;
+
+  color: #8b94a9;
   font-size: 14px;
   line-height: 1.6;
   font-weight: 500;
@@ -257,530 +858,572 @@
    MAIN SETTINGS CARD
    ========================================================= */
 
-.settings-main-card {
-  position: relative;
+.settings-card {
   display: grid;
-  grid-template-columns: 285px minmax(0, 1fr);
-  min-height: 620px;
+  grid-template-columns: 300px minmax(0, 1fr);
+
+  min-height: 560px;
+
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 19px;
-  background: rgba(255, 255, 255, 0.88);
+
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(251, 252, 255, 0.89)
+    );
+
   box-shadow:
-    0 25px 70px rgba(44, 50, 91, 0.12),
-    0 6px 22px rgba(83, 74, 154, 0.06);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+    0 30px 80px rgba(37, 43, 76, 0.10),
+    0 10px 30px rgba(84, 73, 175, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 /* =========================================================
-   LEFT SETTINGS SIDEBAR
+   SETTINGS NAVIGATION
    ========================================================= */
 
-.settings-sidebar {
-  position: relative;
+.settings-navigation {
   display: flex;
   flex-direction: column;
-  padding: 28px 18px 20px;
-  border-right: 1px solid rgba(110, 120, 165, 0.13);
+
+  padding: 30px 20px 20px;
+
   background:
     linear-gradient(
       180deg,
-      rgba(249, 250, 255, 0.94),
-      rgba(242, 244, 253, 0.82)
+      rgba(248, 249, 255, 0.96),
+      rgba(241, 244, 252, 0.88)
     );
+
+  border-right: 1px solid rgba(104, 111, 145, 0.10);
 }
 
-.settings-sidebar-title {
+.settings-navigation-title {
   padding: 0 13px;
-  margin-bottom: 13px;
-  color: #8b94ad;
+  margin-bottom: 17px;
+
+  color: #8d96ac;
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 2px;
 }
 
-.settings-navigation {
+.settings-navigation-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
-.settings-nav-item {
+.settings-navigation-item {
   position: relative;
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 15px;
+
+  display: flex;
   align-items: center;
   width: 100%;
-  min-height: 67px;
-  padding: 8px 11px;
+
+  padding: 13px 12px;
+
   border: 1px solid transparent;
-  border-radius: 13px;
+  border-radius: 12px;
+
   background: transparent;
-  color: #33405f;
-  text-align: left;
+  color: #5c6780;
+
   cursor: pointer;
+  text-align: left;
+
   transition:
-    transform 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
-.settings-nav-item:hover {
-  transform: translateX(2px);
+.settings-navigation-item:hover {
   background: rgba(255, 255, 255, 0.72);
-  border-color: rgba(117, 83, 255, 0.12);
+  border-color: rgba(116, 91, 255, 0.10);
+  transform: translateX(2px);
 }
 
-.settings-nav-item.active {
+.settings-navigation-item.active {
+  color: #6948ff;
+
   background:
     linear-gradient(
       135deg,
-      rgba(121, 80, 255, 0.13),
-      rgba(150, 120, 255, 0.06)
+      rgba(119, 87, 255, 0.12),
+      rgba(147, 114, 255, 0.055)
     );
-  border-color: rgba(122, 85, 255, 0.22);
+
+  border-color: rgba(119, 87, 255, 0.22);
+
   box-shadow:
-    0 8px 24px rgba(113, 77, 255, 0.08);
+    0 7px 20px rgba(111, 77, 255, 0.08);
 }
 
-.settings-nav-item.active::before {
+.settings-navigation-item.active::before {
   content: "";
+
   position: absolute;
   left: -1px;
   top: 10px;
   bottom: 10px;
+
   width: 3px;
-  border-radius: 0 5px 5px 0;
+
+  border-radius: 0 4px 4px 0;
+
   background: linear-gradient(
     180deg,
-    #7045ff,
-    #8d62ff
+    #8b63ff,
+    #6844ff
   );
 }
 
-.settings-nav-icon {
+.settings-navigation-icon {
+  flex: 0 0 auto;
+
   display: grid;
   place-items: center;
+
   width: 36px;
   height: 36px;
+
+  margin-right: 12px;
+
   border-radius: 10px;
-  background: #e9edf7;
-  color: #71809f;
-  font-size: 14px;
-  transition:
-    background 0.22s ease,
-    color 0.22s ease,
-    box-shadow 0.22s ease;
-}
 
-.settings-nav-item.active .settings-nav-icon {
-  background: linear-gradient(
-    135deg,
-    #6e40ff,
-    #895eff
-  );
-  color: white;
-  box-shadow:
-    0 8px 18px rgba(106, 61, 255, 0.26);
-}
+  background: rgba(226, 231, 243, 0.8);
 
-.settings-nav-text {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 4px;
-}
+  color: #7a86a1;
 
-.settings-nav-text strong {
-  overflow: hidden;
-  color: #25304e;
   font-size: 13px;
-  line-height: 1.1;
-  font-weight: 800;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  transition: 0.2s ease;
 }
 
-.settings-nav-text small {
-  overflow: hidden;
-  color: #9aa2b8;
-  font-size: 9px;
+.settings-navigation-item.active
+  .settings-navigation-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #7955ff,
+      #9b76ff
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 7px 16px rgba(113, 76, 255, 0.26);
+}
+
+.settings-navigation-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settings-navigation-content strong {
+  font-size: 12px;
   line-height: 1.2;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-weight: 800;
 }
 
-.settings-nav-item.active .settings-nav-text strong {
-  color: #7044f8;
-}
-
-.settings-nav-arrow {
-  color: #c2c8d8;
+.settings-navigation-content small {
+  color: #99a2b7;
   font-size: 9px;
-  transition: transform 0.2s ease;
+  line-height: 1.25;
+  font-weight: 500;
 }
 
-.settings-nav-item:hover .settings-nav-arrow,
-.settings-nav-item.active .settings-nav-arrow {
-  color: #7952ff;
+.settings-navigation-arrow {
+  margin-left: auto;
+
+  color: #9da6b9;
+  font-size: 8px;
+
+  transition: 0.2s ease;
+}
+
+.settings-navigation-item.active
+  .settings-navigation-arrow {
+  color: #7653ff;
   transform: translateX(2px);
 }
 
 /* =========================================================
-   SIDEBAR SECURITY
+   MINI SECURITY CARD
    ========================================================= */
 
-.settings-sidebar-security {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 13px;
+.settings-navigation-security {
+  display: flex;
   align-items: center;
-  gap: 9px;
+
   margin-top: auto;
-  padding: 12px 10px;
-  border: 1px solid rgba(112, 78, 255, 0.13);
+  padding: 12px;
+
+  border: 1px solid rgba(119, 87, 255, 0.12);
   border-radius: 12px;
+
   background:
     linear-gradient(
       135deg,
-      rgba(123, 82, 255, 0.08),
+      rgba(123, 92, 255, 0.08),
       rgba(255, 255, 255, 0.72)
     );
 }
 
-.sidebar-security-icon {
+.security-mini-icon {
   display: grid;
   place-items: center;
-  width: 33px;
-  height: 33px;
+
+  width: 31px;
+  height: 31px;
+
+  margin-right: 9px;
+
   border-radius: 9px;
-  background: #eeeaff;
-  color: #7049ff;
-  font-size: 13px;
+
+  background: rgba(121, 88, 255, 0.10);
+  color: #7654ff;
+
+  font-size: 11px;
 }
 
-.settings-sidebar-security strong {
-  display: block;
-  margin-bottom: 3px;
-  color: #39435e;
+.security-mini-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.security-mini-content strong {
+  color: #4d5871;
   font-size: 9px;
   font-weight: 800;
 }
 
-.settings-sidebar-security span {
-  display: block;
-  color: #9ba3b8;
+.security-mini-content span {
+  color: #9ca5b8;
   font-size: 7px;
-  line-height: 1.35;
 }
 
-.sidebar-security-check {
-  color: #19c77a;
-  font-size: 10px;
+.security-status-dot {
+  width: 7px;
+  height: 7px;
+
+  margin-left: auto;
+
+  border-radius: 50%;
+  background: #20c983;
+
+  box-shadow:
+    0 0 0 4px rgba(32, 201, 131, 0.10);
 }
 
 /* =========================================================
-   RIGHT CONTENT
+   SETTINGS CONTENT
    ========================================================= */
 
 .settings-content {
   min-width: 0;
-  background: rgba(255, 255, 255, 0.76);
+
+  padding: 34px 42px 38px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.84),
+      rgba(255, 255, 255, 0.58)
+    );
 }
 
-.settings-panel-content {
-  min-height: 100%;
-  padding: 34px 34px 32px;
+.settings-section {
+  width: 100%;
 }
 
-/* =========================================================
-   PANEL HEADING
-   ========================================================= */
-
-.settings-panel-heading {
+.settings-section-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: flex-start;
+
   gap: 24px;
-  padding-bottom: 25px;
-  border-bottom: 1px solid #edf0f7;
 }
 
-.settings-eyebrow {
+.section-eyebrow {
   display: block;
-  margin-bottom: 7px;
-  color: #7046ff;
+  margin-bottom: 9px;
+
+  color: #7351ff;
   font-size: 9px;
   font-weight: 900;
-  letter-spacing: 1.8px;
+  letter-spacing: 2px;
 }
 
-.settings-panel-heading h2 {
+.settings-section-header h2 {
   margin: 0;
-  color: #18213d;
-  font-size: clamp(28px, 2.8vw, 38px);
-  line-height: 1.08;
+
+  color: #1a2440;
+
+  font-size: 31px;
+  line-height: 1.1;
   font-weight: 900;
-  letter-spacing: -1.5px;
+
+  letter-spacing: -1.2px;
 }
 
-.settings-panel-heading p {
-  margin: 9px 0 0;
-  color: #8c95ad;
+.settings-section-header p {
+  margin: 8px 0 0;
+
+  color: #929bad;
   font-size: 12px;
-  line-height: 1.55;
+  line-height: 1.5;
   font-weight: 500;
 }
 
-.settings-heading-icon {
-  display: grid;
+.section-header-icon {
   flex: 0 0 auto;
+
+  display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #f0ebff;
-  color: #7146ff;
-  box-shadow:
-    0 10px 25px rgba(105, 68, 255, 0.12);
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(120, 87, 255, 0.12),
+      rgba(148, 112, 255, 0.05)
+    );
+
+  color: #7451ff;
   font-size: 15px;
+
+  box-shadow:
+    0 8px 22px rgba(113, 80, 255, 0.10);
+}
+
+.settings-divider {
+  height: 1px;
+
+  margin: 22px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(109, 119, 148, 0.13),
+      rgba(109, 119, 148, 0.04),
+      transparent
+    );
 }
 
 /* =========================================================
-   ACCOUNT PROFILE
+   ACCOUNT
    ========================================================= */
 
 .account-profile-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: 25px;
+
   min-height: 82px;
-  padding: 15px 17px;
-  border: 1px solid #e7eaf3;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.9);
+
+  padding: 14px 17px;
+
+  border: 1px solid rgba(114, 124, 150, 0.12);
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.82);
+
   box-shadow:
-    0 8px 22px rgba(50, 58, 94, 0.04);
+    0 8px 25px rgba(46, 53, 85, 0.045);
 }
 
-.account-profile-left {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  gap: 14px;
-}
-
-.account-large-avatar {
+.account-avatar {
   display: grid;
-  flex: 0 0 auto;
   place-items: center;
-  width: 54px;
-  height: 54px;
+
+  width: 52px;
+  height: 52px;
+
+  flex: 0 0 auto;
+
   border-radius: 50%;
+
   background:
     linear-gradient(
       135deg,
-      #6d3eff,
-      #8d5fff
+      #7650ff,
+      #8f68ff 60%,
+      #6d4bff
     );
-  color: white;
-  font-size: 18px;
+
+  color: #fff;
+
+  font-size: 15px;
   font-weight: 900;
+
   box-shadow:
-    0 10px 24px rgba(104, 57, 255, 0.25);
+    0 9px 22px rgba(111, 75, 255, 0.26);
 }
 
 .account-profile-details {
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  margin-left: 14px;
 }
 
-.account-profile-details h3 {
-  overflow: hidden;
-  margin: 0 0 5px;
-  color: #1a2340;
+.account-profile-details strong {
+  color: #1b2541;
   font-size: 14px;
-  font-weight: 850;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-weight: 900;
 }
 
 .account-profile-details span {
-  color: #9098ad;
+  color: #929bad;
   font-size: 10px;
   font-weight: 500;
 }
 
 .account-role-badge {
-  flex: 0 0 auto;
+  margin-left: auto;
+
   padding: 6px 10px;
+
   border-radius: 7px;
-  background: #f1edff;
-  color: #7046ff;
+
+  background: rgba(118, 82, 255, 0.09);
+  color: #7450ff;
+
   font-size: 8px;
   font-weight: 900;
+  text-transform: uppercase;
   letter-spacing: 0.8px;
 }
 
-/* =========================================================
-   ACCOUNT INFORMATION GRID
-   ========================================================= */
-
-.account-information-grid {
+.account-details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.account-info-card {
-  display: flex;
-  align-items: center;
-  min-height: 70px;
   gap: 12px;
-  padding: 11px 13px;
-  border: 1px solid #e8ebf3;
+
+  margin-top: 14px;
+}
+
+.account-detail-card {
+  min-height: 72px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 13px 15px;
+
+  border: 1px solid rgba(110, 120, 150, 0.12);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.84);
-  transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.account-info-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(113, 75, 255, 0.2);
-  box-shadow:
-    0 10px 25px rgba(52, 61, 102, 0.07);
-}
+.detail-label {
+  margin-bottom: 7px;
 
-.account-info-icon {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: #f0edff;
-  color: #7350ff;
-  font-size: 12px;
-}
-
-.account-info-icon.email {
-  background: #edf5ff;
-  color: #4e91ff;
-}
-
-.account-info-icon.security {
-  background: #eef0f7;
-  color: #61708f;
-}
-
-.account-info-icon.active {
-  background: #eafaf3;
-  color: #16b86f;
-}
-
-.account-info-card > div:last-child {
-  min-width: 0;
-}
-
-.account-info-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #9aa2b8;
+  color: #9aa3b7;
   font-size: 7px;
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 1.4px;
 }
 
-.account-info-card strong {
-  display: block;
-  overflow: hidden;
-  color: #29334f;
-  font-size: 10px;
+.account-detail-card strong {
+  color: #26304a;
+  font-size: 11px;
   font-weight: 800;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .status-active {
-  display: flex !important;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #16b96f !important;
+
+  color: #14b979 !important;
 }
 
-.status-dot {
-  display: inline-block;
+.status-active svg {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background: #19c879;
-  box-shadow:
-    0 0 0 3px rgba(25, 200, 121, 0.11);
+  color: #16c982;
 }
 
-/* =========================================================
-   PROTECTED WORKSPACE
-   ========================================================= */
-
-.protected-workspace-card {
+.protected-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 10px;
+
+  margin-top: 14px;
   padding: 12px 14px;
-  border: 1px solid rgba(117, 78, 255, 0.18);
-  border-radius: 12px;
+
+  border: 1px solid rgba(117, 86, 255, 0.14);
+  border-radius: 11px;
+
   background:
     linear-gradient(
       135deg,
-      rgba(119, 78, 255, 0.07),
-      rgba(255, 255, 255, 0.8)
+      rgba(121, 89, 255, 0.07),
+      rgba(255, 255, 255, 0.65)
     );
 }
 
 .protected-icon {
   display: grid;
-  flex: 0 0 auto;
   place-items: center;
-  width: 34px;
-  height: 34px;
+
+  width: 32px;
+  height: 32px;
+
+  margin-right: 10px;
+
   border-radius: 9px;
-  background: #eeeaff;
-  color: #6e46ff;
-  font-size: 13px;
+
+  background: rgba(119, 85, 255, 0.10);
+  color: #7450ff;
+
+  font-size: 11px;
 }
 
-.protected-content {
-  min-width: 0;
-  flex: 1;
+.protected-card > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.protected-content strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #29334f;
+.protected-card strong {
+  color: #3d4861;
   font-size: 10px;
-  font-weight: 850;
+  font-weight: 800;
 }
 
-.protected-content span {
-  display: block;
-  color: #929bb0;
+.protected-card span {
+  color: #9ca4b7;
   font-size: 8px;
-  line-height: 1.4;
 }
 
 .protected-check {
-  flex: 0 0 auto;
-  color: #17c477;
-  font-size: 11px;
+  margin-left: auto;
+
+  color: #17c985;
+  font-size: 12px;
 }
 
 /* =========================================================
@@ -788,88 +1431,116 @@
    ========================================================= */
 
 .appearance-options {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 25px;
 }
 
 .appearance-option {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 18px;
-  min-height: 155px;
-  padding: 19px;
-  border: 1px solid #e7eaf2;
-  border-radius: 14px;
-  background: white;
-  text-align: left;
+  align-items: center;
+
+  width: 100%;
+  min-height: 78px;
+
+  padding: 13px 15px;
+
+  border: 1px solid rgba(110, 120, 150, 0.12);
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.72);
+
   cursor: pointer;
+  text-align: left;
+
   transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .appearance-option:hover {
-  transform: translateY(-3px);
-  border-color: rgba(112, 73, 255, 0.25);
-  box-shadow:
-    0 15px 30px rgba(56, 63, 103, 0.08);
+  transform: translateY(-2px);
+  border-color: rgba(116, 81, 255, 0.22);
 }
 
 .appearance-option.selected {
-  border-color: rgba(111, 69, 255, 0.35);
-  box-shadow:
-    0 12px 28px rgba(103, 61, 255, 0.1);
+  border-color: rgba(116, 81, 255, 0.32);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(119, 87, 255, 0.08),
+      rgba(255, 255, 255, 0.82)
+    );
 }
 
-.appearance-option > svg {
-  position: absolute;
-  top: 17px;
-  right: 17px;
-  color: #18bf77;
+.appearance-option-icon {
+  display: grid;
+  place-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin-right: 13px;
+
+  border-radius: 10px;
+
   font-size: 13px;
 }
 
-.appearance-icon {
-  display: grid;
-  place-items: center;
-  width: 43px;
-  height: 43px;
-  border-radius: 12px;
-  font-size: 16px;
+.appearance-option-icon.light {
+  background: #fff5d8;
+  color: #e6a927;
 }
 
-.appearance-icon.light {
-  background: #fff5d9;
-  color: #e6a915;
+.appearance-option-icon.dark {
+  background: #e8e9ff;
+  color: #6256c9;
 }
 
-.appearance-icon.dark {
-  background: #e8eaff;
-  color: #5f65c8;
+.appearance-option-icon.system {
+  background: #e6f1ff;
+  color: #4285e8;
 }
 
-.appearance-icon.system {
-  background: #e8f1ff;
-  color: #4b8ff5;
+.appearance-option > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .appearance-option strong {
-  display: block;
-  margin-bottom: 5px;
-  color: #29334e;
-  font-size: 13px;
-  font-weight: 850;
+  color: #27314b;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .appearance-option span {
-  color: #929bb1;
+  color: #98a1b5;
   font-size: 9px;
-  line-height: 1.45;
+}
+
+.appearance-radio {
+  display: grid;
+  place-items: center;
+
+  width: 19px;
+  height: 19px;
+
+  margin-left: auto;
+
+  border: 2px solid #d5dae7;
+  border-radius: 50%;
+}
+
+.appearance-radio span {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #7451ff;
 }
 
 /* =========================================================
@@ -879,211 +1550,234 @@
 .notification-list {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  margin-top: 25px;
+  gap: 10px;
 }
 
 .notification-row {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 43px;
+  display: flex;
   align-items: center;
-  min-height: 68px;
-  gap: 12px;
-  padding: 10px 13px;
-  border: 1px solid #e6eaf2;
-  border-radius: 13px;
-  background: rgba(255, 255, 255, 0.88);
+
+  min-height: 76px;
+
+  padding: 12px 15px;
+
+  border: 1px solid rgba(110, 120, 150, 0.12);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.74);
+
   transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease;
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .notification-row:hover {
-  transform: translateX(2px);
-  border-color: rgba(113, 76, 255, 0.18);
-  box-shadow:
-    0 10px 25px rgba(54, 62, 102, 0.06);
+  transform: translateY(-1px);
+  border-color: rgba(116, 81, 255, 0.18);
 }
 
 .notification-icon {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  font-size: 13px;
+
+  width: 39px;
+  height: 39px;
+
+  margin-right: 12px;
+
+  border-radius: 11px;
+
+  font-size: 12px;
 }
 
 .notification-icon.purple {
   background: #f0eaff;
-  color: #754cff;
+  color: #7953ff;
 }
 
 .notification-icon.blue {
-  background: #eaf3ff;
-  color: #4b8ef5;
+  background: #e8f3ff;
+  color: #4c9bff;
+}
+
+.notification-icon.violet {
+  background: #f2eaff;
+  color: #8c57ff;
 }
 
 .notification-icon.green {
-  background: #e6faf1;
-  color: #15b873;
+  background: #e5f8f0;
+  color: #18b979;
 }
 
 .notification-icon.orange {
-  background: #fff4e3;
-  color: #e7a33a;
+  background: #fff1dd;
+  color: #e7a13c;
 }
 
-.notification-copy {
-  min-width: 0;
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.notification-copy strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #2a344f;
-  font-size: 10px;
-  font-weight: 850;
+.notification-content strong {
+  color: #27314b;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.notification-copy span {
-  display: block;
-  overflow: hidden;
-  color: #949cb1;
+.notification-content span {
+  color: #99a2b6;
   font-size: 8px;
-  line-height: 1.4;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.notification-toggle {
+.toggle-switch {
   position: relative;
-  width: 42px;
-  height: 23px;
+
+  width: 39px;
+  height: 22px;
+
+  margin-left: auto;
+
   padding: 0;
+
   border: 0;
   border-radius: 999px;
-  background: #dce2ee;
+
+  background: #d8deeb;
+
   cursor: pointer;
-  transition: background 0.2s ease;
+
+  transition: 0.25s ease;
 }
 
-.notification-toggle span {
+.toggle-switch span {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 17px;
-  height: 17px;
+
+  width: 16px;
+  height: 16px;
+
   border-radius: 50%;
-  background: white;
+
+  background: #fff;
+
   box-shadow:
-    0 2px 6px rgba(28, 35, 61, 0.2);
-  transition: transform 0.2s ease;
+    0 2px 6px rgba(30, 36, 60, 0.18);
+
+  transition: 0.25s ease;
 }
 
-.notification-toggle.enabled {
-  background: linear-gradient(
-    135deg,
-    #7547ff,
-    #895eff
-  );
+.toggle-switch.on {
+  background:
+    linear-gradient(
+      135deg,
+      #7952ff,
+      #8b64ff
+    );
 }
 
-.notification-toggle.enabled span {
-  transform: translateX(19px);
+.toggle-switch.on span {
+  transform: translateX(17px);
 }
 
 /* =========================================================
    SECURITY
    ========================================================= */
 
-.security-list {
+.security-options {
   display: flex;
   flex-direction: column;
-  gap: 11px;
-  margin-top: 25px;
+  gap: 12px;
 }
 
-.security-card {
-  display: grid;
-  grid-template-columns: 43px minmax(0, 1fr) auto;
+.security-option {
+  display: flex;
   align-items: center;
-  gap: 13px;
-  min-height: 82px;
-  padding: 13px 15px;
-  border: 1px solid #e7eaf2;
+
+  min-height: 83px;
+
+  padding: 14px;
+
+  border: 1px solid rgba(110, 120, 150, 0.12);
   border-radius: 13px;
-  background: white;
+
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.security-card-icon {
+.security-option-icon {
   display: grid;
   place-items: center;
-  width: 37px;
-  height: 37px;
+
+  width: 40px;
+  height: 40px;
+
+  margin-right: 13px;
+
   border-radius: 10px;
+
   background: #eeeaff;
-  color: #7047ff;
+  color: #7451ff;
+
   font-size: 13px;
 }
 
-.security-card-icon.green {
-  background: #e8faf2;
-  color: #14b873;
-}
-
-.security-card-icon.blue {
-  background: #eaf3ff;
-  color: #4c8ef5;
-}
-
-.security-card-copy strong {
-  display: block;
-  margin-bottom: 5px;
-  color: #29334e;
-  font-size: 11px;
-  font-weight: 850;
-}
-
-.security-card-copy span {
-  display: block;
-  color: #949cb1;
-  font-size: 8px;
-  line-height: 1.5;
-}
-
-.settings-action-button {
-  min-width: 68px;
-  padding: 8px 11px;
-  border: 0;
-  border-radius: 8px;
-  background: #f0ebff;
-  color: #7046ff;
-  font-size: 8px;
-  font-weight: 850;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.settings-action-button:hover {
-  transform: translateY(-1px);
-  background: #e6deff;
-}
-
-.security-status {
+.security-option > div:nth-child(2) {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.security-option strong {
+  color: #27314b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.security-option span {
+  color: #98a1b5;
+  font-size: 9px;
+}
+
+.security-option button {
+  margin-left: auto;
+
+  padding: 8px 14px;
+
+  border: 1px solid rgba(112, 84, 255, 0.20);
+  border-radius: 8px;
+
+  background: rgba(117, 82, 255, 0.07);
+  color: #6f4cff;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.secure-badge {
+  display: inline-flex !important;
   align-items: center;
   gap: 5px;
-  color: #16b873;
-  font-size: 8px;
-  font-weight: 850;
+
+  margin-left: auto;
+
+  padding: 7px 10px;
+
+  border-radius: 8px;
+
+  background: rgba(25, 201, 130, 0.09);
+  color: #13b878 !important;
+
+  font-size: 8px !important;
+  font-weight: 800;
 }
 
-.security-status svg {
-  font-size: 10px;
+.secure-badge svg {
+  font-size: 8px;
 }
 
 /* =========================================================
@@ -1093,119 +1787,46 @@
 .application-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 11px;
-  margin-top: 25px;
+  gap: 13px;
 }
 
 .application-card {
-  display: grid;
-  grid-template-columns: 43px minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  column-gap: 12px;
-  align-items: center;
-  padding: 15px;
-  min-height: 78px;
-  border: 1px solid #e7eaf2;
-  border-radius: 13px;
-  background: white;
-}
+  min-height: 90px;
 
-.application-icon {
-  display: grid;
-  grid-row: span 2;
-  place-items: center;
-  width: 37px;
-  height: 37px;
-  border-radius: 10px;
-  background: #eeeaff;
-  color: #7047ff;
-  font-size: 13px;
-}
-
-.application-icon.blue {
-  background: #eaf3ff;
-  color: #4c8ef5;
-}
-
-.application-icon.green {
-  background: #e8faf2;
-  color: #14b873;
-}
-
-.application-icon.orange {
-  background: #fff4e5;
-  color: #e7a43b;
-}
-
-.application-card > span {
-  color: #9aa2b8;
-  font-size: 7px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.application-card > strong {
-  color: #29334e;
-  font-size: 11px;
-  font-weight: 850;
-}
-
-/* =========================================================
-   INFORMATION BANNER
-   ========================================================= */
-
-.settings-information-banner {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 13px;
-  padding: 13px 14px;
-  border: 1px solid rgba(113, 77, 255, 0.14);
-  border-radius: 12px;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(116, 78, 255, 0.07),
-      rgba(255, 255, 255, 0.85)
-    );
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 15px;
+
+  border: 1px solid rgba(110, 120, 150, 0.12);
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.banner-icon {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 35px;
-  height: 35px;
-  border-radius: 9px;
-  background: #eeeaff;
-  color: #7148ff;
-  font-size: 12px;
-}
+.application-card span {
+  margin-bottom: 8px;
 
-.settings-information-banner > div:last-child {
-  min-width: 0;
-}
+  color: #9ba4b7;
 
-.settings-information-banner strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #29334e;
-  font-size: 10px;
-  font-weight: 850;
-}
-
-.settings-information-banner span {
-  display: block;
-  color: #929bb1;
   font-size: 8px;
-  line-height: 1.4;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.application-card strong {
+  color: #26304a;
+
+  font-size: 13px;
+  font-weight: 800;
 }
 
 /* =========================================================
-   MOBILE ACTIVE SECTION
+   MOBILE HEADING
    ========================================================= */
 
-.settings-mobile-section {
+.settings-content-mobile-heading {
   display: none;
 }
 
@@ -1216,148 +1837,120 @@
 .settings-footer {
   display: flex;
   align-items: center;
-  gap: 15px;
-  min-height: 76px;
-  margin-top: 14px;
-  padding: 13px 17px;
-  border: 1px solid rgba(255, 255, 255, 0.92);
+
+  min-height: 70px;
+
+  margin-top: 15px;
+  padding: 12px 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: 15px;
-  background: rgba(255, 255, 255, 0.88);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(248, 249, 255, 0.82)
+    );
+
   box-shadow:
-    0 14px 35px rgba(48, 57, 96, 0.08);
+    0 15px 38px rgba(44, 52, 84, 0.065);
+
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .settings-footer-icon {
   display: grid;
-  flex: 0 0 auto;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
-  background: #eeeaff;
-  color: #7048ff;
-  font-size: 15px;
-}
 
-.settings-footer-copy {
-  min-width: 0;
-  flex: 1;
-}
+  width: 37px;
+  height: 37px;
 
-.settings-footer-copy strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #29334e;
+  margin-right: 12px;
+
+  border-radius: 10px;
+
+  background: rgba(116, 83, 255, 0.09);
+  color: #7652ff;
+
   font-size: 12px;
-  font-weight: 850;
 }
 
-.settings-footer-copy span {
-  display: block;
-  color: #949cb1;
-  font-size: 9px;
-  line-height: 1.4;
+.settings-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-footer-content strong {
+  color: #374159;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.settings-footer-content span {
+  color: #9ba4b7;
+
+  font-size: 8px;
+  font-weight: 500;
 }
 
 .settings-footer-status {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 5px;
+
+  margin-left: auto;
+
   padding: 7px 11px;
+
   border-radius: 8px;
-  background: #e9faf2;
-  color: #12a967;
+
+  background: rgba(20, 196, 126, 0.08);
+  color: #13b777;
+
   font-size: 8px;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .settings-footer-status svg {
-  font-size: 10px;
+  font-size: 8px;
 }
 
 /* =========================================================
    LARGE DESKTOP
    ========================================================= */
 
-@media (min-width: 1450px) {
+@media (min-width: 1500px) {
+  .settings-main {
+    padding: 48px 60px 80px;
+  }
+
   .settings-container {
-    width: min(1280px, calc(100% - 70px));
-    padding-top: 42px;
+    width: min(1240px, 100%);
   }
 
-  .settings-main-card {
-    grid-template-columns: 310px minmax(0, 1fr);
-    min-height: 680px;
+  .settings-card {
+    grid-template-columns: 315px minmax(0, 1fr);
+    min-height: 590px;
   }
 
-  .settings-sidebar {
-    padding: 32px 21px 23px;
+  .settings-content {
+    padding: 40px 48px 44px;
   }
 
-  .settings-panel-content {
-    padding: 40px 40px 38px;
+  .settings-section-header h2 {
+    font-size: 34px;
   }
 
   .settings-page-header h1 {
-    font-size: 64px;
+    font-size: 62px;
   }
 
   .settings-page-header p {
     font-size: 15px;
-  }
-
-  .settings-panel-heading h2 {
-    font-size: 42px;
-  }
-
-  .settings-panel-heading p {
-    font-size: 13px;
-  }
-
-  .account-profile-card {
-    min-height: 92px;
-  }
-
-  .account-large-avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 20px;
-  }
-
-  .account-profile-details h3 {
-    font-size: 16px;
-  }
-
-  .account-profile-details span {
-    font-size: 11px;
-  }
-
-  .account-info-card {
-    min-height: 80px;
-  }
-
-  .account-info-card strong {
-    font-size: 11px;
-  }
-
-  .settings-footer {
-    min-height: 86px;
-    padding: 15px 19px;
-  }
-
-  .settings-footer-icon {
-    width: 47px;
-    height: 47px;
-  }
-
-  .settings-footer-copy strong {
-    font-size: 13px;
-  }
-
-  .settings-footer-copy span {
-    font-size: 10px;
   }
 }
 
@@ -1365,30 +1958,30 @@
    TABLET
    ========================================================= */
 
-@media (max-width: 1000px) {
-  .settings-container {
-    width: min(94%, 850px);
-    padding-top: 28px;
+@media (max-width: 1050px) {
+  .settings-main {
+    padding: 32px 28px 60px;
   }
 
-  .settings-main-card {
+  .settings-container {
+    width: 100%;
+  }
+
+  .settings-card {
     grid-template-columns: 245px minmax(0, 1fr);
   }
 
-  .settings-panel-content {
-    padding: 27px 24px;
+  .settings-navigation {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
-  .settings-panel-heading h2 {
-    font-size: 30px;
+  .settings-content {
+    padding: 28px;
   }
 
-  .account-information-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .appearance-options {
-    grid-template-columns: 1fr;
+  .settings-section-header h2 {
+    font-size: 27px;
   }
 }
 
@@ -1397,172 +1990,90 @@
    ========================================================= */
 
 @media (max-width: 760px) {
-  .settings-page {
-    overflow: visible;
-  }
-
-  .settings-container {
-    width: calc(100% - 26px);
-    padding: 24px 0 35px;
+  .settings-main {
+    padding: 24px 15px 45px;
   }
 
   .settings-page-header {
-    margin-bottom: 18px;
-  }
-
-  .settings-breadcrumb {
-    font-size: 8px;
-    letter-spacing: 1.5px;
+    margin-bottom: 20px;
   }
 
   .settings-page-header h1 {
-    font-size: 38px;
-    letter-spacing: -1.8px;
+    font-size: 40px;
+    letter-spacing: -2px;
   }
 
   .settings-page-header p {
-    font-size: 11px;
+    font-size: 12px;
   }
 
-  .settings-main-card {
+  .settings-card {
     display: block;
     min-height: auto;
-    border-radius: 16px;
-  }
-
-  .settings-sidebar {
-    border-right: 0;
-    border-bottom: 1px solid rgba(110, 120, 165, 0.13);
-    padding: 14px;
-  }
-
-  .settings-sidebar-title {
-    display: none;
+    border-radius: 17px;
   }
 
   .settings-navigation {
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(104, 111, 145, 0.10);
+  }
+
+  .settings-navigation-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
   }
 
-  .settings-nav-item {
-    min-height: 58px;
-    grid-template-columns: 35px minmax(0, 1fr);
-    padding: 7px 8px;
-  }
-
-  .settings-nav-icon {
-    width: 31px;
-    height: 31px;
-    font-size: 11px;
-  }
-
-  .settings-nav-text strong {
-    font-size: 10px;
-  }
-
-  .settings-nav-text small {
-    font-size: 7px;
-  }
-
-  .settings-nav-arrow {
+  .settings-navigation-security {
     display: none;
   }
 
-  .settings-sidebar-security {
+  .settings-navigation-item {
+    padding: 10px;
+  }
+
+  .settings-navigation-content small,
+  .settings-navigation-arrow {
     display: none;
+  }
+
+  .settings-navigation-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
   }
 
   .settings-content {
-    background: transparent;
+    padding: 24px 18px 26px;
   }
 
-  .settings-mobile-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 16px;
-    border-bottom: 1px solid #edf0f7;
-    background: rgba(250, 251, 255, 0.8);
-  }
+  .settings-content-mobile-heading {
+    display: block;
 
-  .settings-mobile-section span {
-    color: #a0a7ba;
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: 1px;
-  }
+    margin-bottom: 14px;
 
-  .settings-mobile-section strong {
-    color: #7047ff;
+    color: #8e97aa;
     font-size: 9px;
-    font-weight: 850;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
   }
 
-  .settings-panel-content {
-    padding: 23px 17px;
+  .settings-section-header h2 {
+    font-size: 25px;
   }
 
-  .settings-panel-heading {
-    gap: 12px;
-    padding-bottom: 19px;
-  }
-
-  .settings-eyebrow {
-    font-size: 8px;
-  }
-
-  .settings-panel-heading h2 {
-    font-size: 26px;
-    letter-spacing: -1px;
-  }
-
-  .settings-panel-heading p {
+  .settings-section-header p {
     font-size: 10px;
   }
 
-  .settings-heading-icon {
+  .section-header-icon {
     width: 38px;
     height: 38px;
-    border-radius: 10px;
   }
 
-  .account-profile-card {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 11px;
-  }
-
-  .account-role-badge {
-    margin-left: 68px;
-    margin-top: -7px;
-  }
-
-  .account-information-grid {
+  .account-details-grid {
     grid-template-columns: 1fr;
-  }
-
-  .appearance-options {
-    grid-template-columns: 1fr;
-  }
-
-  .notification-row {
-    grid-template-columns: 36px minmax(0, 1fr) 40px;
-  }
-
-  .notification-copy span {
-    white-space: normal;
-  }
-
-  .security-card {
-    grid-template-columns: 38px minmax(0, 1fr);
-  }
-
-  .settings-action-button,
-  .security-status {
-    grid-column: 2;
-    justify-self: start;
   }
 
   .application-grid {
@@ -1571,68 +2082,63 @@
 
   .settings-footer {
     align-items: flex-start;
-    flex-wrap: wrap;
     min-height: auto;
     padding: 14px;
   }
 
-  .settings-footer-copy {
-    flex-basis: calc(100% - 62px);
+  .settings-footer-status {
+    display: none;
   }
 
-  .settings-footer-status {
-    margin-left: 57px;
+  .settings-orb-one {
+    left: -130px;
+  }
+
+  .settings-orb-two {
+    right: -240px;
+  }
+}
+
+@media (max-width: 500px) {
+  .settings-navigation-list {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-navigation-content small {
+    display: block;
+  }
+
+  .settings-navigation-arrow {
+    display: block;
+  }
+
+  .account-profile-card {
+    align-items: flex-start;
+  }
+
+  .account-role-badge {
+    margin-top: 3px;
+  }
+
+  .notification-row {
+    padding: 10px;
+  }
+
+  .notification-content span {
+    line-height: 1.4;
   }
 }
 
 /* =========================================================
-   SMALL MOBILE
+   ACCESSIBILITY
    ========================================================= */
 
-@media (max-width: 450px) {
-  .settings-container {
-    width: calc(100% - 18px);
-  }
-
-  .settings-navigation {
-    grid-template-columns: 1fr;
-  }
-
-  .settings-nav-item {
-    min-height: 55px;
-  }
-
-  .settings-page-header h1 {
-    font-size: 34px;
-  }
-
-  .settings-panel-heading h2 {
-    font-size: 23px;
-  }
-
-  .account-profile-card {
-    padding: 13px;
-  }
-
-  .account-profile-left {
-    width: 100%;
-  }
-
-  .protected-workspace-card {
-    align-items: flex-start;
-  }
-
-  .protected-check {
-    margin-top: 4px;
-  }
-
-  .settings-footer-copy strong {
-    font-size: 10px;
-  }
-
-  .settings-footer-copy span {
-    font-size: 8px;
-  }
+.settings-navigation-item:focus-visible,
+.appearance-option:focus-visible,
+.toggle-switch:focus-visible,
+.security-option button:focus-visible {
+  outline: 3px solid rgba(116, 81, 255, 0.22);
+  outline-offset: 2px;
 }
 
 /* =========================================================
@@ -1641,16 +2147,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .settings-orb,
-  .settings-ring,
-  .settings-glow {
+  .settings-ring {
     animation: none;
   }
 
-  .settings-nav-item,
-  .account-info-card,
-  .notification-row,
+  .settings-navigation-item,
   .appearance-option,
-  .settings-action-button {
+  .notification-row {
     transition: none;
   }
 }
