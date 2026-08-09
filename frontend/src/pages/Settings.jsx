@@ -1,632 +1,1245 @@
-import { useMemo, useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-import { useAuth } from "../context/AuthContext";
+/* =========================================================
+   TASKFLOW SETTINGS
+   Premium settings page
+   ========================================================= */
 
-import {
-  FaUser,
-  FaPalette,
-  FaBell,
-  FaLock,
-  FaInfoCircle,
-  FaShieldAlt,
-  FaEnvelope,
-  FaCheckCircle,
-  FaDesktop,
-  FaMoon,
-  FaSun,
-  FaCog,
-  FaChevronRight,
-  FaCircle,
-} from "react-icons/fa";
+.settings-page {
+  --settings-purple: #7657ff;
+  --settings-purple-dark: #6242ee;
+  --settings-purple-soft: #eeeaff;
 
-import "../styles/Settings.css";
-
-const SETTINGS_ITEMS = [
-  {
-    id: "account",
-    label: "Account",
-    description: "Your profile information",
-    icon: FaUser,
-  },
-  {
-    id: "appearance",
-    label: "Appearance",
-    description: "Customize your workspace",
-    icon: FaPalette,
-  },
-  {
-    id: "notifications",
-    label: "Notifications",
-    description: "Manage your alerts",
-    icon: FaBell,
-  },
-  {
-    id: "security",
-    label: "Security",
-    description: "Password and security",
-    icon: FaLock,
-  },
-  {
-    id: "application",
-    label: "Application",
-    description: "TaskFlow information",
-    icon: FaInfoCircle,
-  },
-];
-
-function getInitials(name = "TaskFlow User") {
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((word) => word.charAt(0).toUpperCase())
-    .join("");
+  position: relative;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(123, 92, 255, 0.13),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(91, 144, 255, 0.11),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(137, 92, 255, 0.10),
+      transparent 32%
+    ),
+    #f8f9ff;
+  color: #17213d;
 }
 
-function SettingNavigation({ activeTab, setActiveTab }) {
-  return (
-    <aside className="settings-navigation">
-      <div className="settings-navigation-title">
-        <span>SETTINGS</span>
-      </div>
+/* =========================================================
+   ANIMATED BACKGROUND
+   ========================================================= */
 
-      <div className="settings-navigation-list">
-        {SETTINGS_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const active = activeTab === item.id;
+.settings-background {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={`settings-navigation-item ${
-                active ? "active" : ""
-              }`}
-              onClick={() => setActiveTab(item.id)}
-            >
-              <span className="settings-navigation-icon">
-                <Icon />
-              </span>
+.settings-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(3px);
+  opacity: 0.8;
+  animation: settingsFloat 13s ease-in-out infinite;
+}
 
-              <span className="settings-navigation-content">
-                <strong>{item.label}</strong>
-                <small>{item.description}</small>
-              </span>
-
-              <FaChevronRight className="settings-navigation-arrow" />
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="settings-navigation-security">
-        <div className="security-mini-icon">
-          <FaShieldAlt />
-        </div>
-
-        <div className="security-mini-content">
-          <strong>Protected workspace</strong>
-          <span>Your TaskFlow account is secure.</span>
-        </div>
-
-        <span className="security-status-dot" />
-      </div>
-    </aside>
+.settings-orb-one {
+  width: 260px;
+  height: 260px;
+  left: -90px;
+  top: 40px;
+  background: radial-gradient(
+    circle,
+    rgba(126, 87, 255, 0.23) 0%,
+    rgba(126, 87, 255, 0.08) 48%,
+    transparent 72%
   );
 }
 
-function AccountSection({ user }) {
-  const name =
-    user?.name ||
-    user?.username ||
-    user?.fullName ||
-    "Souradipta Patra";
+.settings-orb-two {
+  width: 350px;
+  height: 350px;
+  right: -120px;
+  top: 60px;
+  background: radial-gradient(
+    circle,
+    rgba(73, 130, 255, 0.18) 0%,
+    rgba(73, 130, 255, 0.06) 48%,
+    transparent 72%
+  );
+  animation-delay: -4s;
+}
 
-  const email =
-    user?.email ||
-    user?.emailAddress ||
-    "soura@gmail.com";
+.settings-orb-three {
+  width: 300px;
+  height: 300px;
+  left: 45%;
+  bottom: -150px;
+  background: radial-gradient(
+    circle,
+    rgba(133, 83, 255, 0.14) 0%,
+    rgba(133, 83, 255, 0.05) 50%,
+    transparent 72%
+  );
+  animation-delay: -8s;
+}
 
-  const role = user?.role || "Admin";
-  const initials = getInitials(name);
+.settings-ring {
+  position: absolute;
+  border: 1px solid rgba(116, 91, 255, 0.12);
+  border-radius: 50%;
+  animation: settingsRotate 28s linear infinite;
+}
 
-  return (
-    <div className="settings-section">
-      <div className="settings-section-header">
-        <div>
-          <span className="section-eyebrow">ACCOUNT</span>
+.settings-ring-one {
+  width: 330px;
+  height: 330px;
+  right: -120px;
+  top: -70px;
+}
 
-          <h2>Account information</h2>
+.settings-ring-two {
+  width: 250px;
+  height: 250px;
+  left: -120px;
+  bottom: -90px;
+  animation-direction: reverse;
+  animation-duration: 34s;
+}
 
-          <p>
-            View the information associated with your TaskFlow account.
-          </p>
-        </div>
-
-        <div className="section-header-icon">
-          <FaUser />
-        </div>
-      </div>
-
-      <div className="settings-divider" />
-
-      <div className="account-profile-card">
-        <div className="account-avatar">{initials}</div>
-
-        <div className="account-profile-details">
-          <strong>{name}</strong>
-          <span>{email}</span>
-        </div>
-
-        <span className="account-role-badge">
-          {role}
-        </span>
-      </div>
-
-      <div className="account-details-grid">
-        <div className="account-detail-card">
-          <span className="detail-label">FULL NAME</span>
-          <strong>{name}</strong>
-        </div>
-
-        <div className="account-detail-card">
-          <span className="detail-label">EMAIL ADDRESS</span>
-          <strong>{email}</strong>
-        </div>
-
-        <div className="account-detail-card">
-          <span className="detail-label">ROLE</span>
-          <strong>{role}</strong>
-        </div>
-
-        <div className="account-detail-card">
-          <span className="detail-label">ACCOUNT STATUS</span>
-
-          <strong className="status-active">
-            <FaCircle />
-            Active
-          </strong>
-        </div>
-      </div>
-
-      <div className="protected-card">
-        <div className="protected-icon">
-          <FaShieldAlt />
-        </div>
-
-        <div>
-          <strong>Protected workspace</strong>
-
-          <span>
-            Your account information is securely associated with
-            your TaskFlow workspace.
-          </span>
-        </div>
-
-        <FaCheckCircle className="protected-check" />
-      </div>
-    </div>
+.settings-grid-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  background-image:
+    linear-gradient(
+      rgba(109, 91, 220, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(109, 91, 220, 0.07) 1px,
+      transparent 1px
+    );
+  background-size: 46px 46px;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    transparent 75%
   );
 }
 
-function AppearanceSection() {
-  const [theme, setTheme] = useState("system");
+@keyframes settingsFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 
-  return (
-    <div className="settings-section">
-      <div className="settings-section-header">
-        <div>
-          <span className="section-eyebrow">APPEARANCE</span>
+  50% {
+    transform: translate3d(20px, -18px, 0) scale(1.05);
+  }
+}
 
-          <h2>Workspace appearance</h2>
+@keyframes settingsRotate {
+  from {
+    transform: rotate(0deg);
+  }
 
-          <p>
-            Customize how your TaskFlow workspace looks.
-          </p>
-        </div>
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-        <div className="section-header-icon">
-          <FaPalette />
-        </div>
-      </div>
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-      <div className="settings-divider" />
+.settings-main {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 42px 0 60px;
+}
 
-      <div className="appearance-options">
-        <button
-          type="button"
-          className={`appearance-option ${
-            theme === "light" ? "selected" : ""
-          }`}
-          onClick={() => setTheme("light")}
-        >
-          <div className="appearance-option-icon light">
-            <FaSun />
-          </div>
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-          <div>
-            <strong>Light mode</strong>
-            <span>Use a bright workspace interface.</span>
-          </div>
+.settings-page-header {
+  margin-bottom: 26px;
+}
 
-          <span className="appearance-radio">
-            {theme === "light" && <span />}
-          </span>
-        </button>
+.settings-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+  color: #7e8aa7;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
 
-        <button
-          type="button"
-          className={`appearance-option ${
-            theme === "dark" ? "selected" : ""
-          }`}
-          onClick={() => setTheme("dark")}
-        >
-          <div className="appearance-option-icon dark">
-            <FaMoon />
-          </div>
+.settings-breadcrumb svg {
+  width: 8px;
+  height: 8px;
+  color: #a69aff;
+}
 
-          <div>
-            <strong>Dark mode</strong>
-            <span>Use a darker workspace interface.</span>
-          </div>
+.settings-page-header h1 {
+  margin: 0;
+  color: #17213d;
+  font-size: clamp(38px, 4vw, 54px);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -2.5px;
+}
 
-          <span className="appearance-radio">
-            {theme === "dark" && <span />}
-          </span>
-        </button>
+.settings-page-header p {
+  margin: 10px 0 0;
+  color: #8290ac;
+  font-size: 14px;
+  font-weight: 500;
+}
 
-        <button
-          type="button"
-          className={`appearance-option ${
-            theme === "system" ? "selected" : ""
-          }`}
-          onClick={() => setTheme("system")}
-        >
-          <div className="appearance-option-icon system">
-            <FaDesktop />
-          </div>
+/* =========================================================
+   MAIN SETTINGS PANEL
+   ========================================================= */
 
-          <div>
-            <strong>System default</strong>
-            <span>Follow your device appearance.</span>
-          </div>
+.settings-panel {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  min-height: 570px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    0 28px 80px rgba(49, 54, 100, 0.12),
+    0 8px 30px rgba(77, 66, 150, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
 
-          <span className="appearance-radio">
-            {theme === "system" && <span />}
-          </span>
-        </button>
-      </div>
-    </div>
+/* =========================================================
+   LEFT SETTINGS NAVIGATION
+   ========================================================= */
+
+.settings-panel-sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 16px 18px;
+  border-right: 1px solid #edf0f8;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(247, 248, 253, 0.96),
+      rgba(242, 244, 251, 0.76)
+    );
+}
+
+.settings-panel-label {
+  padding: 0 12px 16px;
+  color: #8994ad;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+}
+
+.settings-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.settings-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 9px 10px;
+  gap: 11px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: transparent;
+  color: #26314b;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.settings-nav-item:hover {
+  transform: translateX(2px);
+  border-color: #e5ddff;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.settings-nav-item.is-active {
+  border-color: #dcd1ff;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(239, 234, 255, 0.98),
+      rgba(249, 247, 255, 0.92)
+    );
+  box-shadow:
+    0 10px 24px rgba(111, 77, 238, 0.10);
+}
+
+.settings-nav-item.is-active::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 11px;
+  bottom: 11px;
+  width: 3px;
+  border-radius: 0 5px 5px 0;
+  background: linear-gradient(
+    180deg,
+    #8b69ff,
+    #6541ef
   );
 }
 
-function NotificationsSection() {
-  const [notifications, setNotifications] = useState({
-    assignments: true,
-    taskUpdates: true,
-    projectUpdates: true,
-    email: true,
-    desktop: false,
-  });
+.settings-nav-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #e8ebf3;
+  color: #7b88a4;
+  transition: all 0.22s ease;
+}
 
-  const toggleNotification = (key) => {
-    setNotifications((current) => ({
-      ...current,
-      [key]: !current[key],
-    }));
-  };
+.settings-nav-icon svg {
+  width: 15px;
+  height: 15px;
+}
 
-  const items = [
-    {
-      key: "assignments",
-      title: "Task assignments",
-      description: "Notify me when a task is assigned to me.",
-      icon: FaUser,
-      color: "purple",
-    },
-    {
-      key: "taskUpdates",
-      title: "Task updates",
-      description: "Notify me when tasks assigned to me are updated.",
-      icon: FaCog,
-      color: "blue",
-    },
-    {
-      key: "projectUpdates",
-      title: "Project updates",
-      description: "Notify me about important project activity.",
-      icon: FaPalette,
-      color: "violet",
-    },
-    {
-      key: "email",
-      title: "Email notifications",
-      description: "Receive important TaskFlow updates by email.",
-      icon: FaEnvelope,
-      color: "green",
-    },
-    {
-      key: "desktop",
-      title: "Desktop notifications",
-      description: "Show notifications directly on your device.",
-      icon: FaDesktop,
-      color: "orange",
-    },
-  ];
+.settings-nav-item.is-active .settings-nav-icon {
+  background: linear-gradient(
+    135deg,
+    #8362ff,
+    #6c47f4
+  );
+  color: white;
+  box-shadow: 0 8px 18px rgba(112, 73, 245, 0.25);
+}
 
-  return (
-    <div className="settings-section">
-      <div className="settings-section-header">
-        <div>
-          <span className="section-eyebrow">NOTIFICATIONS</span>
+.settings-nav-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
 
-          <h2>Notification preferences</h2>
+.settings-nav-copy strong {
+  color: #25304b;
+  font-size: 12px;
+  font-weight: 800;
+}
 
-          <p>
-            Decide which events should notify you.
-          </p>
-        </div>
+.settings-nav-copy small {
+  margin-top: 3px;
+  overflow: hidden;
+  color: #919bb0;
+  font-size: 9px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-        <div className="section-header-icon">
-          <FaBell />
-        </div>
-      </div>
+.settings-nav-item.is-active .settings-nav-copy strong {
+  color: #6743ed;
+}
 
-      <div className="settings-divider" />
+.settings-nav-arrow {
+  width: 8px;
+  height: 8px;
+  color: #a5aec0;
+}
 
-      <div className="notification-list">
-        {items.map((item) => {
-          const Icon = item.icon;
-          const enabled = notifications[item.key];
+.settings-nav-item.is-active .settings-nav-arrow {
+  color: #744ff2;
+}
 
-          return (
-            <div
-              className={`notification-row ${
-                enabled ? "enabled" : ""
-              }`}
-              key={item.key}
-            >
-              <div className={`notification-icon ${item.color}`}>
-                <Icon />
-              </div>
+/* =========================================================
+   SIDEBAR SECURITY
+   ========================================================= */
 
-              <div className="notification-content">
-                <strong>{item.title}</strong>
-                <span>{item.description}</span>
-              </div>
-
-              <button
-                type="button"
-                className={`toggle-switch ${
-                  enabled ? "on" : ""
-                }`}
-                onClick={() => toggleNotification(item.key)}
-                aria-label={`Toggle ${item.title}`}
-              >
-                <span />
-              </button>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+.settings-sidebar-security {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: auto;
+  padding: 13px 11px;
+  border: 1px solid #e1d9ff;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 235, 255, 0.88),
+    rgba(255, 255, 255, 0.88)
   );
 }
 
-function SecuritySection() {
-  return (
-    <div className="settings-section">
-      <div className="settings-section-header">
-        <div>
-          <span className="section-eyebrow">SECURITY</span>
+.settings-sidebar-security-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: #e8e0ff;
+  color: #7550ef;
+}
 
-          <h2>Security & protection</h2>
+.settings-sidebar-security-icon svg {
+  width: 12px;
+  height: 12px;
+}
 
-          <p>
-            Manage account security and workspace protection.
-          </p>
-        </div>
+.settings-sidebar-security div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
 
-        <div className="section-header-icon">
-          <FaLock />
-        </div>
-      </div>
+.settings-sidebar-security strong {
+  color: #36405a;
+  font-size: 9px;
+  font-weight: 800;
+}
 
-      <div className="settings-divider" />
+.settings-sidebar-security span {
+  margin-top: 2px;
+  color: #929bb0;
+  font-size: 7px;
+  line-height: 1.3;
+}
 
-      <div className="security-options">
-        <div className="security-option">
-          <div className="security-option-icon">
-            <FaLock />
-          </div>
+.settings-sidebar-security > svg {
+  width: 9px;
+  height: 9px;
+  color: #15c783;
+}
 
-          <div>
-            <strong>Password</strong>
-            <span>
-              Keep your password secure and up to date.
-            </span>
-          </div>
+/* =========================================================
+   CONTENT
+   ========================================================= */
 
-          <button type="button">Manage</button>
-        </div>
+.settings-panel-content {
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.76);
+}
 
-        <div className="security-option">
-          <div className="security-option-icon">
-            <FaShieldAlt />
-          </div>
+.settings-content-section {
+  min-height: 100%;
+  padding: 34px 38px 36px;
+}
 
-          <div>
-            <strong>Workspace protection</strong>
-            <span>
-              Your TaskFlow workspace is protected.
-            </span>
-          </div>
+.settings-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
 
-          <span className="secure-badge">
-            <FaCheckCircle />
-            Secure
-          </span>
-        </div>
-      </div>
-    </div>
+.settings-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #7650f3;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+}
+
+.settings-section-heading h2 {
+  margin: 0;
+  color: #1b2641;
+  font-size: clamp(26px, 2.4vw, 34px);
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -1.3px;
+}
+
+.settings-section-heading p {
+  margin: 8px 0 0;
+  color: #8b96ad;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.settings-heading-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: #eeeaff;
+  color: #7650f3;
+  box-shadow: 0 8px 22px rgba(114, 78, 241, 0.10);
+}
+
+.settings-heading-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.settings-divider {
+  width: 100%;
+  height: 1px;
+  margin: 21px 0 17px;
+  background: #eceef5;
+}
+
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
+
+.settings-profile-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 18px;
+  border: 1px solid #e8eaf2;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 22px rgba(42, 48, 85, 0.04);
+}
+
+.settings-profile-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.settings-large-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      135deg,
+      #8461ff,
+      #6942ed
+    );
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  box-shadow:
+    0 9px 22px rgba(109, 69, 241, 0.26);
+}
+
+.settings-profile-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.settings-profile-copy strong {
+  color: #1e2943;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.settings-profile-copy span {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #8c96aa;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-role-badge {
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: #f0ebff;
+  color: #6e48ee;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+}
+
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 11px;
+}
+
+.settings-info-card {
+  display: flex;
+  align-items: center;
+  min-height: 69px;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e9ebf3;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.settings-info-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+.settings-info-icon svg {
+  width: 11px;
+  height: 11px;
+}
+
+.settings-info-icon.purple {
+  background: #eeeaff;
+  color: #7650f3;
+}
+
+.settings-info-icon.blue {
+  background: #eaf3ff;
+  color: #528df3;
+}
+
+.settings-info-icon.slate {
+  background: #edf0f6;
+  color: #71809e;
+}
+
+.settings-info-icon.green {
+  background: #e6fbf2;
+  color: #16b879;
+}
+
+.settings-info-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.settings-info-card span {
+  color: #9aa3b6;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.settings-info-card strong {
+  margin-top: 5px;
+  overflow: hidden;
+  color: #2a3550;
+  font-size: 10px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-active-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #13ad72 !important;
+}
+
+.settings-active-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #18c786;
+  box-shadow: 0 0 0 3px rgba(24, 199, 134, 0.12);
+}
+
+/* =========================================================
+   PROTECTED BOX
+   ========================================================= */
+
+.settings-protected-box {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e3dcff;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(244, 241, 255, 0.94),
+    rgba(255, 255, 255, 0.94)
   );
 }
 
-function ApplicationSection() {
-  return (
-    <div className="settings-section">
-      <div className="settings-section-header">
-        <div>
-          <span className="section-eyebrow">APPLICATION</span>
+.settings-protected-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #e9e2ff;
+  color: #7350ef;
+}
 
-          <h2>TaskFlow information</h2>
+.settings-protected-icon svg {
+  width: 11px;
+  height: 11px;
+}
 
-          <p>
-            Information about your TaskFlow workspace.
-          </p>
-        </div>
+.settings-protected-box > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
 
-        <div className="section-header-icon">
-          <FaInfoCircle />
-        </div>
-      </div>
+.settings-protected-box strong {
+  display: block;
+  color: #34405a;
+  font-size: 9px;
+  font-weight: 850;
+}
 
-      <div className="settings-divider" />
+.settings-protected-box p {
+  margin: 3px 0 0;
+  color: #929caf;
+  font-size: 7px;
+  line-height: 1.4;
+}
 
-      <div className="application-grid">
-        <div className="application-card">
-          <span>APPLICATION</span>
-          <strong>TaskFlow</strong>
-        </div>
+.settings-protected-check {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  color: #15c783;
+}
 
-        <div className="application-card">
-          <span>VERSION</span>
-          <strong>1.0.0</strong>
-        </div>
+/* =========================================================
+   APPEARANCE
+   ========================================================= */
 
-        <div className="application-card">
-          <span>PLATFORM</span>
-          <strong>Web Application</strong>
-        </div>
+.settings-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-        <div className="application-card">
-          <span>STATUS</span>
-          <strong className="status-active">
-            <FaCircle />
-            Operational
-          </strong>
-        </div>
-      </div>
-    </div>
+.settings-option-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 74px;
+  gap: 13px;
+  padding: 12px 14px;
+  border: 1px solid #e8eaf2;
+  border-radius: 12px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.settings-option-card:hover {
+  border-color: #d9ceff;
+  transform: translateY(-1px);
+}
+
+.settings-option-card.is-selected {
+  border-color: #cfc0ff;
+  background: #faf8ff;
+  box-shadow: 0 8px 20px rgba(105, 72, 231, 0.08);
+}
+
+.settings-option-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #eeeaff;
+  color: #7450ef;
+}
+
+.settings-option-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.settings-option-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.settings-option-copy strong {
+  color: #27324b;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.settings-option-copy span {
+  margin-top: 4px;
+  color: #919bae;
+  font-size: 9px;
+}
+
+.settings-radio {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d9deea;
+  border-radius: 50%;
+}
+
+.settings-radio.is-selected {
+  border-color: #7650f3;
+}
+
+.settings-radio span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7650f3;
+}
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+.settings-notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.settings-notification-row {
+  display: flex;
+  align-items: center;
+  min-height: 70px;
+  gap: 13px;
+  padding: 11px 13px;
+  border: 1px solid #e8eaf1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.22s ease;
+}
+
+.settings-notification-row:hover {
+  border-color: #d9d1fa;
+  transform: translateY(-1px);
+}
+
+.settings-notification-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f0ebff;
+  color: #7650f3;
+}
+
+.settings-notification-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.settings-notification-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.settings-notification-copy strong {
+  color: #2a3550;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.settings-notification-copy span {
+  margin-top: 4px;
+  color: #929bae;
+  font-size: 8px;
+}
+
+.settings-toggle {
+  position: relative;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #d9deea;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.settings-toggle.is-active {
+  background: linear-gradient(
+    90deg,
+    #8260ff,
+    #7049ef
   );
 }
 
-export default function Settings() {
-  const { user } = useAuth();
+.settings-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 6px rgba(36, 42, 68, 0.18);
+  transition: transform 0.2s ease;
+}
 
-  const [activeTab, setActiveTab] = useState("account");
+.settings-toggle.is-active .settings-toggle-thumb {
+  transform: translateX(18px);
+}
 
-  const activeItem = useMemo(
-    () =>
-      SETTINGS_ITEMS.find((item) => item.id === activeTab) ||
-      SETTINGS_ITEMS[0],
-    [activeTab]
-  );
+/* =========================================================
+   SECURITY
+   ========================================================= */
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "appearance":
-        return <AppearanceSection />;
+.settings-security-card {
+  display: flex;
+  align-items: center;
+  min-height: 76px;
+  gap: 13px;
+  padding: 13px;
+  margin-bottom: 10px;
+  border: 1px solid #e8eaf2;
+  border-radius: 12px;
+  background: white;
+}
 
-      case "notifications":
-        return <NotificationsSection />;
+.settings-security-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #eeeaff;
+  color: #7650f3;
+}
 
-      case "security":
-        return <SecuritySection />;
+.settings-security-icon svg {
+  width: 14px;
+  height: 14px;
+}
 
-      case "application":
-        return <ApplicationSection />;
+.settings-security-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
 
-      case "account":
-      default:
-        return <AccountSection user={user} />;
-    }
-  };
+.settings-security-copy strong {
+  color: #29344d;
+  font-size: 11px;
+  font-weight: 850;
+}
 
-  return (
-    <div className="settings-page">
-      {/* Premium animated background */}
-      <div className="settings-background" aria-hidden="true">
-        <div className="settings-orb settings-orb-one" />
-        <div className="settings-orb settings-orb-two" />
-        <div className="settings-orb settings-orb-three" />
+.settings-security-copy span {
+  margin-top: 4px;
+  color: #929bae;
+  font-size: 8px;
+}
 
-        <div className="settings-ring settings-ring-one" />
-        <div className="settings-ring settings-ring-two" />
+.settings-secondary-button {
+  padding: 9px 12px;
+  border: 1px solid #ddd6f7;
+  border-radius: 8px;
+  background: #faf9ff;
+  color: #704cf0;
+  font-size: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-        <div className="settings-grid" />
-      </div>
+.settings-secondary-button:hover {
+  background: #f0ebff;
+  border-color: #cfc1ff;
+}
 
-      {/* EXISTING TASKFLOW SHELL */}
-      <Sidebar />
+/* =========================================================
+   APPLICATION
+   ========================================================= */
 
-      <div className="settings-main-shell">
-        <Navbar />
+.settings-app-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
 
-        <main className="settings-main">
-          <div className="settings-container">
-            <header className="settings-page-header">
-              <div className="settings-breadcrumb">
-                <span>WORKSPACE</span>
-                <span className="breadcrumb-separator">›</span>
-                <span>SETTINGS</span>
-              </div>
+.settings-app-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 82px;
+  padding: 15px;
+  border: 1px solid #e8eaf2;
+  border-radius: 12px;
+  background: white;
+}
 
-              <h1>Settings</h1>
+.settings-app-card span {
+  color: #9aa3b6;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
 
-              <p>
-                Manage your account, workspace preferences and security.
-              </p>
-            </header>
+.settings-app-card strong {
+  margin-top: 7px;
+  color: #29344e;
+  font-size: 12px;
+  font-weight: 850;
+}
 
-            <section className="settings-card">
-              <SettingNavigation
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
-              <div className="settings-content">
-                <div className="settings-content-mobile-heading">
-                  <span>{activeItem.label}</span>
-                </div>
+.settings-footer-card {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  margin-top: 14px;
+  padding: 12px 16px;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 14px 35px rgba(45, 49, 89, 0.07);
+  backdrop-filter: blur(18px);
+}
 
-                {renderContent()}
-              </div>
-            </section>
+.settings-footer-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #eeeaff;
+  color: #7650f3;
+}
 
-            <footer className="settings-footer">
-              <div className="settings-footer-icon">
-                <FaShieldAlt />
-              </div>
+.settings-footer-icon svg {
+  width: 13px;
+  height: 13px;
+}
 
-              <div className="settings-footer-content">
-                <strong>Your preferences are stored securely</strong>
+.settings-footer-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
 
-                <span>
-                  TaskFlow keeps your workspace settings organized
-                  and protected.
-                </span>
-              </div>
+.settings-footer-copy strong {
+  color: #303a53;
+  font-size: 10px;
+  font-weight: 850;
+}
 
-              <div className="settings-footer-status">
-                <FaCheckCircle />
-                <span>Secure</span>
-              </div>
-            </footer>
-          </div>
-        </main>
-      </div>
-    </div>
-  );
+.settings-footer-copy span {
+  margin-top: 4px;
+  color: #929bae;
+  font-size: 8px;
+}
+
+.settings-footer-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  background: #e9faf3;
+  color: #12a971;
+  font-size: 8px;
+  font-weight: 850;
+}
+
+.settings-footer-status svg {
+  width: 8px;
+  height: 8px;
+}
+
+.settings-active-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: #a2a9ba;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.settings-active-label svg {
+  width: 9px;
+  height: 9px;
+  color: #8a71eb;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .settings-main {
+    width: min(1000px, calc(100% - 32px));
+  }
+
+  .settings-panel {
+    grid-template-columns: 235px minmax(0, 1fr);
+  }
+
+  .settings-content-section {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 820px) {
+  .settings-main {
+    width: calc(100% - 24px);
+    padding-top: 28px;
+  }
+
+  .settings-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-panel-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid #edf0f8;
+  }
+
+  .settings-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings-sidebar-security {
+    margin-top: 16px;
+  }
+
+  .settings-content-section {
+    padding: 26px 24px 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .settings-page {
+    min-height: calc(100vh - 60px);
+  }
+
+  .settings-main {
+    width: calc(100% - 16px);
+    padding: 22px 0 35px;
+  }
+
+  .settings-page-header h1 {
+    font-size: 40px;
+    letter-spacing: -1.8px;
+  }
+
+  .settings-page-header p {
+    font-size: 11px;
+  }
+
+  .settings-panel {
+    border-radius: 17px;
+  }
+
+  .settings-panel-sidebar {
+    padding: 18px 12px 14px;
+  }
+
+  .settings-navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-nav-item {
+    min-height: 58px;
+  }
+
+  .settings-content-section {
+    padding: 23px 16px;
+  }
+
+  .settings-section-heading h2 {
+    font-size: 27px;
+  }
+
+  .settings-info-grid,
+  .settings-app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-profile-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .settings-footer-card {
+    align-items: flex-start;
+  }
+
+  .settings-footer-status {
+    display: none;
+  }
+
+  .settings-footer-copy span {
+    line-height: 1.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-orb,
+  .settings-ring {
+    animation: none;
+  }
+
+  .settings-nav-item,
+  .settings-option-card,
+  .settings-notification-row {
+    transition: none;
+  }
 }
