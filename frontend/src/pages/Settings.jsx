@@ -5,22 +5,16 @@ import {
   FaBell,
   FaLock,
   FaInfoCircle,
-  FaChevronRight,
   FaShieldAlt,
   FaCheckCircle,
   FaEnvelope,
   FaUserShield,
   FaDesktop,
+  FaChevronRight,
   FaMoon,
   FaSun,
   FaGlobe,
-  FaKey,
-  FaDatabase,
-  FaCode,
-  FaCloud,
-  FaMobileAlt,
-  FaToggleOn,
-  FaToggleOff,
+  FaCog,
 } from "react-icons/fa";
 
 import "../styles/Settings.css";
@@ -28,85 +22,88 @@ import "../styles/Settings.css";
 const SETTINGS_ITEMS = [
   {
     id: "account",
-    label: "Account",
+    title: "Account",
     description: "Your profile information",
     icon: FaUser,
   },
   {
     id: "appearance",
-    label: "Appearance",
+    title: "Appearance",
     description: "Customize your workspace",
     icon: FaPalette,
   },
   {
     id: "notifications",
-    label: "Notifications",
+    title: "Notifications",
     description: "Manage your alerts",
     icon: FaBell,
   },
   {
     id: "security",
-    label: "Security",
+    title: "Security",
     description: "Password and security",
     icon: FaLock,
   },
   {
     id: "application",
-    label: "Application",
+    title: "Application",
     description: "TaskFlow information",
     icon: FaInfoCircle,
   },
 ];
 
+function getInitials(name) {
+  if (!name) return "SP";
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+}
+
 function getUserData() {
   try {
     const storedUser =
       localStorage.getItem("user") ||
-      localStorage.getItem("taskflow_user");
+      localStorage.getItem("taskflow_user") ||
+      localStorage.getItem("currentUser");
 
-    if (storedUser) {
-      return JSON.parse(storedUser);
+    if (!storedUser) {
+      return {
+        name: "Souradipta Patra",
+        email: "soura@gmail.com",
+        role: "Admin",
+      };
     }
-  } catch (error) {
-    console.warn("Unable to read stored user data:", error);
-  }
 
-  return {};
+    const parsed = JSON.parse(storedUser);
+
+    return {
+      name:
+        parsed?.name ||
+        parsed?.username ||
+        parsed?.fullName ||
+        "Souradipta Patra",
+      email: parsed?.email || parsed?.emailAddress || "soura@gmail.com",
+      role: parsed?.role || "Admin",
+    };
+  } catch {
+    return {
+      name: "Souradipta Patra",
+      email: "soura@gmail.com",
+      role: "Admin",
+    };
+  }
 }
 
-function getInitials(name = "") {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-
-  if (!parts.length) {
-    return "SP";
-  }
-
-  if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
-  }
-
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-}
-
-function AccountContent({ user }) {
-  const fullName =
-    user?.name ||
-    user?.username ||
-    user?.fullName ||
-    "Souradipta Patra";
-
-  const email =
-    user?.email ||
-    user?.emailAddress ||
-    "soura@gmail.com";
-
-  const role = user?.role || "Admin";
-
-  const initials = getInitials(fullName);
+function AccountPanel({ user }) {
+  const initials = getInitials(user.name);
 
   return (
-    <div className="settings-content">
-      <div className="settings-section-heading">
+    <section className="settings-panel-content">
+      <div className="settings-panel-heading">
         <div>
           <span className="settings-eyebrow">ACCOUNT</span>
 
@@ -122,71 +119,67 @@ function AccountContent({ user }) {
         </div>
       </div>
 
-      <div className="settings-divider" />
+      <div className="settings-heading-divider" />
 
       <div className="settings-profile-card">
         <div className="settings-profile-left">
-          <div className="settings-large-avatar">
-            {initials}
-          </div>
+          <div className="settings-profile-avatar">{initials}</div>
 
           <div className="settings-profile-details">
-            <strong>{fullName}</strong>
-            <span>{email}</span>
+            <strong>{user.name}</strong>
+            <span>{user.email}</span>
           </div>
         </div>
 
         <span className="settings-admin-badge">
-          {String(role).toUpperCase()}
+          {String(user.role).toUpperCase()}
         </span>
       </div>
 
-      <div className="settings-info-grid">
-        <div className="settings-info-card">
-          <div className="settings-info-icon purple">
+      <div className="settings-information-grid">
+        <div className="settings-information-card">
+          <div className="settings-information-icon purple">
             <FaUser />
           </div>
 
           <div>
-            <span className="settings-info-label">FULL NAME</span>
-            <strong>{fullName}</strong>
+            <span>FULL NAME</span>
+            <strong>{user.name}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon blue">
+        <div className="settings-information-card">
+          <div className="settings-information-icon blue">
             <FaEnvelope />
           </div>
 
           <div>
-            <span className="settings-info-label">EMAIL ADDRESS</span>
-            <strong>{email}</strong>
+            <span>EMAIL ADDRESS</span>
+            <strong>{user.email}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon slate">
+        <div className="settings-information-card">
+          <div className="settings-information-icon slate">
             <FaUserShield />
           </div>
 
           <div>
-            <span className="settings-info-label">ROLE</span>
-            <strong>{role}</strong>
+            <span>ROLE</span>
+            <strong>{user.role}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon green">
+        <div className="settings-information-card">
+          <div className="settings-information-icon green">
             <FaCheckCircle />
           </div>
 
           <div>
-            <span className="settings-info-label">
-              ACCOUNT STATUS
-            </span>
+            <span>ACCOUNT STATUS</span>
 
             <strong className="settings-active-status">
-              <span />
+              <i />
               Active
             </strong>
           </div>
@@ -198,35 +191,32 @@ function AccountContent({ user }) {
           <FaShieldAlt />
         </div>
 
-        <div className="settings-protected-text">
+        <div>
           <strong>Protected workspace</strong>
-
           <span>
-            Your account information is securely associated with
-            your TaskFlow workspace.
+            Your account information is securely associated with your
+            TaskFlow workspace.
           </span>
         </div>
 
-        <FaCheckCircle className="settings-success-icon" />
+        <FaCheckCircle className="settings-protected-check" />
       </div>
-    </div>
+    </section>
   );
 }
 
-function AppearanceContent() {
+function AppearancePanel() {
   const [theme, setTheme] = useState("light");
 
   return (
-    <div className="settings-content">
-      <div className="settings-section-heading">
+    <section className="settings-panel-content">
+      <div className="settings-panel-heading">
         <div>
           <span className="settings-eyebrow">APPEARANCE</span>
 
           <h2>Workspace appearance</h2>
 
-          <p>
-            Customize the visual appearance of your TaskFlow workspace.
-          </p>
+          <p>Customize how TaskFlow looks across your workspace.</p>
         </div>
 
         <div className="settings-heading-icon">
@@ -234,70 +224,70 @@ function AppearanceContent() {
         </div>
       </div>
 
-      <div className="settings-divider" />
+      <div className="settings-heading-divider" />
 
-      <div className="settings-option-grid">
+      <div className="settings-option-list">
         <button
           type="button"
-          className={`settings-choice-card ${
+          className={`settings-option-card ${
             theme === "light" ? "selected" : ""
           }`}
           onClick={() => setTheme("light")}
         >
-          <div className="settings-choice-icon purple">
+          <div className="settings-option-icon purple">
             <FaSun />
           </div>
 
-          <div>
+          <div className="settings-option-copy">
             <strong>Light mode</strong>
-            <span>Bright and clean workspace</span>
+            <span>Bright and clean workspace appearance.</span>
           </div>
 
-          {theme === "light" && (
-            <FaCheckCircle className="choice-check" />
-          )}
+          <span className="settings-radio">
+            {theme === "light" && <i />}
+          </span>
         </button>
 
         <button
           type="button"
-          className={`settings-choice-card ${
+          className={`settings-option-card ${
             theme === "dark" ? "selected" : ""
           }`}
           onClick={() => setTheme("dark")}
         >
-          <div className="settings-choice-icon blue">
+          <div className="settings-option-icon slate">
             <FaMoon />
           </div>
 
-          <div>
+          <div className="settings-option-copy">
             <strong>Dark mode</strong>
-            <span>Comfortable darker interface</span>
+            <span>Reduce visual brightness for a darker workspace.</span>
           </div>
 
-          {theme === "dark" && (
-            <FaCheckCircle className="choice-check" />
-          )}
-        </button>
-      </div>
-
-      <div className="settings-protected-card">
-        <div className="settings-protected-icon">
-          <FaDesktop />
-        </div>
-
-        <div className="settings-protected-text">
-          <strong>Workspace preferences</strong>
-          <span>
-            Your appearance preferences are saved for this workspace.
+          <span className="settings-radio">
+            {theme === "dark" && <i />}
           </span>
+        </button>
+
+        <div className="settings-preference-card">
+          <div className="settings-option-icon blue">
+            <FaGlobe />
+          </div>
+
+          <div className="settings-option-copy">
+            <strong>Workspace language</strong>
+            <span>English is currently selected.</span>
+          </div>
+
+          <span className="settings-value-badge">English</span>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-function NotificationsContent() {
-  const [notifications, setNotifications] = useState({
+function NotificationsPanel() {
+  const [preferences, setPreferences] = useState({
     assignments: true,
     taskUpdates: true,
     projectUpdates: true,
@@ -305,14 +295,14 @@ function NotificationsContent() {
     desktop: false,
   });
 
-  const toggleNotification = (key) => {
-    setNotifications((previous) => ({
-      ...previous,
-      [key]: !previous[key],
+  const togglePreference = (key) => {
+    setPreferences((current) => ({
+      ...current,
+      [key]: !current[key],
     }));
   };
 
-  const items = [
+  const notificationItems = [
     {
       key: "assignments",
       title: "Task assignments",
@@ -324,7 +314,7 @@ function NotificationsContent() {
       key: "taskUpdates",
       title: "Task updates",
       description: "Notify me when tasks assigned to me are updated.",
-      icon: FaBell,
+      icon: FaCog,
       color: "blue",
     },
     {
@@ -351,16 +341,14 @@ function NotificationsContent() {
   ];
 
   return (
-    <div className="settings-content">
-      <div className="settings-section-heading">
+    <section className="settings-panel-content">
+      <div className="settings-panel-heading">
         <div>
           <span className="settings-eyebrow">NOTIFICATIONS</span>
 
           <h2>Notification preferences</h2>
 
-          <p>
-            Decide which events should notify you.
-          </p>
+          <p>Decide which events should notify you.</p>
         </div>
 
         <div className="settings-heading-icon">
@@ -368,59 +356,56 @@ function NotificationsContent() {
         </div>
       </div>
 
-      <div className="settings-divider" />
+      <div className="settings-heading-divider" />
 
-      <div className="notification-list">
-        {items.map((item) => {
+      <div className="settings-notification-list">
+        {notificationItems.map((item) => {
           const Icon = item.icon;
-          const enabled = notifications[item.key];
+          const enabled = preferences[item.key];
 
           return (
             <div
-              className={`notification-row ${
+              className={`settings-notification-row ${
                 enabled ? "enabled" : ""
               }`}
               key={item.key}
             >
-              <div className={`notification-icon ${item.color}`}>
+              <div className={`settings-notification-icon ${item.color}`}>
                 <Icon />
               </div>
 
-              <div className="notification-text">
+              <div className="settings-notification-copy">
                 <strong>{item.title}</strong>
                 <span>{item.description}</span>
               </div>
 
               <button
                 type="button"
-                className={`notification-toggle ${
-                  enabled ? "active" : ""
-                }`}
-                onClick={() => toggleNotification(item.key)}
+                className={`settings-switch ${enabled ? "on" : ""}`}
+                onClick={() => togglePreference(item.key)}
                 aria-label={`Toggle ${item.title}`}
+                aria-pressed={enabled}
               >
-                {enabled ? <FaToggleOn /> : <FaToggleOff />}
+                <span />
               </button>
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
 
-function SecurityContent() {
+function SecurityPanel() {
   return (
-    <div className="settings-content">
-      <div className="settings-section-heading">
+    <section className="settings-panel-content">
+      <div className="settings-panel-heading">
         <div>
           <span className="settings-eyebrow">SECURITY</span>
 
-          <h2>Password & security</h2>
+          <h2>Password and security</h2>
 
-          <p>
-            Manage your password and protect your TaskFlow account.
-          </p>
+          <p>Manage your account security preferences.</p>
         </div>
 
         <div className="settings-heading-icon">
@@ -428,77 +413,53 @@ function SecurityContent() {
         </div>
       </div>
 
-      <div className="settings-divider" />
+      <div className="settings-heading-divider" />
 
-      <div className="security-card-list">
-        <div className="security-card">
-          <div className="security-card-icon purple">
-            <FaKey />
-          </div>
-
-          <div className="security-card-content">
-            <strong>Password</strong>
-            <span>
-              Keep your account protected with a strong password.
-            </span>
-          </div>
-
-          <button type="button" className="settings-action-button">
-            Manage
-          </button>
+      <div className="settings-security-card">
+        <div className="settings-security-icon">
+          <FaShieldAlt />
         </div>
 
-        <div className="security-card">
-          <div className="security-card-icon green">
-            <FaShieldAlt />
-          </div>
-
-          <div className="security-card-content">
-            <strong>Account protection</strong>
-            <span>
-              Your TaskFlow workspace is currently protected.
-            </span>
-          </div>
-
-          <span className="security-status">
-            <FaCheckCircle />
-            Secure
+        <div>
+          <strong>Account security</strong>
+          <span>
+            Your TaskFlow account is protected with secure authentication.
           </span>
         </div>
 
-        <div className="security-card">
-          <div className="security-card-icon blue">
-            <FaMobileAlt />
-          </div>
+        <span className="settings-security-status">
+          <FaCheckCircle />
+          Protected
+        </span>
+      </div>
 
-          <div className="security-card-content">
-            <strong>Active sessions</strong>
-            <span>
-              Review devices currently connected to your account.
-            </span>
-          </div>
+      <div className="settings-security-grid">
+        <div className="settings-security-item">
+          <span>PASSWORD</span>
+          <strong>••••••••••••</strong>
+          <button type="button">Change password</button>
+        </div>
 
-          <button type="button" className="settings-action-button">
-            Review
-          </button>
+        <div className="settings-security-item">
+          <span>ACCOUNT ACCESS</span>
+          <strong>Secure</strong>
+          <small>Authentication is enabled.</small>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-function ApplicationContent() {
+function ApplicationPanel() {
   return (
-    <div className="settings-content">
-      <div className="settings-section-heading">
+    <section className="settings-panel-content">
+      <div className="settings-panel-heading">
         <div>
           <span className="settings-eyebrow">APPLICATION</span>
 
           <h2>TaskFlow information</h2>
 
-          <p>
-            Information about your TaskFlow application environment.
-          </p>
+          <p>Information about your TaskFlow workspace application.</p>
         </div>
 
         <div className="settings-heading-icon">
@@ -506,65 +467,44 @@ function ApplicationContent() {
         </div>
       </div>
 
-      <div className="settings-divider" />
+      <div className="settings-heading-divider" />
 
-      <div className="settings-info-grid">
-        <div className="settings-info-card">
-          <div className="settings-info-icon purple">
-            <FaCode />
-          </div>
+      <div className="settings-application-card">
+        <div className="settings-app-logo">TF</div>
 
-          <div>
-            <span className="settings-info-label">
-              APPLICATION
-            </span>
-            <strong>TaskFlow</strong>
-          </div>
+        <div>
+          <strong>TaskFlow</strong>
+          <span>Project management workspace</span>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon blue">
-            <FaCloud />
-          </div>
+        <span className="settings-version-badge">v1.0.0</span>
+      </div>
 
-          <div>
-            <span className="settings-info-label">
-              ENVIRONMENT
-            </span>
-            <strong>Production</strong>
-          </div>
+      <div className="settings-application-grid">
+        <div>
+          <span>APPLICATION</span>
+          <strong>TaskFlow</strong>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon green">
-            <FaDatabase />
-          </div>
-
-          <div>
-            <span className="settings-info-label">
-              DATA STORAGE
-            </span>
-            <strong>Cloud Database</strong>
-          </div>
+        <div>
+          <span>PLATFORM</span>
+          <strong>Web Application</strong>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon slate">
-            <FaGlobe />
-          </div>
+        <div>
+          <span>ENVIRONMENT</span>
+          <strong>Production</strong>
+        </div>
 
-          <div>
-            <span className="settings-info-label">
-              STATUS
-            </span>
-            <strong className="settings-active-status">
-              <span />
-              Operational
-            </strong>
-          </div>
+        <div>
+          <span>STATUS</span>
+          <strong className="settings-active-status">
+            <i />
+            Operational
+          </strong>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -573,29 +513,25 @@ export default function Settings() {
 
   const user = useMemo(() => getUserData(), []);
 
-  const renderContent = () => {
+  const renderPanel = () => {
     switch (activeSection) {
       case "appearance":
-        return <AppearanceContent />;
+        return <AppearancePanel />;
 
       case "notifications":
-        return <NotificationsContent />;
+        return <NotificationsPanel />;
 
       case "security":
-        return <SecurityContent />;
+        return <SecurityPanel />;
 
       case "application":
-        return <ApplicationContent />;
+        return <ApplicationPanel />;
 
       case "account":
       default:
-        return <AccountContent user={user} />;
+        return <AccountPanel user={user} />;
     }
   };
-
-  const activeItem =
-    SETTINGS_ITEMS.find((item) => item.id === activeSection) ||
-    SETTINGS_ITEMS[0];
 
   return (
     <main className="settings-page">
@@ -607,39 +543,38 @@ export default function Settings() {
 
         <div className="settings-ring settings-ring-one" />
         <div className="settings-ring settings-ring-two" />
-        <div className="settings-ring settings-ring-three" />
 
-        <div className="settings-grid-pattern" />
+        <div className="settings-grid-overlay" />
       </div>
 
-      <div className="settings-page-inner">
+      <div className="settings-container">
         {/* Page heading */}
         <header className="settings-page-header">
-          <div className="settings-breadcrumb">
-            <span>WORKSPACE</span>
-            <FaChevronRight />
-            <span>SETTINGS</span>
+          <div>
+            <div className="settings-breadcrumb">
+              <span>WORKSPACE</span>
+              <FaChevronRight />
+              <span>SETTINGS</span>
+            </div>
+
+            <h1>Settings</h1>
+
+            <p>
+              Manage your account, workspace preferences and security.
+            </p>
           </div>
-
-          <h1>Settings</h1>
-
-          <p>
-            Manage your account, workspace preferences and security.
-          </p>
         </header>
 
-        {/* Main settings panel */}
+        {/* Main settings card */}
         <section className="settings-main-card">
-          {/* Left settings navigation */}
+          {/* Settings navigation */}
           <aside className="settings-navigation">
-            <div className="settings-navigation-title">
-              SETTINGS
-            </div>
+            <div className="settings-navigation-title">SETTINGS</div>
 
             <div className="settings-navigation-list">
               {SETTINGS_ITEMS.map((item) => {
                 const Icon = item.icon;
-                const active = item.id === activeSection;
+                const active = activeSection === item.id;
 
                 return (
                   <button
@@ -650,14 +585,14 @@ export default function Settings() {
                     }`}
                     onClick={() => setActiveSection(item.id)}
                   >
-                    <div className="settings-navigation-icon">
+                    <span className="settings-navigation-icon">
                       <Icon />
-                    </div>
+                    </span>
 
-                    <div className="settings-navigation-text">
-                      <strong>{item.label}</strong>
-                      <span>{item.description}</span>
-                    </div>
+                    <span className="settings-navigation-copy">
+                      <strong>{item.title}</strong>
+                      <small>{item.description}</small>
+                    </span>
 
                     <FaChevronRight className="settings-navigation-arrow" />
                   </button>
@@ -665,46 +600,35 @@ export default function Settings() {
               })}
             </div>
 
-            <div className="settings-navigation-security">
-              <div className="settings-navigation-security-icon">
+            <div className="settings-navigation-protection">
+              <div className="settings-protection-icon">
                 <FaShieldAlt />
               </div>
 
               <div>
                 <strong>Protected workspace</strong>
-
-                <span>
-                  Your TaskFlow account is secure.
-                </span>
+                <span>Your TaskFlow account is secure.</span>
               </div>
 
               <FaCheckCircle />
             </div>
           </aside>
 
-          {/* Right content */}
-          <section className="settings-panel-content">
-            <div className="settings-mobile-current">
-              <span>Current section</span>
-              <strong>{activeItem.label}</strong>
-            </div>
-
-            {renderContent()}
-          </section>
+          {/* Dynamic settings content */}
+          <div className="settings-content">{renderPanel()}</div>
         </section>
 
-        {/* Footer security banner */}
-        <footer className="settings-footer-card">
+        {/* Footer / security information */}
+        <footer className="settings-footer">
           <div className="settings-footer-icon">
             <FaShieldAlt />
           </div>
 
-          <div className="settings-footer-text">
+          <div className="settings-footer-copy">
             <strong>Your preferences are stored securely</strong>
 
             <span>
-              TaskFlow keeps your workspace settings organized and
-              protected.
+              TaskFlow keeps your workspace settings organized and protected.
             </span>
           </div>
 
