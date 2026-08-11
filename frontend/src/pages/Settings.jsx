@@ -31,7 +31,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar/Navbar";
 import { useAuth } from "../context/AuthContext";
 
-import "./Settings.css";
+import "../styles/Settings.css";
 
 const SETTINGS_ITEMS = [
   {
