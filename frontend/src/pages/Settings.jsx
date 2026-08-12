@@ -1,530 +1,548 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
-  FaUser,
-  FaPalette,
+  FaBars,
   FaBell,
-  FaLock,
-  FaInfoCircle,
-  FaCheckCircle,
-  FaMoon,
-  FaSun,
-  FaChevronRight,
-  FaShieldAlt,
-  FaCog,
-  FaSave,
-  FaUndo,
-  FaEnvelope,
-  FaKey,
-  FaDesktop,
-  FaDatabase,
-  FaCode,
-  FaServer,
-  FaGlobe,
-  FaEdit,
-  FaEye,
-  FaEyeSlash,
+  FaChartBar,
   FaCheck,
+  FaChevronRight,
+  FaCog,
+  FaFolder,
+  FaInfoCircle,
+  FaKanban,
+  FaLock,
+  FaMoon,
+  FaPalette,
+  FaRedo,
+  FaSave,
+  FaSearch,
+  FaShieldAlt,
+  FaSignOutAlt,
+  FaSun,
+  FaTasks,
   FaTimes,
-  FaCircle,
+  FaUser,
+  FaUsers,
+  FaEnvelope,
+  FaEdit,
 } from "react-icons/fa";
-import { toast } from "react-toastify";
 
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-
+import { useAuth } from "../context/AuthContext";
 import "../styles/Settings.css";
-
-
-/* =========================================================
-   SETTINGS CONFIGURATION
-========================================================= */
 
 const SETTINGS_ITEMS = [
   {
     id: "account",
-    label: "Account",
+    title: "Account",
     description: "Your profile information",
     icon: FaUser,
   },
   {
     id: "appearance",
-    label: "Appearance",
+    title: "Appearance",
     description: "Customize your workspace",
     icon: FaPalette,
   },
   {
     id: "notifications",
-    label: "Notifications",
+    title: "Notifications",
     description: "Manage your alerts",
     icon: FaBell,
   },
   {
     id: "security",
-    label: "Security",
+    title: "Security",
     description: "Password and security",
     icon: FaLock,
   },
   {
     id: "application",
-    label: "Application",
+    title: "Application",
     description: "TaskFlow information",
     icon: FaInfoCircle,
   },
 ];
 
-
 const DEFAULT_SETTINGS = {
   darkMode: false,
-  compactMode: false,
   emailNotifications: true,
   taskNotifications: true,
   projectNotifications: true,
-  securityNotifications: true,
 };
-
-
-const DEFAULT_PROFILE = {
-  name: "Souradipta Patra",
-  email: "soura@gmail.com",
-  role: "Admin",
-};
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
 
 const getInitials = (name = "") => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
 
-  if (!parts.length) {
-    return "SP";
-  }
-
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
-  }
+  if (!parts.length) return "TF";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
 
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 };
 
+const getUserName = (user) =>
+  user?.name ||
+  user?.username ||
+  user?.fullName ||
+  "Souradipta Patra";
 
-const getStoredObject = (key, fallback) => {
-  try {
-    const value = localStorage.getItem(key);
+const getUserEmail = (user) =>
+  user?.email ||
+  user?.emailAddress ||
+  "soura@gmail.com";
 
-    if (!value) {
-      return fallback;
-    }
+const getUserRole = (user) =>
+  user?.role ||
+  user?.userRole ||
+  "Admin";
 
-    return JSON.parse(value);
-  } catch {
-    return fallback;
-  }
-};
+function Settings() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-
-/* =========================================================
-   COMPONENT
-========================================================= */
-
-export default function Settings() {
-  /* -------------------------------------------------------
-     AUTH USER
-  ------------------------------------------------------- */
-
-  let authUser = null;
-
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { user } = require("../context/AuthContext").useAuth();
-    authUser = user;
-  } catch {
-    authUser = null;
-  }
-
-
-  /* -------------------------------------------------------
-     INITIAL USER DATA
-  ------------------------------------------------------- */
-
-  const initialProfile = useMemo(() => {
-    const storedProfile = getStoredObject(
-      "taskflow_settings_profile",
-      {}
-    );
-
-    return {
-      ...DEFAULT_PROFILE,
-      ...(authUser || {}),
-      ...storedProfile,
-      name:
-        storedProfile.name ||
-        authUser?.name ||
-        authUser?.username ||
-        DEFAULT_PROFILE.name,
-      email:
-        storedProfile.email ||
-        authUser?.email ||
-        DEFAULT_PROFILE.email,
-      role:
-        storedProfile.role ||
-        authUser?.role ||
-        DEFAULT_PROFILE.role,
-    };
-  }, [authUser]);
-
-
-  /* -------------------------------------------------------
-     STATE
-  ------------------------------------------------------- */
+  const userName = getUserName(user);
+  const userEmail = getUserEmail(user);
+  const userRole = getUserRole(user);
+  const initials = useMemo(() => getInitials(userName), [userName]);
 
   const [activeSection, setActiveSection] = useState("account");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
-  const [profile, setProfile] = useState(initialProfile);
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
-  const [draftProfile, setDraftProfile] = useState(initialProfile);
+  const [profile, setProfile] = useState({
+    name: userName,
+    email: userEmail,
+  });
 
-  const [settings, setSettings] = useState(() =>
-    getStoredObject(
-      "taskflow_settings_preferences",
-      DEFAULT_SETTINGS
-    )
-  );
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
 
-  const [draftSettings, setDraftSettings] = useState(() =>
-    getStoredObject(
-      "taskflow_settings_preferences",
-      DEFAULT_SETTINGS
-    )
-  );
+  const [editForm, setEditForm] = useState({
+    name: userName,
+    email: userEmail,
+  });
 
-
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-
-  const [showCurrentPassword, setShowCurrentPassword] =
-    useState(false);
-
-  const [showNewPassword, setShowNewPassword] =
-    useState(false);
-
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false);
-
-
-  const [passwordData, setPasswordData] = useState({
+  const [passwordFields, setPasswordFields] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-
-  const [passwordMessage, setPasswordMessage] = useState({
-    type: "",
-    text: "",
-  });
-
-
-  /* -------------------------------------------------------
-     EFFECTS
-  ------------------------------------------------------- */
-
-  useEffect(() => {
-    document.body.classList.toggle(
-      "settings-dark-mode",
-      draftSettings.darkMode
-    );
-
-    return () => {
-      document.body.classList.remove(
-        "settings-dark-mode"
-      );
-    };
-  }, [draftSettings.darkMode]);
-
-
-  /* -------------------------------------------------------
-     ACTIVE SECTION
-  ------------------------------------------------------- */
-
-  const activeItem = SETTINGS_ITEMS.find(
-    (item) => item.id === activeSection
+  const [saveMessage, setSaveMessage] = useState(
+    "All changes are currently saved"
   );
 
+  const [passwordMessage, setPasswordMessage] = useState("");
 
-  /* -------------------------------------------------------
-     PROFILE HANDLERS
-  ------------------------------------------------------- */
+  const activeItem =
+    SETTINGS_ITEMS.find((item) => item.id === activeSection) ||
+    SETTINGS_ITEMS[0];
 
-  const handleProfileChange = (event) => {
-    const { name, value } = event.target;
+  const ActiveIcon = activeItem.icon;
 
-    setDraftProfile((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
-  };
-
-
-  const handleEditProfile = () => {
-    setDraftProfile(profile);
-    setIsEditingProfile(true);
-  };
-
-
-  const handleCancelProfileEdit = () => {
-    setDraftProfile(profile);
-    setIsEditingProfile(false);
-  };
-
-
-  const handleSaveProfile = () => {
-    if (!draftProfile.name.trim()) {
-      toast.error("Please enter your full name.");
-      return;
-    }
-
-    if (!draftProfile.email.trim()) {
-      toast.error("Please enter your email address.");
-      return;
-    }
-
-    const updatedProfile = {
-      ...profile,
-      name: draftProfile.name.trim(),
-      email: draftProfile.email.trim(),
-    };
-
-    setProfile(updatedProfile);
-
-    localStorage.setItem(
-      "taskflow_settings_profile",
-      JSON.stringify(updatedProfile)
-    );
-
-    setIsEditingProfile(false);
-
-    toast.success("Profile information saved successfully.");
-  };
-
-
-  /* -------------------------------------------------------
-     SETTINGS HANDLERS
-  ------------------------------------------------------- */
-
-  const updateSetting = (key, value) => {
-    setDraftSettings((previous) => ({
-      ...previous,
-      [key]: value,
-    }));
-  };
-
-
-  const handleSaveSettings = () => {
-    setSettings(draftSettings);
-
-    localStorage.setItem(
-      "taskflow_settings_preferences",
-      JSON.stringify(draftSettings)
-    );
-
-    toast.success("Settings saved successfully.");
-  };
-
-
-  const handleResetSettings = () => {
-    setDraftSettings(settings);
-    setDraftProfile(profile);
-
-    toast.info("Unsaved changes have been reset.");
-  };
-
-
-  /* -------------------------------------------------------
-     PASSWORD
-  ------------------------------------------------------- */
-
-  const handlePasswordChange = (event) => {
-    const { name, value } = event.target;
-
-    setPasswordData((previous) => ({
-      ...previous,
-      [name]: value,
+  const handleSettingChange = (key) => {
+    setSettings((prev) => ({
+      ...prev,
+      [key]: !prev[key],
     }));
 
-    setPasswordMessage({
-      type: "",
-      text: "",
+    setSaveMessage("You have unsaved changes");
+  };
+
+  const handleReset = () => {
+    setSettings(DEFAULT_SETTINGS);
+    setProfile({
+      name: userName,
+      email: userEmail,
     });
+
+    setSaveMessage("All changes are currently saved");
+    setPasswordMessage("");
   };
 
+  const handleSave = () => {
+    setSaveMessage("All changes are currently saved");
 
-  const handlePasswordUpdate = (event) => {
+    setTimeout(() => {
+      setSaveMessage("All changes are currently saved");
+    }, 500);
+  };
+
+  const openEditProfile = () => {
+    setEditForm({
+      name: profile.name,
+      email: profile.email,
+    });
+
+    setEditProfileOpen(true);
+    setProfileMenuOpen(false);
+  };
+
+  const handleProfileSave = (event) => {
     event.preventDefault();
 
-    const {
-      currentPassword,
-      newPassword,
-      confirmPassword,
-    } = passwordData;
-
-
-    if (!currentPassword) {
-      setPasswordMessage({
-        type: "error",
-        text: "Please enter your current password.",
-      });
-
+    if (!editForm.name.trim() || !editForm.email.trim()) {
       return;
     }
 
-
-    if (newPassword.length < 6) {
-      setPasswordMessage({
-        type: "error",
-        text: "New password must contain at least 6 characters.",
-      });
-
-      return;
-    }
-
-
-    if (newPassword !== confirmPassword) {
-      setPasswordMessage({
-        type: "error",
-        text: "New password and confirmation do not match.",
-      });
-
-      return;
-    }
-
-
-    /*
-      IMPORTANT:
-      This is frontend validation only.
-
-      Connect this handler to your backend password
-      endpoint when your password API is ready.
-    */
-
-    setPasswordMessage({
-      type: "success",
-      text: "Password validation completed successfully.",
+    setProfile({
+      name: editForm.name.trim(),
+      email: editForm.email.trim(),
     });
 
-    setPasswordData({
+    setEditProfileOpen(false);
+    setSaveMessage("Profile changes are ready to save");
+  };
+
+  const handlePasswordChange = (event) => {
+    event.preventDefault();
+
+    const { currentPassword, newPassword, confirmPassword } =
+      passwordFields;
+
+    if (!currentPassword) {
+      setPasswordMessage("Enter your current password.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordMessage(
+        "New password must contain at least 6 characters."
+      );
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage("New passwords do not match.");
+      return;
+    }
+
+    setPasswordMessage("Password validated successfully.");
+    setPasswordFields({
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
-
-    toast.success("Security settings updated.");
   };
 
+  const handleLogout = async () => {
+    try {
+      if (typeof logout === "function") {
+        await logout();
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
 
-  /* =========================================================
-     RENDER
-  ========================================================= */
+    navigate("/login");
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    if (!searchValue.trim()) return;
+
+    const value = searchValue.toLowerCase();
+
+    if (value.includes("project")) {
+      navigate("/projects");
+    } else if (value.includes("task")) {
+      navigate("/tasks");
+    } else if (value.includes("team") || value.includes("user")) {
+      navigate("/users");
+    }
+  };
 
   return (
-    <div className="settings-page">
+    <div className="settings-app">
+      {/* =========================
+          TOP NAVBAR
+      ========================== */}
+      <header className="settings-navbar">
+        <div className="navbar-left">
+          <button
+            type="button"
+            className="navbar-menu-button"
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            aria-label="Toggle sidebar"
+          >
+            {sidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
 
-      {/* ===================================================
-          PREMIUM BACKGROUND
-      =================================================== */}
+          <button
+            type="button"
+            className="navbar-brand"
+            onClick={() => navigate("/dashboard")}
+          >
+            <span className="navbar-brand-icon">
+              TF
+              <span className="brand-status-dot" />
+            </span>
 
-      <div className="settings-background">
-        <div className="settings-bg-grid" />
+            <span className="navbar-brand-text">
+              <strong>TaskFlow</strong>
+              <small>Workspace</small>
+            </span>
+          </button>
+        </div>
 
-        <div className="settings-bg-orb settings-bg-orb-one" />
-        <div className="settings-bg-orb settings-bg-orb-two" />
-        <div className="settings-bg-orb settings-bg-orb-three" />
+        <form className="navbar-search" onSubmit={handleSearch}>
+          <FaSearch />
 
-        <div className="settings-bg-glow settings-bg-glow-one" />
-        <div className="settings-bg-glow settings-bg-glow-two" />
-      </div>
+          <input
+            type="text"
+            placeholder="Search projects, tasks, teams..."
+            value={searchValue}
+            onChange={(event) => setSearchValue(event.target.value)}
+          />
 
+          <span className="search-shortcut">Ctrl + K</span>
+        </form>
 
-      {/* ===================================================
+        <div className="navbar-actions">
+          <button
+            type="button"
+            className="navbar-icon-button theme-button"
+            onClick={() =>
+              setSettings((prev) => ({
+                ...prev,
+                darkMode: !prev.darkMode,
+              }))
+            }
+            aria-label="Toggle theme"
+          >
+            {settings.darkMode ? <FaSun /> : <FaMoon />}
+          </button>
+
+          <button
+            type="button"
+            className="navbar-icon-button notification-button"
+            onClick={() => navigate("/notifications")}
+            aria-label="Notifications"
+          >
+            <FaBell />
+            <span className="notification-count">3</span>
+          </button>
+
+          <button
+            type="button"
+            className="navbar-icon-button"
+            onClick={() => setActiveSection("application")}
+            aria-label="Application settings"
+          >
+            <FaCog />
+          </button>
+
+          <div className="navbar-profile-wrapper">
+            <button
+              type="button"
+              className="navbar-profile"
+              onClick={() =>
+                setProfileMenuOpen((prev) => !prev)
+              }
+            >
+              <span className="navbar-avatar">
+                {initials}
+                <span />
+              </span>
+
+              <span className="navbar-profile-info">
+                <strong>{profile.name}</strong>
+                <small>{userRole}</small>
+              </span>
+
+              <FaChevronRight
+                className={`profile-chevron ${
+                  profileMenuOpen ? "open" : ""
+                }`}
+              />
+            </button>
+
+            {profileMenuOpen && (
+              <div className="profile-dropdown">
+                <button
+                  type="button"
+                  onClick={openEditProfile}
+                >
+                  <FaUser />
+                  Profile
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSection("account")}
+                >
+                  <FaCog />
+                  Settings
+                </button>
+
+                <div className="dropdown-divider" />
+
+                <button
+                  type="button"
+                  className="dropdown-danger"
+                  onClick={handleLogout}
+                >
+                  <FaSignOutAlt />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* =========================
           SIDEBAR
-      =================================================== */}
+      ========================== */}
+      <aside
+        className={`settings-sidebar ${
+          sidebarOpen ? "sidebar-expanded" : "sidebar-collapsed"
+        }`}
+      >
+        <div className="sidebar-profile">
+          <div className="sidebar-avatar">
+            {initials}
+            <span />
+          </div>
 
-      <Sidebar />
+          {sidebarOpen && (
+            <div className="sidebar-profile-details">
+              <strong>{profile.name}</strong>
+              <small>{userRole}</small>
+            </div>
+          )}
 
+          {sidebarOpen && (
+            <FaChevronRight className="sidebar-profile-arrow" />
+          )}
+        </div>
 
-      {/* ===================================================
-          MAIN APPLICATION AREA
-      =================================================== */}
+        {sidebarOpen && (
+          <div className="sidebar-label">WORKSPACE</div>
+        )}
 
-      <div className="settings-app">
+        <nav className="sidebar-navigation">
+          <NavLink to="/dashboard" className="sidebar-link">
+            <FaChartBar />
+            {sidebarOpen && <span>Dashboard</span>}
+          </NavLink>
 
-        {/* YOUR EXISTING NAVBAR */}
-        <Navbar />
+          <NavLink to="/projects" className="sidebar-link">
+            <FaFolder />
+            {sidebarOpen && <span>Projects</span>}
+          </NavLink>
 
+          <NavLink to="/tasks" className="sidebar-link">
+            <FaTasks />
+            {sidebarOpen && <span>Tasks</span>}
+          </NavLink>
 
-        {/* =================================================
-            CONTENT
-        ================================================= */}
+          <NavLink to="/kanban" className="sidebar-link">
+            <FaKanban />
+            {sidebarOpen && <span>Kanban</span>}
+          </NavLink>
 
-        <main className="settings-main">
+          <NavLink to="/users" className="sidebar-link">
+            <FaUsers />
+            {sidebarOpen && <span>Users</span>}
+          </NavLink>
 
-          {/* ------------------------------------------------
-              PAGE HEADER
-          ------------------------------------------------ */}
+          <NavLink to="/reports" className="sidebar-link">
+            <FaChartBar />
+            {sidebarOpen && <span>Reports</span>}
+          </NavLink>
 
-          <section className="settings-page-header">
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <FaCog />
+            {sidebarOpen && <span>Settings</span>}
+          </NavLink>
 
-            <div className="settings-header-left">
+          <NavLink
+            to="/notifications"
+            className="sidebar-link"
+          >
+            <FaBell />
+            {sidebarOpen && <span>Notifications</span>}
+          </NavLink>
+        </nav>
 
-              <div className="settings-breadcrumb">
-                <span>WORKSPACE</span>
-                <FaChevronRight />
-                <strong>SETTINGS</strong>
+        <div className="sidebar-bottom">
+          {sidebarOpen && (
+            <div className="sidebar-security-card">
+              <div className="security-icon">
+                <FaShieldAlt />
               </div>
 
+              <div>
+                <strong>Protected workspace</strong>
+                <span>Your TaskFlow account is secure.</span>
+              </div>
+
+              <FaCheck className="security-check" />
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="sidebar-logout"
+            onClick={handleLogout}
+          >
+            <FaSignOutAlt />
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* =========================
+          MAIN CONTENT
+      ========================== */}
+      <main
+        className={`settings-main ${
+          sidebarOpen ? "main-sidebar-open" : "main-sidebar-closed"
+        }`}
+      >
+        <div className="settings-page">
+          {/* Page heading */}
+          <div className="settings-heading">
+            <div>
+              <div className="settings-breadcrumb">
+                WORKSPACE
+                <FaChevronRight />
+                <span>SETTINGS</span>
+              </div>
 
               <h1>Settings</h1>
-
 
               <p>
                 Manage your account, workspace preferences,
                 notifications and security.
               </p>
-
             </div>
 
-
-            <div className="workspace-secure-badge">
-              <span className="secure-dot" />
+            <div className="workspace-secure">
               <FaShieldAlt />
               <span>Workspace secure</span>
             </div>
+          </div>
 
-          </section>
-
-
-          {/* =================================================
-              MAIN SETTINGS CARD
-          ================================================= */}
-
+          {/* Settings Card */}
           <section className="settings-card">
-
-            {/* ===============================================
-                SETTINGS SIDEBAR
-            =============================================== */}
-
-            <aside className="settings-navigation">
-
-              <div className="settings-nav-title">
+            {/* Left settings navigation */}
+            <aside className="settings-menu">
+              <div className="settings-menu-label">
                 SETTINGS
               </div>
 
-
-              <div className="settings-nav-list">
-
+              <div className="settings-menu-list">
                 {SETTINGS_ITEMS.map((item) => {
                   const Icon = item.icon;
-
                   const isActive =
                     activeSection === item.id;
 
@@ -532,84 +550,48 @@ export default function Settings() {
                     <button
                       key={item.id}
                       type="button"
-                      className={`settings-nav-item ${
+                      className={`settings-menu-item ${
                         isActive ? "active" : ""
                       }`}
                       onClick={() =>
                         setActiveSection(item.id)
                       }
                     >
-
-                      <span className="settings-nav-icon">
+                      <span className="settings-menu-icon">
                         <Icon />
                       </span>
 
-
-                      <span className="settings-nav-copy">
-
-                        <strong>
-                          {item.label}
-                        </strong>
-
-                        <small>
-                          {item.description}
-                        </small>
-
+                      <span className="settings-menu-content">
+                        <strong>{item.title}</strong>
+                        <small>{item.description}</small>
                       </span>
 
-
-                      <FaChevronRight className="settings-nav-arrow" />
-
+                      <FaChevronRight />
                     </button>
                   );
                 })}
-
               </div>
 
-
-              {/* ------------------------------------------------
-                  NAVIGATION SECURITY CARD
-              ------------------------------------------------ */}
-
-              <div className="navigation-security-card">
-
-                <div className="security-card-icon">
+              <div className="settings-menu-security">
+                <div className="settings-menu-security-icon">
                   <FaShieldAlt />
                 </div>
 
                 <div>
-                  <strong>
-                    Protected workspace
-                  </strong>
-
-                  <span>
-                    Your TaskFlow account is secure.
-                  </span>
+                  <strong>Protected workspace</strong>
+                  <span>Your TaskFlow account is secure.</span>
                 </div>
 
-                <FaCheckCircle className="security-card-check" />
-
+                <FaCheck />
               </div>
-
             </aside>
 
-
-            {/* ===============================================
-                SETTINGS CONTENT
-            =============================================== */}
-
+            {/* Right content */}
             <section className="settings-content">
-
-              {/* ---------------------------------------------
-                  CONTENT HEADER
-              --------------------------------------------- */}
-
-              <header className="settings-content-header">
-
+              <div className="settings-content-header">
                 <div>
-
-                  <span className="content-eyebrow">
-                    {activeItem?.label.toUpperCase()}
+                  <span className="section-kicker">
+                    {activeItem.title.toUpperCase()}
                   </span>
 
                   <h2>
@@ -620,10 +602,10 @@ export default function Settings() {
                       "Appearance"}
 
                     {activeSection === "notifications" &&
-                      "Notifications"}
+                      "Notification preferences"}
 
                     {activeSection === "security" &&
-                      "Security"}
+                      "Security & password"}
 
                     {activeSection === "application" &&
                       "TaskFlow information"}
@@ -634,910 +616,567 @@ export default function Settings() {
                       "Manage your personal identity and TaskFlow workspace information."}
 
                     {activeSection === "appearance" &&
-                      "Customize the way TaskFlow looks and behaves on your device."}
+                      "Customize the visual experience of your TaskFlow workspace."}
 
                     {activeSection === "notifications" &&
-                      "Choose which notifications and updates you want to receive."}
+                      "Control which notifications TaskFlow sends to you."}
 
                     {activeSection === "security" &&
-                      "Manage your password and keep your TaskFlow account protected."}
+                      "Manage your password and account security preferences."}
 
                     {activeSection === "application" &&
                       "Information about your TaskFlow application and current environment."}
                   </p>
-
                 </div>
-
 
                 <div className="content-header-icon">
-
-                  {activeSection === "account" && <FaUser />}
-
-                  {activeSection === "appearance" && <FaPalette />}
-
-                  {activeSection === "notifications" && <FaBell />}
-
-                  {activeSection === "security" && <FaLock />}
-
-                  {activeSection === "application" && <FaCog />}
-
+                  <ActiveIcon />
                 </div>
+              </div>
 
-              </header>
-
-
-              {/* =================================================
-                  ACCOUNT
-              ================================================= */}
-
+              {/* ACCOUNT */}
               {activeSection === "account" && (
-                <div className="settings-section">
-
-                  {/* PROFILE HERO */}
-
-                  <div className="profile-hero">
-
-                    <div className="profile-avatar">
-                      {getInitials(profile.name)}
-                      <span className="avatar-online" />
-                    </div>
-
-
-                    <div className="profile-identity">
-
-                      <div className="profile-name-row">
-
-                        <h3>
-                          {profile.name}
-                        </h3>
-
-                        <span className="admin-badge">
-                          {profile.role}
-                        </span>
-
+                <div className="settings-section-body">
+                  <div className="profile-card">
+                    <div className="profile-card-left">
+                      <div className="large-avatar">
+                        {getInitials(profile.name)}
+                        <span />
                       </div>
 
+                      <div className="profile-card-info">
+                        <div className="profile-name-row">
+                          <h3>{profile.name}</h3>
 
-                      <p>
-                        {profile.email}
-                      </p>
+                          <span className="role-badge">
+                            {userRole}
+                          </span>
+                        </div>
 
+                        <p>{profile.email}</p>
 
-                      <div className="profile-status-row">
-
-                        <span>
-                          <FaCircle />
-                          Active account
-                        </span>
-
-                        <span>
-                          <FaShieldAlt />
-                          Protected workspace
-                        </span>
-
-                      </div>
-
-                    </div>
-
-
-                    {!isEditingProfile && (
-                      <button
-                        className="profile-edit-button"
-                        type="button"
-                        onClick={handleEditProfile}
-                      >
-                        <FaEdit />
-                        Edit profile
-                      </button>
-                    )}
-
-                  </div>
-
-
-                  {/* EDIT PROFILE */}
-
-                  {isEditingProfile && (
-                    <div className="edit-profile-panel">
-
-                      <div className="panel-heading">
-
-                        <div>
+                        <div className="profile-statuses">
                           <span>
-                            PROFILE
+                            <i />
+                            Active account
                           </span>
 
-                          <h3>
-                            Edit your information
-                          </h3>
+                          <span className="status-separator">
+                            |
+                          </span>
+
+                          <span>
+                            <FaShieldAlt />
+                            Protected workspace
+                          </span>
                         </div>
-
-                        <button
-                          type="button"
-                          className="close-edit-button"
-                          onClick={handleCancelProfileEdit}
-                        >
-                          <FaTimes />
-                        </button>
-
                       </div>
-
-
-                      <div className="form-grid">
-
-                        <div className="form-group">
-
-                          <label>
-                            FULL NAME
-                          </label>
-
-                          <div className="input-with-icon">
-                            <FaUser />
-
-                            <input
-                              type="text"
-                              name="name"
-                              value={draftProfile.name}
-                              onChange={handleProfileChange}
-                              placeholder="Enter your full name"
-                            />
-                          </div>
-
-                        </div>
-
-
-                        <div className="form-group">
-
-                          <label>
-                            EMAIL ADDRESS
-                          </label>
-
-                          <div className="input-with-icon">
-                            <FaEnvelope />
-
-                            <input
-                              type="email"
-                              name="email"
-                              value={draftProfile.email}
-                              onChange={handleProfileChange}
-                              placeholder="Enter your email"
-                            />
-                          </div>
-
-                        </div>
-
-                      </div>
-
-
-                      <div className="edit-actions">
-
-                        <button
-                          type="button"
-                          className="secondary-button"
-                          onClick={handleCancelProfileEdit}
-                        >
-                          Cancel
-                        </button>
-
-                        <button
-                          type="button"
-                          className="primary-button"
-                          onClick={handleSaveProfile}
-                        >
-                          <FaSave />
-                          Save profile
-                        </button>
-
-                      </div>
-
                     </div>
-                  )}
 
+                    {/* FIXED EDIT PROFILE BUTTON */}
+                    <button
+                      type="button"
+                      className="edit-profile-button"
+                      onClick={openEditProfile}
+                    >
+                      <FaEdit />
+                      <span>Edit profile</span>
+                    </button>
+                  </div>
 
-                  {/* ACCOUNT INFORMATION */}
-
-                  <div className="information-grid">
-
-                    <div className="information-box">
-
+                  <div className="account-grid">
+                    <div className="information-card">
                       <div className="information-icon purple">
                         <FaUser />
                       </div>
 
                       <div>
-                        <span>
-                          FULL NAME
-                        </span>
-
-                        <strong>
-                          {profile.name}
-                        </strong>
+                        <span>FULL NAME</span>
+                        <strong>{profile.name}</strong>
                       </div>
-
                     </div>
 
-
-                    <div className="information-box">
-
+                    <div className="information-card">
                       <div className="information-icon blue">
                         <FaEnvelope />
                       </div>
 
                       <div>
-                        <span>
-                          EMAIL ADDRESS
-                        </span>
-
-                        <strong>
-                          {profile.email}
-                        </strong>
+                        <span>EMAIL ADDRESS</span>
+                        <strong>{profile.email}</strong>
                       </div>
-
                     </div>
 
-
-                    <div className="information-box">
-
+                    <div className="information-card">
                       <div className="information-icon purple">
                         <FaShieldAlt />
                       </div>
 
                       <div>
-                        <span>
-                          ROLE
-                        </span>
-
-                        <strong>
-                          {profile.role}
-                        </strong>
+                        <span>ROLE</span>
+                        <strong>{userRole}</strong>
                       </div>
-
                     </div>
 
-
-                    <div className="information-box">
-
+                    <div className="information-card">
                       <div className="information-icon green">
-                        <FaCheckCircle />
+                        <FaCheck />
                       </div>
 
                       <div>
-                        <span>
-                          ACCOUNT STATUS
-                        </span>
-
+                        <span>ACCOUNT STATUS</span>
                         <strong className="active-text">
                           Active
                         </strong>
                       </div>
-
                     </div>
-
                   </div>
 
-
-                  {/* PROTECTED WORKSPACE */}
-
                   <div className="protected-workspace">
-
                     <div className="protected-icon">
                       <FaShieldAlt />
                     </div>
 
                     <div>
-
-                      <strong>
-                        Protected workspace
-                      </strong>
-
+                      <h3>Protected workspace</h3>
                       <p>
-                        Your TaskFlow account information is securely
-                        associated with your workspace.
+                        Your TaskFlow account information is
+                        securely associated with your workspace.
                       </p>
-
                     </div>
 
-                    <FaCheckCircle className="protected-check" />
-
+                    <FaCheck className="protected-check" />
                   </div>
-
                 </div>
               )}
 
-
-              {/* =================================================
-                  APPEARANCE
-              ================================================= */}
-
+              {/* APPEARANCE */}
               {activeSection === "appearance" && (
-                <div className="settings-section">
+                <div className="settings-section-body">
+                  <div className="preference-card">
+                    <div className="preference-card-icon">
+                      {settings.darkMode ? (
+                        <FaMoon />
+                      ) : (
+                        <FaSun />
+                      )}
+                    </div>
 
-                  <div className="appearance-preview">
-
-                    <div className="preview-text">
-
-                      <span>
-                        THEME PREVIEW
-                      </span>
-
-                      <h3>
-                        Make TaskFlow feel like yours.
-                      </h3>
-
+                    <div className="preference-card-content">
+                      <h3>Interface theme</h3>
                       <p>
-                        Choose the visual experience that works
-                        best for your workspace.
+                        Choose how TaskFlow looks on your
+                        device.
                       </p>
 
+                      <div className="theme-options">
+                        <button
+                          type="button"
+                          className={`theme-option ${
+                            !settings.darkMode
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            setSettings((prev) => ({
+                              ...prev,
+                              darkMode: false,
+                            }))
+                          }
+                        >
+                          <FaSun />
+                          <span>Light</span>
+                          {!settings.darkMode && (
+                            <FaCheck />
+                          )}
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`theme-option ${
+                            settings.darkMode
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            setSettings((prev) => ({
+                              ...prev,
+                              darkMode: true,
+                            }))
+                          }
+                        >
+                          <FaMoon />
+                          <span>Dark</span>
+                          {settings.darkMode && (
+                            <FaCheck />
+                          )}
+                        </button>
+                      </div>
                     </div>
-
-                    <div className="preview-window">
-
-                      <div className="preview-window-top">
-                        <span />
-                        <span />
-                        <span />
-                      </div>
-
-                      <div className="preview-window-body">
-
-                        <div className="preview-sidebar" />
-
-                        <div className="preview-content">
-
-                          <div />
-                          <div />
-                          <div />
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
                   </div>
 
-
-                  <div className="preference-title">
-                    Theme preferences
-                  </div>
-
-
-                  <div className="option-grid">
-
-                    <button
-                      type="button"
-                      className={`theme-option ${
-                        !draftSettings.darkMode
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        updateSetting("darkMode", false)
-                      }
-                    >
-
-                      <div className="theme-icon light">
-                        <FaSun />
-                      </div>
-
-                      <div>
-                        <strong>
-                          Light mode
-                        </strong>
-
-                        <span>
-                          Clean and bright workspace
-                        </span>
-                      </div>
-
-                      {!draftSettings.darkMode && (
-                        <FaCheckCircle />
-                      )}
-
-                    </button>
-
-
-                    <button
-                      type="button"
-                      className={`theme-option ${
-                        draftSettings.darkMode
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        updateSetting("darkMode", true)
-                      }
-                    >
-
-                      <div className="theme-icon dark">
-                        <FaMoon />
-                      </div>
-
-                      <div>
-                        <strong>
-                          Dark mode
-                        </strong>
-
-                        <span>
-                          Comfortable low-light experience
-                        </span>
-                      </div>
-
-                      {draftSettings.darkMode && (
-                        <FaCheckCircle />
-                      )}
-
-                    </button>
-
-                  </div>
-
-
-                  <div className="toggle-list">
-
-                    <ToggleRow
-                      icon={FaDesktop}
-                      title="Compact workspace"
-                      description="Reduce spacing across TaskFlow for a denser workspace."
-                      checked={draftSettings.compactMode}
-                      onChange={(value) =>
-                        updateSetting("compactMode", value)
-                      }
-                    />
-
-                  </div>
-
-                </div>
-              )}
-
-
-              {/* =================================================
-                  NOTIFICATIONS
-              ================================================= */}
-
-              {activeSection === "notifications" && (
-                <div className="settings-section">
-
-                  <div className="notification-intro">
-
-                    <div className="notification-intro-icon">
-                      <FaBell />
+                  <div className="protected-workspace">
+                    <div className="protected-icon">
+                      <FaPalette />
                     </div>
 
                     <div>
-                      <h3>
-                        Stay informed without the noise.
-                      </h3>
-
+                      <h3>Personalized workspace</h3>
                       <p>
-                        Control which TaskFlow events should
-                        generate notifications.
+                        Your visual preferences are stored
+                        with your TaskFlow workspace.
                       </p>
                     </div>
 
+                    <FaCheck className="protected-check" />
                   </div>
-
-
-                  <div className="toggle-list">
-
-                    <ToggleRow
-                      icon={FaEnvelope}
-                      title="Email notifications"
-                      description="Receive important TaskFlow updates through email."
-                      checked={draftSettings.emailNotifications}
-                      onChange={(value) =>
-                        updateSetting(
-                          "emailNotifications",
-                          value
-                        )
-                      }
-                    />
-
-
-                    <ToggleRow
-                      icon={FaCheckCircle}
-                      title="Task notifications"
-                      description="Get notified when tasks are assigned, completed or updated."
-                      checked={draftSettings.taskNotifications}
-                      onChange={(value) =>
-                        updateSetting(
-                          "taskNotifications",
-                          value
-                        )
-                      }
-                    />
-
-
-                    <ToggleRow
-                      icon={FaCode}
-                      title="Project notifications"
-                      description="Receive updates about projects and workspace activity."
-                      checked={draftSettings.projectNotifications}
-                      onChange={(value) =>
-                        updateSetting(
-                          "projectNotifications",
-                          value
-                        )
-                      }
-                    />
-
-
-                    <ToggleRow
-                      icon={FaShieldAlt}
-                      title="Security notifications"
-                      description="Always receive important account and security alerts."
-                      checked={draftSettings.securityNotifications}
-                      onChange={(value) =>
-                        updateSetting(
-                          "securityNotifications",
-                          value
-                        )
-                      }
-                      locked
-                    />
-
-                  </div>
-
                 </div>
               )}
 
+              {/* NOTIFICATIONS */}
+              {activeSection === "notifications" && (
+                <div className="settings-section-body">
+                  <div className="toggle-list">
+                    <div className="toggle-card">
+                      <div className="toggle-icon">
+                        <FaEnvelope />
+                      </div>
 
-              {/* =================================================
-                  SECURITY
-              ================================================= */}
+                      <div className="toggle-content">
+                        <h3>Email notifications</h3>
+                        <p>
+                          Receive important TaskFlow updates
+                          through email.
+                        </p>
+                      </div>
 
+                      <button
+                        type="button"
+                        className={`toggle-switch ${
+                          settings.emailNotifications
+                            ? "enabled"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleSettingChange(
+                            "emailNotifications"
+                          )
+                        }
+                      >
+                        <span />
+                      </button>
+                    </div>
+
+                    <div className="toggle-card">
+                      <div className="toggle-icon">
+                        <FaTasks />
+                      </div>
+
+                      <div className="toggle-content">
+                        <h3>Task notifications</h3>
+                        <p>
+                          Get notified when tasks are assigned,
+                          updated or completed.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={`toggle-switch ${
+                          settings.taskNotifications
+                            ? "enabled"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleSettingChange(
+                            "taskNotifications"
+                          )
+                        }
+                      >
+                        <span />
+                      </button>
+                    </div>
+
+                    <div className="toggle-card">
+                      <div className="toggle-icon">
+                        <FaFolder />
+                      </div>
+
+                      <div className="toggle-content">
+                        <h3>Project notifications</h3>
+                        <p>
+                          Receive updates about your projects
+                          and workspace activity.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={`toggle-switch ${
+                          settings.projectNotifications
+                            ? "enabled"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleSettingChange(
+                            "projectNotifications"
+                          )
+                        }
+                      >
+                        <span />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SECURITY */}
               {activeSection === "security" && (
-                <div className="settings-section">
+                <div className="settings-section-body">
+                  <form
+                    className="security-form"
+                    onSubmit={handlePasswordChange}
+                  >
+                    <div className="security-intro">
+                      <div className="security-intro-icon">
+                        <FaLock />
+                      </div>
 
-                  <div className="security-summary">
+                      <div>
+                        <h3>Change password</h3>
+                        <p>
+                          Keep your TaskFlow account secure with
+                          a strong password.
+                        </p>
+                      </div>
+                    </div>
 
-                    <div className="security-score-icon">
+                    <div className="password-grid">
+                      <label>
+                        <span>Current password</span>
+                        <input
+                          type="password"
+                          value={
+                            passwordFields.currentPassword
+                          }
+                          onChange={(event) =>
+                            setPasswordFields((prev) => ({
+                              ...prev,
+                              currentPassword:
+                                event.target.value,
+                            }))
+                          }
+                          placeholder="Enter current password"
+                        />
+                      </label>
+
+                      <label>
+                        <span>New password</span>
+                        <input
+                          type="password"
+                          value={
+                            passwordFields.newPassword
+                          }
+                          onChange={(event) =>
+                            setPasswordFields((prev) => ({
+                              ...prev,
+                              newPassword:
+                                event.target.value,
+                            }))
+                          }
+                          placeholder="Enter new password"
+                        />
+                      </label>
+
+                      <label className="full-width">
+                        <span>Confirm new password</span>
+                        <input
+                          type="password"
+                          value={
+                            passwordFields.confirmPassword
+                          }
+                          onChange={(event) =>
+                            setPasswordFields((prev) => ({
+                              ...prev,
+                              confirmPassword:
+                                event.target.value,
+                            }))
+                          }
+                          placeholder="Confirm new password"
+                        />
+                      </label>
+                    </div>
+
+                    {passwordMessage && (
+                      <div className="password-message">
+                        <FaInfoCircle />
+                        {passwordMessage}
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      className="security-submit"
+                    >
+                      <FaLock />
+                      Update password
+                    </button>
+                  </form>
+
+                  <div className="protected-workspace">
+                    <div className="protected-icon">
                       <FaShieldAlt />
                     </div>
 
                     <div>
-
-                      <span>
-                        SECURITY STATUS
-                      </span>
-
-                      <h3>
-                        Your account is protected
-                      </h3>
-
+                      <h3>Account protection enabled</h3>
                       <p>
-                        Keep your password strong and unique
-                        to maintain account security.
+                        Your workspace is protected by TaskFlow
+                        security controls.
                       </p>
-
                     </div>
 
-                    <div className="security-status">
-                      <FaCheckCircle />
-                      Secure
-                    </div>
-
+                    <FaCheck className="protected-check" />
                   </div>
-
-
-                  <form
-                    className="password-form"
-                    onSubmit={handlePasswordUpdate}
-                  >
-
-                    <div className="password-form-heading">
-
-                      <div className="password-heading-icon">
-                        <FaKey />
-                      </div>
-
-                      <div>
-                        <h3>
-                          Change password
-                        </h3>
-
-                        <p>
-                          Update your TaskFlow account password.
-                        </p>
-                      </div>
-
-                    </div>
-
-
-                    <PasswordField
-                      label="CURRENT PASSWORD"
-                      name="currentPassword"
-                      value={passwordData.currentPassword}
-                      onChange={handlePasswordChange}
-                      visible={showCurrentPassword}
-                      setVisible={setShowCurrentPassword}
-                    />
-
-
-                    <div className="password-grid">
-
-                      <PasswordField
-                        label="NEW PASSWORD"
-                        name="newPassword"
-                        value={passwordData.newPassword}
-                        onChange={handlePasswordChange}
-                        visible={showNewPassword}
-                        setVisible={setShowNewPassword}
-                      />
-
-
-                      <PasswordField
-                        label="CONFIRM PASSWORD"
-                        name="confirmPassword"
-                        value={passwordData.confirmPassword}
-                        onChange={handlePasswordChange}
-                        visible={showConfirmPassword}
-                        setVisible={setShowConfirmPassword}
-                      />
-
-                    </div>
-
-
-                    {passwordMessage.text && (
-                      <div
-                        className={`password-message ${
-                          passwordMessage.type
-                        }`}
-                      >
-                        {passwordMessage.type ===
-                        "success" ? (
-                          <FaCheckCircle />
-                        ) : (
-                          <FaTimes />
-                        )}
-
-                        {passwordMessage.text}
-                      </div>
-                    )}
-
-
-                    <div className="password-requirements">
-
-                      <span>
-                        Password requirements
-                      </span>
-
-                      <div>
-                        <Requirement
-                          valid={
-                            passwordData.newPassword.length >=
-                            6
-                          }
-                          text="At least 6 characters"
-                        />
-
-                        <Requirement
-                          valid={
-                            /[A-Z]/.test(
-                              passwordData.newPassword
-                            )
-                          }
-                          text="One uppercase letter"
-                        />
-
-                        <Requirement
-                          valid={
-                            /[0-9]/.test(
-                              passwordData.newPassword
-                            )
-                          }
-                          text="One number"
-                        />
-
-                      </div>
-
-                    </div>
-
-
-                    <div className="password-actions">
-
-                      <button
-                        type="submit"
-                        className="primary-button"
-                      >
-                        <FaLock />
-                        Update password
-                      </button>
-
-                    </div>
-
-                  </form>
-
                 </div>
               )}
 
-
-              {/* =================================================
-                  APPLICATION
-              ================================================= */}
-
+              {/* APPLICATION */}
               {activeSection === "application" && (
-                <div className="settings-section">
-
-                  <div className="application-hero">
-
-                    <div className="taskflow-logo-box">
+                <div className="settings-section-body">
+                  <div className="application-brand-card">
+                    <div className="application-logo">
                       TF
                     </div>
 
-                    <div>
-
-                      <span>
-                        PROJECT MANAGEMENT PLATFORM
-                      </span>
-
-                      <h3>
-                        TaskFlow
-                      </h3>
-
+                    <div className="application-brand-info">
+                      <span>PROJECT MANAGEMENT PLATFORM</span>
+                      <h3>TaskFlow</h3>
                       <p>
                         A modern workspace for managing
                         projects, tasks, teams and productivity.
                       </p>
-
                     </div>
 
-                    <div className="version-box">
-
-                      <span>
-                        VERSION
-                      </span>
-
-                      <strong>
-                        1.0.0
-                      </strong>
-
+                    <div className="application-version">
+                      <span>VERSION</span>
+                      <strong>1.0.0</strong>
                     </div>
-
                   </div>
-
 
                   <div className="application-grid">
+                    <div className="application-info">
+                      <span>PLATFORM</span>
+                      <strong>Web Application</strong>
+                      <FaCheck />
+                    </div>
 
-                    <ApplicationInfo
-                      icon={FaGlobe}
-                      label="PLATFORM"
-                      value="Web Application"
-                    />
+                    <div className="application-info">
+                      <span>ENVIRONMENT</span>
+                      <strong>Production</strong>
+                      <FaCheck />
+                    </div>
 
-                    <ApplicationInfo
-                      icon={FaServer}
-                      label="ENVIRONMENT"
-                      value="Production"
-                    />
+                    <div className="application-info">
+                      <span>BACKEND</span>
+                      <strong>Node.js / Express</strong>
+                      <FaCheck />
+                    </div>
 
-                    <ApplicationInfo
-                      icon={FaCode}
-                      label="BACKEND"
-                      value="Node.js / Express"
-                    />
+                    <div className="application-info">
+                      <span>DATABASE</span>
+                      <strong>MongoDB</strong>
+                      <FaCheck />
+                    </div>
 
-                    <ApplicationInfo
-                      icon={FaDatabase}
-                      label="DATABASE"
-                      value="MongoDB"
-                    />
+                    <div className="application-info">
+                      <span>FRONTEND</span>
+                      <strong>React + Vite</strong>
+                      <FaCheck />
+                    </div>
 
-                    <ApplicationInfo
-                      icon={FaCode}
-                      label="FRONTEND"
-                      value="React + Vite"
-                    />
-
-                    <ApplicationInfo
-                      icon={FaShieldAlt}
-                      label="SYSTEM STATUS"
-                      value="Operational"
-                      status
-                    />
-
+                    <div className="application-info">
+                      <span>SYSTEM STATUS</span>
+                      <strong className="active-text">
+                        Operational
+                      </strong>
+                      <FaCheck />
+                    </div>
                   </div>
 
-
-                  <div className="application-about">
-
-                    <div className="application-about-icon">
+                  <div className="about-taskflow">
+                    <div>
                       <FaInfoCircle />
                     </div>
 
                     <div>
-
-                      <strong>
-                        About TaskFlow
-                      </strong>
-
+                      <h3>About TaskFlow</h3>
                       <p>
                         TaskFlow is designed to provide a
                         centralized, organized and secure
                         environment for modern project
                         management.
                       </p>
-
                     </div>
 
                     <span className="operational-badge">
-                      <FaCheckCircle />
+                      <i />
                       Operational
                     </span>
-
                   </div>
-
                 </div>
               )}
 
-
-              {/* =================================================
-                  FOOTER ACTIONS
-              ================================================= */}
-
-              <footer className="settings-footer">
-
-                <div className="changes-status">
-
-                  <span className="changes-dot" />
+              {/* Footer */}
+              <div className="settings-footer">
+                <div className="save-status">
+                  <span
+                    className={
+                      saveMessage.includes("unsaved")
+                        ? "unsaved-dot"
+                        : ""
+                    }
+                  />
 
                   <div>
-
-                    <strong>
-                      All changes are currently saved
-                    </strong>
-
-                    <span>
-                      Your workspace preferences stay organized
-                      and protected.
-                    </span>
-
+                    <strong>{saveMessage}</strong>
+                    <small>
+                      Your workspace preferences stay
+                      organized and protected.
+                    </small>
                   </div>
-
                 </div>
 
-
                 <div className="footer-actions">
-
                   <button
                     type="button"
-                    className="secondary-button"
-                    onClick={handleResetSettings}
+                    className="reset-button"
+                    onClick={handleReset}
                   >
-                    <FaUndo />
+                    <FaRedo />
                     Reset
                   </button>
 
-
                   <button
                     type="button"
-                    className="primary-button"
-                    onClick={handleSaveSettings}
+                    className="save-button"
+                    onClick={handleSave}
                   >
                     <FaSave />
                     Save changes
                   </button>
-
                 </div>
-
-              </footer>
-
+              </div>
             </section>
-
           </section>
 
-
-          {/* =================================================
-              SECURITY BANNER
-          ================================================= */}
-
-          <section className="settings-security-banner">
-
-            <div className="security-banner-icon">
+          {/* Bottom secure information */}
+          <div className="secure-information">
+            <div className="secure-information-icon">
               <FaShieldAlt />
             </div>
 
-            <div className="security-banner-content">
-
+            <div>
               <strong>
                 Your preferences are stored securely
               </strong>
@@ -1546,179 +1185,107 @@ export default function Settings() {
                 TaskFlow keeps your workspace settings
                 organized and protected.
               </p>
-
             </div>
 
-            <div className="secure-label">
-              <FaCheckCircle />
+            <span>
+              <FaLock />
               Secure
+            </span>
+          </div>
+        </div>
+      </main>
+
+      {/* =========================
+          EDIT PROFILE MODAL
+      ========================== */}
+      {editProfileOpen && (
+        <div
+          className="profile-modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setEditProfileOpen(false);
+            }
+          }}
+        >
+          <div className="profile-modal">
+            <div className="profile-modal-header">
+              <div>
+                <span>PROFILE</span>
+                <h2>Edit profile</h2>
+                <p>
+                  Update your TaskFlow account information.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="modal-close"
+                onClick={() => setEditProfileOpen(false)}
+              >
+                <FaTimes />
+              </button>
             </div>
 
-          </section>
+            <form onSubmit={handleProfileSave}>
+              <div className="modal-avatar-preview">
+                {getInitials(editForm.name || profile.name)}
+              </div>
 
-        </main>
+              <label className="modal-field">
+                <span>Full name</span>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(event) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      name: event.target.value,
+                    }))
+                  }
+                  placeholder="Enter your name"
+                />
+              </label>
 
-      </div>
+              <label className="modal-field">
+                <span>Email address</span>
+                <input
+                  type="email"
+                  value={editForm.email}
+                  onChange={(event) =>
+                    setEditForm((prev) => ({
+                      ...prev,
+                      email: event.target.value,
+                    }))
+                  }
+                  placeholder="Enter your email"
+                />
+              </label>
 
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="modal-cancel"
+                  onClick={() =>
+                    setEditProfileOpen(false)
+                  }
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="modal-save"
+                >
+                  <FaSave />
+                  Save profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-
-/* =========================================================
-   TOGGLE COMPONENT
-========================================================= */
-
-function ToggleRow({
-  icon: Icon,
-  title,
-  description,
-  checked,
-  onChange,
-  locked = false,
-}) {
-  return (
-    <div className="toggle-row">
-
-      <div className="toggle-row-icon">
-        <Icon />
-      </div>
-
-      <div className="toggle-row-content">
-
-        <strong>
-          {title}
-        </strong>
-
-        <span>
-          {description}
-        </span>
-
-      </div>
-
-
-      <button
-        type="button"
-        className={`toggle-switch ${
-          checked ? "checked" : ""
-        } ${locked ? "locked" : ""}`}
-        onClick={() => {
-          if (!locked) {
-            onChange(!checked);
-          }
-        }}
-        aria-label={title}
-        aria-pressed={checked}
-      >
-
-        <span />
-
-      </button>
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   PASSWORD FIELD
-========================================================= */
-
-function PasswordField({
-  label,
-  name,
-  value,
-  onChange,
-  visible,
-  setVisible,
-}) {
-  return (
-    <div className="form-group">
-
-      <label>
-        {label}
-      </label>
-
-      <div className="password-input">
-
-        <FaLock />
-
-        <input
-          type={visible ? "text" : "password"}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder="Enter password"
-        />
-
-        <button
-          type="button"
-          onClick={() =>
-            setVisible((previous) => !previous)
-          }
-          aria-label="Toggle password visibility"
-        >
-          {visible ? <FaEyeSlash /> : <FaEye />}
-        </button>
-
-      </div>
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   PASSWORD REQUIREMENT
-========================================================= */
-
-function Requirement({ valid, text }) {
-  return (
-    <span className={valid ? "valid" : ""}>
-      {valid ? <FaCheck /> : <FaCircle />}
-      {text}
-    </span>
-  );
-}
-
-
-/* =========================================================
-   APPLICATION INFO
-========================================================= */
-
-function ApplicationInfo({
-  icon: Icon,
-  label,
-  value,
-  status = false,
-}) {
-  return (
-    <div className="application-info-box">
-
-      <div className="application-info-icon">
-        <Icon />
-      </div>
-
-      <div>
-
-        <span>
-          {label}
-        </span>
-
-        <strong>
-          {value}
-        </strong>
-
-      </div>
-
-      <FaCheckCircle
-        className={
-          status
-            ? "application-status-icon"
-            : "application-check"
-        }
-      />
-
-    </div>
-  );
-}
+export default Settings;
