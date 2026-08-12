@@ -9,7 +9,7 @@ import {
   FaCog,
   FaFolder,
   FaInfoCircle,
-  FaKanban,
+  FaColumns,
   FaLock,
   FaMoon,
   FaPalette,
@@ -24,7 +24,7 @@ import {
   FaUser,
   FaUsers,
   FaEnvelope,
-  FaEdit,
+  FaEdit
 } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
@@ -440,7 +440,7 @@ function Settings() {
           </NavLink>
 
           <NavLink to="/kanban" className="sidebar-link">
-            <FaKanban />
+            <FaColumns />
             {sidebarOpen && <span>Kanban</span>}
           </NavLink>
 
