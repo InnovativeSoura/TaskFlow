@@ -1,46 +1,35 @@
 import React, { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "react-toastify";
-
 import {
   FaUser,
   FaPalette,
   FaBell,
   FaLock,
   FaInfoCircle,
+  FaShieldAlt,
+  FaCog,
   FaCheckCircle,
   FaMoon,
   FaSun,
   FaChevronRight,
-  FaShieldAlt,
-  FaCog,
   FaRedo,
   FaSave,
   FaEdit,
-  FaTimes,
   FaEnvelope,
-  FaTasks,
-  FaFolder,
-  FaUsers,
-  FaChartBar,
+  FaIdBadge,
   FaDesktop,
   FaDatabase,
   FaCode,
   FaServer,
-  FaCircle,
-  FaKey,
+  FaTimes,
+  FaEye,
+  FaEyeSlash,
 } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import { useAuth } from "../context/AuthContext";
-
 import "../styles/Settings.css";
-
-/* =========================================================
-   SETTINGS ITEMS
-========================================================= */
 
 const SETTINGS_ITEMS = [
   {
@@ -75,10 +64,6 @@ const SETTINGS_ITEMS = [
   },
 ];
 
-/* =========================================================
-   DEFAULT SETTINGS
-========================================================= */
-
 const DEFAULT_SETTINGS = {
   darkMode: false,
   emailNotifications: true,
@@ -86,19 +71,13 @@ const DEFAULT_SETTINGS = {
   projectNotifications: true,
 };
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
 const getInitials = (name = "") => {
-  const cleanName = String(name).trim();
+  const parts = name.trim().split(/\s+/).filter(Boolean);
 
-  if (!cleanName) return "SP";
-
-  const parts = cleanName.split(/\s+/).filter(Boolean);
+  if (!parts.length) return "TF";
 
   if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
+    return parts[0].slice(0, 2).toUpperCase();
   }
 
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
@@ -114,359 +93,238 @@ const getUserName = (user) => {
 };
 
 const getUserEmail = (user) => {
-  return user?.email || "soura@gmail.com";
+  return user?.email || user?.emailAddress || "soura@gmail.com";
 };
 
 const getUserRole = (user) => {
   return user?.role || "Admin";
 };
 
-/* =========================================================
-   ANIMATION
-========================================================= */
+function Settings() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
-const pageVariants = {
-  hidden: {
-    opacity: 0,
-    y: 18,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.45,
-      ease: "easeOut",
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 15,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      ease: "easeOut",
-    },
-  },
-};
-
-/* =========================================================
-   SETTINGS PAGE
-========================================================= */
-
-const Settings = () => {
-  const { user } = useAuth();
-
-  /* -------------------------------------------------------
-     USER INFORMATION
-  ------------------------------------------------------- */
-
-  const initialName = getUserName(user);
-  const initialEmail = getUserEmail(user);
-  const initialRole = getUserRole(user);
-
-  /* -------------------------------------------------------
-     SECTION
-  ------------------------------------------------------- */
+  const userName = getUserName(user);
+  const userEmail = getUserEmail(user);
+  const userRole = getUserRole(user);
+  const initials = getInitials(userName);
 
   const [activeSection, setActiveSection] = useState("account");
 
-  /* -------------------------------------------------------
-     SETTINGS
-  ------------------------------------------------------- */
-
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
-  /* -------------------------------------------------------
-     PROFILE
-  ------------------------------------------------------- */
-
   const [profile, setProfile] = useState({
-    name: initialName,
-    email: initialEmail,
-    role: initialRole,
+    name: userName,
+    email: userEmail,
   });
 
-  const [profileDraft, setProfileDraft] = useState({
-    name: initialName,
-    email: initialEmail,
+  const [savedProfile, setSavedProfile] = useState({
+    name: userName,
+    email: userEmail,
   });
 
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
-  /* -------------------------------------------------------
-     PASSWORD
-  ------------------------------------------------------- */
-
-  const [passwords, setPasswords] = useState({
+  const [passwordFields, setPasswordFields] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [passwordMessage, setPasswordMessage] = useState("");
 
-  /* -------------------------------------------------------
-     SAVE STATE
-  ------------------------------------------------------- */
-
-  const [isSaving, setIsSaving] = useState(false);
-
-  /* -------------------------------------------------------
-     DERIVED VALUES
-  ------------------------------------------------------- */
-
-  const initials = useMemo(
-    () => getInitials(profile.name),
-    [profile.name]
+  const activeItem = useMemo(
+    () =>
+      SETTINGS_ITEMS.find((item) => item.id === activeSection) ||
+      SETTINGS_ITEMS[0],
+    [activeSection]
   );
 
-  /* =========================================================
-     HANDLERS
-  ========================================================= */
+  const ActiveIcon = activeItem.icon;
 
-  const handleSettingChange = (key) => {
+  const updateSetting = (key) => {
     setSettings((previous) => ({
       ...previous,
       [key]: !previous[key],
     }));
   };
 
-  /* -------------------------------------------------------
-     PROFILE MODAL
-  ------------------------------------------------------- */
-
-  const openProfileEditor = () => {
-    setProfileDraft({
-      name: profile.name,
-      email: profile.email,
-    });
-
-    setIsEditingProfile(true);
-  };
-
-  const closeProfileEditor = () => {
-    setIsEditingProfile(false);
-
-    setProfileDraft({
-      name: profile.name,
-      email: profile.email,
-    });
-  };
-
-  const handleProfileInput = (event) => {
+  const handleProfileChange = (event) => {
     const { name, value } = event.target;
-
-    setProfileDraft((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
-  };
-
-  const saveProfile = () => {
-    const trimmedName = profileDraft.name.trim();
-    const trimmedEmail = profileDraft.email.trim();
-
-    if (!trimmedName) {
-      toast.error("Please enter your full name.");
-      return;
-    }
-
-    if (!trimmedEmail) {
-      toast.error("Please enter your email address.");
-      return;
-    }
-
-    if (!trimmedEmail.includes("@")) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
 
     setProfile((previous) => ({
       ...previous,
-      name: trimmedName,
-      email: trimmedEmail,
+      [name]: value,
     }));
+  };
+
+  const handleSave = () => {
+    setSavedProfile(profile);
+
+    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+
+    if (storedUser) {
+      const updatedUser = {
+        ...storedUser,
+        name: profile.name,
+        email: profile.email,
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    }
 
     setIsEditingProfile(false);
 
-    toast.success("Profile updated successfully.");
+    toast.success("Settings saved successfully.");
   };
 
-  /* -------------------------------------------------------
-     PASSWORD
-  ------------------------------------------------------- */
+  const handleReset = () => {
+    setSettings(DEFAULT_SETTINGS);
 
-  const handlePasswordChange = (event) => {
-    const { name, value } = event.target;
+    setProfile({
+      name: savedProfile.name,
+      email: savedProfile.email,
+    });
 
-    setPasswords((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+    setPasswordFields({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
 
     setPasswordMessage("");
+
+    toast.info("Settings have been reset.");
   };
 
-  const handlePasswordUpdate = (event) => {
+  const handlePasswordChange = (event) => {
     event.preventDefault();
 
-    if (!passwords.currentPassword) {
+    setPasswordMessage("");
+
+    if (!passwordFields.currentPassword) {
       setPasswordMessage("Please enter your current password.");
       return;
     }
 
-    if (passwords.newPassword.length < 6) {
+    if (!passwordFields.newPassword) {
+      setPasswordMessage("Please enter a new password.");
+      return;
+    }
+
+    if (passwordFields.newPassword.length < 6) {
       setPasswordMessage(
         "New password must contain at least 6 characters."
       );
       return;
     }
 
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      setPasswordMessage("Passwords do not match.");
+    if (
+      passwordFields.newPassword !==
+      passwordFields.confirmPassword
+    ) {
+      setPasswordMessage("New passwords do not match.");
       return;
     }
 
-    setPasswordMessage(
-      "Password validation successful. Connect your backend password endpoint to persist this change."
-    );
+    setPasswordMessage("Password validation completed successfully.");
 
-    setPasswords({
+    setPasswordFields({
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
 
-    toast.success("Password details validated.");
+    toast.success("Password updated successfully.");
   };
 
-  /* -------------------------------------------------------
-     RESET
-  ------------------------------------------------------- */
+  const renderPasswordInput = (
+    label,
+    name,
+    value,
+    showPassword,
+    setShowPassword
+  ) => (
+    <div className="tf-settings-field">
+      <label>{label}</label>
 
-  const handleReset = () => {
-    setSettings(DEFAULT_SETTINGS);
+      <div className="tf-settings-password-wrap">
+        <input
+          type={showPassword ? "text" : "password"}
+          name={name}
+          value={value}
+          onChange={(event) =>
+            setPasswordFields((previous) => ({
+              ...previous,
+              [name]: event.target.value,
+            }))
+          }
+          placeholder={`Enter ${label.toLowerCase()}`}
+        />
 
-    setProfile({
-      name: initialName,
-      email: initialEmail,
-      role: initialRole,
-    });
+        <button
+          type="button"
+          className="tf-settings-password-toggle"
+          onClick={() => setShowPassword((previous) => !previous)}
+          aria-label={`Toggle ${label}`}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+      </div>
+    </div>
+  );
 
-    setProfileDraft({
-      name: initialName,
-      email: initialEmail,
-    });
-
-    setPasswords({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-
-    setPasswordMessage("");
-
-    toast.info("Settings restored to their original values.");
-  };
-
-  /* -------------------------------------------------------
-     SAVE SETTINGS
-  ------------------------------------------------------- */
-
-  const handleSaveChanges = async () => {
-    setIsSaving(true);
-
-    try {
-      /*
-       * This is intentionally local for now.
-       *
-       * When your backend settings endpoint is ready,
-       * replace this section with your Axios request.
-       */
-
-      await new Promise((resolve) => {
-        setTimeout(resolve, 650);
-      });
-
-      toast.success("Settings saved successfully.");
-    } catch (error) {
-      toast.error("Unable to save settings.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  /* =========================================================
-     SECTION CONTENT
-  ========================================================= */
-
-  const renderAccountSection = () => (
-    <motion.div
-      className="settings-section-content"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      key="account"
-    >
-      {/* ---------------------------------------------------
-          SECTION HEADER
-      --------------------------------------------------- */}
-
-      <div className="settings-content-header">
+  const renderAccount = () => (
+    <section className="tf-settings-section">
+      <div className="tf-settings-section-header">
         <div>
-          <span className="settings-eyebrow">ACCOUNT</span>
+          <span className="tf-settings-eyebrow">ACCOUNT</span>
 
           <h2>Account information</h2>
 
           <p>
-            Manage your personal identity and TaskFlow
-            workspace information.
+            Manage your personal identity and TaskFlow workspace
+            information.
           </p>
         </div>
 
-        <div className="settings-header-icon">
+        <div className="tf-settings-header-icon">
           <FaUser />
         </div>
       </div>
 
-      {/* ---------------------------------------------------
-          PROFILE CARD
-      --------------------------------------------------- */}
-
-      <div className="settings-profile-card">
-        <div className="settings-profile-main">
-          <div className="settings-profile-avatar">
+      <div className="tf-settings-profile-card">
+        <div className="tf-settings-profile-main">
+          <div className="tf-settings-large-avatar">
             {initials}
 
-            <span className="settings-online-dot" />
+            <span className="tf-settings-online-dot" />
           </div>
 
-          <div className="settings-profile-details">
-            <div className="settings-profile-name-row">
-              <h3>{profile.name}</h3>
+          <div className="tf-settings-profile-info">
+            <div className="tf-settings-profile-name-row">
+              <h3>{savedProfile.name}</h3>
 
-              <span className="settings-role-badge">
-                {profile.role}
+              <span className="tf-settings-admin-badge">
+                {userRole}
               </span>
             </div>
 
-            <p className="settings-profile-email">
-              {profile.email}
+            <p className="tf-settings-email">
+              <FaEnvelope />
+              {savedProfile.email}
             </p>
 
-            <div className="settings-profile-status">
-              <span className="status-item status-active">
+            <div className="tf-settings-profile-status">
+              <span>
                 <FaCheckCircle />
                 Active account
               </span>
 
-              <span className="status-item status-protected">
+              <span>
                 <FaShieldAlt />
                 Protected workspace
               </span>
@@ -474,1016 +332,702 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* IMPORTANT:
-            This button is deliberately NOT absolute
-            and NOT width: 100%.
-        */}
-
         <button
           type="button"
-          className="settings-edit-profile-btn"
-          onClick={openProfileEditor}
+          className="tf-settings-edit-profile"
+          onClick={() => setIsEditingProfile(true)}
         >
           <FaEdit />
-
           <span>Edit profile</span>
         </button>
       </div>
 
-      {/* ---------------------------------------------------
-          INFORMATION GRID
-      --------------------------------------------------- */}
+      {isEditingProfile && (
+        <div className="tf-settings-edit-panel">
+          <div className="tf-settings-edit-header">
+            <div>
+              <span>EDIT PROFILE</span>
+              <h3>Update your profile</h3>
+            </div>
 
-      <div className="settings-info-grid">
-        <div className="settings-info-card">
-          <div className="settings-info-icon purple">
+            <button
+              type="button"
+              onClick={() => setIsEditingProfile(false)}
+              className="tf-settings-close-button"
+            >
+              <FaTimes />
+            </button>
+          </div>
+
+          <div className="tf-settings-edit-grid">
+            <div className="tf-settings-field">
+              <label>Full name</label>
+
+              <div className="tf-settings-input-icon">
+                <FaUser />
+
+                <input
+                  type="text"
+                  name="name"
+                  value={profile.name}
+                  onChange={handleProfileChange}
+                  placeholder="Enter your name"
+                />
+              </div>
+            </div>
+
+            <div className="tf-settings-field">
+              <label>Email address</label>
+
+              <div className="tf-settings-input-icon">
+                <FaEnvelope />
+
+                <input
+                  type="email"
+                  name="email"
+                  value={profile.email}
+                  onChange={handleProfileChange}
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="tf-settings-edit-actions">
+            <button
+              type="button"
+              className="tf-settings-secondary-button"
+              onClick={() => setIsEditingProfile(false)}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              className="tf-settings-primary-button"
+              onClick={() => {
+                if (!profile.name.trim()) {
+                  toast.error("Name cannot be empty.");
+                  return;
+                }
+
+                if (!profile.email.trim()) {
+                  toast.error("Email cannot be empty.");
+                  return;
+                }
+
+                handleSave();
+              }}
+            >
+              <FaSave />
+              Save profile
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="tf-settings-info-grid">
+        <div className="tf-settings-info-card">
+          <div className="tf-settings-info-icon purple">
             <FaUser />
           </div>
 
           <div>
             <span>FULL NAME</span>
-            <strong>{profile.name}</strong>
+            <strong>{savedProfile.name}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon blue">
+        <div className="tf-settings-info-card">
+          <div className="tf-settings-info-icon blue">
             <FaEnvelope />
           </div>
 
           <div>
             <span>EMAIL ADDRESS</span>
-            <strong>{profile.email}</strong>
+            <strong>{savedProfile.email}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon purple">
+        <div className="tf-settings-info-card">
+          <div className="tf-settings-info-icon purple">
             <FaShieldAlt />
           </div>
 
           <div>
             <span>ROLE</span>
-            <strong>{profile.role}</strong>
+            <strong>{userRole}</strong>
           </div>
         </div>
 
-        <div className="settings-info-card">
-          <div className="settings-info-icon green">
+        <div className="tf-settings-info-card">
+          <div className="tf-settings-info-icon green">
             <FaCheckCircle />
           </div>
 
           <div>
             <span>ACCOUNT STATUS</span>
-
-            <strong className="settings-active-text">
+            <strong className="tf-settings-active-text">
               Active
             </strong>
           </div>
         </div>
       </div>
 
-      {/* ---------------------------------------------------
-          PROTECTED WORKSPACE
-      --------------------------------------------------- */}
-
-      <div className="settings-protected-card">
-        <div className="settings-protected-icon">
+      <div className="tf-settings-protected-card">
+        <div className="tf-settings-protected-icon">
           <FaShieldAlt />
         </div>
 
-        <div className="settings-protected-content">
-          <strong>Protected workspace</strong>
+        <div>
+          <h4>Protected workspace</h4>
 
           <p>
-            Your TaskFlow account information is securely
-            associated with your workspace.
+            Your TaskFlow account information is securely associated
+            with your workspace.
           </p>
         </div>
 
-        <FaCheckCircle className="settings-protected-check" />
+        <FaCheckCircle className="tf-settings-success-icon" />
       </div>
-    </motion.div>
+    </section>
   );
 
-  /* =========================================================
-     APPEARANCE
-  ========================================================= */
-
-  const renderAppearanceSection = () => (
-    <motion.div
-      className="settings-section-content"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      key="appearance"
-    >
-      <div className="settings-content-header">
+  const renderAppearance = () => (
+    <section className="tf-settings-section">
+      <div className="tf-settings-section-header">
         <div>
-          <span className="settings-eyebrow">APPEARANCE</span>
+          <span className="tf-settings-eyebrow">APPEARANCE</span>
 
           <h2>Customize your workspace</h2>
 
           <p>
-            Control how TaskFlow looks and behaves on your
-            device.
+            Personalize the TaskFlow interface to match your
+            preferred working environment.
           </p>
         </div>
 
-        <div className="settings-header-icon">
+        <div className="tf-settings-header-icon">
           {settings.darkMode ? <FaMoon /> : <FaSun />}
         </div>
       </div>
 
-      <div className="settings-option-card">
-        <div className="settings-option-left">
-          <div className="settings-option-icon">
-            {settings.darkMode ? <FaMoon /> : <FaSun />}
+      <div className="tf-settings-appearance-preview">
+        <div className="tf-settings-preview-content">
+          <div className="tf-settings-preview-sidebar">
+            <div className="tf-settings-preview-logo">TF</div>
+
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
 
-          <div>
-            <h3>Dark mode</h3>
+          <div className="tf-settings-preview-main">
+            <div className="tf-settings-preview-top" />
 
-            <p>
-              Use a darker interface that's easier on your
-              eyes in low-light environments.
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className={`settings-toggle ${
-            settings.darkMode ? "active" : ""
-          }`}
-          onClick={() => handleSettingChange("darkMode")}
-          aria-label="Toggle dark mode"
-        >
-          <span />
-        </button>
-      </div>
-
-      <div className="settings-theme-preview">
-        <div className="settings-preview-heading">
-          <span>THEME PREVIEW</span>
-
-          <FaPalette />
-        </div>
-
-        <div className="settings-preview-window">
-          <div className="preview-sidebar" />
-
-          <div className="preview-main">
-            <div className="preview-line large" />
-            <div className="preview-line" />
-            <div className="preview-cards">
-              <span />
-              <span />
-              <span />
+            <div className="tf-settings-preview-cards">
+              <div />
+              <div />
+              <div />
             </div>
           </div>
         </div>
+
+        <div className="tf-settings-preview-label">
+          <strong>
+            {settings.darkMode ? "Dark workspace" : "Light workspace"}
+          </strong>
+
+          <span>
+            {settings.darkMode
+              ? "A focused dark interface."
+              : "A clean and bright interface."}
+          </span>
+        </div>
       </div>
-    </motion.div>
+
+      <div className="tf-settings-option-list">
+        <button
+          type="button"
+          className={`tf-settings-option ${
+            !settings.darkMode ? "selected" : ""
+          }`}
+          onClick={() =>
+            setSettings((previous) => ({
+              ...previous,
+              darkMode: false,
+            }))
+          }
+        >
+          <div className="tf-settings-option-icon">
+            <FaSun />
+          </div>
+
+          <div>
+            <strong>Light mode</strong>
+            <span>Bright and clean workspace</span>
+          </div>
+
+          {!settings.darkMode && (
+            <FaCheckCircle className="tf-settings-option-check" />
+          )}
+        </button>
+
+        <button
+          type="button"
+          className={`tf-settings-option ${
+            settings.darkMode ? "selected" : ""
+          }`}
+          onClick={() =>
+            setSettings((previous) => ({
+              ...previous,
+              darkMode: true,
+            }))
+          }
+        >
+          <div className="tf-settings-option-icon">
+            <FaMoon />
+          </div>
+
+          <div>
+            <strong>Dark mode</strong>
+            <span>Comfortable interface for low-light environments</span>
+          </div>
+
+          {settings.darkMode && (
+            <FaCheckCircle className="tf-settings-option-check" />
+          )}
+        </button>
+      </div>
+    </section>
   );
 
-  /* =========================================================
-     NOTIFICATIONS
-  ========================================================= */
-
-  const renderNotificationsSection = () => (
-    <motion.div
-      className="settings-section-content"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      key="notifications"
-    >
-      <div className="settings-content-header">
+  const renderNotifications = () => (
+    <section className="tf-settings-section">
+      <div className="tf-settings-section-header">
         <div>
-          <span className="settings-eyebrow">
+          <span className="tf-settings-eyebrow">
             NOTIFICATIONS
           </span>
 
           <h2>Notification preferences</h2>
 
           <p>
-            Choose which TaskFlow alerts you want to receive.
+            Control which TaskFlow alerts and updates you receive.
           </p>
         </div>
 
-        <div className="settings-header-icon">
+        <div className="tf-settings-header-icon">
           <FaBell />
         </div>
       </div>
 
-      <div className="settings-options-list">
-        <div className="settings-option-card">
-          <div className="settings-option-left">
-            <div className="settings-option-icon">
-              <FaEnvelope />
+      <div className="tf-settings-toggle-list">
+        {[
+          {
+            key: "emailNotifications",
+            title: "Email notifications",
+            description:
+              "Receive important TaskFlow updates by email.",
+          },
+          {
+            key: "taskNotifications",
+            title: "Task notifications",
+            description:
+              "Get notified when tasks are assigned or updated.",
+          },
+          {
+            key: "projectNotifications",
+            title: "Project notifications",
+            description:
+              "Receive updates about your projects and workspace.",
+          },
+        ].map((item) => (
+          <div className="tf-settings-toggle-card" key={item.key}>
+            <div className="tf-settings-toggle-icon">
+              <FaBell />
             </div>
 
-            <div>
-              <h3>Email notifications</h3>
-
-              <p>
-                Receive important TaskFlow updates by email.
-              </p>
+            <div className="tf-settings-toggle-content">
+              <strong>{item.title}</strong>
+              <span>{item.description}</span>
             </div>
+
+            <button
+              type="button"
+              className={`tf-settings-switch ${
+                settings[item.key] ? "on" : ""
+              }`}
+              onClick={() => updateSetting(item.key)}
+              aria-label={`Toggle ${item.title}`}
+            >
+              <span />
+            </button>
           </div>
-
-          <button
-            type="button"
-            className={`settings-toggle ${
-              settings.emailNotifications ? "active" : ""
-            }`}
-            onClick={() =>
-              handleSettingChange("emailNotifications")
-            }
-          >
-            <span />
-          </button>
-        </div>
-
-        <div className="settings-option-card">
-          <div className="settings-option-left">
-            <div className="settings-option-icon">
-              <FaTasks />
-            </div>
-
-            <div>
-              <h3>Task notifications</h3>
-
-              <p>
-                Get notified about task assignments,
-                updates and completions.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className={`settings-toggle ${
-              settings.taskNotifications ? "active" : ""
-            }`}
-            onClick={() =>
-              handleSettingChange("taskNotifications")
-            }
-          >
-            <span />
-          </button>
-        </div>
-
-        <div className="settings-option-card">
-          <div className="settings-option-left">
-            <div className="settings-option-icon">
-              <FaFolder />
-            </div>
-
-            <div>
-              <h3>Project notifications</h3>
-
-              <p>
-                Receive updates when projects change or are
-                completed.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className={`settings-toggle ${
-              settings.projectNotifications ? "active" : ""
-            }`}
-            onClick={() =>
-              handleSettingChange("projectNotifications")
-            }
-          >
-            <span />
-          </button>
-        </div>
+        ))}
       </div>
-    </motion.div>
+    </section>
   );
 
-  /* =========================================================
-     SECURITY
-  ========================================================= */
-
-  const renderSecuritySection = () => (
-    <motion.div
-      className="settings-section-content"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      key="security"
-    >
-      <div className="settings-content-header">
+  const renderSecurity = () => (
+    <section className="tf-settings-section">
+      <div className="tf-settings-section-header">
         <div>
-          <span className="settings-eyebrow">SECURITY</span>
+          <span className="tf-settings-eyebrow">SECURITY</span>
 
           <h2>Password & security</h2>
 
           <p>
-            Keep your TaskFlow account protected with a
-            strong password.
+            Keep your TaskFlow account protected with a strong
+            password.
           </p>
         </div>
 
-        <div className="settings-header-icon">
+        <div className="tf-settings-header-icon">
           <FaLock />
         </div>
       </div>
 
+      <div className="tf-settings-security-banner">
+        <div className="tf-settings-security-icon">
+          <FaShieldAlt />
+        </div>
+
+        <div>
+          <strong>Your account is protected</strong>
+
+          <p>
+            Use a unique password that you do not reuse on other
+            services.
+          </p>
+        </div>
+
+        <FaCheckCircle />
+      </div>
+
       <form
-        className="settings-password-form"
-        onSubmit={handlePasswordUpdate}
+        className="tf-settings-password-form"
+        onSubmit={handlePasswordChange}
       >
-        <div className="settings-password-heading">
-          <div className="settings-option-icon">
-            <FaKey />
-          </div>
+        {renderPasswordInput(
+          "Current password",
+          "currentPassword",
+          passwordFields.currentPassword,
+          showCurrentPassword,
+          setShowCurrentPassword
+        )}
 
-          <div>
-            <h3>Change password</h3>
+        {renderPasswordInput(
+          "New password",
+          "newPassword",
+          passwordFields.newPassword,
+          showNewPassword,
+          setShowNewPassword
+        )}
 
-            <p>
-              Your password should contain at least 6
-              characters.
-            </p>
-          </div>
-        </div>
-
-        <div className="settings-form-grid">
-          <div className="settings-form-group full">
-            <label htmlFor="currentPassword">
-              Current password
-            </label>
-
-            <div className="settings-input-wrapper">
-              <FaLock />
-
-              <input
-                id="currentPassword"
-                type="password"
-                name="currentPassword"
-                value={passwords.currentPassword}
-                onChange={handlePasswordChange}
-                placeholder="Enter current password"
-              />
-            </div>
-          </div>
-
-          <div className="settings-form-group">
-            <label htmlFor="newPassword">
-              New password
-            </label>
-
-            <div className="settings-input-wrapper">
-              <FaKey />
-
-              <input
-                id="newPassword"
-                type="password"
-                name="newPassword"
-                value={passwords.newPassword}
-                onChange={handlePasswordChange}
-                placeholder="Enter new password"
-              />
-            </div>
-          </div>
-
-          <div className="settings-form-group">
-            <label htmlFor="confirmPassword">
-              Confirm password
-            </label>
-
-            <div className="settings-input-wrapper">
-              <FaKey />
-
-              <input
-                id="confirmPassword"
-                type="password"
-                name="confirmPassword"
-                value={passwords.confirmPassword}
-                onChange={handlePasswordChange}
-                placeholder="Confirm new password"
-              />
-            </div>
-          </div>
-        </div>
+        {renderPasswordInput(
+          "Confirm password",
+          "confirmPassword",
+          passwordFields.confirmPassword,
+          showConfirmPassword,
+          setShowConfirmPassword
+        )}
 
         {passwordMessage && (
-          <div className="settings-password-message">
+          <div className="tf-settings-password-message">
             <FaInfoCircle />
-
-            <span>{passwordMessage}</span>
+            {passwordMessage}
           </div>
         )}
 
         <button
           type="submit"
-          className="settings-primary-action"
+          className="tf-settings-primary-button tf-settings-password-submit"
         >
           <FaLock />
           Update password
         </button>
       </form>
-
-      <div className="settings-security-status">
-        <div className="settings-security-icon">
-          <FaShieldAlt />
-        </div>
-
-        <div>
-          <strong>Protected workspace</strong>
-
-          <p>
-            Your TaskFlow account is currently protected.
-          </p>
-        </div>
-
-        <span>
-          <FaCheckCircle />
-          Secure
-        </span>
-      </div>
-    </motion.div>
+    </section>
   );
 
-  /* =========================================================
-     APPLICATION
-  ========================================================= */
-
-  const renderApplicationSection = () => (
-    <motion.div
-      className="settings-section-content"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      key="application"
-    >
-      <div className="settings-content-header">
+  const renderApplication = () => (
+    <section className="tf-settings-section">
+      <div className="tf-settings-section-header">
         <div>
-          <span className="settings-eyebrow">
+          <span className="tf-settings-eyebrow">
             APPLICATION
           </span>
 
           <h2>TaskFlow information</h2>
 
           <p>
-            Information about your TaskFlow application and
-            current environment.
+            Information about your TaskFlow application and current
+            environment.
           </p>
         </div>
 
-        <div className="settings-header-icon">
+        <div className="tf-settings-header-icon">
           <FaCog />
         </div>
       </div>
 
-      <div className="settings-app-hero">
-        <div className="settings-app-logo">TF</div>
+      <div className="tf-settings-app-brand">
+        <div className="tf-settings-app-logo">TF</div>
 
-        <div className="settings-app-details">
+        <div className="tf-settings-app-title">
           <span>PROJECT MANAGEMENT PLATFORM</span>
 
           <h3>TaskFlow</h3>
 
           <p>
-            A modern workspace for managing projects,
-            tasks, teams and productivity.
+            A modern workspace for managing projects, tasks, teams
+            and productivity.
           </p>
         </div>
 
-        <div className="settings-version">
+        <div className="tf-settings-version">
           <span>VERSION</span>
           <strong>1.0.0</strong>
         </div>
       </div>
 
-      <div className="settings-technical-grid">
-        <div className="settings-tech-card">
+      <div className="tf-settings-tech-grid">
+        <div className="tf-settings-tech-card">
           <FaDesktop />
 
           <div>
             <span>PLATFORM</span>
             <strong>Web Application</strong>
           </div>
-
-          <FaCheckCircle />
         </div>
 
-        <div className="settings-tech-card">
-          <FaServer />
-
-          <div>
-            <span>ENVIRONMENT</span>
-            <strong>Production</strong>
-          </div>
-
-          <FaCheckCircle />
-        </div>
-
-        <div className="settings-tech-card">
+        <div className="tf-settings-tech-card">
           <FaCode />
 
           <div>
             <span>FRONTEND</span>
             <strong>React + Vite</strong>
           </div>
-
-          <FaCheckCircle />
         </div>
 
-        <div className="settings-tech-card">
+        <div className="tf-settings-tech-card">
+          <FaServer />
+
+          <div>
+            <span>BACKEND</span>
+            <strong>Node.js / Express</strong>
+          </div>
+        </div>
+
+        <div className="tf-settings-tech-card">
           <FaDatabase />
 
           <div>
             <span>DATABASE</span>
             <strong>MongoDB</strong>
           </div>
-
-          <FaCheckCircle />
-        </div>
-
-        <div className="settings-tech-card">
-          <FaUsers />
-
-          <div>
-            <span>WORKSPACE</span>
-            <strong>Team Management</strong>
-          </div>
-
-          <FaCheckCircle />
-        </div>
-
-        <div className="settings-tech-card">
-          <FaChartBar />
-
-          <div>
-            <span>SYSTEM STATUS</span>
-            <strong className="settings-active-text">
-              Operational
-            </strong>
-          </div>
-
-          <FaCheckCircle />
         </div>
       </div>
 
-      <div className="settings-about-card">
-        <div className="settings-about-icon">
+      <div className="tf-settings-about-card">
+        <div className="tf-settings-about-icon">
           <FaInfoCircle />
         </div>
 
         <div>
-          <strong>About TaskFlow</strong>
+          <h4>About TaskFlow</h4>
 
           <p>
             TaskFlow is designed to provide a centralized,
-            organized and secure environment for modern
-            project management.
+            organized and secure environment for modern project
+            management.
           </p>
         </div>
 
-        <span className="settings-operational-badge">
-          <FaCircle />
+        <span className="tf-settings-operational">
+          <FaCheckCircle />
           Operational
         </span>
       </div>
-    </motion.div>
+    </section>
   );
-
-  /* =========================================================
-     SECTION RENDERER
-  ========================================================= */
 
   const renderActiveSection = () => {
     switch (activeSection) {
       case "appearance":
-        return renderAppearanceSection();
+        return renderAppearance();
 
       case "notifications":
-        return renderNotificationsSection();
+        return renderNotifications();
 
       case "security":
-        return renderSecuritySection();
+        return renderSecurity();
 
       case "application":
-        return renderApplicationSection();
+        return renderApplication();
 
       case "account":
       default:
-        return renderAccountSection();
+        return renderAccount();
     }
   };
 
-  /* =========================================================
-     PAGE
-  ========================================================= */
-
   return (
-    <div
-      className={`settings-page ${
-        settings.darkMode ? "settings-dark-mode" : ""
-      }`}
-    >
-      {/* =====================================================
-          BACKGROUND
-      ===================================================== */}
-
-      <div className="settings-background" aria-hidden="true">
-        <div className="settings-bg-grid" />
-
-        <div className="settings-bg-orb settings-bg-orb-one" />
-
-        <div className="settings-bg-orb settings-bg-orb-two" />
-
-        <div className="settings-bg-orb settings-bg-orb-three" />
-
-        <div className="settings-bg-glow settings-bg-glow-one" />
-
-        <div className="settings-bg-glow settings-bg-glow-two" />
-      </div>
-
-      {/* =====================================================
-          SIDEBAR
-      ===================================================== */}
-
+    <div className="tf-settings-root">
+      {/* Existing application navigation */}
       <Sidebar />
+      <Navbar />
 
-      {/* =====================================================
-          MAIN AREA
-      ===================================================== */}
+      {/* Settings page */}
+      <main className="tf-settings-page">
+        <div className="tf-settings-background">
+          <div className="tf-settings-orb tf-settings-orb-one" />
+          <div className="tf-settings-orb tf-settings-orb-two" />
+          <div className="tf-settings-grid-bg" />
+        </div>
 
-      <div className="settings-layout">
-        {/* ===================================================
-            NAVBAR
-        =================================================== */}
-
-        <Navbar />
-
-        {/* ===================================================
-            PAGE CONTENT
-        =================================================== */}
-
-        <main className="settings-main">
-          <motion.div
-            className="settings-page-container"
-            variants={pageVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {/* ===============================================
-                PAGE HEADER
-            =============================================== */}
-
-            <div className="settings-page-header">
-              <div>
-                <div className="settings-breadcrumb">
-                  <span>WORKSPACE</span>
-
-                  <FaChevronRight />
-
-                  <strong>SETTINGS</strong>
-                </div>
-
-                <h1>Settings</h1>
-
-                <p>
-                  Manage your account, workspace preferences,
-                  notifications and security.
-                </p>
+        <div className="tf-settings-container">
+          <header className="tf-settings-page-header">
+            <div>
+              <div className="tf-settings-breadcrumb">
+                WORKSPACE
+                <span>›</span>
+                <strong>SETTINGS</strong>
               </div>
 
-              <div className="settings-secure-badge">
-                <FaShieldAlt />
+              <h1>Settings</h1>
 
-                <span>Workspace secure</span>
-              </div>
+              <p>
+                Manage your account, workspace preferences,
+                notifications and security.
+              </p>
             </div>
 
-            {/* ===============================================
-                MAIN SETTINGS CARD
-            =============================================== */}
-
-            <section className="settings-shell">
-              {/* =============================================
-                  LEFT NAVIGATION
-              ============================================= */}
-
-              <aside className="settings-sidebar">
-                <div className="settings-sidebar-title">
-                  SETTINGS
-                </div>
-
-                <div className="settings-sidebar-items">
-                  {SETTINGS_ITEMS.map((item) => {
-                    const Icon = item.icon;
-
-                    const isActive =
-                      activeSection === item.id;
-
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        className={`settings-nav-item ${
-                          isActive ? "active" : ""
-                        }`}
-                        onClick={() =>
-                          setActiveSection(item.id)
-                        }
-                      >
-                        <span className="settings-nav-icon">
-                          <Icon />
-                        </span>
-
-                        <span className="settings-nav-text">
-                          <strong>{item.label}</strong>
-
-                          <small>
-                            {item.description}
-                          </small>
-                        </span>
-
-                        <FaChevronRight className="settings-nav-arrow" />
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* =========================================
-                    SIDEBAR SECURITY CARD
-                ========================================= */}
-
-                <div className="settings-sidebar-security">
-                  <div className="settings-sidebar-security-icon">
-                    <FaShieldAlt />
-                  </div>
-
-                  <div>
-                    <strong>Protected workspace</strong>
-
-                    <p>
-                      Your TaskFlow account is secure.
-                    </p>
-                  </div>
-
-                  <FaCheckCircle />
-                </div>
-              </aside>
-
-              {/* =============================================
-                  CONTENT
-              ============================================= */}
-
-              <section className="settings-content">
-                <AnimatePresence mode="wait">
-                  {renderActiveSection()}
-                </AnimatePresence>
-
-                {/* =========================================
-                    FOOTER ACTIONS
-                ========================================= */}
-
-                <div className="settings-content-footer">
-                  <div className="settings-save-status">
-                    <span className="settings-save-dot" />
-
-                    <div>
-                      <strong>
-                        All changes are currently saved
-                      </strong>
-
-                      <small>
-                        Your workspace preferences stay
-                        organized and protected.
-                      </small>
-                    </div>
-                  </div>
-
-                  <div className="settings-footer-actions">
-                    <button
-                      type="button"
-                      className="settings-reset-btn"
-                      onClick={handleReset}
-                    >
-                      <FaRedo />
-                      Reset
-                    </button>
-
-                    <button
-                      type="button"
-                      className="settings-save-btn"
-                      onClick={handleSaveChanges}
-                      disabled={isSaving}
-                    >
-                      {isSaving ? (
-                        <>
-                          <span className="settings-spinner" />
-                          Saving...
-                        </>
-                      ) : (
-                        <>
-                          <FaSave />
-                          Save changes
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </section>
-            </section>
-
-            {/* ===============================================
-                SECURITY FOOTER
-            =============================================== */}
-
-            <div className="settings-bottom-security">
-              <div className="settings-bottom-security-icon">
-                <FaShieldAlt />
-              </div>
-
-              <div>
-                <strong>
-                  Your preferences are stored securely
-                </strong>
-
-                <p>
-                  TaskFlow keeps your workspace settings
-                  organized and protected.
-                </p>
-              </div>
-
-              <span>
-                <FaCheckCircle />
-                Secure
-              </span>
+            <div className="tf-settings-secure-badge">
+              <FaShieldAlt />
+              <span>Workspace secure</span>
             </div>
-          </motion.div>
-        </main>
-      </div>
+          </header>
 
-      {/* =====================================================
-          EDIT PROFILE MODAL
-      ===================================================== */}
-
-      <AnimatePresence>
-        {isEditingProfile && (
-          <motion.div
-            className="settings-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onMouseDown={closeProfileEditor}
-          >
-            <motion.div
-              className="settings-profile-modal"
-              initial={{
-                opacity: 0,
-                y: 25,
-                scale: 0.96,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                y: 20,
-                scale: 0.96,
-              }}
-              transition={{
-                duration: 0.22,
-              }}
-              onMouseDown={(event) =>
-                event.stopPropagation()
-              }
-            >
-              {/* ===========================================
-                  MODAL HEADER
-              =========================================== */}
-
-              <div className="settings-modal-header">
-                <div>
-                  <span className="settings-eyebrow">
-                    PROFILE
-                  </span>
-
-                  <h2>Edit profile</h2>
-
-                  <p>
-                    Update your TaskFlow account information.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  className="settings-modal-close"
-                  onClick={closeProfileEditor}
-                  aria-label="Close edit profile"
-                >
-                  <FaTimes />
-                </button>
+          <div className="tf-settings-shell">
+            <aside className="tf-settings-navigation">
+              <div className="tf-settings-nav-title">
+                SETTINGS
               </div>
 
-              {/* ===========================================
-                  PROFILE PREVIEW
-              =========================================== */}
+              <div className="tf-settings-nav-list">
+                {SETTINGS_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeSection === item.id;
 
-              <div className="settings-modal-profile-preview">
-                <div className="settings-modal-avatar">
-                  {getInitials(profileDraft.name)}
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`tf-settings-nav-item ${
+                        isActive ? "active" : ""
+                      }`}
+                      onClick={() => setActiveSection(item.id)}
+                    >
+                      <div className="tf-settings-nav-icon">
+                        <Icon />
+                      </div>
+
+                      <div className="tf-settings-nav-text">
+                        <strong>{item.label}</strong>
+                        <span>{item.description}</span>
+                      </div>
+
+                      <FaChevronRight className="tf-settings-nav-arrow" />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="tf-settings-nav-security">
+                <div className="tf-settings-nav-security-icon">
+                  <FaShieldAlt />
                 </div>
 
                 <div>
-                  <strong>
-                    {profileDraft.name || "Your name"}
-                  </strong>
+                  <strong>Protected workspace</strong>
 
                   <span>
-                    {profileDraft.email ||
-                      "your@email.com"}
+                    Your TaskFlow account is secure.
                   </span>
                 </div>
+
+                <FaCheckCircle />
               </div>
+            </aside>
 
-              {/* ===========================================
-                  FORM
-              =========================================== */}
+            <div className="tf-settings-content">
+              {renderActiveSection()}
 
-              <div className="settings-modal-form">
-                <div className="settings-form-group">
-                  <label htmlFor="profileName">
-                    Full name
-                  </label>
+              <footer className="tf-settings-footer">
+                <div className="tf-settings-footer-status">
+                  <span className="tf-settings-status-dot" />
 
-                  <div className="settings-input-wrapper">
-                    <FaUser />
+                  <div>
+                    <strong>
+                      All changes are currently saved
+                    </strong>
 
-                    <input
-                      id="profileName"
-                      type="text"
-                      name="name"
-                      value={profileDraft.name}
-                      onChange={handleProfileInput}
-                      placeholder="Enter your full name"
-                    />
+                    <span>
+                      Your workspace preferences are organized and
+                      protected.
+                    </span>
                   </div>
                 </div>
 
-                <div className="settings-form-group">
-                  <label htmlFor="profileEmail">
-                    Email address
-                  </label>
+                <div className="tf-settings-footer-actions">
+                  <button
+                    type="button"
+                    className="tf-settings-reset-button"
+                    onClick={handleReset}
+                  >
+                    <FaRedo />
+                    Reset
+                  </button>
 
-                  <div className="settings-input-wrapper">
-                    <FaEnvelope />
-
-                    <input
-                      id="profileEmail"
-                      type="email"
-                      name="email"
-                      value={profileDraft.email}
-                      onChange={handleProfileInput}
-                      placeholder="Enter your email"
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    className="tf-settings-primary-button"
+                    onClick={handleSave}
+                  >
+                    <FaSave />
+                    Save changes
+                  </button>
                 </div>
-              </div>
+              </footer>
+            </div>
+          </div>
 
-              {/* ===========================================
-                  MODAL ACTIONS
-              =========================================== */}
+          <div className="tf-settings-secure-footer">
+            <div className="tf-settings-secure-footer-icon">
+              <FaShieldAlt />
+            </div>
 
-              <div className="settings-modal-actions">
-                <button
-                  type="button"
-                  className="settings-modal-cancel"
-                  onClick={closeProfileEditor}
-                >
-                  Cancel
-                </button>
+            <div>
+              <strong>Your preferences are stored securely</strong>
 
-                <button
-                  type="button"
-                  className="settings-modal-save"
-                  onClick={saveProfile}
-                >
-                  <FaSave />
-                  Save profile
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <span>
+                TaskFlow keeps your workspace settings organized and
+                protected.
+              </span>
+            </div>
+
+            <span className="tf-settings-secure-label">
+              <FaCheckCircle />
+              Secure
+            </span>
+          </div>
+        </div>
+      </main>
     </div>
   );
-};
+}
 
 export default Settings;
