@@ -1,25 +1,28 @@
 import { useMemo } from "react";
+import MainLayout from "../layouts/MainLayout";
+
 import {
   FaChartLine,
   FaCheckCircle,
   FaClipboardList,
   FaFolderOpen,
   FaLayerGroup,
-  FaArrowUp,
   FaShieldAlt,
+  FaArrowUp,
+  FaArrowDown,
+  FaTasks,
+  FaClock,
+  FaBolt,
+  FaBullseye,
+  FaChartPie,
 } from "react-icons/fa";
-
-import MainLayout from "../layouts/MainLayout";
-
-import ReportsHeader from "../components/reports/ReportsHeader";
-import ReportCards from "../components/reports/ReportCards";
-import TaskStatusChart from "../components/reports/TaskStatusChart";
-import ProjectProgressChart from "../components/reports/ProjectProgressChart";
-import PriorityChart from "../components/reports/PriorityChart";
-import ExportButtons from "../components/reports/ExportButtons";
 
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
+
+import TaskStatusChart from "../components/reports/TaskStatusChart";
+import ProjectProgressChart from "../components/reports/ProjectProgressChart";
+import PriorityChart from "../components/reports/PriorityChart";
 
 import "../styles/Reports.css";
 
@@ -27,11 +30,7 @@ const Reports = () => {
   const { projects = [] } = useProjects();
   const { tasks = [] } = useTasks();
 
-  /* =========================================================
-     SAFE STATISTICS
-  ========================================================= */
-
-  const statistics = useMemo(() => {
+  const stats = useMemo(() => {
     const totalProjects = projects.length;
     const totalTasks = tasks.length;
 
@@ -45,20 +44,12 @@ const Reports = () => {
       );
     }).length;
 
-    const pendingTasks = Math.max(
-      totalTasks - completedTasks,
-      0
-    );
+    const pendingTasks = Math.max(totalTasks - completedTasks, 0);
 
-    const completedProjects = projects.filter((project) => {
-      const status = String(project?.status || "").toLowerCase();
-
-      return (
-        status === "completed" ||
-        status === "complete" ||
-        status === "done"
-      );
-    }).length;
+    const completionRate =
+      totalTasks > 0
+        ? Math.round((completedTasks / totalTasks) * 100)
+        : 0;
 
     const activeProjects = projects.filter((project) => {
       const status = String(project?.status || "").toLowerCase();
@@ -66,471 +57,424 @@ const Reports = () => {
       return (
         status === "active" ||
         status === "in progress" ||
-        status === "in-progress"
+        status === "ongoing"
       );
     }).length;
 
-    const completionRate =
-      totalTasks > 0
-        ? Math.round((completedTasks / totalTasks) * 100)
-        : 0;
-
-    const projectCompletionRate =
+    const projectProgress =
       totalProjects > 0
         ? Math.round(
-            (completedProjects / totalProjects) * 100
-          )
-        : 0;
-
-    const averageProjectProgress =
-      totalProjects > 0
-        ? Math.round(
-            projects.reduce((total, project) => {
-              const progress = Number(
-                project?.progress ?? 0
-              );
-
-              return total + (
-                Number.isFinite(progress)
-                  ? progress
-                  : 0
-              );
+            projects.reduce((sum, project) => {
+              const progress = Number(project?.progress || 0);
+              return sum + Math.min(Math.max(progress, 0), 100);
             }, 0) / totalProjects
           )
         : 0;
+
+    const highPriority = tasks.filter((task) => {
+      const priority = String(task?.priority || "").toLowerCase();
+
+      return priority === "high" || priority === "urgent";
+    }).length;
 
     return {
       totalProjects,
       totalTasks,
       completedTasks,
       pendingTasks,
-      completedProjects,
-      activeProjects,
       completionRate,
-      projectCompletionRate,
-      averageProjectProgress,
+      activeProjects,
+      projectProgress,
+      highPriority,
     };
   }, [projects, tasks]);
 
-  /* =========================================================
-     REPORT STAT CARDS
-  ========================================================= */
-
-  const premiumStats = [
+  const statCards = [
     {
-      title: "Total Projects",
-      value: statistics.totalProjects,
-      description: "Projects in your workspace",
+      label: "Total Projects",
+      value: stats.totalProjects,
+      description: "Projects in workspace",
       icon: FaFolderOpen,
-      className: "blue",
-    },
-    {
-      title: "Total Tasks",
-      value: statistics.totalTasks,
-      description: "Tasks across all projects",
-      icon: FaClipboardList,
       className: "purple",
+      trend: "Workspace",
+      trendType: "neutral",
     },
     {
-      title: "Completed",
-      value: statistics.completedTasks,
-      description: `${statistics.completionRate}% task completion`,
+      label: "Total Tasks",
+      value: stats.totalTasks,
+      description: "Tasks across projects",
+      icon: FaClipboardList,
+      className: "blue",
+      trend: "Tracked",
+      trendType: "up",
+    },
+    {
+      label: "Completed",
+      value: stats.completedTasks,
+      description: `${stats.completionRate}% completion rate`,
       icon: FaCheckCircle,
       className: "green",
+      trend: `${stats.completionRate}%`,
+      trendType: "up",
     },
     {
-      title: "Pending",
-      value: statistics.pendingTasks,
-      description: "Tasks still requiring action",
-      icon: FaLayerGroup,
+      label: "Pending",
+      value: stats.pendingTasks,
+      description: "Tasks requiring action",
+      icon: FaClock,
       className: "orange",
+      trend: stats.pendingTasks > 0 ? "Action needed" : "Clear",
+      trendType: stats.pendingTasks > 0 ? "down" : "up",
     },
   ];
 
   return (
     <MainLayout>
       <div className="reports-page">
+        <div className="reports-shell">
 
-        {/* =====================================================
-            PREMIUM BACKGROUND
-        ===================================================== */}
-
-        <div
-          className="reports-background"
-          aria-hidden="true"
-        >
-          <div className="reports-bg-grid" />
-
-          <div className="reports-bg-orb reports-bg-orb-1" />
-          <div className="reports-bg-orb reports-bg-orb-2" />
-          <div className="reports-bg-orb reports-bg-orb-3" />
-
-          <div className="reports-bg-glow reports-bg-glow-1" />
-          <div className="reports-bg-glow reports-bg-glow-2" />
-
-          <span className="reports-particle reports-particle-1" />
-          <span className="reports-particle reports-particle-2" />
-          <span className="reports-particle reports-particle-3" />
-          <span className="reports-particle reports-particle-4" />
-          <span className="reports-particle reports-particle-5" />
-        </div>
-
-        {/* =====================================================
-            MAIN CONTENT
-        ===================================================== */}
-
-        <div className="reports-container">
-
-          {/* ===================================================
-              HEADER
-          =================================================== */}
-
+          {/* =====================================================
+              HERO
+          ===================================================== */}
           <section className="reports-hero">
+
+            <div className="reports-hero-glow reports-glow-one" />
+            <div className="reports-hero-glow reports-glow-two" />
 
             <div className="reports-hero-content">
 
-              <div className="reports-hero-icon">
-                <FaChartLine />
+              <div className="reports-eyebrow">
+                <span className="eyebrow-icon">
+                  <FaChartLine />
+                </span>
+
+                <span>WORKSPACE ANALYTICS</span>
+
+                <span className="live-indicator">
+                  <span />
+                  LIVE DATA
+                </span>
               </div>
 
-              <div>
-                <div className="reports-eyebrow">
-                  <span>WORKSPACE</span>
-                  <i />
-                  <strong>ANALYTICS</strong>
+              <h1>
+                Reports &amp;
+                <span> Analytics</span>
+              </h1>
+
+              <p>
+                Track project performance, task completion, productivity,
+                and workspace activity from one central dashboard.
+              </p>
+
+              <div className="reports-hero-meta">
+                <div className="hero-meta-item">
+                  <FaShieldAlt />
+                  <span>Secure workspace data</span>
                 </div>
 
-                <h1>
-                  Reports &amp; Analytics
-                </h1>
+                <div className="hero-meta-divider" />
 
-                <p>
-                  Track project performance, task
-                  completion, productivity and
-                  workspace activity.
-                </p>
+                <div className="hero-meta-item">
+                  <FaBolt />
+                  <span>Real-time metrics</span>
+                </div>
               </div>
 
             </div>
 
-            <div className="reports-hero-status">
+            <div className="reports-hero-visual">
 
-              <div className="reports-live-dot" />
+              <div className="hero-chart-orbit orbit-one" />
+              <div className="hero-chart-orbit orbit-two" />
 
-              <span>LIVE DATA</span>
+              <div className="hero-chart-card">
 
-              <div className="reports-hero-divider" />
+                <div className="hero-chart-top">
+                  <div>
+                    <span>COMPLETION</span>
+                    <strong>{stats.completionRate}%</strong>
+                  </div>
 
-              <FaShieldAlt />
+                  <div className="hero-chart-icon">
+                    <FaChartLine />
+                  </div>
+                </div>
 
-              <span>SECURE</span>
+                <div className="hero-mini-bars">
+                  <span style={{ height: "34%" }} />
+                  <span style={{ height: "48%" }} />
+                  <span style={{ height: "42%" }} />
+                  <span style={{ height: "64%" }} />
+                  <span style={{ height: "58%" }} />
+                  <span style={{ height: "76%" }} />
+                  <span style={{ height: `${Math.max(stats.completionRate, 10)}%` }} />
+                </div>
+
+                <div className="hero-chart-footer">
+                  <span>Workspace performance</span>
+                  <FaArrowUp />
+                </div>
+
+              </div>
 
             </div>
 
           </section>
 
-          {/* ===================================================
-              EXISTING REPORT HEADER
-          =================================================== */}
+          {/* =====================================================
+              OVERVIEW HEADER
+          ===================================================== */}
+          <section className="reports-section-heading">
 
-          <div className="reports-component-wrapper">
-            <ReportsHeader />
-          </div>
+            <div>
+              <span className="section-kicker">
+                PERFORMANCE OVERVIEW
+              </span>
 
-          {/* ===================================================
-              PREMIUM OVERVIEW
-          =================================================== */}
+              <h2>Workspace at a glance</h2>
 
-          <section className="reports-overview">
-
-            <div className="reports-section-heading">
-
-              <div>
-                <span>PERFORMANCE OVERVIEW</span>
-
-                <h2>
-                  Workspace at a glance
-                </h2>
-
-                <p>
-                  A real-time summary of your
-                  projects and task performance.
-                </p>
-              </div>
-
-              <div className="reports-heading-badge">
-                <FaArrowUp />
-                <strong>
-                  {statistics.completionRate}%
-                </strong>
-                <span>completion</span>
-              </div>
-
+              <p>
+                A real-time summary of your projects and task performance.
+              </p>
             </div>
 
-            <div className="premium-stat-grid">
+            <div className="completion-summary">
+              <div className="completion-ring">
+                <span>{stats.completionRate}%</span>
+              </div>
 
-              {premiumStats.map((stat) => {
-                const Icon = stat.icon;
+              <div>
+                <strong>Overall completion</strong>
+                <span>Task completion rate</span>
+              </div>
+            </div>
 
-                return (
-                  <div
-                    className={`premium-stat-card ${stat.className}`}
-                    key={stat.title}
-                  >
-                    <div className="premium-stat-glow" />
+          </section>
 
-                    <div className="premium-stat-top">
+          {/* =====================================================
+              STAT CARDS
+          ===================================================== */}
+          <section className="reports-stat-grid">
 
-                      <div className="premium-stat-icon">
-                        <Icon />
-                      </div>
+            {statCards.map((card) => {
+              const Icon = card.icon;
 
-                      <div className="premium-stat-arrow">
-                        <FaArrowUp />
-                      </div>
+              return (
+                <article
+                  className={`reports-stat-card ${card.className}`}
+                  key={card.label}
+                >
+                  <div className="stat-card-top">
 
+                    <div className="stat-icon">
+                      <Icon />
                     </div>
 
-                    <div className="premium-stat-value">
-                      {stat.value}
-                    </div>
-
-                    <div className="premium-stat-title">
-                      {stat.title}
-                    </div>
-
-                    <div className="premium-stat-description">
-                      {stat.description}
-                    </div>
+                    <span className={`stat-trend ${card.trendType}`}>
+                      {card.trendType === "up" && <FaArrowUp />}
+                      {card.trendType === "down" && <FaArrowDown />}
+                      {card.trend}
+                    </span>
 
                   </div>
-                );
-              })}
 
-            </div>
+                  <div className="stat-card-value">
+                    {card.value}
+                  </div>
 
-          </section>
+                  <div className="stat-card-label">
+                    {card.label}
+                  </div>
 
-          {/* ===================================================
-              EXISTING REPORT CARDS
-          =================================================== */}
+                  <p>{card.description}</p>
 
-          <section className="reports-component-section">
-
-            <div className="reports-component-title">
-
-              <div>
-                <span>SUMMARY</span>
-
-                <h2>
-                  Performance metrics
-                </h2>
-              </div>
-
-              <div className="reports-component-line" />
-
-            </div>
-
-            <div className="reports-existing-cards">
-              <ReportCards
-                projects={projects}
-                tasks={tasks}
-              />
-            </div>
+                  <div className="stat-card-shine" />
+                </article>
+              );
+            })}
 
           </section>
 
-          {/* ===================================================
-              PERFORMANCE HIGHLIGHTS
-          =================================================== */}
+          {/* =====================================================
+              INSIGHT STRIP
+          ===================================================== */}
+          <section className="insight-strip">
 
-          <section className="reports-highlight-grid">
-
-            <div className="reports-highlight-card">
-
-              <div className="reports-highlight-icon blue">
-                <FaChartLine />
-              </div>
-
-              <div>
-                <span>AVERAGE PROJECT PROGRESS</span>
-
-                <strong>
-                  {statistics.averageProjectProgress}%
-                </strong>
-
-                <p>
-                  Overall progress across your
-                  active workspace projects.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="reports-highlight-card">
-
-              <div className="reports-highlight-icon green">
-                <FaCheckCircle />
-              </div>
-
-              <div>
-                <span>PROJECT COMPLETION</span>
-
-                <strong>
-                  {statistics.projectCompletionRate}%
-                </strong>
-
-                <p>
-                  {statistics.completedProjects} of{" "}
-                  {statistics.totalProjects} projects
-                  completed.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="reports-highlight-card">
-
-              <div className="reports-highlight-icon purple">
-                <FaArrowUp />
+            <div className="insight-item">
+              <div className="insight-icon purple">
+                <FaLayerGroup />
               </div>
 
               <div>
                 <span>ACTIVE PROJECTS</span>
+                <strong>{stats.activeProjects}</strong>
+              </div>
+            </div>
 
-                <strong>
-                  {statistics.activeProjects}
-                </strong>
+            <div className="insight-divider" />
 
-                <p>
-                  Projects currently in active
-                  development or execution.
-                </p>
+            <div className="insight-item">
+              <div className="insight-icon blue">
+                <FaTasks />
               </div>
 
+              <div>
+                <span>AVERAGE PROJECT PROGRESS</span>
+                <strong>{stats.projectProgress}%</strong>
+              </div>
+            </div>
+
+            <div className="insight-divider" />
+
+            <div className="insight-item">
+              <div className="insight-icon orange">
+                <FaBullseye />
+              </div>
+
+              <div>
+                <span>HIGH PRIORITY TASKS</span>
+                <strong>{stats.highPriority}</strong>
+              </div>
+            </div>
+
+            <div className="insight-divider" />
+
+            <div className="insight-item">
+              <div className="insight-icon green">
+                <FaCheckCircle />
+              </div>
+
+              <div>
+                <span>COMPLETION RATE</span>
+                <strong>{stats.completionRate}%</strong>
+              </div>
             </div>
 
           </section>
 
-          {/* ===================================================
-              CHARTS
-          =================================================== */}
+          {/* =====================================================
+              ANALYTICS HEADER
+          ===================================================== */}
+          <section className="analytics-heading">
 
-          <section className="reports-charts-section">
-
-            <div className="reports-section-heading">
-
-              <div>
-                <span>DATA VISUALIZATION</span>
-
-                <h2>
-                  Performance analytics
-                </h2>
-
-                <p>
-                  Visual insights into task status,
-                  project progress and priorities.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="reports-grid">
-
-              <div className="reports-chart-wrapper reports-chart-large">
-                <TaskStatusChart
-                  tasks={tasks}
-                />
-              </div>
-
-              <div className="reports-chart-wrapper reports-chart-large">
-                <ProjectProgressChart
-                  projects={projects}
-                />
-              </div>
-
-              <div className="reports-chart-wrapper reports-chart-full">
-                <PriorityChart
-                  tasks={tasks}
-                />
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* ===================================================
-              EXPORT
-          =================================================== */}
-
-          <section className="reports-export-section">
-
-            <div className="reports-export-header">
-
-              <div className="reports-export-icon">
-                <FaClipboardList />
-              </div>
-
-              <div>
-                <span>REPORT CENTER</span>
-
-                <h2>
-                  Export your analytics
-                </h2>
-
-                <p>
-                  Download your project and task
-                  performance data for further analysis.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="reports-export-content">
-
-              <ExportButtons
-                projects={projects}
-                tasks={tasks}
-              />
-
-            </div>
-
-          </section>
-
-          {/* ===================================================
-              FOOTER
-          =================================================== */}
-
-          <div className="reports-footer">
-
-            <div className="reports-footer-left">
-
-              <div className="reports-footer-icon">
-                <FaShieldAlt />
-              </div>
-
-              <div>
-                <strong>
-                  TaskFlow Analytics
-                </strong>
-
-                <span>
-                  Your workspace performance is
-                  continuously monitored.
-                </span>
-              </div>
-
-            </div>
-
-            <div className="reports-footer-secure">
-              <FaCheckCircle />
-              <span>
-                Data synchronized
+            <div>
+              <span className="section-kicker">
+                VISUAL ANALYTICS
               </span>
+
+              <h2>Performance intelligence</h2>
+
+              <p>
+                Understand task distribution, project progress,
+                and priority across your workspace.
+              </p>
             </div>
 
-          </div>
+            <div className="analytics-badge">
+              <FaChartPie />
+              <span>Analytics dashboard</span>
+            </div>
+
+          </section>
+
+          {/* =====================================================
+              MAIN CHARTS
+          ===================================================== */}
+          <section className="reports-chart-grid">
+
+            <div className="analytics-card analytics-card-large">
+              <div className="analytics-card-header">
+                <div>
+                  <span>01 / TASK ANALYTICS</span>
+                  <h3>Task Status</h3>
+                  <p>Current distribution of workspace tasks.</p>
+                </div>
+
+                <div className="analytics-card-icon">
+                  <FaClipboardList />
+                </div>
+              </div>
+
+              <div className="analytics-chart-content">
+                <TaskStatusChart tasks={tasks} />
+              </div>
+            </div>
+
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <div>
+                  <span>02 / PROJECT ANALYTICS</span>
+                  <h3>Project Progress</h3>
+                  <p>Progress across active projects.</p>
+                </div>
+
+                <div className="analytics-card-icon">
+                  <FaChartLine />
+                </div>
+              </div>
+
+              <div className="analytics-chart-content">
+                <ProjectProgressChart projects={projects} />
+              </div>
+            </div>
+
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <div>
+                  <span>03 / PRIORITY ANALYTICS</span>
+                  <h3>Task Priority</h3>
+                  <p>Priority distribution across tasks.</p>
+                </div>
+
+                <div className="analytics-card-icon">
+                  <FaBullseye />
+                </div>
+              </div>
+
+              <div className="analytics-chart-content">
+                <PriorityChart tasks={tasks} />
+              </div>
+            </div>
+
+          </section>
+
+          {/* =====================================================
+              EMPTY / DATA MESSAGE
+          ===================================================== */}
+          {projects.length === 0 && tasks.length === 0 && (
+            <section className="reports-empty-state">
+
+              <div className="empty-icon">
+                <FaChartLine />
+              </div>
+
+              <div>
+                <h3>Your analytics are waiting</h3>
+
+                <p>
+                  Create projects and tasks to start generating
+                  meaningful workspace reports.
+                </p>
+              </div>
+
+            </section>
+          )}
+
+          {/* =====================================================
+              FOOTER
+          ===================================================== */}
+          <footer className="reports-footer">
+
+            <div>
+              <span className="footer-dot" />
+              <span>TaskFlow Analytics Engine</span>
+            </div>
+
+            <span>
+              Metrics update automatically with workspace activity.
+            </span>
+
+          </footer>
 
         </div>
       </div>
