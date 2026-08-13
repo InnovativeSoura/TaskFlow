@@ -10,92 +10,29 @@ import ExportButtons from "../components/reports/ExportButtons";
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
 
-import {
-  FaChartLine,
-  FaRocket,
-  FaFolderOpen,
-  FaTasks,
-  FaArrowRight,
-  FaCheckCircle,
-} from "react-icons/fa";
-
 import "../styles/Reports.css";
 
 const Reports = () => {
   const { projects = [] } = useProjects();
   const { tasks = [] } = useTasks();
 
-  /*
-   * ----------------------------------------------------------
-   * BASIC REPORT METRICS
-   * ----------------------------------------------------------
-   */
-
-  const totalProjects = projects.length;
-  const totalTasks = tasks.length;
-
-  const completedTasks = tasks.filter((task) => {
-    const status = String(task?.status || "").toLowerCase();
-
-    return (
-      status === "completed" ||
-      status === "complete" ||
-      status === "done"
-    );
-  }).length;
-
-  const pendingTasks = Math.max(totalTasks - completedTasks, 0);
-
-  const completionRate =
-    totalTasks > 0
-      ? Math.round((completedTasks / totalTasks) * 100)
-      : 0;
-
-  /*
-   * ----------------------------------------------------------
-   * PROJECT PROGRESS
-   * ----------------------------------------------------------
-   */
-
-  const projectProgress =
-    projects.length > 0
-      ? Math.round(
-          projects.reduce((total, project) => {
-            const progress = Number(
-              project?.progress ??
-                project?.completion ??
-                project?.completionPercentage ??
-                0
-            );
-
-            return total + Math.min(Math.max(progress, 0), 100);
-          }, 0) / projects.length
-        )
-      : 0;
-
-  /*
-   * ----------------------------------------------------------
-   * EMPTY WORKSPACE STATE
-   * ----------------------------------------------------------
-   */
-
-  const hasWorkspaceData = totalProjects > 0 || totalTasks > 0;
-
   return (
     <MainLayout>
       <div className="reports-page">
 
         {/* =====================================================
-            PREMIUM REPORT HEADER
+            HEADER
         ====================================================== */}
 
-        <ReportsHeader />
+        <div className="reports-header-area">
+          <ReportsHeader />
+        </div>
 
         {/* =====================================================
             PERFORMANCE OVERVIEW
         ====================================================== */}
 
-        <section className="reports-overview-section">
+        <section className="reports-overview">
 
           <div className="reports-section-heading">
             <div>
@@ -110,14 +47,6 @@ const Reports = () => {
                 performance.
               </p>
             </div>
-
-            <div className="reports-completion-indicator">
-              <span className="completion-arrow">↑</span>
-
-              <strong>{completionRate}%</strong>
-
-              <span>completion</span>
-            </div>
           </div>
 
           <ReportCards
@@ -128,10 +57,10 @@ const Reports = () => {
         </section>
 
         {/* =====================================================
-            ANALYTICS
+            VISUAL ANALYTICS
         ====================================================== */}
 
-        <section className="reports-analytics-section">
+        <section className="reports-analytics">
 
           <div className="reports-analytics-heading">
 
@@ -148,48 +77,74 @@ const Reports = () => {
               </p>
             </div>
 
-            <button
-              type="button"
-              className="analytics-dashboard-button"
-            >
-              <FaChartLine />
-
-              <span>Analytics dashboard</span>
-
-              <FaArrowRight />
-            </button>
+            <div className="analytics-status">
+              <span className="analytics-status-dot"></span>
+              Live analytics
+            </div>
 
           </div>
 
+          {/* ===================================================
+              CHART GRID
+          ==================================================== */}
+
           <div className="reports-grid">
 
-            {/* =================================================
-                TASK STATUS
-            ================================================== */}
+            {/* TASK STATUS */}
 
-            <div className="report-chart-container task-status-container">
+            <div className="report-chart-card report-chart-wide">
 
-              <div className="report-chart-label">
-                <span>01 / TASK ANALYTICS</span>
+              <div className="report-chart-card-header">
+
+                <div>
+                  <span className="chart-eyebrow">
+                    01 / TASK ANALYTICS
+                  </span>
+
+                  <h3>Task Status</h3>
+
+                  <p>
+                    Current distribution of workspace tasks.
+                  </p>
+                </div>
+
+                <div className="chart-header-icon">
+                  ✓
+                </div>
+
               </div>
 
-              <div className="report-chart-content">
+              <div className="report-chart-body">
                 <TaskStatusChart tasks={tasks} />
               </div>
 
             </div>
 
-            {/* =================================================
-                PROJECT PROGRESS
-            ================================================== */}
+            {/* PROJECT PROGRESS */}
 
-            <div className="report-chart-container project-progress-container">
+            <div className="report-chart-card">
 
-              <div className="report-chart-label">
-                <span>02 / PROJECT ANALYTICS</span>
+              <div className="report-chart-card-header">
+
+                <div>
+                  <span className="chart-eyebrow">
+                    02 / PROJECT ANALYTICS
+                  </span>
+
+                  <h3>Project Progress</h3>
+
+                  <p>
+                    Progress overview across all projects.
+                  </p>
+                </div>
+
+                <div className="chart-header-icon">
+                  ↗
+                </div>
+
               </div>
 
-              <div className="report-chart-content">
+              <div className="report-chart-body">
                 <ProjectProgressChart
                   projects={projects}
                 />
@@ -201,13 +156,29 @@ const Reports = () => {
                 TASK PRIORITY
             ================================================== */}
 
-            <div className="report-chart-container priority-container">
+            <div className="report-chart-card priority-report-card">
 
-              <div className="report-chart-label">
-                <span>03 / PRIORITY ANALYTICS</span>
+              <div className="report-chart-card-header">
+
+                <div>
+                  <span className="chart-eyebrow">
+                    03 / PRIORITY ANALYTICS
+                  </span>
+
+                  <h3>Task Priority</h3>
+
+                  <p>
+                    Priority distribution across tasks.
+                  </p>
+                </div>
+
+                <div className="chart-header-icon">
+                  ◎
+                </div>
+
               </div>
 
-              <div className="report-chart-content">
+              <div className="report-chart-body priority-chart-body">
                 <PriorityChart tasks={tasks} />
               </div>
 
@@ -218,145 +189,43 @@ const Reports = () => {
         </section>
 
         {/* =====================================================
-            ANALYTICS WAITING / EMPTY STATE
+            ANALYTICS WAITING
         ====================================================== */}
 
-        {!hasWorkspaceData && (
-          <section className="analytics-waiting-card">
+        <section className="analytics-waiting">
+
+          <div className="analytics-waiting-main">
 
             <div className="analytics-waiting-icon">
-              <FaChartLine />
+              ↗
             </div>
 
-            <div className="analytics-waiting-content">
+            <div className="analytics-waiting-text">
 
-              <span className="analytics-waiting-label">
-                WORKSPACE ANALYTICS
+              <span>
+                TASKFLOW ANALYTICS
               </span>
 
-              <h3>Your analytics are waiting</h3>
+              <h3>
+                Your analytics are waiting
+              </h3>
 
               <p>
                 Create projects and tasks to start generating
                 meaningful workspace reports.
               </p>
 
-              <div className="analytics-waiting-stats">
-
-                <div className="waiting-stat">
-                  <div className="waiting-stat-icon">
-                    <FaFolderOpen />
-                  </div>
-
-                  <div>
-                    <strong>0</strong>
-                    <span>Projects</span>
-                  </div>
-                </div>
-
-                <div className="waiting-stat">
-                  <div className="waiting-stat-icon">
-                    <FaTasks />
-                  </div>
-
-                  <div>
-                    <strong>0</strong>
-                    <span>Tasks</span>
-                  </div>
-                </div>
-
-                <div className="waiting-stat">
-                  <div className="waiting-stat-icon">
-                    <FaCheckCircle />
-                  </div>
-
-                  <div>
-                    <strong>0%</strong>
-                    <span>Completion</span>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="analytics-waiting-status">
-              <span className="status-dot"></span>
-
-              <span>TaskFlow Analytics Engine</span>
-            </div>
-
-          </section>
-        )}
-
-        {/* =====================================================
-            WORKSPACE SUMMARY
-        ====================================================== */}
-
-        <section className="reports-summary-strip">
-
-          <div className="summary-strip-item">
-
-            <div className="summary-strip-icon">
-              <FaFolderOpen />
-            </div>
-
-            <div>
-              <strong>{totalProjects}</strong>
-              <span>Total Projects</span>
             </div>
 
           </div>
 
-          <div className="summary-strip-item">
+          <div className="analytics-engine">
 
-            <div className="summary-strip-icon">
-              <FaTasks />
-            </div>
+            <span className="engine-dot"></span>
 
-            <div>
-              <strong>{totalTasks}</strong>
-              <span>Total Tasks</span>
-            </div>
-
-          </div>
-
-          <div className="summary-strip-item">
-
-            <div className="summary-strip-icon">
-              <FaCheckCircle />
-            </div>
-
-            <div>
-              <strong>{completedTasks}</strong>
-              <span>Completed</span>
-            </div>
-
-          </div>
-
-          <div className="summary-strip-item">
-
-            <div className="summary-strip-icon">
-              <FaRocket />
-            </div>
-
-            <div>
-              <strong>{projectProgress}%</strong>
-              <span>Project Progress</span>
-            </div>
-
-          </div>
-
-          <div className="summary-strip-item">
-
-            <div className="summary-strip-icon">
-              <FaChartLine />
-            </div>
-
-            <div>
-              <strong>{pendingTasks}</strong>
-              <span>Pending Tasks</span>
-            </div>
+            <span>
+              TaskFlow Analytics Engine
+            </span>
 
           </div>
 
@@ -366,19 +235,23 @@ const Reports = () => {
             EXPORT
         ====================================================== */}
 
-        <section className="reports-export-section">
+        <section className="reports-export">
 
-          <div>
+          <div className="reports-export-content">
+
             <span className="reports-eyebrow">
               REPORT CENTER
             </span>
 
-            <h3>Export workspace analytics</h3>
+            <h3>
+              Export workspace analytics
+            </h3>
 
             <p>
               Download your current project and task
               performance data.
             </p>
+
           </div>
 
           <ExportButtons
@@ -392,18 +265,17 @@ const Reports = () => {
             FOOTER
         ====================================================== */}
 
-        <div className="reports-footer">
+        <footer className="reports-footer">
 
-          <div className="footer-security">
-            <span className="footer-dot"></span>
+          <span>
             Secure workspace analytics
-          </div>
+          </span>
 
           <span>
             Metrics update automatically with workspace activity.
           </span>
 
-        </div>
+        </footer>
 
       </div>
     </MainLayout>
