@@ -5,7 +5,7 @@ import {
   FaClipboardList,
   FaFolderOpen,
   FaLayerGroup,
-  FaArrowTrendUp,
+  FaArrowUp,
   FaShieldAlt,
 } from "react-icons/fa";
 
@@ -28,10 +28,10 @@ const Reports = () => {
   const { tasks = [] } = useTasks();
 
   /* =========================================================
-     SAFE DATA CALCULATIONS
+     SAFE STATISTICS
   ========================================================= */
 
-  const reportStats = useMemo(() => {
+  const statistics = useMemo(() => {
     const totalProjects = projects.length;
     const totalTasks = tasks.length;
 
@@ -40,8 +40,8 @@ const Reports = () => {
 
       return (
         status === "completed" ||
-        status === "done" ||
-        status === "complete"
+        status === "complete" ||
+        status === "done"
       );
     }).length;
 
@@ -50,23 +50,52 @@ const Reports = () => {
       0
     );
 
+    const completedProjects = projects.filter((project) => {
+      const status = String(project?.status || "").toLowerCase();
+
+      return (
+        status === "completed" ||
+        status === "complete" ||
+        status === "done"
+      );
+    }).length;
+
+    const activeProjects = projects.filter((project) => {
+      const status = String(project?.status || "").toLowerCase();
+
+      return (
+        status === "active" ||
+        status === "in progress" ||
+        status === "in-progress"
+      );
+    }).length;
+
     const completionRate =
       totalTasks > 0
+        ? Math.round((completedTasks / totalTasks) * 100)
+        : 0;
+
+    const projectCompletionRate =
+      totalProjects > 0
         ? Math.round(
-            (completedTasks / totalTasks) * 100
+            (completedProjects / totalProjects) * 100
           )
         : 0;
 
-    const projectProgress =
-      projects.length > 0
+    const averageProjectProgress =
+      totalProjects > 0
         ? Math.round(
             projects.reduce((total, project) => {
               const progress = Number(
                 project?.progress ?? 0
               );
 
-              return total + progress;
-            }, 0) / projects.length
+              return total + (
+                Number.isFinite(progress)
+                  ? progress
+                  : 0
+              );
+            }, 0) / totalProjects
           )
         : 0;
 
@@ -75,10 +104,48 @@ const Reports = () => {
       totalTasks,
       completedTasks,
       pendingTasks,
+      completedProjects,
+      activeProjects,
       completionRate,
-      projectProgress,
+      projectCompletionRate,
+      averageProjectProgress,
     };
   }, [projects, tasks]);
+
+  /* =========================================================
+     REPORT STAT CARDS
+  ========================================================= */
+
+  const premiumStats = [
+    {
+      title: "Total Projects",
+      value: statistics.totalProjects,
+      description: "Projects in your workspace",
+      icon: FaFolderOpen,
+      className: "blue",
+    },
+    {
+      title: "Total Tasks",
+      value: statistics.totalTasks,
+      description: "Tasks across all projects",
+      icon: FaClipboardList,
+      className: "purple",
+    },
+    {
+      title: "Completed",
+      value: statistics.completedTasks,
+      description: `${statistics.completionRate}% task completion`,
+      icon: FaCheckCircle,
+      className: "green",
+    },
+    {
+      title: "Pending",
+      value: statistics.pendingTasks,
+      description: "Tasks still requiring action",
+      icon: FaLayerGroup,
+      className: "orange",
+    },
+  ];
 
   return (
     <MainLayout>
@@ -88,158 +155,75 @@ const Reports = () => {
             PREMIUM BACKGROUND
         ===================================================== */}
 
-        <div className="reports-background">
+        <div
+          className="reports-background"
+          aria-hidden="true"
+        >
           <div className="reports-bg-grid" />
 
-          <div className="reports-orb reports-orb-one" />
-          <div className="reports-orb reports-orb-two" />
-          <div className="reports-orb reports-orb-three" />
+          <div className="reports-bg-orb reports-bg-orb-1" />
+          <div className="reports-bg-orb reports-bg-orb-2" />
+          <div className="reports-bg-orb reports-bg-orb-3" />
 
-          <div className="reports-glow reports-glow-one" />
-          <div className="reports-glow reports-glow-two" />
+          <div className="reports-bg-glow reports-bg-glow-1" />
+          <div className="reports-bg-glow reports-bg-glow-2" />
+
+          <span className="reports-particle reports-particle-1" />
+          <span className="reports-particle reports-particle-2" />
+          <span className="reports-particle reports-particle-3" />
+          <span className="reports-particle reports-particle-4" />
+          <span className="reports-particle reports-particle-5" />
         </div>
 
         {/* =====================================================
             MAIN CONTENT
         ===================================================== */}
 
-        <main className="reports-container">
+        <div className="reports-container">
 
           {/* ===================================================
-              PAGE HEADER
+              HEADER
           =================================================== */}
 
           <section className="reports-hero">
 
-            <div className="reports-hero-left">
+            <div className="reports-hero-content">
 
               <div className="reports-hero-icon">
                 <FaChartLine />
-                <span />
               </div>
 
-              <div className="reports-hero-content">
-
+              <div>
                 <div className="reports-eyebrow">
-                  <FaArrowTrendUp />
-                  TASKFLOW ANALYTICS
-                  <span />
-                  LIVE OVERVIEW
+                  <span>WORKSPACE</span>
+                  <i />
+                  <strong>ANALYTICS</strong>
                 </div>
 
                 <h1>
-                  Reports &{" "}
-                  <span>Analytics</span>
+                  Reports &amp; Analytics
                 </h1>
 
                 <p>
-                  Track project performance, task completion,
-                  priorities and overall workspace productivity.
+                  Track project performance, task
+                  completion, productivity and
+                  workspace activity.
                 </p>
-
               </div>
 
             </div>
 
             <div className="reports-hero-status">
 
-              <div className="reports-status-dot" />
+              <div className="reports-live-dot" />
 
-              <div>
-                <strong>Workspace Active</strong>
-                <span>Analytics are up to date</span>
-              </div>
+              <span>LIVE DATA</span>
 
-            </div>
+              <div className="reports-hero-divider" />
 
-          </section>
+              <FaShieldAlt />
 
-          {/* ===================================================
-              QUICK INSIGHT STRIP
-          =================================================== */}
-
-          <section className="reports-insight-strip">
-
-            <div className="reports-insight-item">
-
-              <div className="reports-insight-icon blue">
-                <FaFolderOpen />
-              </div>
-
-              <div>
-                <span>Projects</span>
-                <strong>
-                  {reportStats.totalProjects}
-                </strong>
-              </div>
-
-            </div>
-
-            <div className="reports-insight-divider" />
-
-            <div className="reports-insight-item">
-
-              <div className="reports-insight-icon purple">
-                <FaClipboardList />
-              </div>
-
-              <div>
-                <span>Total Tasks</span>
-                <strong>
-                  {reportStats.totalTasks}
-                </strong>
-              </div>
-
-            </div>
-
-            <div className="reports-insight-divider" />
-
-            <div className="reports-insight-item">
-
-              <div className="reports-insight-icon green">
-                <FaCheckCircle />
-              </div>
-
-              <div>
-                <span>Completed</span>
-                <strong>
-                  {reportStats.completedTasks}
-                </strong>
-              </div>
-
-            </div>
-
-            <div className="reports-insight-divider" />
-
-            <div className="reports-insight-item">
-
-              <div className="reports-insight-icon orange">
-                <FaLayerGroup />
-              </div>
-
-              <div>
-                <span>Completion Rate</span>
-                <strong>
-                  {reportStats.completionRate}%
-                </strong>
-              </div>
-
-            </div>
-
-            <div className="reports-productivity">
-
-              <div className="reports-productivity-ring">
-                <span>
-                  {reportStats.projectProgress}%
-                </span>
-              </div>
-
-              <div>
-                <span>Project Progress</span>
-                <strong>
-                  Overall progress
-                </strong>
-              </div>
+              <span>SECURE</span>
 
             </div>
 
@@ -249,41 +233,106 @@ const Reports = () => {
               EXISTING REPORT HEADER
           =================================================== */}
 
-          <div className="reports-section reports-header-section">
+          <div className="reports-component-wrapper">
             <ReportsHeader />
           </div>
 
           {/* ===================================================
-              STATISTICS
+              PREMIUM OVERVIEW
           =================================================== */}
 
-          <section className="reports-section">
+          <section className="reports-overview">
 
             <div className="reports-section-heading">
 
               <div>
-                <span className="reports-section-kicker">
-                  PERFORMANCE
-                </span>
+                <span>PERFORMANCE OVERVIEW</span>
 
                 <h2>
-                  Workspace Overview
+                  Workspace at a glance
                 </h2>
 
                 <p>
-                  A high-level summary of your current
-                  TaskFlow workspace.
+                  A real-time summary of your
+                  projects and task performance.
                 </p>
               </div>
 
-              <div className="reports-section-badge">
-                <FaShieldAlt />
-                Data Overview
+              <div className="reports-heading-badge">
+                <FaArrowUp />
+                <strong>
+                  {statistics.completionRate}%
+                </strong>
+                <span>completion</span>
               </div>
 
             </div>
 
-            <div className="reports-cards-wrapper">
+            <div className="premium-stat-grid">
+
+              {premiumStats.map((stat) => {
+                const Icon = stat.icon;
+
+                return (
+                  <div
+                    className={`premium-stat-card ${stat.className}`}
+                    key={stat.title}
+                  >
+                    <div className="premium-stat-glow" />
+
+                    <div className="premium-stat-top">
+
+                      <div className="premium-stat-icon">
+                        <Icon />
+                      </div>
+
+                      <div className="premium-stat-arrow">
+                        <FaArrowUp />
+                      </div>
+
+                    </div>
+
+                    <div className="premium-stat-value">
+                      {stat.value}
+                    </div>
+
+                    <div className="premium-stat-title">
+                      {stat.title}
+                    </div>
+
+                    <div className="premium-stat-description">
+                      {stat.description}
+                    </div>
+
+                  </div>
+                );
+              })}
+
+            </div>
+
+          </section>
+
+          {/* ===================================================
+              EXISTING REPORT CARDS
+          =================================================== */}
+
+          <section className="reports-component-section">
+
+            <div className="reports-component-title">
+
+              <div>
+                <span>SUMMARY</span>
+
+                <h2>
+                  Performance metrics
+                </h2>
+              </div>
+
+              <div className="reports-component-line" />
+
+            </div>
+
+            <div className="reports-existing-cards">
               <ReportCards
                 projects={projects}
                 tasks={tasks}
@@ -293,50 +342,115 @@ const Reports = () => {
           </section>
 
           {/* ===================================================
+              PERFORMANCE HIGHLIGHTS
+          =================================================== */}
+
+          <section className="reports-highlight-grid">
+
+            <div className="reports-highlight-card">
+
+              <div className="reports-highlight-icon blue">
+                <FaChartLine />
+              </div>
+
+              <div>
+                <span>AVERAGE PROJECT PROGRESS</span>
+
+                <strong>
+                  {statistics.averageProjectProgress}%
+                </strong>
+
+                <p>
+                  Overall progress across your
+                  active workspace projects.
+                </p>
+              </div>
+
+            </div>
+
+            <div className="reports-highlight-card">
+
+              <div className="reports-highlight-icon green">
+                <FaCheckCircle />
+              </div>
+
+              <div>
+                <span>PROJECT COMPLETION</span>
+
+                <strong>
+                  {statistics.projectCompletionRate}%
+                </strong>
+
+                <p>
+                  {statistics.completedProjects} of{" "}
+                  {statistics.totalProjects} projects
+                  completed.
+                </p>
+              </div>
+
+            </div>
+
+            <div className="reports-highlight-card">
+
+              <div className="reports-highlight-icon purple">
+                <FaArrowUp />
+              </div>
+
+              <div>
+                <span>ACTIVE PROJECTS</span>
+
+                <strong>
+                  {statistics.activeProjects}
+                </strong>
+
+                <p>
+                  Projects currently in active
+                  development or execution.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+          {/* ===================================================
               CHARTS
           =================================================== */}
 
-          <section className="reports-section charts-section">
+          <section className="reports-charts-section">
 
             <div className="reports-section-heading">
 
               <div>
-                <span className="reports-section-kicker">
-                  ANALYTICS
-                </span>
+                <span>DATA VISUALIZATION</span>
 
                 <h2>
-                  Performance Insights
+                  Performance analytics
                 </h2>
 
                 <p>
-                  Understand task distribution, project
-                  progress and workload priorities.
+                  Visual insights into task status,
+                  project progress and priorities.
                 </p>
-              </div>
-
-              <div className="reports-chart-live">
-                <span />
-                Live Analytics
               </div>
 
             </div>
 
             <div className="reports-grid">
 
-              <div className="reports-chart-item reports-chart-large">
+              <div className="reports-chart-wrapper reports-chart-large">
                 <TaskStatusChart
                   tasks={tasks}
                 />
               </div>
 
-              <div className="reports-chart-item reports-chart-large">
+              <div className="reports-chart-wrapper reports-chart-large">
                 <ProjectProgressChart
                   projects={projects}
                 />
               </div>
 
-              <div className="reports-chart-item reports-chart-full">
+              <div className="reports-chart-wrapper reports-chart-full">
                 <PriorityChart
                   tasks={tasks}
                 />
@@ -347,39 +461,39 @@ const Reports = () => {
           </section>
 
           {/* ===================================================
-              EXPORT SECTION
+              EXPORT
           =================================================== */}
 
           <section className="reports-export-section">
 
-            <div className="reports-export-left">
+            <div className="reports-export-header">
 
               <div className="reports-export-icon">
-                <FaChartLine />
+                <FaClipboardList />
               </div>
 
               <div>
-                <span>
-                  REPORT CENTER
-                </span>
+                <span>REPORT CENTER</span>
 
-                <h3>
+                <h2>
                   Export your analytics
-                </h3>
+                </h2>
 
                 <p>
-                  Generate a downloadable report from
-                  your current project and task data.
+                  Download your project and task
+                  performance data for further analysis.
                 </p>
               </div>
 
             </div>
 
-            <div className="reports-export-actions">
+            <div className="reports-export-content">
+
               <ExportButtons
                 projects={projects}
                 tasks={tasks}
               />
+
             </div>
 
           </section>
@@ -388,7 +502,7 @@ const Reports = () => {
               FOOTER
           =================================================== */}
 
-          <footer className="reports-footer">
+          <div className="reports-footer">
 
             <div className="reports-footer-left">
 
@@ -402,21 +516,23 @@ const Reports = () => {
                 </strong>
 
                 <span>
-                  Your workspace performance data is
-                  securely processed.
+                  Your workspace performance is
+                  continuously monitored.
                 </span>
               </div>
 
             </div>
 
-            <div className="reports-footer-status">
-              <span />
-              System Operational
+            <div className="reports-footer-secure">
+              <FaCheckCircle />
+              <span>
+                Data synchronized
+              </span>
             </div>
 
-          </footer>
+          </div>
 
-        </main>
+        </div>
       </div>
     </MainLayout>
   );
