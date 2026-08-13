@@ -3661,3 +3661,138 @@ body[data-taskflow-theme="light"] .tf-active-section-bar {
   }
 
 }
+/* =========================================================
+   TASKFLOW SETTINGS — EDIT PROFILE BUTTON FIX
+   ========================================================= */
+
+.tf-settings-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+/* Compact premium edit button */
+.tf-settings-profile .tf-settings-edit-btn {
+  position: static !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+
+  width: auto !important;
+  min-width: 124px !important;
+  max-width: 150px !important;
+
+  height: 38px !important;
+  padding: 0 15px !important;
+  margin-left: auto !important;
+
+  flex: 0 0 auto !important;
+
+  border: 1px solid rgba(139, 92, 246, 0.45) !important;
+  border-radius: 10px !important;
+
+  background: linear-gradient(
+    135deg,
+    #6845e8 0%,
+    #7c4dff 100%
+  ) !important;
+
+  color: #ffffff !important;
+
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 8px 20px rgba(99, 70, 220, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease !important;
+}
+
+.tf-settings-profile .tf-settings-edit-btn svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex: 0 0 auto !important;
+  color: #ffffff !important;
+}
+
+.tf-settings-profile .tf-settings-edit-btn span {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  color: #ffffff !important;
+}
+
+.tf-settings-profile .tf-settings-edit-btn:hover {
+  transform: translateY(-2px) !important;
+
+  background: linear-gradient(
+    135deg,
+    #7554ef 0%,
+    #8b5cf6 100%
+  ) !important;
+
+  box-shadow:
+    0 12px 26px rgba(99, 70, 220, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+.tf-settings-profile .tf-settings-edit-btn:active {
+  transform: translateY(0) !important;
+}
+
+.tf-settings-profile .tf-settings-edit-btn:focus-visible {
+  outline: 2px solid rgba(139, 92, 246, 0.65) !important;
+  outline-offset: 3px !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE
+   ========================================================= */
+
+.light-mode .tf-settings-profile .tf-settings-edit-btn,
+[data-theme="light"] .tf-settings-profile .tf-settings-edit-btn {
+  background: linear-gradient(
+    135deg,
+    #6845e8 0%,
+    #7c4dff 100%
+  ) !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .tf-settings-profile {
+    flex-wrap: wrap;
+  }
+
+  .tf-settings-profile .tf-settings-edit-btn {
+    width: auto !important;
+    min-width: 118px !important;
+    height: 36px !important;
+    margin-left: auto !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .tf-settings-profile .tf-settings-edit-btn {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+  }
+}
