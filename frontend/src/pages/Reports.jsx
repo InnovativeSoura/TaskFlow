@@ -1,859 +1,251 @@
-import { useMemo } from "react";
 import MainLayout from "../layouts/MainLayout";
 
-import {
-  FaChartLine,
-  FaChartPie,
-  FaClipboardList,
-  FaFolderOpen,
-  FaCheckCircle,
-  FaClock,
-  FaLayerGroup,
-  FaBullseye,
-  FaArrowUp,
-  FaArrowDown,
-  FaMinus,
-  FaShieldAlt,
-  FaRocket,
-} from "react-icons/fa";
+import ReportsHeader from "../components/reports/ReportsHeader";
+import ReportCards from "../components/reports/ReportCards";
+import TaskStatusChart from "../components/reports/TaskStatusChart";
+import ProjectProgressChart from "../components/reports/ProjectProgressChart";
+import PriorityChart from "../components/reports/PriorityChart";
+import ExportButtons from "../components/reports/ExportButtons";
 
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
 
+import {
+  FaChartLine,
+  FaRocket,
+  FaFolderOpen,
+  FaTasks,
+  FaArrowRight,
+  FaCircleCheck,
+} from "react-icons/fa";
+
 import "../styles/Reports.css";
-
-/* ============================================================
-   HELPERS
-============================================================ */
-
-const normalize = (value) =>
-  String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[_\s]+/g, "-");
-
-/* ============================================================
-   REPORTS PAGE
-============================================================ */
 
 const Reports = () => {
   const { projects = [] } = useProjects();
   const { tasks = [] } = useTasks();
 
-  /* ==========================================================
-     TASK STATUS
-  ========================================================== */
+  const totalProjects = projects.length;
+  const totalTasks = tasks.length;
 
-  const statusData = useMemo(() => {
-    const total = tasks.length;
-
-    const completed = tasks.filter((task) => {
-      const status = normalize(task.status);
-
-      return [
-        "completed",
-        "complete",
-        "done",
-        "finished",
-      ].includes(status);
-    }).length;
-
-    const inProgress = tasks.filter((task) => {
-      const status = normalize(task.status);
-
-      return [
-        "in-progress",
-        "inprogress",
-        "in_progress",
-        "active",
-        "working",
-      ].includes(status);
-    }).length;
-
-    const review = tasks.filter((task) => {
-      const status = normalize(task.status);
-
-      return [
-        "review",
-        "in-review",
-        "in_review",
-      ].includes(status);
-    }).length;
-
-    const pending = Math.max(
-      total - completed - inProgress - review,
-      0
-    );
-
-    return {
-      total,
-      completed,
-      inProgress,
-      review,
-      pending,
-    };
-  }, [tasks]);
-
-  /* ==========================================================
-     PROJECT PROGRESS
-  ========================================================== */
-
-  const projectProgress = useMemo(() => {
-    if (!projects.length) {
-      return {
-        average: 0,
-        completed: 0,
-        active: 0,
-      };
-    }
-
-    const values = projects.map((project) => {
-      const value =
-        project.progress ??
-        project.completion ??
-        project.completionPercentage ??
-        project.percentage ??
-        0;
-
-      const numericValue = Number(value);
-
-      return Math.min(
-        100,
-        Math.max(
-          0,
-          Number.isFinite(numericValue)
-            ? numericValue
-            : 0
-        )
-      );
-    });
-
-    const average = Math.round(
-      values.reduce((sum, value) => sum + value, 0) /
-        values.length
-    );
-
-    const completed = values.filter(
-      (value) => value >= 100
-    ).length;
-
-    const active = values.filter(
-      (value) => value > 0 && value < 100
-    ).length;
-
-    return {
-      average,
-      completed,
-      active,
-    };
-  }, [projects]);
-
-  /* ==========================================================
-     TASK PRIORITY
-  ========================================================== */
-
-  const priorityData = useMemo(() => {
-    const high = tasks.filter((task) => {
-      const priority = normalize(task.priority);
-
-      return [
-        "high",
-        "urgent",
-        "critical",
-      ].includes(priority);
-    }).length;
-
-    const medium = tasks.filter((task) => {
-      const priority = normalize(task.priority);
-
-      return [
-        "medium",
-        "moderate",
-        "normal",
-      ].includes(priority);
-    }).length;
-
-    const low = tasks.filter((task) => {
-      const priority = normalize(task.priority);
-
-      return [
-        "low",
-        "minor",
-      ].includes(priority);
-    }).length;
-
-    /*
-      If some tasks do not have a recognized priority,
-      keep them out of the three priority buckets rather
-      than incorrectly assigning them.
-    */
-
-    const total = high + medium + low;
-
-    const highPercent =
-      total > 0 ? Math.round((high / total) * 100) : 0;
-
-    const mediumPercent =
-      total > 0 ? Math.round((medium / total) * 100) : 0;
-
-    const lowPercent =
-      total > 0
-        ? Math.max(
-            0,
-            100 - highPercent - mediumPercent
-          )
-        : 0;
-
-    return {
-      high,
-      medium,
-      low,
-      total,
-      highPercent,
-      mediumPercent,
-      lowPercent,
-    };
-  }, [tasks]);
-
-  /* ==========================================================
-     COMPLETION
-  ========================================================== */
-
-  const completionPercent = useMemo(() => {
-    if (!tasks.length) return 0;
-
-    return Math.round(
-      (statusData.completed / tasks.length) * 100
-    );
-  }, [tasks, statusData.completed]);
-
-  /* ==========================================================
-     DONUT STYLE
-  ========================================================== */
-
-  const priorityDonutStyle = useMemo(() => {
-    const {
-      highPercent,
-      mediumPercent,
-      lowPercent,
-    } = priorityData;
-
-    if (priorityData.total === 0) {
-      return {
-        background:
-          "conic-gradient(#273451 0deg 360deg)",
-      };
-    }
-
-    const highEnd = highPercent * 3.6;
-
-    const mediumEnd =
-      highEnd + mediumPercent * 3.6;
-
-    return {
-      background: `conic-gradient(
-        #ff4d4d 0deg ${highEnd}deg,
-        #f5a623 ${highEnd}deg ${mediumEnd}deg,
-        #35c878 ${mediumEnd}deg 360deg
-      )`,
-    };
-  }, [priorityData]);
-
-  /* ==========================================================
-     STATUS BAR WIDTH
-  ========================================================== */
-
-  const getStatusWidth = (value) => {
-    if (!statusData.total) return "0%";
-
-    return `${Math.round(
-      (value / statusData.total) * 100
-    )}%`;
-  };
-
-  /* ==========================================================
-     RENDER
-  ========================================================== */
+  const hasAnalytics = totalProjects > 0 || totalTasks > 0;
 
   return (
     <MainLayout>
       <div className="reports-page">
+        {/* =====================================================
+            PREMIUM REPORTS HEADER
+        ===================================================== */}
+        <ReportsHeader />
 
-        {/* ====================================================
-            PAGE HEADER
-        ==================================================== */}
-
-        <header className="reports-page-header">
-
-          <div className="reports-header-copy">
-
-            <div className="reports-eyebrow">
-              <span className="eyebrow-line" />
-              VISUAL ANALYTICS
-            </div>
-
-            <h1>
-              Performance intelligence
-            </h1>
-
-            <p>
-              Understand task distribution, project progress,
-              and priority across your workspace.
-            </p>
-
-          </div>
-
-          <div className="reports-header-badge">
-            <FaChartLine />
-            <span>Analytics dashboard</span>
-          </div>
-
-        </header>
-
-        {/* ====================================================
-            TASK STATUS
-        ==================================================== */}
-
-        <section className="analytics-card analytics-card-status">
-
-          <div className="analytics-card-header">
-
+        {/* =====================================================
+            PERFORMANCE OVERVIEW
+        ===================================================== */}
+        <section className="reports-overview-section">
+          <div className="reports-section-heading">
             <div>
-              <div className="analytics-label">
-                01 / TASK ANALYTICS
-              </div>
+              <span className="reports-eyebrow">
+                PERFORMANCE OVERVIEW
+              </span>
 
-              <h2>Task Status</h2>
+              <h2>Workspace at a glance</h2>
 
               <p>
-                Current distribution of workspace tasks.
+                A real-time summary of your projects and task performance.
               </p>
             </div>
 
-            <div className="analytics-icon">
-              <FaClipboardList />
+            <div className="reports-live-indicator">
+              <span className="live-dot"></span>
+              <span>Live workspace data</span>
             </div>
-
           </div>
 
-          <div className="status-content">
-
-            <div className="status-overview">
-
-              <div className="status-total">
-                <span>
-                  Total Tasks
-                </span>
-
-                <strong>
-                  {statusData.total}
-                </strong>
-              </div>
-
-              <div className="status-completion">
-                <FaArrowUp />
-
-                <strong>
-                  {completionPercent}%
-                </strong>
-
-                <span>
-                  completion
-                </span>
-              </div>
-
-            </div>
-
-            <div className="status-bars">
-
-              <StatusBar
-                label="Completed"
-                value={statusData.completed}
-                width={getStatusWidth(
-                  statusData.completed
-                )}
-                type="completed"
-              />
-
-              <StatusBar
-                label="In Progress"
-                value={statusData.inProgress}
-                width={getStatusWidth(
-                  statusData.inProgress
-                )}
-                type="progress"
-              />
-
-              <StatusBar
-                label="Review"
-                value={statusData.review}
-                width={getStatusWidth(
-                  statusData.review
-                )}
-                type="review"
-              />
-
-              <StatusBar
-                label="Pending"
-                value={statusData.pending}
-                width={getStatusWidth(
-                  statusData.pending
-                )}
-                type="pending"
-              />
-
-            </div>
-
-          </div>
-
+          <ReportCards
+            projects={projects}
+            tasks={tasks}
+          />
         </section>
 
-        {/* ====================================================
-            LOWER ANALYTICS GRID
-        ==================================================== */}
+        {/* =====================================================
+            ANALYTICS CHARTS
+        ===================================================== */}
+        <section className="reports-analytics-section">
+          <div className="reports-section-heading analytics-heading">
+            <div>
+              <span className="reports-eyebrow">
+                VISUAL ANALYTICS
+              </span>
 
-        <div className="analytics-grid">
+              <h2>Performance intelligence</h2>
 
-          {/* ==================================================
-              PROJECT PROGRESS
-          ================================================== */}
-
-          <section className="analytics-card project-progress-card">
-
-            <div className="analytics-card-header">
-
-              <div>
-                <div className="analytics-label">
-                  02 / PROJECT ANALYTICS
-                </div>
-
-                <h2>
-                  Project Progress
-                </h2>
-
-                <p>
-                  Progress overview across all projects.
-                </p>
-              </div>
-
-              <div className="analytics-icon">
-                <FaChartLine />
-              </div>
-
+              <p>
+                Understand task distribution, project progress, and priority
+                across your workspace.
+              </p>
             </div>
 
-            <div className="project-progress-body">
+            <div className="analytics-badge">
+              <FaChartLine />
+              Analytics dashboard
+            </div>
+          </div>
 
-              {projects.length === 0 ? (
-                <div className="analytics-empty-state">
+          <div className="reports-grid">
+            {/* TASK STATUS */}
+            <div className="report-chart-slot task-status-slot">
+              <TaskStatusChart tasks={tasks} />
+            </div>
 
-                  <div className="empty-icon">
+            {/* PROJECT PROGRESS */}
+            <div className="report-chart-slot project-progress-slot">
+              <ProjectProgressChart
+                projects={projects}
+              />
+            </div>
+
+            {/* TASK PRIORITY */}
+            <div className="report-chart-slot priority-slot">
+              <PriorityChart
+                tasks={tasks}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            LARGE ANALYTICS WAITING PANEL
+        ===================================================== */}
+        <section className="analytics-waiting-card">
+          <div className="analytics-waiting-glow glow-one"></div>
+          <div className="analytics-waiting-glow glow-two"></div>
+
+          <div className="analytics-waiting-content">
+            <div className="analytics-waiting-icon">
+              <FaChartLine />
+            </div>
+
+            <div className="analytics-waiting-copy">
+              <span className="analytics-waiting-label">
+                TASKFLOW ANALYTICS ENGINE
+              </span>
+
+              <h2>
+                {hasAnalytics
+                  ? "Your workspace insights are ready"
+                  : "Your analytics are waiting"}
+              </h2>
+
+              <p>
+                {hasAnalytics
+                  ? "Your projects and tasks are generating meaningful workspace insights. Continue managing your work to unlock deeper performance intelligence."
+                  : "Create projects and tasks to start generating meaningful workspace reports, performance insights, and productivity analytics."}
+              </p>
+
+              <div className="analytics-waiting-features">
+                <div className="waiting-feature">
+                  <span className="waiting-feature-icon">
                     <FaFolderOpen />
+                  </span>
+
+                  <div>
+                    <strong>Project insights</strong>
+                    <small>Track project progress</small>
                   </div>
-
-                  <h3>
-                    No project data available
-                  </h3>
-
-                  <p>
-                    Create projects to see progress
-                    analytics here.
-                  </p>
-
                 </div>
-              ) : (
-                <>
-                  <div className="progress-ring">
 
-                    <svg
-                      viewBox="0 0 120 120"
-                      className="progress-ring-svg"
-                    >
-                      <circle
-                        className="progress-ring-track"
-                        cx="60"
-                        cy="60"
-                        r="48"
-                      />
+                <div className="waiting-feature">
+                  <span className="waiting-feature-icon">
+                    <FaTasks />
+                  </span>
 
-                      <circle
-                        className="progress-ring-value"
-                        cx="60"
-                        cy="60"
-                        r="48"
-                        style={{
-                          strokeDashoffset:
-                            301 -
-                            (301 *
-                              projectProgress.average) /
-                              100,
-                        }}
-                      />
-                    </svg>
-
-                    <div className="progress-ring-content">
-                      <strong>
-                        {projectProgress.average}%
-                      </strong>
-
-                      <span>
-                        Average
-                      </span>
-                    </div>
-
+                  <div>
+                    <strong>Task intelligence</strong>
+                    <small>Analyze task performance</small>
                   </div>
+                </div>
 
-                  <div className="project-progress-stats">
+                <div className="waiting-feature">
+                  <span className="waiting-feature-icon">
+                    <FaCircleCheck />
+                  </span>
 
-                    <div>
-                      <strong>
-                        {projects.length}
-                      </strong>
-
-                      <span>
-                        Total Projects
-                      </span>
-                    </div>
-
-                    <div>
-                      <strong>
-                        {projectProgress.active}
-                      </strong>
-
-                      <span>
-                        Active Projects
-                      </span>
-                    </div>
-
-                    <div>
-                      <strong>
-                        {projectProgress.completed}
-                      </strong>
-
-                      <span>
-                        Completed
-                      </span>
-                    </div>
-
+                  <div>
+                    <strong>Performance metrics</strong>
+                    <small>Measure workspace health</small>
                   </div>
-                </>
+                </div>
+              </div>
+
+              {!hasAnalytics && (
+                <div className="analytics-waiting-status">
+                  <span className="status-pulse"></span>
+                  Waiting for workspace activity
+                </div>
               )}
-
             </div>
 
-          </section>
+            <div className="analytics-waiting-decoration">
+              <div className="decoration-circle circle-one"></div>
+              <div className="decoration-circle circle-two"></div>
+              <div className="decoration-circle circle-three"></div>
 
-          {/* ==================================================
-              TASK PRIORITY
-          ================================================== */}
-
-          <section className="analytics-card priority-card">
-
-            <div className="analytics-card-header">
-
-              <div>
-                <div className="analytics-label">
-                  03 / PRIORITY ANALYTICS
-                </div>
-
-                <h2>
-                  Task Priority
-                </h2>
-
-                <p>
-                  Priority distribution across tasks.
-                </p>
+              <div className="decoration-chart">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </div>
 
-              <div className="analytics-icon">
-                <FaBullseye />
+              <div className="decoration-arrow">
+                <FaArrowRight />
               </div>
-
             </div>
-
-            {/* ================================================
-                PRIORITY MAIN CONTENT
-            ================================================= */}
-
-            <div className="priority-main">
-
-              {/* DONUT */}
-
-              <div className="priority-donut-area">
-
-                <div
-                  className="priority-donut"
-                  style={priorityDonutStyle}
-                >
-
-                  <div className="priority-donut-inner">
-
-                    <FaLayerGroup />
-
-                    <span>
-                      Total Tasks
-                    </span>
-
-                    <strong>
-                      {priorityData.total}
-                    </strong>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* LEGEND */}
-
-              <div className="priority-legend">
-
-                <PriorityLegend
-                  label="High Priority"
-                  value={priorityData.high}
-                  percent={
-                    priorityData.highPercent
-                  }
-                  type="high"
-                />
-
-                <PriorityLegend
-                  label="Medium Priority"
-                  value={priorityData.medium}
-                  percent={
-                    priorityData.mediumPercent
-                  }
-                  type="medium"
-                />
-
-                <PriorityLegend
-                  label="Low Priority"
-                  value={priorityData.low}
-                  percent={
-                    priorityData.lowPercent
-                  }
-                  type="low"
-                />
-
-              </div>
-
-            </div>
-
-            {/* ================================================
-                PRIORITY SUMMARY CARDS
-            ================================================= */}
-
-            <div className="priority-summary">
-
-              <PrioritySummary
-                icon={<FaArrowUp />}
-                value={priorityData.high}
-                label="High Priority"
-                percent={
-                  priorityData.highPercent
-                }
-                type="high"
-              />
-
-              <PrioritySummary
-                icon={<FaMinus />}
-                value={priorityData.medium}
-                label="Medium Priority"
-                percent={
-                  priorityData.mediumPercent
-                }
-                type="medium"
-              />
-
-              <PrioritySummary
-                icon={<FaArrowDown />}
-                value={priorityData.low}
-                label="Low Priority"
-                percent={
-                  priorityData.lowPercent
-                }
-                type="low"
-              />
-
-            </div>
-
-          </section>
-
-        </div>
-
-        {/* ====================================================
-            BOTTOM INFORMATION BAR
-        ==================================================== */}
-
-        <section className="reports-info-bar">
-
-          <div className="reports-info-icon">
-            <FaChartPie />
           </div>
-
-          <div className="reports-info-copy">
-
-            <strong>
-              {tasks.length
-                ? "Analytics are ready"
-                : "Your analytics are waiting"}
-            </strong>
-
-            <span>
-              {tasks.length
-                ? "Your workspace activity is being reflected in the analytics above."
-                : "Create projects and tasks to start generating meaningful workspace reports."}
-            </span>
-
-          </div>
-
-          <div className="reports-live-status">
-            <span className="live-dot" />
-            TaskFlow Analytics Engine
-          </div>
-
         </section>
 
-        {/* ====================================================
-            FOOTER
-        ==================================================== */}
+        {/* =====================================================
+            EXPORT AREA
+        ===================================================== */}
+        <section className="reports-export-section">
+          <div className="reports-export-header">
+            <div>
+              <span className="reports-eyebrow">
+                REPORT CENTER
+              </span>
 
-        <footer className="reports-footer">
+              <h2>Export your workspace reports</h2>
 
-          <div>
-            <FaShieldAlt />
-            Secure workspace analytics
+              <p>
+                Download your project and task performance data whenever you
+                need it.
+              </p>
+            </div>
           </div>
+
+          <ExportButtons
+            projects={projects}
+            tasks={tasks}
+          />
+        </section>
+
+        {/* =====================================================
+            FOOTER STATUS
+        ===================================================== */}
+        <div className="reports-footer-status">
+          <span className="footer-status-dot"></span>
+          <span>TaskFlow Analytics Engine</span>
+
+          <span className="footer-status-divider"></span>
 
           <span>
             Metrics update automatically with workspace activity.
           </span>
-
-        </footer>
-
+        </div>
       </div>
     </MainLayout>
-  );
-};
-
-/* ============================================================
-   STATUS BAR COMPONENT
-============================================================ */
-
-const StatusBar = ({
-  label,
-  value,
-  width,
-  type,
-}) => {
-  return (
-    <div className="status-row">
-
-      <div className="status-row-top">
-
-        <span>
-          {label}
-        </span>
-
-        <strong>
-          {value}
-        </strong>
-
-      </div>
-
-      <div className="status-track">
-
-        <div
-          className={`status-fill ${type}`}
-          style={{
-            width,
-          }}
-        />
-
-      </div>
-
-    </div>
-  );
-};
-
-/* ============================================================
-   PRIORITY LEGEND
-============================================================ */
-
-const PriorityLegend = ({
-  label,
-  value,
-  percent,
-  type,
-}) => {
-  return (
-    <div className="priority-legend-item">
-
-      <div className="priority-legend-left">
-
-        <span
-          className={`priority-dot ${type}`}
-        />
-
-        <span>
-          {label}
-        </span>
-
-      </div>
-
-      <div className="priority-legend-value">
-
-        <strong>
-          {value}
-        </strong>
-
-        <span>
-          ({percent}%)
-        </span>
-
-      </div>
-
-    </div>
-  );
-};
-
-/* ============================================================
-   PRIORITY SUMMARY
-============================================================ */
-
-const PrioritySummary = ({
-  icon,
-  value,
-  label,
-  percent,
-  type,
-}) => {
-  return (
-    <div
-      className={`priority-summary-card ${type}`}
-    >
-
-      <div className="priority-summary-icon">
-        {icon}
-      </div>
-
-      <div className="priority-summary-content">
-
-        <div className="priority-summary-value">
-          {value}
-        </div>
-
-        <div className="priority-summary-label">
-          {label}
-        </div>
-
-      </div>
-
-      <div className="priority-summary-percent">
-        {percent}%
-      </div>
-
-    </div>
   );
 };
 
