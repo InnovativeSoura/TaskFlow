@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
-
+import React, { useMemo, useState } from "react";
 import {
   FaUser,
   FaPalette,
@@ -23,19 +22,14 @@ import {
   FaTimes,
   FaEye,
   FaEyeSlash,
+  FaCloud,
 } from "react-icons/fa";
-
 import { toast } from "react-toastify";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
 import "../styles/Settings.css";
-
-
-/* =========================================================
-   SETTINGS NAVIGATION
-   ========================================================= */
 
 const SETTINGS_ITEMS = [
   {
@@ -70,11 +64,6 @@ const SETTINGS_ITEMS = [
   },
 ];
 
-
-/* =========================================================
-   DEFAULT SETTINGS
-   ========================================================= */
-
 const DEFAULT_SETTINGS = {
   darkMode: true,
   emailNotifications: true,
@@ -82,17 +71,10 @@ const DEFAULT_SETTINGS = {
   projectNotifications: true,
 };
 
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
 const getInitials = (name = "") => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
 
-  if (!parts.length) {
-    return "TF";
-  }
+  if (!parts.length) return "TF";
 
   if (parts.length === 1) {
     return parts[0].slice(0, 2).toUpperCase();
@@ -101,32 +83,24 @@ const getInitials = (name = "") => {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 };
 
-
 const getUserName = (user) =>
   user?.name ||
   user?.username ||
   user?.fullName ||
   "Souradipta Patra";
 
-
 const getUserEmail = (user) =>
   user?.email ||
   user?.emailAddress ||
   "soura@gmail.com";
 
-
 const getUserRole = (user) =>
   user?.role || "Admin";
 
-
-/* =========================================================
-   SETTINGS COMPONENT
-   ========================================================= */
-
 function Settings() {
-  /* -------------------------------------------------------
+  /* =========================================================
      USER
-  ------------------------------------------------------- */
+  ========================================================= */
 
   const user = useMemo(() => {
     try {
@@ -136,64 +110,42 @@ function Settings() {
     }
   }, []);
 
-
   const userName = getUserName(user);
   const userEmail = getUserEmail(user);
   const userRole = getUserRole(user);
   const initials = getInitials(userName);
 
-
-  /* -------------------------------------------------------
-     ACTIVE SECTION
-  ------------------------------------------------------- */
+  /* =========================================================
+     STATE
+  ========================================================= */
 
   const [activeSection, setActiveSection] = useState("account");
 
-
-  /* -------------------------------------------------------
-     SETTINGS
-  ------------------------------------------------------- */
-
   const [settings, setSettings] = useState(() => {
     try {
-      const saved = JSON.parse(
+      const stored = JSON.parse(
         localStorage.getItem("taskflowSettings") || "null"
       );
 
-      return {
-        ...DEFAULT_SETTINGS,
-        ...(saved || {}),
-      };
+      return stored
+        ? { ...DEFAULT_SETTINGS, ...stored }
+        : DEFAULT_SETTINGS;
     } catch {
-      return {
-        ...DEFAULT_SETTINGS,
-      };
+      return DEFAULT_SETTINGS;
     }
   });
-
-
-  /* -------------------------------------------------------
-     PROFILE
-  ------------------------------------------------------- */
 
   const [profile, setProfile] = useState({
     name: userName,
     email: userEmail,
   });
 
-
   const [savedProfile, setSavedProfile] = useState({
     name: userName,
     email: userEmail,
   });
 
-
   const [editingProfile, setEditingProfile] = useState(false);
-
-
-  /* -------------------------------------------------------
-     PASSWORD
-  ------------------------------------------------------- */
 
   const [passwordFields, setPasswordFields] = useState({
     currentPassword: "",
@@ -201,41 +153,15 @@ function Settings() {
     confirmPassword: "",
   });
 
-
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [passwordMessage, setPasswordMessage] = useState("");
 
-
-  /* =======================================================
-     APPLY THEME
-     ======================================================= */
-
-  useEffect(() => {
-    const theme = settings.darkMode ? "dark" : "light";
-
-    document.documentElement.setAttribute(
-      "data-taskflow-theme",
-      theme
-    );
-
-    document.body.setAttribute(
-      "data-taskflow-theme",
-      theme
-    );
-
-    localStorage.setItem(
-      "taskflowSettings",
-      JSON.stringify(settings)
-    );
-  }, [settings]);
-
-
-  /* =======================================================
-     ACTIVE ITEM
-     ======================================================= */
+  /* =========================================================
+     ACTIVE SECTION
+  ========================================================= */
 
   const activeItem = useMemo(() => {
     return (
@@ -245,13 +171,11 @@ function Settings() {
     );
   }, [activeSection]);
 
-
   const ActiveIcon = activeItem.icon;
 
-
-  /* =======================================================
-     UPDATE SETTING
-     ======================================================= */
+  /* =========================================================
+     SETTINGS
+  ========================================================= */
 
   const updateSetting = (key) => {
     setSettings((previous) => ({
@@ -260,52 +184,65 @@ function Settings() {
     }));
   };
 
+  /* =========================================================
+     PROFILE
+  ========================================================= */
 
-  /* =======================================================
-     SAVE PROFILE
-     ======================================================= */
+  const openEditProfile = () => {
+    setProfile({
+      name: savedProfile.name,
+      email: savedProfile.email,
+    });
+
+    setEditingProfile(true);
+  };
+
+  const closeEditProfile = () => {
+    setProfile({
+      name: savedProfile.name,
+      email: savedProfile.email,
+    });
+
+    setEditingProfile(false);
+  };
 
   const saveProfile = () => {
-    const cleanName = profile.name.trim();
-    const cleanEmail = profile.email.trim();
+    const name = profile.name.trim();
+    const email = profile.email.trim();
 
-    if (!cleanName) {
+    if (!name) {
       toast.error("Name cannot be empty.");
       return;
     }
 
-    if (!cleanEmail) {
+    if (!email) {
       toast.error("Email cannot be empty.");
       return;
     }
 
-    try {
-      const storedUser = JSON.parse(
-        localStorage.getItem("user") || "null"
-      );
+    const storedUser = JSON.parse(
+      localStorage.getItem("user") || "null"
+    );
 
-      if (storedUser) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            ...storedUser,
-            name: cleanName,
-            email: cleanEmail,
-          })
-        );
-      }
-    } catch {
-      // Ignore malformed local storage user data.
+    if (storedUser) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...storedUser,
+          name,
+          email,
+        })
+      );
     }
 
     setSavedProfile({
-      name: cleanName,
-      email: cleanEmail,
+      name,
+      email,
     });
 
     setProfile({
-      name: cleanName,
-      email: cleanEmail,
+      name,
+      email,
     });
 
     setEditingProfile(false);
@@ -313,10 +250,9 @@ function Settings() {
     toast.success("Profile updated successfully.");
   };
 
-
-  /* =======================================================
-     SAVE SETTINGS
-     ======================================================= */
+  /* =========================================================
+     SAVE / RESET
+  ========================================================= */
 
   const saveAllSettings = () => {
     localStorage.setItem(
@@ -327,15 +263,8 @@ function Settings() {
     toast.success("Settings saved successfully.");
   };
 
-
-  /* =======================================================
-     RESET SETTINGS
-     ======================================================= */
-
   const resetSettings = () => {
-    setSettings({
-      ...DEFAULT_SETTINGS,
-    });
+    setSettings(DEFAULT_SETTINGS);
 
     setProfile({
       name: savedProfile.name,
@@ -350,13 +279,17 @@ function Settings() {
 
     setPasswordMessage("");
 
+    localStorage.setItem(
+      "taskflowSettings",
+      JSON.stringify(DEFAULT_SETTINGS)
+    );
+
     toast.info("Settings have been reset.");
   };
 
-
-  /* =======================================================
-     PASSWORD SUBMIT
-     ======================================================= */
+  /* =========================================================
+     PASSWORD
+  ========================================================= */
 
   const handlePasswordSubmit = (event) => {
     event.preventDefault();
@@ -407,11 +340,6 @@ function Settings() {
     toast.success("Password updated successfully.");
   };
 
-
-  /* =======================================================
-     PASSWORD INPUT
-     ======================================================= */
-
   const renderPasswordInput = (
     label,
     name,
@@ -438,13 +366,14 @@ function Settings() {
 
           <button
             type="button"
-            aria-label={
-              visible
-                ? `Hide ${label}`
-                : `Show ${label}`
-            }
+            className="tf-password-eye"
             onClick={() =>
               setVisible((previous) => !previous)
+            }
+            aria-label={
+              visible
+                ? "Hide password"
+                : "Show password"
             }
           >
             {visible ? <FaEyeSlash /> : <FaEye />}
@@ -454,16 +383,13 @@ function Settings() {
     );
   };
 
-
-  /* =======================================================
+  /* =========================================================
      ACCOUNT
-     ======================================================= */
+  ========================================================= */
 
   const renderAccount = () => (
     <section className="tf-settings-panel">
-
       <div className="tf-settings-panel-heading">
-
         <div>
           <span className="tf-settings-kicker">
             ACCOUNT
@@ -480,43 +406,30 @@ function Settings() {
         <div className="tf-settings-heading-icon">
           <FaUser />
         </div>
-
       </div>
 
-
-      {/* PROFILE HERO */}
-
-      <div className="tf-settings-profile">
-
-        <div className="tf-settings-avatar">
+      {/* PROFILE CARD */}
+      <div className="tf-settings-profile-card">
+        <div className="tf-settings-avatar-large">
           {initials}
           <span />
         </div>
 
-
         <div className="tf-settings-profile-details">
-
           <div className="tf-settings-name-row">
-
-            <h3>
-              {savedProfile.name}
-            </h3>
+            <h3>{savedProfile.name}</h3>
 
             <span className="tf-settings-role">
               {userRole}
             </span>
-
           </div>
-
 
           <div className="tf-settings-email">
             <FaEnvelope />
-            {savedProfile.email}
+            <span>{savedProfile.email}</span>
           </div>
 
-
           <div className="tf-settings-status-row">
-
             <span>
               <FaCheckCircle />
               Active account
@@ -526,60 +439,46 @@ function Settings() {
               <FaShieldAlt />
               Protected workspace
             </span>
-
           </div>
-
         </div>
-
 
         <button
           type="button"
           className="tf-settings-edit-btn"
-          onClick={() => setEditingProfile(true)}
+          onClick={openEditProfile}
         >
           <FaEdit />
-          Edit profile
+          <span>Edit profile</span>
         </button>
-
       </div>
 
-
       {/* EDIT PROFILE */}
-
       {editingProfile && (
         <div className="tf-settings-edit-box">
-
-          <div className="tf-settings-edit-top">
-
+          <div className="tf-settings-edit-header">
             <div>
               <span>EDIT PROFILE</span>
-
-              <h3>
-                Update your profile
-              </h3>
+              <h3>Update your profile</h3>
+              <p>
+                Change the name and email associated
+                with your TaskFlow account.
+              </p>
             </div>
 
             <button
               type="button"
-              aria-label="Close profile editor"
-              onClick={() => setEditingProfile(false)}
+              className="tf-edit-close"
+              onClick={closeEditProfile}
             >
               <FaTimes />
             </button>
-
           </div>
 
-
           <div className="tf-settings-form-grid">
-
             <div className="tf-settings-field">
-
-              <label>
-                Full name
-              </label>
+              <label>Full name</label>
 
               <div className="tf-settings-input-box">
-
                 <FaUser />
 
                 <input
@@ -593,20 +492,13 @@ function Settings() {
                   }
                   placeholder="Enter your name"
                 />
-
               </div>
-
             </div>
 
-
             <div className="tf-settings-field">
-
-              <label>
-                Email address
-              </label>
+              <label>Email address</label>
 
               <div className="tf-settings-input-box">
-
                 <FaEnvelope />
 
                 <input
@@ -620,31 +512,18 @@ function Settings() {
                   }
                   placeholder="Enter your email"
                 />
-
               </div>
-
             </div>
-
           </div>
 
-
           <div className="tf-settings-form-actions">
-
             <button
               type="button"
               className="tf-settings-cancel-btn"
-              onClick={() => {
-                setProfile({
-                  name: savedProfile.name,
-                  email: savedProfile.email,
-                });
-
-                setEditingProfile(false);
-              }}
+              onClick={closeEditProfile}
             >
               Cancel
             </button>
-
 
             <button
               type="button"
@@ -654,159 +533,113 @@ function Settings() {
               <FaSave />
               Save profile
             </button>
-
           </div>
-
         </div>
       )}
 
-
       {/* INFORMATION GRID */}
-
       <div className="tf-settings-info-grid">
-
         <div className="tf-settings-info">
-
           <div className="purple">
             <FaUser />
           </div>
 
-          <span>FULL NAME</span>
-
-          <strong>
-            {savedProfile.name}
-          </strong>
-
+          <div>
+            <span>FULL NAME</span>
+            <strong>{savedProfile.name}</strong>
+          </div>
         </div>
 
-
         <div className="tf-settings-info">
-
           <div className="blue">
             <FaEnvelope />
           </div>
 
-          <span>EMAIL ADDRESS</span>
-
-          <strong>
-            {savedProfile.email}
-          </strong>
-
+          <div>
+            <span>EMAIL ADDRESS</span>
+            <strong>{savedProfile.email}</strong>
+          </div>
         </div>
 
-
         <div className="tf-settings-info">
-
           <div className="violet">
             <FaShieldAlt />
           </div>
 
-          <span>ROLE</span>
-
-          <strong>
-            {userRole}
-          </strong>
-
+          <div>
+            <span>ROLE</span>
+            <strong>{userRole}</strong>
+          </div>
         </div>
 
-
         <div className="tf-settings-info">
-
           <div className="green">
             <FaCheckCircle />
           </div>
 
-          <span>ACCOUNT STATUS</span>
-
-          <strong className="active">
-            Active
-          </strong>
-
+          <div>
+            <span>ACCOUNT STATUS</span>
+            <strong className="active">
+              Active
+            </strong>
+          </div>
         </div>
-
       </div>
 
-
-      {/* PROTECTED */}
-
+      {/* PROTECTED WORKSPACE */}
       <div className="tf-settings-protected">
-
-        <div>
+        <div className="tf-protected-icon">
           <FaShieldAlt />
         </div>
 
-        <section>
-
-          <strong>
-            Protected workspace
-          </strong>
+        <div className="tf-protected-copy">
+          <strong>Protected workspace</strong>
 
           <p>
             Your TaskFlow account information is securely
             associated with your workspace.
           </p>
+        </div>
 
-        </section>
-
-        <FaCheckCircle />
-
+        <FaCheckCircle className="tf-protected-check" />
       </div>
-
     </section>
   );
 
-
-  /* =======================================================
+  /* =========================================================
      APPEARANCE
-     ======================================================= */
+  ========================================================= */
 
   const renderAppearance = () => (
     <section className="tf-settings-panel">
-
       <div className="tf-settings-panel-heading">
-
         <div>
-
           <span className="tf-settings-kicker">
             APPEARANCE
           </span>
 
-          <h2>
-            Customize your workspace
-          </h2>
+          <h2>Customize your workspace</h2>
 
           <p>
             Personalize the TaskFlow interface to match
             your preferred working environment.
           </p>
-
         </div>
 
         <div className="tf-settings-heading-icon">
-          {settings.darkMode ? (
-            <FaMoon />
-          ) : (
-            <FaSun />
-          )}
+          {settings.darkMode ? <FaMoon /> : <FaSun />}
         </div>
-
       </div>
 
-
-      {/* THEME PREVIEW */}
-
       <div className="tf-settings-theme-preview">
-
         <div
           className={
             settings.darkMode
-              ? "tf-preview-window dark-preview"
-              : "tf-preview-window light-preview"
+              ? "tf-preview-window dark"
+              : "tf-preview-window light"
           }
         >
-
           <div className="tf-preview-sidebar">
-
             <div className="tf-preview-logo">
               TF
             </div>
@@ -816,29 +649,20 @@ function Settings() {
             <i />
             <i />
             <i />
-
           </div>
 
-
           <div className="tf-preview-main">
-
             <div className="tf-preview-top" />
 
             <div className="tf-preview-content">
-
               <div />
               <div />
               <div />
-
             </div>
-
           </div>
-
         </div>
 
-
         <div className="tf-theme-caption">
-
           <strong>
             {settings.darkMode
               ? "Dark workspace"
@@ -850,16 +674,10 @@ function Settings() {
               ? "Focused and comfortable for long sessions."
               : "Clean and bright for daytime work."}
           </span>
-
         </div>
-
       </div>
 
-
-      {/* THEME OPTIONS */}
-
       <div className="tf-theme-options">
-
         <button
           type="button"
           className={
@@ -874,29 +692,21 @@ function Settings() {
             }))
           }
         >
-
           <div className="tf-theme-option-icon">
             <FaSun />
           </div>
 
           <section>
-
-            <strong>
-              Light mode
-            </strong>
-
+            <strong>Light mode</strong>
             <span>
               Bright and clean workspace
             </span>
-
           </section>
 
           {!settings.darkMode && (
-            <FaCheckCircle />
+            <FaCheckCircle className="tf-theme-check" />
           )}
-
         </button>
-
 
         <button
           type="button"
@@ -912,42 +722,31 @@ function Settings() {
             }))
           }
         >
-
           <div className="tf-theme-option-icon">
             <FaMoon />
           </div>
 
           <section>
-
-            <strong>
-              Dark mode
-            </strong>
-
+            <strong>Dark mode</strong>
             <span>
               Comfortable interface for low-light
               environments
             </span>
-
           </section>
 
           {settings.darkMode && (
-            <FaCheckCircle />
+            <FaCheckCircle className="tf-theme-check" />
           )}
-
         </button>
-
       </div>
-
     </section>
   );
 
-
-  /* =======================================================
+  /* =========================================================
      NOTIFICATIONS
-     ======================================================= */
+  ========================================================= */
 
   const renderNotifications = () => {
-
     const notifications = [
       {
         key: "emailNotifications",
@@ -969,66 +768,44 @@ function Settings() {
       },
     ];
 
-
     return (
       <section className="tf-settings-panel">
-
         <div className="tf-settings-panel-heading">
-
           <div>
-
             <span className="tf-settings-kicker">
               NOTIFICATIONS
             </span>
 
-            <h2>
-              Notification preferences
-            </h2>
+            <h2>Notification preferences</h2>
 
             <p>
               Control which TaskFlow alerts and updates
               you receive.
             </p>
-
           </div>
 
           <div className="tf-settings-heading-icon">
             <FaBell />
           </div>
-
         </div>
 
-
         <div className="tf-notification-list">
-
           {notifications.map((item) => (
-
             <div
               className="tf-notification-row"
               key={item.key}
             >
-
               <div className="tf-notification-icon">
                 <FaBell />
               </div>
 
-
               <div className="tf-notification-text">
-
-                <strong>
-                  {item.title}
-                </strong>
-
-                <span>
-                  {item.description}
-                </span>
-
+                <strong>{item.title}</strong>
+                <span>{item.description}</span>
               </div>
-
 
               <button
                 type="button"
-                aria-label={`Toggle ${item.title}`}
                 className={
                   settings[item.key]
                     ? "tf-switch on"
@@ -1037,83 +814,63 @@ function Settings() {
                 onClick={() =>
                   updateSetting(item.key)
                 }
+                aria-label={`Toggle ${item.title}`}
               >
                 <span />
               </button>
-
             </div>
-
           ))}
-
         </div>
-
       </section>
     );
   };
 
-
-  /* =======================================================
+  /* =========================================================
      SECURITY
-     ======================================================= */
+  ========================================================= */
 
   const renderSecurity = () => (
     <section className="tf-settings-panel">
-
       <div className="tf-settings-panel-heading">
-
         <div>
-
           <span className="tf-settings-kicker">
             SECURITY
           </span>
 
-          <h2>
-            Password & security
-          </h2>
+          <h2>Password & security</h2>
 
           <p>
             Keep your TaskFlow account protected with a
             strong password.
           </p>
-
         </div>
 
         <div className="tf-settings-heading-icon">
           <FaLock />
         </div>
-
       </div>
 
-
       <div className="tf-security-banner">
-
-        <div>
+        <div className="tf-security-banner-icon">
           <FaShieldAlt />
         </div>
 
-        <section>
-
-          <strong>
-            Your account is protected
-          </strong>
+        <div>
+          <strong>Your account is protected</strong>
 
           <span>
             Use a unique password that you do not reuse
             on other services.
           </span>
-
-        </section>
+        </div>
 
         <FaCheckCircle />
-
       </div>
-
 
       <form
         className="tf-password-form"
         onSubmit={handlePasswordSubmit}
       >
-
         {renderPasswordInput(
           "Current password",
           "currentPassword",
@@ -1121,7 +878,6 @@ function Settings() {
           showCurrent,
           setShowCurrent
         )}
-
 
         {renderPasswordInput(
           "New password",
@@ -1131,7 +887,6 @@ function Settings() {
           setShowNew
         )}
 
-
         {renderPasswordInput(
           "Confirm password",
           "confirmPassword",
@@ -1140,14 +895,12 @@ function Settings() {
           setShowConfirm
         )}
 
-
         {passwordMessage && (
           <div className="tf-password-message">
             <FaInfoCircle />
             {passwordMessage}
           </div>
         )}
-
 
         <button
           type="submit"
@@ -1156,205 +909,124 @@ function Settings() {
           <FaLock />
           Update password
         </button>
-
       </form>
-
     </section>
   );
 
-
-  /* =======================================================
+  /* =========================================================
      APPLICATION
-     ======================================================= */
+  ========================================================= */
 
   const renderApplication = () => (
     <section className="tf-settings-panel">
-
       <div className="tf-settings-panel-heading">
-
         <div>
-
           <span className="tf-settings-kicker">
             APPLICATION
           </span>
 
-          <h2>
-            TaskFlow information
-          </h2>
+          <h2>TaskFlow information</h2>
 
           <p>
             Information about your TaskFlow application
             and current environment.
           </p>
-
         </div>
 
         <div className="tf-settings-heading-icon">
           <FaCog />
         </div>
-
       </div>
 
-
       <div className="tf-app-brand">
-
         <div className="tf-app-logo">
           TF
         </div>
 
+        <div className="tf-app-brand-copy">
+          <span>PROJECT MANAGEMENT PLATFORM</span>
 
-        <div>
-
-          <span>
-            PROJECT MANAGEMENT PLATFORM
-          </span>
-
-          <h3>
-            TaskFlow
-          </h3>
+          <h3>TaskFlow</h3>
 
           <p>
             A modern workspace for managing projects,
             tasks, teams and productivity.
           </p>
-
         </div>
-
 
         <div className="tf-app-version">
-
-          <span>
-            VERSION
-          </span>
-
-          <strong>
-            1.0.0
-          </strong>
-
+          <span>VERSION</span>
+          <strong>1.0.0</strong>
         </div>
-
       </div>
 
-
       <div className="tf-tech-grid">
-
         <div>
-
           <FaDesktop />
 
           <section>
-
-            <span>
-              PLATFORM
-            </span>
-
-            <strong>
-              Web Application
-            </strong>
-
+            <span>PLATFORM</span>
+            <strong>Web Application</strong>
           </section>
-
         </div>
 
-
         <div>
-
           <FaCode />
 
           <section>
-
-            <span>
-              FRONTEND
-            </span>
-
-            <strong>
-              React + Vite
-            </strong>
-
+            <span>FRONTEND</span>
+            <strong>React + Vite</strong>
           </section>
-
         </div>
 
-
         <div>
-
           <FaServer />
 
           <section>
-
-            <span>
-              BACKEND
-            </span>
-
-            <strong>
-              Node.js / Express
-            </strong>
-
+            <span>BACKEND</span>
+            <strong>Node.js / Express</strong>
           </section>
-
         </div>
 
-
         <div>
-
           <FaDatabase />
 
           <section>
-
-            <span>
-              DATABASE
-            </span>
-
-            <strong>
-              MongoDB
-            </strong>
-
+            <span>DATABASE</span>
+            <strong>MongoDB</strong>
           </section>
-
         </div>
-
       </div>
 
-
       <div className="tf-about">
-
-        <div>
+        <div className="tf-about-icon">
           <FaInfoCircle />
         </div>
 
         <section>
-
-          <strong>
-            About TaskFlow
-          </strong>
+          <strong>About TaskFlow</strong>
 
           <p>
             TaskFlow provides a centralized, organized
             and secure environment for modern project
             management.
           </p>
-
         </section>
 
         <span>
           <FaCheckCircle />
           Operational
         </span>
-
       </div>
-
     </section>
   );
 
-
-  /* =======================================================
-     CONTENT SWITCH
-     ======================================================= */
+  /* =========================================================
+     CONTENT
+  ========================================================= */
 
   const renderContent = () => {
-
     switch (activeSection) {
-
       case "appearance":
         return renderAppearance();
 
@@ -1373,94 +1045,64 @@ function Settings() {
     }
   };
 
-
-  /* =======================================================
-     RENDER
-     ======================================================= */
+  /* =========================================================
+     PAGE
+  ========================================================= */
 
   return (
-    <div className="tf-settings-root">
-
+    <div
+      className={
+        settings.darkMode
+          ? "tf-settings-root theme-dark"
+          : "tf-settings-root theme-light"
+      }
+    >
       <Sidebar />
 
       <Navbar />
 
-
       <main className="tf-settings-page">
-
-        {/* BACKGROUND */}
-
         <div className="tf-settings-bg">
-
           <div className="tf-bg-orb tf-bg-orb-1" />
           <div className="tf-bg-orb tf-bg-orb-2" />
           <div className="tf-bg-grid" />
-
         </div>
 
-
-        {/* MAIN CONTAINER */}
-
         <div className="tf-settings-container">
-
 
           {/* =================================================
               HEADER
           ================================================= */}
 
           <header className="tf-settings-header">
-
             <div>
-
               <div className="tf-settings-breadcrumb">
-
-                <span>
-                  WORKSPACE
-                </span>
-
-                <b>/</b>
-
-                <strong>
-                  SETTINGS
-                </strong>
-
+                WORKSPACE
+                <span>/</span>
+                <strong>SETTINGS</strong>
               </div>
 
-
-              <h1>
-                Settings
-              </h1>
-
+              <h1>Settings</h1>
 
               <p>
                 Manage your account, workspace preferences,
                 notifications and security.
               </p>
-
             </div>
-
 
             <div className="tf-secure-badge">
-
               <FaShieldAlt />
-
-              Workspace secure
-
+              <span>Workspace secure</span>
             </div>
-
           </header>
 
-
           {/* =================================================
-              SETTINGS LAYOUT
+              MAIN LAYOUT
           ================================================= */}
 
           <div className="tf-settings-layout">
 
-
-            {/* =================================================
-                LEFT SETTINGS NAVIGATION
-            ================================================= */}
+            {/* LEFT SETTINGS NAVIGATION */}
 
             <aside className="tf-settings-sidebar">
 
@@ -1468,16 +1110,12 @@ function Settings() {
                 SETTINGS
               </div>
 
-
               <div className="tf-settings-nav">
-
                 {SETTINGS_ITEMS.map((item) => {
-
                   const Icon = item.icon;
 
                   const active =
                     activeSection === item.id;
-
 
                   return (
                     <button
@@ -1492,45 +1130,30 @@ function Settings() {
                         setActiveSection(item.id)
                       }
                     >
-
                       <div className="tf-settings-nav-icon">
                         <Icon />
                       </div>
 
-
                       <div className="tf-settings-nav-copy">
-
-                        <strong>
-                          {item.label}
-                        </strong>
+                        <strong>{item.label}</strong>
 
                         <span>
                           {item.description}
                         </span>
-
                       </div>
 
-
                       <FaChevronRight />
-
                     </button>
                   );
-
                 })}
-
               </div>
 
-
-              {/* PROTECTED */}
-
               <div className="tf-sidebar-protected">
-
-                <div>
+                <div className="tf-sidebar-protected-icon">
                   <FaShieldAlt />
                 </div>
 
                 <section>
-
                   <strong>
                     Protected workspace
                   </strong>
@@ -1538,29 +1161,20 @@ function Settings() {
                   <span>
                     Your TaskFlow account is secure.
                   </span>
-
                 </section>
 
                 <FaCheckCircle />
-
               </div>
-
             </aside>
 
-
-            {/* =================================================
-                RIGHT CONTENT
-            ================================================= */}
+            {/* RIGHT CONTENT */}
 
             <div className="tf-settings-main">
 
-
-              {/* ACTIVE SECTION */}
+              {/* ACTIVE SECTION BAR */}
 
               <div className="tf-active-section-bar">
-
                 <div>
-
                   <ActiveIcon />
 
                   <strong>
@@ -1570,29 +1184,25 @@ function Settings() {
                   <span>
                     {activeItem.description}
                   </span>
-
                 </div>
-
               </div>
-
-
-              {/* CONTENT */}
 
               {renderContent()}
 
-
               {/* =================================================
-                  ACTION BAR
+                  SAVE STATUS
               ================================================= */}
 
               <div className="tf-settings-actions">
 
                 <div className="tf-save-status">
 
-                  <span />
+                  <div className="tf-save-status-icon">
+                    <FaCloud />
+                    <span />
+                  </div>
 
                   <div>
-
                     <strong>
                       All changes are currently saved
                     </strong>
@@ -1601,11 +1211,9 @@ function Settings() {
                       Your workspace preferences are
                       organized and protected.
                     </small>
-
                   </div>
 
                 </div>
-
 
                 <div className="tf-action-buttons">
 
@@ -1615,9 +1223,8 @@ function Settings() {
                     onClick={resetSettings}
                   >
                     <FaRedo />
-                    Reset
+                    <span>Reset</span>
                   </button>
-
 
                   <button
                     type="button"
@@ -1625,31 +1232,26 @@ function Settings() {
                     onClick={saveAllSettings}
                   >
                     <FaSave />
-                    Save changes
+                    <span>Save changes</span>
                   </button>
 
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
-
           {/* =================================================
-              BOTTOM SECURITY BAR
+              SECURITY FOOTER
           ================================================= */}
 
           <div className="tf-settings-bottom">
 
             <div className="tf-bottom-icon">
               <FaShieldAlt />
+              <span />
             </div>
 
-
-            <div>
-
+            <div className="tf-bottom-copy">
               <strong>
                 Your preferences are stored securely
               </strong>
@@ -1658,27 +1260,17 @@ function Settings() {
                 TaskFlow keeps your workspace settings
                 organized and protected.
               </span>
-
             </div>
 
-
             <span className="tf-bottom-secure">
-
               <FaCheckCircle />
-
               Secure
-
             </span>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }
-
 
 export default Settings;

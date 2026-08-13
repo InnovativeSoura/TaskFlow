@@ -1,4482 +1,2336 @@
 /* =========================================================
-   TASKFLOW
-   PREMIUM SETTINGS PAGE
-   COMPLETE THEME SYSTEM
-   ========================================================= */
+   TASKFLOW SETTINGS
+   PREMIUM LIGHT / DARK SYSTEM
+========================================================= */
 
+.tf-settings-root {
+  --tf-primary: #6d42ff;
+  --tf-primary-dark: #5630e8;
+  --tf-primary-soft: rgba(109, 66, 255, 0.1);
 
-/* =========================================================
-   ROOT THEME VARIABLES
-   ========================================================= */
+  --tf-success: #16a879;
+  --tf-success-soft: rgba(22, 168, 121, 0.1);
 
-:root {
+  --tf-danger: #ef5b68;
 
-  /* DARK */
+  --tf-radius-sm: 10px;
+  --tf-radius-md: 14px;
+  --tf-radius-lg: 18px;
+  --tf-radius-xl: 22px;
 
-  --tf-settings-bg:
-    #070b16;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
 
-  --tf-settings-bg-secondary:
-    #0b1020;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
-  --tf-settings-card:
-    rgba(15, 22, 42, 0.96);
-
-  --tf-settings-card-soft:
-    rgba(23, 31, 55, 0.78);
-
-  --tf-settings-card-hover:
-    rgba(31, 40, 68, 0.9);
-
-  --tf-settings-text:
-    #f5f7ff;
-
-  --tf-settings-text-secondary:
-    #a9b1c5;
-
-  --tf-settings-text-muted:
-    #707b96;
-
-  --tf-settings-border:
-    rgba(255, 255, 255, 0.075);
-
-  --tf-settings-border-strong:
-    rgba(124, 77, 255, 0.38);
-
-  --tf-settings-purple:
-    #7c4dff;
-
-  --tf-settings-purple-light:
-    #9d7cff;
-
-  --tf-settings-purple-soft:
-    rgba(124, 77, 255, 0.13);
-
-  --tf-settings-green:
-    #20d99a;
-
-  --tf-settings-green-soft:
-    rgba(32, 217, 154, 0.10);
-
-  --tf-settings-blue:
-    #3e9eff;
-
-  --tf-settings-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.35);
-
-  --tf-settings-radius:
-    18px;
-
-  --tf-settings-transition:
-    0.25s ease;
-
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
 }
 
+/* =========================================================
+   DARK THEME
+========================================================= */
+
+.tf-settings-root.theme-dark {
+  --tf-page: #080d1c;
+  --tf-page-secondary: #0c1224;
+
+  --tf-card: rgba(17, 24, 45, 0.96);
+  --tf-card-secondary: #11192e;
+
+  --tf-border: rgba(255, 255, 255, 0.08);
+  --tf-border-strong: rgba(255, 255, 255, 0.14);
+
+  --tf-text: #f7f8ff;
+  --tf-text-secondary: #c1c8dc;
+  --tf-text-muted: #7e89a4;
+
+  --tf-input: #0c1326;
+  --tf-hover: rgba(255, 255, 255, 0.04);
+
+  background: var(--tf-page);
+  color: var(--tf-text);
+}
 
 /* =========================================================
    LIGHT THEME
-   ========================================================= */
+========================================================= */
 
-html[data-taskflow-theme="light"],
-body[data-taskflow-theme="light"] {
+.tf-settings-root.theme-light {
+  --tf-page: #f5f7fc;
+  --tf-page-secondary: #eef2f9;
 
-  --tf-settings-bg:
-    #f3f5fa;
+  --tf-card: rgba(255, 255, 255, 0.97);
+  --tf-card-secondary: #f8f9fd;
 
-  --tf-settings-bg-secondary:
-    #edf0f6;
+  --tf-border: rgba(30, 41, 70, 0.1);
+  --tf-border-strong: rgba(30, 41, 70, 0.16);
 
-  --tf-settings-card:
-    rgba(255, 255, 255, 0.98);
+  --tf-text: #182033;
+  --tf-text-secondary: #4e5b72;
+  --tf-text-muted: #7c879b;
 
-  --tf-settings-card-soft:
-    #f8f9fc;
+  --tf-input: #f8f9fc;
+  --tf-hover: rgba(109, 66, 255, 0.04);
 
-  --tf-settings-card-hover:
-    #f2f4f9;
-
-  --tf-settings-text:
-    #171b2b;
-
-  --tf-settings-text-secondary:
-    #5d6679;
-
-  --tf-settings-text-muted:
-    #8991a4;
-
-  --tf-settings-border:
-    rgba(27, 37, 61, 0.10);
-
-  --tf-settings-border-strong:
-    rgba(105, 69, 225, 0.32);
-
-  --tf-settings-purple:
-    #6844df;
-
-  --tf-settings-purple-light:
-    #815de9;
-
-  --tf-settings-purple-soft:
-    rgba(104, 68, 223, 0.09);
-
-  --tf-settings-green:
-    #149b70;
-
-  --tf-settings-green-soft:
-    rgba(20, 155, 112, 0.08);
-
-  --tf-settings-blue:
-    #267fc9;
-
-  --tf-settings-shadow:
-    0 20px 55px rgba(42, 53, 80, 0.10);
-
+  background: var(--tf-page);
+  color: var(--tf-text);
 }
 
-
 /* =========================================================
-   ROOT
-   ========================================================= */
-
-.tf-settings-root {
-
-  min-height: 100vh;
-
-  background:
-    var(--tf-settings-bg);
-
-  color:
-    var(--tf-settings-text);
-
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
-
-}
-
-
-/* =========================================================
-   MAIN PAGE
-   ========================================================= */
+   PAGE
+========================================================= */
 
 .tf-settings-page {
-
   position: relative;
+  min-height: calc(100vh - 70px);
 
-  min-height: 100vh;
-
-  overflow-x: hidden;
-
-  background:
-    var(--tf-settings-bg);
-
-  color:
-    var(--tf-settings-text);
-
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
-
-}
-
-
-/* =========================================================
-   BACKGROUND
-   ========================================================= */
-
-.tf-settings-bg {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 0;
-
-  pointer-events: none;
+  margin-left: 180px;
+  padding-top: 70px;
 
   overflow: hidden;
 
   background:
-    var(--tf-settings-bg);
+    radial-gradient(
+      circle at 82% 10%,
+      rgba(109, 66, 255, 0.1),
+      transparent 30%
+    ),
+    var(--tf-page);
 
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
 }
 
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.tf-settings-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
 
 .tf-bg-orb {
-
   position: absolute;
-
-  width: 520px;
-
-  height: 520px;
-
   border-radius: 50%;
-
-  filter: blur(100px);
-
-  opacity: 0.15;
-
+  filter: blur(80px);
+  opacity: 0.28;
 }
-
 
 .tf-bg-orb-1 {
+  width: 420px;
+  height: 420px;
 
-  top: -220px;
+  top: -160px;
+  right: 5%;
 
-  right: -120px;
-
-  background:
-    #704cff;
-
+  background: rgba(109, 66, 255, 0.25);
 }
-
 
 .tf-bg-orb-2 {
+  width: 360px;
+  height: 360px;
 
-  bottom: -280px;
+  bottom: -180px;
+  left: 5%;
 
-  left: 180px;
-
-  background:
-    #1e77ff;
-
+  background: rgba(72, 137, 255, 0.16);
 }
-
 
 .tf-bg-grid {
-
   position: absolute;
-
   inset: 0;
 
-  opacity: 0.20;
+  opacity: 0.35;
 
   background-image:
     linear-gradient(
-      rgba(124, 77, 255, 0.06) 1px,
+      rgba(109, 66, 255, 0.035) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(124, 77, 255, 0.06) 1px,
+      rgba(109, 66, 255, 0.035) 1px,
       transparent 1px
     );
 
-  background-size:
-    42px 42px;
-
+  background-size: 34px 34px;
 }
-
-
-html[data-taskflow-theme="light"] .tf-bg-grid,
-body[data-taskflow-theme="light"] .tf-bg-grid {
-
-  opacity: 0.55;
-
-  background-image:
-    linear-gradient(
-      rgba(82, 94, 125, 0.045) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(82, 94, 125, 0.045) 1px,
-      transparent 1px
-    );
-
-}
-
 
 /* =========================================================
    CONTAINER
-   ========================================================= */
+========================================================= */
 
 .tf-settings-container {
-
   position: relative;
+  z-index: 2;
 
-  z-index: 1;
-
-  width: min(
-    calc(100% - 60px),
-    1280px
-  );
+  width: min(1180px, calc(100% - 80px));
 
   margin: 0 auto;
 
   padding:
-    96px 0 48px;
-
+    42px
+    0
+    60px;
 }
-
 
 /* =========================================================
    HEADER
-   ========================================================= */
+========================================================= */
 
 .tf-settings-header {
-
   display: flex;
-
   align-items: flex-end;
-
   justify-content: space-between;
 
   gap: 30px;
 
   margin-bottom: 28px;
-
 }
-
 
 .tf-settings-breadcrumb {
-
   display: flex;
-
   align-items: center;
+  gap: 10px;
 
-  gap: 8px;
+  margin-bottom: 10px;
 
-  margin-bottom: 9px;
-
-  font-size: 9px;
-
+  font-size: 10px;
   font-weight: 800;
+  letter-spacing: 2.2px;
 
-  letter-spacing: 0.22em;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  color: var(--tf-text-muted);
 }
-
-
-.tf-settings-breadcrumb b {
-
-  color:
-    var(--tf-settings-text-muted);
-
-  font-weight: 500;
-
-}
-
 
 .tf-settings-breadcrumb strong {
-
-  color:
-    var(--tf-settings-purple);
-
+  color: var(--tf-primary);
 }
 
+.tf-settings-breadcrumb span {
+  opacity: 0.6;
+}
 
 .tf-settings-header h1 {
-
   margin: 0;
 
-  font-size: clamp(
-    34px,
-    4vw,
-    48px
-  );
-
-  line-height: 1;
-
+  font-size: 38px;
+  line-height: 1.05;
   font-weight: 800;
+  letter-spacing: -1.2px;
 
-  letter-spacing: -0.04em;
-
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-text);
 }
-
 
 .tf-settings-header p {
+  margin: 10px 0 0;
 
-  margin:
-    10px 0 0;
-
-  max-width: 620px;
-
-  font-size: 13px;
-
+  font-size: 14px;
   line-height: 1.6;
 
-  color:
-    var(--tf-settings-text-secondary);
-
+  color: var(--tf-text-secondary);
 }
-
 
 .tf-secure-badge {
-
   display: inline-flex;
-
   align-items: center;
+  gap: 9px;
 
-  gap: 8px;
+  padding: 11px 17px;
 
-  padding:
-    9px 14px;
+  border: 1px solid rgba(22, 168, 121, 0.2);
+  border-radius: 999px;
 
-  border:
-    1px solid
-    rgba(32, 217, 154, 0.22);
+  background: rgba(22, 168, 121, 0.08);
 
-  border-radius:
-    999px;
+  color: var(--tf-success);
 
-  background:
-    var(--tf-settings-green-soft);
-
-  color:
-    var(--tf-settings-green);
-
-  font-size: 10px;
-
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
 
   white-space: nowrap;
-
 }
-
 
 .tf-secure-badge svg {
-
-  font-size: 10px;
-
+  font-size: 13px;
 }
-
 
 /* =========================================================
    MAIN LAYOUT
-   ========================================================= */
+========================================================= */
 
 .tf-settings-layout {
-
   display: grid;
 
-  grid-template-columns:
-    250px minmax(0, 1fr);
+  grid-template-columns: 275px minmax(0, 1fr);
 
-  gap: 18px;
+  gap: 24px;
 
   align-items: start;
-
 }
-
 
 /* =========================================================
    SETTINGS SIDEBAR
-   ========================================================= */
+========================================================= */
 
 .tf-settings-sidebar {
-
   position: sticky;
+  top: 94px;
 
-  top: 92px;
+  padding: 22px;
 
-  padding: 16px;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-radius-lg);
 
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius:
-    var(--tf-settings-radius);
-
-  background:
-    var(--tf-settings-card);
+  background: var(--tf-card);
 
   box-shadow:
-    var(--tf-settings-shadow);
+    0 18px 50px rgba(15, 23, 42, 0.08);
 
-  backdrop-filter:
-    blur(18px);
-
+  backdrop-filter: blur(20px);
 }
-
 
 .tf-settings-sidebar-title {
+  margin-bottom: 16px;
 
-  padding:
-    2px 8px 12px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
 
-  font-size: 8px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.22em;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  color: var(--tf-text-muted);
 }
-
 
 .tf-settings-nav {
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 6px;
-
+  gap: 8px;
 }
 
-
 .tf-settings-nav-btn {
+  width: 100%;
 
-  position: relative;
-
-  display: flex;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 14px;
 
   align-items: center;
 
-  gap: 11px;
+  gap: 12px;
 
-  width: 100%;
+  padding: 13px;
 
-  min-height: 54px;
+  border: 1px solid transparent;
+  border-radius: 12px;
 
-  padding:
-    8px 9px;
+  background: transparent;
 
-  border:
-    1px solid transparent;
-
-  border-radius:
-    12px;
-
-  background:
-    transparent;
-
-  color:
-    var(--tf-settings-text-secondary);
+  color: var(--tf-text);
 
   text-align: left;
 
   cursor: pointer;
 
   transition:
-    all var(--tf-settings-transition);
-
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
-
 
 .tf-settings-nav-btn:hover {
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  border-color:
-    var(--tf-settings-border);
-
+  background: var(--tf-hover);
+  transform: translateX(2px);
 }
 
-
 .tf-settings-nav-btn.active {
+  border-color: rgba(109, 66, 255, 0.35);
 
   background:
     linear-gradient(
       135deg,
-      rgba(124, 77, 255, 0.17),
-      rgba(124, 77, 255, 0.06)
+      rgba(109, 66, 255, 0.14),
+      rgba(109, 66, 255, 0.04)
     );
 
-  border-color:
-    var(--tf-settings-border-strong);
-
+  box-shadow:
+    0 8px 24px rgba(109, 66, 255, 0.08);
 }
-
-
-.tf-settings-nav-btn.active::before {
-
-  content: "";
-
-  position: absolute;
-
-  left: -1px;
-
-  top: 9px;
-
-  bottom: 9px;
-
-  width: 3px;
-
-  border-radius:
-    0 5px 5px 0;
-
-  background:
-    var(--tf-settings-purple);
-
-}
-
 
 .tf-settings-nav-icon {
+  width: 38px;
+  height: 38px;
 
-  display: grid;
-
-  place-items: center;
-
-  width: 34px;
-
-  height: 34px;
-
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 10px;
 
-  background:
-    rgba(124, 77, 255, 0.09);
+  background: var(--tf-card-secondary);
 
-  color:
-    var(--tf-settings-text-muted);
+  color: var(--tf-text-muted);
 
-  transition:
-    all var(--tf-settings-transition);
-
+  font-size: 14px;
 }
-
 
 .tf-settings-nav-btn.active
 .tf-settings-nav-icon {
-
-  background:
-    var(--tf-settings-purple);
-
-  color:
-    #ffffff;
+  background: var(--tf-primary);
+  color: #ffffff;
 
   box-shadow:
-    0 7px 20px
-    rgba(124, 77, 255, 0.25);
-
+    0 8px 18px rgba(109, 66, 255, 0.3);
 }
-
-
-.tf-settings-nav-icon svg {
-
-  font-size: 12px;
-
-}
-
 
 .tf-settings-nav-copy {
-
   min-width: 0;
 
-  flex: 1;
-
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
-
 
 .tf-settings-nav-copy strong {
+  font-size: 13px;
+  font-weight: 800;
 
-  display: block;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-text);
 }
-
 
 .tf-settings-nav-copy span {
-
-  display: block;
-
-  margin-top: 3px;
-
   overflow: hidden;
 
-  text-overflow: ellipsis;
+  font-size: 10px;
+
+  color: var(--tf-text-muted);
 
   white-space: nowrap;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  text-overflow: ellipsis;
 }
-
 
 .tf-settings-nav-btn > svg {
-
-  flex-shrink: 0;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  font-size: 10px;
+  color: var(--tf-text-muted);
 }
-
 
 /* =========================================================
    SIDEBAR PROTECTED
-   ========================================================= */
+========================================================= */
 
 .tf-sidebar-protected {
-
-  display: flex;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 14px;
 
   align-items: center;
 
-  gap: 9px;
+  gap: 11px;
 
-  margin-top: 15px;
+  margin-top: 20px;
+  padding: 15px;
 
-  padding:
-    11px;
+  border: 1px solid rgba(22, 168, 121, 0.18);
+  border-radius: 13px;
 
-  border:
-    1px solid
-    rgba(32, 217, 154, 0.15);
-
-  border-radius: 12px;
-
-  background:
-    var(--tf-settings-green-soft);
-
+  background: rgba(22, 168, 121, 0.07);
 }
 
+.tf-sidebar-protected-icon {
+  width: 38px;
+  height: 38px;
 
-.tf-sidebar-protected > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  display: grid;
+  border-radius: 10px;
 
-  place-items: center;
+  background: rgba(22, 168, 121, 0.12);
 
-  width: 30px;
-
-  height: 30px;
-
-  flex-shrink: 0;
-
-  border-radius: 9px;
-
-  background:
-    rgba(32, 217, 154, 0.12);
-
-  color:
-    var(--tf-settings-green);
-
+  color: var(--tf-success);
 }
-
 
 .tf-sidebar-protected section {
-
-  min-width: 0;
-
-  flex: 1;
-
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-
 
 .tf-sidebar-protected strong {
+  font-size: 11px;
+  font-weight: 800;
 
-  display: block;
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-text);
 }
-
 
 .tf-sidebar-protected span {
-
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 7px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-sidebar-protected > svg {
-
-  flex-shrink: 0;
-
-  color:
-    var(--tf-settings-green);
-
   font-size: 9px;
 
+  color: var(--tf-text-muted);
 }
 
+.tf-sidebar-protected > svg {
+  color: var(--tf-success);
+  font-size: 12px;
+}
 
 /* =========================================================
    MAIN CONTENT
-   ========================================================= */
+========================================================= */
 
 .tf-settings-main {
-
   min-width: 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 14px;
-
 }
-
-
-/* =========================================================
-   ACTIVE SECTION BAR
-   ========================================================= */
 
 .tf-active-section-bar {
+  min-height: 50px;
 
   display: flex;
-
   align-items: center;
 
-  min-height: 46px;
+  padding: 0 18px;
 
-  padding:
-    8px 14px;
+  margin-bottom: 18px;
 
-  border:
-    1px solid
-    var(--tf-settings-border);
-
+  border: 1px solid var(--tf-border);
   border-radius: 13px;
 
-  background:
-    var(--tf-settings-card);
+  background: var(--tf-card);
 
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05);
 }
-
 
 .tf-active-section-bar > div {
-
   display: flex;
-
   align-items: center;
-
-  gap: 9px;
-
+  gap: 10px;
 }
-
 
 .tf-active-section-bar svg {
-
-  color:
-    var(--tf-settings-purple);
-
-  font-size: 12px;
-
+  color: var(--tf-primary);
+  font-size: 14px;
 }
-
 
 .tf-active-section-bar strong {
-
-  font-size: 10px;
-
-  color:
-    var(--tf-settings-text);
-
+  font-size: 12px;
+  font-weight: 800;
 }
-
 
 .tf-active-section-bar span {
-
-  padding-left: 9px;
-
-  border-left:
-    1px solid
-    var(--tf-settings-border);
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  font-size: 11px;
+  color: var(--tf-text-muted);
 }
-
 
 /* =========================================================
    PANEL
-   ========================================================= */
+========================================================= */
 
 .tf-settings-panel {
+  padding: 28px;
 
-  overflow: hidden;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-radius-lg);
 
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius:
-    var(--tf-settings-radius);
-
-  background:
-    var(--tf-settings-card);
+  background: var(--tf-card);
 
   box-shadow:
-    var(--tf-settings-shadow);
+    0 20px 60px rgba(15, 23, 42, 0.07);
 
-  transition:
-    background 0.35s ease,
-    border-color 0.35s ease,
-    color 0.35s ease;
-
+  backdrop-filter: blur(20px);
 }
-
 
 .tf-settings-panel-heading {
-
   display: flex;
-
   align-items: flex-start;
-
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 25px;
 
-  padding:
-    22px 24px 19px;
+  padding-bottom: 23px;
 
-  border-bottom:
-    1px solid
-    var(--tf-settings-border);
-
+  border-bottom: 1px solid var(--tf-border);
 }
-
 
 .tf-settings-kicker {
-
   display: block;
 
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 
-  font-size: 8px;
-
+  font-size: 9px;
   font-weight: 900;
+  letter-spacing: 2px;
 
-  letter-spacing: 0.21em;
-
-  color:
-    var(--tf-settings-purple);
-
+  color: var(--tf-primary);
 }
-
 
 .tf-settings-panel-heading h2 {
-
   margin: 0;
 
-  font-size: 22px;
+  font-size: 23px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.4px;
 
-  line-height: 1.15;
-
-  letter-spacing: -0.025em;
-
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-text);
 }
-
 
 .tf-settings-panel-heading p {
-
-  margin:
-    7px 0 0;
-
   max-width: 650px;
 
-  font-size: 10px;
+  margin: 8px 0 0;
 
+  font-size: 12px;
   line-height: 1.6;
 
-  color:
-    var(--tf-settings-text-secondary);
-
+  color: var(--tf-text-secondary);
 }
-
 
 .tf-settings-heading-icon {
+  width: 42px;
+  height: 42px;
 
-  display: grid;
-
-  place-items: center;
-
-  width: 38px;
-
-  height: 38px;
-
-  flex-shrink: 0;
-
-  border:
-    1px solid
-    var(--tf-settings-border-strong);
-
-  border-radius: 11px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple-light);
-
-}
-
-
-.tf-settings-heading-icon svg {
-
-  font-size: 13px;
-
-}
-
-
-/* =========================================================
-   ACCOUNT PROFILE
-   ========================================================= */
-
-.tf-settings-profile {
-
-  position: relative;
+  flex: 0 0 auto;
 
   display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(109, 66, 255, 0.2);
+  border-radius: 11px;
+
+  background: rgba(109, 66, 255, 0.08);
+
+  color: var(--tf-primary);
+}
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.tf-settings-profile-card {
+  display: grid;
+
+  grid-template-columns: 80px minmax(0, 1fr) auto;
 
   align-items: center;
 
-  gap: 16px;
+  gap: 20px;
 
-  margin:
-    18px;
+  margin-top: 22px;
+  padding: 22px;
 
-  padding:
-    20px;
-
-  min-height: 132px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
+  border: 1px solid var(--tf-border);
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--tf-settings-card-soft),
-      var(--tf-settings-card-hover)
-    );
-
+  background: var(--tf-card-secondary);
 }
 
-
-.tf-settings-avatar {
+.tf-settings-avatar-large {
+  width: 80px;
+  height: 80px;
 
   position: relative;
 
-  display: grid;
-
-  place-items: center;
-
-  width: 68px;
-
-  height: 68px;
-
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 20px;
 
   background:
     linear-gradient(
       135deg,
-      #6844df,
-      #865cff
+      #7852ff,
+      #6334ed
     );
 
   color: #ffffff;
 
-  font-size: 20px;
-
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 900;
 
   box-shadow:
-    0 12px 28px
-    rgba(104, 68, 223, 0.30);
-
+    0 15px 30px rgba(109, 66, 255, 0.25);
 }
 
-
-.tf-settings-avatar > span {
-
+.tf-settings-avatar-large > span {
   position: absolute;
 
-  right: 1px;
-
-  bottom: 1px;
-
   width: 11px;
-
   height: 11px;
 
-  border:
-    2px solid
-    var(--tf-settings-card);
+  right: -2px;
+  bottom: 4px;
 
+  border: 3px solid var(--tf-card-secondary);
   border-radius: 50%;
 
-  background:
-    var(--tf-settings-green);
-
+  background: #1ac58a;
 }
-
 
 .tf-settings-profile-details {
-
   min-width: 0;
-
-  flex: 1;
-
 }
-
 
 .tf-settings-name-row {
-
   display: flex;
-
   align-items: center;
-
-  gap: 9px;
-
   flex-wrap: wrap;
 
+  gap: 9px;
 }
-
 
 .tf-settings-name-row h3 {
-
   margin: 0;
 
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 800;
 
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-text);
 }
-
 
 .tf-settings-role {
+  padding: 4px 8px;
 
-  padding:
-    4px 8px;
+  border-radius: 6px;
 
-  border-radius:
-    999px;
+  background: rgba(109, 66, 255, 0.1);
 
-  background:
-    var(--tf-settings-purple-soft);
+  color: var(--tf-primary);
 
-  color:
-    var(--tf-settings-purple-light);
-
-  font-size: 7px;
-
+  font-size: 8px;
   font-weight: 900;
-
+  letter-spacing: 0.7px;
   text-transform: uppercase;
-
-  letter-spacing: 0.10em;
-
 }
-
 
 .tf-settings-email {
-
   display: flex;
-
   align-items: center;
-
   gap: 7px;
 
-  margin-top: 8px;
+  margin-top: 7px;
 
-  font-size: 10px;
+  font-size: 12px;
 
-  color:
-    var(--tf-settings-text-secondary);
-
+  color: var(--tf-text-secondary);
 }
-
 
 .tf-settings-email svg {
-
-  color:
-    var(--tf-settings-blue);
-
-  font-size: 9px;
-
+  color: var(--tf-primary);
+  font-size: 11px;
 }
-
 
 .tf-settings-status-row {
-
   display: flex;
-
   align-items: center;
-
   flex-wrap: wrap;
 
-  gap: 15px;
+  gap: 16px;
 
-  margin-top: 10px;
-
+  margin-top: 11px;
 }
-
 
 .tf-settings-status-row span {
-
-  display: inline-flex;
-
+  display: flex;
   align-items: center;
+  gap: 6px;
 
-  gap: 5px;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-settings-status-row span:first-child svg {
-
-  color:
-    var(--tf-settings-green);
-
-}
-
-
-.tf-settings-status-row span:last-child svg {
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-settings-edit-btn {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  flex-shrink: 0;
-
-  padding:
-    9px 12px;
-
-  border:
-    1px solid
-    var(--tf-settings-border-strong);
-
-  border-radius: 9px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple-light);
-
-  font-size: 9px;
-
+  font-size: 10px;
   font-weight: 700;
 
-  cursor: pointer;
-
-  transition:
-    all var(--tf-settings-transition);
-
+  color: var(--tf-text-muted);
 }
 
-
-.tf-settings-edit-btn:hover {
-
-  background:
-    var(--tf-settings-purple);
-
-  color: #ffffff;
-
-  transform:
-    translateY(-1px);
-
+.tf-settings-status-row svg {
+  color: var(--tf-success);
 }
-
 
 /* =========================================================
-   EDIT PROFILE
-   ========================================================= */
+   EDIT PROFILE BUTTON
+========================================================= */
 
-.tf-settings-edit-box {
+.tf-settings-edit-btn {
+  min-width: 130px;
+  height: 44px;
 
-  margin:
-    0 18px 18px;
-
-  padding:
-    18px;
-
-  border:
-    1px solid
-    var(--tf-settings-border-strong);
-
-  border-radius: 14px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-}
-
-
-.tf-settings-edit-top {
-
-  display: flex;
-
-  align-items: flex-start;
-
-  justify-content: space-between;
-
-  margin-bottom: 18px;
-
-}
-
-
-.tf-settings-edit-top span {
-
-  font-size: 8px;
-
-  font-weight: 900;
-
-  letter-spacing: 0.18em;
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-settings-edit-top h3 {
-
-  margin:
-    5px 0 0;
-
-  font-size: 16px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-settings-edit-top button {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 30px;
-
-  height: 30px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 8px;
-
-  background:
-    var(--tf-settings-card);
-
-  color:
-    var(--tf-settings-text-muted);
-
-  cursor: pointer;
-
-}
-
-
-.tf-settings-form-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 14px;
-
-}
-
-
-.tf-settings-field {
-
-  min-width: 0;
-
-}
-
-
-.tf-settings-field label {
-
-  display: block;
-
-  margin-bottom: 7px;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  color:
-    var(--tf-settings-text-secondary);
-
-}
-
-
-.tf-settings-input-box,
-.tf-settings-password-box {
-
-  display: flex;
-
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
 
-  gap: 9px;
+  gap: 8px;
 
-  height: 42px;
+  padding: 0 17px;
 
-  padding:
-    0 11px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
+  border: 0;
   border-radius: 10px;
 
   background:
-    var(--tf-settings-card-soft);
-
-  transition:
-    border-color var(--tf-settings-transition),
-    box-shadow var(--tf-settings-transition);
-
-}
-
-
-.tf-settings-input-box:focus-within,
-.tf-settings-password-box:focus-within {
-
-  border-color:
-    var(--tf-settings-purple);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(124, 77, 255, 0.09);
-
-}
-
-
-.tf-settings-input-box > svg,
-.tf-settings-password-box > svg {
-
-  color:
-    var(--tf-settings-purple);
-
-  font-size: 10px;
-
-}
-
-
-.tf-settings-input-box input,
-.tf-settings-password-box input {
-
-  min-width: 0;
-
-  width: 100%;
-
-  border: 0;
-
-  outline: 0;
-
-  background: transparent;
-
-  color:
-    var(--tf-settings-text);
-
-  font-size: 10px;
-
-}
-
-
-.tf-settings-input-box input::placeholder,
-.tf-settings-password-box input::placeholder {
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-settings-password-box button {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 28px;
-
-  height: 28px;
-
-  flex-shrink: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  color:
-    var(--tf-settings-text-muted);
-
-  cursor: pointer;
-
-}
-
-
-.tf-settings-password-box button:hover {
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-settings-form-actions {
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 9px;
-
-  margin-top: 16px;
-
-}
-
-
-.tf-settings-cancel-btn,
-.tf-settings-save-btn,
-.tf-reset-btn {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  min-height: 38px;
-
-  padding:
-    0 13px;
-
-  border-radius: 9px;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    all var(--tf-settings-transition);
-
-}
-
-
-.tf-settings-cancel-btn {
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  background:
-    var(--tf-settings-card);
-
-  color:
-    var(--tf-settings-text-secondary);
-
-}
-
-
-.tf-settings-save-btn {
-
-  border:
-    1px solid
-    var(--tf-settings-purple);
-
-  background:
     linear-gradient(
       135deg,
-      #6844df,
-      #8158f0
+      #7852ff,
+      #6536eb
     );
 
   color: #ffffff;
 
-  box-shadow:
-    0 8px 22px
-    rgba(104, 68, 223, 0.20);
-
-}
-
-
-.tf-settings-save-btn:hover {
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    0 12px 28px
-    rgba(104, 68, 223, 0.28);
-
-}
-
-
-/* =========================================================
-   ACCOUNT INFORMATION GRID
-   ========================================================= */
-
-.tf-settings-info-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-
-  padding:
-    0 18px 18px;
-
-}
-
-
-.tf-settings-info {
-
-  display: grid;
-
-  grid-template-columns:
-    34px 1fr;
-
-  grid-template-rows:
-    auto auto;
-
-  column-gap: 10px;
-
-  padding:
-    12px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 12px;
-
-  background:
-    var(--tf-settings-card-soft);
-
-}
-
-
-.tf-settings-info > div {
-
-  grid-row:
-    1 / span 2;
-
-  display: grid;
-
-  place-items: center;
-
-  width: 34px;
-
-  height: 34px;
-
-  border-radius: 9px;
-
-}
-
-
-.tf-settings-info > div.purple {
-
-  background:
-    rgba(124, 77, 255, 0.12);
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-settings-info > div.blue {
-
-  background:
-    rgba(62, 158, 255, 0.11);
-
-  color:
-    var(--tf-settings-blue);
-
-}
-
-
-.tf-settings-info > div.violet {
-
-  background:
-    rgba(150, 100, 255, 0.11);
-
-  color:
-    #9a70ff;
-
-}
-
-
-.tf-settings-info > div.green {
-
-  background:
-    var(--tf-settings-green-soft);
-
-  color:
-    var(--tf-settings-green);
-
-}
-
-
-.tf-settings-info span {
-
-  font-size: 7px;
-
+  font-size: 12px;
   font-weight: 800;
 
-  letter-spacing: 0.12em;
+  cursor: pointer;
 
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-settings-info strong {
-
-  margin-top: 4px;
-
-  font-size: 10px;
-
-  font-weight: 700;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-settings-info strong.active {
-
-  color:
-    var(--tf-settings-green);
-
-}
-
-
-/* =========================================================
-   PROTECTED
-   ========================================================= */
-
-.tf-settings-protected {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  margin:
-    0 18px 18px;
-
-  padding:
-    12px;
-
-  border:
-    1px solid
-    rgba(32, 217, 154, 0.14);
-
-  border-radius: 12px;
-
-  background:
-    var(--tf-settings-green-soft);
-
-}
-
-
-.tf-settings-protected > div {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 34px;
-
-  height: 34px;
-
-  flex-shrink: 0;
-
-  border-radius: 9px;
-
-  background:
-    rgba(32, 217, 154, 0.10);
-
-  color:
-    var(--tf-settings-green);
-
-}
-
-
-.tf-settings-protected section {
-
-  flex: 1;
-
-}
-
-
-.tf-settings-protected strong {
-
-  display: block;
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-settings-protected p {
-
-  margin:
-    3px 0 0;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-settings-protected > svg {
-
-  color:
-    var(--tf-settings-green);
-
-  font-size: 10px;
-
-}
-
-
-/* =========================================================
-   APPEARANCE PREVIEW
-   ========================================================= */
-
-.tf-settings-theme-preview {
-
-  margin:
-    18px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 14px;
-
-  overflow: hidden;
-
-  background:
-    var(--tf-settings-card-soft);
-
-}
-
-
-.tf-preview-window {
-
-  display: flex;
-
-  height: 190px;
-
-  overflow: hidden;
+  box-shadow:
+    0 10px 24px rgba(109, 66, 255, 0.25);
 
   transition:
-    background 0.3s ease;
-
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+.tf-settings-edit-btn:hover {
+  transform: translateY(-2px);
 
-.tf-preview-window.dark-preview {
-
-  background:
-    #0b1121;
-
+  box-shadow:
+    0 14px 30px rgba(109, 66, 255, 0.35);
 }
 
-
-.tf-preview-window.light-preview {
-
-  background:
-    #f4f6fa;
-
+.tf-settings-edit-btn:active {
+  transform: translateY(0);
 }
 
-
-.tf-preview-sidebar {
-
-  width: 115px;
-
-  flex-shrink: 0;
-
-  padding:
-    18px 13px;
-
+.tf-settings-edit-btn svg {
+  font-size: 11px;
 }
 
+/* =========================================================
+   EDIT PROFILE BOX
+========================================================= */
 
-.dark-preview .tf-preview-sidebar {
+.tf-settings-edit-box {
+  margin-top: 18px;
+  padding: 22px;
 
-  background:
-    #111a30;
-
-}
-
-
-.light-preview .tf-preview-sidebar {
-
-  background:
-    #e7eaf1;
-
-}
-
-
-.tf-preview-logo {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 28px;
-
-  height: 28px;
-
-  margin-bottom: 22px;
-
-  border-radius: 8px;
+  border: 1px solid rgba(109, 66, 255, 0.25);
+  border-radius: 15px;
 
   background:
     linear-gradient(
       135deg,
-      #6844df,
-      #885fff
+      rgba(109, 66, 255, 0.07),
+      transparent
     );
-
-  color: #ffffff;
-
-  font-size: 8px;
-
-  font-weight: 900;
-
 }
 
-
-.tf-preview-sidebar i {
-
-  display: block;
-
-  width: 70px;
-
-  height: 5px;
-
-  margin-bottom: 12px;
-
-  border-radius: 99px;
-
-}
-
-
-.dark-preview .tf-preview-sidebar i {
-
-  background:
-    #26304a;
-
-}
-
-
-.light-preview .tf-preview-sidebar i {
-
-  background:
-    #c8ceda;
-
-}
-
-
-.tf-preview-sidebar i:first-of-type {
-
-  width: 62px;
-
-  background:
-    #7651e8;
-
-}
-
-
-.tf-preview-main {
-
-  flex: 1;
-
-  padding:
-    20px;
-
-}
-
-
-.dark-preview .tf-preview-main {
-
-  background:
-    #0b1121;
-
-}
-
-
-.light-preview .tf-preview-main {
-
-  background:
-    #f4f6fa;
-
-}
-
-
-.tf-preview-top {
-
-  width: 42%;
-
-  height: 7px;
-
-  margin-bottom: 18px;
-
-  border-radius: 99px;
-
-}
-
-
-.dark-preview .tf-preview-top {
-
-  background:
-    #27314a;
-
-}
-
-
-.light-preview .tf-preview-top {
-
-  background:
-    #c9ced9;
-
-}
-
-
-.tf-preview-content {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 9px;
-
-}
-
-
-.tf-preview-content div {
-
-  height: 78px;
-
-  border-radius: 9px;
-
-}
-
-
-.dark-preview .tf-preview-content div {
-
-  background:
-    #151d31;
-
-  border:
-    1px solid
-    #202943;
-
-}
-
-
-.light-preview .tf-preview-content div {
-
-  background:
-    #ffffff;
-
-  border:
-    1px solid
-    #dce0e8;
-
-}
-
-
-.tf-theme-caption {
-
+.tf-settings-edit-header {
   display: flex;
-
-  align-items: center;
-
   justify-content: space-between;
 
   gap: 20px;
 
-  padding:
-    11px 14px;
-
-  border-top:
-    1px solid
-    var(--tf-settings-border);
-
+  margin-bottom: 20px;
 }
 
-
-.tf-theme-caption strong {
-
+.tf-settings-edit-header span {
   font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
 
-  color:
-    var(--tf-settings-text);
-
+  color: var(--tf-primary);
 }
 
+.tf-settings-edit-header h3 {
+  margin: 5px 0 0;
 
-.tf-theme-caption span {
+  font-size: 17px;
+  font-weight: 800;
 
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  color: var(--tf-text);
 }
 
+.tf-settings-edit-header p {
+  margin: 6px 0 0;
+
+  font-size: 11px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-edit-close {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--tf-border);
+  border-radius: 9px;
+
+  background: var(--tf-card);
+
+  color: var(--tf-text-muted);
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.tf-edit-close:hover {
+  color: var(--tf-danger);
+  border-color: rgba(239, 91, 104, 0.25);
+}
 
 /* =========================================================
-   THEME OPTIONS
-   ========================================================= */
+   FORM
+========================================================= */
 
-.tf-theme-options {
-
+.tf-settings-form-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 11px;
-
-  padding:
-    0 18px 18px;
-
+  gap: 18px;
 }
 
+.tf-settings-field {
+  display: flex;
+  flex-direction: column;
 
-.tf-theme-option {
+  gap: 8px;
+}
+
+.tf-settings-field label {
+  font-size: 11px;
+  font-weight: 800;
+
+  color: var(--tf-text);
+}
+
+.tf-settings-input-box,
+.tf-settings-password-box {
+  display: flex;
+  align-items: center;
+
+  min-height: 46px;
+
+  border: 1px solid var(--tf-border-strong);
+  border-radius: 10px;
+
+  background: var(--tf-input);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tf-settings-input-box:focus-within,
+.tf-settings-password-box:focus-within {
+  border-color: rgba(109, 66, 255, 0.6);
+
+  box-shadow:
+    0 0 0 3px rgba(109, 66, 255, 0.08);
+}
+
+.tf-settings-input-box svg {
+  margin-left: 14px;
+
+  color: var(--tf-primary);
+
+  font-size: 12px;
+}
+
+.tf-settings-input-box input,
+.tf-settings-password-box input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  padding: 0 14px;
+
+  background: transparent;
+
+  color: var(--tf-text);
+
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.tf-settings-input-box input::placeholder,
+.tf-settings-password-box input::placeholder {
+  color: var(--tf-text-muted);
+}
+
+.tf-settings-form-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.tf-settings-cancel-btn,
+.tf-reset-btn {
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 17px;
+
+  border: 1px solid var(--tf-border-strong);
+  border-radius: 9px;
+
+  background: var(--tf-card);
+
+  color: var(--tf-text-secondary);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.tf-settings-cancel-btn:hover,
+.tf-reset-btn:hover {
+  border-color: var(--tf-primary);
+  color: var(--tf-primary);
+}
+
+/* =========================================================
+   INFO GRID
+========================================================= */
+
+.tf-settings-info-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 13px;
+
+  margin-top: 18px;
+}
+
+.tf-settings-info {
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 14px;
+
+  border: 1px solid var(--tf-border);
+  border-radius: 12px;
+
+  background: var(--tf-card-secondary);
+}
+
+.tf-settings-info > div:first-child {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.tf-settings-info > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.tf-settings-info span {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-settings-info strong {
+  overflow: hidden;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  color: var(--tf-text);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tf-settings-info strong.active {
+  color: var(--tf-success);
+}
+
+.tf-settings-info .purple,
+.tf-settings-info .violet {
+  background: rgba(109, 66, 255, 0.1);
+  color: var(--tf-primary);
+}
+
+.tf-settings-info .blue {
+  background: rgba(45, 139, 245, 0.1);
+  color: #2787ed;
+}
+
+.tf-settings-info .green {
+  background: rgba(22, 168, 121, 0.1);
+  color: var(--tf-success);
+}
+
+/* =========================================================
+   PROTECTED
+========================================================= */
+
+.tf-settings-protected {
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 18px;
+  padding: 14px 17px;
+
+  border: 1px solid rgba(22, 168, 121, 0.2);
+  border-radius: 12px;
+
+  background: rgba(22, 168, 121, 0.07);
+}
+
+.tf-protected-icon {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(22, 168, 121, 0.11);
+
+  color: var(--tf-success);
+}
+
+.tf-protected-copy {
+  flex: 1;
+}
+
+.tf-protected-copy strong {
+  display: block;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  color: var(--tf-text);
+}
+
+.tf-protected-copy p {
+  margin: 4px 0 0;
+
+  font-size: 10px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-protected-check {
+  color: var(--tf-success);
+  font-size: 15px;
+}
+
+/* =========================================================
+   APPEARANCE PREVIEW
+========================================================= */
+
+.tf-settings-theme-preview {
+  margin-top: 22px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--tf-border);
+  border-radius: 15px;
+
+  background: var(--tf-card-secondary);
+}
+
+.tf-preview-window {
+  height: 240px;
 
   display: flex;
 
+  overflow: hidden;
+}
+
+.tf-preview-sidebar {
+  width: 125px;
+
+  flex: 0 0 auto;
+
+  padding: 18px 14px;
+
+  background: #10172a;
+}
+
+.tf-preview-logo {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 25px;
+
+  border-radius: 8px;
+
+  background: var(--tf-primary);
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.tf-preview-sidebar i {
+  display: block;
+
+  width: 75%;
+
+  height: 8px;
+
+  margin-bottom: 14px;
+
+  border-radius: 99px;
+
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tf-preview-sidebar i:nth-child(3) {
+  width: 58%;
+}
+
+.tf-preview-sidebar i:nth-child(4) {
+  width: 82%;
+}
+
+.tf-preview-sidebar i:nth-child(5) {
+  width: 65%;
+}
+
+.tf-preview-sidebar i:nth-child(6) {
+  width: 74%;
+}
+
+.tf-preview-main {
+  flex: 1;
+
+  padding: 22px;
+
+  background: #080d1c;
+}
+
+.tf-preview-window.light .tf-preview-main {
+  background: #f3f5fa;
+}
+
+.tf-preview-top {
+  width: 45%;
+  height: 11px;
+
+  margin-bottom: 28px;
+
+  border-radius: 99px;
+
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.tf-preview-window.light .tf-preview-top {
+  background: rgba(25, 35, 55, 0.12);
+}
+
+.tf-preview-content {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 14px;
+}
+
+.tf-preview-content div {
+  height: 90px;
+
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.tf-preview-window.light
+.tf-preview-content div {
+  border-color: rgba(25, 35, 55, 0.07);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.tf-theme-caption {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 
-  gap: 11px;
+  gap: 20px;
 
-  width: 100%;
+  padding: 15px 18px;
 
-  padding:
-    13px;
+  border-top: 1px solid var(--tf-border);
+}
 
-  border:
-    1px solid
-    var(--tf-settings-border);
+.tf-theme-caption strong {
+  font-size: 13px;
+  color: var(--tf-text);
+}
 
+.tf-theme-caption span {
+  font-size: 10px;
+  color: var(--tf-text-muted);
+}
+
+/* =========================================================
+   THEME OPTIONS
+========================================================= */
+
+.tf-theme-options {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 16px;
+}
+
+.tf-theme-option {
+  min-height: 82px;
+
+  display: grid;
+
+  grid-template-columns: 44px minmax(0, 1fr) 18px;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 14px;
+
+  border: 1px solid var(--tf-border);
   border-radius: 12px;
 
-  background:
-    var(--tf-settings-card-soft);
+  background: var(--tf-card-secondary);
 
-  color:
-    var(--tf-settings-text);
+  color: var(--tf-text);
 
   text-align: left;
 
   cursor: pointer;
 
-  transition:
-    all var(--tf-settings-transition);
-
+  transition: 0.2s ease;
 }
-
 
 .tf-theme-option:hover {
-
-  border-color:
-    var(--tf-settings-border-strong);
-
-  transform:
-    translateY(-1px);
-
+  border-color: rgba(109, 66, 255, 0.3);
 }
-
 
 .tf-theme-option.selected {
+  border-color: rgba(109, 66, 255, 0.55);
 
-  border-color:
-    var(--tf-settings-purple);
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  box-shadow:
-    0 0 0 1px
-    rgba(124, 77, 255, 0.08);
-
+  background: rgba(109, 66, 255, 0.07);
 }
-
 
 .tf-theme-option-icon {
+  width: 44px;
+  height: 44px;
 
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  place-items: center;
+  border-radius: 11px;
 
-  width: 36px;
+  background: rgba(109, 66, 255, 0.1);
 
-  height: 36px;
-
-  flex-shrink: 0;
-
-  border-radius: 10px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple);
-
+  color: var(--tf-primary);
 }
-
 
 .tf-theme-option section {
+  display: flex;
+  flex-direction: column;
 
-  min-width: 0;
-
-  flex: 1;
-
+  gap: 4px;
 }
-
 
 .tf-theme-option section strong {
-
-  display: block;
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text);
-
+  font-size: 12px;
+  font-weight: 800;
 }
-
 
 .tf-theme-option section span {
-
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 7px;
-
-  line-height: 1.4;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-theme-option > svg {
-
-  flex-shrink: 0;
-
-  color:
-    var(--tf-settings-purple);
-
   font-size: 10px;
-
+  color: var(--tf-text-muted);
 }
 
+.tf-theme-check {
+  color: var(--tf-primary);
+}
 
 /* =========================================================
    NOTIFICATIONS
-   ========================================================= */
+========================================================= */
 
 .tf-notification-list {
-
   display: flex;
-
   flex-direction: column;
 
-  gap: 9px;
+  gap: 10px;
 
-  padding:
-    18px;
-
+  margin-top: 22px;
 }
-
 
 .tf-notification-row {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  padding:
-    14px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 12px;
-
-  background:
-    var(--tf-settings-card-soft);
-
-}
-
-
-.tf-notification-icon {
+  min-height: 78px;
 
   display: grid;
 
-  place-items: center;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
 
-  width: 38px;
+  align-items: center;
 
-  height: 38px;
+  gap: 15px;
 
-  flex-shrink: 0;
+  padding: 15px;
 
-  border-radius: 10px;
+  border: 1px solid var(--tf-border);
+  border-radius: 12px;
 
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple);
-
+  background: var(--tf-card-secondary);
 }
 
+.tf-notification-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: rgba(109, 66, 255, 0.1);
+
+  color: var(--tf-primary);
+}
 
 .tf-notification-text {
+  display: flex;
+  flex-direction: column;
 
-  min-width: 0;
-
-  flex: 1;
-
+  gap: 5px;
 }
-
 
 .tf-notification-text strong {
-
-  display: block;
-
-  font-size: 10px;
-
-  color:
-    var(--tf-settings-text);
-
+  font-size: 13px;
+  font-weight: 800;
 }
-
 
 .tf-notification-text span {
-
-  display: block;
-
-  margin-top: 4px;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  font-size: 10px;
+  color: var(--tf-text-muted);
 }
 
+/* =========================================================
+   SWITCH
+========================================================= */
 
 .tf-switch {
+  width: 48px;
+  height: 27px;
 
   position: relative;
-
-  width: 40px;
-
-  height: 22px;
-
-  flex-shrink: 0;
 
   padding: 0;
 
   border: 0;
-
   border-radius: 99px;
 
-  background:
-    #31394d;
+  background: #c3c9d5;
 
   cursor: pointer;
 
-  transition:
-    background var(--tf-settings-transition);
-
+  transition: 0.2s ease;
 }
 
-
 .tf-switch span {
-
   position: absolute;
 
+  width: 21px;
+  height: 21px;
+
   top: 3px;
-
   left: 3px;
-
-  width: 16px;
-
-  height: 16px;
 
   border-radius: 50%;
 
-  background:
-    #ffffff;
+  background: #ffffff;
 
-  transition:
-    transform var(--tf-settings-transition);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.2);
 
+  transition: 0.2s ease;
 }
-
 
 .tf-switch.on {
-
-  background:
-    var(--tf-settings-purple);
-
+  background: var(--tf-primary);
 }
-
 
 .tf-switch.on span {
-
-  transform:
-    translateX(18px);
-
+  transform: translateX(21px);
 }
-
 
 /* =========================================================
    SECURITY
-   ========================================================= */
+========================================================= */
 
 .tf-security-banner {
+  min-height: 82px;
 
-  display: flex;
+  display: grid;
+
+  grid-template-columns: 48px minmax(0, 1fr) 18px;
 
   align-items: center;
 
-  gap: 12px;
+  gap: 15px;
 
-  margin:
-    18px;
+  margin-top: 22px;
+  padding: 15px;
 
-  padding:
-    13px;
+  border: 1px solid rgba(22, 168, 121, 0.2);
+  border-radius: 12px;
 
-  border:
-    1px solid
-    rgba(32, 217, 154, 0.15);
+  background: rgba(22, 168, 121, 0.07);
+}
+
+.tf-security-banner-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border-radius: 12px;
 
-  background:
-    var(--tf-settings-green-soft);
+  background: rgba(22, 168, 121, 0.12);
 
+  color: var(--tf-success);
+
+  font-size: 17px;
 }
 
+.tf-security-banner div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
 
-.tf-security-banner > div {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 38px;
-
-  height: 38px;
-
-  flex-shrink: 0;
-
-  border-radius: 10px;
-
-  background:
-    rgba(32, 217, 154, 0.11);
-
-  color:
-    var(--tf-settings-green);
-
+  gap: 5px;
 }
-
-
-.tf-security-banner section {
-
-  flex: 1;
-
-}
-
 
 .tf-security-banner strong {
-
-  display: block;
-
-  font-size: 10px;
-
-  color:
-    var(--tf-settings-text);
-
+  font-size: 13px;
+  font-weight: 800;
 }
-
 
 .tf-security-banner span {
-
-  display: block;
-
-  margin-top: 4px;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
+  font-size: 10px;
+  color: var(--tf-text-muted);
 }
-
 
 .tf-security-banner > svg {
-
-  color:
-    var(--tf-settings-green);
-
+  color: var(--tf-success);
 }
-
 
 .tf-password-form {
+  display: flex;
+  flex-direction: column;
 
-  display: grid;
+  gap: 16px;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 13px;
-
-  padding:
-    0 18px 20px;
-
+  margin-top: 24px;
 }
 
-
-.tf-password-form .tf-password-message {
-
-  grid-column:
-    1 / -1;
-
+.tf-settings-password-box {
+  position: relative;
 }
 
-
-.tf-password-form
-.tf-settings-save-btn {
-
-  grid-column:
-    1 / -1;
-
-  justify-self: flex-start;
-
-}
-
-
-/* =========================================================
-   PASSWORD MESSAGE
-   ========================================================= */
-
-.tf-password-message {
+.tf-password-eye {
+  width: 42px;
+  height: 100%;
 
   display: flex;
+  align-items: center;
+  justify-content: center;
 
+  border: 0;
+
+  background: transparent;
+
+  color: var(--tf-text-muted);
+
+  cursor: pointer;
+}
+
+.tf-password-eye:hover {
+  color: var(--tf-primary);
+}
+
+.tf-password-message {
+  display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 8px;
 
-  padding:
-    10px 12px;
-
-  border:
-    1px solid
-    rgba(124, 77, 255, 0.18);
+  padding: 12px;
 
   border-radius: 9px;
 
-  background:
-    var(--tf-settings-purple-soft);
+  background: rgba(109, 66, 255, 0.08);
 
-  color:
-    var(--tf-settings-text-secondary);
+  color: var(--tf-primary);
 
-  font-size: 8px;
-
+  font-size: 11px;
+  font-weight: 700;
 }
-
 
 /* =========================================================
    APPLICATION
-   ========================================================= */
+========================================================= */
 
 .tf-app-brand {
+  display: grid;
+
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+
+  align-items: center;
+
+  gap: 18px;
+
+  margin-top: 22px;
+  padding: 22px;
+
+  border: 1px solid var(--tf-border);
+  border-radius: 14px;
+
+  background: var(--tf-card-secondary);
+}
+
+.tf-app-logo {
+  width: 70px;
+  height: 70px;
 
   display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7852ff,
+      #6334ed
+    );
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 900;
+
+  box-shadow:
+    0 15px 30px rgba(109, 66, 255, 0.2);
+}
+
+.tf-app-brand-copy span {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+
+  color: var(--tf-primary);
+}
+
+.tf-app-brand-copy h3 {
+  margin: 5px 0;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.tf-app-brand-copy p {
+  margin: 0;
+
+  font-size: 11px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-app-version {
+  min-width: 90px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 5px;
+}
+
+.tf-app-version span {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-app-version strong {
+  font-size: 15px;
+
+  color: var(--tf-primary);
+}
+
+.tf-tech-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 18px;
+}
+
+.tf-tech-grid > div {
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 14px;
+
+  border: 1px solid var(--tf-border);
+  border-radius: 12px;
+
+  background: var(--tf-card-secondary);
+}
+
+.tf-tech-grid > div > svg {
+  font-size: 16px;
+  color: var(--tf-primary);
+}
+
+.tf-tech-grid section {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.tf-tech-grid section span {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-tech-grid section strong {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.tf-about {
+  min-height: 78px;
+
+  display: grid;
+
+  grid-template-columns: 45px minmax(0, 1fr) auto;
 
   align-items: center;
 
   gap: 14px;
 
-  margin:
-    18px;
+  margin-top: 18px;
+  padding: 15px;
 
-  padding:
-    18px;
+  border: 1px solid rgba(22, 168, 121, 0.18);
+  border-radius: 12px;
 
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 14px;
-
-  background:
-    var(--tf-settings-card-soft);
-
+  background: rgba(22, 168, 121, 0.06);
 }
 
+.tf-about-icon {
+  width: 45px;
+  height: 45px;
 
-.tf-app-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  display: grid;
+  border-radius: 11px;
 
-  place-items: center;
+  background: rgba(22, 168, 121, 0.1);
 
-  width: 58px;
+  color: var(--tf-success);
+}
 
-  height: 58px;
+.tf-about section {
+  display: flex;
+  flex-direction: column;
 
-  flex-shrink: 0;
+  gap: 5px;
+}
 
+.tf-about strong {
+  font-size: 12px;
+}
+
+.tf-about p {
+  margin: 0;
+
+  font-size: 10px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-about > span {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  color: var(--tf-success);
+}
+
+/* =========================================================
+   SAVE ACTIONS
+   IMPORTANT: LARGE + CLEAR
+========================================================= */
+
+.tf-settings-actions {
+  min-height: 104px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-top: 20px;
+  padding: 22px 24px;
+
+  border: 1px solid rgba(109, 66, 255, 0.22);
+  border-radius: 16px;
+
+  background: var(--tf-card);
+
+  box-shadow:
+    0 15px 40px rgba(15, 23, 42, 0.07);
+}
+
+.tf-save-status {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 0;
+}
+
+.tf-save-status-icon {
+  width: 54px;
+  height: 54px;
+
+  position: relative;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(109, 66, 255, 0.2);
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(109, 66, 255, 0.14),
+      rgba(109, 66, 255, 0.05)
+    );
+
+  color: var(--tf-primary);
+
+  font-size: 19px;
+}
+
+.tf-save-status-icon > span {
+  position: absolute;
+
+  width: 11px;
+  height: 11px;
+
+  right: -3px;
+  bottom: 3px;
+
+  border: 2px solid var(--tf-card);
+
+  border-radius: 50%;
+
+  background: var(--tf-success);
+}
+
+.tf-save-status > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.tf-save-status strong {
+  font-size: 15px;
+  font-weight: 900;
+
+  color: var(--tf-text);
+}
+
+.tf-save-status small {
+  font-size: 11px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-action-buttons {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  flex: 0 0 auto;
+}
+
+.tf-reset-btn {
+  min-width: 90px;
+  height: 46px;
+
+  font-size: 11px;
+}
+
+.tf-settings-save-btn {
+  min-width: 145px;
+  height: 46px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 18px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7852ff,
+      #6334ed
+    );
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px rgba(109, 66, 255, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tf-settings-save-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(109, 66, 255, 0.35);
+}
+
+/* =========================================================
+   BOTTOM SECURITY
+   IMPORTANT: LARGE + CLEAR
+========================================================= */
+
+.tf-settings-bottom {
+  min-height: 96px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  margin-top: 18px;
+  padding: 20px 24px;
+
+  border: 1px solid rgba(109, 66, 255, 0.2);
   border-radius: 16px;
 
   background:
     linear-gradient(
       135deg,
-      #6844df,
-      #895fff
+      var(--tf-card),
+      rgba(109, 66, 255, 0.035)
     );
 
-  color:
-    #ffffff;
-
-  font-size: 17px;
-
-  font-weight: 900;
-
   box-shadow:
-    0 10px 28px
-    rgba(104, 68, 223, 0.24);
-
+    0 15px 40px rgba(15, 23, 42, 0.06);
 }
-
-
-.tf-app-brand > div:nth-child(2) {
-
-  min-width: 0;
-
-  flex: 1;
-
-}
-
-
-.tf-app-brand > div:nth-child(2) > span {
-
-  font-size: 7px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.16em;
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-app-brand h3 {
-
-  margin:
-    5px 0 3px;
-
-  font-size: 18px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-app-brand p {
-
-  margin: 0;
-
-  font-size: 8px;
-
-  line-height: 1.5;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-app-version {
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: flex-end;
-
-  flex-shrink: 0;
-
-}
-
-
-.tf-app-version span {
-
-  font-size: 7px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.12em;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-app-version strong {
-
-  margin-top: 4px;
-
-  font-size: 12px;
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-/* =========================================================
-   TECH GRID
-   ========================================================= */
-
-.tf-tech-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-
-  padding:
-    0 18px 18px;
-
-}
-
-
-.tf-tech-grid > div {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  padding:
-    12px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 11px;
-
-  background:
-    var(--tf-settings-card-soft);
-
-}
-
-
-.tf-tech-grid > div > svg {
-
-  color:
-    var(--tf-settings-purple);
-
-  font-size: 14px;
-
-}
-
-
-.tf-tech-grid section {
-
-  min-width: 0;
-
-}
-
-
-.tf-tech-grid span {
-
-  display: block;
-
-  font-size: 7px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.10em;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-tech-grid strong {
-
-  display: block;
-
-  margin-top: 4px;
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-/* =========================================================
-   ABOUT
-   ========================================================= */
-
-.tf-about {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  margin:
-    0 18px 18px;
-
-  padding:
-    13px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 11px;
-
-  background:
-    var(--tf-settings-card-soft);
-
-}
-
-
-.tf-about > div {
-
-  display: grid;
-
-  place-items: center;
-
-  width: 34px;
-
-  height: 34px;
-
-  flex-shrink: 0;
-
-  border-radius: 9px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-about section {
-
-  min-width: 0;
-
-  flex: 1;
-
-}
-
-
-.tf-about strong {
-
-  display: block;
-
-  font-size: 9px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-about p {
-
-  margin:
-    4px 0 0;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-about > span {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 5px;
-
-  padding:
-    5px 8px;
-
-  border-radius:
-    999px;
-
-  background:
-    var(--tf-settings-green-soft);
-
-  color:
-    var(--tf-settings-green);
-
-  font-size: 7px;
-
-  font-weight: 800;
-
-  white-space: nowrap;
-
-}
-
-
-/* =========================================================
-   ACTION BAR
-   ========================================================= */
-
-.tf-settings-actions {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 15px;
-
-  padding:
-    12px 14px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 13px;
-
-  background:
-    var(--tf-settings-card);
-
-}
-
-
-.tf-save-status {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  min-width: 0;
-
-}
-
-
-.tf-save-status > span {
-
-  width: 7px;
-
-  height: 7px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background:
-    var(--tf-settings-green);
-
-  box-shadow:
-    0 0 10px
-    rgba(32, 217, 154, 0.5);
-
-}
-
-
-.tf-save-status strong {
-
-  display: block;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-save-status small {
-
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 7px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-action-buttons {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  flex-shrink: 0;
-
-}
-
-
-.tf-reset-btn {
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  background:
-    var(--tf-settings-card-soft);
-
-  color:
-    var(--tf-settings-text-secondary);
-
-}
-
-
-.tf-reset-btn:hover {
-
-  border-color:
-    var(--tf-settings-border-strong);
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-/* =========================================================
-   BOTTOM BAR
-   ========================================================= */
-
-.tf-settings-bottom {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  margin-top: 15px;
-
-  padding:
-    12px 15px;
-
-  border:
-    1px solid
-    var(--tf-settings-border);
-
-  border-radius: 12px;
-
-  background:
-    var(--tf-settings-card);
-
-}
-
 
 .tf-bottom-icon {
+  width: 55px;
+  height: 55px;
 
-  display: grid;
+  position: relative;
 
-  place-items: center;
+  flex: 0 0 auto;
 
-  width: 30px;
-
-  height: 30px;
-
-  flex-shrink: 0;
-
-  border-radius: 8px;
-
-  background:
-    var(--tf-settings-purple-soft);
-
-  color:
-    var(--tf-settings-purple);
-
-}
-
-
-.tf-settings-bottom > div:nth-child(2) {
-
-  min-width: 0;
-
-  flex: 1;
-
-}
-
-
-.tf-settings-bottom strong {
-
-  display: block;
-
-  font-size: 8px;
-
-  color:
-    var(--tf-settings-text);
-
-}
-
-
-.tf-settings-bottom span {
-
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 7px;
-
-  color:
-    var(--tf-settings-text-muted);
-
-}
-
-
-.tf-bottom-secure {
-
-  display: inline-flex !important;
-
+  display: flex;
   align-items: center;
+  justify-content: center;
 
-  gap: 5px;
-
-  padding:
-    5px 8px;
-
-  border-radius:
-    999px;
-
-  background:
-    var(--tf-settings-green-soft);
-
-  color:
-    var(--tf-settings-green) !important;
-
-  font-size: 7px !important;
-
-  font-weight: 800;
-
-}
-
-
-/* =========================================================
-   LIGHT MODE — EXTRA VISUAL ADJUSTMENTS
-   ========================================================= */
-
-html[data-taskflow-theme="light"] .tf-settings-bg,
-body[data-taskflow-theme="light"] .tf-settings-bg {
+  border-radius: 15px;
 
   background:
     linear-gradient(
       135deg,
-      #f5f7fb,
-      #eef1f7
+      rgba(109, 66, 255, 0.14),
+      rgba(109, 66, 255, 0.05)
     );
 
+  color: var(--tf-primary);
+
+  font-size: 19px;
 }
 
+.tf-bottom-icon > span {
+  position: absolute;
 
-html[data-taskflow-theme="light"] .tf-bg-orb,
-body[data-taskflow-theme="light"] .tf-bg-orb {
+  width: 11px;
+  height: 11px;
 
-  opacity: 0.08;
+  right: -3px;
+  bottom: 3px;
 
+  border: 2px solid var(--tf-card);
+
+  border-radius: 50%;
+
+  background: var(--tf-success);
 }
 
+.tf-bottom-copy {
+  flex: 1;
 
-html[data-taskflow-theme="light"] .tf-settings-panel,
-html[data-taskflow-theme="light"] .tf-settings-sidebar,
-html[data-taskflow-theme="light"] .tf-settings-actions,
-html[data-taskflow-theme="light"] .tf-settings-bottom,
-html[data-taskflow-theme="light"] .tf-active-section-bar,
-body[data-taskflow-theme="light"] .tf-settings-panel,
-body[data-taskflow-theme="light"] .tf-settings-sidebar,
-body[data-taskflow-theme="light"] .tf-settings-actions,
-body[data-taskflow-theme="light"] .tf-settings-bottom,
-body[data-taskflow-theme="light"] .tf-active-section-bar {
+  display: flex;
+  flex-direction: column;
 
-  box-shadow:
-    0 15px 40px
-    rgba(40, 51, 79, 0.07);
-
+  gap: 6px;
 }
 
+.tf-bottom-copy strong {
+  font-size: 15px;
+  font-weight: 900;
+
+  color: var(--tf-text);
+}
+
+.tf-bottom-copy span {
+  font-size: 11px;
+
+  color: var(--tf-text-muted);
+}
+
+.tf-bottom-secure {
+  min-width: 85px;
+  height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 13px;
+
+  border: 1px solid rgba(22, 168, 121, 0.18);
+  border-radius: 999px;
+
+  background: rgba(22, 168, 121, 0.08);
+
+  color: var(--tf-success);
+
+  font-size: 11px;
+  font-weight: 900;
+}
 
 /* =========================================================
-   RESPONSIVE — TABLET
-   ========================================================= */
+   RESPONSIVE
+========================================================= */
 
-@media (max-width: 1050px) {
+@media (max-width: 1200px) {
+  .tf-settings-page {
+    margin-left: 180px;
+  }
 
   .tf-settings-container {
-
-    width:
-      calc(100% - 36px);
-
+    width: calc(100% - 48px);
   }
-
 
   .tf-settings-layout {
-
-    grid-template-columns:
-      220px minmax(0, 1fr);
-
+    grid-template-columns: 245px minmax(0, 1fr);
   }
-
-
-  .tf-settings-sidebar {
-
-    padding: 12px;
-
-  }
-
-
-  .tf-settings-profile {
-
-    align-items: flex-start;
-
-  }
-
 }
 
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-   ========================================================= */
-
-@media (max-width: 800px) {
-
-  .tf-settings-container {
-
-    width:
-      calc(100% - 24px);
-
-    padding-top:
-      78px;
-
-  }
-
-
-  .tf-settings-header {
-
-    align-items: flex-start;
-
-    flex-direction: column;
-
-  }
-
-
-  .tf-settings-header h1 {
-
-    font-size: 36px;
-
-  }
-
-
+@media (max-width: 1000px) {
   .tf-settings-layout {
-
-    grid-template-columns:
-      1fr;
-
+    grid-template-columns: 1fr;
   }
-
 
   .tf-settings-sidebar {
-
     position: static;
-
   }
-
 
   .tf-settings-nav {
-
     display: grid;
 
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
-
-  }
-
-
-  .tf-settings-panel-heading {
-
-    padding:
-      18px;
-
-  }
-
-
-  .tf-settings-profile {
-
-    flex-wrap: wrap;
-
-  }
-
-
-  .tf-settings-edit-btn {
-
-    width: 100%;
-
-    justify-content: center;
-
-  }
-
-
-  .tf-settings-form-grid {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-theme-options {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-password-form {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-app-brand {
-
-    flex-wrap: wrap;
-
-  }
-
-
-  .tf-app-version {
-
-    align-items: flex-start;
-
-    width: 100%;
-
-  }
-
-
-  .tf-settings-actions {
-
-    align-items: stretch;
-
-    flex-direction: column;
-
-  }
-
-
-  .tf-action-buttons {
-
-    width: 100%;
-
-  }
-
-
-  .tf-action-buttons button {
-
-    flex: 1;
-
-  }
-
-}
-
-
-/* =========================================================
-   RESPONSIVE — SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 520px) {
-
-  .tf-settings-container {
-
-    width:
-      calc(100% - 16px);
-
-  }
-
-
-  .tf-settings-nav {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-settings-info-grid {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-tech-grid {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .tf-settings-panel-heading {
-
-    gap: 12px;
-
-  }
-
-
-  .tf-settings-panel-heading h2 {
-
-    font-size: 19px;
-
-  }
-
-
-  .tf-settings-profile {
-
-    margin:
-      12px;
-
-    padding:
-      15px;
-
-  }
-
-
-  .tf-settings-info-grid {
-
-    padding:
-      0 12px 12px;
-
-  }
-
-
-  .tf-settings-protected {
-
-    margin:
-      0 12px 12px;
-
-  }
-
-
-  .tf-settings-theme-preview {
-
-    margin:
-      12px;
-
-  }
-
-
-  .tf-theme-options {
-
-    padding:
-      0 12px 12px;
-
-  }
-
-
-  .tf-notification-list {
-
-    padding:
-      12px;
-
-  }
-
-
-  .tf-security-banner {
-
-    margin:
-      12px;
-
-  }
-
-
-  .tf-password-form {
-
-    padding:
-      0 12px 14px;
-
-  }
-
-
-  .tf-app-brand {
-
-    margin:
-      12px;
-
-  }
-
-
-  .tf-tech-grid {
-
-    padding:
-      0 12px 12px;
-
-  }
-
-
-  .tf-about {
-
-    margin:
-      0 12px 12px;
-
-  }
-
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .tf-settings-root *,
-  .tf-settings-page * {
-
-    transition: none !important;
-
-    animation: none !important;
-
-  }
-
-}
-/* =========================================================
-   TASKFLOW SETTINGS — EDIT PROFILE BUTTON FIX
-   ========================================================= */
-
-.tf-settings-profile {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-/* Compact premium edit button */
-.tf-settings-profile .tf-settings-edit-btn {
-  position: static !important;
-
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-
-  width: auto !important;
-  min-width: 124px !important;
-  max-width: 150px !important;
-
-  height: 38px !important;
-  padding: 0 15px !important;
-  margin-left: auto !important;
-
-  flex: 0 0 auto !important;
-
-  border: 1px solid rgba(139, 92, 246, 0.45) !important;
-  border-radius: 10px !important;
-
-  background: linear-gradient(
-    135deg,
-    #6845e8 0%,
-    #7c4dff 100%
-  ) !important;
-
-  color: #ffffff !important;
-
-  font-family: inherit !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-
-  cursor: pointer !important;
-
-  box-shadow:
-    0 8px 20px rgba(99, 70, 220, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn svg {
-  width: 13px !important;
-  height: 13px !important;
-  flex: 0 0 auto !important;
-  color: #ffffff !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn span {
-  display: inline-block !important;
-  white-space: nowrap !important;
-  color: #ffffff !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn:hover {
-  transform: translateY(-2px) !important;
-
-  background: linear-gradient(
-    135deg,
-    #7554ef 0%,
-    #8b5cf6 100%
-  ) !important;
-
-  box-shadow:
-    0 12px 26px rgba(99, 70, 220, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn:active {
-  transform: translateY(0) !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn:focus-visible {
-  outline: 2px solid rgba(139, 92, 246, 0.65) !important;
-  outline-offset: 3px !important;
-}
-
-
-/* =========================================================
-   LIGHT MODE
-   ========================================================= */
-
-.light-mode .tf-settings-profile .tf-settings-edit-btn,
-[data-theme="light"] .tf-settings-profile .tf-settings-edit-btn {
-  background: linear-gradient(
-    135deg,
-    #6845e8 0%,
-    #7c4dff 100%
-  ) !important;
-
-  color: #ffffff !important;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 700px) {
-  .tf-settings-profile {
-    flex-wrap: wrap;
-  }
-
-  .tf-settings-profile .tf-settings-edit-btn {
-    width: auto !important;
-    min-width: 118px !important;
-    height: 36px !important;
-    margin-left: auto !important;
-  }
-}
-
-@media (max-width: 520px) {
-  .tf-settings-profile .tf-settings-edit-btn {
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-  }
-}
-/* =========================================================
-   TASKFLOW SETTINGS — LARGE / PREMIUM DESKTOP LAYOUT
-   ========================================================= */
-
-/* ---------- MAIN PAGE ---------- */
-
-.tf-settings-page {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.tf-settings-container {
-  width: min(1240px, calc(100% - 64px)) !important;
-  max-width: 1240px !important;
-  margin: 0 auto !important;
-  padding: 58px 0 70px !important;
-}
-
-
-/* ---------- HEADER ---------- */
-
-.tf-settings-header {
-  width: 100% !important;
-  margin-bottom: 28px !important;
-}
-
-.tf-settings-breadcrumb {
-  font-size: 11px !important;
-  letter-spacing: 2px !important;
-  margin-bottom: 10px !important;
-}
-
-.tf-settings-header h1 {
-  font-size: 38px !important;
-  line-height: 1.1 !important;
-  font-weight: 800 !important;
-  letter-spacing: -1px !important;
-  margin: 0 0 9px !important;
-}
-
-.tf-settings-header p {
-  font-size: 14px !important;
-  line-height: 1.6 !important;
-  max-width: 650px !important;
-}
-
-.tf-secure-badge {
-  min-height: 38px !important;
-  padding: 0 15px !important;
-  font-size: 11px !important;
-}
-
-
-/* =========================================================
-   MAIN SETTINGS GRID
-   ========================================================= */
-
-.tf-settings-layout {
-  display: grid !important;
-
-  grid-template-columns: 280px minmax(0, 1fr) !important;
-
-  gap: 22px !important;
-
-  width: 100% !important;
-
-  align-items: start !important;
-}
-
-
-/* =========================================================
-   LEFT SETTINGS NAVIGATION
-   ========================================================= */
-
-.tf-settings-sidebar {
-  width: 280px !important;
-  min-width: 280px !important;
-
-  padding: 20px !important;
-
-  border-radius: 18px !important;
-}
-
-.tf-settings-sidebar-title {
-  font-size: 10px !important;
-  letter-spacing: 2px !important;
-  margin-bottom: 14px !important;
-}
-
-.tf-settings-nav {
-  gap: 8px !important;
-}
-
-.tf-settings-nav-btn {
-  min-height: 64px !important;
-  padding: 10px 12px !important;
-
-  border-radius: 12px !important;
-
-  gap: 12px !important;
-}
-
-.tf-settings-nav-icon {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-
-  border-radius: 10px !important;
-
-  font-size: 14px !important;
-}
-
-.tf-settings-nav-copy {
-  min-width: 0 !important;
-  flex: 1 !important;
-}
-
-.tf-settings-nav-copy strong {
-  display: block !important;
-
-  font-size: 13px !important;
-  line-height: 1.3 !important;
-
-  margin-bottom: 3px !important;
-}
-
-.tf-settings-nav-copy span {
-  display: block !important;
-
-  font-size: 10px !important;
-  line-height: 1.35 !important;
-}
-
-.tf-settings-nav-btn > svg:last-child {
-  font-size: 10px !important;
-}
-
-
-/* ---------- PROTECTED CARD ---------- */
-
-.tf-sidebar-protected {
-  min-height: 70px !important;
-
-  margin-top: 18px !important;
-  padding: 12px !important;
-
-  border-radius: 12px !important;
-
-  gap: 10px !important;
-}
-
-.tf-sidebar-protected > div {
-  width: 34px !important;
-  height: 34px !important;
-  min-width: 34px !important;
-
-  border-radius: 9px !important;
-}
-
-.tf-sidebar-protected section strong {
-  font-size: 10px !important;
-}
-
-.tf-sidebar-protected section span {
-  font-size: 8px !important;
-  line-height: 1.4 !important;
-}
-
-
-/* =========================================================
-   RIGHT CONTENT
-   ========================================================= */
-
-.tf-settings-main {
-  min-width: 0 !important;
-  width: 100% !important;
-}
-
-
-/* ---------- ACTIVE SECTION BAR ---------- */
-
-.tf-active-section-bar {
-  min-height: 48px !important;
-
-  padding: 0 18px !important;
-  margin-bottom: 12px !important;
-
-  border-radius: 12px !important;
-}
-
-.tf-active-section-bar > div {
-  gap: 10px !important;
-}
-
-.tf-active-section-bar svg {
-  font-size: 14px !important;
-}
-
-.tf-active-section-bar strong {
-  font-size: 12px !important;
-}
-
-.tf-active-section-bar span {
-  font-size: 11px !important;
-}
-
-
-/* =========================================================
-   MAIN PANEL
-   ========================================================= */
-
-.tf-settings-panel {
-  width: 100% !important;
-
-  padding: 28px !important;
-
-  border-radius: 18px !important;
-}
-
-
-/* ---------- PANEL HEADER ---------- */
-
-.tf-settings-panel-heading {
-  min-height: 62px !important;
-
-  padding-bottom: 20px !important;
-  margin-bottom: 22px !important;
-}
-
-.tf-settings-kicker {
-  font-size: 10px !important;
-  letter-spacing: 2px !important;
-  margin-bottom: 6px !important;
-}
-
-.tf-settings-panel-heading h2 {
-  font-size: 25px !important;
-  line-height: 1.2 !important;
-
-  margin: 0 0 7px !important;
-
-  letter-spacing: -0.4px !important;
-}
-
-.tf-settings-panel-heading p {
-  font-size: 12px !important;
-  line-height: 1.5 !important;
-}
-
-.tf-settings-heading-icon {
-  width: 44px !important;
-  height: 44px !important;
-
-  min-width: 44px !important;
-
-  border-radius: 12px !important;
-
-  font-size: 16px !important;
-}
-
-
-/* =========================================================
-   PROFILE CARD
-   ========================================================= */
-
-.tf-settings-profile {
-  min-height: 140px !important;
-
-  padding: 24px !important;
-
-  gap: 20px !important;
-
-  border-radius: 15px !important;
-}
-
-
-/* ---------- AVATAR ---------- */
-
-.tf-settings-avatar {
-  width: 76px !important;
-  height: 76px !important;
-  min-width: 76px !important;
-
-  border-radius: 20px !important;
-
-  font-size: 22px !important;
-  font-weight: 800 !important;
-}
-
-
-/* ---------- PROFILE DETAILS ---------- */
-
-.tf-settings-profile-details {
-  flex: 1 !important;
-  min-width: 0 !important;
-}
-
-.tf-settings-name-row {
-  gap: 9px !important;
-  margin-bottom: 7px !important;
-}
-
-.tf-settings-name-row h3 {
-  font-size: 18px !important;
-  line-height: 1.3 !important;
-}
-
-.tf-settings-role {
-  font-size: 9px !important;
-  padding: 4px 8px !important;
-  border-radius: 6px !important;
-}
-
-.tf-settings-email {
-  font-size: 11px !important;
-  gap: 7px !important;
-
-  margin-bottom: 12px !important;
-}
-
-.tf-settings-email svg {
-  font-size: 11px !important;
-}
-
-.tf-settings-status-row {
-  gap: 18px !important;
-}
-
-.tf-settings-status-row span {
-  font-size: 10px !important;
-  gap: 5px !important;
-}
-
-.tf-settings-status-row svg {
-  font-size: 10px !important;
-}
-
-
-/* =========================================================
-   EDIT PROFILE BUTTON
-   ========================================================= */
-
-.tf-settings-profile .tf-settings-edit-btn {
-  min-width: 138px !important;
-  height: 42px !important;
-
-  padding: 0 17px !important;
-
-  border-radius: 10px !important;
-
-  font-size: 11px !important;
-}
-
-.tf-settings-profile .tf-settings-edit-btn svg {
-  width: 13px !important;
-  height: 13px !important;
-}
-
-
-/* =========================================================
-   INFORMATION CARDS
-   ========================================================= */
-
-.tf-settings-info-grid {
-  display: grid !important;
-
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-
-  gap: 12px !important;
-
-  margin-top: 16px !important;
-}
-
-.tf-settings-info {
-  min-height: 70px !important;
-
-  padding: 13px 15px !important;
-
-  border-radius: 12px !important;
-}
-
-.tf-settings-info > div {
-  width: 34px !important;
-  height: 34px !important;
-  min-width: 34px !important;
-
-  border-radius: 9px !important;
-
-  font-size: 12px !important;
-}
-
-.tf-settings-info span {
-  font-size: 8px !important;
-  letter-spacing: 1px !important;
-
-  margin-bottom: 4px !important;
-}
-
-.tf-settings-info strong {
-  font-size: 11px !important;
-}
-
-
-/* =========================================================
-   PROTECTED WORKSPACE
-   ========================================================= */
-
-.tf-settings-protected {
-  min-height: 68px !important;
-
-  margin-top: 14px !important;
-
-  padding: 13px 15px !important;
-
-  border-radius: 12px !important;
-
-  gap: 12px !important;
-}
-
-.tf-settings-protected > div {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-
-  border-radius: 9px !important;
-}
-
-.tf-settings-protected > div svg {
-  font-size: 13px !important;
-}
-
-.tf-settings-protected section strong {
-  font-size: 11px !important;
-}
-
-.tf-settings-protected section p {
-  font-size: 9px !important;
-  line-height: 1.45 !important;
-}
-
-.tf-settings-protected > svg {
-  font-size: 12px !important;
-}
-
-
-/* =========================================================
-   FOOTER ACTION BAR
-   ========================================================= */
-
-.tf-settings-actions {
-  min-height: 72px !important;
-
-  margin-top: 14px !important;
-
-  padding: 14px 16px !important;
-
-  border-radius: 14px !important;
-}
-
-.tf-save-status {
-  gap: 10px !important;
-}
-
-.tf-save-status > span {
-  width: 8px !important;
-  height: 8px !important;
-}
-
-.tf-save-status strong {
-  font-size: 10px !important;
-}
-
-.tf-save-status small {
-  display: block !important;
-
-  font-size: 8px !important;
-  margin-top: 3px !important;
-}
-
-.tf-action-buttons {
-  gap: 9px !important;
-}
-
-.tf-reset-btn,
-.tf-settings-actions .tf-settings-save-btn {
-  min-height: 38px !important;
-
-  padding: 0 15px !important;
-
-  border-radius: 9px !important;
-
-  font-size: 10px !important;
-}
-
-
-/* =========================================================
-   BOTTOM SECURITY BAR
-   ========================================================= */
-
-.tf-settings-bottom {
-  min-height: 64px !important;
-
-  margin-top: 14px !important;
-
-  padding: 12px 16px !important;
-
-  border-radius: 12px !important;
-
-  gap: 12px !important;
-}
-
-.tf-settings-bottom > svg {
-  font-size: 15px !important;
-}
-
-.tf-settings-bottom strong {
-  font-size: 10px !important;
-}
-
-.tf-settings-bottom span {
-  font-size: 8px !important;
-}
-
-.tf-bottom-secure {
-  padding: 5px 9px !important;
-
-  font-size: 8px !important;
-}
-
-
-/* =========================================================
-   LARGE DESKTOP — 1440px+
-   ========================================================= */
-
-@media (min-width: 1440px) {
-  .tf-settings-container {
-    width: min(1320px, calc(100% - 80px)) !important;
-    max-width: 1320px !important;
-
-    padding-top: 62px !important;
-  }
-
-  .tf-settings-layout {
-    grid-template-columns: 300px minmax(0, 1fr) !important;
-    gap: 24px !important;
-  }
-
-  .tf-settings-sidebar {
-    width: 300px !important;
-    min-width: 300px !important;
-  }
-
-  .tf-settings-header h1 {
-    font-size: 42px !important;
-  }
-
-  .tf-settings-panel {
-    padding: 32px !important;
-  }
-
-  .tf-settings-panel-heading h2 {
-    font-size: 27px !important;
-  }
-
-  .tf-settings-profile {
-    min-height: 150px !important;
-  }
-
-  .tf-settings-avatar {
-    width: 82px !important;
-    height: 82px !important;
-    min-width: 82px !important;
-  }
-}
-
-
-/* =========================================================
-   1200px — LAPTOP
-   ========================================================= */
-
-@media (max-width: 1200px) {
-  .tf-settings-container {
-    width: calc(100% - 40px) !important;
-  }
-
-  .tf-settings-layout {
-    grid-template-columns: 250px minmax(0, 1fr) !important;
-  }
-
-  .tf-settings-sidebar {
-    width: 250px !important;
-    min-width: 250px !important;
-  }
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 900px) {
-  .tf-settings-container {
-    width: calc(100% - 30px) !important;
-  }
-
-  .tf-settings-layout {
-    grid-template-columns: 1fr !important;
-  }
-
-  .tf-settings-sidebar {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .tf-settings-nav {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .tf-sidebar-protected {
-    display: none !important;
+    margin-top: 15px;
   }
 }
 
+@media (max-width: 760px) {
+  .tf-settings-page {
+    margin-left: 0;
+    padding-top: 70px;
+  }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 600px) {
   .tf-settings-container {
-    width: calc(100% - 20px) !important;
-    padding: 35px 0 50px !important;
+    width: calc(100% - 30px);
+
+    padding-top: 25px;
+  }
+
+  .tf-settings-header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .tf-settings-header h1 {
-    font-size: 32px !important;
-  }
-
-  .tf-settings-header p {
-    font-size: 12px !important;
+    font-size: 32px;
   }
 
   .tf-settings-nav {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 
-  .tf-settings-panel {
-    padding: 20px !important;
+  .tf-settings-profile-card {
+    grid-template-columns: 70px minmax(0, 1fr);
   }
 
-  .tf-settings-panel-heading h2 {
-    font-size: 21px !important;
+  .tf-settings-avatar-large {
+    width: 70px;
+    height: 70px;
   }
 
-  .tf-settings-profile {
-    flex-wrap: wrap !important;
-    padding: 18px !important;
-  }
-
-  .tf-settings-profile .tf-settings-edit-btn {
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
+  .tf-settings-edit-btn {
+    grid-column: 1 / -1;
+    width: 100%;
   }
 
   .tf-settings-info-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
+  }
+
+  .tf-settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-theme-options {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-tech-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-app-brand {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .tf-app-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .tf-app-version {
+    grid-column: 1 / -1;
+    align-items: flex-start;
   }
 
   .tf-settings-actions {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 14px !important;
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .tf-action-buttons {
-    width: 100% !important;
+    width: 100%;
   }
 
-  .tf-action-buttons button {
-    flex: 1 !important;
+  .tf-reset-btn,
+  .tf-settings-save-btn {
+    flex: 1;
+  }
+
+  .tf-settings-bottom {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .tf-bottom-secure {
+    margin-left: 73px;
+  }
+}
+
+@media (max-width: 520px) {
+  .tf-settings-container {
+    width: calc(100% - 20px);
+  }
+
+  .tf-settings-panel {
+    padding: 18px;
+  }
+
+  .tf-settings-header h1 {
+    font-size: 28px;
+  }
+
+  .tf-settings-panel-heading h2 {
+    font-size: 20px;
+  }
+
+  .tf-settings-profile-card {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-settings-avatar-large {
+    width: 68px;
+    height: 68px;
+  }
+
+  .tf-settings-edit-btn {
+    width: 100%;
+  }
+
+  .tf-theme-caption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tf-preview-window {
+    height: 190px;
+  }
+
+  .tf-preview-sidebar {
+    width: 85px;
+  }
+
+  .tf-settings-actions,
+  .tf-settings-bottom {
+    padding: 18px;
+  }
+
+  .tf-save-status-icon,
+  .tf-bottom-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .tf-save-status strong,
+  .tf-bottom-copy strong {
+    font-size: 13px;
+  }
+
+  .tf-action-buttons {
+    flex-direction: column;
+  }
+
+  .tf-reset-btn,
+  .tf-settings-save-btn {
+    width: 100%;
+  }
+
+  .tf-bottom-secure {
+    margin-left: 66px;
   }
 }
