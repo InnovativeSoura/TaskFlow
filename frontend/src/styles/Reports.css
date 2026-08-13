@@ -1,2003 +1,1542 @@
-/* ============================================================
-   TASKFLOW — REPORTS & ANALYTICS
-   Premium Dark Analytics Dashboard
-   Scoped specifically to Reports page
-============================================================ */
+/* =========================================================
+   TASKFLOW — PREMIUM REPORTS & ANALYTICS
+   Complete layout rebuild
+   ========================================================= */
 
+/* =========================================================
+   ROOT PAGE
+   ========================================================= */
 
-/* ============================================================
-   REPORT PAGE
-============================================================ */
+.reports-page {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
 
-.report-page {
-    width: 100%;
-    min-height: 100%;
-    position: relative;
-    overflow-x: hidden;
+  background:
+    radial-gradient(
+      circle at 82% 12%,
+      rgba(102, 75, 255, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 18% 65%,
+      rgba(53, 80, 180, 0.08),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #070b18 0%,
+      #090e1e 48%,
+      #0b1024 100%
+    );
 
-    background:
-        radial-gradient(
-            circle at 78% 8%,
-            rgba(88, 70, 220, 0.16),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 28% 65%,
-            rgba(62, 46, 180, 0.10),
-            transparent 34%
-        ),
-        linear-gradient(
-            135deg,
-            #070b17 0%,
-            #0a1020 48%,
-            #0b0d1f 100%
-        );
-
-    color: #f8fafc;
+  color: #f5f7ff;
 }
 
 
-.report-main {
-    width: 100%;
-    min-width: 0;
-    min-height: 100vh;
-    position: relative;
+/* =========================================================
+   MAIN REPORT CONTENT
+   IMPORTANT:
+   Keeps content completely clear of the fixed sidebar/navbar.
+   ========================================================= */
+
+.reports-main,
+.reports-content {
+  position: relative;
+
+  width: calc(100% - 180px);
+  min-height: 100vh;
+
+  margin-left: 180px;
+
+  padding:
+    42px
+    56px
+    80px;
+
+  box-sizing: border-box;
+
+  z-index: 1;
 }
 
 
-/* ============================================================
-   REPORT CONTAINER
-============================================================ */
+/* =========================================================
+   BACKGROUND GRID
+   ========================================================= */
 
-.report-container {
-    width: min(1180px, calc(100% - 56px));
-    margin: 0 auto;
+.reports-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
 
-    padding: 34px 0 55px;
+  pointer-events: none;
 
-    display: flex;
-    flex-direction: column;
-    gap: 26px;
+  background-image:
+    linear-gradient(
+      rgba(108, 91, 255, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(108, 91, 255, 0.035) 1px,
+      transparent 1px
+    );
 
-    position: relative;
-    z-index: 2;
+  background-size: 42px 42px;
 
-    animation: reportsPageIn 0.55s ease both;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent 92%
+    );
+
+  z-index: 0;
 }
 
 
-/* ============================================================
-   HEADER
-============================================================ */
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
 
-.report-header {
-    width: 100%;
+.reports-header {
+  width: 100%;
+  max-width: 1180px;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+  margin: 0 auto 36px;
 
-    gap: 24px;
-
-    padding: 4px 0 6px;
+  position: relative;
+  z-index: 2;
 }
 
 
-.report-header > div:first-child {
-    min-width: 0;
+.reports-header .eyebrow,
+.analytics-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 10px;
+
+  color: #8174ff;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 
-.report-header h1 {
-    margin: 0 0 8px;
-
-    color: #f8fafc;
-
-    font-size: clamp(28px, 3vw, 38px);
-    line-height: 1.1;
-
-    font-weight: 750;
-    letter-spacing: -0.8px;
-}
-
-
-.report-header p {
-    margin: 0;
-
-    color: #8d99b5;
-
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-
-/* ============================================================
-   EXPORT BUTTON
-============================================================ */
-
-.export-btn {
-    flex-shrink: 0;
-
-    min-height: 44px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-
-    padding: 0 18px;
-
-    border: 1px solid rgba(139, 92, 246, 0.32);
-    border-radius: 12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(108, 78, 220, 0.22),
-            rgba(76, 58, 160, 0.12)
-        );
-
-    color: #dcd5ff;
-
-    font-size: 12px;
-    font-weight: 650;
-
-    cursor: pointer;
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        0 8px 22px rgba(0,0,0,0.18);
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        background 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-
-.export-btn:hover {
-    transform: translateY(-2px);
-
-    border-color: rgba(139, 92, 246, 0.62);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(108, 78, 220, 0.34),
-            rgba(76, 58, 160, 0.20)
-        );
-
-    box-shadow:
-        0 12px 28px rgba(91, 67, 190, 0.20);
-}
-
-
-.export-btn:active {
-    transform: translateY(0);
-}
-
-
-/* ============================================================
-   PERFORMANCE OVERVIEW / STATS
-============================================================ */
-
-.stats-grid {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 14px;
-}
-
-
-/* ============================================================
-   STAT CARD
-============================================================ */
-
-.stat-card {
-    position: relative;
-
-    min-height: 138px;
-
-    padding: 22px 21px;
-
-    overflow: hidden;
-
-    border-radius: 17px;
-
-    border: 1px solid rgba(148, 163, 184, 0.15);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(27, 39, 61, 0.94),
-            rgba(17, 27, 46, 0.94)
-        );
-
-    box-shadow:
-        0 15px 38px rgba(0,0,0,0.20),
-        inset 0 1px 0 rgba(255,255,255,0.035);
-
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-.stat-card:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(129, 110, 255, 0.32);
-
-    box-shadow:
-        0 20px 42px rgba(0,0,0,0.28),
-        0 0 25px rgba(99, 79, 210, 0.08);
-}
-
-
-/* Decorative glow */
-
-.stat-card::before {
-    content: "";
-
-    position: absolute;
-
-    width: 130px;
-    height: 130px;
-
-    right: -55px;
-    top: -60px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(124, 92, 255, 0.16),
-            transparent 70%
-        );
-
-    pointer-events: none;
-}
-
-
-.stat-card::after {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 100%;
-    height: 2px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #6856e8,
-            #47d7cf
-        );
-
-    opacity: 0.9;
-}
-
-
-.stat-card h2 {
-    position: relative;
-    z-index: 2;
-
-    margin: 0 0 8px;
-
-    color: #ffffff;
-
-    font-size: 32px;
-    line-height: 1;
-
-    font-weight: 750;
-
-    letter-spacing: -0.8px;
-}
-
-
-.stat-card p {
-    position: relative;
-    z-index: 2;
-
-    margin: 0;
-
-    color: #9aa7bd;
-
-    font-size: 12px;
-    line-height: 1.55;
-}
-
-
-/* ============================================================
-   STAT CARD COLOR VARIATIONS
-============================================================ */
-
-.stat-card.blue::after {
-    background: linear-gradient(
-        90deg,
-        #6366f1,
-        #38bdf8
+.reports-header .eyebrow::before,
+.analytics-eyebrow::before {
+  content: "";
+
+  width: 28px;
+  height: 2px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6d5dfc,
+      #8b7dff
     );
 }
 
 
-.stat-card.green::after {
-    background: linear-gradient(
-        90deg,
-        #10b981,
-        #2dd4bf
+.reports-header h1 {
+  margin: 0;
+
+  color: #f7f8ff;
+
+  font-size: clamp(30px, 3vw, 46px);
+  font-weight: 800;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.04em;
+}
+
+
+.reports-header p {
+  max-width: 650px;
+
+  margin: 12px 0 0;
+
+  color: #7e89a4;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   PERFORMANCE OVERVIEW
+   ========================================================= */
+
+.performance-overview,
+.overview-section {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto 48px;
+
+  position: relative;
+  z-index: 2;
+}
+
+
+.section-label {
+  margin-bottom: 8px;
+
+  color: #8174ff;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+
+.performance-overview h2,
+.overview-section h2 {
+  margin: 0;
+
+  color: #f4f6ff;
+
+  font-size: 24px;
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+}
+
+
+.section-description {
+  margin: 8px 0 22px;
+
+  color: #717d98;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   OVERVIEW STATS
+   ========================================================= */
+
+.stats-grid,
+.overview-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  width: 100%;
+}
+
+
+.stat-card,
+.overview-card {
+  min-height: 132px;
+
+  padding: 22px;
+
+  border: 1px solid rgba(130, 143, 181, 0.13);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 43, 65, 0.96),
+      rgba(22, 31, 52, 0.96)
     );
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 
-.stat-card.orange::after {
-    background: linear-gradient(
-        90deg,
-        #f59e0b,
-        #fbbf24
-    );
+.stat-card:hover,
+.overview-card:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(123, 105, 255, 0.3);
+
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.28),
+    0 0 25px rgba(105, 86, 255, 0.06);
 }
 
 
-.stat-card.red::after {
-    background: linear-gradient(
-        90deg,
-        #ef4444,
-        #fb7185
-    );
+.stat-card h3,
+.overview-card h3 {
+  margin: 0 0 10px;
+
+  color: #8c97b0;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 
-.stat-card.purple::after {
-    background: linear-gradient(
-        90deg,
-        #8b5cf6,
-        #c084fc
-    );
+.stat-card .stat-value,
+.overview-card .stat-value {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #f7f8ff;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  line-height: 1;
 }
 
 
-.stat-card.dark::after {
-    background: linear-gradient(
-        90deg,
-        #64748b,
-        #94a3b8
-    );
+.stat-card p,
+.overview-card p {
+  margin: 0;
+
+  color: #697690;
+
+  font-size: 10px;
 }
 
 
-/* ============================================================
-   SUMMARY GRID
-============================================================ */
+/* =========================================================
+   VISUAL ANALYTICS SECTION
+   ========================================================= */
 
-.summary-grid {
-    width: 100%;
+.analytics-section,
+.visual-analytics {
+  width: 100%;
+  max-width: 1180px;
 
-    display: grid;
+  margin: 0 auto;
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 14px;
+  position: relative;
+  z-index: 2;
 }
 
 
-.summary-item {
-    min-height: 120px;
+.analytics-heading {
+  display: flex;
 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+  align-items: flex-end;
+  justify-content: space-between;
 
-    padding: 20px;
+  gap: 20px;
 
-    border-radius: 16px;
-
-    border: 1px solid rgba(148, 163, 184, 0.13);
-
-    background:
-        rgba(19, 29, 48, 0.82);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.025);
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease;
+  margin-bottom: 24px;
 }
 
 
-.summary-item:hover {
-    transform: translateY(-3px);
+.analytics-heading h2 {
+  margin: 0;
 
-    border-color: rgba(139, 92, 246, 0.28);
+  color: #f5f7ff;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
 }
 
 
-.summary-item h3 {
-    margin: 0 0 7px;
+.analytics-heading p {
+  margin: 8px 0 0;
 
-    color: #f8fafc;
+  color: #737f99;
 
-    font-size: 28px;
-    line-height: 1;
-
-    font-weight: 750;
+  font-size: 11px;
 }
 
 
-.summary-item p {
-    margin: 0;
+/* =========================================================
+   ANALYTICS GRID
+   ========================================================= */
 
-    color: #8491aa;
+.analytics-grid {
+  display: grid;
 
-    font-size: 11px;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 18px;
+
+  width: 100%;
 }
 
 
-/* ============================================================
-   TASK STATS
-============================================================ */
+/* =========================================================
+   ANALYTICS CARDS
+   ========================================================= */
 
-.task-stats-grid {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 14px;
-}
-
-
-.mini-card {
-    position: relative;
-
-    min-height: 110px;
-
-    padding: 20px;
-
-    border-radius: 15px;
-
-    background:
-        rgba(21, 32, 52, 0.88);
-
-    border: 1px solid rgba(148, 163, 184, 0.13);
-
-    overflow: hidden;
-}
-
-
-.mini-card::before {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 100%;
-    height: 2px;
-
-    background: #6d5ce7;
-}
-
-
-.mini-card.low::before {
-    background: #34d399;
-}
-
-
-.mini-card.medium::before {
-    background: #fbbf24;
-}
-
-
-.mini-card.high::before {
-    background: #fb7185;
-}
-
-
-.mini-card h3 {
-    margin: 0 0 6px;
-
-    color: #ffffff;
-
-    font-size: 27px;
-    line-height: 1;
-}
-
-
-.mini-card p {
-    margin: 0;
-
-    color: #8794ac;
-
-    font-size: 11px;
-}
-
-
-/* ============================================================
-   REPORT CARD
-============================================================ */
-
+.analytics-card,
 .report-card {
-    width: 100%;
-    min-width: 0;
+  position: relative;
 
-    position: relative;
+  min-width: 0;
 
-    padding: 24px;
+  padding: 26px;
 
-    border-radius: 18px;
+  border: 1px solid rgba(128, 143, 180, 0.13);
+  border-radius: 20px;
 
-    border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 43, 65, 0.98),
+      rgba(24, 34, 55, 0.98)
+    );
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29, 42, 64, 0.96),
-            rgba(24, 36, 56, 0.96)
-        );
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
 
-    box-shadow:
-        0 18px 42px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.025);
+  overflow: hidden;
 
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
+  box-sizing: border-box;
 }
 
 
-.report-card:hover {
-    border-color: rgba(139, 92, 246, 0.23);
+.analytics-card::before,
+.report-card::before {
+  content: "";
 
-    box-shadow:
-        0 22px 48px rgba(0,0,0,0.27),
-        0 0 30px rgba(90, 67, 180, 0.05);
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(122, 102, 255, 0.65),
+      rgba(62, 212, 232, 0.45),
+      transparent
+    );
 }
 
 
-/* ============================================================
+/* =========================================================
+   TASK STATUS — FULL WIDTH
+   ========================================================= */
+
+.task-status-card,
+.status-card {
+  grid-column: 1 / -1;
+
+  min-height: 320px;
+}
+
+
+/* =========================================================
+   PROJECT PROGRESS
+   ========================================================= */
+
+.project-progress-card,
+.progress-card {
+  min-height: 360px;
+}
+
+
+/* =========================================================
+   TASK PRIORITY
+   ========================================================= */
+
+.task-priority-card,
+.priority-card {
+  min-height: 360px;
+}
+
+
+/* =========================================================
    CARD HEADER
-============================================================ */
+   ========================================================= */
 
 .card-header {
-    width: 100%;
+  display: flex;
 
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+  align-items: flex-start;
+  justify-content: space-between;
 
-    gap: 18px;
+  gap: 20px;
 
-    margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 
-.card-header > div {
-    min-width: 0;
+.card-header-left {
+  min-width: 0;
 }
 
 
-.card-header h2 {
-    margin: 0 0 7px;
+.card-eyebrow {
+  margin-bottom: 8px;
 
-    color: #f8fafc;
+  color: #66738e;
 
-    font-size: 18px;
-    line-height: 1.2;
+  font-size: 8px;
+  font-weight: 800;
 
-    font-weight: 700;
-
-    letter-spacing: -0.2px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 
-.card-header p {
-    margin: 0;
+.card-header h2,
+.analytics-card h2,
+.report-card h2 {
+  margin: 0;
 
-    color: #8491aa;
+  color: #f4f6ff;
 
-    font-size: 10px;
-    line-height: 1.5;
+  font-size: 16px;
+  font-weight: 750;
+
+  letter-spacing: -0.02em;
 }
 
 
-/* ============================================================
-   CHART CARD
-============================================================ */
+.card-subtitle {
+  margin-top: 7px;
 
-.chart-card {
-    width: 100%;
-    min-width: 0;
+  color: #68748d;
 
-    position: relative;
-
-    padding: 24px;
-
-    border-radius: 18px;
-
-    border: 1px solid rgba(148, 163, 184, 0.14);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(29, 42, 64, 0.96),
-            rgba(24, 36, 56, 0.96)
-        );
-
-    box-shadow:
-        0 18px 42px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.025);
-
-    overflow: hidden;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 
-.chart-title {
-    margin: 0 0 18px;
+/* =========================================================
+   CARD ICON
+   ========================================================= */
 
-    color: #f8fafc;
+.card-icon {
+  flex-shrink: 0;
 
-    font-size: 18px;
-    font-weight: 700;
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  color: #9a8cff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(105, 84, 255, 0.2),
+      rgba(85, 73, 170, 0.13)
+    );
+
+  border: 1px solid rgba(129, 111, 255, 0.16);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 
-.chart-wrapper {
-    width: 100%;
-    height: 270px;
+/* =========================================================
+   TASK STATUS CONTENT
+   ========================================================= */
 
-    position: relative;
+.task-status-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+  width: 100%;
 }
 
 
-/* ============================================================
-   MAIN REPORT GRID
-============================================================ */
+.status-summary {
+  display: flex;
 
-/*
-   This is the important layout:
-   
-   Task Status
-   ┌───────────────────────────────┐
-   │                               │
-   └───────────────────────────────┘
+  align-items: center;
+  justify-content: space-between;
 
-   Project Progress   Task Priority
-   ┌───────────────┐   ┌───────────────┐
-   │               │   │               │
-   └───────────────┘   └───────────────┘
-*/
-
-.reports-grid {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 14px;
-
-    align-items: stretch;
+  gap: 20px;
 }
 
 
-/*
-   First chart takes full width.
-*/
+.total-tasks {
+  display: flex;
 
-.reports-grid > :first-child {
-    grid-column: 1 / -1;
+  flex-direction: column;
 
-    min-height: 270px;
+  gap: 5px;
 }
 
 
-/*
-   Project Progress
-*/
+.total-tasks-label {
+  color: #68748d;
 
-.reports-grid > :nth-child(2) {
-    min-width: 0;
+  font-size: 9px;
 
-    min-height: 330px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 
-/*
-   Task Priority
-*/
+.total-tasks-value {
+  color: #f5f7ff;
 
-.reports-grid > :nth-child(3) {
-    min-width: 0;
+  font-size: 36px;
+  font-weight: 800;
 
-    min-height: 330px;
+  line-height: 1;
 }
 
 
-/* ============================================================
-   TASK STATUS CHART AREA
-============================================================ */
-
-.reports-grid > :first-child .chart-wrapper,
-.reports-grid > :first-child .chart-container {
-    min-height: 190px;
+.completion-rate {
+  text-align: right;
 }
 
 
-.reports-grid > :first-child {
-    display: flex;
-    flex-direction: column;
+.completion-rate strong {
+  display: block;
+
+  color: #6fe5a4;
+
+  font-size: 20px;
 }
 
 
-/* ============================================================
-   PROJECT PROGRESS
-============================================================ */
+.completion-rate span {
+  color: #68748d;
 
-.reports-grid > :nth-child(2) {
-    display: flex;
-    flex-direction: column;
+  font-size: 9px;
 }
 
 
-.reports-grid > :nth-child(2) .chart-wrapper {
-    flex: 1;
-    min-height: 235px;
+/* =========================================================
+   STATUS BARS
+   ========================================================= */
+
+.status-bars {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  width: 100%;
 }
 
 
-/* ============================================================
+.status-item {
+  min-width: 0;
+}
+
+
+.status-item-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+
+  color: #8792aa;
+
+  font-size: 9px;
+}
+
+
+.status-item-header strong {
+  color: #dce1ef;
+}
+
+
+.status-progress {
+  width: 100%;
+  height: 5px;
+
+  border-radius: 999px;
+
+  background: rgba(7, 11, 23, 0.7);
+
+  overflow: hidden;
+}
+
+
+.status-progress-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6755ff,
+      #8a78ff
+    );
+}
+
+
+/* =========================================================
+   EMPTY CHART STATE
+   ========================================================= */
+
+.chart-empty,
+.empty-chart {
+  width: 100%;
+  min-height: 205px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  padding: 30px;
+
+  border: 1px dashed rgba(111, 125, 159, 0.16);
+  border-radius: 15px;
+
+  background:
+    rgba(8, 13, 27, 0.22);
+
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+
+.chart-empty-icon,
+.empty-chart-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 50%;
+
+  color: #8d82ff;
+
+  background:
+    rgba(103, 85, 255, 0.1);
+
+  border: 1px solid rgba(103, 85, 255, 0.12);
+}
+
+
+.chart-empty h3,
+.empty-chart h3 {
+  margin: 0 0 7px;
+
+  color: #e8ebf5;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+.chart-empty p,
+.empty-chart p {
+  max-width: 300px;
+
+  margin: 0;
+
+  color: #64708a;
+
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
    TASK PRIORITY
-============================================================ */
+   THIS IS THE IMPORTANT MODIFICATION
+   ========================================================= */
 
-/*
-   Dedicated styling so the priority chart never collapses
-   or becomes visually hidden.
-*/
+.task-priority-content,
+.priority-content {
+  display: grid;
 
-.reports-grid > :nth-child(3) {
-    display: flex;
-    flex-direction: column;
+  grid-template-columns:
+    minmax(150px, 0.85fr)
+    minmax(190px, 1.15fr);
 
-    overflow: hidden;
+  align-items: center;
+
+  gap: 24px;
+
+  min-height: 215px;
 }
 
 
-.reports-grid > :nth-child(3) .chart-wrapper {
-    flex: 1;
+/* =========================================================
+   PRIORITY DONUT
+   ========================================================= */
 
-    min-height: 235px;
+.priority-chart,
+.priority-donut {
+  width: 170px;
+  height: 170px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  margin: 0 auto;
 
-    padding-top: 2px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #ff5b67 0deg,
+      #ff5b67 var(--high-angle, 0deg),
+      #f5a623 var(--high-angle, 0deg),
+      #f5a623 var(--medium-angle, 0deg),
+      #3ed48c var(--medium-angle, 0deg),
+      #3ed48c 360deg
+    );
+
+  box-shadow:
+    0 0 0 8px rgba(103, 85, 255, 0.04),
+    0 0 30px rgba(92, 75, 255, 0.08);
 }
 
 
-/* ============================================================
-   PRIORITY SECTION
-============================================================ */
+.priority-chart::before,
+.priority-donut::before {
+  content: "";
 
-.priority-chart {
-    width: 100%;
-    min-height: 220px;
+  position: absolute;
+
+  inset: 17px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #1b263c 0%,
+      #152137 100%
+    );
+
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.25);
 }
 
 
-.priority-wrapper {
-    width: 100%;
-    min-height: 220px;
+.priority-center {
+  position: relative;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
 }
 
 
-/* ============================================================
-   REPORT LIST
-============================================================ */
+.priority-center span {
+  color: #7c88a1;
 
-.report-list {
-    width: 100%;
+  font-size: 8px;
 
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 
-.list-item {
-    width: 100%;
+.priority-center strong {
+  margin-top: 4px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  color: #f7f8ff;
 
-    gap: 16px;
-
-    padding: 14px 16px;
-
-    border-radius: 13px;
-
-    border: 1px solid rgba(148, 163, 184, 0.11);
-
-    background:
-        rgba(15, 24, 41, 0.62);
-
-    transition:
-        transform 0.25s ease,
-        background 0.25s ease,
-        border-color 0.25s ease;
+  font-size: 28px;
+  font-weight: 800;
 }
 
 
-.list-item:hover {
-    transform: translateX(3px);
+/* =========================================================
+   PRIORITY LEGEND
+   ========================================================= */
 
-    background:
-        rgba(32, 45, 68, 0.82);
+.priority-legend {
+  display: flex;
 
-    border-color:
-        rgba(139, 92, 246, 0.22);
+  flex-direction: column;
+
+  gap: 9px;
+
+  width: 100%;
 }
 
 
-.list-item h3 {
-    margin: 0 0 4px;
+.priority-item {
+  display: flex;
 
-    color: #edf2f7;
+  align-items: center;
+  justify-content: space-between;
 
-    font-size: 13px;
+  min-height: 43px;
+
+  padding: 10px 12px;
+
+  border: 1px solid rgba(119, 132, 165, 0.1);
+  border-radius: 10px;
+
+  background:
+    rgba(7, 12, 25, 0.22);
+
+  box-sizing: border-box;
 }
 
 
-.list-item p {
-    margin: 0;
+.priority-item-left {
+  display: flex;
 
-    color: #7f8ca4;
+  align-items: center;
 
-    font-size: 10px;
+  gap: 9px;
+
+  min-width: 0;
 }
 
 
-/* ============================================================
-   BADGES
-============================================================ */
+.priority-dot {
+  width: 8px;
+  height: 8px;
 
-.badge {
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 26px;
-
-    padding: 0 10px;
-
-    border-radius: 999px;
-
-    color: #ffffff;
-
-    font-size: 9px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.5px;
+  border-radius: 50%;
 }
 
 
-.badge.completed {
-    background: rgba(16, 185, 129, 0.18);
-    color: #6ee7b7;
+.priority-dot.high {
+  background: #ff5b67;
 
-    border: 1px solid rgba(16, 185, 129, 0.22);
+  box-shadow:
+    0 0 10px rgba(255, 91, 103, 0.35);
 }
 
 
-.badge.active {
-    background: rgba(59, 130, 246, 0.18);
-    color: #93c5fd;
+.priority-dot.medium {
+  background: #f5a623;
 
-    border: 1px solid rgba(59, 130, 246, 0.22);
+  box-shadow:
+    0 0 10px rgba(245, 166, 35, 0.3);
 }
 
 
-.badge.pending {
-    background: rgba(245, 158, 11, 0.18);
-    color: #fcd34d;
+.priority-dot.low {
+  background: #3ed48c;
 
-    border: 1px solid rgba(245, 158, 11, 0.22);
+  box-shadow:
+    0 0 10px rgba(62, 212, 140, 0.3);
 }
 
 
-.badge.review {
-    background: rgba(139, 92, 246, 0.18);
-    color: #c4b5fd;
+.priority-name {
+  color: #cdd3e2;
 
-    border: 1px solid rgba(139, 92, 246, 0.22);
+  font-size: 9px;
+  font-weight: 600;
 }
 
 
-.badge.failed {
-    background: rgba(239, 68, 68, 0.18);
-    color: #fca5a5;
+.priority-value {
+  color: #eef1f8;
 
-    border: 1px solid rgba(239, 68, 68, 0.22);
+  font-size: 10px;
+  font-weight: 700;
 }
 
 
-/* ============================================================
-   PROGRESS SECTION
-============================================================ */
+/* =========================================================
+   PRIORITY MINI CARDS
+   ========================================================= */
 
-.progress-section {
-    width: 100%;
+.priority-summary {
+  display: grid;
 
-    display: flex;
-    flex-direction: column;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
-    gap: 13px;
+  gap: 9px;
+
+  margin-top: 18px;
 }
 
 
-.progress-bar {
-    width: 100%;
-    height: 9px;
+.priority-summary-item {
+  padding: 11px;
 
-    overflow: hidden;
+  border-radius: 10px;
 
-    border-radius: 999px;
+  border: 1px solid rgba(120, 134, 166, 0.1);
 
-    background: rgba(100, 116, 139, 0.18);
+  background:
+    rgba(7, 12, 25, 0.2);
+
+  text-align: center;
 }
 
 
-.progress-fill {
-    height: 100%;
+.priority-summary-item strong {
+  display: block;
 
-    border-radius: inherit;
+  margin-bottom: 4px;
 
-    background:
-        linear-gradient(
-            90deg,
-            #5b5ce2,
-            #38bdf8,
-            #8b5cf6
-        );
+  color: #f2f4fa;
 
-    background-size: 200% 100%;
-
-    animation:
-        reportGradient 4s ease infinite;
-
-    transition: width 0.5s ease;
+  font-size: 16px;
 }
 
 
-.progress-info {
-    text-align: center;
+.priority-summary-item span {
+  color: #66738e;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 
-.progress-info h2 {
-    margin: 0 0 5px;
+/* =========================================================
+   YOUR ANALYTICS ARE WAITING
+   LARGE PREMIUM SECTION
+   ========================================================= */
 
-    color: #ffffff;
+.analytics-waiting,
+.waiting-section,
+.empty-analytics {
+  width: 100%;
+  max-width: 1180px;
 
-    font-size: 32px;
-    line-height: 1;
+  min-height: 170px;
+
+  margin: 26px auto 0;
+
+  padding: 30px 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(112, 91, 255, 0.18);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 28, 73, 0.72),
+      rgba(20, 27, 49, 0.82)
+    );
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  box-sizing: border-box;
+
+  position: relative;
+
+  overflow: hidden;
 }
 
 
-.progress-info p {
-    margin: 0;
+.analytics-waiting::before,
+.waiting-section::before,
+.empty-analytics::before {
+  content: "";
 
-    color: #7f8ca4;
+  position: absolute;
 
-    font-size: 10px;
+  top: 0;
+  left: 0;
+
+  width: 4px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #725cff,
+      #9b7dff
+    );
 }
 
 
-/* ============================================================
-   TABLE
-============================================================ */
+.analytics-waiting::after,
+.waiting-section::after,
+.empty-analytics::after {
+  content: "";
 
-.report-table-wrapper {
-    width: 100%;
+  position: absolute;
 
-    overflow-x: auto;
+  width: 280px;
+  height: 280px;
 
-    border-radius: 15px;
+  right: -100px;
+  top: -120px;
 
-    border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 50%;
 
-    background:
-        rgba(17, 27, 45, 0.88);
+  background:
+    radial-gradient(
+      circle,
+      rgba(109, 87, 255, 0.12),
+      transparent 68%
+    );
+
+  pointer-events: none;
 }
 
 
-.report-table {
-    width: 100%;
+.waiting-icon {
+  width: 62px;
+  height: 62px;
 
-    min-width: 700px;
+  flex-shrink: 0;
 
-    border-collapse: collapse;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  color: #9c8fff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(103, 82, 255, 0.22),
+      rgba(90, 70, 190, 0.12)
+    );
+
+  border: 1px solid rgba(126, 106, 255, 0.2);
+
+  box-shadow:
+    0 0 25px rgba(103, 82, 255, 0.1);
 }
 
 
-.report-table thead {
-    background:
-        rgba(99, 78, 214, 0.16);
+.waiting-content {
+  position: relative;
+
+  z-index: 2;
+
+  flex: 1;
+
+  min-width: 0;
 }
 
 
-.report-table th {
-    padding: 14px 16px;
+.waiting-content h3 {
+  margin: 0 0 9px;
 
-    color: #b8c2d4;
+  color: #f1f3fa;
 
-    text-align: left;
+  font-size: 17px;
+  font-weight: 750;
 
-    font-size: 9px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.7px;
-
-    border-bottom:
-        1px solid rgba(148, 163, 184, 0.10);
+  letter-spacing: -0.015em;
 }
 
 
-.report-table td {
-    padding: 14px 16px;
+.waiting-content p {
+  max-width: 700px;
 
-    color: #aeb9cb;
+  margin: 0;
 
-    font-size: 11px;
+  color: #7d89a3;
 
-    border-bottom:
-        1px solid rgba(148, 163, 184, 0.07);
+  font-size: 11px;
+
+  line-height: 1.7;
 }
 
 
-.report-table tbody tr {
-    transition: background 0.2s ease;
+.waiting-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 15px;
+
+  color: #6d7891;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.12em;
 }
 
 
-.report-table tbody tr:hover {
-    background:
-        rgba(99, 78, 214, 0.06);
+.waiting-status::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #3ed48c;
+
+  box-shadow:
+    0 0 10px rgba(62, 212, 140, 0.5);
 }
 
 
-/* ============================================================
-   SEARCH
-============================================================ */
+/* =========================================================
+   FOOTER / ANALYTICS ENGINE
+   ========================================================= */
 
-.report-search {
-    width: 300px;
+.reports-footer {
+  width: 100%;
+  max-width: 1180px;
 
-    position: relative;
+  margin: 20px auto 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  color: #4f5a73;
+
+  font-size: 8px;
 }
 
 
-.report-search input {
-    width: 100%;
+.reports-footer span {
+  display: inline-flex;
 
-    height: 42px;
+  align-items: center;
 
-    padding: 0 15px 0 43px;
-
-    outline: none;
-
-    border-radius: 11px;
-
-    border:
-        1px solid rgba(148, 163, 184, 0.14);
-
-    background:
-        rgba(18, 28, 46, 0.85);
-
-    color: #ffffff;
-
-    font-size: 11px;
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
+  gap: 7px;
 }
 
 
-.report-search input::placeholder {
-    color: #66738a;
+.reports-footer .online-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #3ed48c;
+
+  box-shadow:
+    0 0 8px rgba(62, 212, 140, 0.5);
 }
 
 
-.report-search input:focus {
-    border-color:
-        rgba(139, 92, 246, 0.55);
+/* =========================================================
+   RESPONSIVE — LAPTOP
+   ========================================================= */
 
-    box-shadow:
-        0 0 0 3px rgba(139, 92, 246, 0.08);
+@media (max-width: 1250px) {
+
+  .reports-main,
+  .reports-content {
+    width: calc(100% - 180px);
+
+    margin-left: 180px;
+
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+
+  .reports-header,
+  .performance-overview,
+  .analytics-section,
+  .analytics-waiting,
+  .waiting-section,
+  .empty-analytics,
+  .reports-footer {
+    max-width: 1050px;
+  }
+
 }
 
 
-.report-search svg {
-    position: absolute;
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
 
-    left: 15px;
-    top: 50%;
+@media (max-width: 1000px) {
 
-    transform: translateY(-50%);
+  .reports-main,
+  .reports-content {
+    width: calc(100% - 170px);
 
-    color: #7c89a0;
+    margin-left: 170px;
 
-    pointer-events: none;
+    padding:
+      32px
+      28px
+      70px;
+  }
+
+
+  .stats-grid,
+  .overview-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .task-status-card,
+  .status-card {
+    grid-column: auto;
+  }
+
+
+  .task-priority-content,
+  .priority-content {
+    grid-template-columns:
+      minmax(150px, 0.8fr)
+      minmax(180px, 1.2fr);
+  }
+
 }
 
 
-/* ============================================================
-   FILTER BUTTONS
-============================================================ */
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
 
-.filter-buttons {
-    display: flex;
+@media (max-width: 760px) {
 
-    align-items: center;
-
-    gap: 8px;
-
-    flex-wrap: wrap;
-}
-
-
-.filter-btn {
-    min-height: 35px;
-
-    padding: 0 13px;
-
-    border-radius: 9px;
-
-    border:
-        1px solid rgba(148, 163, 184, 0.12);
-
-    background:
-        rgba(26, 38, 59, 0.72);
-
-    color: #8996ac;
-
-    font-size: 10px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-.filter-btn:hover,
-.filter-btn.active {
-    background:
-        rgba(99, 78, 214, 0.22);
-
-    border-color:
-        rgba(139, 92, 246, 0.34);
-
-    color: #d8d1ff;
-}
-
-
-/* ============================================================
-   EXPORT OPTIONS
-============================================================ */
-
-.export-options {
-    display: flex;
-
-    gap: 9px;
-
-    flex-wrap: wrap;
-}
-
-
-.pdf-btn,
-.excel-btn {
-    min-height: 40px;
-
-    padding: 0 16px;
-
-    border-radius: 10px;
-
-    border: none;
-
-    color: #ffffff;
-
-    font-size: 11px;
-    font-weight: 650;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.25s ease,
-        filter 0.25s ease;
-}
-
-
-.pdf-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #dc2626,
-            #ef4444
-        );
-}
-
-
-.excel-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #059669,
-            #10b981
-        );
-}
-
-
-.pdf-btn:hover,
-.excel-btn:hover {
-    transform: translateY(-2px);
-
-    filter: brightness(1.08);
-}
-
-
-/* ============================================================
-   EMPTY STATE
-============================================================ */
-
-.empty-state {
-    width: 100%;
-
-    min-height: 210px;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 35px 25px;
-
-    text-align: center;
-
-    border-radius: 14px;
-
-    border:
-        1px dashed rgba(148, 163, 184, 0.14);
-
-    background:
-        rgba(10, 18, 32, 0.24);
-}
-
-
-.empty-state h3 {
-    margin: 14px 0 6px;
-
-    color: #e5eaf2;
-
-    font-size: 15px;
-}
-
-
-.empty-state p {
-    max-width: 400px;
-
-    margin: 0;
-
-    color: #738198;
-
-    font-size: 10px;
-
-    line-height: 1.6;
-}
-
-
-/* ============================================================
-   LOADING
-============================================================ */
-
-.loading-screen {
-    min-height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #080c17;
-}
-
-
-.loading-spinner {
-    width: 46px;
-    height: 46px;
-
-    border-radius: 50%;
-
-    border:
-        3px solid rgba(139, 92, 246, 0.16);
-
-    border-top-color: #8b5cf6;
-
-    animation:
-        reportSpin 0.8s linear infinite;
-}
-
-
-/* ============================================================
-   ANALYTICS EMPTY / WAITING SECTION
-============================================================ */
-
-/*
-   This section is intentionally LARGE.
-   
-   Screenshot target:
-   
-   ┌─────────────────────────────────────────────────────┐
-   │  ◉     Your analytics are waiting                   │
-   │        Create projects and tasks to start...         │
-   │                                                     │
-   │                                     Analytics Engine │
-   └─────────────────────────────────────────────────────┘
-*/
-
-.analytics-waiting {
+  .reports-main,
+  .reports-content {
     width: 100%;
 
-    min-height: 145px;
+    margin-left: 0;
 
-    display: flex;
-    align-items: center;
+    padding:
+      24px
+      18px
+      60px;
+  }
 
-    gap: 22px;
 
-    padding: 27px 28px;
+  .reports-header {
+    margin-bottom: 28px;
+  }
 
-    position: relative;
 
-    overflow: hidden;
+  .reports-header h1 {
+    font-size: 30px;
+  }
 
-    border-radius: 18px;
 
-    border:
-        1px solid rgba(110, 83, 228, 0.28);
+  .stats-grid,
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(35, 30, 78, 0.76),
-            rgba(18, 28, 49, 0.90)
-        );
 
-    box-shadow:
-        0 18px 42px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.025);
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
 
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease;
-}
 
-
-.analytics-waiting:hover {
-    transform: translateY(-3px);
-
-    border-color:
-        rgba(139, 92, 246, 0.45);
-}
-
-
-/* Glow */
-
-.analytics-waiting::before {
-    content: "";
-
-    position: absolute;
-
-    width: 240px;
-    height: 240px;
-
-    left: -100px;
-    top: -120px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(124, 92, 255, 0.17),
-            transparent 68%
-        );
-
-    pointer-events: none;
-}
-
-
-/* Right glow */
-
-.analytics-waiting::after {
-    content: "";
-
-    position: absolute;
-
-    width: 300px;
-    height: 180px;
-
-    right: -130px;
-    bottom: -100px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(52, 211, 153, 0.08),
-            transparent 70%
-        );
-
-    pointer-events: none;
-}
-
-
-/* ============================================================
-   WAITING ICON
-============================================================ */
-
-.analytics-waiting-icon {
-    width: 54px;
-    height: 54px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(109, 83, 232, 0.28),
-            rgba(77, 58, 165, 0.18)
-        );
-
-    border:
-        1px solid rgba(139, 92, 246, 0.24);
-
-    color: #a99aff;
-
-    font-size: 20px;
-
-    box-shadow:
-        0 10px 24px rgba(78, 59, 176, 0.16);
-}
-
-
-/* ============================================================
-   WAITING CONTENT
-============================================================ */
-
-.analytics-waiting-content {
-    flex: 1;
-
-    min-width: 0;
-
-    position: relative;
-    z-index: 2;
-}
-
-
-.analytics-waiting-content h3 {
-    margin: 0 0 8px;
-
-    color: #f4f5f8;
-
-    font-size: 16px;
-    font-weight: 700;
-
-    letter-spacing: -0.15px;
-}
-
-
-.analytics-waiting-content p {
-    max-width: 620px;
-
-    margin: 0;
-
-    color: #8c99b0;
-
-    font-size: 11px;
-
-    line-height: 1.6;
-}
-
-
-/* ============================================================
-   WAITING STATUS
-============================================================ */
-
-.analytics-waiting-status {
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    color: #7f8ca3;
-
-    font-size: 10px;
-}
-
-
-.analytics-waiting-status::before {
-    content: "";
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: #22c55e;
-
-    box-shadow:
-        0 0 0 4px rgba(34, 197, 94, 0.08),
-        0 0 12px rgba(34, 197, 94, 0.45);
-
-    animation:
-        reportPulse 2s ease-in-out infinite;
-}
-
-
-/* ============================================================
-   ACTIVITY LIST
-============================================================ */
-
-.activity-list {
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 12px;
-}
-
-
-.activity-item {
-    display: flex;
-
+  .analytics-heading {
     align-items: flex-start;
 
-    gap: 13px;
+    flex-direction: column;
+  }
+
+
+  .analytics-heading h2 {
+    font-size: 24px;
+  }
+
+
+  .status-bars {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .status-summary {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .completion-rate {
+    text-align: left;
+  }
+
+
+  .task-priority-content,
+  .priority-content {
+    grid-template-columns: 1fr;
+  }
+
+
+  .priority-chart,
+  .priority-donut {
+    width: 145px;
+    height: 145px;
+  }
+
+
+  .priority-summary {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+
+  .analytics-waiting,
+  .waiting-section,
+  .empty-analytics {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding: 26px;
+  }
+
+
+  .reports-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
 }
 
 
-.activity-icon {
-    width: 38px;
-    height: 38px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 11px;
-
-    background:
-        rgba(99, 78, 214, 0.14);
-
-    color: #9b8cff;
-
-    font-size: 13px;
-}
-
-
-.activity-content {
-    min-width: 0;
-
-    flex: 1;
-}
-
-
-.activity-content h4 {
-    margin: 0 0 4px;
-
-    color: #e7ebf2;
-
-    font-size: 11px;
-}
-
-
-.activity-content p {
-    margin: 0;
-
-    color: #76839b;
-
-    font-size: 10px;
-}
-
-
-/* ============================================================
-   GENERIC REPORT TOOLBAR
-============================================================ */
-
-.report-toolbar {
-    width: 100%;
-
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-}
-
-
-.report-toolbar input,
-.report-toolbar select {
-    min-height: 42px;
-
-    flex: 1;
-
-    min-width: 200px;
-
-    padding: 0 14px;
-
-    outline: none;
-
-    border-radius: 11px;
-
-    border:
-        1px solid rgba(148, 163, 184, 0.14);
-
-    background:
-        rgba(18, 28, 46, 0.88);
-
-    color: #e8edf5;
-
-    font-size: 11px;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-.report-toolbar input::placeholder {
-    color: #68758c;
-}
-
-
-.report-toolbar input:focus,
-.report-toolbar select:focus {
-    border-color:
-        rgba(139, 92, 246, 0.48);
-
-    box-shadow:
-        0 0 0 3px rgba(139, 92, 246, 0.07);
-}
-
-
-/* ============================================================
-   ANIMATIONS
-============================================================ */
-
-@keyframes reportsPageIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-@keyframes reportGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-
-@keyframes reportSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-@keyframes reportPulse {
-    0%,
-    100% {
-        opacity: 0.55;
-        transform: scale(0.9);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-
-/* ============================================================
-   RESPONSIVE — 1200px
-============================================================ */
-
-@media (max-width: 1200px) {
-
-    .report-container {
-        width: min(1080px, calc(100% - 42px));
-    }
-
-    .stats-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .summary-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-}
-
-
-/* ============================================================
-   RESPONSIVE — 900px
-============================================================ */
-
-@media (max-width: 900px) {
-
-    .report-container {
-        width: calc(100% - 32px);
-
-        padding-top: 26px;
-    }
-
-    .reports-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .reports-grid > :first-child {
-        grid-column: auto;
-    }
-
-    .reports-grid > :nth-child(2),
-    .reports-grid > :nth-child(3) {
-        min-height: 300px;
-    }
-
-    .task-stats-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .analytics-waiting {
-        min-height: 135px;
-    }
-}
-
-
-/* ============================================================
-   RESPONSIVE — 700px
-============================================================ */
-
-@media (max-width: 700px) {
-
-    .report-container {
-        width: calc(100% - 26px);
-
-        padding:
-            22px
-            0
-            35px;
-    }
-
-    .report-header {
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
-    .report-header h1 {
-        font-size: 28px;
-    }
-
-    .export-btn {
-        width: 100%;
-    }
-
-    .stats-grid,
-    .summary-grid,
-    .task-stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .report-card,
-    .chart-card {
-        padding: 19px;
-    }
-
-    .card-header h2 {
-        font-size: 16px;
-    }
-
-    .chart-wrapper {
-        height: 240px;
-    }
-
-    .reports-grid > :nth-child(2),
-    .reports-grid > :nth-child(3) {
-        min-height: 280px;
-    }
-
-    .analytics-waiting {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        min-height: 175px;
-
-        padding: 24px;
-    }
-
-    .analytics-waiting-status {
-        margin-left: 0;
-    }
-
-    .report-search {
-        width: 100%;
-    }
-
-    .report-toolbar {
-        flex-direction: column;
-    }
-
-    .report-toolbar input,
-    .report-toolbar select {
-        width: 100%;
-    }
-}
-
-
-/* ============================================================
-   RESPONSIVE — 480px
-============================================================ */
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
 
 @media (max-width: 480px) {
 
-    .report-container {
-        width: calc(100% - 20px);
-    }
+  .reports-main,
+  .reports-content {
+    padding:
+      20px
+      14px
+      50px;
+  }
 
-    .report-header h1 {
-        font-size: 25px;
-    }
 
-    .stat-card {
-        min-height: 125px;
+  .reports-header h1 {
+    font-size: 26px;
+  }
 
-        padding: 19px;
-    }
 
-    .stat-card h2 {
-        font-size: 29px;
-    }
+  .stats-grid,
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .summary-item {
-        min-height: 105px;
-    }
 
-    .mini-card {
-        min-height: 100px;
-    }
+  .status-bars {
+    grid-template-columns: 1fr;
+  }
 
-    .chart-wrapper {
-        height: 220px;
-    }
 
-    .analytics-waiting {
-        min-height: 185px;
+  .priority-summary {
+    grid-template-columns: 1fr;
+  }
 
-        padding: 20px;
-    }
 
-    .analytics-waiting-icon {
-        width: 48px;
-        height: 48px;
+  .analytics-card,
+  .report-card {
+    padding: 20px;
+  }
 
-        font-size: 17px;
-    }
-
-    .analytics-waiting-content h3 {
-        font-size: 15px;
-    }
 }
 
 
-/* ============================================================
-   PRINT
-============================================================ */
+/* =========================================================
+   SAFETY OVERRIDES
+   Prevent accidental global styles from destroying layout
+   ========================================================= */
 
-@media print {
+.reports-page *,
+.reports-page *::before,
+.reports-page *::after {
+  box-sizing: border-box;
+}
 
-    .report-page {
-        background: #ffffff !important;
-        color: #111827 !important;
-    }
 
-    .report-container {
-        width: 100%;
-        padding: 0;
-    }
+.reports-page h1,
+.reports-page h2,
+.reports-page h3,
+.reports-page h4,
+.reports-page p {
+  overflow-wrap: break-word;
+}
 
-    .export-btn,
-    .filter-buttons,
-    .report-toolbar {
-        display: none !important;
-    }
 
-    .report-card,
-    .chart-card,
-    .stat-card,
-    .analytics-waiting {
-        box-shadow: none !important;
+.reports-page button {
+  font-family: inherit;
+}
 
-        break-inside: avoid;
 
-        border:
-            1px solid #d1d5db !important;
-    }
+.reports-page svg {
+  flex-shrink: 0;
 }
