@@ -25,95 +25,108 @@ const Reports = () => {
         ====================================================== */}
 
         <div className="reports-background" aria-hidden="true">
-          <div className="reports-grid-overlay"></div>
-
-          <div className="reports-glow reports-glow-one"></div>
-          <div className="reports-glow reports-glow-two"></div>
-          <div className="reports-glow reports-glow-three"></div>
+          <div className="reports-glow reports-glow-one" />
+          <div className="reports-glow reports-glow-two" />
+          <div className="reports-grid-overlay" />
         </div>
-
-        {/* =====================================================
-            MAIN CONTENT
-        ====================================================== */}
 
         <div className="reports-container">
 
-          {/* ===================================================
-              PAGE HEADER
-          ==================================================== */}
+          {/* =====================================================
+              HERO
+          ====================================================== */}
 
           <section className="reports-hero">
 
             <div className="reports-hero-content">
-              <div className="reports-hero-label">
-                <span className="reports-hero-line"></span>
 
-                <span>WORKSPACE INTELLIGENCE</span>
+              <div className="reports-hero-badge">
+                <span className="reports-hero-dot" />
+                WORKSPACE INTELLIGENCE
+              </div>
 
-                <span className="reports-live-indicator">
-                  <span></span>
-                  LIVE
+              <div className="reports-hero-title-row">
+
+                <div>
+                  <h1>Reports &amp; Analytics</h1>
+
+                  <p>
+                    Track project performance, task activity,
+                    and workspace productivity through clear,
+                    actionable analytics.
+                  </p>
+                </div>
+
+                <div className="reports-hero-status">
+                  <span className="status-pulse" />
+                  <div>
+                    <strong>Live</strong>
+                    <span>Workspace data</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="reports-hero-line" />
+
+              <div className="reports-hero-meta">
+                <span>
+                  <span className="meta-icon">01</span>
+                  Performance
+                </span>
+
+                <span className="meta-divider" />
+
+                <span>
+                  <span className="meta-icon">02</span>
+                  Productivity
+                </span>
+
+                <span className="meta-divider" />
+
+                <span>
+                  <span className="meta-icon">03</span>
+                  Insights
                 </span>
               </div>
 
-              <ReportsHeader />
-            </div>
-
-            <div className="reports-hero-decoration">
-              <div className="hero-orbit hero-orbit-one"></div>
-              <div className="hero-orbit hero-orbit-two"></div>
-
-              <div className="hero-core">
-                <span>TF</span>
-              </div>
             </div>
 
           </section>
 
 
-          {/* ===================================================
+          {/* =====================================================
               PERFORMANCE OVERVIEW
-          ==================================================== */}
+          ====================================================== */}
 
-          <section className="reports-section reports-overview-section">
+          <section className="reports-overview">
 
-            <div className="reports-section-header">
+            <div className="reports-section-heading">
 
-              <div className="reports-section-heading">
+              <div className="section-heading-copy">
 
-                <div className="reports-section-index">
-                  01
+                <div className="section-kicker">
+                  <span className="kicker-line" />
+                  01 / PERFORMANCE OVERVIEW
                 </div>
 
-                <div>
-                  <span className="reports-section-eyebrow">
-                    PERFORMANCE OVERVIEW
-                  </span>
+                <h2>Workspace at a glance</h2>
 
-                  <h2>
-                    Workspace at a glance
-                  </h2>
-
-                  <p>
-                    A real-time snapshot of your projects,
-                    tasks, and overall workspace activity.
-                  </p>
-                </div>
+                <p>
+                  A real-time snapshot of your projects, tasks,
+                  and overall workspace activity.
+                </p>
 
               </div>
 
-              <div className="reports-section-status">
-                <span className="status-pulse"></span>
-
-                <span>
-                  Workspace synchronized
-                </span>
+              <div className="section-live-indicator">
+                <span />
+                Workspace synchronized
               </div>
 
             </div>
 
-
-            <div className="reports-stats-wrapper">
+            <div className="reports-stats-shell">
               <ReportCards
                 projects={projects}
                 tasks={tasks}
@@ -123,134 +136,118 @@ const Reports = () => {
           </section>
 
 
-          {/* ===================================================
+          {/* =====================================================
               VISUAL ANALYTICS
-          ==================================================== */}
+          ====================================================== */}
 
-          <section className="reports-section reports-analytics-section">
+          <section className="reports-analytics">
 
-            <div className="reports-section-header">
+            <div className="reports-analytics-heading">
 
-              <div className="reports-section-heading">
+              <div className="section-heading-copy">
 
-                <div className="reports-section-index">
-                  02
+                <div className="section-kicker">
+                  <span className="kicker-line" />
+                  02 / VISUAL ANALYTICS
                 </div>
 
-                <div>
-                  <span className="reports-section-eyebrow">
-                    VISUAL ANALYTICS
-                  </span>
+                <h2>Performance intelligence</h2>
 
-                  <h2>
-                    Performance intelligence
-                  </h2>
-
-                  <p>
-                    Transform workspace activity into clear,
-                    actionable performance insights.
-                  </p>
-                </div>
+                <p>
+                  Transform workspace activity into clear,
+                  actionable performance insights.
+                </p>
 
               </div>
 
               <div className="analytics-live-badge">
-                <span className="analytics-live-dot"></span>
-
-                <span>
-                  Live analytics
-                </span>
+                <span className="analytics-live-dot" />
+                Live analytics
               </div>
 
             </div>
 
 
             {/* =================================================
-                CHART DASHBOARD
+                CHART GRID
             ================================================== */}
 
-            <div className="reports-chart-grid">
+            <div className="reports-grid">
 
-              {/* ===============================================
-                  TASK STATUS — LARGE CARD
-              ================================================ */}
+              {/* -----------------------------------------------
+                  TASK STATUS
+              ------------------------------------------------ */}
 
-              <article className="reports-chart-card reports-chart-status">
+              <article className="report-chart-card report-chart-wide">
 
-                <div className="chart-card-top">
+                <div className="chart-card-top-line" />
 
-                  <div className="chart-card-heading">
+                <div className="report-chart-card-header">
 
-                    <span className="chart-card-number">
+                  <div className="chart-heading-copy">
+
+                    <span className="chart-kicker">
                       01 / TASK ANALYTICS
                     </span>
 
-                    <h3>
-                      Task Status
-                    </h3>
+                    <h3>Task Status</h3>
 
                     <p>
-                      Current distribution of tasks
-                      across your workspace.
+                      Current distribution of tasks across
+                      your workspace.
                     </p>
 
                   </div>
 
-                  <div className="chart-card-action">
+                  <div className="chart-header-icon">
                     <span>✓</span>
                   </div>
 
                 </div>
 
+                <div className="chart-divider" />
 
-                <div className="chart-card-divider"></div>
-
-
-                <div className="chart-card-content">
-                  <TaskStatusChart
-                    tasks={tasks}
-                  />
+                <div className="report-chart-body task-status-body">
+                  <TaskStatusChart tasks={tasks} />
                 </div>
 
               </article>
 
 
-              {/* ===============================================
+              {/* -----------------------------------------------
                   PROJECT PROGRESS
-              ================================================ */}
+              ------------------------------------------------ */}
 
-              <article className="reports-chart-card reports-chart-project">
+              <article className="report-chart-card">
 
-                <div className="chart-card-top">
+                <div className="chart-card-top-line" />
 
-                  <div className="chart-card-heading">
+                <div className="report-chart-card-header">
 
-                    <span className="chart-card-number">
+                  <div className="chart-heading-copy">
+
+                    <span className="chart-kicker">
                       02 / PROJECT ANALYTICS
                     </span>
 
-                    <h3>
-                      Project Progress
-                    </h3>
+                    <h3>Project Progress</h3>
 
                     <p>
-                      Progress overview across
-                      all active projects.
+                      Progress overview across all active
+                      projects.
                     </p>
 
                   </div>
 
-                  <div className="chart-card-action">
+                  <div className="chart-header-icon">
                     <span>↗</span>
                   </div>
 
                 </div>
 
+                <div className="chart-divider" />
 
-                <div className="chart-card-divider"></div>
-
-
-                <div className="chart-card-content">
+                <div className="report-chart-body project-progress-body">
                   <ProjectProgressChart
                     projects={projects}
                   />
@@ -259,45 +256,41 @@ const Reports = () => {
               </article>
 
 
-              {/* ===============================================
+              {/* -----------------------------------------------
                   TASK PRIORITY
-              ================================================ */}
+              ------------------------------------------------ */}
 
-              <article className="reports-chart-card reports-chart-priority">
+              <article className="report-chart-card">
 
-                <div className="chart-card-top">
+                <div className="chart-card-top-line" />
 
-                  <div className="chart-card-heading">
+                <div className="report-chart-card-header">
 
-                    <span className="chart-card-number">
+                  <div className="chart-heading-copy">
+
+                    <span className="chart-kicker">
                       03 / PRIORITY ANALYTICS
                     </span>
 
-                    <h3>
-                      Task Priority
-                    </h3>
+                    <h3>Task Priority</h3>
 
                     <p>
-                      Understand the priority
-                      distribution of your tasks.
+                      Priority distribution across workspace
+                      tasks.
                     </p>
 
                   </div>
 
-                  <div className="chart-card-action">
+                  <div className="chart-header-icon">
                     <span>◎</span>
                   </div>
 
                 </div>
 
+                <div className="chart-divider" />
 
-                <div className="chart-card-divider"></div>
-
-
-                <div className="chart-card-content priority-chart-content">
-                  <PriorityChart
-                    tasks={tasks}
-                  />
+                <div className="report-chart-body priority-chart-body">
+                  <PriorityChart tasks={tasks} />
                 </div>
 
               </article>
@@ -307,59 +300,43 @@ const Reports = () => {
           </section>
 
 
-          {/* ===================================================
-              INSIGHT / ANALYTICS ENGINE
-          ==================================================== */}
+          {/* =====================================================
+              ANALYTICS WAITING / INSIGHT BANNER
+          ====================================================== */}
 
-          <section className="reports-insight-card">
+          <section className="analytics-waiting">
 
-            <div className="insight-card-decoration">
-              <div></div>
-              <div></div>
-              <div></div>
+            <div className="waiting-glow" />
+
+            <div className="analytics-waiting-icon">
+              <span>↗</span>
             </div>
 
+            <div className="analytics-waiting-main">
 
-            <div className="insight-icon-wrapper">
-
-              <div className="insight-icon">
-                ↗
+              <div className="waiting-kicker">
+                TASKFLOW ANALYTICS
               </div>
 
-            </div>
-
-
-            <div className="insight-content">
-
-              <span className="insight-eyebrow">
-                TASKFLOW ANALYTICS ENGINE
-              </span>
-
               <h3>
-                Your workspace intelligence is ready
+                Your analytics are waiting
               </h3>
 
               <p>
-                Create projects and tasks to generate
-                deeper performance insights, productivity
-                trends, and actionable workspace reports.
+                Create projects and tasks to start generating
+                meaningful workspace reports and performance
+                insights.
               </p>
 
             </div>
 
+            <div className="analytics-engine">
 
-            <div className="insight-engine-status">
-
-              <span className="engine-status-dot"></span>
+              <span className="engine-pulse" />
 
               <div>
-                <strong>
-                  Analytics Engine
-                </strong>
-
-                <span>
-                  Operational
-                </span>
+                <strong>TaskFlow Analytics Engine</strong>
+                <span>Ready for workspace activity</span>
               </div>
 
             </div>
@@ -367,81 +344,54 @@ const Reports = () => {
           </section>
 
 
-          {/* ===================================================
+          {/* =====================================================
               EXPORT CENTER
-          ==================================================== */}
+          ====================================================== */}
 
-          <section className="reports-export-card">
+          <section className="reports-export">
 
-            <div className="reports-export-left">
+            <div className="reports-export-content">
 
-              <div className="export-icon">
-                ↓
+              <div className="section-kicker">
+                <span className="kicker-line" />
+                REPORT CENTER
               </div>
 
-              <div className="export-copy">
+              <h3>
+                Export workspace analytics
+              </h3>
 
-                <span className="reports-section-eyebrow">
-                  REPORT CENTER
-                </span>
-
-                <h3>
-                  Export workspace analytics
-                </h3>
-
-                <p>
-                  Download your current project and
-                  task performance data.
-                </p>
-
-              </div>
+              <p>
+                Download your current project and task
+                performance data whenever you need it.
+              </p>
 
             </div>
 
-
             <div className="reports-export-actions">
-
               <ExportButtons
                 projects={projects}
                 tasks={tasks}
               />
-
             </div>
 
           </section>
 
 
-          {/* ===================================================
+          {/* =====================================================
               FOOTER
-          ==================================================== */}
+          ====================================================== */}
 
           <footer className="reports-footer">
 
             <div className="reports-footer-left">
-
-              <span className="footer-secure-dot"></span>
-
-              <span>
-                Secure workspace analytics
-              </span>
-
+              <span className="footer-status-dot" />
+              <span>Secure workspace analytics</span>
             </div>
 
-            <div className="reports-footer-right">
-
-              <span>
-                Metrics update automatically
-              </span>
-
-              <span className="footer-separator">
-                •
-              </span>
-
-              <span>
-                TaskFlow Intelligence
-              </span>
-
-            </div>
+            <span>
+              Metrics update automatically with workspace activity.
+            </span>
 
           </footer>
 
