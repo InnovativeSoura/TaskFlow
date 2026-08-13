@@ -16,7 +16,7 @@ import {
   FaFolderOpen,
   FaTasks,
   FaArrowRight,
-  FaCircleCheck,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 import "../styles/Reports.css";
@@ -25,23 +25,78 @@ const Reports = () => {
   const { projects = [] } = useProjects();
   const { tasks = [] } = useTasks();
 
+  /*
+   * ----------------------------------------------------------
+   * BASIC REPORT METRICS
+   * ----------------------------------------------------------
+   */
+
   const totalProjects = projects.length;
   const totalTasks = tasks.length;
 
-  const hasAnalytics = totalProjects > 0 || totalTasks > 0;
+  const completedTasks = tasks.filter((task) => {
+    const status = String(task?.status || "").toLowerCase();
+
+    return (
+      status === "completed" ||
+      status === "complete" ||
+      status === "done"
+    );
+  }).length;
+
+  const pendingTasks = Math.max(totalTasks - completedTasks, 0);
+
+  const completionRate =
+    totalTasks > 0
+      ? Math.round((completedTasks / totalTasks) * 100)
+      : 0;
+
+  /*
+   * ----------------------------------------------------------
+   * PROJECT PROGRESS
+   * ----------------------------------------------------------
+   */
+
+  const projectProgress =
+    projects.length > 0
+      ? Math.round(
+          projects.reduce((total, project) => {
+            const progress = Number(
+              project?.progress ??
+                project?.completion ??
+                project?.completionPercentage ??
+                0
+            );
+
+            return total + Math.min(Math.max(progress, 0), 100);
+          }, 0) / projects.length
+        )
+      : 0;
+
+  /*
+   * ----------------------------------------------------------
+   * EMPTY WORKSPACE STATE
+   * ----------------------------------------------------------
+   */
+
+  const hasWorkspaceData = totalProjects > 0 || totalTasks > 0;
 
   return (
     <MainLayout>
       <div className="reports-page">
+
         {/* =====================================================
-            PREMIUM REPORTS HEADER
-        ===================================================== */}
+            PREMIUM REPORT HEADER
+        ====================================================== */}
+
         <ReportsHeader />
 
         {/* =====================================================
             PERFORMANCE OVERVIEW
-        ===================================================== */}
+        ====================================================== */}
+
         <section className="reports-overview-section">
+
           <div className="reports-section-heading">
             <div>
               <span className="reports-eyebrow">
@@ -51,13 +106,17 @@ const Reports = () => {
               <h2>Workspace at a glance</h2>
 
               <p>
-                A real-time summary of your projects and task performance.
+                A real-time summary of your projects and task
+                performance.
               </p>
             </div>
 
-            <div className="reports-live-indicator">
-              <span className="live-dot"></span>
-              <span>Live workspace data</span>
+            <div className="reports-completion-indicator">
+              <span className="completion-arrow">↑</span>
+
+              <strong>{completionRate}%</strong>
+
+              <span>completion</span>
             </div>
           </div>
 
@@ -65,13 +124,17 @@ const Reports = () => {
             projects={projects}
             tasks={tasks}
           />
+
         </section>
 
         {/* =====================================================
-            ANALYTICS CHARTS
-        ===================================================== */}
+            ANALYTICS
+        ====================================================== */}
+
         <section className="reports-analytics-section">
-          <div className="reports-section-heading analytics-heading">
+
+          <div className="reports-analytics-heading">
+
             <div>
               <span className="reports-eyebrow">
                 VISUAL ANALYTICS
@@ -80,170 +143,268 @@ const Reports = () => {
               <h2>Performance intelligence</h2>
 
               <p>
-                Understand task distribution, project progress, and priority
-                across your workspace.
+                Understand task distribution, project progress,
+                and priority across your workspace.
               </p>
             </div>
 
-            <div className="analytics-badge">
+            <button
+              type="button"
+              className="analytics-dashboard-button"
+            >
               <FaChartLine />
-              Analytics dashboard
-            </div>
+
+              <span>Analytics dashboard</span>
+
+              <FaArrowRight />
+            </button>
+
           </div>
 
           <div className="reports-grid">
-            {/* TASK STATUS */}
-            <div className="report-chart-slot task-status-slot">
-              <TaskStatusChart tasks={tasks} />
+
+            {/* =================================================
+                TASK STATUS
+            ================================================== */}
+
+            <div className="report-chart-container task-status-container">
+
+              <div className="report-chart-label">
+                <span>01 / TASK ANALYTICS</span>
+              </div>
+
+              <div className="report-chart-content">
+                <TaskStatusChart tasks={tasks} />
+              </div>
+
             </div>
 
-            {/* PROJECT PROGRESS */}
-            <div className="report-chart-slot project-progress-slot">
-              <ProjectProgressChart
-                projects={projects}
-              />
+            {/* =================================================
+                PROJECT PROGRESS
+            ================================================== */}
+
+            <div className="report-chart-container project-progress-container">
+
+              <div className="report-chart-label">
+                <span>02 / PROJECT ANALYTICS</span>
+              </div>
+
+              <div className="report-chart-content">
+                <ProjectProgressChart
+                  projects={projects}
+                />
+              </div>
+
             </div>
 
-            {/* TASK PRIORITY */}
-            <div className="report-chart-slot priority-slot">
-              <PriorityChart
-                tasks={tasks}
-              />
+            {/* =================================================
+                TASK PRIORITY
+            ================================================== */}
+
+            <div className="report-chart-container priority-container">
+
+              <div className="report-chart-label">
+                <span>03 / PRIORITY ANALYTICS</span>
+              </div>
+
+              <div className="report-chart-content">
+                <PriorityChart tasks={tasks} />
+              </div>
+
             </div>
+
           </div>
+
         </section>
 
         {/* =====================================================
-            LARGE ANALYTICS WAITING PANEL
-        ===================================================== */}
-        <section className="analytics-waiting-card">
-          <div className="analytics-waiting-glow glow-one"></div>
-          <div className="analytics-waiting-glow glow-two"></div>
+            ANALYTICS WAITING / EMPTY STATE
+        ====================================================== */}
 
-          <div className="analytics-waiting-content">
+        {!hasWorkspaceData && (
+          <section className="analytics-waiting-card">
+
             <div className="analytics-waiting-icon">
               <FaChartLine />
             </div>
 
-            <div className="analytics-waiting-copy">
+            <div className="analytics-waiting-content">
+
               <span className="analytics-waiting-label">
-                TASKFLOW ANALYTICS ENGINE
+                WORKSPACE ANALYTICS
               </span>
 
-              <h2>
-                {hasAnalytics
-                  ? "Your workspace insights are ready"
-                  : "Your analytics are waiting"}
-              </h2>
+              <h3>Your analytics are waiting</h3>
 
               <p>
-                {hasAnalytics
-                  ? "Your projects and tasks are generating meaningful workspace insights. Continue managing your work to unlock deeper performance intelligence."
-                  : "Create projects and tasks to start generating meaningful workspace reports, performance insights, and productivity analytics."}
+                Create projects and tasks to start generating
+                meaningful workspace reports.
               </p>
 
-              <div className="analytics-waiting-features">
-                <div className="waiting-feature">
-                  <span className="waiting-feature-icon">
+              <div className="analytics-waiting-stats">
+
+                <div className="waiting-stat">
+                  <div className="waiting-stat-icon">
                     <FaFolderOpen />
-                  </span>
+                  </div>
 
                   <div>
-                    <strong>Project insights</strong>
-                    <small>Track project progress</small>
+                    <strong>0</strong>
+                    <span>Projects</span>
                   </div>
                 </div>
 
-                <div className="waiting-feature">
-                  <span className="waiting-feature-icon">
+                <div className="waiting-stat">
+                  <div className="waiting-stat-icon">
                     <FaTasks />
-                  </span>
+                  </div>
 
                   <div>
-                    <strong>Task intelligence</strong>
-                    <small>Analyze task performance</small>
+                    <strong>0</strong>
+                    <span>Tasks</span>
                   </div>
                 </div>
 
-                <div className="waiting-feature">
-                  <span className="waiting-feature-icon">
-                    <FaCircleCheck />
-                  </span>
+                <div className="waiting-stat">
+                  <div className="waiting-stat-icon">
+                    <FaCheckCircle />
+                  </div>
 
                   <div>
-                    <strong>Performance metrics</strong>
-                    <small>Measure workspace health</small>
+                    <strong>0%</strong>
+                    <span>Completion</span>
                   </div>
                 </div>
+
               </div>
 
-              {!hasAnalytics && (
-                <div className="analytics-waiting-status">
-                  <span className="status-pulse"></span>
-                  Waiting for workspace activity
-                </div>
-              )}
             </div>
 
-            <div className="analytics-waiting-decoration">
-              <div className="decoration-circle circle-one"></div>
-              <div className="decoration-circle circle-two"></div>
-              <div className="decoration-circle circle-three"></div>
+            <div className="analytics-waiting-status">
+              <span className="status-dot"></span>
 
-              <div className="decoration-chart">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-
-              <div className="decoration-arrow">
-                <FaArrowRight />
-              </div>
+              <span>TaskFlow Analytics Engine</span>
             </div>
+
+          </section>
+        )}
+
+        {/* =====================================================
+            WORKSPACE SUMMARY
+        ====================================================== */}
+
+        <section className="reports-summary-strip">
+
+          <div className="summary-strip-item">
+
+            <div className="summary-strip-icon">
+              <FaFolderOpen />
+            </div>
+
+            <div>
+              <strong>{totalProjects}</strong>
+              <span>Total Projects</span>
+            </div>
+
           </div>
+
+          <div className="summary-strip-item">
+
+            <div className="summary-strip-icon">
+              <FaTasks />
+            </div>
+
+            <div>
+              <strong>{totalTasks}</strong>
+              <span>Total Tasks</span>
+            </div>
+
+          </div>
+
+          <div className="summary-strip-item">
+
+            <div className="summary-strip-icon">
+              <FaCheckCircle />
+            </div>
+
+            <div>
+              <strong>{completedTasks}</strong>
+              <span>Completed</span>
+            </div>
+
+          </div>
+
+          <div className="summary-strip-item">
+
+            <div className="summary-strip-icon">
+              <FaRocket />
+            </div>
+
+            <div>
+              <strong>{projectProgress}%</strong>
+              <span>Project Progress</span>
+            </div>
+
+          </div>
+
+          <div className="summary-strip-item">
+
+            <div className="summary-strip-icon">
+              <FaChartLine />
+            </div>
+
+            <div>
+              <strong>{pendingTasks}</strong>
+              <span>Pending Tasks</span>
+            </div>
+
+          </div>
+
         </section>
 
         {/* =====================================================
-            EXPORT AREA
-        ===================================================== */}
+            EXPORT
+        ====================================================== */}
+
         <section className="reports-export-section">
-          <div className="reports-export-header">
-            <div>
-              <span className="reports-eyebrow">
-                REPORT CENTER
-              </span>
 
-              <h2>Export your workspace reports</h2>
+          <div>
+            <span className="reports-eyebrow">
+              REPORT CENTER
+            </span>
 
-              <p>
-                Download your project and task performance data whenever you
-                need it.
-              </p>
-            </div>
+            <h3>Export workspace analytics</h3>
+
+            <p>
+              Download your current project and task
+              performance data.
+            </p>
           </div>
 
           <ExportButtons
             projects={projects}
             tasks={tasks}
           />
+
         </section>
 
         {/* =====================================================
-            FOOTER STATUS
-        ===================================================== */}
-        <div className="reports-footer-status">
-          <span className="footer-status-dot"></span>
-          <span>TaskFlow Analytics Engine</span>
+            FOOTER
+        ====================================================== */}
 
-          <span className="footer-status-divider"></span>
+        <div className="reports-footer">
+
+          <div className="footer-security">
+            <span className="footer-dot"></span>
+            Secure workspace analytics
+          </div>
 
           <span>
             Metrics update automatically with workspace activity.
           </span>
+
         </div>
+
       </div>
     </MainLayout>
   );
