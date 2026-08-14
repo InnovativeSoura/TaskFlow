@@ -1,7 +1,6 @@
-// src/pages/Users.jsx
-
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 import {
   FaUsers,
   FaUserCheck,
@@ -9,25 +8,55 @@ import {
   FaUserFriends,
   FaUserPlus,
   FaSearch,
-  FaEllipsisV,
-  FaSyncAlt,
-  FaCheckCircle,
-  FaCalendarAlt,
   FaFilter,
+  FaCalendarAlt,
+  FaEllipsisV,
+  FaCheckCircle,
+  FaCircle,
   FaTimes,
   FaEnvelope,
-  FaPlus,
 } from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+
 import "../styles/Users.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "";
+const API_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : "/api";
 
 /* =========================================================
    HELPERS
-   ========================================================= */
+========================================================= */
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (!parts.length) return "U";
+
+  if (parts.length === 1) {
+    return parts[0].substring(0, 2).toUpperCase();
+  }
+
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
+
+const formatDate = (date) => {
+  if (!date) return "Recently";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "Recently";
+  }
+
+  return parsed.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
 
 const getUserName = (user) => {
   return (
@@ -44,188 +73,236 @@ const getUserEmail = (user) => {
 };
 
 const getUserRole = (user) => {
-  const role = String(
-    user?.role ||
-      user?.userRole ||
-      user?.accountType ||
-      "Member"
-  ).trim();
+  const role = user?.role || user?.userRole || "member";
 
-  if (!role) return "Member";
-
-  if (role.toLowerCase() === "admin") return "Admin";
-  if (role.toLowerCase() === "administrator") return "Admin";
-  if (role.toLowerCase() === "manager") return "Manager";
-
-  return "Team Member";
+  return String(role).toLowerCase() === "admin"
+    ? "Admin"
+    : "Team Member";
 };
 
 const getUserStatus = (user) => {
-  const status = String(
-    user?.status ||
-      user?.accountStatus ||
-      (user?.isActive === false ? "Inactive" : "Active")
-  ).trim();
+  const status = String(user?.status || "active").toLowerCase();
 
-  if (status.toLowerCase() === "inactive") {
-    return "Inactive";
-  }
-
-  return "Active";
-};
-
-const getUserId = (user) => {
-  return user?._id || user?.id || user?.userId || "";
-};
-
-const getInitials = (name = "") => {
-  const cleanName = String(name).trim();
-
-  if (!cleanName) return "U";
-
-  const words = cleanName.split(/\s+/).filter(Boolean);
-
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-
-  return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
-};
-
-const formatJoinedDate = (user) => {
-  const date =
-    user?.createdAt ||
-    user?.joinedAt ||
-    user?.dateJoined ||
-    user?.created_at;
-
-  if (!date) return "Recently";
-
-  const parsed = new Date(date);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return "Recently";
-  }
-
-  return parsed.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return status === "inactive" || status === "disabled"
+    ? "Inactive"
+    : "Active";
 };
 
 /* =========================================================
-   COMPONENT
-   ========================================================= */
+   AVATAR
+========================================================= */
+
+const Avatar = ({ user, size = "large" }) => {
+  const name = getUserName(user);
+  const initials = getInitials(name);
+
+  return (
+    <div className={`user-avatar user-avatar-${size}`}>
+      <span>{initials}</span>
+
+      <span
+        className={`avatar-status ${
+          getUserStatus(user) === "Active" ? "online" : "offline"
+        }`}
+      />
+    </div>
+  );
+};
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+const StatCard = ({
+  icon,
+  label,
+  value,
+  description,
+  type = "purple",
+}) => {
+  return (
+    <motion.div
+      className="users-stat-card"
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className={`stat-icon stat-icon-${type}`}>{icon}</div>
+
+      <div className="stat-content">
+        <span className="stat-label">{label}</span>
+        <strong className="stat-value">{value}</strong>
+        <span className="stat-description">{description}</span>
+      </div>
+
+      <div className={`stat-progress stat-progress-${type}`} />
+    </motion.div>
+  );
+};
+
+/* =========================================================
+   MEMBER CARD
+========================================================= */
+
+const MemberCard = ({ user, index }) => {
+  const name = getUserName(user);
+  const email = getUserEmail(user);
+  const role = getUserRole(user);
+  const status = getUserStatus(user);
+
+  return (
+    <motion.article
+      className="member-card"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.35,
+        delay: index * 0.06,
+      }}
+      whileHover={{
+        y: -5,
+        transition: { duration: 0.2 },
+      }}
+    >
+      {/* Card top */}
+      <div className="member-card-top">
+        <span className="member-number">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        <button
+          type="button"
+          className="member-menu-btn"
+          aria-label={`Options for ${name}`}
+        >
+          <FaEllipsisV />
+        </button>
+      </div>
+
+      {/* Profile */}
+      <div className="member-profile">
+        <Avatar user={user} size="large" />
+
+        <h3>{name}</h3>
+
+        <p className="member-email">
+          <FaEnvelope />
+          {email}
+        </p>
+      </div>
+
+      <div className="member-divider" />
+
+      {/* Details */}
+      <div className="member-details">
+        <div className="member-detail-row">
+          <span className="detail-label">ROLE</span>
+
+          <span
+            className={`role-badge ${
+              role === "Admin" ? "role-admin" : "role-member"
+            }`}
+          >
+            {role === "Admin" ? <FaUserShield /> : <FaUsers />}
+            {role}
+          </span>
+        </div>
+
+        <div className="member-detail-row">
+          <span className="detail-label">STATUS</span>
+
+          <span
+            className={`status-badge ${
+              status === "Active" ? "status-active" : "status-inactive"
+            }`}
+          >
+            <FaCircle />
+            {status}
+          </span>
+        </div>
+
+        <div className="member-detail-row">
+          <span className="detail-label">JOINED</span>
+
+          <span className="joined-date">
+            <FaCalendarAlt />
+            {formatDate(user?.createdAt || user?.joinedAt)}
+          </span>
+        </div>
+      </div>
+    </motion.article>
+  );
+};
+
+/* =========================================================
+   USERS PAGE
+========================================================= */
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const [showInvite, setShowInvite] = useState(false);
+
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteLoading, setInviteLoading] = useState(false);
 
   const [error, setError] = useState("");
 
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
-
-  const [openMenu, setOpenMenu] = useState(null);
-
-  const [showInviteModal, setShowInviteModal] = useState(false);
-
   /* =======================================================
      FETCH USERS
-     ======================================================= */
-
-  const fetchUsers = useCallback(async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-
-      setError("");
-
-      const response = await axios.get(`${API_URL}/api/users`);
-
-      const responseData = response?.data;
-
-      const fetchedUsers =
-        responseData?.users ||
-        responseData?.data ||
-        responseData ||
-        [];
-
-      if (Array.isArray(fetchedUsers)) {
-        setUsers(fetchedUsers);
-      } else {
-        setUsers([]);
-      }
-    } catch (err) {
-      console.error("Failed to fetch users:", err);
-
-      setError(
-        err?.response?.data?.message ||
-          "Unable to load workspace members."
-      );
-
-      setUsers([]);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
+  ======================================================= */
 
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-  /* =======================================================
-     STATISTICS
-     ======================================================= */
+        const token = localStorage.getItem("token");
 
-  const statistics = useMemo(() => {
-    const total = users.length;
+        const response = await axios.get(`${API_URL}/users`, {
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
+        });
 
-    const active = users.filter(
-      (user) => getUserStatus(user) === "Active"
-    ).length;
+        const data = response?.data;
 
-    const administrators = users.filter(
-      (user) => getUserRole(user) === "Admin"
-    ).length;
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else if (Array.isArray(data?.users)) {
+          setUsers(data.users);
+        } else if (Array.isArray(data?.data)) {
+          setUsers(data.data);
+        } else {
+          setUsers([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch users:", err);
 
-    const teamMembers = users.filter(
-      (user) => getUserRole(user) !== "Admin"
-    ).length;
-
-    return {
-      total,
-      active,
-      administrators,
-      teamMembers,
+        /*
+         * Keep the UI alive even if the endpoint is temporarily
+         * unavailable. This avoids destroying the page layout.
+         */
+        setUsers([]);
+        setError("Unable to load workspace members.");
+      } finally {
+        setLoading(false);
+      }
     };
-  }, [users]);
 
-  /* =======================================================
-     FILTER OPTIONS
-     ======================================================= */
-
-  const availableRoles = useMemo(() => {
-    const roles = new Set();
-
-    users.forEach((user) => {
-      roles.add(getUserRole(user));
-    });
-
-    return Array.from(roles).sort();
-  }, [users]);
+    fetchUsers();
+  }, []);
 
   /* =======================================================
      FILTERED USERS
-     ======================================================= */
+  ======================================================= */
 
   const filteredUsers = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -233,8 +310,8 @@ const Users = () => {
     return users.filter((user) => {
       const name = getUserName(user).toLowerCase();
       const email = getUserEmail(user).toLowerCase();
-      const role = getUserRole(user);
-      const status = getUserStatus(user);
+      const role = getUserRole(user).toLowerCase();
+      const status = getUserStatus(user).toLowerCase();
 
       const matchesSearch =
         !query ||
@@ -242,843 +319,405 @@ const Users = () => {
         email.includes(query);
 
       const matchesRole =
-        roleFilter === "All" ||
-        role === roleFilter;
+        roleFilter === "all" ||
+        role === roleFilter.toLowerCase();
 
       const matchesStatus =
-        statusFilter === "All" ||
-        status === statusFilter;
+        statusFilter === "all" ||
+        status === statusFilter.toLowerCase();
 
-      return (
-        matchesSearch &&
-        matchesRole &&
-        matchesStatus
-      );
+      return matchesSearch && matchesRole && matchesStatus;
     });
-  }, [
-    users,
-    search,
-    roleFilter,
-    statusFilter,
-  ]);
+  }, [users, search, roleFilter, statusFilter]);
 
   /* =======================================================
-     HERO AVATARS
-     ======================================================= */
+     STATS
+  ======================================================= */
 
-  const heroUsers = useMemo(() => {
-    return users.slice(0, 4);
-  }, [users]);
+  const totalMembers = users.length;
 
-  /* =======================================================
-     CLEAR FILTERS
-     ======================================================= */
+  const activeMembers = users.filter(
+    (user) => getUserStatus(user) === "Active"
+  ).length;
 
-  const clearFilters = () => {
-    setSearch("");
-    setRoleFilter("All");
-    setStatusFilter("All");
-  };
+  const administrators = users.filter(
+    (user) => getUserRole(user) === "Admin"
+  ).length;
 
-  const hasActiveFilters =
-    search.trim() !== "" ||
-    roleFilter !== "All" ||
-    statusFilter !== "All";
-
-  /* =======================================================
-     MENU
-     ======================================================= */
-
-  const toggleMenu = (userId) => {
-    setOpenMenu((current) =>
-      current === userId ? null : userId
-    );
-  };
+  const teamMembers = users.filter(
+    (user) => getUserRole(user) === "Team Member"
+  ).length;
 
   /* =======================================================
      INVITE
-     ======================================================= */
+  ======================================================= */
 
-  const handleInviteClick = () => {
-    setShowInviteModal(true);
-  };
+  const handleInvite = async (event) => {
+    event.preventDefault();
 
-  const closeInviteModal = () => {
-    setShowInviteModal(false);
+    if (!inviteEmail.trim()) return;
+
+    try {
+      setInviteLoading(true);
+
+      /*
+       * This endpoint is intentionally isolated here so the
+       * existing Users page does not depend on an invitation
+       * endpoint being available.
+       */
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        `${API_URL}/users/invite`,
+        {
+          email: inviteEmail.trim(),
+        },
+        {
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
+        }
+      );
+
+      setInviteEmail("");
+      setShowInvite(false);
+    } catch (err) {
+      console.error("Invite failed:", err);
+    } finally {
+      setInviteLoading(false);
+    }
   };
 
   /* =======================================================
-     LOADING STATE
-     ======================================================= */
-
-  if (loading) {
-    return (
-      <div className="app-layout">
-        <Sidebar />
-
-        <div className="app-content">
-          <Navbar />
-
-          <main className="users-page">
-            <div className="users-main">
-              <div className="users-loading">
-                <div className="users-loading-spinner">
-                  <FaSyncAlt />
-                </div>
-
-                <h3>Loading your team</h3>
-
-                <p>
-                  Fetching workspace members...
-                </p>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    );
-  }
-
-  /* =======================================================
-     MAIN RENDER
-     ======================================================= */
+     RENDER
+  ======================================================= */
 
   return (
-    <div className="app-layout">
+    <div className="users-page-shell">
       <Sidebar />
 
-      <div className="app-content">
+      <div className="users-content">
         <Navbar />
 
-        <main className="users-page">
-          <div className="users-main">
+        <main className="users-main">
+          {/* ===============================================
+              HERO
+          =============================================== */}
 
-            {/* =================================================
-                HERO
-               ================================================= */}
+          <section className="users-hero">
+            <div className="hero-grid" />
+            <div className="hero-glow hero-glow-one" />
+            <div className="hero-glow hero-glow-two" />
 
-            <section className="users-hero">
+            <div className="hero-content">
+              <div className="hero-eyebrow">
+                <span className="eyebrow-line" />
+                <FaUsers />
+                <span>WORKSPACE</span>
+              </div>
 
-              <div className="users-hero-content">
+              <h1>
+                Team <span>Members</span>
+              </h1>
 
-                <div className="users-eyebrow">
-                  Workspace
+              <p>
+                Manage and collaborate with everyone in your
+                TaskFlow workspace.
+              </p>
+
+              {/* COMPACT INVITE BUTTON */}
+              <button
+                type="button"
+                className="invite-member-btn"
+                onClick={() => setShowInvite(true)}
+              >
+                <span className="invite-icon">
+                  <FaUserPlus />
+                </span>
+
+                <span className="invite-text">
+                  <strong>Invite Member</strong>
+                  <small>Add someone to your workspace</small>
+                </span>
+
+                <span className="invite-arrow">→</span>
+              </button>
+            </div>
+
+            {/* Mini member preview */}
+            <div className="hero-members">
+              <div className="hero-avatar-stack">
+                {users.slice(0, 3).map((user, index) => (
+                  <Avatar
+                    key={user?._id || user?.id || index}
+                    user={user}
+                    size="small"
+                  />
+                ))}
+              </div>
+
+              <div className="hero-members-copy">
+                <strong>{totalMembers} members</strong>
+                <span>working together</span>
+              </div>
+            </div>
+          </section>
+
+          {/* ===============================================
+              STATS
+          =============================================== */}
+
+          <section className="users-stats">
+            <StatCard
+              icon={<FaUsers />}
+              label="TOTAL MEMBERS"
+              value={totalMembers}
+              description="Workspace members"
+              type="purple"
+            />
+
+            <StatCard
+              icon={<FaUserCheck />}
+              label="ACTIVE MEMBERS"
+              value={activeMembers}
+              description="Currently active"
+              type="green"
+            />
+
+            <StatCard
+              icon={<FaUserShield />}
+              label="ADMINISTRATORS"
+              value={administrators}
+              description="Workspace admins"
+              type="violet"
+            />
+
+            <StatCard
+              icon={<FaUserFriends />}
+              label="TEAM MEMBERS"
+              value={teamMembers}
+              description="Standard members"
+              type="blue"
+            />
+          </section>
+
+          {/* ===============================================
+              TEAM SECTION
+          =============================================== */}
+
+          <section className="team-section">
+            <div className="section-heading">
+              <div>
+                <div className="section-eyebrow">
+                  <span />
+                  WORKSPACE MEMBERS
                 </div>
 
-                <h1>
-                  Team Members
-                </h1>
+                <h2>Your Team</h2>
 
                 <p>
-                  Manage and collaborate with everyone
-                  in your TaskFlow workspace.
+                  View and manage everyone in your TaskFlow
+                  workspace.
                 </p>
-
-                <button
-                  type="button"
-                  className="invite-member-btn"
-                  onClick={handleInviteClick}
-                >
-                  <span className="invite-icon">
-                    <FaUserPlus />
-                  </span>
-
-                  <span>
-                    Invite Member
-                  </span>
-
-                  <span className="invite-arrow">
-                    →
-                  </span>
-                </button>
-
               </div>
 
-              {/* HERO MEMBER PREVIEW */}
-
-              {heroUsers.length > 0 && (
-                <div className="users-hero-members">
-
-                  <div className="users-avatar-stack">
-
-                    {heroUsers.map((user, index) => (
-                      <div
-                        className="avatar"
-                        key={
-                          getUserId(user) ||
-                          `${getUserName(user)}-${index}`
-                        }
-                        title={getUserName(user)}
-                      >
-                        {getInitials(
-                          getUserName(user)
-                        )}
-                      </div>
-                    ))}
-
-                  </div>
-
-                  <div className="users-member-count">
-                    <strong>
-                      {users.length}{" "}
-                      {users.length === 1
-                        ? "member"
-                        : "members"}
-                    </strong>
-
-                    <span>
-                      working together
-                    </span>
-                  </div>
-
-                </div>
-              )}
-
-            </section>
-
-            {/* =================================================
-                ERROR
-               ================================================= */}
-
-            {error && (
-              <div className="users-error">
-                <div>
-                  <strong>
-                    Unable to load members
-                  </strong>
-
-                  <span>
-                    {error}
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => fetchUsers()}
-                >
-                  Try Again
-                </button>
+              <div className="member-count">
+                <strong>{filteredUsers.length}</strong>
+                <span>members</span>
               </div>
-            )}
+            </div>
 
-            {/* =================================================
-                STATISTICS
-               ================================================= */}
+            {/* Filters */}
+            <div className="users-toolbar">
+              <div className="search-box">
+                <FaSearch />
 
-            <section className="users-stats-grid">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(event) =>
+                    setSearch(event.target.value)
+                  }
+                  placeholder="Search members..."
+                />
 
-              {/* TOTAL */}
-
-              <article className="users-stat-card">
-
-                <div className="users-stat-icon">
-                  <FaUsers />
-                </div>
-
-                <div className="users-stat-label">
-                  Total Members
-                </div>
-
-                <div className="users-stat-value">
-                  {statistics.total}
-                </div>
-
-                <div className="users-stat-description">
-                  Workspace members
-                </div>
-
-              </article>
-
-              {/* ACTIVE */}
-
-              <article className="users-stat-card">
-
-                <div
-                  className="users-stat-icon"
-                  style={{
-                    color: "#29e998",
-                    background:
-                      "rgba(41, 233, 152, 0.08)",
-                  }}
-                >
-                  <FaUserCheck />
-                </div>
-
-                <div className="users-stat-label">
-                  Active Members
-                </div>
-
-                <div className="users-stat-value">
-                  {statistics.active}
-                </div>
-
-                <div className="users-stat-description">
-                  Currently active
-                </div>
-
-              </article>
-
-              {/* ADMINS */}
-
-              <article className="users-stat-card">
-
-                <div
-                  className="users-stat-icon"
-                  style={{
-                    color: "#b58aff",
-                    background:
-                      "rgba(181, 138, 255, 0.09)",
-                  }}
-                >
-                  <FaUserShield />
-                </div>
-
-                <div className="users-stat-label">
-                  Administrators
-                </div>
-
-                <div className="users-stat-value">
-                  {statistics.administrators}
-                </div>
-
-                <div className="users-stat-description">
-                  Workspace admins
-                </div>
-
-              </article>
-
-              {/* TEAM */}
-
-              <article className="users-stat-card">
-
-                <div
-                  className="users-stat-icon"
-                  style={{
-                    color: "#55a8ff",
-                    background:
-                      "rgba(85, 168, 255, 0.09)",
-                  }}
-                >
-                  <FaUserFriends />
-                </div>
-
-                <div className="users-stat-label">
-                  Team Members
-                </div>
-
-                <div className="users-stat-value">
-                  {statistics.teamMembers}
-                </div>
-
-                <div className="users-stat-description">
-                  Standard members
-                </div>
-
-              </article>
-
-            </section>
-
-            {/* =================================================
-                TEAM HEADER
-               ================================================= */}
-
-            <section className="users-team-section">
-
-              <div className="users-team-header">
-
-                <div>
-
-                  <div className="users-section-eyebrow">
-                    Workspace Members
-                  </div>
-
-                  <h2>
-                    Your Team
-                  </h2>
-
-                  <p>
-                    View and manage everyone in your
-                    TaskFlow workspace.
-                  </p>
-
-                </div>
-
-                <div className="users-count-pill">
-                  {filteredUsers.length}{" "}
-                  {filteredUsers.length === 1
-                    ? "member"
-                    : "members"}
-                </div>
-
+                {search && (
+                  <button
+                    type="button"
+                    className="clear-search"
+                    onClick={() => setSearch("")}
+                  >
+                    <FaTimes />
+                  </button>
+                )}
               </div>
 
-              {/* =================================================
-                  TOOLBAR
-                 ================================================= */}
-
-              <div className="users-toolbar">
-
-                <div className="users-search">
-
-                  <FaSearch />
-
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(event) =>
-                      setSearch(event.target.value)
-                    }
-                    placeholder="Search members..."
-                    aria-label="Search members"
-                  />
-
-                </div>
-
-                <div className="users-filter">
+              <div className="filter-group">
+                <div className="filter-select">
+                  <FaFilter />
 
                   <select
                     value={roleFilter}
                     onChange={(event) =>
                       setRoleFilter(event.target.value)
                     }
-                    aria-label="Filter by role"
                   >
-                    <option value="All">
-                      All Roles
-                    </option>
-
-                    {availableRoles.map((role) => (
-                      <option
-                        value={role}
-                        key={role}
-                      >
-                        {role}
-                      </option>
-                    ))}
-
+                    <option value="all">All Roles</option>
+                    <option value="admin">Administrators</option>
+                    <option value="team member">Team Members</option>
                   </select>
-
                 </div>
 
-                <div className="users-filter">
+                <div className="filter-select">
+                  <FaCircle />
 
                   <select
                     value={statusFilter}
                     onChange={(event) =>
                       setStatusFilter(event.target.value)
                     }
-                    aria-label="Filter by status"
                   >
-                    <option value="All">
-                      All Status
-                    </option>
-
-                    <option value="Active">
-                      Active
-                    </option>
-
-                    <option value="Inactive">
-                      Inactive
-                    </option>
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
                   </select>
+                </div>
+              </div>
+            </div>
 
+            {/* Error */}
+            {error && (
+              <div className="users-error">
+                <span />
+                {error}
+              </div>
+            )}
+
+            {/* Cards */}
+            {loading ? (
+              <div className="members-loading">
+                {[1, 2, 3].map((item) => (
+                  <div
+                    className="member-skeleton"
+                    key={item}
+                  >
+                    <div className="skeleton-top" />
+                    <div className="skeleton-avatar" />
+                    <div className="skeleton-line skeleton-name" />
+                    <div className="skeleton-line" />
+                    <div className="skeleton-details" />
+                  </div>
+                ))}
+              </div>
+            ) : filteredUsers.length > 0 ? (
+              <div className="members-grid">
+                {filteredUsers.map((user, index) => (
+                  <MemberCard
+                    key={user?._id || user?.id || index}
+                    user={user}
+                    index={index}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="empty-members">
+                <div className="empty-icon">
+                  <FaUsers />
                 </div>
 
-                <button
-                  type="button"
-                  className="users-refresh-btn"
-                  onClick={() => fetchUsers(true)}
-                  disabled={refreshing}
-                  title="Refresh members"
-                >
-                  <FaSyncAlt
-                    className={
-                      refreshing
-                        ? "is-spinning"
-                        : ""
-                    }
-                  />
-                </button>
+                <h3>No members found</h3>
 
+                <p>
+                  Try changing your search or filter settings.
+                </p>
+              </div>
+            )}
+
+            <div className="members-footer">
+              <div className="secure-status">
+                <span />
+                Secure workspace members
               </div>
 
-              {/* =================================================
-                  ACTIVE FILTERS
-                 ================================================= */}
-
-              {hasActiveFilters && (
-                <div className="users-active-filters">
-
-                  <span>
-                    <FaFilter />
-                    Filters applied
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                  >
-                    Clear
-                    <FaTimes />
-                  </button>
-
-                </div>
-              )}
-
-              {/* =================================================
-                  MEMBERS
-                 ================================================= */}
-
-              {filteredUsers.length > 0 ? (
-                <div className="users-members-grid">
-
-                  {filteredUsers.map(
-                    (user, index) => {
-                      const userId =
-                        getUserId(user) ||
-                        `${index}`;
-
-                      const name =
-                        getUserName(user);
-
-                      const email =
-                        getUserEmail(user);
-
-                      const role =
-                        getUserRole(user);
-
-                      const status =
-                        getUserStatus(user);
-
-                      const initials =
-                        getInitials(name);
-
-                      const isAdmin =
-                        role === "Admin";
-
-                      return (
-                        <article
-                          className="user-member-card"
-                          key={userId}
-                        >
-
-                          {/* CARD TOP */}
-
-                          <div className="user-card-top">
-
-                            <span className="user-card-number">
-                              {String(index + 1).padStart(
-                                2,
-                                "0"
-                              )}
-                            </span>
-
-                            <button
-                              type="button"
-                              className="user-card-menu"
-                              onClick={() =>
-                                toggleMenu(userId)
-                              }
-                              aria-label={`Options for ${name}`}
-                            >
-                              <FaEllipsisV />
-                            </button>
-
-                            {openMenu === userId && (
-                              <div className="user-card-dropdown">
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    setOpenMenu(null)
-                                  }
-                                >
-                                  View Member
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    setOpenMenu(null)
-                                  }
-                                >
-                                  Send Email
-                                </button>
-
-                              </div>
-                            )}
-
-                          </div>
-
-                          {/* AVATAR */}
-
-                          <div className="user-avatar-wrapper">
-
-                            <div className="user-avatar">
-
-                              {initials}
-
-                              <span
-                                className="user-avatar-status"
-                                style={{
-                                  background:
-                                    status ===
-                                    "Active"
-                                      ? "#20df8a"
-                                      : "#64748b",
-                                }}
-                              />
-
-                            </div>
-
-                          </div>
-
-                          {/* MEMBER INFO */}
-
-                          <div className="user-member-info">
-
-                            <div className="user-member-name">
-                              {name}
-                            </div>
-
-                            <div className="user-member-email">
-                              {email}
-                            </div>
-
-                          </div>
-
-                          {/* DETAILS */}
-
-                          <div className="user-member-details">
-
-                            <div className="user-detail">
-
-                              <span className="user-detail-label">
-                                Role
-                              </span>
-
-                              <span
-                                className={`user-role-badge ${
-                                  isAdmin
-                                    ? "admin"
-                                    : ""
-                                }`}
-                              >
-                                {isAdmin && (
-                                  <FaUserShield />
-                                )}
-
-                                {!isAdmin && (
-                                  <FaUsers />
-                                )}
-
-                                {role}
-                              </span>
-
-                            </div>
-
-                            <div className="user-detail">
-
-                              <span className="user-detail-label">
-                                Status
-                              </span>
-
-                              <span className="user-status-badge">
-
-                                <FaCheckCircle />
-
-                                {status}
-
-                              </span>
-
-                            </div>
-
-                            <div className="user-detail">
-
-                              <span className="user-detail-label">
-                                Joined
-                              </span>
-
-                              <span className="user-detail-value">
-
-                                <FaCalendarAlt
-                                  style={{
-                                    marginRight:
-                                      "5px",
-                                  }}
-                                />
-
-                                {formatJoinedDate(
-                                  user
-                                )}
-
-                              </span>
-
-                            </div>
-
-                            <div className="user-detail">
-
-                              <span className="user-detail-label">
-                                Contact
-                              </span>
-
-                              <span className="user-detail-value">
-
-                                <FaEnvelope
-                                  style={{
-                                    marginRight:
-                                      "5px",
-                                  }}
-                                />
-
-                                Email
-
-                              </span>
-
-                            </div>
-
-                          </div>
-
-                        </article>
-                      );
-                    }
-                  )}
-
-                </div>
-              ) : (
-                <div className="users-empty-state">
-
-                  <FaUsers
-                    style={{
-                      fontSize: "28px",
-                      color: "#7760e8",
-                    }}
-                  />
-
-                  <h3>
-                    No members found
-                  </h3>
-
-                  <p>
-                    {hasActiveFilters
-                      ? "Try adjusting your search or filters."
-                      : "Your workspace does not have any members yet."}
-                  </p>
-
-                  {hasActiveFilters && (
-                    <button
-                      type="button"
-                      className="invite-member-btn"
-                      onClick={clearFilters}
-                    >
-                      <FaTimes />
-                      Clear Filters
-                    </button>
-                  )}
-
-                </div>
-              )}
-
-              {/* =================================================
-                  FOOTER
-                 ================================================= */}
-
-              {filteredUsers.length > 0 && (
-                <div className="users-footer">
-
-                  <span className="users-secure-label">
-                    <span className="users-secure-dot" />
-                    Secure workspace members
-                  </span>
-
-                  <span>
-                    {filteredUsers.length}{" "}
-                    {filteredUsers.length === 1
-                      ? "member"
-                      : "members"}{" "}
-                    displayed
-                  </span>
-
-                </div>
-              )}
-
-            </section>
-
-          </div>
+              <span>
+                {filteredUsers.length} members displayed
+              </span>
+            </div>
+          </section>
         </main>
-
       </div>
 
-      {/* =====================================================
+      {/* ===============================================
           INVITE MODAL
-         ===================================================== */}
+      =============================================== */}
 
-      {showInviteModal && (
+      {showInvite && (
         <div
-          className="users-modal-overlay"
-          onClick={closeInviteModal}
+          className="invite-modal-overlay"
+          onMouseDown={() => setShowInvite(false)}
         >
-
-          <div
-            className="users-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+          <motion.div
+            className="invite-modal"
+            initial={{ opacity: 0, scale: 0.96, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            onMouseDown={(event) => event.stopPropagation()}
           >
-
             <button
               type="button"
-              className="users-modal-close"
-              onClick={closeInviteModal}
-              aria-label="Close invite modal"
+              className="modal-close"
+              onClick={() => setShowInvite(false)}
             >
               <FaTimes />
             </button>
 
-            <div className="users-modal-icon">
+            <div className="modal-icon">
               <FaUserPlus />
             </div>
 
-            <div className="users-modal-eyebrow">
-              Workspace
+            <div className="modal-heading">
+              <span>WORKSPACE</span>
+              <h2>Invite a Member</h2>
+              <p>
+                Add a teammate to your TaskFlow workspace.
+              </p>
             </div>
 
-            <h2>
-              Invite a Member
-            </h2>
+            <form onSubmit={handleInvite}>
+              <label htmlFor="invite-email">
+                Email address
+              </label>
 
-            <p>
-              Grow your workspace by inviting
-              teammates to collaborate with you
-              in TaskFlow.
-            </p>
+              <div className="invite-input">
+                <FaEnvelope />
 
-            <div className="users-modal-input-wrapper">
+                <input
+                  id="invite-email"
+                  type="email"
+                  value={inviteEmail}
+                  onChange={(event) =>
+                    setInviteEmail(event.target.value)
+                  }
+                  placeholder="teammate@example.com"
+                  autoFocus
+                  required
+                />
+              </div>
 
-              <FaEnvelope />
-
-              <input
-                type="email"
-                placeholder="teammate@example.com"
-                autoFocus
-              />
-
-            </div>
-
-            <button
-              type="button"
-              className="users-modal-primary"
-              onClick={closeInviteModal}
-            >
-              <FaPlus />
-              Send Invitation
-            </button>
-
-          </div>
-
+              <button
+                type="submit"
+                className="modal-invite-btn"
+                disabled={inviteLoading}
+              >
+                {inviteLoading
+                  ? "Sending..."
+                  : "Send Invitation"}
+              </button>
+            </form>
+          </motion.div>
         </div>
       )}
-
     </div>
   );
 };
