@@ -4,51 +4,30 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import api from "../api/axios";
 
+import {
+  FaUsers,
+  FaUserShield,
+  FaUserCheck,
+  FaUserFriends,
+  FaUserPlus,
+  FaSearch,
+  FaFilter,
+  FaEllipsisV,
+  FaCircle,
+  FaEnvelope,
+  FaCalendarAlt,
+  FaChevronDown,
+} from "react-icons/fa";
+
 import "../styles/Users.css";
-
-const getInitials = (name = "") => {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-
-  if (!words.length) return "U";
-
-  if (words.length === 1) {
-    return words[0].substring(0, 2).toUpperCase();
-  }
-
-  return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
-};
-
-const getStatus = (user) => {
-  const status = String(user?.status || "Active").toLowerCase();
-
-  if (
-    status === "inactive" ||
-    status === "disabled" ||
-    status === "suspended"
-  ) {
-    return "Inactive";
-  }
-
-  return "Active";
-};
-
-const getRole = (user) => {
-  const role = String(user?.role || "Team Member");
-
-  if (role.toLowerCase() === "admin") {
-    return "Admin";
-  }
-
-  return "Team Member";
-};
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [roleFilter, setRoleFilter] = useState("All Roles");
+  const [statusFilter, setStatusFilter] = useState("All Status");
 
   const loadUsers = async () => {
     try {
@@ -57,8 +36,8 @@ const Users = () => {
       const res = await api.get("/users");
 
       setUsers(
-        res.data?.users ||
-          res.data?.data ||
+        res.data.users ||
+          res.data.data ||
           res.data ||
           []
       );
@@ -74,56 +53,127 @@ const Users = () => {
     loadUsers();
   }, []);
 
-  const statistics = useMemo(() => {
-    const total = users.length;
+  /* ---------------------------------------------
+     HELPERS
+  --------------------------------------------- */
 
-    const active = users.filter(
-      (user) => getStatus(user) === "Active"
-    ).length;
+  const getInitials = (name = "") => {
+    const parts = name.trim().split(" ").filter(Boolean);
 
-    const admins = users.filter(
-      (user) => getRole(user) === "Admin"
-    ).length;
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+    }
 
-    const members = users.filter(
-      (user) => getRole(user) === "Team Member"
-    ).length;
+    return name.substring(0, 2).toUpperCase() || "U";
+  };
 
-    return {
-      total,
-      active,
-      admins,
-      members,
-    };
+  const getStatus = (user) => {
+    return user?.status || "Active";
+  };
+
+  const getRole = (user) => {
+    return user?.role || "Team Member";
+  };
+
+  const getJoinDate = (user) => {
+    const date =
+      user?.createdAt ||
+      user?.joinedAt ||
+      user?.dateJoined;
+
+    if (!date) return "Recently joined";
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return "Recently joined";
+    }
+
+    return parsedDate.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  /* ---------------------------------------------
+     STATISTICS
+  --------------------------------------------- */
+
+  const totalMembers = users.length;
+
+  const activeMembers = users.filter(
+    (user) =>
+      String(getStatus(user)).toLowerCase() === "active"
+  ).length;
+
+  const administrators = users.filter(
+    (user) =>
+      String(getRole(user)).toLowerCase() === "admin" ||
+      String(getRole(user)).toLowerCase() === "administrator"
+  ).length;
+
+  const teamMembers = Math.max(
+    totalMembers - administrators,
+    0
+  );
+
+  /* ---------------------------------------------
+     FILTER OPTIONS
+  --------------------------------------------- */
+
+  const roles = useMemo(() => {
+    const uniqueRoles = [
+      ...new Set(
+        users
+          .map((user) => getRole(user))
+          .filter(Boolean)
+      ),
+    ];
+
+    return ["All Roles", ...uniqueRoles];
   }, [users]);
 
-  const filteredUsers = useMemo(() => {
-    const query = search.trim().toLowerCase();
+  const statuses = useMemo(() => {
+    const uniqueStatuses = [
+      ...new Set(
+        users
+          .map((user) => getStatus(user))
+          .filter(Boolean)
+      ),
+    ];
 
+    return ["All Status", ...uniqueStatuses];
+  }, [users]);
+
+  /* ---------------------------------------------
+     FILTERED USERS
+  --------------------------------------------- */
+
+  const filteredUsers = useMemo(() => {
     return users.filter((user) => {
       const name = String(user?.name || "").toLowerCase();
       const email = String(user?.email || "").toLowerCase();
+      const role = String(getRole(user));
+      const status = String(getStatus(user));
 
-      const role = getRole(user);
-      const status = getStatus(user);
+      const searchMatch =
+        !search ||
+        name.includes(search.toLowerCase()) ||
+        email.includes(search.toLowerCase());
 
-      const matchesSearch =
-        !query ||
-        name.includes(query) ||
-        email.includes(query);
-
-      const matchesRole =
-        roleFilter === "All" ||
+      const roleMatch =
+        roleFilter === "All Roles" ||
         role === roleFilter;
 
-      const matchesStatus =
-        statusFilter === "All" ||
+      const statusMatch =
+        statusFilter === "All Status" ||
         status === statusFilter;
 
       return (
-        matchesSearch &&
-        matchesRole &&
-        matchesStatus
+        searchMatch &&
+        roleMatch &&
+        statusMatch
       );
     });
   }, [
@@ -141,29 +191,34 @@ const Users = () => {
     <MainLayout>
       <div className="users-page">
 
-        {/* =========================================
-            BACKGROUND DECORATION
-        ========================================= */}
-        <div className="users-page__glow users-page__glow--one" />
-        <div className="users-page__glow users-page__glow--two" />
+        {/* ==========================================
+            PREMIUM BACKGROUND
+        ========================================== */}
 
-        {/* =========================================
-            HEADER
-        ========================================= */}
-        <section className="users-hero">
+        <div className="users-background">
+          <div className="users-bg-orb users-bg-orb-one" />
+          <div className="users-bg-orb users-bg-orb-two" />
+          <div className="users-bg-grid" />
+        </div>
 
-          <div className="users-hero__content">
+        {/* ==========================================
+            PAGE HEADER
+        ========================================== */}
+
+        <section className="users-header">
+
+          <div className="users-header-content">
 
             <div className="users-eyebrow">
-              <span className="users-eyebrow__line" />
-              <span>WORKSPACE</span>
+              <span className="users-eyebrow-line" />
+              WORKSPACE
             </div>
 
-            <h1 className="users-hero__title">
+            <h1 className="users-title">
               Team Members
             </h1>
 
-            <p className="users-hero__description">
+            <p className="users-description">
               Manage and view everyone in your
               TaskFlow workspace.
             </p>
@@ -171,11 +226,11 @@ const Users = () => {
           </div>
 
           <button
+            className="users-invite-button"
             type="button"
-            className="users-invite-btn"
           >
-            <span className="users-invite-btn__icon">
-              +
+            <span className="users-invite-icon">
+              <FaUserPlus />
             </span>
 
             <span>Invite Member</span>
@@ -183,144 +238,148 @@ const Users = () => {
 
         </section>
 
-        {/* =========================================
+        {/* ==========================================
             STATISTICS
-        ========================================= */}
+        ========================================== */}
+
         <section className="users-stats">
 
-          <div className="users-stat">
+          <div className="users-stat-card">
 
-            <div className="users-stat__icon">
-              👥
+            <div className="users-stat-icon purple">
+              <FaUsers />
             </div>
 
-            <div className="users-stat__content">
-              <span className="users-stat__label">
+            <div className="users-stat-content">
+              <span className="users-stat-label">
                 Total Members
               </span>
 
-              <strong className="users-stat__value">
-                {statistics.total}
+              <strong className="users-stat-value">
+                {totalMembers}
               </strong>
 
-              <span className="users-stat__hint">
+              <small>
                 Workspace members
-              </span>
+              </small>
             </div>
 
           </div>
 
-          <div className="users-stat">
+          <div className="users-stat-card">
 
-            <div className="users-stat__icon users-stat__icon--green">
-              ●
+            <div className="users-stat-icon green">
+              <FaUserCheck />
             </div>
 
-            <div className="users-stat__content">
-              <span className="users-stat__label">
+            <div className="users-stat-content">
+              <span className="users-stat-label">
                 Active Members
               </span>
 
-              <strong className="users-stat__value">
-                {statistics.active}
+              <strong className="users-stat-value">
+                {activeMembers}
               </strong>
 
-              <span className="users-stat__hint">
+              <small>
                 Currently active
-              </span>
+              </small>
             </div>
 
           </div>
 
-          <div className="users-stat">
+          <div className="users-stat-card">
 
-            <div className="users-stat__icon users-stat__icon--purple">
-              ★
+            <div className="users-stat-icon violet">
+              <FaUserShield />
             </div>
 
-            <div className="users-stat__content">
-              <span className="users-stat__label">
+            <div className="users-stat-content">
+              <span className="users-stat-label">
                 Administrators
               </span>
 
-              <strong className="users-stat__value">
-                {statistics.admins}
+              <strong className="users-stat-value">
+                {administrators}
               </strong>
 
-              <span className="users-stat__hint">
+              <small>
                 Workspace admins
-              </span>
+              </small>
             </div>
 
           </div>
 
-          <div className="users-stat">
+          <div className="users-stat-card">
 
-            <div className="users-stat__icon users-stat__icon--blue">
-              ✓
+            <div className="users-stat-icon blue">
+              <FaUserFriends />
             </div>
 
-            <div className="users-stat__content">
-              <span className="users-stat__label">
+            <div className="users-stat-content">
+              <span className="users-stat-label">
                 Team Members
               </span>
 
-              <strong className="users-stat__value">
-                {statistics.members}
+              <strong className="users-stat-value">
+                {teamMembers}
               </strong>
 
-              <span className="users-stat__hint">
+              <small>
                 Standard members
-              </span>
+              </small>
             </div>
 
           </div>
 
         </section>
 
-        {/* =========================================
+        {/* ==========================================
             MEMBERS SECTION
-        ========================================= */}
-        <section className="users-section">
+        ========================================== */}
 
-          <div className="users-section__header">
+        <section className="users-members-section">
+
+          <div className="users-section-header">
 
             <div>
-              <div className="users-section__eyebrow">
+
+              <div className="users-section-eyebrow">
                 WORKSPACE MEMBERS
               </div>
 
-              <h2 className="users-section__title">
+              <h2>
                 Your Team
               </h2>
 
-              <p className="users-section__subtitle">
+              <p>
                 View and manage everyone in your
                 TaskFlow workspace.
               </p>
+
             </div>
 
-            <div className="users-section__count">
-              {filteredUsers.length}
+            <div className="users-member-count">
+              <strong>
+                {filteredUsers.length}
+              </strong>
+
               <span>
-                {filteredUsers.length === 1
-                  ? " member"
-                  : " members"}
+                members
               </span>
             </div>
 
           </div>
 
-          {/* =========================================
-              FILTERS
-          ========================================= */}
+          {/* ========================================
+              FILTER BAR
+          ======================================== */}
+
           <div className="users-toolbar">
 
             <div className="users-search">
 
-              <span className="users-search__icon">
-                ⌕
-              </span>
+              <FaSearch />
 
               <input
                 type="text"
@@ -331,71 +390,74 @@ const Users = () => {
                 }
               />
 
-              {search && (
-                <button
-                  type="button"
-                  className="users-search__clear"
-                  onClick={() => setSearch("")}
-                  aria-label="Clear search"
+            </div>
+
+            <div className="users-filter-group">
+
+              <div className="users-select-wrapper">
+
+                <FaFilter />
+
+                <select
+                  value={roleFilter}
+                  onChange={(e) =>
+                    setRoleFilter(e.target.value)
+                  }
                 >
-                  ×
-                </button>
-              )}
+                  {roles.map((role) => (
+                    <option
+                      key={role}
+                      value={role}
+                    >
+                      {role}
+                    </option>
+                  ))}
+                </select>
+
+                <FaChevronDown />
+
+              </div>
+
+              <div className="users-select-wrapper">
+
+                <select
+                  value={statusFilter}
+                  onChange={(e) =>
+                    setStatusFilter(e.target.value)
+                  }
+                >
+                  {statuses.map((status) => (
+                    <option
+                      key={status}
+                      value={status}
+                    >
+                      {status}
+                    </option>
+                  ))}
+                </select>
+
+                <FaChevronDown />
+
+              </div>
 
             </div>
 
-            <select
-              className="users-filter"
-              value={roleFilter}
-              onChange={(e) =>
-                setRoleFilter(e.target.value)
-              }
-            >
-              <option value="All">
-                All Roles
-              </option>
-
-              <option value="Admin">
-                Admin
-              </option>
-
-              <option value="Team Member">
-                Team Member
-              </option>
-            </select>
-
-            <select
-              className="users-filter"
-              value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(e.target.value)
-              }
-            >
-              <option value="All">
-                All Status
-              </option>
-
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-            </select>
-
           </div>
 
-          {/* =========================================
-              EMPTY SEARCH RESULT
-          ========================================= */}
+          {/* ========================================
+              EMPTY STATE
+          ======================================== */}
+
           {users.length === 0 ? (
+
             <EmptyState title="No Members Found" />
+
           ) : filteredUsers.length === 0 ? (
+
             <div className="users-no-results">
 
-              <div className="users-no-results__icon">
-                ⌕
+              <div className="users-no-results-icon">
+                <FaUsers />
               </div>
 
               <h3>
@@ -411,41 +473,53 @@ const Users = () => {
                 type="button"
                 onClick={() => {
                   setSearch("");
-                  setRoleFilter("All");
-                  setStatusFilter("All");
+                  setRoleFilter("All Roles");
+                  setStatusFilter("All Status");
                 }}
               >
                 Clear Filters
               </button>
 
             </div>
+
           ) : (
+
+            /* ========================================
+               USER GRID
+            ======================================== */
+
             <div className="users-grid">
 
               {filteredUsers.map((user, index) => {
-                const name =
-                  user?.name || "Unknown User";
-
-                const email =
-                  user?.email || "No email available";
 
                 const role = getRole(user);
                 const status = getStatus(user);
+
+                const isAdmin =
+                  String(role).toLowerCase() ===
+                    "admin" ||
+                  String(role).toLowerCase() ===
+                    "administrator";
+
+                const isActive =
+                  String(status).toLowerCase() ===
+                  "active";
 
                 return (
                   <article
                     className="users-card"
                     key={
-                      user?._id ||
-                      user?.id ||
-                      `${email}-${index}`
+                      user._id ||
+                      user.id ||
+                      `${user.email}-${index}`
                     }
                   >
 
                     {/* CARD TOP */}
-                    <div className="users-card__top">
 
-                      <span className="users-card__number">
+                    <div className="users-card-top">
+
+                      <span className="users-card-number">
                         {String(index + 1).padStart(
                           2,
                           "0"
@@ -453,104 +527,130 @@ const Users = () => {
                       </span>
 
                       <button
+                        className="users-card-menu"
                         type="button"
-                        className="users-card__menu"
-                        aria-label={`Options for ${name}`}
+                        aria-label="Member options"
                       >
-                        ⋮
+                        <FaEllipsisV />
                       </button>
 
                     </div>
 
                     {/* AVATAR */}
-                    <div className="users-card__avatar-wrap">
 
-                      <div className="users-card__avatar">
+                    <div className="users-avatar-wrapper">
 
-                        {user?.avatar ? (
+                      <div
+                        className={`users-avatar ${
+                          isAdmin
+                            ? "admin-avatar"
+                            : ""
+                        }`}
+                      >
+
+                        {user.avatar ? (
+
                           <img
                             src={user.avatar}
-                            alt={name}
+                            alt={user.name || "Member"}
                           />
+
                         ) : (
+
                           <span>
-                            {getInitials(name)}
+                            {getInitials(user.name)}
                           </span>
+
                         )}
 
                       </div>
 
                       <span
-                        className={`users-card__presence ${
-                          status === "Active"
-                            ? "users-card__presence--active"
-                            : "users-card__presence--inactive"
+                        className={`users-online-dot ${
+                          isActive
+                            ? "online"
+                            : "offline"
                         }`}
                       />
                     </div>
 
-                    {/* USER INFO */}
-                    <div className="users-card__identity">
+                    {/* IDENTITY */}
+
+                    <div className="users-card-identity">
 
                       <h3>
-                        {name}
+                        {user.name ||
+                          "Unnamed Member"}
                       </h3>
 
-                      <p>
-                        {email}
-                      </p>
+                      <div className="users-email">
+                        <FaEnvelope />
+                        <span>
+                          {user.email ||
+                            "No email available"}
+                        </span>
+                      </div>
 
                     </div>
 
+                    {/* DIVIDER */}
+
+                    <div className="users-card-divider" />
+
                     {/* DETAILS */}
-                    <div className="users-card__details">
 
-                      <div className="users-card__detail">
+                    <div className="users-card-details">
 
-                        <span className="users-card__detail-label">
+                      <div className="users-detail-row">
+
+                        <span className="users-detail-label">
                           ROLE
                         </span>
 
                         <span
-                          className={`users-card__role ${
-                            role === "Admin"
-                              ? "users-card__role--admin"
+                          className={`users-role ${
+                            isAdmin
+                              ? "admin"
                               : ""
                           }`}
                         >
-                          {role === "Admin" && "★ "}
+                          {isAdmin && (
+                            <FaUserShield />
+                          )}
+
                           {role}
                         </span>
 
                       </div>
 
-                      <div className="users-card__detail">
+                      <div className="users-detail-row">
 
-                        <span className="users-card__detail-label">
+                        <span className="users-detail-label">
                           STATUS
                         </span>
 
                         <span
-                          className={`users-card__status ${
-                            status === "Active"
-                              ? "users-card__status--active"
-                              : "users-card__status--inactive"
+                          className={`users-status ${
+                            isActive
+                              ? "active"
+                              : "inactive"
                           }`}
                         >
-                          <span className="users-card__status-dot" />
+                          <FaCircle />
                           {status}
                         </span>
 
                       </div>
 
-                      <div className="users-card__detail">
+                      <div className="users-detail-row">
 
-                        <span className="users-card__detail-label">
-                          MEMBER
+                        <span className="users-detail-label">
+                          JOINED
                         </span>
 
-                        <span className="users-card__member-type">
-                          Workspace Member
+                        <span className="users-joined">
+                          <FaCalendarAlt />
+                          {getJoinDate(user)}
                         </span>
 
                       </div>
@@ -564,24 +664,30 @@ const Users = () => {
             </div>
           )}
 
-          {/* =========================================
+          {/* ========================================
               FOOTER
-          ========================================= */}
+          ======================================== */}
+
           {filteredUsers.length > 0 && (
             <div className="users-footer">
 
-              <div className="users-footer__secure">
-                <span className="users-footer__dot" />
+              <div className="users-security">
+
+                <span>
+                  <FaCircle />
+                </span>
+
                 Secure workspace members
+
               </div>
 
-              <span>
+              <div className="users-footer-count">
                 {filteredUsers.length}{" "}
                 {filteredUsers.length === 1
                   ? "member"
                   : "members"}{" "}
                 displayed
-              </span>
+              </div>
 
             </div>
           )}
