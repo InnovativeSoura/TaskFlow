@@ -22,7 +22,7 @@ import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import api from "../services/api";
 
-import "../styles/User.css";
+import "../styles/Users.css";
 
 const getInitials = (name = "") => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
