@@ -23,11 +23,12 @@ const Reports = () => {
         {/* =====================================================
             PREMIUM BACKGROUND
         ====================================================== */}
-
         <div className="reports-background" aria-hidden="true">
           <div className="reports-glow reports-glow-one" />
           <div className="reports-glow reports-glow-two" />
           <div className="reports-grid-overlay" />
+          <div className="reports-background-orb reports-orb-one" />
+          <div className="reports-background-orb reports-orb-two" />
         </div>
 
         <div className="reports-container">
@@ -35,7 +36,6 @@ const Reports = () => {
           {/* =====================================================
               HERO
           ====================================================== */}
-
           <section className="reports-hero">
 
             <div className="reports-hero-content">
@@ -47,7 +47,7 @@ const Reports = () => {
 
               <div className="reports-hero-title-row">
 
-                <div>
+                <div className="reports-hero-copy">
                   <h1>Reports &amp; Analytics</h1>
 
                   <p>
@@ -59,6 +59,7 @@ const Reports = () => {
 
                 <div className="reports-hero-status">
                   <span className="status-pulse" />
+
                   <div>
                     <strong>Live</strong>
                     <span>Workspace data</span>
@@ -70,6 +71,7 @@ const Reports = () => {
               <div className="reports-hero-line" />
 
               <div className="reports-hero-meta">
+
                 <span>
                   <span className="meta-icon">01</span>
                   Performance
@@ -88,6 +90,7 @@ const Reports = () => {
                   <span className="meta-icon">03</span>
                   Insights
                 </span>
+
               </div>
 
             </div>
@@ -96,9 +99,8 @@ const Reports = () => {
 
 
           {/* =====================================================
-              PERFORMANCE OVERVIEW
+              01 / PERFORMANCE OVERVIEW
           ====================================================== */}
-
           <section className="reports-overview">
 
             <div className="reports-section-heading">
@@ -107,39 +109,66 @@ const Reports = () => {
 
                 <div className="section-kicker">
                   <span className="kicker-line" />
-                  01 / PERFORMANCE OVERVIEW
+                  <span className="section-number">01</span>
+                  <span className="section-slash">/</span>
+                  PERFORMANCE OVERVIEW
                 </div>
 
                 <h2>Workspace at a glance</h2>
 
                 <p>
                   A real-time snapshot of your projects, tasks,
-                  and overall workspace activity.
+                  productivity and overall workspace activity.
                 </p>
 
               </div>
 
               <div className="section-live-indicator">
                 <span />
-                Workspace synchronized
+                <strong>Workspace synchronized</strong>
               </div>
 
             </div>
 
-            <div className="reports-stats-shell">
-              <ReportCards
-                projects={projects}
-                tasks={tasks}
-              />
+
+            <div className="performance-overview-frame">
+
+              <div className="performance-frame-glow" />
+
+              <div className="performance-frame-header">
+
+                <div>
+                  <span className="performance-frame-label">
+                    WORKSPACE PERFORMANCE
+                  </span>
+
+                  <span className="performance-frame-description">
+                    Live operational metrics
+                  </span>
+                </div>
+
+                <div className="performance-frame-status">
+                  <span className="performance-status-dot" />
+                  LIVE
+                </div>
+
+              </div>
+
+              <div className="reports-stats-shell">
+                <ReportCards
+                  projects={projects}
+                  tasks={tasks}
+                />
+              </div>
+
             </div>
 
           </section>
 
 
           {/* =====================================================
-              VISUAL ANALYTICS
+              02 / VISUAL ANALYTICS
           ====================================================== */}
-
           <section className="reports-analytics">
 
             <div className="reports-analytics-heading">
@@ -148,7 +177,9 @@ const Reports = () => {
 
                 <div className="section-kicker">
                   <span className="kicker-line" />
-                  02 / VISUAL ANALYTICS
+                  <span className="section-number">02</span>
+                  <span className="section-slash">/</span>
+                  VISUAL ANALYTICS
                 </div>
 
                 <h2>Performance intelligence</h2>
@@ -171,13 +202,9 @@ const Reports = () => {
             {/* =================================================
                 CHART GRID
             ================================================== */}
-
             <div className="reports-grid">
 
-              {/* -----------------------------------------------
-                  TASK STATUS
-              ------------------------------------------------ */}
-
+              {/* TASK STATUS */}
               <article className="report-chart-card report-chart-wide">
 
                 <div className="chart-card-top-line" />
@@ -214,10 +241,7 @@ const Reports = () => {
               </article>
 
 
-              {/* -----------------------------------------------
-                  PROJECT PROGRESS
-              ------------------------------------------------ */}
-
+              {/* PROJECT PROGRESS */}
               <article className="report-chart-card">
 
                 <div className="chart-card-top-line" />
@@ -248,18 +272,13 @@ const Reports = () => {
                 <div className="chart-divider" />
 
                 <div className="report-chart-body project-progress-body">
-                  <ProjectProgressChart
-                    projects={projects}
-                  />
+                  <ProjectProgressChart projects={projects} />
                 </div>
 
               </article>
 
 
-              {/* -----------------------------------------------
-                  TASK PRIORITY
-              ------------------------------------------------ */}
-
+              {/* TASK PRIORITY */}
               <article className="report-chart-card">
 
                 <div className="chart-card-top-line" />
@@ -301,12 +320,12 @@ const Reports = () => {
 
 
           {/* =====================================================
-              ANALYTICS WAITING / INSIGHT BANNER
+              ANALYTICS WAITING
           ====================================================== */}
-
           <section className="analytics-waiting">
 
             <div className="waiting-glow" />
+            <div className="waiting-glow-secondary" />
 
             <div className="analytics-waiting-icon">
               <span>↗</span>
@@ -345,34 +364,64 @@ const Reports = () => {
 
 
           {/* =====================================================
-              EXPORT CENTER
+              REPORT CENTER / EXPORT
           ====================================================== */}
-
           <section className="reports-export">
+
+            <div className="export-background-glow" />
+
+            <div className="export-decoration export-decoration-one" />
+            <div className="export-decoration export-decoration-two" />
 
             <div className="reports-export-content">
 
-              <div className="section-kicker">
+              <div className="section-kicker export-kicker">
                 <span className="kicker-line" />
                 REPORT CENTER
               </div>
 
-              <h3>
-                Export workspace analytics
-              </h3>
+              <div className="export-title-row">
 
-              <p>
-                Download your current project and task
-                performance data whenever you need it.
-              </p>
+                <div>
+                  <h3>
+                    Export workspace analytics
+                  </h3>
+
+                  <p>
+                    Download your current project and task
+                    performance data whenever you need it.
+                  </p>
+                </div>
+
+                <div className="export-status">
+
+                  <span className="export-status-icon">
+                    ↓
+                  </span>
+
+                  <div>
+                    <strong>Ready to export</strong>
+                    <span>Workspace data available</span>
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
+
             <div className="reports-export-actions">
+
+              <div className="export-actions-label">
+                <span>AVAILABLE FORMATS</span>
+              </div>
+
               <ExportButtons
                 projects={projects}
                 tasks={tasks}
               />
+
             </div>
 
           </section>
@@ -381,7 +430,6 @@ const Reports = () => {
           {/* =====================================================
               FOOTER
           ====================================================== */}
-
           <footer className="reports-footer">
 
             <div className="reports-footer-left">
