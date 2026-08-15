@@ -1,26 +1,25 @@
-// src/pages/Users.jsx
-
-import { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
+
 import {
   FaUsers,
-  FaUserShield,
   FaUserCheck,
-  FaUserPlus,
+  FaUserShield,
+  FaUserFriends,
+  FaPlus,
+  FaArrowRight,
   FaSearch,
   FaFilter,
   FaChevronDown,
+  FaSortAmountDown,
   FaEllipsisV,
   FaCalendarAlt,
+  FaUser,
   FaCircle,
-  FaArrowRight,
   FaTimes,
-  FaEnvelope,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaUserFriends,
-  FaCrown,
+  FaSyncAlt,
 } from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar";
@@ -28,202 +27,476 @@ import Navbar from "../components/Navbar";
 
 import "../styles/Users.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "";
+/* =========================================================
+   FALLBACK DATA
+   ---------------------------------------------------------
+   Used only when the users API cannot be reached.
+   Replace/retain your existing API logic if your project
+   already has a dedicated users context/service.
+========================================================= */
 
-const fallbackUsers = [
+const FALLBACK_USERS = [
   {
-    _id: "1",
+    _id: "fallback-1",
+    id: "fallback-1",
     name: "InnovativeSoura",
     username: "InnovativeSoura",
-    email: "souradipta302@gmail.com",
-    role: "member",
-    status: "active",
+    email: "patsouradipta302@gmail.com",
+    role: "Team Member",
+    status: "Active",
     createdAt: "2026-07-25T00:00:00.000Z",
+    joinedAt: "2026-07-25T00:00:00.000Z",
   },
   {
-    _id: "2",
+    _id: "fallback-2",
+    id: "fallback-2",
     name: "Souradipta Patra",
-    username: "souradipta.patra03",
+    username: "Souradipta Patra",
     email: "souradipta.patra03@gmail.com",
-    role: "member",
-    status: "active",
+    role: "Team Member",
+    status: "Active",
     createdAt: "2026-07-25T00:00:00.000Z",
+    joinedAt: "2026-07-25T00:00:00.000Z",
   },
   {
-    _id: "3",
+    _id: "fallback-3",
+    id: "fallback-3",
     name: "Souradipta Patra",
-    username: "soura",
+    username: "Souradipta Patra",
     email: "soura@gmail.com",
-    role: "admin",
-    status: "active",
+    role: "Admin",
+    status: "Active",
     createdAt: "2026-07-24T00:00:00.000Z",
+    joinedAt: "2026-07-24T00:00:00.000Z",
   },
 ];
 
-const normalizeUser = (user, index = 0) => {
-  const name =
-    user?.name ||
-    user?.username ||
-    user?.fullName ||
-    user?.email?.split("@")[0] ||
-    `Member ${index + 1}`;
-
-  return {
-    ...user,
-    _id: user?._id || user?.id || `member-${index + 1}`,
-    name,
-    username: user?.username || name,
-    email: user?.email || "No email available",
-    role: String(user?.role || "member").toLowerCase(),
-    status: String(user?.status || "active").toLowerCase(),
-    createdAt: user?.createdAt || user?.joinedAt || new Date().toISOString(),
-  };
-};
+/* =========================================================
+   HELPERS
+========================================================= */
 
 const getInitials = (name = "") => {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const words = String(name).trim().split(/\s+/).filter(Boolean);
 
-  if (!parts.length) return "U";
+  if (!words.length) return "U";
 
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
   }
 
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
 };
 
-const formatDate = (date) => {
-  if (!date) return "—";
+const getDisplayName = (user = {}) => {
+  return (
+    user.name ||
+    user.fullName ||
+    user.username ||
+    user.displayName ||
+    user.email?.split("@")[0] ||
+    "Unknown User"
+  );
+};
 
-  const parsed = new Date(date);
+const getEmail = (user = {}) => {
+  return user.email || user.emailAddress || "No email available";
+};
 
-  if (Number.isNaN(parsed.getTime())) return "—";
+const normalizeRole = (role) => {
+  const value = String(role || "Team Member").toLowerCase();
 
-  return parsed.toLocaleDateString("en-US", {
+  if (
+    value === "admin" ||
+    value === "administrator" ||
+    value === "superadmin" ||
+    value === "super admin"
+  ) {
+    return "Admin";
+  }
+
+  return "Team Member";
+};
+
+const normalizeStatus = (status) => {
+  const value = String(status || "Active").toLowerCase();
+
+  if (
+    value === "inactive" ||
+    value === "disabled" ||
+    value === "deactivated"
+  ) {
+    return "Inactive";
+  }
+
+  if (value === "pending") {
+    return "Pending";
+  }
+
+  return "Active";
+};
+
+const getDateValue = (user = {}) => {
+  return (
+    user.joinedAt ||
+    user.createdAt ||
+    user.dateJoined ||
+    user.created_at ||
+    user.updatedAt ||
+    null
+  );
+};
+
+const formatJoinedDate = (user = {}) => {
+  const value = getDateValue(user);
+
+  if (!value) return "Recently";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Recently";
+  }
+
+  return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
 };
 
-const formatRole = (role) => {
-  if (!role) return "Member";
+const normalizeUser = (user, index) => {
+  const name = getDisplayName(user);
 
-  return role.charAt(0).toUpperCase() + role.slice(1);
+  return {
+    ...user,
+    _id: user?._id || user?.id || `user-${index}`,
+    name,
+    email: getEmail(user),
+    role: normalizeRole(user?.role),
+    status: normalizeStatus(user?.status),
+    joinedAt: getDateValue(user),
+  };
 };
 
-const formatStatus = (status) => {
-  if (!status) return "Active";
+const getStoredToken = () => {
+  const possibleKeys = [
+    "token",
+    "authToken",
+    "accessToken",
+    "jwt",
+    "userToken",
+  ];
 
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  for (const key of possibleKeys) {
+    const value = localStorage.getItem(key);
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return null;
 };
 
-const isActiveUser = (status) => {
-  return ["active", "online", "available"].includes(
-    String(status || "").toLowerCase()
+const extractUsers = (responseData) => {
+  if (Array.isArray(responseData)) {
+    return responseData;
+  }
+
+  if (Array.isArray(responseData?.users)) {
+    return responseData.users;
+  }
+
+  if (Array.isArray(responseData?.data)) {
+    return responseData.data;
+  }
+
+  if (Array.isArray(responseData?.members)) {
+    return responseData.members;
+  }
+
+  if (Array.isArray(responseData?.results)) {
+    return responseData.results;
+  }
+
+  return [];
+};
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+const containerVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: "easeOut",
+      staggerChildren: 0.07,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 16,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
+};
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+function StatCard({
+  icon,
+  label,
+  value,
+  description,
+  accent,
+  delay = 0,
+}) {
+  return (
+    <motion.div
+      className={`users-stat-card ${accent}`}
+      variants={itemVariants}
+      transition={{ delay }}
+      whileHover={{
+        y: -5,
+        scale: 1.012,
+      }}
+    >
+      <div className="users-stat-icon">{icon}</div>
+
+      <div className="users-stat-content">
+        <span className="users-stat-label">{label}</span>
+
+        <strong className="users-stat-value">{value}</strong>
+
+        <span className="users-stat-description">
+          {description}
+        </span>
+      </div>
+
+      <div className="users-stat-accent-line" />
+    </motion.div>
   );
-};
+}
 
-function Users() {
+/* =========================================================
+   MEMBER CARD
+========================================================= */
+
+function MemberCard({ user, index, onMenu }) {
+  const initials = getInitials(user.name);
+
+  return (
+    <motion.article
+      className="users-member-card"
+      variants={itemVariants}
+      whileHover={{
+        y: -7,
+        transition: {
+          duration: 0.2,
+        },
+      }}
+    >
+      <div className="users-member-card-glow" />
+
+      <div className="users-member-top">
+        <span className="users-member-index">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        <button
+          type="button"
+          className="users-member-menu"
+          onClick={() => onMenu(user)}
+          aria-label={`Open menu for ${user.name}`}
+        >
+          <FaEllipsisV />
+        </button>
+      </div>
+
+      <div className="users-member-profile">
+        <motion.div
+          className="users-member-avatar"
+          whileHover={{
+            scale: 1.08,
+            rotate: 2,
+          }}
+        >
+          <span>{initials}</span>
+          <i />
+        </motion.div>
+
+        <h3 className="users-member-name">
+          {user.name}
+        </h3>
+
+        <p className="users-member-email">
+          {user.email}
+        </p>
+      </div>
+
+      <div className="users-member-divider" />
+
+      <div className="users-member-details">
+        <div className="users-member-detail-row">
+          <div className="users-detail-label">
+            <FaUser />
+            <span>Role</span>
+          </div>
+
+          <span
+            className={`users-role-badge ${
+              user.role === "Admin"
+                ? "admin"
+                : "member"
+            }`}
+          >
+            {user.role === "Admin" && <FaUserShield />}
+            {user.role}
+          </span>
+        </div>
+
+        <div className="users-member-detail-row">
+          <div className="users-detail-label">
+            <FaCircle />
+            <span>Status</span>
+          </div>
+
+          <span
+            className={`users-status-badge ${
+              user.status.toLowerCase()
+            }`}
+          >
+            <i />
+            {user.status}
+          </span>
+        </div>
+
+        <div className="users-member-detail-row">
+          <div className="users-detail-label">
+            <FaCalendarAlt />
+            <span>Joined</span>
+          </div>
+
+          <span className="users-joined-date">
+            {formatJoinedDate(user)}
+          </span>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [roleFilter, setRoleFilter] = useState("All Roles");
+  const [statusFilter, setStatusFilter] = useState("All Status");
+  const [sortBy, setSortBy] = useState("Newest");
 
-  const [showRoleFilter, setShowRoleFilter] = useState(false);
-  const [showStatusFilter, setShowStatusFilter] = useState(false);
+  const [openFilter, setOpenFilter] = useState(null);
 
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState("member");
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  const [openMenu, setOpenMenu] = useState(null);
-  const [inviteMessage, setInviteMessage] = useState("");
+  /* =======================================================
+     FETCH USERS
+  ======================================================= */
+
+  const fetchUsers = async () => {
+    setLoading(true);
+
+    try {
+      const baseUrl =
+        import.meta.env.VITE_API_URL || "";
+
+      const token = getStoredToken();
+
+      const headers = token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {};
+
+      const response = await axios.get(
+        `${baseUrl}/api/users`,
+        {
+          headers,
+          timeout: 12000,
+        }
+      );
+
+      const extractedUsers = extractUsers(
+        response?.data
+      );
+
+      if (extractedUsers.length > 0) {
+        setUsers(
+          extractedUsers.map(normalizeUser)
+        );
+        setUsingFallback(false);
+      } else {
+        setUsers(FALLBACK_USERS);
+        setUsingFallback(true);
+      }
+    } catch (error) {
+      console.warn(
+        "Users API could not be loaded:",
+        error
+      );
+
+      setUsers(FALLBACK_USERS);
+      setUsingFallback(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    let mounted = true;
-
-    const loadUsers = async () => {
-      setLoading(true);
-
-      try {
-        const token =
-          localStorage.getItem("token") ||
-          localStorage.getItem("accessToken");
-
-        const config = token
-          ? {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          : {};
-
-        const response = await axios.get(
-          `${API_URL}/api/users`,
-          config
-        );
-
-        const payload = response?.data;
-
-        let receivedUsers = [];
-
-        if (Array.isArray(payload)) {
-          receivedUsers = payload;
-        } else if (Array.isArray(payload?.users)) {
-          receivedUsers = payload.users;
-        } else if (Array.isArray(payload?.data)) {
-          receivedUsers = payload.data;
-        }
-
-        if (mounted && receivedUsers.length) {
-          setUsers(receivedUsers.map(normalizeUser));
-        } else if (mounted) {
-          setUsers(fallbackUsers.map(normalizeUser));
-        }
-      } catch (error) {
-        console.warn(
-          "Users API could not be loaded. Using local fallback data.",
-          error
-        );
-
-        if (mounted) {
-          setUsers(fallbackUsers.map(normalizeUser));
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadUsers();
-
-    return () => {
-      mounted = false;
-    };
+    fetchUsers();
   }, []);
+
+  /* =======================================================
+     STATS
+  ======================================================= */
 
   const stats = useMemo(() => {
     const total = users.length;
 
-    const active = users.filter((user) =>
-      isActiveUser(user.status)
+    const active = users.filter(
+      (user) =>
+        user.status.toLowerCase() === "active"
     ).length;
 
-    const administrators = users.filter((user) =>
-      ["admin", "administrator"].includes(
-        String(user.role).toLowerCase()
-      )
+    const administrators = users.filter(
+      (user) => user.role === "Admin"
     ).length;
 
     const teamMembers = users.filter(
-      (user) =>
-        !["admin", "administrator"].includes(
-          String(user.role).toLowerCase()
-        )
+      (user) => user.role === "Team Member"
     ).length;
 
     return {
@@ -234,481 +507,809 @@ function Users() {
     };
   }, [users]);
 
+  /* =======================================================
+     FILTER + SORT
+  ======================================================= */
+
   const filteredUsers = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    return users.filter((user) => {
+    let result = users.filter((user) => {
       const matchesSearch =
         !query ||
         user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
-        user.username.toLowerCase().includes(query);
+        user.role.toLowerCase().includes(query);
 
       const matchesRole =
-        roleFilter === "all" ||
-        String(user.role).toLowerCase() === roleFilter;
+        roleFilter === "All Roles" ||
+        user.role === roleFilter;
 
       const matchesStatus =
-        statusFilter === "all" ||
-        String(user.status).toLowerCase() === statusFilter;
+        statusFilter === "All Status" ||
+        user.status === statusFilter;
 
-      return matchesSearch && matchesRole && matchesStatus;
+      return (
+        matchesSearch &&
+        matchesRole &&
+        matchesStatus
+      );
     });
-  }, [users, search, roleFilter, statusFilter]);
 
-  const handleInvite = (event) => {
-    event.preventDefault();
+    result = [...result].sort((a, b) => {
+      const dateA = new Date(
+        getDateValue(a) || 0
+      ).getTime();
 
-    if (!inviteEmail.trim()) {
-      setInviteMessage("Please enter an email address.");
-      return;
+      const dateB = new Date(
+        getDateValue(b) || 0
+      ).getTime();
+
+      if (sortBy === "Newest") {
+        return dateB - dateA;
+      }
+
+      if (sortBy === "Oldest") {
+        return dateA - dateB;
+      }
+
+      if (sortBy === "Name A-Z") {
+        return a.name.localeCompare(b.name);
+      }
+
+      if (sortBy === "Name Z-A") {
+        return b.name.localeCompare(a.name);
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [
+    users,
+    search,
+    roleFilter,
+    statusFilter,
+    sortBy,
+  ]);
+
+  /* =======================================================
+     FILTER HANDLERS
+  ======================================================= */
+
+  const handleRoleChange = (role) => {
+    setRoleFilter(role);
+    setOpenFilter(null);
+  };
+
+  const handleStatusChange = (status) => {
+    setStatusFilter(status);
+    setOpenFilter(null);
+  };
+
+  const handleSortChange = (sort) => {
+    setSortBy(sort);
+    setOpenFilter(null);
+  };
+
+  const clearFilters = () => {
+    setSearch("");
+    setRoleFilter("All Roles");
+    setStatusFilter("All Status");
+    setSortBy("Newest");
+  };
+
+  /* =======================================================
+     MEMBER MENU
+  ======================================================= */
+
+  const handleMemberMenu = (user) => {
+    setSelectedUser(user);
+  };
+
+  /* =======================================================
+     INVITE
+  ======================================================= */
+
+  const handleInvite = () => {
+    toast.info(
+      "Invite Member functionality is ready to connect to your invitation flow."
+    );
+  };
+
+  /* =======================================================
+     CLOSE FILTERS WHEN CLICKING OUTSIDE
+  ======================================================= */
+
+  useEffect(() => {
+    const handleDocumentClick = () => {
+      setOpenFilter(null);
+    };
+
+    if (openFilter) {
+      document.addEventListener(
+        "click",
+        handleDocumentClick
+      );
     }
 
-    setInviteMessage(
-      `Invitation prepared for ${inviteEmail.trim()}.`
-    );
-
-    setInviteEmail("");
-  };
-
-  const closeInviteModal = () => {
-    setShowInviteModal(false);
-    setInviteEmail("");
-    setInviteRole("member");
-    setInviteMessage("");
-  };
+    return () => {
+      document.removeEventListener(
+        "click",
+        handleDocumentClick
+      );
+    };
+  }, [openFilter]);
 
   return (
-    <div className="users-page">
+    <div className="users-layout">
       <Sidebar />
 
-      <div className="users-shell">
+      <div className="users-main-shell">
         <Navbar />
 
-        <main className="users-main">
-          {/* =========================================
-              PREMIUM HERO
-          ========================================= */}
-          <motion.section
-            className="users-hero"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
+        <main className="users-page">
+          <div className="users-background">
+            <div className="users-bg-grid" />
+            <div className="users-bg-orb users-bg-orb-one" />
+            <div className="users-bg-orb users-bg-orb-two" />
+            <div className="users-bg-glow users-bg-glow-one" />
+            <div className="users-bg-glow users-bg-glow-two" />
+          </div>
+
+          <motion.div
+            className="users-container"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <div className="users-hero-glow users-hero-glow-one" />
-            <div className="users-hero-glow users-hero-glow-two" />
+            {/* =================================================
+                HERO
+            ================================================= */}
 
-            <div className="users-hero-content">
-              <div className="users-eyebrow">
-                <span className="users-eyebrow-icon">
-                  <FaUsers />
-                </span>
+            <motion.section
+              className="users-hero"
+              variants={itemVariants}
+            >
+              <div className="users-hero-decoration" />
 
-                <span>WORKSPACE</span>
-              </div>
+              <div className="users-hero-content">
+                <div className="users-eyebrow">
+                  <span className="users-eyebrow-dot">
+                    <i />
+                  </span>
 
-              <h1>
-                Team <span>Members</span>
-              </h1>
-
-              <p>
-                Manage and collaborate with everyone in your
-                TaskFlow workspace.
-              </p>
-
-              {/* SHORT PREMIUM INVITE BUTTON */}
-              <button
-                type="button"
-                className="invite-button"
-                onClick={() => setShowInviteModal(true)}
-              >
-                <span className="invite-button-icon">
-                  <FaUserPlus />
-                </span>
-
-                <span className="invite-button-content">
-                  <strong>Invite Member</strong>
-                  <small>Add someone to your workspace</small>
-                </span>
-
-                <FaArrowRight className="invite-button-arrow" />
-              </button>
-            </div>
-
-            <div className="hero-team-preview">
-              <div className="hero-avatar-stack">
-                {users.slice(0, 3).map((user, index) => (
-                  <div
-                    className="hero-avatar"
-                    key={user._id}
-                    style={{
-                      zIndex: 10 - index,
-                    }}
-                  >
-                    {getInitials(user.name)}
-                    <span />
-                  </div>
-                ))}
-
-                {users.length === 0 && (
-                  <>
-                    <div className="hero-avatar">SP<span /></div>
-                    <div className="hero-avatar">IN<span /></div>
-                    <div className="hero-avatar">TF<span /></div>
-                  </>
-                )}
-              </div>
-
-              <div className="hero-team-copy">
-                <strong>{stats.total || 0} members</strong>
-                <span>working together</span>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* =========================================
-              STATISTICS
-          ========================================= */}
-          <section className="users-stats">
-            <StatCard
-              icon={<FaUsers />}
-              label="TOTAL MEMBERS"
-              value={stats.total}
-              description="Workspace members"
-              accent="purple"
-              delay={0}
-            />
-
-            <StatCard
-              icon={<FaUserCheck />}
-              label="ACTIVE MEMBERS"
-              value={stats.active}
-              description="Currently active"
-              accent="green"
-              delay={0.05}
-            />
-
-            <StatCard
-              icon={<FaUserShield />}
-              label="ADMINISTRATORS"
-              value={stats.administrators}
-              description="Workspace admins"
-              accent="violet"
-              delay={0.1}
-            />
-
-            <StatCard
-              icon={<FaUserFriends />}
-              label="TEAM MEMBERS"
-              value={stats.teamMembers}
-              description="Standard members"
-              accent="blue"
-              delay={0.15}
-            />
-          </section>
-
-          {/* =========================================
-              TEAM SECTION
-          ========================================= */}
-          <section className="team-section">
-            <div className="team-section-heading">
-              <div>
-                <div className="section-eyebrow">
-                  <span />
-                  WORKSPACE MEMBERS
+                  <span>WORKSPACE</span>
                 </div>
 
-                <h2>Your Team</h2>
+                <h1 className="users-hero-title">
+                  Team{" "}
+                  <span>Members</span>
+                </h1>
 
-                <p>
-                  View and manage everyone in your TaskFlow
-                  workspace.
+                <p className="users-hero-description">
+                  Manage and collaborate with everyone in
+                  your TaskFlow workspace.
                 </p>
+
+                <button
+                  type="button"
+                  className="invite-member-btn"
+                  onClick={handleInvite}
+                >
+                  <FaPlus />
+
+                  <span>Invite Member</span>
+
+                  <FaArrowRight />
+                </button>
               </div>
 
-              <div className="member-count">
-                <strong>{filteredUsers.length}</strong>
-                <span>members</span>
+              <div className="users-hero-members">
+                <div className="users-avatar-stack">
+                  {users.slice(0, 4).map(
+                    (user, index) => (
+                      <div
+                        className="users-stack-avatar"
+                        key={
+                          user._id ||
+                          user.id ||
+                          index
+                        }
+                        style={{
+                          zIndex: 10 - index,
+                        }}
+                      >
+                        {getInitials(user.name)}
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="users-hero-member-count">
+                  <strong>
+                    {stats.total}{" "}
+                    {stats.total === 1
+                      ? "member"
+                      : "members"}
+                  </strong>
+
+                  <span>Workspace</span>
+                </div>
               </div>
-            </div>
+            </motion.section>
 
-            {/* FILTER BAR */}
-            <div className="users-toolbar">
-              <div className="users-search">
-                <FaSearch />
+            {/* =================================================
+                STATS
+            ================================================= */}
 
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(event) =>
-                    setSearch(event.target.value)
+            <section className="users-stats-grid">
+              <StatCard
+                icon={<FaUsers />}
+                label="Total Members"
+                value={stats.total}
+                description="Workspace members"
+                accent="purple"
+              />
+
+              <StatCard
+                icon={<FaUserCheck />}
+                label="Active Members"
+                value={stats.active}
+                description="Currently active"
+                accent="green"
+              />
+
+              <StatCard
+                icon={<FaUserShield />}
+                label="Administrators"
+                value={stats.administrators}
+                description="Workspace admins"
+                accent="violet"
+              />
+
+              <StatCard
+                icon={<FaUserFriends />}
+                label="Team Members"
+                value={stats.teamMembers}
+                description="Standard members"
+                accent="blue"
+              />
+            </section>
+
+            {/* =================================================
+                MEMBERS HEADER
+            ================================================= */}
+
+            <motion.section
+              className="users-members-section"
+              variants={itemVariants}
+            >
+              <div className="users-section-header">
+                <div>
+                  <div className="users-section-eyebrow">
+                    WORKSPACE MEMBERS
+                  </div>
+
+                  <h2>Your Team</h2>
+
+                  <p>
+                    View and manage everyone in your
+                    TaskFlow workspace.
+                  </p>
+                </div>
+
+                <div className="users-result-count">
+                  <FaUsers />
+
+                  <span>
+                    {filteredUsers.length}{" "}
+                    {filteredUsers.length === 1
+                      ? "member"
+                      : "members"}
+                  </span>
+                </div>
+              </div>
+
+              {/* =================================================
+                  TOOLBAR
+              ================================================= */}
+
+              <div className="users-toolbar">
+                <div className="users-search">
+                  <FaSearch />
+
+                  <input
+                    type="text"
+                    placeholder="Search members..."
+                    value={search}
+                    onChange={(event) =>
+                      setSearch(event.target.value)
+                    }
+                  />
+
+                  {search && (
+                    <button
+                      type="button"
+                      className="users-search-clear"
+                      onClick={() =>
+                        setSearch("")
+                      }
+                      aria-label="Clear search"
+                    >
+                      <FaTimes />
+                    </button>
+                  )}
+                </div>
+
+                {/* ROLE */}
+
+                <div
+                  className={`users-filter-dropdown ${
+                    openFilter === "role"
+                      ? "open"
+                      : ""
+                  }`}
+                  onClick={(event) =>
+                    event.stopPropagation()
                   }
-                  placeholder="Search members..."
-                />
-
-                {search && (
+                >
                   <button
                     type="button"
-                    onClick={() => setSearch("")}
-                    className="clear-search"
-                    aria-label="Clear search"
-                  >
-                    <FaTimes />
-                  </button>
-                )}
-              </div>
-
-              <div className="filter-group">
-                <div className="filter-wrapper">
-                  <button
-                    type="button"
-                    className={`filter-button ${
-                      roleFilter !== "all" ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setShowRoleFilter((value) => !value);
-                      setShowStatusFilter(false);
-                    }}
-                  >
-                    <FaFilter />
-                    <span>
-                      {roleFilter === "all"
-                        ? "All Roles"
-                        : formatRole(roleFilter)}
-                    </span>
-                    <FaChevronDown />
-                  </button>
-
-                  <AnimatePresence>
-                    {showRoleFilter && (
-                      <FilterDropdown
-                        values={[
-                          ["all", "All Roles"],
-                          ["admin", "Administrators"],
-                          ["member", "Team Members"],
-                        ]}
-                        selected={roleFilter}
-                        onSelect={(value) => {
-                          setRoleFilter(value);
-                          setShowRoleFilter(false);
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <div className="filter-wrapper">
-                  <button
-                    type="button"
-                    className={`filter-button ${
-                      statusFilter !== "all" ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setShowStatusFilter((value) => !value);
-                      setShowRoleFilter(false);
-                    }}
-                  >
-                    <FaCircle />
-                    <span>
-                      {statusFilter === "all"
-                        ? "All Status"
-                        : formatStatus(statusFilter)}
-                    </span>
-                    <FaChevronDown />
-                  </button>
-
-                  <AnimatePresence>
-                    {showStatusFilter && (
-                      <FilterDropdown
-                        values={[
-                          ["all", "All Status"],
-                          ["active", "Active"],
-                          ["inactive", "Inactive"],
-                        ]}
-                        selected={statusFilter}
-                        onSelect={(value) => {
-                          setStatusFilter(value);
-                          setShowStatusFilter(false);
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            </div>
-
-            {/* =========================================
-                MEMBERS GRID
-            ========================================= */}
-            <div className="members-grid">
-              {loading ? (
-                <>
-                  {[1, 2, 3].map((item) => (
-                    <SkeletonCard key={item} />
-                  ))}
-                </>
-              ) : filteredUsers.length ? (
-                filteredUsers.map((user, index) => (
-                  <MemberCard
-                    key={user._id || index}
-                    user={user}
-                    index={index}
-                    menuOpen={openMenu === user._id}
-                    onMenu={() =>
-                      setOpenMenu(
-                        openMenu === user._id
+                    className="users-filter-btn"
+                    onClick={() =>
+                      setOpenFilter(
+                        openFilter === "role"
                           ? null
-                          : user._id
+                          : "role"
                       )
                     }
-                    onCloseMenu={() => setOpenMenu(null)}
+                  >
+                    <FaFilter />
+
+                    <span>{roleFilter}</span>
+
+                    <FaChevronDown />
+                  </button>
+
+                  <AnimatePresence>
+                    {openFilter === "role" && (
+                      <motion.div
+                        className="users-filter-menu"
+                        initial={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                      >
+                        {[
+                          "All Roles",
+                          "Admin",
+                          "Team Member",
+                        ].map((role) => (
+                          <button
+                            type="button"
+                            key={role}
+                            className={
+                              roleFilter === role
+                                ? "active"
+                                : ""
+                            }
+                            onClick={() =>
+                              handleRoleChange(
+                                role
+                              )
+                            }
+                          >
+                            {role}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* STATUS */}
+
+                <div
+                  className={`users-filter-dropdown ${
+                    openFilter === "status"
+                      ? "open"
+                      : ""
+                  }`}
+                  onClick={(event) =>
+                    event.stopPropagation()
+                  }
+                >
+                  <button
+                    type="button"
+                    className="users-filter-btn"
+                    onClick={() =>
+                      setOpenFilter(
+                        openFilter === "status"
+                          ? null
+                          : "status"
+                      )
+                    }
+                  >
+                    <FaCircle />
+
+                    <span>{statusFilter}</span>
+
+                    <FaChevronDown />
+                  </button>
+
+                  <AnimatePresence>
+                    {openFilter === "status" && (
+                      <motion.div
+                        className="users-filter-menu"
+                        initial={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                      >
+                        {[
+                          "All Status",
+                          "Active",
+                          "Inactive",
+                          "Pending",
+                        ].map((status) => (
+                          <button
+                            type="button"
+                            key={status}
+                            className={
+                              statusFilter ===
+                              status
+                                ? "active"
+                                : ""
+                            }
+                            onClick={() =>
+                              handleStatusChange(
+                                status
+                              )
+                            }
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* SORT */}
+
+                <div
+                  className={`users-filter-dropdown ${
+                    openFilter === "sort"
+                      ? "open"
+                      : ""
+                  }`}
+                  onClick={(event) =>
+                    event.stopPropagation()
+                  }
+                >
+                  <button
+                    type="button"
+                    className="users-filter-btn"
+                    onClick={() =>
+                      setOpenFilter(
+                        openFilter === "sort"
+                          ? null
+                          : "sort"
+                      )
+                    }
+                  >
+                    <FaSortAmountDown />
+
+                    <span>Sort By</span>
+
+                    <FaChevronDown />
+                  </button>
+
+                  <AnimatePresence>
+                    {openFilter === "sort" && (
+                      <motion.div
+                        className="users-filter-menu"
+                        initial={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -6,
+                        }}
+                      >
+                        {[
+                          "Newest",
+                          "Oldest",
+                          "Name A-Z",
+                          "Name Z-A",
+                        ].map((sort) => (
+                          <button
+                            type="button"
+                            key={sort}
+                            className={
+                              sortBy === sort
+                                ? "active"
+                                : ""
+                            }
+                            onClick={() =>
+                              handleSortChange(
+                                sort
+                              )
+                            }
+                          >
+                            {sort}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {(search ||
+                  roleFilter !== "All Roles" ||
+                  statusFilter !== "All Status" ||
+                  sortBy !== "Newest") && (
+                  <button
+                    type="button"
+                    className="users-clear-filters"
+                    onClick={clearFilters}
+                  >
+                    Clear
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  className="users-refresh-btn"
+                  onClick={fetchUsers}
+                  disabled={loading}
+                  aria-label="Refresh users"
+                  title="Refresh users"
+                >
+                  <FaSyncAlt
+                    className={
+                      loading
+                        ? "users-spin"
+                        : ""
+                    }
                   />
-                ))
-              ) : (
-                <EmptyState
-                  search={search}
-                  onClear={() => {
-                    setSearch("");
-                    setRoleFilter("all");
-                    setStatusFilter("all");
-                  }}
-                />
-              )}
-            </div>
-
-            {!loading && filteredUsers.length > 0 && (
-              <div className="team-footer">
-                <span>
-                  <FaCheckCircle />
-                  Secure workspace members
-                </span>
-
-                <span>
-                  {filteredUsers.length} member
-                  {filteredUsers.length !== 1 ? "s" : ""} displayed
-                </span>
+                </button>
               </div>
-            )}
-          </section>
+
+              {/* =================================================
+                  MEMBER GRID
+              ================================================= */}
+
+              {loading ? (
+                <div className="users-loading-grid">
+                  {[1, 2, 3].map((item) => (
+                    <div
+                      className="users-loading-card"
+                      key={item}
+                    >
+                      <div className="users-skeleton users-skeleton-small" />
+                      <div className="users-skeleton users-skeleton-avatar" />
+                      <div className="users-skeleton users-skeleton-name" />
+                      <div className="users-skeleton users-skeleton-email" />
+                      <div className="users-skeleton users-skeleton-line" />
+                      <div className="users-skeleton users-skeleton-line" />
+                      <div className="users-skeleton users-skeleton-line" />
+                    </div>
+                  ))}
+                </div>
+              ) : filteredUsers.length > 0 ? (
+                <div className="users-members-grid">
+                  {filteredUsers.map(
+                    (user, index) => (
+                      <MemberCard
+                        key={
+                          user._id ||
+                          user.id ||
+                          `${user.email}-${index}`
+                        }
+                        user={user}
+                        index={index}
+                        onMenu={
+                          handleMemberMenu
+                        }
+                      />
+                    )
+                  )}
+                </div>
+              ) : (
+                <motion.div
+                  className="users-empty-state"
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                >
+                  <div className="users-empty-icon">
+                    <FaUsers />
+                  </div>
+
+                  <h3>No members found</h3>
+
+                  <p>
+                    Try changing your search or
+                    filters.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                  >
+                    Reset Filters
+                  </button>
+                </motion.div>
+              )}
+
+              {/* =================================================
+                  FOOTER
+              ================================================= */}
+
+              {!loading &&
+                filteredUsers.length > 0 && (
+                  <div className="users-footer">
+                    <span>
+                      Showing{" "}
+                      <strong>
+                        1 to {filteredUsers.length}
+                      </strong>{" "}
+                      of{" "}
+                      <strong>
+                        {filteredUsers.length}
+                      </strong>{" "}
+                      members
+                    </span>
+
+                    <div className="users-pagination">
+                      <button
+                        type="button"
+                        disabled
+                        aria-label="Previous page"
+                      >
+                        ‹
+                      </button>
+
+                      <button
+                        type="button"
+                        className="active"
+                      >
+                        1
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled
+                        aria-label="Next page"
+                      >
+                        ›
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+              {usingFallback && !loading && (
+                <div className="users-api-notice">
+                  Showing workspace members from the
+                  available local fallback because the
+                  users API could not be loaded.
+                </div>
+              )}
+            </motion.section>
+          </motion.div>
         </main>
       </div>
 
-      {/* =========================================
-          INVITE MODAL
-      ========================================= */}
+      {/* =====================================================
+          MEMBER MENU MODAL
+      ===================================================== */}
+
       <AnimatePresence>
-        {showInviteModal && (
+        {selectedUser && (
           <motion.div
-            className="invite-overlay"
+            className="users-modal-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) {
-                closeInviteModal();
-              }
-            }}
+            onClick={() =>
+              setSelectedUser(null)
+            }
           >
             <motion.div
-              className="invite-modal"
+              className="users-member-modal"
               initial={{
                 opacity: 0,
-                y: 24,
-                scale: 0.96,
+                scale: 0.94,
+                y: 20,
               }}
               animate={{
                 opacity: 1,
-                y: 0,
                 scale: 1,
+                y: 0,
               }}
               exit={{
                 opacity: 0,
-                y: 24,
-                scale: 0.96,
+                scale: 0.94,
+                y: 20,
               }}
-              transition={{
-                duration: 0.25,
-              }}
+              onClick={(event) =>
+                event.stopPropagation()
+              }
             >
-              <div className="invite-modal-glow" />
-
               <button
                 type="button"
-                className="modal-close"
-                onClick={closeInviteModal}
+                className="users-modal-close"
+                onClick={() =>
+                  setSelectedUser(null)
+                }
+                aria-label="Close"
               >
                 <FaTimes />
               </button>
 
-              <div className="modal-icon">
-                <FaUserPlus />
-              </div>
-
-              <div className="modal-heading">
-                <span>TEAM MANAGEMENT</span>
-                <h3>Invite a Member</h3>
-                <p>
-                  Add a new collaborator to your TaskFlow
-                  workspace.
-                </p>
-              </div>
-
-              <form onSubmit={handleInvite}>
-                <label>
-                  Email address
-                  <div className="modal-input">
-                    <FaEnvelope />
-
-                    <input
-                      type="email"
-                      value={inviteEmail}
-                      onChange={(event) =>
-                        setInviteEmail(event.target.value)
-                      }
-                      placeholder="member@example.com"
-                      autoFocus
-                    />
-                  </div>
-                </label>
-
-                <label>
-                  Workspace role
-                  <div className="modal-input">
-                    <FaCrown />
-
-                    <select
-                      value={inviteRole}
-                      onChange={(event) =>
-                        setInviteRole(event.target.value)
-                      }
-                    >
-                      <option value="member">
-                        Team Member
-                      </option>
-
-                      <option value="admin">
-                        Administrator
-                      </option>
-                    </select>
-                  </div>
-                </label>
-
-                {inviteMessage && (
-                  <div className="invite-message">
-                    <FaCheckCircle />
-                    {inviteMessage}
-                  </div>
+              <div className="users-modal-avatar">
+                {getInitials(
+                  selectedUser.name
                 )}
+              </div>
 
-                <button
-                  type="submit"
-                  className="modal-submit"
-                >
-                  <FaUserPlus />
-                  Send Invitation
-                  <FaArrowRight />
-                </button>
-              </form>
+              <h3>{selectedUser.name}</h3>
+
+              <p>{selectedUser.email}</p>
+
+              <div className="users-modal-info">
+                <span>
+                  Role
+                  <strong>
+                    {selectedUser.role}
+                  </strong>
+                </span>
+
+                <span>
+                  Status
+                  <strong>
+                    {selectedUser.status}
+                  </strong>
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className="users-modal-action"
+                onClick={() =>
+                  setSelectedUser(null)
+                }
+              >
+                Close
+              </button>
             </motion.div>
           </motion.div>
         )}
@@ -716,324 +1317,3 @@ function Users() {
     </div>
   );
 }
-
-/* =====================================================
-   STAT CARD
-===================================================== */
-
-function StatCard({
-  icon,
-  label,
-  value,
-  description,
-  accent,
-  delay,
-}) {
-  return (
-    <motion.div
-      className={`stat-card stat-${accent}`}
-      initial={{
-        opacity: 0,
-        y: 16,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.4,
-        delay,
-      }}
-    >
-      <div className="stat-icon">{icon}</div>
-
-      <div className="stat-content">
-        <span className="stat-label">{label}</span>
-
-        <strong>{value}</strong>
-
-        <small>{description}</small>
-      </div>
-
-      <div className="stat-line" />
-    </motion.div>
-  );
-}
-
-/* =====================================================
-   FILTER DROPDOWN
-===================================================== */
-
-function FilterDropdown({
-  values,
-  selected,
-  onSelect,
-}) {
-  return (
-    <motion.div
-      className="filter-dropdown"
-      initial={{
-        opacity: 0,
-        y: -5,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      exit={{
-        opacity: 0,
-        y: -5,
-      }}
-    >
-      {values.map(([value, label]) => (
-        <button
-          type="button"
-          key={value}
-          className={selected === value ? "selected" : ""}
-          onClick={() => onSelect(value)}
-        >
-          <span>{label}</span>
-
-          {selected === value && (
-            <FaCheckCircle />
-          )}
-        </button>
-      ))}
-    </motion.div>
-  );
-}
-
-/* =====================================================
-   MEMBER CARD
-===================================================== */
-
-function MemberCard({
-  user,
-  index,
-  menuOpen,
-  onMenu,
-  onCloseMenu,
-}) {
-  const active = isActiveUser(user.status);
-
-  const admin = ["admin", "administrator"].includes(
-    String(user.role).toLowerCase()
-  );
-
-  return (
-    <motion.article
-      className={`member-card ${
-        admin ? "member-card-admin" : ""
-      }`}
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.06,
-      }}
-      whileHover={{
-        y: -5,
-      }}
-    >
-      <div className="member-card-glow" />
-
-      <div className="member-card-top">
-        <span className="member-number">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-
-        <div className="member-menu-wrapper">
-          <button
-            type="button"
-            className="member-menu"
-            onClick={onMenu}
-            aria-label="Member options"
-          >
-            <FaEllipsisV />
-          </button>
-
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                className="member-menu-dropdown"
-                initial={{
-                  opacity: 0,
-                  scale: 0.96,
-                  y: -4,
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.96,
-                  y: -4,
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={onCloseMenu}
-                >
-                  View Profile
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onCloseMenu}
-                >
-                  Message Member
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      <div className="member-profile">
-        <div className="member-avatar">
-          {getInitials(user.name)}
-
-          <span
-            className={
-              active
-                ? "member-online"
-                : "member-offline"
-            }
-          />
-        </div>
-
-        <h3>{user.name}</h3>
-
-        <p className="member-email">
-          {user.email}
-        </p>
-      </div>
-
-      <div className="member-divider" />
-
-      <div className="member-details">
-        <div className="detail-row">
-          <span>ROLE</span>
-
-          <div
-            className={`role-badge ${
-              admin ? "role-admin" : "role-member"
-            }`}
-          >
-            {admin ? <FaUserShield /> : <FaUsers />}
-
-            {formatRole(user.role)}
-          </div>
-        </div>
-
-        <div className="detail-row">
-          <span>STATUS</span>
-
-          <div
-            className={`status-badge ${
-              active
-                ? "status-active"
-                : "status-inactive"
-            }`}
-          >
-            <FaCircle />
-            {formatStatus(user.status)}
-          </div>
-        </div>
-
-        <div className="detail-row">
-          <span>JOINED</span>
-
-          <div className="joined-date">
-            <FaCalendarAlt />
-            {formatDate(user.createdAt)}
-          </div>
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-/* =====================================================
-   SKELETON
-===================================================== */
-
-function SkeletonCard() {
-  return (
-    <div className="member-card skeleton-card">
-      <div className="skeleton-top" />
-
-      <div className="skeleton-avatar" />
-
-      <div className="skeleton-line skeleton-name" />
-
-      <div className="skeleton-line skeleton-email" />
-
-      <div className="skeleton-divider" />
-
-      <div className="skeleton-detail">
-        <span />
-        <span />
-      </div>
-
-      <div className="skeleton-detail">
-        <span />
-        <span />
-      </div>
-
-      <div className="skeleton-detail">
-        <span />
-        <span />
-      </div>
-    </div>
-  );
-}
-
-/* =====================================================
-   EMPTY STATE
-===================================================== */
-
-function EmptyState({ search, onClear }) {
-  return (
-    <motion.div
-      className="empty-state"
-      initial={{
-        opacity: 0,
-        y: 12,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-    >
-      <div className="empty-icon">
-        <FaUsers />
-      </div>
-
-      <h3>No members found</h3>
-
-      <p>
-        {search
-          ? `No team members match "${search}".`
-          : "There are no members matching the selected filters."}
-      </p>
-
-      <button
-        type="button"
-        onClick={onClear}
-      >
-        Clear Filters
-      </button>
-    </motion.div>
-  );
-}
-
-export default Users;
