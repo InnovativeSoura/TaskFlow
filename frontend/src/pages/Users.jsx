@@ -24,7 +24,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-import "../styles/User.css";
+import "../styles/Users.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
