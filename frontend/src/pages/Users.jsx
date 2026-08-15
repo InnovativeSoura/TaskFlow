@@ -17,7 +17,7 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 
-import MainLayout from "../Layouts/MainLayout";
+// import MainLayout from "../Layouts/MainLayout";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import api from "../services/api";
