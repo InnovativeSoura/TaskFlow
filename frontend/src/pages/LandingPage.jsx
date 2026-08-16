@@ -1,3 +1,5 @@
+// src/pages/LandingPage.jsx
+
 import LandingNavbar from "../components/LandingNavbar";
 import BackgroundAnimation from "../components/BackgroundAnimation";
 import Hero from "../components/Hero";
@@ -8,12 +10,26 @@ import Footer from "../components/Footer";
 
 const LandingPage = () => {
   return (
-    <>
+    <div className="landing-page">
+
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
+
       <BackgroundAnimation />
+
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
 
       <LandingNavbar />
 
+      {/* =====================================================
+          MAIN LANDING CONTENT
+      ===================================================== */}
+
       <main id="home">
+
         <Hero />
 
         <FeatureSection />
@@ -21,10 +37,16 @@ const LandingPage = () => {
         <AboutSection />
 
         <ContactSection />
+
       </main>
 
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
+
       <Footer />
-    </>
+
+    </div>
   );
 };
 

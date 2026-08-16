@@ -1,7 +1,14 @@
-import { Navigate, useLocation } from "react-router-dom";
+// src/components/ProtectedRoute.jsx
+
+import {
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+
 import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
+
   const {
     loading,
     user,
@@ -10,21 +17,23 @@ const ProtectedRoute = ({ children }) => {
 
   const location = useLocation();
 
-  /* ==========================================
+  /* =======================================================
      LOADING
-  ========================================== */
+  ======================================================= */
 
   if (loading) {
     return (
       <div className="page-loader">
-        <div className="spinner"></div>
+
+        <div className="spinner" />
+
       </div>
     );
   }
 
-  /* ==========================================
-     AUTH CHECK
-  ========================================== */
+  /* =======================================================
+     AUTHENTICATION CHECK
+  ======================================================= */
 
   const authenticated = Boolean(
     token &&
@@ -32,19 +41,27 @@ const ProtectedRoute = ({ children }) => {
     user._id
   );
 
+  /* =======================================================
+     NOT AUTHENTICATED
+  ======================================================= */
+
   if (!authenticated) {
+
     return (
       <Navigate
-        to="/login"
+        to="/"
         replace
-        state={{ from: location }}
+        state={{
+          from: location,
+        }}
       />
     );
+
   }
 
-  /* ==========================================
-     ALLOW ACCESS
-  ========================================== */
+  /* =======================================================
+     AUTHENTICATED
+  ======================================================= */
 
   return children;
 };

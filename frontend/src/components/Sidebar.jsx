@@ -1,8 +1,20 @@
 // src/components/Sidebar.jsx
 
-import React, { useMemo, useState } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import React, {
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  NavLink,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
 
 import {
   FaThLarge,
@@ -23,12 +35,34 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+
+  /* =======================================================
+     STATE
+  ======================================================= */
+
+  const [collapsed, setCollapsed] =
+    useState(false);
+
+  /* =======================================================
+     ROUTER
+  ======================================================= */
 
   const navigate = useNavigate();
+
   const location = useLocation();
 
-  const { user, logout } = useAuth();
+  /* =======================================================
+     AUTH
+  ======================================================= */
+
+  const {
+    user,
+    logout,
+  } = useAuth();
+
+  /* =======================================================
+     USER INFORMATION
+  ======================================================= */
 
   const username =
     user?.name ||
@@ -39,21 +73,25 @@ const Sidebar = () => {
     user?.role ||
     "Administrator";
 
-  /* =========================================
-      Avatar Initials
-  ========================================= */
+  /* =======================================================
+     AVATAR INITIALS
+  ======================================================= */
 
   const avatarInitials = useMemo(() => {
 
-    if (!username) return "TF";
+    if (!username) {
+      return "TF";
+    }
 
     const words = username
       .trim()
-      .split(" ")
+      .split(/\s+/)
       .filter(Boolean);
 
-    if (words.length === 1)
-      return words[0][0].toUpperCase();
+    if (words.length === 1) {
+      return words[0][0]
+        .toUpperCase();
+    }
 
     return (
       words[0][0] +
@@ -62,24 +100,34 @@ const Sidebar = () => {
 
   }, [username]);
 
-  /* =========================================
-      Logout
-  ========================================= */
+  /* =======================================================
+     LOGOUT
+  ======================================================= */
 
   const handleLogout = () => {
 
+    /*
+     * First remove authentication.
+     */
     logout();
 
-    navigate("../pages/Home.jsx");
+    /*
+     * Then return to the PUBLIC LANDING PAGE.
+     *
+     * IMPORTANT:
+     * Do NOT navigate to /login here.
+     */
+    navigate("/", {
+      replace: true,
+    });
 
   };
 
-  /* =========================================
-      Sidebar Menu
-  ========================================= */
+  /* =======================================================
+     SIDEBAR MENU
+  ======================================================= */
 
   const menuItems = [
-
     {
       name: "Dashboard",
       path: "/dashboard",
@@ -127,117 +175,124 @@ const Sidebar = () => {
       path: "/notifications",
       icon: <FaBell />,
     },
-
   ];
 
-  /* =========================================
-      Animations
-  ========================================= */
+  /* =======================================================
+     SIDEBAR ANIMATION
+  ======================================================= */
 
   const sidebarVariants = {
 
     expanded: {
-
       width: 280,
 
       transition: {
-
         duration: 0.35,
         ease: "easeInOut",
-
       },
-
     },
 
     collapsed: {
-
       width: 90,
 
       transition: {
-
         duration: 0.35,
         ease: "easeInOut",
-
       },
-
     },
 
   };
+
+  /* =======================================================
+     TEXT ANIMATION
+  ======================================================= */
 
   const textVariants = {
 
     hidden: {
-
       opacity: 0,
       x: -10,
-
     },
 
     visible: {
-
       opacity: 1,
       x: 0,
 
       transition: {
-
         duration: 0.2,
-
       },
-
     },
 
     exit: {
-
       opacity: 0,
       x: -10,
 
       transition: {
-
         duration: 0.15,
-
       },
-
     },
 
   };
 
-  return (
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
+  return (
     <motion.aside
-      className={`sidebar ${collapsed ? "collapsed" : ""}`}
+      className={`sidebar ${
+        collapsed ? "collapsed" : ""
+      }`}
       variants={sidebarVariants}
-      animate={collapsed ? "collapsed" : "expanded"}
+      animate={
+        collapsed
+          ? "collapsed"
+          : "expanded"
+      }
       initial={false}
     >
 
       <div className="sidebar-inner">
-              {/* =========================================
-                    WORKSPACE CARD
-        ========================================= */}
+
+        {/* =================================================
+            WORKSPACE CARD
+        ================================================= */}
 
         <motion.div
           className="workspace-card"
           whileHover={{ y: -2 }}
-          transition={{ duration: 0.2 }}
+          transition={{
+            duration: 0.2,
+          }}
         >
+
           <button
+            type="button"
             className="workspace-button"
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() =>
+              setCollapsed(
+                (previous) =>
+                  !previous
+              )
+            }
+            aria-label={
+              collapsed
+                ? "Expand sidebar"
+                : "Collapse sidebar"
+            }
           >
+
             <div className="workspace-left">
 
               <div className="workspace-logo">
-
                 TF
 
-                <span className="workspace-status"></span>
-
+                <span className="workspace-status" />
               </div>
 
               <AnimatePresence mode="wait">
 
                 {!collapsed && (
-
                   <motion.div
                     className="workspace-content"
                     variants={textVariants}
@@ -246,12 +301,15 @@ const Sidebar = () => {
                     exit="exit"
                   >
 
-                    <h3>TaskFlow</h3>
+                    <h3>
+                      TaskFlow
+                    </h3>
 
-                    <p>Workspace</p>
+                    <p>
+                      Workspace
+                    </p>
 
                   </motion.div>
-
                 )}
 
               </AnimatePresence>
@@ -261,29 +319,43 @@ const Sidebar = () => {
             <AnimatePresence mode="wait">
 
               {!collapsed ? (
-
                 <motion.div
                   key="expanded"
                   className="workspace-arrow"
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: -90 }}
+                  initial={{
+                    opacity: 0,
+                    rotate: -90,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    rotate: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    rotate: -90,
+                  }}
                 >
                   <FaChevronLeft />
                 </motion.div>
-
               ) : (
-
                 <motion.div
                   key="collapsed"
                   className="workspace-arrow"
-                  initial={{ opacity: 0, rotate: 90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 90 }}
+                  initial={{
+                    opacity: 0,
+                    rotate: 90,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    rotate: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    rotate: 90,
+                  }}
                 >
                   <FaChevronRight />
                 </motion.div>
-
               )}
 
             </AnimatePresence>
@@ -292,17 +364,13 @@ const Sidebar = () => {
 
         </motion.div>
 
-
-
-        {/* =========================================
-                    PROFILE CARD
-        ========================================= */}
+        {/* =================================================
+            PROFILE CARD
+        ================================================= */}
 
         <motion.div
           className="profile-card"
-          whileHover={{
-            y: -2,
-          }}
+          whileHover={{ y: -2 }}
           transition={{
             duration: 0.2,
           }}
@@ -314,14 +382,13 @@ const Sidebar = () => {
 
               {avatarInitials}
 
-              <span className="profile-online"></span>
+              <span className="profile-online" />
 
             </div>
 
             <AnimatePresence mode="wait">
 
               {!collapsed && (
-
                 <motion.div
                   className="profile-info"
                   variants={textVariants}
@@ -331,19 +398,14 @@ const Sidebar = () => {
                 >
 
                   <h4 title={username}>
-
                     {username}
-
                   </h4>
 
                   <p>
-
                     {role}
-
                   </p>
 
                 </motion.div>
-
               )}
 
             </AnimatePresence>
@@ -353,34 +415,33 @@ const Sidebar = () => {
           <AnimatePresence>
 
             {!collapsed && (
-
               <motion.div
                 className="profile-arrow"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
               >
-
                 <FaChevronRight />
-
               </motion.div>
-
             )}
 
           </AnimatePresence>
 
         </motion.div>
 
-
-
-        {/* =========================================
-                    MENU TITLE
-        ========================================= */}
+        {/* =================================================
+            SECTION TITLE
+        ================================================= */}
 
         <AnimatePresence>
 
           {!collapsed && (
-
             <motion.div
               className="menu-title"
               variants={textVariants}
@@ -388,41 +449,43 @@ const Sidebar = () => {
               animate="visible"
               exit="exit"
             >
-
               Workspace
-
             </motion.div>
-
           )}
 
         </AnimatePresence>
-                {/* =========================================
-                    NAVIGATION MENU
-        ========================================= */}
 
-        <nav className="sidebar-navigation">
+        {/* =================================================
+            NAVIGATION
+        ================================================= */}
+
+        <nav
+          className="sidebar-navigation"
+          aria-label="Main navigation"
+        >
 
           {menuItems.map((item) => {
 
             const isActive =
-              location.pathname === item.path;
+              location.pathname ===
+              item.path;
 
             return (
-
               <NavLink
                 key={item.name}
                 to={item.path}
                 className={`sidebar-link ${
-                  isActive ? "active" : ""
+                  isActive
+                    ? "active"
+                    : ""
                 }`}
               >
 
-                {/* Active Indicator */}
+                {/* Active indicator */}
 
                 <AnimatePresence>
 
                   {isActive && (
-
                     <motion.span
                       layoutId="sidebar-active-pill"
                       className="active-indicator"
@@ -432,7 +495,6 @@ const Sidebar = () => {
                         damping: 30,
                       }}
                     />
-
                   )}
 
                 </AnimatePresence>
@@ -440,9 +502,7 @@ const Sidebar = () => {
                 {/* Icon */}
 
                 <div className="sidebar-icon">
-
                   {item.icon}
-
                 </div>
 
                 {/* Label */}
@@ -450,7 +510,6 @@ const Sidebar = () => {
                 <AnimatePresence mode="wait">
 
                   {!collapsed && (
-
                     <motion.span
                       className="sidebar-label"
                       variants={textVariants}
@@ -458,52 +517,49 @@ const Sidebar = () => {
                       animate="visible"
                       exit="exit"
                     >
-
                       {item.name}
-
                     </motion.span>
-
                   )}
 
                 </AnimatePresence>
 
-                {/* Right Glow */}
+                {/* Active glow */}
 
                 <AnimatePresence>
 
-                  {isActive && !collapsed && (
-
-                    <motion.span
-                      className="active-glow"
-                      initial={{
-                        opacity: 0,
-                      }}
-                      animate={{
-                        opacity: 1,
-                      }}
-                      exit={{
-                        opacity: 0,
-                      }}
-                    />
-
-                  )}
+                  {isActive &&
+                    !collapsed && (
+                      <motion.span
+                        className="active-glow"
+                        initial={{
+                          opacity: 0,
+                        }}
+                        animate={{
+                          opacity: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                        }}
+                      />
+                    )}
 
                 </AnimatePresence>
 
               </NavLink>
-
             );
 
           })}
 
         </nav>
-                {/* =========================================
-                    SIDEBAR FOOTER
-        ========================================= */}
+
+        {/* =================================================
+            FOOTER
+        ================================================= */}
 
         <div className="sidebar-footer">
 
           <motion.button
+            type="button"
             className="logout-button"
             onClick={handleLogout}
             whileHover={{
@@ -516,15 +572,12 @@ const Sidebar = () => {
           >
 
             <span className="sidebar-icon">
-
               <FaSignOutAlt />
-
             </span>
 
             <AnimatePresence mode="wait">
 
               {!collapsed && (
-
                 <motion.span
                   className="sidebar-label"
                   variants={textVariants}
@@ -532,11 +585,8 @@ const Sidebar = () => {
                   animate="visible"
                   exit="exit"
                 >
-
                   Logout
-
                 </motion.span>
-
               )}
 
             </AnimatePresence>
@@ -548,9 +598,7 @@ const Sidebar = () => {
       </div>
 
     </motion.aside>
-
   );
-
 };
 
 export default Sidebar;

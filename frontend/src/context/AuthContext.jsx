@@ -10,220 +10,170 @@ import {
 
 import api from "../api/axios";
 
-const AuthContext =
-  createContext(null);
+const AuthContext = createContext(null);
 
-/* ==========================================
+/* =========================================================
    GET STORED USER
-========================================== */
+========================================================= */
 
 const getStoredUser = () => {
   try {
-    const stored =
-      localStorage.getItem(
-        "user"
-      );
+    const storedUser = localStorage.getItem("user");
 
-    if (!stored) {
+    if (!storedUser) {
       return null;
     }
 
-    return JSON.parse(stored);
+    return JSON.parse(storedUser);
   } catch (error) {
-    console.error(
-      "Invalid stored user:",
-      error
-    );
+    console.error("Invalid stored user:", error);
 
-    localStorage.removeItem(
-      "user"
-    );
+    localStorage.removeItem("user");
 
     return null;
   }
 };
 
-/* ==========================================
-   PROVIDER
-========================================== */
+/* =========================================================
+   AUTH PROVIDER
+========================================================= */
 
-export const AuthProvider = ({
-  children,
-}) => {
-  const [token, setToken] =
-    useState(() =>
-      localStorage.getItem(
-        "token"
-      )
-    );
+export const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token");
+  });
 
-  const [user, setUser] =
-    useState(getStoredUser);
+  const [user, setUser] = useState(getStoredUser);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  /* ==========================================
-     SAVE AUTH
-  ========================================== */
+  /* =======================================================
+     SAVE AUTHENTICATION
+  ======================================================= */
 
-  const saveAuth = useCallback(
-    (jwt, currentUser) => {
-      if (jwt) {
-        localStorage.setItem(
-          "token",
-          jwt
-        );
-      }
+  const saveAuth = useCallback((jwt, currentUser) => {
+    if (jwt) {
+      localStorage.setItem("token", jwt);
+      setToken(jwt);
+    }
 
-      if (currentUser) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(
-            currentUser
-          )
-        );
-      }
-
-      setToken(jwt || null);
-      setUser(
-        currentUser || null
+    if (currentUser) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify(currentUser)
       );
-    },
-    []
-  );
 
-  /* ==========================================
-     CLEAR AUTH
-  ========================================== */
+      setUser(currentUser);
+    }
+  }, []);
+
+  /* =======================================================
+     CLEAR AUTHENTICATION
+  ======================================================= */
 
   const clearAuth = useCallback(() => {
-    localStorage.removeItem(
-      "token"
-    );
-
-    localStorage.removeItem(
-      "user"
-    );
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
   }, []);
 
-  /* ==========================================
+  /* =======================================================
      LOAD CURRENT USER
-  ========================================== */
+  ======================================================= */
 
-  const loadCurrentUser =
-    useCallback(async () => {
-      const storedToken =
-        localStorage.getItem(
-          "token"
+  const loadCurrentUser = useCallback(async () => {
+    const storedToken = localStorage.getItem("token");
+
+    if (!storedToken) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await api.get("/auth/me");
+
+      if (
+        response.data?.success &&
+        response.data?.user
+      ) {
+        const currentUser = response.data.user;
+
+        setToken(storedToken);
+        setUser(currentUser);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(currentUser)
         );
-
-      if (!storedToken) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-
-        const response =
-          await api.get(
-            "/auth/me"
-          );
-
-        if (
-          response.data?.success &&
-          response.data?.user
-        ) {
-          const currentUser =
-            response.data.user;
-
-          setToken(storedToken);
-
-          setUser(currentUser);
-
-          localStorage.setItem(
-            "user",
-            JSON.stringify(
-              currentUser
-            )
-          );
-        } else {
-          clearAuth();
-        }
-      } catch (error) {
-        console.error(
-          "Load User Error:",
-          error.response
-            ?.data ||
-            error.message
-        );
-
+      } else {
         clearAuth();
-      } finally {
-        setLoading(false);
       }
-    }, [clearAuth]);
+    } catch (error) {
+      console.error(
+        "Load Current User Error:",
+        error.response?.data || error.message
+      );
 
-  /* ==========================================
-     INITIAL LOAD
-  ========================================== */
+      clearAuth();
+    } finally {
+      setLoading(false);
+    }
+  }, [clearAuth]);
+
+  /* =======================================================
+     INITIAL AUTH CHECK
+  ======================================================= */
 
   useEffect(() => {
     loadCurrentUser();
   }, [loadCurrentUser]);
 
-  /* ==========================================
+  /* =======================================================
      LOGIN
-  ========================================== */
+  ======================================================= */
 
-  const login = async ({
-    email,
-    password,
-  }) => {
+  const login = async ({ email, password }) => {
     try {
-      const response =
-        await api.post(
-          "/auth/login",
-          {
-            email,
-            password,
-          }
-        );
+      const response = await api.post(
+        "/auth/login",
+        {
+          email,
+          password,
+        }
+      );
 
-      const data =
-        response.data;
+      const data = response.data;
 
       if (!data?.success) {
         return {
           success: false,
           message:
-            data?.message ||
-            "Login failed.",
+            data?.message || "Login failed.",
         };
       }
 
+      /*
+       * Save token and initial user.
+       */
       saveAuth(
         data.token,
         data.user
       );
 
       /*
-        Fetch the latest database
-        version of the user.
-      */
-
-      const me =
-        await api.get(
-          "/auth/me"
-        );
+       * Verify with database.
+       */
+      const meResponse = await api.get(
+        "/auth/me"
+      );
 
       if (
-        !me.data?.success ||
-        !me.data?.user
+        !meResponse.data?.success ||
+        !meResponse.data?.user
       ) {
         clearAuth();
 
@@ -234,31 +184,38 @@ export const AuthProvider = ({
         };
       }
 
+      /*
+       * Save latest database user.
+       */
       saveAuth(
         data.token,
-        me.data.user
+        meResponse.data.user
       );
 
       return {
         success: true,
-        user: me.data.user,
+        user: meResponse.data.user,
       };
     } catch (error) {
+      console.error(
+        "Login Error:",
+        error.response?.data || error.message
+      );
+
       clearAuth();
 
       return {
         success: false,
         message:
-          error.response?.data
-            ?.message ||
-          "Login failed.",
+          error.response?.data?.message ||
+          "Login failed. Please check your credentials.",
       };
     }
   };
 
-  /* ==========================================
+  /* =======================================================
      REGISTER
-  ========================================== */
+  ======================================================= */
 
   const register = async ({
     name,
@@ -267,19 +224,17 @@ export const AuthProvider = ({
     role = "Team Member",
   }) => {
     try {
-      const response =
-        await api.post(
-          "/auth/register",
-          {
-            name,
-            email,
-            password,
-            role,
-          }
-        );
+      const response = await api.post(
+        "/auth/register",
+        {
+          name,
+          email,
+          password,
+          role,
+        }
+      );
 
-      const data =
-        response.data;
+      const data = response.data;
 
       if (!data?.success) {
         return {
@@ -290,19 +245,24 @@ export const AuthProvider = ({
         };
       }
 
+      /*
+       * Save authentication.
+       */
       saveAuth(
         data.token,
         data.user
       );
 
-      const me =
-        await api.get(
-          "/auth/me"
-        );
+      /*
+       * Verify authenticated user.
+       */
+      const meResponse = await api.get(
+        "/auth/me"
+      );
 
       if (
-        !me.data?.success ||
-        !me.data?.user
+        !meResponse.data?.success ||
+        !meResponse.data?.user
       ) {
         clearAuth();
 
@@ -315,37 +275,51 @@ export const AuthProvider = ({
 
       saveAuth(
         data.token,
-        me.data.user
+        meResponse.data.user
       );
 
       return {
         success: true,
-        user: me.data.user,
+        user: meResponse.data.user,
       };
     } catch (error) {
+      console.error(
+        "Register Error:",
+        error.response?.data || error.message
+      );
+
       clearAuth();
 
       return {
         success: false,
         message:
-          error.response?.data
-            ?.message ||
+          error.response?.data?.message ||
           "Registration failed.",
       };
     }
   };
 
-  /* ==========================================
+  /* =======================================================
      LOGOUT
-  ========================================== */
+  ======================================================= */
 
   const logout = useCallback(() => {
-    clearAuth();
-  }, [clearAuth]);
+    /*
+     * Completely remove authentication.
+     */
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-  /* ==========================================
+    /*
+     * Immediately update React state.
+     */
+    setToken(null);
+    setUser(null);
+  }, []);
+
+  /* =======================================================
      UPDATE USER
-  ========================================== */
+  ======================================================= */
 
   const updateUser = useCallback(
     (updatedUser) => {
@@ -357,48 +331,40 @@ export const AuthProvider = ({
 
       localStorage.setItem(
         "user",
-        JSON.stringify(
-          updatedUser
-        )
+        JSON.stringify(updatedUser)
       );
     },
     []
   );
 
-  /* ==========================================
+  /* =======================================================
      AUTHENTICATED STATUS
-  ========================================== */
+  ======================================================= */
 
-  const isAuthenticated =
-    Boolean(
-      token &&
-        user &&
-        user._id
-    );
+  const isAuthenticated = Boolean(
+    token &&
+    user &&
+    user._id
+  );
 
-  /* ==========================================
+  /* =======================================================
      PROVIDER
-  ========================================== */
+  ======================================================= */
 
   return (
     <AuthContext.Provider
       value={{
         user,
-
         token,
-
         loading,
 
         login,
-
         register,
-
         logout,
 
         updateUser,
 
         setUser,
-
         setToken,
 
         isAuthenticated,
@@ -409,13 +375,12 @@ export const AuthProvider = ({
   );
 };
 
-/* ==========================================
+/* =========================================================
    CUSTOM HOOK
-========================================== */
+========================================================= */
 
 export const useAuth = () => {
-  const context =
-    useContext(AuthContext);
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error(
