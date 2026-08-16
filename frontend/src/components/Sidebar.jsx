@@ -70,7 +70,7 @@ const Sidebar = () => {
 
     logout();
 
-    navigate("/", { replace: true });
+    navigate("../pages/Home.jsx");
 
   };
 
