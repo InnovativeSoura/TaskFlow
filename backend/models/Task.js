@@ -1,4 +1,10 @@
+// backend/models/Task.js
+
 import mongoose from "mongoose";
+
+/* =========================================================
+   CHECKLIST SCHEMA
+========================================================= */
 
 const checklistSchema = new mongoose.Schema(
   {
@@ -17,6 +23,10 @@ const checklistSchema = new mongoose.Schema(
     _id: false,
   }
 );
+
+/* =========================================================
+   COMMENT SCHEMA
+========================================================= */
 
 const commentSchema = new mongoose.Schema(
   {
@@ -42,11 +52,21 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
+/* =========================================================
+   ATTACHMENT SCHEMA
+========================================================= */
+
 const attachmentSchema = new mongoose.Schema(
   {
-    fileName: String,
+    fileName: {
+      type: String,
+      trim: true,
+    },
 
-    fileUrl: String,
+    fileUrl: {
+      type: String,
+      trim: true,
+    },
 
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -63,11 +83,16 @@ const attachmentSchema = new mongoose.Schema(
   }
 );
 
+/* =========================================================
+   ACTIVITY SCHEMA
+========================================================= */
+
 const activitySchema = new mongoose.Schema(
   {
     action: {
       type: String,
       required: true,
+      trim: true,
     },
 
     user: {
@@ -85,8 +110,16 @@ const activitySchema = new mongoose.Schema(
   }
 );
 
+/* =========================================================
+   TASK SCHEMA
+========================================================= */
+
 const taskSchema = new mongoose.Schema(
   {
+    /* =====================================================
+       BASIC INFORMATION
+    ===================================================== */
+
     title: {
       type: String,
       required: true,
@@ -99,11 +132,19 @@ const taskSchema = new mongoose.Schema(
       trim: true,
     },
 
+    /* =====================================================
+       PROJECT
+    ===================================================== */
+
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
       required: true,
     },
+
+    /* =====================================================
+       ASSIGNMENT
+    ===================================================== */
 
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
@@ -117,32 +158,55 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
 
+    /* =====================================================
+       STATUS
+
+       IMPORTANT:
+       These values must match the frontend and controller.
+    ===================================================== */
+
     status: {
       type: String,
+
       enum: [
         "To Do",
         "In Progress",
         "Review",
         "Completed",
       ],
+
       default: "To Do",
     },
 
+    /* =====================================================
+       PRIORITY
+    ===================================================== */
+
     priority: {
       type: String,
+
       enum: [
         "Low",
         "Medium",
         "High",
         "Critical",
       ],
+
       default: "Medium",
     },
+
+    /* =====================================================
+       DATE
+    ===================================================== */
 
     dueDate: {
       type: Date,
       default: null,
     },
+
+    /* =====================================================
+       TIME TRACKING
+    ===================================================== */
 
     estimatedHours: {
       type: Number,
@@ -156,12 +220,20 @@ const taskSchema = new mongoose.Schema(
       min: 0,
     },
 
+    /* =====================================================
+       PROGRESS
+    ===================================================== */
+
     progress: {
       type: Number,
       default: 0,
       min: 0,
       max: 100,
     },
+
+    /* =====================================================
+       LABELS
+    ===================================================== */
 
     labels: [
       {
@@ -170,27 +242,56 @@ const taskSchema = new mongoose.Schema(
       },
     ],
 
-    checklist: [checklistSchema],
+    /* =====================================================
+       CHECKLIST
+    ===================================================== */
 
-    comments: [commentSchema],
+    checklist: [
+      checklistSchema,
+    ],
 
-    attachments: [attachmentSchema],
+    /* =====================================================
+       COMMENTS
+    ===================================================== */
 
-    activity: [activitySchema],
+    comments: [
+      commentSchema,
+    ],
+
+    /* =====================================================
+       ATTACHMENTS
+    ===================================================== */
+
+    attachments: [
+      attachmentSchema,
+    ],
+
+    /* =====================================================
+       ACTIVITY
+    ===================================================== */
+
+    activity: [
+      activitySchema,
+    ],
+
+    /* =====================================================
+       ARCHIVE
+    ===================================================== */
 
     isArchived: {
       type: Boolean,
       default: false,
     },
   },
+
   {
     timestamps: true,
   }
 );
 
-/* ======================================
+/* =========================================================
    INDEXES
-====================================== */
+========================================================= */
 
 taskSchema.index({
   project: 1,
@@ -204,6 +305,18 @@ taskSchema.index({
 taskSchema.index({
   priority: 1,
 });
+
+taskSchema.index({
+  createdBy: 1,
+});
+
+taskSchema.index({
+  dueDate: 1,
+});
+
+/* =========================================================
+   MODEL
+========================================================= */
 
 export default mongoose.model(
   "Task",

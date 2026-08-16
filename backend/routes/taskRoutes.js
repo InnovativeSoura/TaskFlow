@@ -1,3 +1,5 @@
+// backend/routes/taskRoutes.js
+
 import express from "express";
 
 import {
@@ -10,6 +12,7 @@ import {
 } from "../controllers/taskController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
+
 import {
   isAdmin,
   isAdminOrManager,
@@ -17,32 +20,88 @@ import {
 
 const router = express.Router();
 
-/* ==========================================
+/* =========================================================
    GLOBAL PROTECTION
-========================================== */
+
+   Every task route requires authentication.
+========================================================= */
 
 router.use(protect);
 
-/* ==========================================
-   TASK ROUTES
-========================================== */
+/* =========================================================
+   GET ALL TASKS
 
-// Get all tasks (All authenticated users)
-router.get("/", protect, getTasks);
+   All authenticated users.
+========================================================= */
 
-// Get single task (All authenticated users)
-router.get("/:id", protect, getTaskById);
+router.get(
+  "/",
+  getTasks
+);
 
-// Create task (Admin & Manager)
-router.post("/", protect, isAdminOrManager, createTask);
+/* =========================================================
+   GET SINGLE TASK
 
-// Update entire task (Admin & Manager)
-router.put("/:id", protect, isAdminOrManager, updateTask);
+   All authenticated users.
+========================================================= */
 
-// Update task status (All authenticated users)
-router.patch("/:id/status", protect, updateTaskStatus);
+router.get(
+  "/:id",
+  getTaskById
+);
 
-// Delete task (Admin only)
-router.delete("/:id", protect, isAdmin, deleteTask);
+/* =========================================================
+   CREATE TASK
+
+   Admin + Manager.
+========================================================= */
+
+router.post(
+  "/",
+  isAdminOrManager,
+  createTask
+);
+
+/* =========================================================
+   UPDATE ENTIRE TASK
+
+   Admin + Manager.
+========================================================= */
+
+router.put(
+  "/:id",
+  isAdminOrManager,
+  updateTask
+);
+
+/* =========================================================
+   UPDATE TASK STATUS
+
+   All authenticated users.
+
+   Team Members are restricted inside the controller
+   to their own assigned tasks.
+========================================================= */
+
+router.patch(
+  "/:id/status",
+  updateTaskStatus
+);
+
+/* =========================================================
+   DELETE TASK
+
+   Admin only.
+========================================================= */
+
+router.delete(
+  "/:id",
+  isAdmin,
+  deleteTask
+);
+
+/* =========================================================
+   EXPORT
+========================================================= */
 
 export default router;
