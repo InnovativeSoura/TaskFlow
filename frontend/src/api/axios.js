@@ -10,6 +10,16 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:5000";
 
+/*
+ * Support both:
+ *
+ * VITE_API_URL=http://localhost:5000
+ *
+ * and:
+ *
+ * VITE_API_URL=http://localhost:5000/api
+ */
+
 const BASE_URL = API_URL.endsWith("/api")
   ? API_URL
   : `${API_URL}/api`;
@@ -46,32 +56,34 @@ api.interceptors.request.use(
     config.headers = config.headers || {};
 
     /*
-     * Attach JWT token to every protected request.
+     * Attach JWT token to protected requests.
      */
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      /*
-       * Make sure we don't accidentally send
-       * an old/undefined Authorization header.
-       */
       delete config.headers.Authorization;
     }
 
     console.log("====================================");
+
     console.log(
-      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+      `🚀 ${config.method?.toUpperCase()} ${
+        config.baseURL
+      }${config.url}`
     );
+
     console.log(
       "🔑 Token:",
       token ? "PRESENT" : "MISSING"
     );
+
     console.log(
       "🛡 Authorization:",
       config.headers.Authorization
         ? "Bearer token attached"
         : "NOT ATTACHED"
     );
+
     console.log("====================================");
 
     return config;
@@ -107,15 +119,15 @@ api.interceptors.response.use(
     });
 
     /*
-     * Authentication endpoints should not trigger
-     * global logout handling.
+     * Authentication routes should not
+     * trigger automatic session clearing.
      */
     const isAuthRoute =
       url.includes("/auth/login") ||
       url.includes("/auth/register");
 
     /*
-     * Only clear authentication when a protected
+     * Only clear the session when a protected
      * request actually returns 401.
      */
     if (status === 401 && !isAuthRoute) {
