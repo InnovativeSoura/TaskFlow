@@ -70,7 +70,7 @@ const Sidebar = () => {
 
     logout();
 
-    navigate("/");
+    navigate("/", { replace: true });
 
   };
 
