@@ -11,7 +11,7 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 
-import "../styles/AuthCard.css";
+import "../styles/Auth.css";
 
 const AuthCard = () => {
   const { login, register } = useAuth();
