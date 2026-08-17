@@ -3,6 +3,7 @@
 import {
   useState,
   useEffect,
+  useCallback,
 } from "react";
 
 import {
@@ -15,6 +16,12 @@ import {
   motion,
 } from "framer-motion";
 
+import {
+  FaCheck,
+  FaUsers,
+  FaArrowUp,
+} from "react-icons/fa";
+
 import { useAuth } from "../../context/AuthContext";
 
 import AuthToggle from "./AuthToggle";
@@ -22,10 +29,16 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import SocialButtons from "./SocialButtons";
 
+
+/* =========================================================
+   AUTH CARD
+========================================================= */
+
 const AuthCard = ({
   compact = false,
   onAuthReady,
 }) => {
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,100 +47,41 @@ const AuthCard = ({
     register,
   } = useAuth();
 
-  /* ==========================================
-      API URL
-  ========================================== */
 
-  const API_URL = (
-    import.meta.env.VITE_API_URL ||
-    "http://localhost:5000/api"
-  ).replace(/\/$/, "");
+  /* =========================================================
+     API URL
+  ========================================================= */
 
-  /* ==========================================
-      LOGIN / REGISTER MODE
-  ========================================== */
+  const getApiBaseUrl = useCallback(() => {
 
-  const [isLogin, setIsLogin] = useState(
-    location.pathname !== "/register"
-  );
+    const envUrl =
+      import.meta.env.VITE_API_URL ||
+      "http://localhost:5000/api";
 
-  /* ==========================================
-      SYNC MODE WITH URL
-      ONLY FOR FULL AUTH PAGE
-  ========================================== */
+    return envUrl
+      .replace(/\/+$/, "")
+      .replace(/\/api$/, "");
 
-  useEffect(() => {
-    if (!compact) {
-      setIsLogin(
-        location.pathname !== "/register"
-      );
-    }
-  }, [
-    location.pathname,
-    compact,
-  ]);
+  }, []);
 
-  /* ==========================================
-      LISTEN FOR LANDING PAGE AUTH REQUESTS
-  ========================================== */
 
-  useEffect(() => {
-    if (!compact) return;
+  const API_BASE_URL =
+    getApiBaseUrl();
 
-    const handleAuthMode = (event) => {
-      const mode =
-        event.detail?.mode;
 
-      if (
-        mode !== "login" &&
-        mode !== "register"
-      ) {
-        return;
-      }
+  /* =========================================================
+     LOGIN / REGISTER MODE
+  ========================================================= */
 
-      setError("");
-
-      setIsLogin(
-        mode === "login"
-      );
-
-      // Reset password visibility
-      setShowPassword(false);
-      setShowConfirmPassword(false);
-    };
-
-    window.addEventListener(
-      "taskflow-auth-mode",
-      handleAuthMode
+  const [isLogin, setIsLogin] =
+    useState(
+      location.pathname !== "/register"
     );
 
-    return () => {
-      window.removeEventListener(
-        "taskflow-auth-mode",
-        handleAuthMode
-      );
-    };
-  }, [compact]);
 
-  /* ==========================================
-      NOTIFY PARENT THAT AUTH CARD IS READY
-  ========================================== */
-
-  useEffect(() => {
-    if (
-      compact &&
-      typeof onAuthReady === "function"
-    ) {
-      onAuthReady();
-    }
-  }, [
-    compact,
-    onAuthReady,
-  ]);
-
-  /* ==========================================
-      UI STATE
-  ========================================== */
+  /* =========================================================
+     UI STATE
+  ========================================================= */
 
   const [loading, setLoading] =
     useState(false);
@@ -146,9 +100,10 @@ const AuthCard = ({
     setShowConfirmPassword,
   ] = useState(false);
 
-  /* ==========================================
-      FORM DATA
-  ========================================== */
+
+  /* =========================================================
+     FORM DATA
+  ========================================================= */
 
   const [formData, setFormData] =
     useState({
@@ -159,25 +114,108 @@ const AuthCard = ({
       role: "Team Member",
     });
 
-  /* ==========================================
-      OAUTH
-  ========================================== */
 
-  const handleGoogleLogin = () => {
-    window.location.href =
-      `${API_URL}/api/auth/google`;
-  };
+  /* =========================================================
+     SYNC MODE WITH URL
+     FULL AUTH PAGE ONLY
+  ========================================================= */
 
-  const handleGithubLogin = () => {
-    window.location.href =
-      `${API_URL}/api/auth/github`;
-  };
+  useEffect(() => {
 
-  /* ==========================================
-      RESET FORM
-  ========================================== */
+    if (!compact) {
+
+      setIsLogin(
+        location.pathname !== "/register"
+      );
+
+    }
+
+  }, [
+    location.pathname,
+    compact,
+  ]);
+
+
+  /* =========================================================
+     LANDING PAGE AUTH MODE EVENT
+  ========================================================= */
+
+  useEffect(() => {
+
+    if (!compact) {
+      return;
+    }
+
+    const handleAuthMode = (event) => {
+
+      const mode =
+        event.detail?.mode;
+
+      if (
+        mode !== "login" &&
+        mode !== "register"
+      ) {
+        return;
+      }
+
+      setError("");
+
+      setIsLogin(
+        mode === "login"
+      );
+
+      setShowPassword(false);
+
+      setShowConfirmPassword(false);
+
+    };
+
+
+    window.addEventListener(
+      "taskflow-auth-mode",
+      handleAuthMode
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "taskflow-auth-mode",
+        handleAuthMode
+      );
+
+    };
+
+  }, [compact]);
+
+
+  /* =========================================================
+     AUTH CARD READY
+  ========================================================= */
+
+  useEffect(() => {
+
+    if (
+      compact &&
+      typeof onAuthReady === "function"
+    ) {
+
+      onAuthReady();
+
+    }
+
+  }, [
+    compact,
+    onAuthReady,
+  ]);
+
+
+  /* =========================================================
+     RESET FORM
+  ========================================================= */
 
   const resetForm = () => {
+
     setError("");
 
     setShowPassword(false);
@@ -191,30 +229,37 @@ const AuthCard = ({
       confirmPassword: "",
       role: "Team Member",
     });
+
   };
 
-  /* ==========================================
-      CHANGE HANDLER
-  ========================================== */
 
-  const handleChange = (e) => {
+  /* =========================================================
+     CHANGE HANDLER
+  ========================================================= */
+
+  const handleChange = (event) => {
+
     setError("");
 
-    setFormData((prev) => ({
-      ...prev,
+    const {
+      name,
+      value,
+    } = event.target;
 
-      [e.target.name]:
-        e.target.value,
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
     }));
+
   };
 
-  /* ==========================================
-      SWITCH MODE
-  ========================================== */
 
-  const switchMode = (
-    loginMode
-  ) => {
+  /* =========================================================
+     SWITCH LOGIN / REGISTER
+  ========================================================= */
+
+  const switchMode = (loginMode) => {
+
     if (
       loginMode === isLogin
     ) {
@@ -225,22 +270,22 @@ const AuthCard = ({
 
     setIsLogin(loginMode);
 
+
     /*
       COMPACT MODE
-      -------------------------------
+      ----------------------------------
       Stay on the landing page.
-      Do NOT navigate to /login
-      or /register.
     */
 
     if (compact) {
       return;
     }
 
+
     /*
       FULL AUTH PAGE
-      -------------------------------
-      Continue using normal routes.
+      ----------------------------------
+      Use normal authentication routes.
     */
 
     navigate(
@@ -251,13 +296,16 @@ const AuthCard = ({
         replace: true,
       }
     );
+
   };
 
-  /* ==========================================
-      VALIDATION
-  ========================================== */
+
+  /* =========================================================
+     VALIDATION
+  ========================================================= */
 
   const validate = () => {
+
     const {
       name,
       email,
@@ -265,79 +313,138 @@ const AuthCard = ({
       confirmPassword,
     } = formData;
 
+
     if (!email.trim()) {
+
       return "Email is required.";
+
     }
+
 
     const emailRegex =
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
     if (
       !emailRegex.test(
         email.trim()
       )
     ) {
+
       return "Enter a valid email.";
+
     }
+
 
     if (!password.trim()) {
+
       return "Password is required.";
+
     }
 
+
     if (password.length < 6) {
+
       return (
         "Password must contain at least 6 characters."
       );
+
     }
 
+
     if (!isLogin) {
+
       if (!name.trim()) {
+
         return "Full Name is required.";
+
       }
+
 
       if (
         password !==
         confirmPassword
       ) {
+
         return "Passwords do not match.";
+
       }
+
     }
 
+
     return "";
+
   };
 
-  /* ==========================================
-      SUBMIT
-  ========================================== */
 
-  const handleSubmit = async (
-    e
-  ) => {
-    e.preventDefault();
+  /* =========================================================
+     GOOGLE LOGIN
+  ========================================================= */
+
+  const handleGoogleLogin = () => {
+
+    window.location.href =
+      `${API_BASE_URL}/api/auth/google`;
+
+  };
+
+
+  /* =========================================================
+     GITHUB LOGIN
+  ========================================================= */
+
+  const handleGithubLogin = () => {
+
+    window.location.href =
+      `${API_BASE_URL}/api/auth/github`;
+
+  };
+
+
+  /* =========================================================
+     SUBMIT
+  ========================================================= */
+
+  const handleSubmit = async (event) => {
+
+    event.preventDefault();
+
 
     if (loading) {
       return;
     }
 
+
     const validation =
       validate();
 
+
     if (validation) {
+
       setError(validation);
+
       return;
+
     }
 
+
     setLoading(true);
+
     setError("");
 
+
     try {
+
       let result;
 
-      /* ==============================
-          LOGIN
-      =============================== */
+
+      /* =====================================================
+         LOGIN
+      ===================================================== */
 
       if (isLogin) {
+
         result = await login({
           email:
             formData.email.trim(),
@@ -345,14 +452,18 @@ const AuthCard = ({
           password:
             formData.password,
         });
+
       }
 
-      /* ==============================
-          REGISTER
-      =============================== */
+
+      /* =====================================================
+         REGISTER
+      ===================================================== */
 
       else {
+
         result = await register({
+
           name:
             formData.name.trim(),
 
@@ -364,28 +475,34 @@ const AuthCard = ({
 
           role:
             formData.role,
+
         });
+
       }
 
-      /* ==============================
-          FAILED RESPONSE
-      =============================== */
+
+      /* =====================================================
+         FAILED RESPONSE
+      ===================================================== */
 
       if (
         !result ||
         !result.success
       ) {
+
         setError(
           result?.message ||
-            "Authentication failed."
+          "Authentication failed."
         );
 
         return;
+
       }
 
-      /* ==============================
-          SUCCESS
-      =============================== */
+
+      /* =====================================================
+         SUCCESS
+      ===================================================== */
 
       navigate(
         "/dashboard",
@@ -393,35 +510,59 @@ const AuthCard = ({
           replace: true,
         }
       );
-    } catch (err) {
+
+    } catch (error) {
+
       setError(
-        err?.message ||
-          "Something went wrong. Please try again."
+        error?.message ||
+        "Something went wrong. Please try again."
       );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
-  /* ==========================================
-      FORGOT PASSWORD
-  ========================================== */
+
+  /* =========================================================
+     FORGOT PASSWORD
+  ========================================================= */
 
   const handleForgotPassword = () => {
+
     navigate(
       "/forgot-password"
     );
+
   };
 
-  /* ==========================================
-      RENDER
-  ========================================== */
+
+  /* =========================================================
+     CARD WIDTH
+  ========================================================= */
+
+  const cardStyle = compact
+    ? {
+        width: "min(390px, calc(100vw - 32px))",
+        maxWidth: "390px",
+        minWidth: "320px",
+      }
+    : undefined;
+
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
-    <div
+
+    <motion.div
       className={`auth-card ${
         compact
-          ? "compact"
+          ? "compact auth-card-wide"
           : ""
       }`}
       id={
@@ -429,22 +570,125 @@ const AuthCard = ({
           ? "landing-auth-card"
           : undefined
       }
+      style={cardStyle}
+      initial={
+        compact
+          ? {
+              opacity: 0,
+              x: 40,
+              scale: 0.97,
+            }
+          : false
+      }
+      animate={
+        compact
+          ? {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+            }
+          : undefined
+      }
+      transition={{
+        duration: 0.45,
+        ease: "easeOut",
+      }}
     >
 
-      {/* ======================================
+      {/* =====================================================
+          WORKSPACE STATUS HEADER
+      ===================================================== */}
+
+      {compact && (
+
+        <motion.div
+          className="auth-workspace-status"
+          initial={{
+            opacity: 0,
+            y: -8,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.15,
+            duration: 0.35,
+          }}
+        >
+
+          <div className="workspace-ready">
+
+            <span className="workspace-ready-dot">
+              <FaCheck />
+            </span>
+
+            <div className="workspace-ready-text">
+
+              <span className="workspace-ready-title">
+                Workspace is ready
+              </span>
+
+              <span className="workspace-ready-subtitle">
+                Your project hub is online
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div className="workspace-members">
+
+            <div
+              className="workspace-avatar avatar-purple"
+              title="Souradipta"
+            >
+              S
+            </div>
+
+            <div
+              className="workspace-avatar avatar-blue"
+              title="Team Member"
+            >
+              A
+            </div>
+
+            <div
+              className="workspace-avatar avatar-cyan"
+              title="Team Member"
+            >
+              K
+            </div>
+
+            <span className="workspace-member-count">
+              +18
+            </span>
+
+          </div>
+
+        </motion.div>
+
+      )}
+
+
+      {/* =====================================================
           LOGIN / REGISTER TOGGLE
-      ======================================= */}
+      ===================================================== */}
 
       <AuthToggle
         isLogin={isLogin}
         onToggle={switchMode}
       />
 
-      {/* ======================================
-          FORM ANIMATION
-      ======================================= */}
 
-      <AnimatePresence mode="wait">
+      {/* =====================================================
+          FORM ANIMATION
+      ===================================================== */}
+
+      <AnimatePresence
+        mode="wait"
+      >
 
         <motion.div
           key={
@@ -454,7 +698,7 @@ const AuthCard = ({
           }
           initial={{
             opacity: 0,
-            y: 25,
+            y: 22,
           }}
           animate={{
             opacity: 1,
@@ -462,37 +706,43 @@ const AuthCard = ({
           }}
           exit={{
             opacity: 0,
-            y: -25,
+            y: -22,
           }}
           transition={{
-            duration: 0.35,
+            duration: 0.32,
             ease: "easeOut",
           }}
         >
 
-          {/* ==================================
+          {/* =================================================
               HEADER
-          =================================== */}
+          ================================================= */}
 
           <div className="auth-header">
 
             <h2 className="auth-title">
+
               {isLogin
                 ? "Welcome Back 👋"
                 : "Create Your Account"}
+
             </h2>
 
+
             <p className="auth-subtitle">
+
               {isLogin
                 ? "Sign in to continue managing your projects."
                 : "Join TaskFlow and start collaborating today."}
+
             </p>
 
           </div>
 
-          {/* ==================================
+
+          {/* =================================================
               LOGIN FORM
-          =================================== */}
+          ================================================= */}
 
           {isLogin ? (
 
@@ -531,15 +781,15 @@ const AuthCard = ({
 
               onTogglePassword={() =>
                 setShowPassword(
-                  (prev) =>
-                    !prev
+                  (previous) =>
+                    !previous
                 )
               }
 
               onRememberChange={() =>
                 setRememberMe(
-                  (prev) =>
-                    !prev
+                  (previous) =>
+                    !previous
                 )
               }
 
@@ -550,9 +800,9 @@ const AuthCard = ({
 
           ) : (
 
-            /* ==================================
-                REGISTER FORM
-            =================================== */
+            /* =================================================
+               REGISTER FORM
+            ================================================= */
 
             <RegisterForm
               name={
@@ -601,24 +851,25 @@ const AuthCard = ({
 
               onTogglePassword={() =>
                 setShowPassword(
-                  (prev) =>
-                    !prev
+                  (previous) =>
+                    !previous
                 )
               }
 
               onToggleConfirmPassword={() =>
                 setShowConfirmPassword(
-                  (prev) =>
-                    !prev
+                  (previous) =>
+                    !previous
                 )
               }
             />
 
           )}
 
-          {/* ==================================
+
+          {/* =================================================
               SOCIAL LOGIN
-          =================================== */}
+          ================================================= */}
 
           <SocialButtons
             onGoogleLogin={
@@ -630,15 +881,17 @@ const AuthCard = ({
             }
           />
 
-          {/* ==================================
+
+          {/* =================================================
               AUTH FOOTER
-          =================================== */}
+          ================================================= */}
 
           <div className="auth-footer">
 
             {isLogin ? (
 
               <>
+
                 <span>
                   Don't have an account?
                 </span>
@@ -652,11 +905,13 @@ const AuthCard = ({
                 >
                   Register Now
                 </button>
+
               </>
 
             ) : (
 
               <>
+
                 <span>
                   Already have an account?
                 </span>
@@ -670,18 +925,97 @@ const AuthCard = ({
                 >
                   Login
                 </button>
+
               </>
 
             )}
 
           </div>
 
+
+          {/* =================================================
+              COMPACT CARD FOOTER STATS
+          ================================================= */}
+
+          {compact && (
+
+            <motion.div
+              className="auth-mini-stats"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.3,
+                duration: 0.35,
+              }}
+            >
+
+              <div className="auth-mini-stat">
+
+                <div className="auth-mini-stat-icon">
+                  <FaTasksSafeIcon />
+                </div>
+
+                <div>
+                  <strong>
+                    124
+                  </strong>
+
+                  <span>
+                    Tasks Completed
+                  </span>
+                </div>
+
+              </div>
+
+
+              <div className="auth-mini-stat">
+
+                <div className="auth-mini-stat-icon success">
+                  <FaArrowUp />
+                </div>
+
+                <div>
+                  <strong>
+                    96%
+                  </strong>
+
+                  <span>
+                    Project Success
+                  </span>
+                </div>
+
+              </div>
+
+            </motion.div>
+
+          )}
+
         </motion.div>
 
       </AnimatePresence>
 
-    </div>
+    </motion.div>
+
   );
 };
+
+
+/* =========================================================
+   SMALL INTERNAL ICON
+   Avoids adding another dependency.
+========================================================= */
+
+const FaTasksSafeIcon = () => (
+
+  <FaUsers />
+
+);
+
 
 export default AuthCard;
