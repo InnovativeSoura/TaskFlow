@@ -1,103 +1,183 @@
-import { motion } from "framer-motion";
+// src/components/auth/HeroSection.jsx
 
+import React from "react";
 import {
+  FaArrowRight,
+  FaPlay,
   FaCheckCircle,
+  FaUsers,
+  FaChartLine,
+  FaShieldAlt,
+  FaRocket,
 } from "react-icons/fa";
 
+import "../../styles/Auth.css";
+
 const HeroSection = () => {
+  const benefits = [
+    "Free Forever Plan",
+    "No Credit Card",
+    "2 Minute Setup",
+    "Cloud Sync Included",
+  ];
+
+  const stats = [
+    {
+      icon: <FaUsers />,
+      value: "10K+",
+      label: "Teams",
+    },
+    {
+      icon: <FaChartLine />,
+      value: "50K+",
+      label: "Tasks Managed",
+    },
+    {
+      icon: <FaShieldAlt />,
+      value: "99.9%",
+      label: "Secure",
+    },
+    {
+      icon: <FaRocket />,
+      value: "24/7",
+      label: "Support",
+    },
+  ];
+
+  const scrollToFeatures = () => {
+    const target = document.getElementById("features");
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <motion.section
-      className="auth-left"
-      initial={{
-        opacity: 0,
-        x: -60,
-      }}
-      animate={{
-        opacity: 1,
-        x: 0,
-      }}
-      transition={{
-        duration: 0.8,
-      }}
-    >
+    <div className="auth-hero">
 
-      <span className="hero-badge">
-        🚀 Smart Project Management
-      </span>
-
-      <h1>
-
-        Manage Projects
-
-        <br />
+      {/* =========================================
+          TOP BADGE
+      ========================================== */}
+      <div className="auth-hero-badge">
+        <span className="badge-dot"></span>
 
         <span>
-          Like Never Before
+          Next Generation Project Management
         </span>
 
+        <FaArrowRight />
+      </div>
+
+      {/* =========================================
+          MAIN HEADING
+      ========================================== */}
+      <h1 className="auth-hero-title">
+        <span className="title-white">
+          Manage Projects.
+        </span>
+
+        <span className="title-gradient">
+          Collaborate Faster.
+        </span>
+
+        <span className="title-white">
+          Deliver On Time.
+        </span>
       </h1>
 
-      <p>
-
-        Plan projects,
-
-        organize tasks,
-
-        collaborate with your team,
-
-        monitor progress,
-
-        and boost productivity
-
-        with one powerful workspace.
-
+      {/* =========================================
+          DESCRIPTION
+      ========================================== */}
+      <p className="auth-hero-description">
+        TaskFlow is an all-in-one project management
+        platform built for modern teams. Plan projects,
+        assign tasks, monitor progress and collaborate
+        in real time — all from one intelligent workspace.
       </p>
 
-      <div className="hero-features">
+      {/* =========================================
+          ACTION BUTTONS
+      ========================================== */}
+      <div className="auth-hero-actions">
 
-        <div className="hero-card">
+        <button
+          type="button"
+          className="hero-primary-button"
+          onClick={() => {
+            const authCard =
+              document.querySelector(".auth-card");
 
-          <FaCheckCircle />
+            if (authCard) {
+              authCard.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }
+          }}
+        >
+          <span>Start Free</span>
+          <FaArrowRight />
+        </button>
 
-          <span>
-            Real-time Collaboration
+        <button
+          type="button"
+          className="hero-secondary-button"
+          onClick={scrollToFeatures}
+        >
+          <span className="play-icon">
+            <FaPlay />
           </span>
 
-        </div>
-
-        <div className="hero-card">
-
-          <FaCheckCircle />
-
-          <span>
-            Kanban Boards
-          </span>
-
-        </div>
-
-        <div className="hero-card">
-
-          <FaCheckCircle />
-
-          <span>
-            Analytics Dashboard
-          </span>
-
-        </div>
-
-        <div className="hero-card">
-
-          <FaCheckCircle />
-
-          <span>
-            Team Notifications
-          </span>
-
-        </div>
+          <span>Explore Features</span>
+        </button>
 
       </div>
 
-    </motion.section>
+      {/* =========================================
+          BENEFITS
+      ========================================== */}
+      <div className="auth-benefits">
+
+        {benefits.map((benefit) => (
+          <div
+            className="auth-benefit"
+            key={benefit}
+          >
+            <FaCheckCircle />
+            <span>{benefit}</span>
+          </div>
+        ))}
+
+      </div>
+
+      {/* =========================================
+          STATS
+      ========================================== */}
+      <div className="auth-stats">
+
+        {stats.map((stat) => (
+          <div
+            className="auth-stat"
+            key={stat.label}
+          >
+
+            <div className="auth-stat-icon">
+              {stat.icon}
+            </div>
+
+            <div className="auth-stat-content">
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
   );
 };
 
