@@ -1,41 +1,37 @@
 /* ============================================================
    TASKFLOW — PREMIUM HERO
+   FIXED / ISOLATED AUTH PREVIEW
 ============================================================ */
 
 .hero-section {
   position: relative;
-
   width: 100%;
   min-height: 100vh;
-
   min-height: 760px;
 
   display: flex;
   align-items: center;
 
   overflow: hidden;
-
   isolation: isolate;
 
-  padding:
-    130px 0
-    80px;
+  padding: 125px 0 80px;
 
   background:
     radial-gradient(
-      circle at 15% 30%,
-      rgba(99, 102, 241, 0.14),
-      transparent 28%
+      circle at 12% 32%,
+      rgba(99, 102, 241, 0.16),
+      transparent 30%
     ),
     radial-gradient(
-      circle at 85% 35%,
-      rgba(6, 182, 212, 0.11),
-      transparent 28%
+      circle at 88% 34%,
+      rgba(6, 182, 212, 0.12),
+      transparent 30%
     ),
     linear-gradient(
       135deg,
       #050817 0%,
-      #080d20 45%,
+      #080d20 48%,
       #050816 100%
     );
 
@@ -44,70 +40,42 @@
 
 
 /* ============================================================
-   HERO CONTAINER
-============================================================ */
-
-.hero-container {
-  position: relative;
-
-  z-index: 5;
-
-  width: min(1240px, 92%);
-
-  margin: 0 auto;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1.05fr)
-    minmax(400px, 0.95fr);
-
-  align-items: center;
-
-  gap: 70px;
-}
-
-
-/* ============================================================
-   GRID BACKGROUND
+   BACKGROUND GRID
 ============================================================ */
 
 .hero-grid {
   position: absolute;
-
   inset: 0;
 
   z-index: -3;
-
   pointer-events: none;
 
   background-image:
     linear-gradient(
-      rgba(255,255,255,0.025) 1px,
+      rgba(255, 255, 255, 0.025) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(255,255,255,0.025) 1px,
+      rgba(255, 255, 255, 0.025) 1px,
       transparent 1px
     );
 
-  background-size:
-    55px 55px;
+  background-size: 55px 55px;
 
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 90%
-    );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 55%,
+    transparent 100%
+  );
 
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 90%
-    );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 55%,
+    transparent 100%
+  );
 }
 
 
@@ -121,69 +89,89 @@
   border-radius: 50%;
 
   pointer-events: none;
-
-  filter: blur(2px);
-
   z-index: -2;
+
+  filter: blur(3px);
 }
 
 .hero-glow-one {
-  width: 340px;
-  height: 340px;
+  width: 360px;
+  height: 360px;
 
-  top: 10%;
-  left: -140px;
+  top: 12%;
+  left: -150px;
 
   background:
     radial-gradient(
       circle,
-      rgba(99,102,241,0.20),
+      rgba(99, 102, 241, 0.22),
       transparent 70%
     );
 
-  animation:
-    heroFloatOne 9s ease-in-out infinite;
+  animation: heroFloatOne 9s ease-in-out infinite;
 }
 
 .hero-glow-two {
-  width: 420px;
-  height: 420px;
+  width: 450px;
+  height: 450px;
 
-  right: -170px;
+  right: -180px;
   top: 18%;
 
   background:
     radial-gradient(
       circle,
-      rgba(6,182,212,0.14),
+      rgba(6, 182, 212, 0.15),
       transparent 70%
     );
 
-  animation:
-    heroFloatTwo 11s ease-in-out infinite;
+  animation: heroFloatTwo 11s ease-in-out infinite;
 }
 
 .hero-glow-three {
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
 
-  left: 42%;
-  bottom: -180px;
+  left: 43%;
+  bottom: -190px;
 
   background:
     radial-gradient(
       circle,
-      rgba(139,92,246,0.16),
+      rgba(139, 92, 246, 0.17),
       transparent 70%
     );
 
-  animation:
-    heroFloatThree 10s ease-in-out infinite;
+  animation: heroFloatThree 10s ease-in-out infinite;
 }
 
 
 /* ============================================================
-   HERO CONTENT
+   MAIN CONTAINER
+============================================================ */
+
+.hero-container {
+  position: relative;
+  z-index: 5;
+
+  width: min(1240px, 92%);
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.08fr)
+    minmax(360px, 0.92fr);
+
+  align-items: center;
+
+  gap: 70px;
+}
+
+
+/* ============================================================
+   LEFT CONTENT
 ============================================================ */
 
 .hero-content {
@@ -192,9 +180,7 @@
   min-width: 0;
 
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-start;
 
   text-align: left;
@@ -207,36 +193,26 @@
 
 .hero-badge {
   display: inline-flex;
-
   align-items: center;
-
   gap: 9px;
 
-  padding:
-    9px 14px;
+  padding: 9px 14px;
+  margin-bottom: 24px;
 
-  margin-bottom: 25px;
-
-  border:
-    1px solid
-    rgba(99,102,241,0.28);
-
+  border: 1px solid rgba(99, 102, 241, 0.28);
   border-radius: 999px;
 
-  background:
-    rgba(99,102,241,0.08);
+  background: rgba(99, 102, 241, 0.08);
 
   color: #c7d2fe;
 
   font-size: 12px;
-
   font-weight: 600;
 
-  letter-spacing: 0.01em;
+  line-height: 1;
 
   box-shadow:
-    inset 0 1px 0
-    rgba(255,255,255,0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -246,23 +222,22 @@
   width: 7px;
   height: 7px;
 
-  flex-shrink: 0;
+  flex: 0 0 7px;
 
   border-radius: 50%;
 
   background: #8b5cf6;
 
   box-shadow:
-    0 0 12px
-    rgba(139,92,246,0.9);
+    0 0 12px rgba(139, 92, 246, 0.9);
 
-  animation:
-    heroPulse 2s ease-in-out infinite;
+  animation: heroPulse 2s ease-in-out infinite;
 }
 
 .hero-badge svg {
-  font-size: 10px;
+  flex: 0 0 auto;
 
+  font-size: 10px;
   color: #818cf8;
 }
 
@@ -276,8 +251,7 @@
 
   max-width: 720px;
 
-  font-size:
-    clamp(48px, 5vw, 72px);
+  font-size: clamp(48px, 5vw, 72px);
 
   line-height: 1.02;
 
@@ -290,6 +264,8 @@
 
 .hero-title-gradient {
   display: inline-block;
+
+  white-space: nowrap;
 
   background:
     linear-gradient(
@@ -313,8 +289,7 @@
 .hero-description {
   max-width: 610px;
 
-  margin:
-    27px 0 0;
+  margin: 27px 0 0;
 
   color: #94a3b8;
 
@@ -332,7 +307,6 @@
 
 .hero-buttons {
   display: flex;
-
   align-items: center;
 
   gap: 13px;
@@ -347,22 +321,18 @@
   min-height: 52px;
 
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
 
   gap: 10px;
 
-  padding:
-    0 21px;
+  padding: 0 21px;
 
   border-radius: 14px;
 
   font-family: inherit;
 
   font-size: 13px;
-
   font-weight: 700;
 
   text-decoration: none;
@@ -376,15 +346,10 @@
     background 0.3s ease;
 }
 
-
-/* PRIMARY */
-
 .hero-primary-btn {
-  border:
-    1px solid
-    rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 
-  color: white;
+  color: #ffffff;
 
   background:
     linear-gradient(
@@ -394,16 +359,14 @@
     );
 
   box-shadow:
-    0 14px 35px
-    rgba(99,102,241,0.30);
+    0 14px 35px rgba(99, 102, 241, 0.30);
 }
 
 .hero-primary-btn:hover {
   transform: translateY(-3px);
 
   box-shadow:
-    0 20px 45px
-    rgba(99,102,241,0.42);
+    0 20px 45px rgba(99, 102, 241, 0.42);
 }
 
 .hero-primary-btn svg {
@@ -414,18 +377,12 @@
   transform: translateX(4px);
 }
 
-
-/* SECONDARY */
-
 .hero-secondary-btn {
-  border:
-    1px solid
-    rgba(255,255,255,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 
   color: #e2e8f0;
 
-  background:
-    rgba(255,255,255,0.045);
+  background: rgba(255, 255, 255, 0.045);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -434,11 +391,9 @@
 .hero-secondary-btn:hover {
   transform: translateY(-3px);
 
-  border-color:
-    rgba(129,140,248,0.35);
+  border-color: rgba(129, 140, 248, 0.35);
 
-  background:
-    rgba(255,255,255,0.075);
+  background: rgba(255, 255, 255, 0.075);
 }
 
 .hero-play-icon {
@@ -446,39 +401,36 @@
   height: 24px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
+  flex: 0 0 24px;
+
   border-radius: 50%;
 
-  background:
-    rgba(255,255,255,0.10);
+  background: rgba(255, 255, 255, 0.10);
 
   font-size: 8px;
 }
 
 
 /* ============================================================
-   TRUST ITEMS
+   TRUST
 ============================================================ */
 
 .hero-trust {
   display: flex;
-
   align-items: center;
 
   flex-wrap: wrap;
 
-  gap:
-    13px 21px;
+  gap: 13px 21px;
 
   margin-top: 23px;
 }
 
 .hero-trust-item {
   display: inline-flex;
-
   align-items: center;
 
   gap: 6px;
@@ -491,6 +443,8 @@
 }
 
 .hero-trust-item svg {
+  flex: 0 0 auto;
+
   color: #22c55e;
 
   font-size: 11px;
@@ -502,31 +456,27 @@
 ============================================================ */
 
 .hero-mini-stats {
-  display: flex;
+  width: 100%;
+  max-width: 620px;
 
+  display: flex;
   align-items: center;
 
   gap: 30px;
 
   margin-top: 34px;
-
   padding-top: 24px;
 
-  border-top:
-    1px solid
-    rgba(255,255,255,0.07);
-
-  width: 100%;
-
-  max-width: 620px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .hero-mini-stat {
   display: flex;
-
   align-items: center;
 
   gap: 10px;
+
+  min-width: 0;
 }
 
 .hero-mini-stat-icon {
@@ -534,27 +484,24 @@
   height: 34px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
+
+  flex: 0 0 34px;
 
   border-radius: 10px;
 
   color: #a5b4fc;
 
-  background:
-    rgba(99,102,241,0.11);
+  background: rgba(99, 102, 241, 0.11);
 
-  border:
-    1px solid
-    rgba(129,140,248,0.12);
+  border: 1px solid rgba(129, 140, 248, 0.12);
 
   font-size: 12px;
 }
 
-.hero-mini-stat div:last-child {
+.hero-mini-stat > div:last-child {
   display: flex;
-
   flex-direction: column;
 
   gap: 2px;
@@ -564,7 +511,6 @@
   color: #f8fafc;
 
   font-size: 14px;
-
   font-weight: 700;
 }
 
@@ -585,10 +531,8 @@
   min-width: 0;
 
   display: flex;
-
-  justify-content: center;
-
   align-items: center;
+  justify-content: center;
 }
 
 
@@ -599,27 +543,26 @@
 .hero-auth-glow {
   position: absolute;
 
-  width: 430px;
-  height: 430px;
+  width: 470px;
+  height: 470px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(99,102,241,0.20),
-      rgba(139,92,246,0.08) 35%,
+      rgba(99, 102, 241, 0.20),
+      rgba(139, 92, 246, 0.08) 35%,
       transparent 72%
     );
 
-  filter: blur(20px);
+  filter: blur(22px);
 
   pointer-events: none;
 
   z-index: -1;
 
-  animation:
-    heroAuthGlow 6s ease-in-out infinite;
+  animation: heroAuthGlow 6s ease-in-out infinite;
 }
 
 
@@ -630,31 +573,34 @@
 .hero-auth-wrapper {
   position: relative;
 
-  width: min(100%, 455px);
+  width: 100%;
+  max-width: 430px;
 
-  padding: 19px;
+  min-width: 0;
 
-  border-radius: 27px;
+  padding: 18px;
 
-  border:
-    1px solid
-    rgba(255,255,255,0.10);
+  border-radius: 26px;
+
+  border: 1px solid rgba(255, 255, 255, 0.10);
 
   background:
     linear-gradient(
       145deg,
-      rgba(25,34,64,0.82),
-      rgba(9,15,35,0.72)
+      rgba(25, 34, 64, 0.86),
+      rgba(9, 15, 35, 0.78)
     );
 
   box-shadow:
-    0 30px 80px
-    rgba(0,0,0,0.40),
-    inset 0 1px 0
-    rgba(255,255,255,0.07);
+    0 30px 80px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+
+  box-sizing: border-box;
+
+  overflow: hidden;
 }
 
 
@@ -663,78 +609,116 @@
 ============================================================ */
 
 .hero-auth-top {
-  display: flex;
+  width: 100%;
 
-  align-items: center;
+  display: flex !important;
+  flex-direction: row !important;
 
-  justify-content: space-between;
+  align-items: center !important;
+  justify-content: space-between !important;
 
-  margin-bottom: 13px;
+  gap: 12px;
 
-  padding:
-    0 3px;
+  margin: 0 0 13px;
+
+  padding: 0 3px;
+
+  box-sizing: border-box;
 }
 
 .hero-auth-status {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
 
-  align-items: center;
+  align-items: center !important;
 
   gap: 7px;
+
+  flex: 1 1 auto;
+
+  min-width: 0;
 
   color: #94a3b8;
 
   font-size: 10px;
 
   font-weight: 600;
+
+  line-height: 1.2;
 }
 
 .hero-auth-status span {
-  width: 6px;
-  height: 6px;
+  display: block !important;
 
-  border-radius: 50%;
+  width: 6px !important;
+  height: 6px !important;
 
-  background: #22c55e;
+  min-width: 6px !important;
+
+  flex: 0 0 6px !important;
+
+  border-radius: 50% !important;
+
+  background: #22c55e !important;
 
   box-shadow:
-    0 0 10px
-    rgba(34,197,94,0.7);
+    0 0 10px rgba(34, 197, 94, 0.7);
 }
 
 
 /* ============================================================
-   USERS
+   AUTH USERS
+   IMPORTANT:
+   Prevent AuthCard/global CSS from destroying this row.
 ============================================================ */
 
 .hero-auth-users {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
 
-  align-items: center;
+  align-items: center !important;
+  justify-content: flex-end !important;
+
+  flex: 0 0 auto;
+
+  width: auto !important;
+  min-width: max-content !important;
+
+  gap: 0 !important;
+
+  white-space: nowrap;
+
+  box-sizing: border-box;
 }
 
-.hero-avatar {
-  width: 24px;
-  height: 24px;
+.hero-auth-users .hero-avatar {
+  display: flex !important;
+  flex-direction: row !important;
 
-  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
 
-  align-items: center;
-  justify-content: center;
+  width: 24px !important;
+  height: 24px !important;
+
+  min-width: 24px !important;
+  min-height: 24px !important;
+
+  flex: 0 0 24px !important;
 
   margin-left: -5px;
 
-  border-radius: 50%;
+  border-radius: 50% !important;
 
-  border:
-    2px solid
-    #111a35;
+  border: 2px solid #111a35;
 
-  font-size: 8px;
+  box-sizing: border-box;
 
+  color: #ffffff;
+
+  font-size: 8px !important;
+  line-height: 1 !important;
   font-weight: 800;
-
-  color: white;
 
   background:
     linear-gradient(
@@ -744,11 +728,11 @@
     );
 }
 
-.hero-avatar:first-child {
+.hero-auth-users .hero-avatar:first-child {
   margin-left: 0;
 }
 
-.avatar-two {
+.hero-auth-users .avatar-two {
   background:
     linear-gradient(
       135deg,
@@ -757,7 +741,7 @@
     );
 }
 
-.avatar-three {
+.hero-auth-users .avatar-three {
   background:
     linear-gradient(
       135deg,
@@ -766,36 +750,85 @@
     );
 }
 
-.hero-avatar-count {
+.hero-auth-users .hero-avatar-count {
+  display: inline-block !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  min-width: 0 !important;
+
+  flex: 0 0 auto !important;
+
   margin-left: 6px;
 
   color: #64748b;
 
-  font-size: 9px;
+  font-size: 9px !important;
+  line-height: 1 !important;
 
   font-weight: 700;
+
+  white-space: nowrap;
 }
 
 
 /* ============================================================
-   AUTH CARD OVERRIDES
+   AUTH CARD — HARD ISOLATION
 ============================================================ */
 
 /*
-   AuthCard has its own CSS.
+   The important part of this fix.
 
-   These rules only control its size inside Hero
-   and prevent it from becoming too narrow.
+   AuthCard is a reusable full authentication component.
+   It should NOT be allowed to control the Hero preview
+   dimensions.
 */
 
-.hero-auth-wrapper .auth-card {
-  width: 100%;
+.hero-auth-wrapper > .auth-card {
+  position: relative !important;
 
-  max-width: none;
+  display: block !important;
 
-  margin: 0;
+  width: 100% !important;
+  max-width: 100% !important;
 
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+
+  overflow: hidden !important;
+}
+
+
+/*
+   Prevent generic AuthCard children from becoming
+   single-character columns.
+*/
+
+.hero-auth-wrapper .auth-card,
+.hero-auth-wrapper .auth-card * {
   box-sizing: border-box;
+}
+
+
+/*
+   Common flex containers inside AuthCard.
+   These prevent inherited compact/global rules
+   from collapsing rows.
+*/
+
+.hero-auth-wrapper .auth-card .auth-tabs,
+.hero-auth-wrapper .auth-card .auth-switch,
+.hero-auth-wrapper .auth-card .social-buttons,
+.hero-auth-wrapper .auth-card .social-login,
+.hero-auth-wrapper .auth-card .form-row,
+.hero-auth-wrapper .auth-card .auth-footer {
+  min-width: 0;
 }
 
 
@@ -804,48 +837,51 @@
 ============================================================ */
 
 .hero-auth-metrics {
+  width: 100%;
+
   display: grid;
 
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 
   gap: 10px;
 
   margin-top: 13px;
+
+  box-sizing: border-box;
 }
 
 .hero-auth-metric {
   min-width: 0;
 
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
 
-  align-items: center;
+  align-items: center !important;
 
   gap: 10px;
 
-  padding:
-    12px 13px;
+  padding: 12px 13px;
 
   border-radius: 13px;
 
-  border:
-    1px solid
-    rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
-  background:
-    rgba(255,255,255,0.035);
+  background: rgba(255, 255, 255, 0.035);
+
+  box-sizing: border-box;
 }
 
 .hero-auth-metric-icon {
   width: 29px;
   height: 29px;
 
-  flex-shrink: 0;
+  min-width: 29px;
 
-  display: flex;
+  flex: 0 0 29px;
 
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 
   border-radius: 8px;
 
@@ -855,46 +891,52 @@
 .hero-auth-metric-icon.blue {
   color: #818cf8;
 
-  background:
-    rgba(99,102,241,0.13);
+  background: rgba(99, 102, 241, 0.13);
 }
 
 .hero-auth-metric-icon.green {
   color: #34d399;
 
-  background:
-    rgba(16,185,129,0.11);
+  background: rgba(16, 185, 129, 0.11);
 }
 
-.hero-auth-metric div:last-child {
-  display: flex;
-
-  flex-direction: column;
+.hero-auth-metric > div:last-child {
+  display: flex !important;
+  flex-direction: column !important;
 
   min-width: 0;
+
+  flex: 1 1 auto;
 }
 
 .hero-auth-metric strong {
+  display: block;
+
   color: #f8fafc;
 
   font-size: 13px;
+  line-height: 1.2;
 
   font-weight: 700;
 }
 
 .hero-auth-metric span {
+  display: block;
+
   margin-top: 2px;
 
   color: #64748b;
 
   font-size: 9px;
 
+  line-height: 1.2;
+
   white-space: nowrap;
 }
 
 
 /* ============================================================
-   SCROLL INDICATOR
+   SCROLL
 ============================================================ */
 
 .hero-scroll {
@@ -902,16 +944,13 @@
 
   z-index: 6;
 
-  bottom: 28px;
-
+  bottom: 27px;
   left: 50%;
 
   transform: translateX(-50%);
 
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
 
   gap: 8px;
@@ -931,7 +970,6 @@
 
 .hero-scroll-line {
   width: 1px;
-
   height: 28px;
 
   background:
@@ -942,8 +980,7 @@
       transparent
     );
 
-  animation:
-    heroScroll 2s ease-in-out infinite;
+  animation: heroScroll 2s ease-in-out infinite;
 }
 
 
@@ -955,13 +992,11 @@
   0%,
   100% {
     opacity: 0.5;
-
     transform: scale(0.85);
   }
 
   50% {
     opacity: 1;
-
     transform: scale(1.15);
   }
 }
@@ -969,33 +1004,33 @@
 @keyframes heroFloatOne {
   0%,
   100% {
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
-    transform: translate3d(30px,25px,0);
+    transform: translate3d(30px, 25px, 0);
   }
 }
 
 @keyframes heroFloatTwo {
   0%,
   100% {
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
-    transform: translate3d(-25px,30px,0);
+    transform: translate3d(-25px, 30px, 0);
   }
 }
 
 @keyframes heroFloatThree {
   0%,
   100% {
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
-    transform: translate3d(20px,-25px,0);
+    transform: translate3d(20px, -25px, 0);
   }
 }
 
@@ -1003,13 +1038,11 @@
   0%,
   100% {
     transform: scale(0.95);
-
     opacity: 0.65;
   }
 
   50% {
     transform: scale(1.05);
-
     opacity: 1;
   }
 }
@@ -1018,13 +1051,11 @@
   0%,
   100% {
     opacity: 0.3;
-
     transform: scaleY(0.7);
   }
 
   50% {
     opacity: 1;
-
     transform: scaleY(1);
   }
 }
@@ -1035,20 +1066,18 @@
 ============================================================ */
 
 @media (max-width: 1100px) {
-
   .hero-container {
-    width: min(940px, 90%);
+    width: min(960px, 90%);
 
     grid-template-columns:
       minmax(0, 1fr)
-      minmax(350px, 0.82fr);
+      minmax(330px, 0.85fr);
 
     gap: 45px;
   }
 
   .hero-title {
-    font-size:
-      clamp(43px, 5vw, 60px);
+    font-size: clamp(43px, 5vw, 60px);
   }
 
   .hero-description {
@@ -1058,6 +1087,10 @@
   .hero-mini-stats {
     gap: 18px;
   }
+
+  .hero-auth-wrapper {
+    max-width: 390px;
+  }
 }
 
 
@@ -1066,19 +1099,16 @@
 ============================================================ */
 
 @media (max-width: 900px) {
-
   .hero-section {
     min-height: auto;
 
-    padding:
-      125px 0
-      90px;
+    padding: 125px 0 90px;
   }
 
   .hero-container {
-    grid-template-columns: 1fr;
+    width: min(680px, 90%);
 
-    max-width: 680px;
+    grid-template-columns: 1fr;
 
     gap: 55px;
   }
@@ -1092,8 +1122,7 @@
   .hero-title {
     max-width: 680px;
 
-    font-size:
-      clamp(44px, 8vw, 62px);
+    font-size: clamp(44px, 8vw, 62px);
   }
 
   .hero-description {
@@ -1119,7 +1148,9 @@
   }
 
   .hero-auth-wrapper {
-    width: min(100%, 460px);
+    width: min(100%, 430px);
+
+    max-width: 430px;
   }
 
   .hero-scroll {
@@ -1133,11 +1164,8 @@
 ============================================================ */
 
 @media (max-width: 600px) {
-
   .hero-section {
-    padding:
-      110px 0
-      65px;
+    padding: 110px 0 65px;
   }
 
   .hero-container {
@@ -1149,15 +1177,17 @@
   .hero-badge {
     font-size: 9px;
 
-    padding:
-      8px 11px;
+    padding: 8px 11px;
   }
 
   .hero-title {
-    font-size:
-      clamp(38px, 11vw, 50px);
+    font-size: clamp(38px, 11vw, 50px);
 
     letter-spacing: -0.04em;
+  }
+
+  .hero-title-gradient {
+    white-space: normal;
   }
 
   .hero-description {
@@ -1184,12 +1214,11 @@
   .hero-trust {
     display: grid;
 
-    grid-template-columns:
-      1fr 1fr;
-
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
 
     width: 100%;
+
+    gap: 10px;
   }
 
   .hero-trust-item {
@@ -1201,8 +1230,7 @@
   .hero-mini-stats {
     display: grid;
 
-    grid-template-columns:
-      repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 8px;
 
@@ -1233,7 +1261,9 @@
   }
 
   .hero-auth-wrapper {
-    padding: 12px;
+    width: 100%;
+
+    padding: 13px;
 
     border-radius: 21px;
   }
@@ -1253,7 +1283,6 @@
 ============================================================ */
 
 @media (max-width: 400px) {
-
   .hero-title {
     font-size: 36px;
   }
@@ -1274,7 +1303,7 @@
   }
 
   .hero-auth-users {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -1284,7 +1313,6 @@
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-
   .hero-glow-one,
   .hero-glow-two,
   .hero-glow-three,
