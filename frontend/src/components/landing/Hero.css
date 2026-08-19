@@ -1,6 +1,6 @@
 /* ============================================================
    TASKFLOW — PREMIUM HERO
-   FIXED / ISOLATED AUTH PREVIEW
+   FULL AUTH CARD ISOLATION
 ============================================================ */
 
 .hero-section {
@@ -575,7 +575,6 @@
 
   width: 100%;
   max-width: 430px;
-
   min-width: 0;
 
   padding: 18px;
@@ -600,7 +599,11 @@
 
   box-sizing: border-box;
 
-  overflow: hidden;
+  /*
+    IMPORTANT:
+    Do not clip AuthCard's internal content.
+  */
+  overflow: visible;
 }
 
 
@@ -668,8 +671,6 @@
 
 /* ============================================================
    AUTH USERS
-   IMPORTANT:
-   Prevent AuthCard/global CSS from destroying this row.
 ============================================================ */
 
 .hero-auth-users {
@@ -774,61 +775,468 @@
 
 
 /* ============================================================
-   AUTH CARD — HARD ISOLATION
+   AUTH CARD — COMPLETE HERO ISOLATION
 ============================================================ */
 
 /*
-   The important part of this fix.
+   AuthCard is a reusable authentication component.
 
-   AuthCard is a reusable full authentication component.
-   It should NOT be allowed to control the Hero preview
-   dimensions.
+   Its normal CSS must remain untouched.
+
+   These rules only apply when AuthCard is rendered inside
+   .hero-auth-wrapper.
 */
 
 .hero-auth-wrapper > .auth-card {
   position: relative !important;
 
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
 
   width: 100% !important;
-  max-width: 100% !important;
+  max-width: none !important;
 
   min-width: 0 !important;
   min-height: 0 !important;
+
+  height: auto !important;
 
   margin: 0 !important;
   padding: 0 !important;
 
   box-sizing: border-box !important;
 
-  overflow: hidden !important;
+  overflow: visible !important;
+
+  flex: 0 1 auto !important;
+
+  transform: none !important;
 }
 
 
-/*
-   Prevent generic AuthCard children from becoming
-   single-character columns.
-*/
+/* ------------------------------------------------------------
+   GLOBAL AUTH CARD BOX SIZING
+------------------------------------------------------------ */
 
 .hero-auth-wrapper .auth-card,
-.hero-auth-wrapper .auth-card * {
-  box-sizing: border-box;
+.hero-auth-wrapper .auth-card *,
+.hero-auth-wrapper .auth-card *::before,
+.hero-auth-wrapper .auth-card *::after {
+  box-sizing: border-box !important;
 }
 
 
-/*
-   Common flex containers inside AuthCard.
-   These prevent inherited compact/global rules
-   from collapsing rows.
-*/
+/* ------------------------------------------------------------
+   COMPACT MODE
+------------------------------------------------------------ */
 
-.hero-auth-wrapper .auth-card .auth-tabs,
-.hero-auth-wrapper .auth-card .auth-switch,
-.hero-auth-wrapper .auth-card .social-buttons,
-.hero-auth-wrapper .auth-card .social-login,
-.hero-auth-wrapper .auth-card .form-row,
-.hero-auth-wrapper .auth-card .auth-footer {
-  min-width: 0;
+.hero-auth-wrapper .auth-card.compact {
+  width: 100% !important;
+  max-width: none !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  height: auto !important;
+
+  transform: none !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH TOGGLE
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-toggle-wrapper {
+  position: relative !important;
+
+  display: flex !important;
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+
+  flex: 0 0 auto !important;
+}
+
+.hero-auth-wrapper .auth-toggle-wrapper > * {
+  min-width: 0 !important;
+}
+
+.hero-auth-wrapper .auth-toggle-wrapper button {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 1 1 0 !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH CARD CONTENT
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  flex: 0 1 auto !important;
+
+  overflow: visible !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH HEADER
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-header {
+  position: relative !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 0 0 13px !important;
+  padding: 0 !important;
+
+  text-align: center !important;
+
+  flex: 0 0 auto !important;
+}
+
+.hero-auth-wrapper .auth-title {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  text-align: center !important;
+
+  white-space: normal !important;
+
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.hero-auth-wrapper .auth-subtitle {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 5px 0 0 !important;
+
+  text-align: center !important;
+
+  white-space: normal !important;
+
+  word-break: normal !important;
+}
+
+
+/* ------------------------------------------------------------
+   FORM
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content form {
+  display: flex !important;
+  flex-direction: column !important;
+
+  align-items: stretch !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  flex: 0 1 auto !important;
+}
+
+
+/* ------------------------------------------------------------
+   FORM ROW
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content .form-row {
+  display: flex !important;
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  gap: 10px !important;
+}
+
+.hero-auth-wrapper .auth-card-content .form-row > * {
+  min-width: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   FORM GROUP
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content .form-group {
+  display: flex !important;
+  flex-direction: column !important;
+
+  align-items: stretch !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   LABEL
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content label {
+  display: flex !important;
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  text-align: left !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ------------------------------------------------------------
+   INPUTS
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content input,
+.hero-auth-wrapper .auth-card-content textarea,
+.hero-auth-wrapper .auth-card-content select {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  flex: 1 1 auto !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ------------------------------------------------------------
+   INPUT WRAPPERS
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content .input-wrapper,
+.hero-auth-wrapper .auth-card-content .password-wrapper,
+.hero-auth-wrapper .auth-card-content .input-group {
+  position: relative !important;
+
+  display: flex !important;
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   INPUT ICONS
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content .input-icon {
+  flex: 0 0 auto !important;
+
+  width: auto !important;
+}
+
+
+/* ------------------------------------------------------------
+   PASSWORD TOGGLE
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content button[type="button"] {
+  flex: 0 0 auto !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   SUBMIT BUTTON
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card-content button[type="submit"] {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH SWITCH
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-switch {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  text-align: center !important;
+
+  white-space: normal !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH FOOTER
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-footer {
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  text-align: center !important;
+}
+
+
+/* ------------------------------------------------------------
+   SOCIAL LOGIN
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-social-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.hero-auth-wrapper .social-buttons,
+.hero-auth-wrapper .social-login {
+  display: grid !important;
+
+  grid-template-columns: 1fr 1fr !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  gap: 8px !important;
+}
+
+.hero-auth-wrapper .social-buttons button,
+.hero-auth-wrapper .social-login button {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH CARD TEXT
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card span,
+.hero-auth-wrapper .auth-card strong,
+.hero-auth-wrapper .auth-card p {
+  max-width: 100% !important;
+
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+
+/* ------------------------------------------------------------
+   AUTH ICONS
+------------------------------------------------------------ */
+
+.hero-auth-wrapper .auth-card svg {
+  width: auto !important;
+  max-width: none !important;
+
+  flex: 0 0 auto !important;
 }
 
 
@@ -936,7 +1344,7 @@
 
 
 /* ============================================================
-   SCROLL
+   SCROLL INDICATOR
 ============================================================ */
 
 .hero-scroll {
@@ -1275,6 +1683,11 @@
   .hero-auth-metrics {
     grid-template-columns: 1fr;
   }
+
+  .hero-auth-wrapper .social-buttons,
+  .hero-auth-wrapper .social-login {
+    grid-template-columns: 1fr;
+  }
 }
 
 
@@ -1321,4 +1734,4 @@
   .hero-scroll-line {
     animation: none;
   }
-} 
+}
