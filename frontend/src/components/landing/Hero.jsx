@@ -10,6 +10,7 @@ import {
   FaShieldAlt,
   FaTasks,
   FaChartLine,
+  FaCheck,
 } from "react-icons/fa";
 
 import AuthCard from "../auth/AuthCard";
@@ -24,46 +25,18 @@ const Hero = () => {
   ========================================================= */
 
   const scrollToAuth = (mode = "login") => {
-    // Tell AuthCard which mode should be displayed
     window.dispatchEvent(
       new CustomEvent("taskflow-auth-mode", {
         detail: { mode },
       })
     );
 
-    // Scroll after the mode event has been processed
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (authRef.current) {
-          authRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest",
-          });
-        }
-      }, 100);
-    });
-  };
-
-  /* =========================================================
-     SCROLL TO FEATURES
-  ========================================================= */
-
-  const scrollToFeatures = (event) => {
-    event.preventDefault();
-
-    const featuresSection = document.getElementById("features");
-
-    if (featuresSection) {
-      featuresSection.scrollIntoView({
+    window.setTimeout(() => {
+      authRef.current?.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
-      return;
-    }
-
-    // Fallback if the section is not currently mounted
-    window.location.hash = "features";
+    }, 100);
   };
 
   /* =========================================================
@@ -72,7 +45,7 @@ const Hero = () => {
 
   useEffect(() => {
     const handleAuthScroll = (event) => {
-      const mode = event.detail?.mode || "login";
+      const mode = event?.detail?.mode || "login";
 
       window.dispatchEvent(
         new CustomEvent("taskflow-auth-mode", {
@@ -80,15 +53,12 @@ const Hero = () => {
         })
       );
 
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          authRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest",
-          });
-        }, 100);
-      });
+      window.setTimeout(() => {
+        authRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     };
 
     window.addEventListener(
@@ -106,39 +76,25 @@ const Hero = () => {
 
   return (
     <section className="hero-section" id="home">
-
       {/* =====================================================
-          BACKGROUND DECORATION
-          IMPORTANT:
-          These elements must NEVER capture mouse clicks.
+          BACKGROUND
       ===================================================== */}
 
-      <div
-        className="hero-glow hero-glow-one"
-        aria-hidden="true"
-      />
+      <div className="hero-glow hero-glow-one" />
+      <div className="hero-glow hero-glow-two" />
+      <div className="hero-glow hero-glow-three" />
 
-      <div
-        className="hero-glow hero-glow-two"
-        aria-hidden="true"
-      />
+      <div className="hero-grid" />
 
-      <div
-        className="hero-glow hero-glow-three"
-        aria-hidden="true"
-      />
-
-      <div
-        className="hero-grid"
-        aria-hidden="true"
-      />
+      <div className="hero-orb hero-orb-one" />
+      <div className="hero-orb hero-orb-two" />
+      <div className="hero-orb hero-orb-three" />
 
       {/* =====================================================
-          MAIN HERO CONTAINER
+          MAIN CONTAINER
       ===================================================== */}
 
       <div className="hero-container">
-
         {/* ===================================================
             LEFT CONTENT
         =================================================== */}
@@ -147,33 +103,32 @@ const Hero = () => {
           className="hero-content"
           initial={{
             opacity: 0,
-            x: -40,
+            x: -30,
           }}
           animate={{
             opacity: 1,
             x: 0,
           }}
           transition={{
-            duration: 0.75,
+            duration: 0.7,
             ease: "easeOut",
           }}
         >
-
           {/* BADGE */}
 
           <motion.div
             className="hero-badge"
             initial={{
               opacity: 0,
-              y: 15,
+              y: 12,
             }}
             animate={{
               opacity: 1,
               y: 0,
             }}
             transition={{
-              delay: 0.15,
-              duration: 0.5,
+              delay: 0.1,
+              duration: 0.45,
             }}
           >
             <span className="hero-badge-dot" />
@@ -188,16 +143,13 @@ const Hero = () => {
           {/* TITLE */}
 
           <h1 className="hero-title">
-            Manage Projects.
-            <br />
+            <span>Manage Projects.</span>
 
             <span className="hero-title-gradient">
               Collaborate Faster.
             </span>
 
-            <br />
-
-            Deliver On Time.
+            <span>Deliver On Time.</span>
           </h1>
 
           {/* DESCRIPTION */}
@@ -210,44 +162,29 @@ const Hero = () => {
           </p>
 
           {/* =================================================
-              ACTION BUTTONS
+              BUTTONS
           ================================================= */}
 
           <div className="hero-buttons">
-
-            {/* START FREE */}
-
             <button
               type="button"
               className="hero-primary-btn"
               onClick={() => scrollToAuth("register")}
-              aria-label="Start using TaskFlow for free"
             >
               <span>Start Free</span>
-
-              <FaArrowRight
-                className="hero-button-arrow"
-                aria-hidden="true"
-              />
+              <FaArrowRight />
             </button>
 
-            {/* EXPLORE FEATURES */}
-
-            <button
-              type="button"
+            <a
+              href="#features"
               className="hero-secondary-btn"
-              onClick={scrollToFeatures}
-              aria-label="Explore TaskFlow features"
             >
               <span className="hero-play-icon">
-                <FaPlay aria-hidden="true" />
+                <FaPlay />
               </span>
 
-              <span>
-                Explore Features
-              </span>
-            </button>
-
+              <span>Explore Features</span>
+            </a>
           </div>
 
           {/* =================================================
@@ -255,7 +192,6 @@ const Hero = () => {
           ================================================= */}
 
           <div className="hero-trust">
-
             <div className="hero-trust-item">
               <FaCheckCircle />
               <span>Free Forever Plan</span>
@@ -275,7 +211,6 @@ const Hero = () => {
               <FaCheckCircle />
               <span>Cloud Sync Included</span>
             </div>
-
           </div>
 
           {/* =================================================
@@ -283,52 +218,43 @@ const Hero = () => {
           ================================================= */}
 
           <div className="hero-mini-stats">
-
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaTasks />
               </div>
 
-              <div>
+              <div className="hero-mini-stat-content">
                 <strong>10K+</strong>
                 <span>Teams</span>
               </div>
-
             </div>
 
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaChartLine />
               </div>
 
-              <div>
+              <div className="hero-mini-stat-content">
                 <strong>50K+</strong>
                 <span>Tasks Managed</span>
               </div>
-
             </div>
 
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaShieldAlt />
               </div>
 
-              <div>
+              <div className="hero-mini-stat-content">
                 <strong>99.9%</strong>
                 <span>Secure</span>
               </div>
-
             </div>
-
           </div>
-
         </motion.div>
 
         {/* ===================================================
-            RIGHT AUTH / PRODUCT PREVIEW
+            RIGHT AUTH PREVIEW
         =================================================== */}
 
         <motion.div
@@ -337,39 +263,39 @@ const Hero = () => {
           id="auth-section"
           initial={{
             opacity: 0,
-            x: 40,
+            x: 30,
           }}
           animate={{
             opacity: 1,
             x: 0,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.75,
             delay: 0.1,
             ease: "easeOut",
           }}
         >
+          {/* Glow behind card */}
 
-          {/* AUTH CARD GLOW */}
+          <div className="hero-auth-glow" />
 
-          <div
-            className="hero-auth-glow"
-            aria-hidden="true"
-          />
+          {/* =================================================
+              ACTUAL PREVIEW CARD
+          ================================================= */}
 
-          <div className="hero-auth-wrapper">
+          <div className="hero-auth-preview">
+            {/* -----------------------------------------------
+                PREVIEW HEADER
+            ------------------------------------------------ */}
 
-            {/* WORKSPACE HEADER */}
-
-            <div className="hero-auth-top">
-
+            <div className="hero-auth-preview-header">
               <div className="hero-auth-status">
-                <span />
+                <span className="hero-status-dot" />
+
                 <span>Workspace is ready</span>
               </div>
 
               <div className="hero-auth-users">
-
                 <span className="hero-avatar avatar-one">
                   S
                 </span>
@@ -385,68 +311,76 @@ const Hero = () => {
                 <span className="hero-avatar-count">
                   +18
                 </span>
-
               </div>
-
             </div>
 
-            {/* AUTH CARD */}
+            {/* -----------------------------------------------
+                WORKSPACE MESSAGE
+            ------------------------------------------------ */}
 
-            <div className="hero-auth-card-area">
+            <div className="hero-workspace-message">
+              <div className="hero-workspace-check">
+                <FaCheck />
+              </div>
+
+              <div>
+                <strong>Workspace is ready</strong>
+
+                <span>
+                  Your project hub is online
+                </span>
+              </div>
+            </div>
+
+            {/* -----------------------------------------------
+                AUTH CARD ISOLATED AREA
+            ------------------------------------------------ */}
+
+            <div className="hero-auth-card-slot">
               <AuthCard
                 compact
                 onAuthReady={() => {}}
               />
             </div>
 
-            {/* =================================================
-                AUTH CARD METRICS
-            ================================================= */}
+            {/* -----------------------------------------------
+                BOTTOM METRICS
+            ------------------------------------------------ */}
 
             <div className="hero-auth-metrics">
-
               <div className="hero-auth-metric">
-
-                <div className="hero-auth-metric-icon blue">
+                <div className="hero-auth-metric-icon">
                   <FaTasks />
                 </div>
 
-                <div>
+                <div className="hero-auth-metric-content">
                   <strong>124</strong>
                   <span>Tasks Completed</span>
                 </div>
-
               </div>
 
               <div className="hero-auth-metric">
-
                 <div className="hero-auth-metric-icon green">
                   <FaChartLine />
                 </div>
 
-                <div>
+                <div className="hero-auth-metric-content">
                   <strong>96%</strong>
                   <span>Project Success</span>
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </motion.div>
-
       </div>
 
       {/* =====================================================
-          BOTTOM SCROLL INDICATOR
+          SCROLL INDICATOR
       ===================================================== */}
 
-      <motion.button
-        type="button"
+      <motion.a
+        href="#features"
         className="hero-scroll"
-        onClick={scrollToFeatures}
         initial={{
           opacity: 0,
         }}
@@ -454,17 +388,14 @@ const Hero = () => {
           opacity: 1,
         }}
         transition={{
-          delay: 1.2,
+          delay: 1,
+          duration: 0.5,
         }}
-        aria-label="Scroll to explore features"
       >
         <span className="hero-scroll-line" />
 
-        <span>
-          Scroll to explore
-        </span>
-      </motion.button>
-
+        <span>Scroll to explore</span>
+      </motion.a>
     </section>
   );
 };
