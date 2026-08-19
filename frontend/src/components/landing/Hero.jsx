@@ -1,3 +1,5 @@
+// src/components/landing/Hero.jsx
+
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -17,10 +19,6 @@ import "./Hero.css";
 const Hero = () => {
   const authRef = useRef(null);
 
-  /* =========================================================
-     SCROLL TO AUTH
-  ========================================================= */
-
   const scrollToAuth = (mode = "login") => {
     window.dispatchEvent(
       new CustomEvent("taskflow-auth-mode", {
@@ -33,12 +31,8 @@ const Hero = () => {
         behavior: "smooth",
         block: "center",
       });
-    }, 80);
+    }, 100);
   };
-
-  /* =========================================================
-     GLOBAL AUTH SCROLL EVENT
-  ========================================================= */
 
   useEffect(() => {
     const handleAuthScroll = (event) => {
@@ -55,7 +49,7 @@ const Hero = () => {
           behavior: "smooth",
           block: "center",
         });
-      }, 80);
+      }, 100);
     };
 
     window.addEventListener(
@@ -74,50 +68,41 @@ const Hero = () => {
   return (
     <section className="hero-section" id="home">
 
-      {/* =====================================================
-          BACKGROUND
-      ===================================================== */}
+      {/* BACKGROUND */}
+      <div className="hero-grid" />
 
-      <div className="hero-background">
-        <div className="hero-grid" />
+      <div className="hero-glow hero-glow-one" />
+      <div className="hero-glow hero-glow-two" />
+      <div className="hero-glow hero-glow-three" />
 
-        <div className="hero-glow hero-glow-one" />
-        <div className="hero-glow hero-glow-two" />
-        <div className="hero-glow hero-glow-three" />
+      <div className="hero-orb hero-orb-one" />
+      <div className="hero-orb hero-orb-two" />
+      <div className="hero-orb hero-orb-three" />
 
-        <div className="hero-orb hero-orb-one" />
-        <div className="hero-orb hero-orb-two" />
-        <div className="hero-orb hero-orb-three" />
-      </div>
-
-      {/* =====================================================
-          MAIN CONTAINER
-      ===================================================== */}
-
+      {/* MAIN CONTENT */}
       <div className="hero-container">
 
-        {/* ===================================================
-            LEFT CONTENT
-        =================================================== */}
+        {/* ================================
+            LEFT SIDE
+        ================================= */}
 
         <motion.div
           className="hero-content"
           initial={{
             opacity: 0,
-            x: -35,
+            x: -30,
           }}
           animate={{
             opacity: 1,
             x: 0,
           }}
           transition={{
-            duration: 0.75,
-            ease: [0.22, 1, 0.36, 1],
+            duration: 0.7,
+            ease: "easeOut",
           }}
         >
 
           {/* BADGE */}
-
           <motion.div
             className="hero-badge"
             initial={{
@@ -129,21 +114,20 @@ const Hero = () => {
               y: 0,
             }}
             transition={{
-              delay: 0.15,
-              duration: 0.5,
+              delay: 0.1,
+              duration: 0.45,
             }}
           >
             <span className="hero-badge-dot" />
 
-            <span className="hero-badge-text">
+            <span>
               Next Generation Project Management
             </span>
 
-            <FaArrowRight className="hero-badge-arrow" />
+            <FaArrowRight />
           </motion.div>
 
           {/* TITLE */}
-
           <h1 className="hero-title">
             <span>Manage Projects.</span>
 
@@ -155,7 +139,6 @@ const Hero = () => {
           </h1>
 
           {/* DESCRIPTION */}
-
           <p className="hero-description">
             TaskFlow is an all-in-one project management
             platform built for modern teams. Plan projects,
@@ -163,10 +146,7 @@ const Hero = () => {
             in real time — all from one intelligent workspace.
           </p>
 
-          {/* =================================================
-              ACTION BUTTONS
-          ================================================= */}
-
+          {/* BUTTONS */}
           <div className="hero-buttons">
 
             <button
@@ -191,10 +171,7 @@ const Hero = () => {
 
           </div>
 
-          {/* =================================================
-              TRUST ITEMS
-          ================================================= */}
-
+          {/* TRUST */}
           <div className="hero-trust">
 
             <div className="hero-trust-item">
@@ -219,14 +196,10 @@ const Hero = () => {
 
           </div>
 
-          {/* =================================================
-              MINI STATS
-          ================================================= */}
-
+          {/* STATS */}
           <div className="hero-mini-stats">
 
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaTasks />
               </div>
@@ -235,11 +208,9 @@ const Hero = () => {
                 <strong>10K+</strong>
                 <span>Teams</span>
               </div>
-
             </div>
 
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaChartLine />
               </div>
@@ -248,11 +219,9 @@ const Hero = () => {
                 <strong>50K+</strong>
                 <span>Tasks Managed</span>
               </div>
-
             </div>
 
             <div className="hero-mini-stat">
-
               <div className="hero-mini-stat-icon">
                 <FaShieldAlt />
               </div>
@@ -261,16 +230,15 @@ const Hero = () => {
                 <strong>99.9%</strong>
                 <span>Secure</span>
               </div>
-
             </div>
 
           </div>
 
         </motion.div>
 
-        {/* ===================================================
-            RIGHT PRODUCT / AUTH PREVIEW
-        =================================================== */}
+        {/* ================================
+            RIGHT SIDE
+        ================================= */}
 
         <motion.div
           ref={authRef}
@@ -278,35 +246,28 @@ const Hero = () => {
           id="auth-section"
           initial={{
             opacity: 0,
-            x: 35,
+            x: 30,
           }}
           animate={{
             opacity: 1,
             x: 0,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.75,
             delay: 0.12,
-            ease: [0.22, 1, 0.36, 1],
+            ease: "easeOut",
           }}
         >
 
-          {/* SOFT GLOW */}
-
           <div className="hero-auth-glow" />
 
-          {/* =================================================
-              PRODUCT PREVIEW
-          ================================================= */}
-
-          <div className="hero-auth-preview">
+          <div className="hero-auth-wrapper">
 
             {/* TOP BAR */}
-
             <div className="hero-auth-top">
 
               <div className="hero-auth-status">
-                <span className="hero-auth-status-dot" />
+                <span />
                 <span>Workspace is ready</span>
               </div>
 
@@ -333,7 +294,6 @@ const Hero = () => {
             </div>
 
             {/* AUTH CARD */}
-
             <div className="hero-auth-card-container">
               <AuthCard
                 compact
@@ -341,10 +301,7 @@ const Hero = () => {
               />
             </div>
 
-            {/* =================================================
-                BOTTOM METRICS
-            ================================================= */}
-
+            {/* BOTTOM METRICS */}
             <div className="hero-auth-metrics">
 
               <div className="hero-auth-metric">
@@ -381,10 +338,7 @@ const Hero = () => {
 
       </div>
 
-      {/* =====================================================
-          SCROLL INDICATOR
-      ===================================================== */}
-
+      {/* SCROLL */}
       <motion.a
         href="#features"
         className="hero-scroll"
@@ -395,12 +349,10 @@ const Hero = () => {
           opacity: 1,
         }}
         transition={{
-          delay: 1.2,
-          duration: 0.5,
+          delay: 1,
         }}
       >
         <span className="hero-scroll-line" />
-
         <span>Scroll to explore</span>
       </motion.a>
 
