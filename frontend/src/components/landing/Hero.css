@@ -1,53 +1,110 @@
-/* ============================================================
-   TASKFLOW — PREMIUM HERO
-   FULL AUTH CARD ISOLATION
-============================================================ */
+/* =========================================================
+   TASKFLOW — PREMIUM LANDING HERO
+   src/components/landing/Hero.css
 
-.hero-section {
+   IMPORTANT:
+   This stylesheet is designed for the Hero + compact
+   AuthCard preview layout.
+
+   Main fixes:
+   - Prevents right-side preview from being squeezed
+   - Gives preview a stable usable width
+   - Prevents AuthCard from collapsing
+   - Prevents text from overlapping
+   - Prevents social buttons from colliding
+   - Removes dangerous scaling behaviour
+   - Keeps Hero vertically centered
+   - Responsive down to mobile
+   ========================================================= */
+
+
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+
+:root {
+  --hero-bg: #060a1b;
+  --hero-bg-deep: #040714;
+
+  --hero-text: #ffffff;
+  --hero-text-soft: #aab2ca;
+  --hero-text-muted: #737c99;
+
+  --hero-primary: #7657ff;
+  --hero-primary-light: #9277ff;
+  --hero-blue: #42a5ff;
+
+  --hero-border: rgba(255, 255, 255, 0.08);
+  --hero-border-soft: rgba(255, 255, 255, 0.045);
+
+  --hero-content-width: 1180px;
+}
+
+
+/* =========================================================
+   GLOBAL BOX MODEL
+   ========================================================= */
+
+.hero,
+.hero *,
+.hero *::before,
+.hero *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HERO ROOT
+   ========================================================= */
+
+.hero {
   position: relative;
+
   width: 100%;
-  min-height: 100vh;
-  min-height: 760px;
+  min-height: calc(100vh - 82px);
 
   display: flex;
   align-items: center;
 
   overflow: hidden;
-  isolation: isolate;
 
-  padding: 125px 0 80px;
+  isolation: isolate;
 
   background:
     radial-gradient(
-      circle at 12% 32%,
-      rgba(99, 102, 241, 0.16),
-      transparent 30%
+      circle at 15% 52%,
+      rgba(88, 72, 255, 0.16),
+      transparent 34%
     ),
     radial-gradient(
-      circle at 88% 34%,
-      rgba(6, 182, 212, 0.12),
-      transparent 30%
+      circle at 82% 50%,
+      rgba(22, 145, 255, 0.09),
+      transparent 32%
     ),
     linear-gradient(
-      135deg,
-      #050817 0%,
-      #080d20 48%,
-      #050816 100%
+      180deg,
+      #080c20 0%,
+      #060a19 55%,
+      #050818 100%
     );
 
-  color: #ffffff;
+  color: var(--hero-text);
+
+  z-index: 1;
 }
 
 
-/* ============================================================
-   BACKGROUND GRID
-============================================================ */
+/* =========================================================
+   HERO BACKGROUND
+   ========================================================= */
 
-.hero-grid {
+.hero::before {
+  content: "";
+
   position: absolute;
+
   inset: 0;
 
-  z-index: -3;
   pointer-events: none;
 
   background-image:
@@ -61,27 +118,101 @@
       transparent 1px
     );
 
-  background-size: 55px 55px;
+  background-size:
+    48px 48px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 55%,
-    transparent 100%
-  );
+  opacity: 0.55;
 
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 55%,
-    transparent 100%
-  );
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black 0%,
+      rgba(0, 0, 0, 0.75) 70%,
+      transparent 100%
+    );
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      black 0%,
+      rgba(0, 0, 0, 0.75) 70%,
+      transparent 100%
+    );
+
+  z-index: -3;
 }
 
 
-/* ============================================================
-   BACKGROUND GLOWS
-============================================================ */
+/* =========================================================
+   HERO GLOW
+   ========================================================= */
+
+.hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 620px;
+  height: 620px;
+
+  left: -260px;
+  top: 25%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(102, 78, 255, 0.15),
+      transparent 68%
+    );
+
+  filter: blur(30px);
+
+  pointer-events: none;
+
+  z-index: -2;
+}
+
+
+/* =========================================================
+   HERO BACKGROUND ELEMENTS
+   ========================================================= */
+
+.hero-background {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: -1;
+}
+
+
+.hero-grid {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px
+    );
+
+  background-size: 56px 56px;
+
+  opacity: 0.7;
+}
+
 
 .hero-glow {
   position: absolute;
@@ -89,1476 +220,1260 @@
   border-radius: 50%;
 
   pointer-events: none;
-  z-index: -2;
 
-  filter: blur(3px);
+  filter: blur(50px);
+
+  opacity: 0.45;
 }
 
-.hero-glow-one {
-  width: 360px;
-  height: 360px;
 
-  top: 12%;
-  left: -150px;
+.hero-glow-left {
+  width: 500px;
+  height: 500px;
+
+  left: -280px;
+  top: 20%;
 
   background:
     radial-gradient(
       circle,
-      rgba(99, 102, 241, 0.22),
+      rgba(104, 80, 255, 0.23),
       transparent 70%
     );
-
-  animation: heroFloatOne 9s ease-in-out infinite;
 }
 
-.hero-glow-two {
-  width: 450px;
-  height: 450px;
 
-  right: -180px;
-  top: 18%;
+.hero-glow-right {
+  width: 500px;
+  height: 500px;
+
+  right: -260px;
+  top: 25%;
 
   background:
     radial-gradient(
       circle,
-      rgba(6, 182, 212, 0.15),
+      rgba(27, 144, 255, 0.13),
       transparent 70%
     );
-
-  animation: heroFloatTwo 11s ease-in-out infinite;
-}
-
-.hero-glow-three {
-  width: 320px;
-  height: 320px;
-
-  left: 43%;
-  bottom: -190px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(139, 92, 246, 0.17),
-      transparent 70%
-    );
-
-  animation: heroFloatThree 10s ease-in-out infinite;
 }
 
 
-/* ============================================================
-   MAIN CONTAINER
-============================================================ */
+/* =========================================================
+   HERO CONTAINER
+   ========================================================= */
 
 .hero-container {
   position: relative;
-  z-index: 5;
 
-  width: min(1240px, 92%);
+  width: min(
+    calc(100% - 80px),
+    var(--hero-content-width)
+  );
+
+  min-height: 650px;
 
   margin: 0 auto;
 
   display: grid;
 
+  /*
+   * IMPORTANT:
+   * The right column has a REAL minimum width.
+   * This prevents the AuthCard from being crushed.
+   */
   grid-template-columns:
-    minmax(0, 1.08fr)
-    minmax(360px, 0.92fr);
+    minmax(0, 1fr)
+    minmax(310px, 350px);
 
   align-items: center;
 
-  gap: 70px;
+  column-gap: 80px;
+
+  padding:
+    60px 0
+    70px;
+
+  z-index: 2;
 }
 
 
-/* ============================================================
-   LEFT CONTENT
-============================================================ */
+/* =========================================================
+   HERO CONTENT / LEFT SIDE
+   ========================================================= */
 
 .hero-content {
   position: relative;
 
+  width: 100%;
+  max-width: 650px;
+
   min-width: 0;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  text-align: left;
+  z-index: 5;
 }
 
 
-/* ============================================================
-   BADGE
-============================================================ */
+.hero-content-inner {
+  width: 100%;
+  max-width: 650px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   HERO BADGE
+   ========================================================= */
 
 .hero-badge {
   display: inline-flex;
+
   align-items: center;
-  gap: 9px;
+  justify-content: center;
 
-  padding: 9px 14px;
-  margin-bottom: 24px;
+  width: fit-content;
+  max-width: 100%;
 
-  border: 1px solid rgba(99, 102, 241, 0.28);
+  min-height: 30px;
+
+  padding:
+    0 14px;
+
+  margin-bottom: 17px;
+
   border-radius: 999px;
 
-  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 
-  color: #c7d2fe;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(118, 87, 255, 0.15),
+      rgba(255, 255, 255, 0.055)
+    );
 
-  font-size: 12px;
+  color: #b9b1ff;
+
+  font-size: 11px;
+
   font-weight: 600;
 
-  line-height: 1;
+  letter-spacing: 0.01em;
+
+  white-space: nowrap;
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.hero-badge-dot {
-  width: 7px;
-  height: 7px;
 
-  flex: 0 0 7px;
+.hero-badge span {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-width: 0;
+}
+
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+
+  margin-right: 8px;
 
   border-radius: 50%;
 
-  background: #8b5cf6;
+  background: #8a72ff;
 
   box-shadow:
-    0 0 12px rgba(139, 92, 246, 0.9);
+    0 0 10px rgba(138, 114, 255, 0.8);
 
-  animation: heroPulse 2s ease-in-out infinite;
-}
-
-.hero-badge svg {
   flex: 0 0 auto;
-
-  font-size: 10px;
-  color: #818cf8;
 }
 
 
-/* ============================================================
-   TITLE
-============================================================ */
+/* =========================================================
+   HERO TITLE
+   ========================================================= */
 
 .hero-title {
+  width: 100%;
+  max-width: 680px;
+
   margin: 0;
 
-  max-width: 720px;
+  color: #ffffff;
 
-  font-size: clamp(48px, 5vw, 72px);
+  font-size:
+    clamp(
+      48px,
+      5.1vw,
+      72px
+    );
 
-  line-height: 1.02;
+  line-height: 0.99;
 
-  letter-spacing: -0.045em;
+  font-weight: 850;
 
-  font-weight: 800;
+  letter-spacing: -0.055em;
 
-  color: #f8fafc;
+  text-wrap: balance;
 }
 
-.hero-title-gradient {
-  display: inline-block;
 
-  white-space: nowrap;
+.hero-title span {
+  display: inline;
+
+  color: #ffffff;
+}
+
+
+.hero-title .gradient-text,
+.hero-title-gradient {
+  color: transparent;
 
   background:
     linear-gradient(
       100deg,
-      #818cf8 0%,
-      #a78bfa 35%,
-      #38bdf8 100%
+      #8370ff 0%,
+      #5fa6ff 52%,
+      #30b7ff 100%
     );
 
-  -webkit-background-clip: text;
   background-clip: text;
+  -webkit-background-clip: text;
 
   -webkit-text-fill-color: transparent;
 }
 
 
-/* ============================================================
-   DESCRIPTION
-============================================================ */
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
 
 .hero-description {
-  max-width: 610px;
+  width: 100%;
+  max-width: 600px;
 
-  margin: 27px 0 0;
+  margin:
+    23px 0
+    0;
 
-  color: #94a3b8;
+  color: var(--hero-text-soft);
 
-  font-size: 16px;
+  font-size: 14px;
 
-  line-height: 1.8;
+  line-height: 1.75;
 
   font-weight: 400;
+
+  letter-spacing: 0;
+
+  overflow-wrap: break-word;
 }
 
 
-/* ============================================================
-   BUTTONS
-============================================================ */
+/* =========================================================
+   HERO ACTIONS
+   ========================================================= */
 
-.hero-buttons {
+.hero-actions {
   display: flex;
+
   align-items: center;
-
-  gap: 13px;
-
-  margin-top: 32px;
 
   flex-wrap: wrap;
-}
-
-.hero-primary-btn,
-.hero-secondary-btn {
-  min-height: 52px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 
   gap: 10px;
 
-  padding: 0 21px;
+  margin-top: 28px;
 
-  border-radius: 14px;
+  width: 100%;
+}
+
+
+.hero-primary-button,
+.hero-secondary-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+
+  border-radius: 10px;
+
+  padding:
+    0 22px;
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 12px;
+
   font-weight: 700;
 
   text-decoration: none;
 
   cursor: pointer;
 
+  white-space: nowrap;
+
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease,
-    background 0.3s ease;
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
 }
 
-.hero-primary-btn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+
+.hero-primary-button {
+  min-width: 210px;
 
   color: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
   background:
     linear-gradient(
       135deg,
-      #6366f1,
-      #8b5cf6
+      #7053f7,
+      #865cff
     );
 
   box-shadow:
-    0 14px 35px rgba(99, 102, 241, 0.30);
+    0 14px 32px rgba(105, 76, 246, 0.28);
 }
 
-.hero-primary-btn:hover {
-  transform: translateY(-3px);
+
+.hero-primary-button:hover {
+  transform: translateY(-2px);
 
   box-shadow:
-    0 20px 45px rgba(99, 102, 241, 0.42);
+    0 18px 40px rgba(105, 76, 246, 0.38);
 }
 
-.hero-primary-btn svg {
-  transition: transform 0.3s ease;
+
+.hero-secondary-button {
+  color: #e0e3f2;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    rgba(255, 255, 255, 0.045);
 }
 
-.hero-primary-btn:hover svg {
-  transform: translateX(4px);
+
+.hero-secondary-button:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(255, 255, 255, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.075);
 }
 
-.hero-secondary-btn {
-  border: 1px solid rgba(255, 255, 255, 0.10);
 
-  color: #e2e8f0;
+.hero-button-icon {
+  display: inline-flex;
 
-  background: rgba(255, 255, 255, 0.045);
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.hero-secondary-btn:hover {
-  transform: translateY(-3px);
-
-  border-color: rgba(129, 140, 248, 0.35);
-
-  background: rgba(255, 255, 255, 0.075);
-}
-
-.hero-play-icon {
-  width: 24px;
-  height: 24px;
-
-  display: flex;
   align-items: center;
   justify-content: center;
 
-  flex: 0 0 24px;
+  margin-left: 8px;
 
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.10);
-
-  font-size: 8px;
+  font-size: 13px;
 }
 
 
-/* ============================================================
-   TRUST
-============================================================ */
+/* =========================================================
+   HERO TRUST / BENEFITS
+   ========================================================= */
 
-.hero-trust {
+.hero-benefits {
   display: flex;
+
   align-items: center;
 
   flex-wrap: wrap;
 
-  gap: 13px 21px;
+  gap:
+    8px 18px;
 
-  margin-top: 23px;
+  width: 100%;
+
+  margin-top: 24px;
+
+  color: #727c99;
+
+  font-size: 9px;
 }
 
-.hero-trust-item {
+
+.hero-benefit {
   display: inline-flex;
+
   align-items: center;
 
-  gap: 6px;
-
-  color: #94a3b8;
-
-  font-size: 11px;
+  min-width: 0;
 
   white-space: nowrap;
 }
 
-.hero-trust-item svg {
-  flex: 0 0 auto;
 
-  color: #22c55e;
+.hero-benefit svg,
+.hero-benefit-icon {
+  margin-right: 6px;
+
+  color: #36d98c;
+
+  font-size: 8px;
+
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   HERO STATS
+   ========================================================= */
+
+.hero-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  width: 100%;
+  max-width: 600px;
+
+  margin-top: 27px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.055);
+
+  gap: 16px;
+}
+
+
+.hero-stat {
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+
+  gap: 9px;
+}
+
+
+.hero-stat-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  min-width: 30px;
+
+  border-radius: 9px;
+
+  background:
+    rgba(118, 87, 255, 0.10);
+
+  border:
+    1px solid rgba(118, 87, 255, 0.10);
+
+  color: #8873ff;
 
   font-size: 11px;
 }
 
 
-/* ============================================================
-   MINI STATS
-============================================================ */
-
-.hero-mini-stats {
-  width: 100%;
-  max-width: 620px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 30px;
-
-  margin-top: 34px;
-  padding-top: 24px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.hero-mini-stat {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
+.hero-stat-content {
   min-width: 0;
 }
 
-.hero-mini-stat-icon {
-  width: 34px;
-  height: 34px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hero-stat-value {
+  display: block;
 
-  flex: 0 0 34px;
-
-  border-radius: 10px;
-
-  color: #a5b4fc;
-
-  background: rgba(99, 102, 241, 0.11);
-
-  border: 1px solid rgba(129, 140, 248, 0.12);
+  color: #f4f5ff;
 
   font-size: 12px;
-}
 
-.hero-mini-stat > div:last-child {
-  display: flex;
-  flex-direction: column;
+  font-weight: 750;
 
-  gap: 2px;
-}
+  line-height: 1.2;
 
-.hero-mini-stat strong {
-  color: #f8fafc;
-
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.hero-mini-stat span {
-  color: #64748b;
-
-  font-size: 10px;
+  white-space: nowrap;
 }
 
 
-/* ============================================================
-   RIGHT SIDE
-============================================================ */
+.hero-stat-label {
+  display: block;
 
-.hero-right {
+  margin-top: 3px;
+
+  color: #697390;
+
+  font-size: 8px;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   RIGHT SIDE PREVIEW AREA
+   ========================================================= */
+
+.hero-preview {
   position: relative;
 
-  min-width: 0;
+  /*
+   * CRITICAL:
+   * Never allow this area to collapse below the auth card's
+   * usable width.
+   */
+  width: 100%;
+  min-width: 310px;
+  max-width: 350px;
+
+  min-height: 560px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  margin: 0 auto;
+
+  z-index: 10;
 }
 
 
-/* ============================================================
-   AUTH GLOW
-============================================================ */
+.hero-preview-container {
+  position: relative;
 
-.hero-auth-glow {
+  width: 100%;
+  min-width: 310px;
+  max-width: 350px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 560px;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   PREVIEW GLOW
+   ========================================================= */
+
+.hero-preview::before {
+  content: "";
+
   position: absolute;
 
-  width: 470px;
-  height: 470px;
+  width: 420px;
+  height: 420px;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(99, 102, 241, 0.20),
-      rgba(139, 92, 246, 0.08) 35%,
-      transparent 72%
+      rgba(104, 78, 255, 0.13),
+      transparent 68%
     );
 
-  filter: blur(22px);
+  filter: blur(30px);
 
   pointer-events: none;
 
   z-index: -1;
-
-  animation: heroAuthGlow 6s ease-in-out infinite;
 }
 
 
-/* ============================================================
-   AUTH WRAPPER
-============================================================ */
+/* =========================================================
+   AUTH CARD WRAPPER
+   ========================================================= */
 
 .hero-auth-wrapper {
   position: relative;
 
   width: 100%;
-  max-width: 430px;
-  min-width: 0;
+  min-width: 310px;
+  max-width: 350px;
 
-  padding: 18px;
+  display: flex;
 
-  border-radius: 26px;
+  align-items: center;
+  justify-content: center;
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  margin: 0 auto;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(25, 34, 64, 0.86),
-      rgba(9, 15, 35, 0.78)
-    );
-
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
-
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-
-  box-sizing: border-box;
-
-  /*
-    IMPORTANT:
-    Do not clip AuthCard's internal content.
-  */
-  overflow: visible;
+  z-index: 20;
 }
 
 
-/* ============================================================
-   AUTH TOP
-============================================================ */
+/*
+ * Some Hero JSX versions use these names.
+ */
 
-.hero-auth-top {
+.hero-preview-card,
+.hero-auth-card,
+.auth-preview {
+  position: relative;
+
   width: 100%;
 
-  display: flex !important;
-  flex-direction: row !important;
+  min-width: 310px;
+  max-width: 350px;
 
-  align-items: center !important;
-  justify-content: space-between !important;
+  margin: 0 auto;
 
-  gap: 12px;
-
-  margin: 0 0 13px;
-
-  padding: 0 3px;
-
-  box-sizing: border-box;
-}
-
-.hero-auth-status {
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-
-  gap: 7px;
-
-  flex: 1 1 auto;
-
-  min-width: 0;
-
-  color: #94a3b8;
-
-  font-size: 10px;
-
-  font-weight: 600;
-
-  line-height: 1.2;
-}
-
-.hero-auth-status span {
-  display: block !important;
-
-  width: 6px !important;
-  height: 6px !important;
-
-  min-width: 6px !important;
-
-  flex: 0 0 6px !important;
-
-  border-radius: 50% !important;
-
-  background: #22c55e !important;
-
-  box-shadow:
-    0 0 10px rgba(34, 197, 94, 0.7);
+  z-index: 20;
 }
 
 
-/* ============================================================
-   AUTH USERS
-============================================================ */
+/* =========================================================
+   COMPACT AUTH CARD — HERO OVERRIDES
+   ========================================================= */
 
-.hero-auth-users {
-  display: flex !important;
-  flex-direction: row !important;
+/*
+ * This is deliberately stronger than the generic AuthCard
+ * stylesheet. The Hero determines the available width.
+ */
 
-  align-items: center !important;
-  justify-content: flex-end !important;
+.hero-preview .auth-card.compact,
+.hero-preview-container .auth-card.compact,
+.hero-auth-wrapper .auth-card.compact,
+.hero .auth-card.compact {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+
+  min-width: 310px;
+
+  max-width: 350px;
+
+  height: auto;
+
+  min-height: 0;
+
+  margin: 0 auto;
+
+  padding: 0;
+
+  transform: none !important;
+
+  scale: 1 !important;
+
+  zoom: 1 !important;
+
+  overflow: hidden;
 
   flex: 0 0 auto;
 
-  width: auto !important;
-  min-width: max-content !important;
+  contain: layout style paint;
 
-  gap: 0 !important;
-
-  white-space: nowrap;
-
-  box-sizing: border-box;
+  z-index: 30;
 }
 
-.hero-auth-users .hero-avatar {
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 24px !important;
-  height: 24px !important;
-
-  min-width: 24px !important;
-  min-height: 24px !important;
-
-  flex: 0 0 24px !important;
-
-  margin-left: -5px;
-
-  border-radius: 50% !important;
-
-  border: 2px solid #111a35;
-
-  box-sizing: border-box;
-
-  color: #ffffff;
-
-  font-size: 8px !important;
-  line-height: 1 !important;
-  font-weight: 800;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6366f1,
-      #8b5cf6
-    );
-}
-
-.hero-auth-users .hero-avatar:first-child {
-  margin-left: 0;
-}
-
-.hero-auth-users .avatar-two {
-  background:
-    linear-gradient(
-      135deg,
-      #06b6d4,
-      #3b82f6
-    );
-}
-
-.hero-auth-users .avatar-three {
-  background:
-    linear-gradient(
-      135deg,
-      #10b981,
-      #06b6d4
-    );
-}
-
-.hero-auth-users .hero-avatar-count {
-  display: inline-block !important;
-
-  width: auto !important;
-  height: auto !important;
-
-  min-width: 0 !important;
-
-  flex: 0 0 auto !important;
-
-  margin-left: 6px;
-
-  color: #64748b;
-
-  font-size: 9px !important;
-  line-height: 1 !important;
-
-  font-weight: 700;
-
-  white-space: nowrap;
-}
-
-
-/* ============================================================
-   AUTH CARD — COMPLETE HERO ISOLATION
-============================================================ */
 
 /*
-   AuthCard is a reusable authentication component.
+ * Prevent Framer Motion from introducing a visual scaling
+ * mismatch on the compact card.
+ */
 
-   Its normal CSS must remain untouched.
+.hero-preview .auth-card.compact[style],
+.hero-preview-container .auth-card.compact[style],
+.hero-auth-wrapper .auth-card.compact[style] {
+  transform:
+    translate3d(0, 0, 0) !important;
 
-   These rules only apply when AuthCard is rendered inside
-   .hero-auth-wrapper.
-*/
-
-.hero-auth-wrapper > .auth-card {
-  position: relative !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-
-  width: 100% !important;
-  max-width: none !important;
-
-  min-width: 0 !important;
-  min-height: 0 !important;
-
-  height: auto !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  box-sizing: border-box !important;
-
-  overflow: visible !important;
-
-  flex: 0 1 auto !important;
-
-  transform: none !important;
+  scale: 1 !important;
 }
 
 
-/* ------------------------------------------------------------
-   GLOBAL AUTH CARD BOX SIZING
------------------------------------------------------------- */
+/* =========================================================
+   LANDING AUTH CARD ROOT
+   ========================================================= */
 
-.hero-auth-wrapper .auth-card,
-.hero-auth-wrapper .auth-card *,
-.hero-auth-wrapper .auth-card *::before,
-.hero-auth-wrapper .auth-card *::after {
-  box-sizing: border-box !important;
-}
+#landing-auth-card {
+  position: relative;
 
-
-/* ------------------------------------------------------------
-   COMPACT MODE
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card.compact {
-  width: 100% !important;
-  max-width: none !important;
-
-  min-width: 0 !important;
-  min-height: 0 !important;
-
-  height: auto !important;
-
-  transform: none !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH TOGGLE
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-toggle-wrapper {
-  position: relative !important;
-
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 0 0 12px !important;
-  padding: 0 !important;
-
-  flex: 0 0 auto !important;
-}
-
-.hero-auth-wrapper .auth-toggle-wrapper > * {
-  min-width: 0 !important;
-}
-
-.hero-auth-wrapper .auth-toggle-wrapper button {
-  display: flex !important;
-
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  flex: 1 1 0 !important;
-
-  width: auto !important;
-  min-width: 0 !important;
-
-  white-space: nowrap !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH CARD CONTENT
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content {
-  position: relative !important;
-
-  display: block !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  height: auto !important;
-  min-height: 0 !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  flex: 0 1 auto !important;
-
-  overflow: visible !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH HEADER
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-header {
-  position: relative !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 0 0 13px !important;
-  padding: 0 !important;
-
-  text-align: center !important;
-
-  flex: 0 0 auto !important;
-}
-
-.hero-auth-wrapper .auth-title {
-  display: block !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-
-  text-align: center !important;
-
-  white-space: normal !important;
-
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-}
-
-.hero-auth-wrapper .auth-subtitle {
-  display: block !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 5px 0 0 !important;
-
-  text-align: center !important;
-
-  white-space: normal !important;
-
-  word-break: normal !important;
-}
-
-
-/* ------------------------------------------------------------
-   FORM
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content form {
-  display: flex !important;
-  flex-direction: column !important;
-
-  align-items: stretch !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  flex: 0 1 auto !important;
-}
-
-
-/* ------------------------------------------------------------
-   FORM ROW
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content .form-row {
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  gap: 10px !important;
-}
-
-.hero-auth-wrapper .auth-card-content .form-row > * {
-  min-width: 0 !important;
-}
-
-
-/* ------------------------------------------------------------
-   FORM GROUP
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content .form-group {
-  display: flex !important;
-  flex-direction: column !important;
-
-  align-items: stretch !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-
-/* ------------------------------------------------------------
-   LABEL
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content label {
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  text-align: left !important;
-
-  white-space: nowrap !important;
-}
-
-
-/* ------------------------------------------------------------
-   INPUTS
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content input,
-.hero-auth-wrapper .auth-card-content textarea,
-.hero-auth-wrapper .auth-card-content select {
-  display: block !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  flex: 1 1 auto !important;
-
-  box-sizing: border-box !important;
-}
-
-
-/* ------------------------------------------------------------
-   INPUT WRAPPERS
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content .input-wrapper,
-.hero-auth-wrapper .auth-card-content .password-wrapper,
-.hero-auth-wrapper .auth-card-content .input-group {
-  position: relative !important;
-
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-}
-
-
-/* ------------------------------------------------------------
-   INPUT ICONS
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content .input-icon {
-  flex: 0 0 auto !important;
-
-  width: auto !important;
-}
-
-
-/* ------------------------------------------------------------
-   PASSWORD TOGGLE
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content button[type="button"] {
-  flex: 0 0 auto !important;
-
-  width: auto !important;
-  min-width: 0 !important;
-}
-
-
-/* ------------------------------------------------------------
-   SUBMIT BUTTON
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card-content button[type="submit"] {
-  display: flex !important;
-
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  white-space: nowrap !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH SWITCH
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-switch {
-  display: flex !important;
-
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  text-align: center !important;
-
-  white-space: normal !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH FOOTER
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-footer {
-  display: flex !important;
-
-  flex-direction: column !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  text-align: center !important;
-}
-
-
-/* ------------------------------------------------------------
-   SOCIAL LOGIN
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-social-wrapper {
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-}
-
-.hero-auth-wrapper .social-buttons,
-.hero-auth-wrapper .social-login {
-  display: grid !important;
-
-  grid-template-columns: 1fr 1fr !important;
-
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  gap: 8px !important;
-}
-
-.hero-auth-wrapper .social-buttons button,
-.hero-auth-wrapper .social-login button {
-  display: flex !important;
-
-  flex-direction: row !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  white-space: nowrap !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH CARD TEXT
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card span,
-.hero-auth-wrapper .auth-card strong,
-.hero-auth-wrapper .auth-card p {
-  max-width: 100% !important;
-
-  word-break: normal !important;
-  overflow-wrap: break-word !important;
-}
-
-
-/* ------------------------------------------------------------
-   AUTH ICONS
------------------------------------------------------------- */
-
-.hero-auth-wrapper .auth-card svg {
-  width: auto !important;
-  max-width: none !important;
-
-  flex: 0 0 auto !important;
-}
-
-
-/* ============================================================
-   AUTH METRICS
-============================================================ */
-
-.hero-auth-metrics {
   width: 100%;
 
-  display: grid;
+  min-width: 310px;
 
-  grid-template-columns: 1fr 1fr;
+  max-width: 350px;
 
-  gap: 10px;
+  margin: 0 auto;
 
-  margin-top: 13px;
+  padding: 0;
 
-  box-sizing: border-box;
+  transform: none !important;
+
+  scale: 1 !important;
+
+  zoom: 1 !important;
+
+  flex: 0 0 auto;
+
+  overflow: hidden;
+
+  z-index: 30;
 }
 
-.hero-auth-metric {
+
+/* =========================================================
+   PREVENT HERO FLEX / GRID COLLAPSE
+   ========================================================= */
+
+.hero-preview > *,
+.hero-preview-container > *,
+.hero-auth-wrapper > * {
   min-width: 0;
-
-  display: flex !important;
-  flex-direction: row !important;
-
-  align-items: center !important;
-
-  gap: 10px;
-
-  padding: 12px 13px;
-
-  border-radius: 13px;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  background: rgba(255, 255, 255, 0.035);
-
-  box-sizing: border-box;
-}
-
-.hero-auth-metric-icon {
-  width: 29px;
-  height: 29px;
-
-  min-width: 29px;
-
-  flex: 0 0 29px;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  border-radius: 8px;
-
-  font-size: 10px;
-}
-
-.hero-auth-metric-icon.blue {
-  color: #818cf8;
-
-  background: rgba(99, 102, 241, 0.13);
-}
-
-.hero-auth-metric-icon.green {
-  color: #34d399;
-
-  background: rgba(16, 185, 129, 0.11);
-}
-
-.hero-auth-metric > div:last-child {
-  display: flex !important;
-  flex-direction: column !important;
-
-  min-width: 0;
-
-  flex: 1 1 auto;
-}
-
-.hero-auth-metric strong {
-  display: block;
-
-  color: #f8fafc;
-
-  font-size: 13px;
-  line-height: 1.2;
-
-  font-weight: 700;
-}
-
-.hero-auth-metric span {
-  display: block;
-
-  margin-top: 2px;
-
-  color: #64748b;
-
-  font-size: 9px;
-
-  line-height: 1.2;
-
-  white-space: nowrap;
 }
 
 
-/* ============================================================
+/* =========================================================
+   PREVIEW DECORATION
+   ========================================================= */
+
+.hero-preview-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: -1;
+}
+
+
+.hero-preview-orb-one {
+  width: 90px;
+  height: 90px;
+
+  right: -25px;
+  top: 90px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(111, 87, 255, 0.16),
+      transparent 70%
+    );
+
+  filter: blur(12px);
+}
+
+
+.hero-preview-orb-two {
+  width: 70px;
+  height: 70px;
+
+  left: -20px;
+  bottom: 90px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(37, 178, 255, 0.10),
+      transparent 70%
+    );
+
+  filter: blur(10px);
+}
+
+
+/* =========================================================
    SCROLL INDICATOR
-============================================================ */
+   ========================================================= */
 
 .hero-scroll {
   position: absolute;
 
-  z-index: 6;
-
-  bottom: 27px;
   left: 50%;
+  bottom: 18px;
 
   transform: translateX(-50%);
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 
-  gap: 8px;
+  justify-content: center;
 
-  color: #64748b;
+  gap: 7px;
 
-  text-decoration: none;
+  color: #707895;
 
-  font-size: 9px;
+  font-size: 7px;
 
   font-weight: 600;
 
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
 
   text-transform: uppercase;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  z-index: 20;
 }
+
 
 .hero-scroll-line {
   width: 1px;
-  height: 28px;
+  height: 20px;
 
   background:
     linear-gradient(
       to bottom,
-      transparent,
-      #6366f1,
+      rgba(118, 87, 255, 0.9),
       transparent
     );
-
-  animation: heroScroll 2s ease-in-out infinite;
 }
 
 
-/* ============================================================
-   ANIMATIONS
-============================================================ */
+/* =========================================================
+   OPTIONAL FLOATING CARD
+   ========================================================= */
 
-@keyframes heroPulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(0.85);
-  }
+.hero-floating-card {
+  position: absolute;
 
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-}
+  display: flex;
 
-@keyframes heroFloatOne {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  align-items: center;
 
-  50% {
-    transform: translate3d(30px, 25px, 0);
-  }
-}
+  gap: 8px;
 
-@keyframes heroFloatTwo {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  padding: 8px 11px;
 
-  50% {
-    transform: translate3d(-25px, 30px, 0);
-  }
-}
+  border-radius: 10px;
 
-@keyframes heroFloatThree {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
 
-  50% {
-    transform: translate3d(20px, -25px, 0);
-  }
-}
+  background:
+    rgba(15, 21, 46, 0.88);
 
-@keyframes heroAuthGlow {
-  0%,
-  100% {
-    transform: scale(0.95);
-    opacity: 0.65;
-  }
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 
-  50% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
-}
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.25);
 
-@keyframes heroScroll {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scaleY(0.7);
-  }
+  color: #cbd1e4;
 
-  50% {
-    opacity: 1;
-    transform: scaleY(1);
-  }
+  font-size: 8px;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  z-index: 50;
 }
 
 
-/* ============================================================
-   LARGE TABLET
-============================================================ */
+/* =========================================================
+   IMPORTANT TEXT SAFETY RULES
+   ========================================================= */
 
-@media (max-width: 1100px) {
+.hero-preview p,
+.hero-preview h1,
+.hero-preview h2,
+.hero-preview h3,
+.hero-preview span,
+.hero-preview label {
+  max-width: 100%;
+}
+
+
+/*
+ * Do NOT allow normal Hero text rules to accidentally
+ * affect the AuthCard internals.
+ */
+
+.hero-preview .auth-card,
+.hero-preview .auth-card p,
+.hero-preview .auth-card h1,
+.hero-preview .auth-card h2,
+.hero-preview .auth-card h3,
+.hero-preview .auth-card span,
+.hero-preview .auth-card label {
+  text-wrap: normal;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1500px) {
   .hero-container {
-    width: min(960px, 90%);
+    width: min(
+      calc(100% - 120px),
+      1280px
+    );
 
     grid-template-columns:
       minmax(0, 1fr)
-      minmax(330px, 0.85fr);
+      350px;
 
-    gap: 45px;
+    column-gap: 100px;
   }
 
   .hero-title {
-    font-size: clamp(43px, 5vw, 60px);
+    font-size: 74px;
   }
 
-  .hero-description {
-    font-size: 14px;
-  }
-
-  .hero-mini-stats {
-    gap: 18px;
-  }
-
+  .hero-preview,
+  .hero-preview-container,
   .hero-auth-wrapper {
-    max-width: 390px;
+    min-width: 330px;
+    max-width: 350px;
+  }
+
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    min-width: 330px;
+    max-width: 350px;
   }
 }
 
 
-/* ============================================================
-   TABLET
-============================================================ */
+/* =========================================================
+   DESKTOP / LAPTOP
+   ========================================================= */
 
-@media (max-width: 900px) {
-  .hero-section {
+@media (max-width: 1300px) {
+  .hero-container {
+    width: min(
+      calc(100% - 70px),
+      1120px
+    );
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      320px;
+
+    column-gap: 55px;
+  }
+
+  .hero-title {
+    font-size:
+      clamp(
+        44px,
+        5vw,
+        64px
+      );
+  }
+
+  .hero-description {
+    max-width: 560px;
+  }
+
+  .hero-preview,
+  .hero-preview-container,
+  .hero-auth-wrapper {
+    min-width: 310px;
+    max-width: 320px;
+  }
+
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    min-width: 310px;
+    max-width: 320px;
+  }
+}
+
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .hero {
     min-height: auto;
-
-    padding: 125px 0 90px;
   }
 
   .hero-container {
-    width: min(680px, 90%);
+    width: min(
+      calc(100% - 50px),
+      900px
+    );
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      310px;
+
+    column-gap: 35px;
+
+    padding:
+      55px 0
+      80px;
+  }
+
+  .hero-title {
+    font-size:
+      clamp(
+        40px,
+        5.4vw,
+        56px
+      );
+  }
+
+  .hero-description {
+    font-size: 13px;
+  }
+
+  .hero-preview,
+  .hero-preview-container,
+  .hero-auth-wrapper {
+    min-width: 300px;
+    max-width: 310px;
+  }
+
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    min-width: 300px;
+    max-width: 310px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .hero-container {
+    width: min(
+      calc(100% - 40px),
+      700px
+    );
+
+    display: grid;
 
     grid-template-columns: 1fr;
 
-    gap: 55px;
+    row-gap: 55px;
+
+    padding:
+      65px 0
+      90px;
   }
 
   .hero-content {
-    align-items: center;
+    max-width: 650px;
+
+    margin: 0 auto;
 
     text-align: center;
   }
 
-  .hero-title {
-    max-width: 680px;
+  .hero-content-inner {
+    margin: 0 auto;
+  }
 
-    font-size: clamp(44px, 8vw, 62px);
+  .hero-badge {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-title {
+    max-width: 700px;
+
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-description {
-    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .hero-buttons {
+  .hero-actions {
     justify-content: center;
   }
 
-  .hero-trust {
+  .hero-benefits {
     justify-content: center;
   }
 
-  .hero-mini-stats {
-    justify-content: center;
-
-    max-width: 100%;
+  .hero-stats {
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .hero-right {
+  .hero-preview {
     width: 100%;
+
+    min-width: 0;
+    max-width: 350px;
+
+    min-height: 0;
+
+    margin: 0 auto;
+  }
+
+  .hero-preview-container {
+    width: 100%;
+
+    min-width: 0;
+    max-width: 350px;
+
+    min-height: 0;
+
+    margin: 0 auto;
   }
 
   .hero-auth-wrapper {
-    width: min(100%, 430px);
+    width: 100%;
 
-    max-width: 430px;
+    min-width: 0;
+    max-width: 350px;
+  }
+
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    width: 100%;
+
+    min-width: 0;
+    max-width: 350px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .hero-container {
+    width:
+      calc(100% - 28px);
+
+    row-gap: 42px;
+
+    padding:
+      45px 0
+      75px;
+  }
+
+  .hero-title {
+    font-size:
+      clamp(
+        38px,
+        10vw,
+        50px
+      );
+
+    line-height: 1.02;
+
+    letter-spacing: -0.045em;
+  }
+
+  .hero-description {
+    margin-top: 18px;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+
+    width: 100%;
+
+    margin-top: 23px;
+  }
+
+  .hero-primary-button,
+  .hero-secondary-button {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .hero-benefits {
+    gap:
+      7px 12px;
+
+    font-size: 8px;
+  }
+
+  .hero-stats {
+    grid-template-columns:
+      1fr;
+
+    gap: 10px;
+
+    text-align: left;
+  }
+
+  .hero-stat {
+    justify-content: flex-start;
+  }
+
+  .hero-preview {
+    width: 100%;
+
+    max-width: 350px;
+  }
+
+  .hero-preview-container {
+    max-width: 350px;
+  }
+
+  .hero-auth-wrapper {
+    max-width: 350px;
+  }
+
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    width: 100%;
+
+    max-width: 350px;
   }
 
   .hero-scroll {
@@ -1567,171 +1482,200 @@
 }
 
 
-/* ============================================================
-   MOBILE
-============================================================ */
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
-@media (max-width: 600px) {
-  .hero-section {
-    padding: 110px 0 65px;
-  }
-
+@media (max-width: 420px) {
   .hero-container {
-    width: 91%;
+    width:
+      calc(100% - 20px);
 
-    gap: 42px;
+    padding:
+      35px 0
+      60px;
   }
 
   .hero-badge {
     font-size: 9px;
 
-    padding: 8px 11px;
+    min-height: 28px;
+
+    padding:
+      0 11px;
   }
 
   .hero-title {
-    font-size: clamp(38px, 11vw, 50px);
-
-    letter-spacing: -0.04em;
-  }
-
-  .hero-title-gradient {
-    white-space: normal;
+    font-size:
+      clamp(
+        34px,
+        10.5vw,
+        43px
+      );
   }
 
   .hero-description {
-    margin-top: 21px;
-
-    font-size: 13px;
-
-    line-height: 1.7;
+    font-size: 11px;
   }
 
-  .hero-buttons {
-    width: 100%;
-
-    flex-direction: column;
-
-    gap: 10px;
-  }
-
-  .hero-primary-btn,
-  .hero-secondary-btn {
-    width: 100%;
-  }
-
-  .hero-trust {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    width: 100%;
-
-    gap: 10px;
-  }
-
-  .hero-trust-item {
-    justify-content: center;
-
-    font-size: 9px;
-  }
-
-  .hero-mini-stats {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 8px;
-
-    margin-top: 25px;
-
-    padding-top: 20px;
-  }
-
-  .hero-mini-stat {
-    flex-direction: column;
-
-    text-align: center;
-
-    gap: 6px;
-  }
-
-  .hero-mini-stat-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .hero-mini-stat strong {
-    font-size: 12px;
-  }
-
-  .hero-mini-stat span {
-    font-size: 8px;
-  }
-
+  .hero-preview,
+  .hero-preview-container,
   .hero-auth-wrapper {
     width: 100%;
 
-    padding: 13px;
-
-    border-radius: 21px;
+    max-width: 340px;
   }
 
-  .hero-auth-top {
-    margin-bottom: 10px;
-  }
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    width: 100%;
 
-  .hero-auth-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-auth-wrapper .social-buttons,
-  .hero-auth-wrapper .social-login {
-    grid-template-columns: 1fr;
+    max-width: 340px;
   }
 }
 
 
-/* ============================================================
-   SMALL MOBILE
-============================================================ */
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
 
-@media (max-width: 400px) {
+@media (max-width: 360px) {
+  .hero-container {
+    width:
+      calc(100% - 16px);
+  }
+
   .hero-title {
-    font-size: 36px;
+    font-size: 32px;
   }
 
-  .hero-trust {
-    grid-template-columns: 1fr;
+  .hero-description {
+    font-size: 10.5px;
   }
 
-  .hero-mini-stats {
-    gap: 4px;
+  .hero-preview,
+  .hero-preview-container,
+  .hero-auth-wrapper {
+    max-width: 100%;
   }
 
-  .hero-mini-stat-icon {
-    width: 27px;
-    height: 27px;
-
-    font-size: 9px;
-  }
-
-  .hero-auth-users {
-    display: none !important;
+  #landing-auth-card,
+  .hero-preview .auth-card.compact,
+  .hero-preview-container .auth-card.compact,
+  .hero-auth-wrapper .auth-card.compact {
+    max-width: 100%;
   }
 }
 
 
-/* ============================================================
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.hero button:focus-visible,
+.hero a:focus-visible {
+  outline:
+    2px solid
+    rgba(145, 121, 255, 0.85);
+
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
    REDUCED MOTION
-============================================================ */
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-glow-one,
-  .hero-glow-two,
-  .hero-glow-three,
-  .hero-auth-glow,
-  .hero-badge-dot,
-  .hero-scroll-line {
-    animation: none;
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+
+    scroll-behavior: auto !important;
   }
 }
+
+
+/* =========================================================
+   HARD SAFETY OVERRIDES
+   ========================================================= */
+
+/*
+ * These rules are intentionally at the bottom so that
+ * older/global Hero rules cannot squeeze the preview.
+ */
+
+.hero-preview,
+.hero-preview-container,
+.hero-auth-wrapper {
+  flex-shrink: 0;
+}
+
+
+.hero-preview .auth-card.compact {
+  flex-shrink: 0;
+
+  white-space: normal;
+}
+
+
+.hero-preview .auth-card.compact * {
+  max-width: 100%;
+}
+
+
+.hero-preview .auth-card.compact .social-buttons {
+  width: 100%;
+}
+
+
+.hero-preview .auth-card.compact .social-button {
+  min-width: 0;
+}
+
+
+.hero-preview .auth-card.compact .social-button span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/*
+ * Prevent accidental global absolute positioning from
+ * destroying the Hero grid.
+ */
+
+.hero-content,
+.hero-preview {
+  left: auto;
+  right: auto;
+}
+
+
+/*
+ * Prevent old transforms from shifting the preview.
+ */
+
+.hero-preview,
+.hero-preview-container,
+.hero-auth-wrapper,
+#landing-auth-card {
+  transform-origin: center center;
+}
+
+
+/* =========================================================
+   END — TASKFLOW PREMIUM HERO
+   ========================================================= */
