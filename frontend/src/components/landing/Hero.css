@@ -1,6 +1,5 @@
 /* =========================================================
    TASKFLOW HERO
-   Completely isolated layout
 ========================================================= */
 
 .hero-section {
@@ -33,7 +32,7 @@
 
 
 /* =========================================================
-   BACKGROUND GRID
+   BACKGROUND
 ========================================================= */
 
 .hero-grid {
@@ -120,7 +119,7 @@
 
 
 /* =========================================================
-   DECORATIVE ORBS
+   ORBS
 ========================================================= */
 
 .hero-orb {
@@ -177,9 +176,9 @@
 
   grid-template-columns:
     minmax(0, 1fr)
-    390px;
+    420px;
 
-  column-gap: 82px;
+  column-gap: 72px;
 
   align-items: center;
 
@@ -211,11 +210,12 @@
 
   display: inline-flex;
   align-items: center;
+
   gap: 9px;
 
-  min-height: 32px;
+  min-height: 34px;
 
-  padding: 0 13px;
+  padding: 0 14px;
 
   border-radius: 999px;
 
@@ -227,12 +227,11 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 8px 30px rgba(0, 0, 0, 0.16);
 
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.72);
 
   font-size: 11px;
-  font-weight: 600;
 
-  letter-spacing: 0.02em;
+  font-weight: 600;
 }
 
 .hero-badge-dot {
@@ -276,7 +275,7 @@
     "Segoe UI",
     sans-serif;
 
-  font-size: clamp(44px, 4.2vw, 67px);
+  font-size: clamp(48px, 4.5vw, 70px);
 
   line-height: 0.98;
 
@@ -335,6 +334,7 @@
 .hero-buttons {
   display: flex;
   align-items: center;
+
   gap: 10px;
 
   margin-top: 28px;
@@ -371,6 +371,7 @@
   border: 0;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
@@ -389,6 +390,7 @@
     0 12px 30px rgba(103, 74, 255, 0.24);
 
   font-size: 13px;
+
   font-weight: 700;
 }
 
@@ -409,14 +411,11 @@
   transform: translateX(3px);
 }
 
-.hero-primary-btn:active {
-  transform: translateY(0);
-}
-
 .hero-secondary-btn {
-  width: 116px;
+  width: 150px;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
@@ -429,6 +428,7 @@
   color: rgba(255, 255, 255, 0.82);
 
   font-size: 11px;
+
   font-weight: 600;
 
   backdrop-filter: blur(12px);
@@ -447,6 +447,7 @@
   height: 18px;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
@@ -463,12 +464,14 @@
 
 
 /* =========================================================
-   TRUST ITEMS
+   TRUST
 ========================================================= */
 
 .hero-trust {
   display: flex;
+
   align-items: center;
+
   flex-wrap: wrap;
 
   gap: 15px;
@@ -482,6 +485,7 @@
 
 .hero-trust-item {
   display: inline-flex;
+
   align-items: center;
 
   gap: 5px;
@@ -506,6 +510,7 @@
 
 .hero-mini-stats {
   display: flex;
+
   align-items: center;
 
   gap: 32px;
@@ -519,6 +524,7 @@
 
 .hero-mini-stat {
   display: flex;
+
   align-items: center;
 
   gap: 9px;
@@ -529,6 +535,7 @@
   height: 28px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -545,6 +552,7 @@
 
 .hero-mini-stat-content {
   display: flex;
+
   flex-direction: column;
 
   gap: 1px;
@@ -572,11 +580,12 @@
 .hero-right {
   position: relative;
 
-  width: 390px;
+  width: 420px;
 
-  min-width: 390px;
+  min-width: 420px;
 
   display: flex;
+
   justify-content: center;
   align-items: center;
 
@@ -587,14 +596,14 @@
 
 
 /* =========================================================
-   AUTH GLOW
+   PREVIEW GLOW
 ========================================================= */
 
 .hero-auth-glow {
   position: absolute;
 
-  width: 330px;
-  height: 430px;
+  width: 390px;
+  height: 510px;
 
   left: 50%;
   top: 50%;
@@ -606,11 +615,11 @@
   background:
     radial-gradient(
       ellipse,
-      rgba(116, 79, 255, 0.18),
+      rgba(116, 79, 255, 0.2),
       transparent 68%
     );
 
-  filter: blur(30px);
+  filter: blur(35px);
 
   pointer-events: none;
 
@@ -619,272 +628,675 @@
 
 
 /* =========================================================
-   MAIN AUTH PREVIEW
+   PRODUCT PREVIEW
 ========================================================= */
 
-.hero-auth-preview {
+.hero-product-preview {
   position: relative;
 
-  width: 360px;
+  width: 390px;
 
   box-sizing: border-box;
 
-  padding: 13px;
+  padding: 16px;
 
-  border-radius: 20px;
+  border-radius: 22px;
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.105);
 
   background:
     linear-gradient(
       145deg,
-      rgba(20, 28, 55, 0.96),
-      rgba(9, 14, 31, 0.98)
+      rgba(22, 29, 57, 0.98),
+      rgba(7, 12, 28, 0.99)
     );
 
   box-shadow:
-    0 28px 70px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    0 35px 90px rgba(0, 0, 0, 0.48),
+    0 0 60px rgba(103, 74, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(25px);
 
-  overflow: visible;
-
-  isolation: isolate;
+  overflow: hidden;
 }
 
 
 /* =========================================================
-   PREVIEW HEADER
+   TOPBAR
 ========================================================= */
 
-.hero-auth-preview-header {
-  width: 100%;
-
-  min-height: 28px;
-
+.preview-topbar {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  box-sizing: border-box;
+  padding-bottom: 14px;
 
-  padding: 0 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
 }
 
-.hero-auth-status {
+.preview-brand {
   display: flex;
+
   align-items: center;
 
-  gap: 7px;
-
-  min-width: 0;
-
-  color: rgba(214, 220, 240, 0.65);
-
-  font-size: 9px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
+  gap: 9px;
 }
 
-.hero-status-dot {
-  width: 5px;
-  height: 5px;
-
-  flex: 0 0 5px;
-
-  border-radius: 50%;
-
-  background: #22d98b;
-
-  box-shadow:
-    0 0 10px rgba(34, 217, 139, 0.8);
-}
-
-
-/* =========================================================
-   USER AVATARS
-========================================================= */
-
-.hero-auth-users {
-  display: flex;
-  align-items: center;
-
-  flex-shrink: 0;
-}
-
-.hero-avatar {
-  width: 20px;
-  height: 20px;
-
-  margin-left: -4px;
+.preview-brand-icon {
+  width: 30px;
+  height: 30px;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
 
-  border-radius: 50%;
-
-  border: 2px solid #10162c;
-
-  color: #ffffff;
-
-  font-size: 7px;
-  font-weight: 700;
-}
-
-.hero-avatar:first-child {
-  margin-left: 0;
-}
-
-.avatar-one {
-  background: #7459ff;
-}
-
-.avatar-two {
-  background: #20a9ff;
-}
-
-.avatar-three {
-  background: #22c79b;
-}
-
-.hero-avatar-count {
-  margin-left: 5px;
-
-  color: rgba(178, 187, 212, 0.55);
-
-  font-size: 7px;
-}
-
-
-/* =========================================================
-   WORKSPACE MESSAGE
-========================================================= */
-
-.hero-workspace-message {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  margin-top: 8px;
-
-  padding: 10px;
-
-  border-radius: 10px;
-
-  border: 1px solid rgba(255, 255, 255, 0.065);
-
-  background:
-    rgba(255, 255, 255, 0.025);
-}
-
-.hero-workspace-check {
-  width: 27px;
-  height: 27px;
-
-  flex: 0 0 27px;
-
-  display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 8px;
 
-  background: rgba(108, 78, 255, 0.14);
+  background:
+    linear-gradient(
+      135deg,
+      #6e58ff,
+      #8755ff
+    );
 
-  color: #9a83ff;
+  color: #ffffff;
+
+  font-size: 11px;
+
+  box-shadow:
+    0 7px 18px rgba(103, 74, 255, 0.3);
+}
+
+.preview-brand div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.preview-brand strong {
+  color: #ffffff;
+
+  font-size: 11px;
+
+  line-height: 1;
+}
+
+.preview-brand span {
+  color: rgba(164, 175, 201, 0.5);
+
+  font-size: 7px;
+}
+
+.preview-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(34, 217, 139, 0.12);
+
+  background: rgba(34, 217, 139, 0.06);
+
+  color: rgba(148, 232, 192, 0.75);
+
+  font-size: 7px;
+
+  font-weight: 700;
+}
+
+.preview-status span {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #22d98b;
+
+  box-shadow: 0 0 9px rgba(34, 217, 139, 0.8);
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.preview-heading {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 18px 2px 15px;
+}
+
+.preview-eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #8875ff;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.preview-heading h3 {
+  margin: 0;
+
+  color: #f7f8ff;
+
+  font-size: 18px;
+
+  line-height: 1.15;
+
+  font-weight: 750;
+}
+
+.preview-heading p {
+  margin: 5px 0 0;
+
+  color: rgba(164, 174, 201, 0.55);
+
+  font-size: 8px;
+}
+
+.preview-avatars {
+  display: flex;
+
+  align-items: center;
+
+  padding-top: 5px;
+}
+
+.preview-avatars span {
+  width: 24px;
+  height: 24px;
+
+  margin-left: -6px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 2px solid #121932;
+
+  color: #ffffff;
+
+  font-size: 6px;
+
+  font-weight: 800;
+}
+
+.preview-avatars span:first-child {
+  margin-left: 0;
+
+  background: #7359ff;
+}
+
+.preview-avatars span:nth-child(2) {
+  background: #209dff;
+}
+
+.preview-avatars span:nth-child(3) {
+  background: #20c89b;
+}
+
+.preview-avatars b {
+  margin-left: 6px;
+
+  color: rgba(177, 187, 211, 0.55);
+
+  font-size: 7px;
+}
+
+
+/* =========================================================
+   PROJECT CARD
+========================================================= */
+
+.preview-project-card {
+  padding: 13px;
+
+  border-radius: 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.preview-project-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.preview-project-icon {
+  width: 31px;
+  height: 31px;
+
+  flex: 0 0 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(111, 85, 255, 0.13);
+
+  color: #9582ff;
+
+  font-size: 11px;
+}
+
+.preview-project-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.preview-project-info strong {
+  color: #f5f6ff;
 
   font-size: 10px;
 }
 
-.hero-workspace-message > div:last-child {
+.preview-project-info span {
+  color: rgba(160, 171, 198, 0.5);
+
+  font-size: 7px;
+}
+
+.preview-project-percent {
+  margin-left: auto;
+
+  color: #a18fff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.preview-progress {
+  width: 100%;
+  height: 5px;
+
+  margin-top: 13px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.preview-progress span {
+  display: block;
+
+  width: 82%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7359ff,
+      #3caeff
+    );
+}
+
+.preview-project-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 9px;
+
+  color: rgba(153, 164, 191, 0.5);
+
+  font-size: 6.5px;
+}
+
+
+/* =========================================================
+   TASK SECTION
+========================================================= */
+
+.preview-task-section {
+  margin-top: 14px;
+}
+
+.preview-section-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+.preview-section-heading strong {
+  color: #e9ebf8;
+
+  font-size: 9px;
+}
+
+.preview-section-heading span {
+  color: #8875ff;
+
+  font-size: 7px;
+
+  font-weight: 700;
+}
+
+.preview-task {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-height: 39px;
+
+  padding: 7px 8px;
+
+  margin-top: 5px;
+
+  border-radius: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.045);
+
+  background: rgba(255, 255, 255, 0.022);
+}
+
+.preview-task-check {
+  width: 21px;
+  height: 21px;
+
+  flex: 0 0 21px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  font-size: 7px;
+}
+
+.preview-task-check.completed {
+  color: #22d98b;
+
+  background: rgba(34, 217, 139, 0.09);
+}
+
+.preview-task-check.progress {
+  color: #8c79ff;
+
+  background: rgba(111, 85, 255, 0.1);
+}
+
+.preview-task-check.pending {
+  color: #4faeff;
+
+  background: rgba(45, 160, 255, 0.09);
+}
+
+.preview-task-content {
   min-width: 0;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 2px;
 }
 
-.hero-workspace-message strong {
-  color: #f5f6ff;
+.preview-task-content strong {
+  overflow: hidden;
 
-  font-size: 11px;
-
-  line-height: 1.2;
-
-  font-weight: 700;
-}
-
-.hero-workspace-message span {
-  color: rgba(167, 177, 204, 0.55);
+  color: rgba(239, 241, 250, 0.88);
 
   font-size: 8px;
 
-  line-height: 1.3;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
+.preview-task-content span {
+  color: rgba(147, 159, 188, 0.45);
 
-/* =========================================================
-   AUTH CARD SLOT
-
-   IMPORTANT:
-   This is the isolation layer preventing AuthCard.css
-   from affecting the Hero layout.
-========================================================= */
-
-.hero-auth-card-slot {
-  position: relative;
-
-  width: 100%;
-
-  min-width: 0;
-
-  box-sizing: border-box;
-
-  margin-top: 10px;
-
-  padding: 0;
-
-  display: block;
-
-  overflow: visible;
-
-  isolation: isolate;
+  font-size: 6.5px;
 }
 
-
-/*
-   Prevent common AuthCard positioning rules from escaping
-   into the Hero layout.
-*/
-
-.hero-auth-card-slot > * {
-  position: relative;
-
-  inset: auto;
-
-  transform: none;
+.preview-task-user {
+  width: 20px;
+  height: 20px;
 
   margin-left: auto;
-  margin-right: auto;
 
-  box-sizing: border-box;
+  flex: 0 0 20px;
 
-  max-width: 100%;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(112, 86, 255, 0.2);
+
+  color: #b7abff;
+
+  font-size: 5.5px;
+
+  font-weight: 800;
+}
+
+.preview-task-user.blue {
+  background: rgba(45, 160, 255, 0.15);
+
+  color: #72c2ff;
+}
+
+.preview-task-user.green {
+  background: rgba(34, 217, 139, 0.13);
+
+  color: #65e8b1;
 }
 
 
 /* =========================================================
-   AUTH METRICS
+   AUTH MINI PANEL
+========================================================= */
+
+.preview-auth-panel {
+  margin-top: 14px;
+
+  padding: 13px;
+
+  border-radius: 13px;
+
+  border: 1px solid rgba(139, 92, 246, 0.16);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(94, 71, 190, 0.1),
+      rgba(255, 255, 255, 0.025)
+    );
+}
+
+.preview-auth-panel-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.preview-auth-panel-header div:first-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.preview-auth-panel-header span {
+  color: #8875ff;
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.preview-auth-panel-header strong {
+  color: #f3f4fc;
+
+  font-size: 10px;
+}
+
+.preview-lock {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: rgba(111, 85, 255, 0.12);
+
+  color: #9684ff;
+
+  font-size: 8px;
+}
+
+.preview-input {
+  position: relative;
+
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 9px;
+
+  margin-top: 6px;
+
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.065);
+
+  background: rgba(3, 7, 20, 0.4);
+
+  color: rgba(166, 176, 201, 0.55);
+
+  font-size: 7px;
+}
+
+.preview-input > svg {
+  color: rgba(139, 120, 255, 0.8);
+
+  font-size: 7px;
+}
+
+.preview-eye {
+  margin-left: auto;
+
+  color: rgba(160, 171, 198, 0.35) !important;
+}
+
+.preview-login-button {
+  height: 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  margin-top: 8px;
+
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6f55ff,
+      #8751ff
+    );
+
+  color: #ffffff;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 18px rgba(103, 74, 255, 0.2);
+}
+
+.preview-login-button svg {
+  font-size: 6px;
+}
+
+
+/* =========================================================
+   METRICS
 ========================================================= */
 
 .hero-auth-metrics {
@@ -903,6 +1315,7 @@
   min-width: 0;
 
   display: flex;
+
   align-items: center;
 
   gap: 8px;
@@ -925,6 +1338,7 @@
   flex: 0 0 25px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -947,6 +1361,7 @@
   min-width: 0;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 2px;
@@ -972,7 +1387,7 @@
 
 
 /* =========================================================
-   SCROLL INDICATOR
+   SCROLL
 ========================================================= */
 
 .hero-scroll {
@@ -984,7 +1399,9 @@
   transform: translateX(-50%);
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 
   gap: 7px;
@@ -1027,17 +1444,13 @@
 
     grid-template-columns:
       minmax(0, 1fr)
-      390px;
+      420px;
 
     column-gap: 95px;
   }
 
   .hero-title {
-    font-size: 67px;
-  }
-
-  .hero-description {
-    font-size: 14px;
+    font-size: 70px;
   }
 }
 
@@ -1052,18 +1465,19 @@
 
     grid-template-columns:
       minmax(0, 1fr)
-      340px;
+      370px;
 
     column-gap: 45px;
   }
 
   .hero-right {
-    width: 340px;
-    min-width: 340px;
+    width: 370px;
+
+    min-width: 370px;
   }
 
-  .hero-auth-preview {
-    width: 330px;
+  .hero-product-preview {
+    width: 350px;
   }
 
   .hero-title {
@@ -1105,7 +1519,9 @@
 
   .hero-content {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
   }
 
@@ -1133,11 +1549,12 @@
 
   .hero-right {
     width: 100%;
+
     min-width: 0;
   }
 
-  .hero-auth-preview {
-    width: min(360px, 100%);
+  .hero-product-preview {
+    width: min(390px, 100%);
   }
 
   .hero-scroll {
@@ -1233,12 +1650,20 @@
     font-size: 7px;
   }
 
-  .hero-auth-preview {
+  .hero-product-preview {
     width: 100%;
 
-    padding: 10px;
+    padding: 11px;
 
     border-radius: 17px;
+  }
+
+  .preview-heading h3 {
+    font-size: 16px;
+  }
+
+  .preview-project-card {
+    padding: 11px;
   }
 
   .hero-auth-metrics {
@@ -1262,6 +1687,7 @@
 
   .hero-mini-stats {
     flex-direction: column;
+
     align-items: flex-start;
   }
 

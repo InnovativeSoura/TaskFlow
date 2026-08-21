@@ -11,9 +11,10 @@ import {
   FaTasks,
   FaChartLine,
   FaCheck,
+  FaLock,
+  FaEnvelope,
+  FaEye,
 } from "react-icons/fa";
-
-import AuthCard from "../auth/AuthCard";
 
 import "./Hero.css";
 
@@ -161,9 +162,7 @@ const Hero = () => {
             in real time — all from one intelligent workspace.
           </p>
 
-          {/* =================================================
-              BUTTONS
-          ================================================= */}
+          {/* BUTTONS */}
 
           <div className="hero-buttons">
             <button
@@ -187,9 +186,7 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* =================================================
-              TRUST ITEMS
-          ================================================= */}
+          {/* TRUST ITEMS */}
 
           <div className="hero-trust">
             <div className="hero-trust-item">
@@ -213,9 +210,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* =================================================
-              MINI STATS
-          ================================================= */}
+          {/* MINI STATS */}
 
           <div className="hero-mini-stats">
             <div className="hero-mini-stat">
@@ -254,7 +249,7 @@ const Hero = () => {
         </motion.div>
 
         {/* ===================================================
-            RIGHT AUTH PREVIEW
+            RIGHT PRODUCT PREVIEW
         =================================================== */}
 
         <motion.div
@@ -275,77 +270,180 @@ const Hero = () => {
             ease: "easeOut",
           }}
         >
-          {/* Glow behind card */}
-
           <div className="hero-auth-glow" />
 
-          {/* =================================================
-              ACTUAL PREVIEW CARD
-          ================================================= */}
+          <div className="hero-product-preview">
+            {/* =================================================
+                TOP BAR
+            ================================================= */}
 
-          <div className="hero-auth-preview">
-            {/* -----------------------------------------------
-                PREVIEW HEADER
-            ------------------------------------------------ */}
+            <div className="preview-topbar">
+              <div className="preview-brand">
+                <div className="preview-brand-icon">
+                  <FaTasks />
+                </div>
 
-            <div className="hero-auth-preview-header">
-              <div className="hero-auth-status">
-                <span className="hero-status-dot" />
-
-                <span>Workspace is ready</span>
+                <div>
+                  <strong>TaskFlow</strong>
+                  <span>Workspace</span>
+                </div>
               </div>
 
-              <div className="hero-auth-users">
-                <span className="hero-avatar avatar-one">
-                  S
-                </span>
-
-                <span className="hero-avatar avatar-two">
-                  A
-                </span>
-
-                <span className="hero-avatar avatar-three">
-                  R
-                </span>
-
-                <span className="hero-avatar-count">
-                  +18
-                </span>
+              <div className="preview-status">
+                <span />
+                Live
               </div>
             </div>
 
-            {/* -----------------------------------------------
-                WORKSPACE MESSAGE
-            ------------------------------------------------ */}
+            {/* =================================================
+                DASHBOARD HEADER
+            ================================================= */}
 
-            <div className="hero-workspace-message">
-              <div className="hero-workspace-check">
-                <FaCheck />
-              </div>
-
+            <div className="preview-heading">
               <div>
-                <strong>Workspace is ready</strong>
-
-                <span>
-                  Your project hub is online
+                <span className="preview-eyebrow">
+                  PROJECT OVERVIEW
                 </span>
+
+                <h3>Workspace is ready</h3>
+
+                <p>
+                  Your team is working efficiently.
+                </p>
+              </div>
+
+              <div className="preview-avatars">
+                <span>SP</span>
+                <span>AR</span>
+                <span>MK</span>
+                <b>+18</b>
               </div>
             </div>
 
-            {/* -----------------------------------------------
-                AUTH CARD ISOLATED AREA
-            ------------------------------------------------ */}
+            {/* =================================================
+                PROJECT CARD
+            ================================================= */}
 
-            <div className="hero-auth-card-slot">
-              <AuthCard
-                compact
-                onAuthReady={() => {}}
-              />
+            <div className="preview-project-card">
+              <div className="preview-project-top">
+                <div className="preview-project-icon">
+                  <FaChartLine />
+                </div>
+
+                <div className="preview-project-info">
+                  <strong>Website Redesign</strong>
+                  <span>Product Development</span>
+                </div>
+
+                <div className="preview-project-percent">
+                  82%
+                </div>
+              </div>
+
+              <div className="preview-progress">
+                <span />
+              </div>
+
+              <div className="preview-project-footer">
+                <span>24 Tasks</span>
+                <span>6 Members</span>
+                <span>Due in 8 days</span>
+              </div>
             </div>
 
-            {/* -----------------------------------------------
+            {/* =================================================
+                TASK LIST
+            ================================================= */}
+
+            <div className="preview-task-section">
+              <div className="preview-section-heading">
+                <strong>Recent Tasks</strong>
+                <span>View all</span>
+              </div>
+
+              <div className="preview-task">
+                <div className="preview-task-check completed">
+                  <FaCheck />
+                </div>
+
+                <div className="preview-task-content">
+                  <strong>Design landing page</strong>
+                  <span>Completed</span>
+                </div>
+
+                <div className="preview-task-user">
+                  SP
+                </div>
+              </div>
+
+              <div className="preview-task">
+                <div className="preview-task-check progress">
+                  <FaArrowRight />
+                </div>
+
+                <div className="preview-task-content">
+                  <strong>Build authentication</strong>
+                  <span>In Progress</span>
+                </div>
+
+                <div className="preview-task-user blue">
+                  AR
+                </div>
+              </div>
+
+              <div className="preview-task">
+                <div className="preview-task-check pending">
+                  <FaTasks />
+                </div>
+
+                <div className="preview-task-content">
+                  <strong>Deploy production build</strong>
+                  <span>Upcoming</span>
+                </div>
+
+                <div className="preview-task-user green">
+                  MK
+                </div>
+              </div>
+            </div>
+
+            {/* =================================================
+                AUTH MINI PANEL
+            ================================================= */}
+
+            <div className="preview-auth-panel">
+              <div className="preview-auth-panel-header">
+                <div>
+                  <span>SECURE ACCESS</span>
+                  <strong>Welcome back 👋</strong>
+                </div>
+
+                <div className="preview-lock">
+                  <FaLock />
+                </div>
+              </div>
+
+              <div className="preview-input">
+                <FaEnvelope />
+                <span>you@example.com</span>
+              </div>
+
+              <div className="preview-input">
+                <FaLock />
+                <span>••••••••••••</span>
+
+                <FaEye className="preview-eye" />
+              </div>
+
+              <div className="preview-login-button">
+                Sign in
+                <FaArrowRight />
+              </div>
+            </div>
+
+            {/* =================================================
                 BOTTOM METRICS
-            ------------------------------------------------ */}
+            ================================================= */}
 
             <div className="hero-auth-metrics">
               <div className="hero-auth-metric">
