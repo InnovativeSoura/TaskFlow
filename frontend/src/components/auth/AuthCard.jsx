@@ -1,26 +1,8 @@
 // src/components/auth/AuthCard.jsx
 
-import {
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-
-import {
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-
-import {
-  AnimatePresence,
-  motion,
-} from "framer-motion";
-
-import {
-  FaCheck,
-  FaUsers,
-  FaArrowUp,
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 
@@ -29,127 +11,88 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import SocialButtons from "./SocialButtons";
 
-
-/* =========================================================
-   AUTH CARD
-========================================================= */
+import "../styles/Auth.css";
 
 const AuthCard = ({
   compact = false,
   onAuthReady,
 }) => {
-
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    login,
-    register,
-  } = useAuth();
-
+  const { login, register } = useAuth();
 
   /* =========================================================
      API URL
   ========================================================= */
 
-  const getApiBaseUrl = useCallback(() => {
-
-    const envUrl =
-      import.meta.env.VITE_API_URL ||
-      "http://localhost:5000/api";
-
-    return envUrl
-      .replace(/\/+$/, "")
-      .replace(/\/api$/, "");
-
-  }, []);
-
-
-  const API_BASE_URL =
-    getApiBaseUrl();
-
+  const API_URL = (
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api"
+  ).replace(/\/$/, "");
 
   /* =========================================================
-     LOGIN / REGISTER MODE
+     AUTH MODE
   ========================================================= */
 
-  const [isLogin, setIsLogin] =
-    useState(
-      location.pathname !== "/register"
-    );
-
+  const [isLogin, setIsLogin] = useState(
+    location.pathname !== "/register"
+  );
 
   /* =========================================================
      UI STATE
   ========================================================= */
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  const [rememberMe, setRememberMe] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const [showPassword, setShowPassword] =
     useState(false);
 
-  const [
-    showConfirmPassword,
-    setShowConfirmPassword,
-  ] = useState(false);
-
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
   /* =========================================================
-     FORM DATA
+     FORM STATE
   ========================================================= */
 
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      role: "Team Member",
-    });
-
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "Team Member",
+  });
 
   /* =========================================================
-     SYNC MODE WITH URL
-     FULL AUTH PAGE ONLY
+     SYNC FULL AUTH PAGE WITH ROUTE
   ========================================================= */
 
   useEffect(() => {
+    if (compact) return;
 
-    if (!compact) {
-
-      setIsLogin(
-        location.pathname !== "/register"
-      );
-
-    }
-
-  }, [
-    location.pathname,
-    compact,
-  ]);
-
+    setIsLogin(location.pathname !== "/register");
+  }, [location.pathname, compact]);
 
   /* =========================================================
-     LANDING PAGE AUTH MODE EVENT
+     LANDING PAGE AUTH TOGGLE EVENT
+
+     Landing page buttons can dispatch:
+
+     window.dispatchEvent(
+       new CustomEvent("taskflow-auth-mode", {
+         detail: { mode: "login" }
+       })
+     );
+
   ========================================================= */
 
   useEffect(() => {
-
-    if (!compact) {
-      return;
-    }
+    if (!compact) return;
 
     const handleAuthMode = (event) => {
-
-      const mode =
-        event.detail?.mode;
+      const mode = event.detail?.mode;
 
       if (
         mode !== "login" &&
@@ -160,66 +103,89 @@ const AuthCard = ({
 
       setError("");
 
-      setIsLogin(
-        mode === "login"
-      );
+      setIsLogin(mode === "login");
 
       setShowPassword(false);
-
       setShowConfirmPassword(false);
-
     };
-
 
     window.addEventListener(
       "taskflow-auth-mode",
       handleAuthMode
     );
 
-
     return () => {
-
       window.removeEventListener(
         "taskflow-auth-mode",
         handleAuthMode
       );
-
     };
-
   }, [compact]);
 
-
   /* =========================================================
-     AUTH CARD READY
+     NOTIFY PARENT
   ========================================================= */
 
   useEffect(() => {
-
     if (
       compact &&
       typeof onAuthReady === "function"
     ) {
-
       onAuthReady();
-
     }
-
-  }, [
-    compact,
-    onAuthReady,
-  ]);
-
+  }, [compact, onAuthReady]);
 
   /* =========================================================
      RESET FORM
   ========================================================= */
 
   const resetForm = () => {
+    setError("");
+
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "Team Member",
+    });
+  };
+
+  /* =========================================================
+     INPUT CHANGE
+  ========================================================= */
+
+  const handleChange = (event) => {
+    const {
+      name,
+      value,
+    } = event.target;
+
+    setError("");
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  /* =========================================================
+     SWITCH LOGIN / REGISTER
+  ========================================================= */
+
+  const switchMode = (loginMode) => {
+    if (loading) return;
+
+    if (loginMode === isLogin) {
+      return;
+    }
 
     setError("");
 
     setShowPassword(false);
-
     setShowConfirmPassword(false);
 
     setFormData({
@@ -230,63 +196,21 @@ const AuthCard = ({
       role: "Team Member",
     });
 
-  };
-
-
-  /* =========================================================
-     CHANGE HANDLER
-  ========================================================= */
-
-  const handleChange = (event) => {
-
-    setError("");
-
-    const {
-      name,
-      value,
-    } = event.target;
-
-    setFormData((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
-
-  };
-
-
-  /* =========================================================
-     SWITCH LOGIN / REGISTER
-  ========================================================= */
-
-  const switchMode = (loginMode) => {
-
-    if (
-      loginMode === isLogin
-    ) {
-      return;
-    }
-
-    resetForm();
-
     setIsLogin(loginMode);
 
+    /* -----------------------------------------
+       LANDING PAGE
 
-    /*
-      COMPACT MODE
-      ----------------------------------
-      Stay on the landing page.
-    */
+       Stay on "/"
+    ----------------------------------------- */
 
     if (compact) {
       return;
     }
 
-
-    /*
-      FULL AUTH PAGE
-      ----------------------------------
-      Use normal authentication routes.
-    */
+    /* -----------------------------------------
+       FULL AUTH PAGE
+    ----------------------------------------- */
 
     navigate(
       loginMode
@@ -296,16 +220,13 @@ const AuthCard = ({
         replace: true,
       }
     );
-
   };
-
 
   /* =========================================================
      VALIDATION
   ========================================================= */
 
   const validate = () => {
-
     const {
       name,
       email,
@@ -313,269 +234,196 @@ const AuthCard = ({
       confirmPassword,
     } = formData;
 
-
-    if (!email.trim()) {
-
-      return "Email is required.";
-
+    if (!isLogin && !name.trim()) {
+      return "Full Name is required.";
     }
 
+    if (!email.trim()) {
+      return "Email is required.";
+    }
 
     const emailRegex =
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-
-    if (
-      !emailRegex.test(
-        email.trim()
-      )
-    ) {
-
-      return "Enter a valid email.";
-
+    if (!emailRegex.test(email.trim())) {
+      return "Enter a valid email address.";
     }
-
 
     if (!password.trim()) {
-
       return "Password is required.";
-
     }
-
 
     if (password.length < 6) {
-
-      return (
-        "Password must contain at least 6 characters."
-      );
-
+      return "Password must contain at least 6 characters.";
     }
-
 
     if (!isLogin) {
-
-      if (!name.trim()) {
-
-        return "Full Name is required.";
-
+      if (!confirmPassword.trim()) {
+        return "Please confirm your password.";
       }
 
-
-      if (
-        password !==
-        confirmPassword
-      ) {
-
+      if (password !== confirmPassword) {
         return "Passwords do not match.";
-
       }
-
     }
 
-
     return "";
-
   };
 
+  /* =========================================================
+     LOGIN / REGISTER SUBMIT
+  ========================================================= */
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (loading) {
+      return;
+    }
+
+    const validationError = validate();
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      let result;
+
+      /* =====================================
+         LOGIN
+      ===================================== */
+
+      if (isLogin) {
+        result = await login({
+          email: formData.email.trim(),
+          password: formData.password,
+        });
+
+        /* -------------------------------------
+           OPTIONAL REMEMBER ME
+        ------------------------------------- */
+
+        if (rememberMe) {
+          localStorage.setItem(
+            "taskflow_remember_email",
+            formData.email.trim()
+          );
+        } else {
+          localStorage.removeItem(
+            "taskflow_remember_email"
+          );
+        }
+      }
+
+      /* =====================================
+         REGISTER
+      ===================================== */
+
+      else {
+        result = await register({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+          role: formData.role,
+        });
+      }
+
+      /* =====================================
+         FAILED
+      ===================================== */
+
+      if (!result?.success) {
+        setError(
+          result?.message ||
+            "Authentication failed. Please try again."
+        );
+
+        return;
+      }
+
+      /* =====================================
+         SUCCESS
+      ===================================== */
+
+      navigate("/dashboard", {
+        replace: true,
+      });
+    } catch (authError) {
+      console.error(
+        "Authentication Error:",
+        authError
+      );
+
+      setError(
+        authError?.response?.data?.message ||
+          authError?.message ||
+          "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /* =========================================================
      GOOGLE LOGIN
   ========================================================= */
 
   const handleGoogleLogin = () => {
-
     window.location.href =
-      `${API_BASE_URL}/api/auth/google`;
-
+      `${API_URL}/auth/google`;
   };
-
 
   /* =========================================================
      GITHUB LOGIN
   ========================================================= */
 
   const handleGithubLogin = () => {
-
     window.location.href =
-      `${API_BASE_URL}/api/auth/github`;
-
+      `${API_URL}/auth/github`;
   };
-
-
-  /* =========================================================
-     SUBMIT
-  ========================================================= */
-
-  const handleSubmit = async (event) => {
-
-    event.preventDefault();
-
-
-    if (loading) {
-      return;
-    }
-
-
-    const validation =
-      validate();
-
-
-    if (validation) {
-
-      setError(validation);
-
-      return;
-
-    }
-
-
-    setLoading(true);
-
-    setError("");
-
-
-    try {
-
-      let result;
-
-
-      /* =====================================================
-         LOGIN
-      ===================================================== */
-
-      if (isLogin) {
-
-        result = await login({
-          email:
-            formData.email.trim(),
-
-          password:
-            formData.password,
-        });
-
-      }
-
-
-      /* =====================================================
-         REGISTER
-      ===================================================== */
-
-      else {
-
-        result = await register({
-
-          name:
-            formData.name.trim(),
-
-          email:
-            formData.email.trim(),
-
-          password:
-            formData.password,
-
-          role:
-            formData.role,
-
-        });
-
-      }
-
-
-      /* =====================================================
-         FAILED RESPONSE
-      ===================================================== */
-
-      if (
-        !result ||
-        !result.success
-      ) {
-
-        setError(
-          result?.message ||
-          "Authentication failed."
-        );
-
-        return;
-
-      }
-
-
-      /* =====================================================
-         SUCCESS
-      ===================================================== */
-
-      navigate(
-        "/dashboard",
-        {
-          replace: true,
-        }
-      );
-
-    } catch (error) {
-
-      setError(
-        error?.message ||
-        "Something went wrong. Please try again."
-      );
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
 
   /* =========================================================
      FORGOT PASSWORD
   ========================================================= */
 
   const handleForgotPassword = () => {
-
-    navigate(
-      "/forgot-password"
-    );
-
+    navigate("/forgot-password");
   };
 
-
   /* =========================================================
-     CARD WIDTH
+     CARD CLASS
   ========================================================= */
 
-  const cardStyle = compact
-    ? {
-        width: "min(390px, calc(100vw - 32px))",
-        maxWidth: "390px",
-        minWidth: "320px",
-      }
-    : undefined;
-
+  const cardClassName = [
+    "auth-card",
+    compact ? "compact" : "",
+    isLogin ? "login-mode" : "register-mode",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   /* =========================================================
      RENDER
   ========================================================= */
 
   return (
-
     <motion.div
-      className={`auth-card ${
-        compact
-          ? "compact auth-card-wide"
-          : ""
-      }`}
+      className={cardClassName}
       id={
         compact
           ? "landing-auth-card"
           : undefined
       }
-      style={cardStyle}
       initial={
         compact
           ? {
               opacity: 0,
-              x: 40,
+              x: 35,
               scale: 0.97,
             }
           : false
@@ -587,118 +435,71 @@ const AuthCard = ({
               x: 0,
               scale: 1,
             }
-          : undefined
+          : false
       }
       transition={{
         duration: 0.45,
-        ease: "easeOut",
+        ease: [0.22, 1, 0.36, 1],
       }}
     >
 
       {/* =====================================================
-          WORKSPACE STATUS HEADER
+          STATUS BAR
       ===================================================== */}
 
       {compact && (
-
-        <motion.div
-          className="auth-workspace-status"
-          initial={{
-            opacity: 0,
-            y: -8,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.15,
-            duration: 0.35,
-          }}
-        >
-
-          <div className="workspace-ready">
-
-            <span className="workspace-ready-dot">
-              <FaCheck />
-            </span>
-
-            <div className="workspace-ready-text">
-
-              <span className="workspace-ready-title">
-                Workspace is ready
-              </span>
-
-              <span className="workspace-ready-subtitle">
-                Your project hub is online
-              </span>
-
-            </div>
-
+        <div className="auth-preview-topbar">
+          <div className="auth-preview-status">
+            <span className="auth-status-dot" />
+            <span>Workspace is ready</span>
           </div>
 
-
-          <div className="workspace-members">
-
-            <div
-              className="workspace-avatar avatar-purple"
-              title="Souradipta"
-            >
+          <div className="auth-preview-members">
+            <span className="preview-avatar purple">
               S
-            </div>
+            </span>
 
-            <div
-              className="workspace-avatar avatar-blue"
-              title="Team Member"
-            >
+            <span className="preview-avatar blue">
               A
-            </div>
+            </span>
 
-            <div
-              className="workspace-avatar avatar-cyan"
-              title="Team Member"
-            >
-              K
-            </div>
+            <span className="preview-avatar cyan">
+              R
+            </span>
 
-            <span className="workspace-member-count">
+            <span className="preview-more">
               +18
             </span>
-
           </div>
-
-        </motion.div>
-
+        </div>
       )}
-
 
       {/* =====================================================
           LOGIN / REGISTER TOGGLE
       ===================================================== */}
 
-      <AuthToggle
-        isLogin={isLogin}
-        onToggle={switchMode}
-      />
-
+      <div className="auth-toggle-wrapper">
+        <AuthToggle
+          isLogin={isLogin}
+          onToggle={switchMode}
+        />
+      </div>
 
       {/* =====================================================
-          FORM ANIMATION
+          FORM CONTENT
       ===================================================== */}
 
-      <AnimatePresence
-        mode="wait"
-      >
-
+      <AnimatePresence mode="wait">
         <motion.div
           key={
             isLogin
-              ? "login"
-              : "register"
+              ? "login-content"
+              : "register-content"
           }
+          className="auth-card-content"
           initial={{
             opacity: 0,
-            y: 22,
+            y: 12,
           }}
           animate={{
             opacity: 1,
@@ -706,10 +507,10 @@ const AuthCard = ({
           }}
           exit={{
             opacity: 0,
-            y: -22,
+            y: -12,
           }}
           transition={{
-            duration: 0.32,
+            duration: 0.25,
             ease: "easeOut",
           }}
         >
@@ -721,177 +522,140 @@ const AuthCard = ({
           <div className="auth-header">
 
             <h2 className="auth-title">
-
-              {isLogin
-                ? "Welcome Back 👋"
-                : "Create Your Account"}
-
+              {isLogin ? (
+                <>
+                  Welcome
+                  <br />
+                  Back 👋
+                </>
+              ) : (
+                <>
+                  Create
+                  <br />
+                  Account
+                </>
+              )}
             </h2>
 
-
             <p className="auth-subtitle">
-
               {isLogin
                 ? "Sign in to continue managing your projects."
                 : "Join TaskFlow and start collaborating today."}
-
             </p>
 
           </div>
 
+          {/* =================================================
+              ERROR
+          ================================================= */}
+
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                className="auth-error"
+                initial={{
+                  opacity: 0,
+                  y: -5,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -5,
+                }}
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* =================================================
-              LOGIN FORM
+              LOGIN
           ================================================= */}
 
           {isLogin ? (
-
             <LoginForm
-              email={
-                formData.email
-              }
-
-              password={
-                formData.password
-              }
-
-              rememberMe={
-                rememberMe
-              }
-
-              loading={
-                loading
-              }
-
-              error={
-                error
-              }
-
-              showPassword={
-                showPassword
-              }
-
-              onChange={
-                handleChange
-              }
-
-              onSubmit={
-                handleSubmit
-              }
-
+              email={formData.email}
+              password={formData.password}
+              rememberMe={rememberMe}
+              loading={loading}
+              error=""
+              showPassword={showPassword}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
               onTogglePassword={() =>
                 setShowPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
-
               onRememberChange={() =>
                 setRememberMe(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
-
               onForgotPassword={
                 handleForgotPassword
               }
             />
-
           ) : (
-
             /* =================================================
-               REGISTER FORM
+               REGISTER
             ================================================= */
 
             <RegisterForm
-              name={
-                formData.name
-              }
-
-              email={
-                formData.email
-              }
-
-              password={
-                formData.password
-              }
-
+              name={formData.name}
+              email={formData.email}
+              password={formData.password}
               confirmPassword={
                 formData.confirmPassword
               }
-
-              role={
-                formData.role
-              }
-
-              loading={
-                loading
-              }
-
-              error={
-                error
-              }
-
-              showPassword={
-                showPassword
-              }
-
+              role={formData.role}
+              loading={loading}
+              error=""
+              showPassword={showPassword}
               showConfirmPassword={
                 showConfirmPassword
               }
-
-              onChange={
-                handleChange
-              }
-
-              onSubmit={
-                handleSubmit
-              }
-
+              onChange={handleChange}
+              onSubmit={handleSubmit}
               onTogglePassword={() =>
                 setShowPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
-
               onToggleConfirmPassword={() =>
                 setShowConfirmPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
             />
-
           )}
-
 
           {/* =================================================
               SOCIAL LOGIN
           ================================================= */}
 
-          <SocialButtons
-            onGoogleLogin={
-              handleGoogleLogin
-            }
-
-            onGithubLogin={
-              handleGithubLogin
-            }
-          />
-
+          <div className="auth-social-wrapper">
+            <SocialButtons
+              onGoogleLogin={
+                handleGoogleLogin
+              }
+              onGithubLogin={
+                handleGithubLogin
+              }
+            />
+          </div>
 
           {/* =================================================
-              AUTH FOOTER
+              FOOTER
           ================================================= */}
 
           <div className="auth-footer">
 
             {isLogin ? (
-
               <>
-
                 <span>
                   Don't have an account?
                 </span>
@@ -905,13 +669,9 @@ const AuthCard = ({
                 >
                   Register Now
                 </button>
-
               </>
-
             ) : (
-
               <>
-
                 <span>
                   Already have an account?
                 </span>
@@ -925,97 +685,58 @@ const AuthCard = ({
                 >
                   Login
                 </button>
-
               </>
-
             )}
 
           </div>
 
-
-          {/* =================================================
-              COMPACT CARD FOOTER STATS
-          ================================================= */}
-
-          {compact && (
-
-            <motion.div
-              className="auth-mini-stats"
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                delay: 0.3,
-                duration: 0.35,
-              }}
-            >
-
-              <div className="auth-mini-stat">
-
-                <div className="auth-mini-stat-icon">
-                  <FaTasksSafeIcon />
-                </div>
-
-                <div>
-                  <strong>
-                    124
-                  </strong>
-
-                  <span>
-                    Tasks Completed
-                  </span>
-                </div>
-
-              </div>
-
-
-              <div className="auth-mini-stat">
-
-                <div className="auth-mini-stat-icon success">
-                  <FaArrowUp />
-                </div>
-
-                <div>
-                  <strong>
-                    96%
-                  </strong>
-
-                  <span>
-                    Project Success
-                  </span>
-                </div>
-
-              </div>
-
-            </motion.div>
-
-          )}
-
         </motion.div>
-
       </AnimatePresence>
 
-    </motion.div>
+      {/* =====================================================
+          PREVIEW STATS
+      ===================================================== */}
 
+      {compact && (
+        <div className="auth-preview-stats">
+
+          <div className="auth-preview-stat">
+            <div className="auth-preview-stat-icon">
+              ✓
+            </div>
+
+            <div className="auth-preview-stat-content">
+              <span className="auth-preview-stat-value">
+                124
+              </span>
+
+              <span className="auth-preview-stat-label">
+                Tasks Completed
+              </span>
+            </div>
+          </div>
+
+          <div className="auth-preview-stat success">
+            <div className="auth-preview-stat-icon">
+              ↗
+            </div>
+
+            <div className="auth-preview-stat-content">
+              <span className="auth-preview-stat-value">
+                96%
+              </span>
+
+              <span className="auth-preview-stat-label">
+                Project Success
+              </span>
+            </div>
+          </div>
+
+        </div>
+      )}
+
+    </motion.div>
   );
 };
-
-
-/* =========================================================
-   SMALL INTERNAL ICON
-   Avoids adding another dependency.
-========================================================= */
-
-const FaTasksSafeIcon = () => (
-
-  <FaUsers />
-
-);
-
 
 export default AuthCard;

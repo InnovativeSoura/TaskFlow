@@ -10,11 +10,9 @@ import {
   FaShieldAlt,
   FaTasks,
   FaChartLine,
-  FaCheck,
-  FaClock,
-  FaRocket,
-  FaLayerGroup,
 } from "react-icons/fa";
+
+import AuthCard from "../AuthCard";
 
 import "./Hero.css";
 
@@ -37,11 +35,16 @@ const Hero = () => {
         behavior: "smooth",
         block: "center",
       });
-    }, 100);
+    }, 80);
   };
 
   /* =========================================================
      GLOBAL AUTH SCROLL EVENT
+     
+     Used by:
+     - LandingNavbar
+     - Hero
+     - Other landing-page buttons
   ========================================================= */
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const Hero = () => {
           behavior: "smooth",
           block: "center",
         });
-      }, 100);
+      }, 80);
     };
 
     window.addEventListener(
@@ -75,9 +78,15 @@ const Hero = () => {
     };
   }, []);
 
-  return (
-    <section className="hero-section" id="home">
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
+  return (
+    <section
+      className="hero-section"
+      id="home"
+    >
       {/* =====================================================
           BACKGROUND
       ===================================================== */}
@@ -117,8 +126,9 @@ const Hero = () => {
             ease: "easeOut",
           }}
         >
-
-          {/* BADGE */}
+          {/* =================================================
+              BADGE
+          ================================================= */}
 
           <motion.div
             className="hero-badge"
@@ -144,19 +154,27 @@ const Hero = () => {
             <FaArrowRight />
           </motion.div>
 
-          {/* TITLE */}
+          {/* =================================================
+              TITLE
+          ================================================= */}
 
           <h1 className="hero-title">
-            <span>Manage Projects.</span>
+            <span>
+              Manage Projects.
+            </span>
 
             <span className="hero-title-gradient">
               Collaborate Faster.
             </span>
 
-            <span>Deliver On Time.</span>
+            <span>
+              Deliver On Time.
+            </span>
           </h1>
 
-          {/* DESCRIPTION */}
+          {/* =================================================
+              DESCRIPTION
+          ================================================= */}
 
           <p className="hero-description">
             TaskFlow is an all-in-one project management
@@ -165,18 +183,29 @@ const Hero = () => {
             in real time — all from one intelligent workspace.
           </p>
 
-          {/* BUTTONS */}
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
 
           <div className="hero-buttons">
+
+            {/* START FREE */}
 
             <button
               type="button"
               className="hero-primary-btn"
-              onClick={() => scrollToAuth("register")}
+              onClick={() =>
+                scrollToAuth("register")
+              }
             >
-              <span>Start Free</span>
+              <span>
+                Start Free
+              </span>
+
               <FaArrowRight />
             </button>
+
+            {/* EXPLORE FEATURES */}
 
             <a
               href="#features"
@@ -186,40 +215,56 @@ const Hero = () => {
                 <FaPlay />
               </span>
 
-              <span>Explore Features</span>
+              <span>
+                Explore Features
+              </span>
             </a>
 
           </div>
 
-          {/* TRUST */}
+          {/* =================================================
+              TRUST
+          ================================================= */}
 
           <div className="hero-trust">
 
             <div className="hero-trust-item">
               <FaCheckCircle />
-              <span>Free Forever Plan</span>
+              <span>
+                Free Forever Plan
+              </span>
             </div>
 
             <div className="hero-trust-item">
               <FaCheckCircle />
-              <span>No Credit Card</span>
+              <span>
+                No Credit Card
+              </span>
             </div>
 
             <div className="hero-trust-item">
               <FaCheckCircle />
-              <span>2 Minute Setup</span>
+              <span>
+                2 Minute Setup
+              </span>
             </div>
 
             <div className="hero-trust-item">
               <FaCheckCircle />
-              <span>Cloud Sync Included</span>
+              <span>
+                Cloud Sync Included
+              </span>
             </div>
 
           </div>
 
-          {/* MINI STATS */}
+          {/* =================================================
+              MINI STATS
+          ================================================= */}
 
           <div className="hero-mini-stats">
+
+            {/* TEAMS */}
 
             <div className="hero-mini-stat">
 
@@ -228,11 +273,18 @@ const Hero = () => {
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>10K+</strong>
-                <span>Teams</span>
+                <strong>
+                  10K+
+                </strong>
+
+                <span>
+                  Teams
+                </span>
               </div>
 
             </div>
+
+            {/* TASKS */}
 
             <div className="hero-mini-stat">
 
@@ -241,11 +293,18 @@ const Hero = () => {
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>50K+</strong>
-                <span>Tasks Managed</span>
+                <strong>
+                  50K+
+                </strong>
+
+                <span>
+                  Tasks Managed
+                </span>
               </div>
 
             </div>
+
+            {/* SECURITY */}
 
             <div className="hero-mini-stat">
 
@@ -254,8 +313,13 @@ const Hero = () => {
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>99.9%</strong>
-                <span>Secure</span>
+                <strong>
+                  99.9%
+                </strong>
+
+                <span>
+                  Secure
+                </span>
               </div>
 
             </div>
@@ -265,7 +329,7 @@ const Hero = () => {
         </motion.div>
 
         {/* ===================================================
-            RIGHT PREMIUM PRODUCT PREVIEW
+            RIGHT AUTH PANEL
         =================================================== */}
 
         <motion.div
@@ -286,241 +350,36 @@ const Hero = () => {
             ease: "easeOut",
           }}
         >
+          {/* =================================================
+              AUTH GLOW
+          ================================================= */}
 
           <div className="hero-auth-glow" />
 
-          <div className="hero-product-preview">
-
-            {/* =================================================
-                TOP BAR
-            ================================================= */}
-
-            <div className="hero-product-topbar">
-
-              <div className="hero-product-brand">
-
-                <div className="hero-product-logo">
-                  <FaLayerGroup />
-                </div>
-
-                <div>
-                  <strong>TaskFlow</strong>
-                  <span>Workspace</span>
-                </div>
-
-              </div>
-
-              <div className="hero-product-live">
-                <span />
-                Live
-              </div>
-
-            </div>
-
-            {/* =================================================
-                OVERVIEW LABEL
-            ================================================= */}
-
-            <div className="hero-product-label">
-              PROJECT OVERVIEW
-            </div>
-
-            {/* =================================================
-                HEADING
-            ================================================= */}
-
-            <div className="hero-product-heading">
-
-              <div>
-                <h3>Workspace is ready</h3>
-                <p>Your team is working efficiently.</p>
-              </div>
-
-              <div className="hero-product-users">
-
-                <span>SP</span>
-                <span>AR</span>
-                <span>MK</span>
-
-                <small>+18</small>
-
-              </div>
-
-            </div>
-
-            {/* =================================================
-                PROJECT CARD
-            ================================================= */}
-
-            <div className="hero-project-card">
-
-              <div className="hero-project-card-top">
-
-                <div className="hero-project-icon">
-                  <FaRocket />
-                </div>
-
-                <div className="hero-project-name">
-                  <strong>Website Redesign</strong>
-                  <span>Product Development</span>
-                </div>
-
-                <strong className="hero-project-percent">
-                  82%
-                </strong>
-
-              </div>
-
-              <div className="hero-progress">
-                <span />
-              </div>
-
-              <div className="hero-project-meta">
-                <span>24 Tasks</span>
-                <span>6 Members</span>
-                <span>Due in 8 days</span>
-              </div>
-
-            </div>
-
-            {/* =================================================
-                RECENT TASKS
-            ================================================= */}
-
-            <div className="hero-recent-header">
-
-              <strong>Recent Tasks</strong>
-
-              <span>View all</span>
-
-            </div>
-
-            <div className="hero-task-list">
-
-              <div className="hero-task">
-
-                <div className="hero-task-check completed">
-                  <FaCheck />
-                </div>
-
-                <div className="hero-task-info">
-                  <strong>Design landing page</strong>
-                  <span>Completed</span>
-                </div>
-
-                <div className="hero-task-avatar">
-                  SP
-                </div>
-
-              </div>
-
-              <div className="hero-task">
-
-                <div className="hero-task-check">
-                  <FaClock />
-                </div>
-
-                <div className="hero-task-info">
-                  <strong>Build authentication</strong>
-                  <span>In Progress</span>
-                </div>
-
-                <div className="hero-task-avatar blue">
-                  AR
-                </div>
-
-              </div>
-
-              <div className="hero-task">
-
-                <div className="hero-task-check">
-                  <FaArrowRight />
-                </div>
-
-                <div className="hero-task-info">
-                  <strong>Deploy production build</strong>
-                  <span>Upcoming</span>
-                </div>
-
-                <div className="hero-task-avatar green">
-                  MK
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* =================================================
-                AUTH MINI PANEL
-            ================================================= */}
-
-            <div className="hero-mini-auth">
-
-              <div className="hero-mini-auth-header">
-
-                <div>
-                  <span>SECURE ACCESS</span>
-                  <strong>Welcome back 👋</strong>
-                </div>
-
-                <div className="hero-mini-auth-lock">
-                  🔒
-                </div>
-
-              </div>
-
-              <div className="hero-mini-input">
-                <span>you@example.com</span>
-              </div>
-
-              <div className="hero-mini-input">
-                <span>••••••••••••</span>
-                <small>●</small>
-              </div>
-
-              <div className="hero-mini-login">
-                <span>Sign in</span>
-                <FaArrowRight />
-              </div>
-
-            </div>
-
-            {/* =================================================
-                BOTTOM METRICS
-            ================================================= */}
-
-            <div className="hero-auth-metrics">
-
-              <div className="hero-auth-metric">
-
-                <div className="hero-auth-metric-icon">
-                  <FaTasks />
-                </div>
-
-                <div className="hero-auth-metric-content">
-                  <strong>124</strong>
-                  <span>Tasks Completed</span>
-                </div>
-
-              </div>
-
-              <div className="hero-auth-metric">
-
-                <div className="hero-auth-metric-icon green">
-                  <FaChartLine />
-                </div>
-
-                <div className="hero-auth-metric-content">
-                  <strong>96%</strong>
-                  <span>Project Success</span>
-                </div>
-
-              </div>
-
-            </div>
-
+          {/* =================================================
+              REAL AUTH CARD
+
+              This is NOT a mockup.
+
+              It uses:
+              - AuthContext
+              - LoginForm
+              - RegisterForm
+              - SocialButtons
+              - Forgot Password
+              - Password visibility
+              - Remember Me
+              - Login/Register switching
+          ================================================= */}
+
+          <div className="hero-auth-card-wrapper">
+            <AuthCard
+              compact
+              onAuthReady={() => {
+                // AuthCard is mounted and ready.
+              }}
+            />
           </div>
-
         </motion.div>
 
       </div>
@@ -545,7 +404,9 @@ const Hero = () => {
       >
         <span className="hero-scroll-line" />
 
-        <span>Scroll to explore</span>
+        <span>
+          Scroll to explore
+        </span>
       </motion.a>
 
     </section>
