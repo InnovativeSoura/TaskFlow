@@ -1,53 +1,78 @@
 /* =========================================================
-   TASKFLOW — PREMIUM HERO
-   Large desktop composition
+   TASKFLOW HERO
+   Premium landing hero / product preview
 ========================================================= */
 
 .hero-section {
   position: relative;
+  min-height: 100vh;
   width: 100%;
-  min-height: calc(100vh - 70px);
-
+  overflow: hidden;
   display: flex;
   align-items: center;
-
-  overflow: hidden;
-  isolation: isolate;
-
-  padding: 48px 0 70px;
-
   background:
     radial-gradient(
-      circle at 17% 48%,
-      rgba(91, 72, 255, 0.19),
+      circle at 18% 48%,
+      rgba(91, 72, 255, 0.18),
       transparent 34%
     ),
     radial-gradient(
-      circle at 83% 43%,
-      rgba(0, 174, 255, 0.105),
-      transparent 31%
+      circle at 82% 40%,
+      rgba(35, 166, 255, 0.08),
+      transparent 30%
     ),
-    radial-gradient(
-      circle at 51% 105%,
-      rgba(104, 71, 255, 0.13),
-      transparent 38%
-    ),
-    #050817;
+    linear-gradient(
+      135deg,
+      #080a22 0%,
+      #080b1e 48%,
+      #06101d 100%
+    );
+  color: #ffffff;
+  isolation: isolate;
 }
 
-
 /* =========================================================
-   BACKGROUND GRID
+   BACKGROUND
 ========================================================= */
+
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  z-index: -3;
+}
+
+.hero-glow-one {
+  width: 420px;
+  height: 420px;
+  left: -180px;
+  top: 20%;
+  background: rgba(93, 65, 255, 0.3);
+}
+
+.hero-glow-two {
+  width: 350px;
+  height: 350px;
+  right: -150px;
+  top: 20%;
+  background: rgba(0, 140, 255, 0.16);
+}
+
+.hero-glow-three {
+  width: 420px;
+  height: 220px;
+  left: 42%;
+  bottom: -130px;
+  background: rgba(102, 61, 255, 0.2);
+}
 
 .hero-grid {
   position: absolute;
   inset: 0;
-
-  pointer-events: none;
-
-  opacity: 0.34;
-
+  z-index: -4;
+  opacity: 0.35;
   background-image:
     linear-gradient(
       rgba(255, 255, 255, 0.035) 1px,
@@ -58,120 +83,43 @@
       rgba(255, 255, 255, 0.035) 1px,
       transparent 1px
     );
-
-  background-size: 48px 48px;
+  background-size: 52px 52px;
 
   mask-image: linear-gradient(
     to bottom,
-    black 0%,
-    rgba(0, 0, 0, 0.75) 68%,
-    transparent 100%
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.35)
   );
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    rgba(0, 0, 0, 0.75) 68%,
-    transparent 100%
-  );
-
-  z-index: -3;
 }
-
-
-/* =========================================================
-   BACKGROUND GLOWS
-========================================================= */
-
-.hero-glow {
-  position: absolute;
-
-  pointer-events: none;
-
-  border-radius: 50%;
-
-  filter: blur(90px);
-
-  opacity: 0.38;
-
-  z-index: -2;
-}
-
-.hero-glow-one {
-  width: 520px;
-  height: 520px;
-
-  left: -220px;
-  top: 20%;
-
-  background: rgba(92, 67, 255, 0.45);
-}
-
-.hero-glow-two {
-  width: 480px;
-  height: 480px;
-
-  right: -220px;
-  top: 15%;
-
-  background: rgba(0, 158, 255, 0.17);
-}
-
-.hero-glow-three {
-  width: 420px;
-  height: 420px;
-
-  left: 52%;
-  bottom: -280px;
-
-  transform: translateX(-50%);
-
-  background: rgba(120, 76, 255, 0.25);
-}
-
-
-/* =========================================================
-   DECORATIVE ORBS
-========================================================= */
 
 .hero-orb {
   position: absolute;
-
-  border: 1px solid rgba(255, 255, 255, 0.055);
-
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.008);
-
   pointer-events: none;
-
-  z-index: -1;
+  z-index: -2;
 }
 
 .hero-orb-one {
-  width: 110px;
-  height: 110px;
-
+  width: 72px;
+  height: 72px;
   left: 7%;
-  top: 21%;
+  top: 27%;
 }
 
 .hero-orb-two {
-  width: 72px;
-  height: 72px;
-
-  left: 17%;
-  bottom: 15%;
+  width: 62px;
+  height: 62px;
+  right: 9%;
+  bottom: 28%;
 }
 
 .hero-orb-three {
-  width: 96px;
-  height: 96px;
-
-  right: 8%;
-  top: 57%;
+  width: 42px;
+  height: 42px;
+  left: 17%;
+  bottom: 17%;
 }
-
 
 /* =========================================================
    MAIN CONTAINER
@@ -179,127 +127,104 @@
 
 .hero-container {
   position: relative;
+  z-index: 2;
 
-  width: min(1440px, calc(100% - 100px));
-
+  width: min(1380px, calc(100% - 80px));
   margin: 0 auto;
 
+  min-height: 100vh;
+
   display: grid;
-
   grid-template-columns:
-    minmax(0, 1fr)
-    520px;
-
-  column-gap: 100px;
+    minmax(0, 1.08fr)
+    minmax(390px, 0.72fr);
 
   align-items: center;
+  gap: 80px;
 
-  z-index: 2;
+  padding:
+    120px
+    0
+    90px;
 }
-
 
 /* =========================================================
    LEFT CONTENT
 ========================================================= */
 
 .hero-content {
-  position: relative;
-
   width: 100%;
-
-  min-width: 0;
-
-  z-index: 5;
+  max-width: 720px;
+  position: relative;
+  z-index: 3;
 }
-
-
-/* =========================================================
-   BADGE
-========================================================= */
 
 .hero-badge {
   width: fit-content;
 
   display: inline-flex;
   align-items: center;
+  gap: 9px;
 
-  gap: 10px;
+  padding: 9px 14px;
 
-  min-height: 36px;
+  margin-bottom: 24px;
 
-  padding: 0 15px;
-
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
 
-  border: 1px solid rgba(255, 255, 255, 0.115);
-
-  background: rgba(255, 255, 255, 0.065);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.035)
+    );
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    0 10px 34px rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 35px rgba(0, 0, 0, 0.18);
 
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.75);
 
   font-size: 12px;
-  font-weight: 600;
-
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .hero-badge-dot {
   width: 7px;
   height: 7px;
-
-  flex: 0 0 7px;
-
   border-radius: 50%;
-
-  background: #8b5cf6;
+  background: #8065ff;
 
   box-shadow:
-    0 0 0 4px rgba(139, 92, 246, 0.1),
-    0 0 14px rgba(139, 92, 246, 0.8);
+    0 0 0 4px rgba(128, 101, 255, 0.12),
+    0 0 15px rgba(128, 101, 255, 0.8);
 }
 
 .hero-badge svg {
-  font-size: 10px;
-
-  color: #9b8cff;
+  font-size: 9px;
+  opacity: 0.75;
 }
-
 
 /* =========================================================
    TITLE
 ========================================================= */
 
 .hero-title {
-  margin: 25px 0 0;
+  margin: 0;
 
   display: flex;
   flex-direction: column;
 
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-  font-size: clamp(56px, 4.45vw, 78px);
-
+  font-size: clamp(54px, 5vw, 78px);
   line-height: 0.98;
 
-  letter-spacing: -0.058em;
-
   font-weight: 800;
-
-  color: #f8f9ff;
+  letter-spacing: -0.055em;
 }
 
-.hero-title > span {
+.hero-title span {
   display: block;
 }
 
@@ -307,38 +232,33 @@
   background:
     linear-gradient(
       90deg,
-      #8b72ff 0%,
-      #6e91ff 45%,
-      #21b9ff 100%
+      #8363ff 0%,
+      #7374ff 42%,
+      #4db6ff 100%
     );
 
   -webkit-background-clip: text;
   background-clip: text;
-
   -webkit-text-fill-color: transparent;
 
   color: transparent;
 }
-
 
 /* =========================================================
    DESCRIPTION
 ========================================================= */
 
 .hero-description {
-  width: min(680px, 100%);
+  max-width: 650px;
 
-  margin: 30px 0 0;
+  margin: 28px 0 26px;
 
-  color: rgba(190, 198, 221, 0.73);
+  color: rgba(215, 220, 241, 0.64);
 
   font-size: 15px;
-
-  line-height: 1.8;
-
-  letter-spacing: 0.005em;
+  line-height: 1.75;
+  font-weight: 400;
 }
-
 
 /* =========================================================
    BUTTONS
@@ -347,171 +267,136 @@
 .hero-buttons {
   display: flex;
   align-items: center;
+  gap: 12px;
 
-  gap: 11px;
-
-  margin-top: 30px;
-
-  position: relative;
-
-  z-index: 20;
+  margin-bottom: 26px;
 }
 
 .hero-primary-btn,
 .hero-secondary-btn {
-  box-sizing: border-box;
+  min-height: 48px;
 
-  min-height: 52px;
-
-  border-radius: 11px;
-
-  font-family: inherit;
-
-  cursor: pointer;
-
-  text-decoration: none;
-
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease,
-    background 0.22s ease;
-}
-
-.hero-primary-btn {
-  width: 245px;
-
-  border: 0;
+  border-radius: 10px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 
-  gap: 12px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
 
-  color: #ffffff;
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.hero-primary-btn {
+  min-width: 158px;
+
+  padding: 0 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
   background:
     linear-gradient(
       135deg,
-      #6f55ff,
-      #8b4dff
+      #7655ff,
+      #8353f5
     );
 
+  color: #ffffff;
+
   box-shadow:
-    0 14px 34px rgba(103, 74, 255, 0.27);
-
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.hero-primary-btn svg {
-  font-size: 12px;
-
-  transition: transform 0.2s ease;
+    0 12px 28px rgba(112, 76, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .hero-primary-btn:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 18px 42px rgba(103, 74, 255, 0.4);
+    0 18px 38px rgba(112, 76, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
-.hero-primary-btn:hover svg {
-  transform: translateX(3px);
-}
-
-.hero-primary-btn:active {
-  transform: translateY(0);
+.hero-primary-btn svg {
+  font-size: 11px;
 }
 
 .hero-secondary-btn {
-  width: 145px;
+  padding: 0 15px;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   background: rgba(255, 255, 255, 0.045);
 
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(255, 255, 255, 0.8);
 
-  font-size: 12px;
-  font-weight: 600;
-
-  backdrop-filter: blur(12px);
+  text-decoration: none;
 }
 
 .hero-secondary-btn:hover {
   transform: translateY(-2px);
 
-  border-color: rgba(139, 92, 246, 0.46);
+  border-color: rgba(130, 99, 255, 0.4);
 
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(130, 99, 255, 0.08);
 }
 
 .hero-play-icon {
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
+
+  border-radius: 50%;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
-
   background: rgba(255, 255, 255, 0.1);
 }
 
 .hero-play-icon svg {
+  font-size: 7px;
   margin-left: 1px;
-
-  font-size: 8px;
 }
 
-
 /* =========================================================
-   TRUST ITEMS
+   TRUST
 ========================================================= */
 
 .hero-trust {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
 
-  gap: 17px;
+  padding-bottom: 23px;
 
-  margin-top: 23px;
-
-  padding-top: 19px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .hero-trust-item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-
   gap: 6px;
 
-  color: rgba(168, 178, 204, 0.68);
+  color: rgba(207, 215, 238, 0.55);
 
   font-size: 10px;
-
   white-space: nowrap;
 }
 
 .hero-trust-item svg {
-  color: #22d98b;
-
+  color: #27d98b;
   font-size: 9px;
 }
-
 
 /* =========================================================
    MINI STATS
@@ -520,38 +405,31 @@
 .hero-mini-stats {
   display: flex;
   align-items: center;
+  gap: 38px;
 
-  gap: 40px;
-
-  margin-top: 22px;
-
-  padding-top: 18px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.055);
+  padding-top: 21px;
 }
 
 .hero-mini-stat {
   display: flex;
   align-items: center;
-
   gap: 10px;
 }
 
 .hero-mini-stat-icon {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  border: 1px solid rgba(126, 99, 255, 0.17);
   border-radius: 8px;
 
-  border: 1px solid rgba(124, 94, 255, 0.17);
+  background: rgba(117, 84, 255, 0.08);
 
-  background: rgba(105, 82, 255, 0.1);
-
-  color: #8d78ff;
+  color: #8067ff;
 
   font-size: 11px;
 }
@@ -559,24 +437,21 @@
 .hero-mini-stat-content {
   display: flex;
   flex-direction: column;
-
   gap: 2px;
 }
 
-.hero-mini-stat strong {
-  color: #ffffff;
+.hero-mini-stat-content strong {
+  color: rgba(255, 255, 255, 0.9);
 
   font-size: 13px;
-
   line-height: 1;
 }
 
-.hero-mini-stat span {
-  color: rgba(160, 171, 198, 0.58);
+.hero-mini-stat-content span {
+  color: rgba(191, 199, 224, 0.45);
 
-  font-size: 9px;
+  font-size: 8px;
 }
-
 
 /* =========================================================
    RIGHT SIDE
@@ -585,19 +460,15 @@
 .hero-right {
   position: relative;
 
-  width: 520px;
+  width: 100%;
+  max-width: 430px;
 
-  min-width: 520px;
+  justify-self: end;
 
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  z-index: 10;
-
-  isolation: isolate;
+  justify-content: center;
 }
-
 
 /* =========================================================
    AUTH GLOW
@@ -606,132 +477,220 @@
 .hero-auth-glow {
   position: absolute;
 
-  width: 440px;
-  height: 560px;
-
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
+  width: 360px;
+  height: 460px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       ellipse,
-      rgba(116, 79, 255, 0.22),
+      rgba(105, 75, 255, 0.28),
       transparent 68%
     );
 
-  filter: blur(34px);
-
-  pointer-events: none;
+  filter: blur(45px);
 
   z-index: -1;
 }
 
-
 /* =========================================================
-   MAIN AUTH PREVIEW
+   PRODUCT PREVIEW
 ========================================================= */
 
-.hero-auth-preview {
+.hero-product-preview {
   position: relative;
 
-  width: 500px;
+  width: 100%;
+  max-width: 410px;
 
-  box-sizing: border-box;
-
-  padding: 18px;
+  padding: 22px;
 
   border-radius: 24px;
 
-  border: 1px solid rgba(255, 255, 255, 0.105);
+  border: 1px solid rgba(255, 255, 255, 0.11);
 
   background:
     linear-gradient(
       145deg,
-      rgba(20, 28, 55, 0.97),
-      rgba(9, 14, 31, 0.99)
+      rgba(29, 35, 66, 0.92),
+      rgba(13, 18, 40, 0.96)
     );
 
   box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.46),
-    0 0 60px rgba(101, 74, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 35px 90px rgba(0, 0, 0, 0.48),
+    0 0 55px rgba(93, 72, 255, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 
-  overflow: visible;
-
-  isolation: isolate;
+  overflow: hidden;
 }
 
+.hero-product-preview::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(111, 83, 255, 0.12),
+      transparent 34%
+    );
+
+  z-index: 0;
+}
+
+.hero-product-preview > * {
+  position: relative;
+  z-index: 1;
+}
 
 /* =========================================================
-   PREVIEW HEADER
+   TOP BAR
 ========================================================= */
 
-.hero-auth-preview-header {
-  width: 100%;
-
-  min-height: 34px;
-
+.hero-product-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  box-sizing: border-box;
-
-  padding: 0 4px;
+  margin-bottom: 23px;
 }
 
-.hero-auth-status {
+.hero-product-brand {
   display: flex;
   align-items: center;
-
-  gap: 8px;
-
-  min-width: 0;
-
-  color: rgba(214, 220, 240, 0.68);
-
-  font-size: 10px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
+  gap: 10px;
 }
 
-.hero-status-dot {
+.hero-product-logo {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7759ff,
+      #6845e8
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 20px rgba(102, 70, 240, 0.35);
+}
+
+.hero-product-logo svg {
+  font-size: 13px;
+}
+
+.hero-product-brand > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-product-brand strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.hero-product-brand span {
+  color: rgba(185, 194, 220, 0.42);
+  font-size: 8px;
+}
+
+.hero-product-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: rgba(209, 219, 239, 0.55);
+
+  font-size: 9px;
+}
+
+.hero-product-live > span {
   width: 6px;
   height: 6px;
 
-  flex: 0 0 6px;
-
   border-radius: 50%;
 
-  background: #22d98b;
+  background: #35db92;
 
   box-shadow:
-    0 0 12px rgba(34, 217, 139, 0.85);
+    0 0 10px rgba(53, 219, 146, 0.7);
 }
 
-
 /* =========================================================
-   USER AVATARS
+   OVERVIEW LABEL
 ========================================================= */
 
-.hero-auth-users {
+.hero-product-label {
+  margin-bottom: 8px;
+
+  color: rgba(160, 170, 202, 0.4);
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.hero-product-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+}
+
+.hero-product-heading h3 {
+  margin: 0 0 5px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.hero-product-heading p {
+  margin: 0;
+
+  color: rgba(188, 198, 224, 0.48);
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.hero-product-users {
   display: flex;
   align-items: center;
 
-  flex-shrink: 0;
+  padding-top: 2px;
 }
 
-.hero-avatar {
-  width: 23px;
-  height: 23px;
+.hero-product-users span {
+  width: 25px;
+  height: 25px;
 
   margin-left: -5px;
 
@@ -739,68 +698,68 @@
   align-items: center;
   justify-content: center;
 
+  border: 2px solid #131933;
   border-radius: 50%;
 
-  border: 2px solid #10162c;
+  background: #7657f6;
 
   color: #ffffff;
 
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 700;
 }
 
-.hero-avatar:first-child {
+.hero-product-users span:first-child {
   margin-left: 0;
 }
 
-.avatar-one {
-  background: #7459ff;
+.hero-product-users span:nth-child(2) {
+  background: #2a9cd8;
 }
 
-.avatar-two {
-  background: #20a9ff;
+.hero-product-users span:nth-child(3) {
+  background: #20b895;
 }
 
-.avatar-three {
-  background: #22c79b;
+.hero-product-users small {
+  margin-left: 5px;
+
+  color: rgba(204, 212, 236, 0.5);
+
+  font-size: 7px;
 }
-
-.hero-avatar-count {
-  margin-left: 6px;
-
-  color: rgba(178, 187, 212, 0.58);
-
-  font-size: 8px;
-}
-
 
 /* =========================================================
-   WORKSPACE MESSAGE
+   PROJECT CARD
 ========================================================= */
 
-.hero-workspace-message {
-  width: 100%;
+.hero-project-card {
+  padding: 15px;
 
-  box-sizing: border-box;
+  margin-bottom: 18px;
 
-  display: flex;
-  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
-  gap: 12px;
-
-  margin-top: 10px;
-
-  padding: 12px;
-
-  border-radius: 11px;
-
-  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 14px;
 
   background:
-    rgba(255, 255, 255, 0.025);
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.hero-workspace-check {
+.hero-project-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-project-icon {
   width: 31px;
   height: 31px;
 
@@ -810,102 +769,349 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: rgba(108, 78, 255, 0.14);
+  background: rgba(121, 87, 255, 0.13);
 
-  color: #9a83ff;
+  color: #866cff;
 
   font-size: 11px;
 }
 
-.hero-workspace-message > div:last-child {
+.hero-project-name {
   min-width: 0;
+
+  flex: 1;
 
   display: flex;
   flex-direction: column;
-
   gap: 3px;
 }
 
-.hero-workspace-message strong {
-  color: #f5f6ff;
+.hero-project-name strong {
+  color: rgba(255, 255, 255, 0.9);
 
-  font-size: 12px;
+  font-size: 10px;
 
-  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+.hero-project-name span {
+  color: rgba(187, 198, 224, 0.42);
+
+  font-size: 8px;
+}
+
+.hero-project-percent {
+  color: #ffffff;
+
+  font-size: 11px;
+}
+
+.hero-progress {
+  height: 5px;
+
+  margin: 13px 0 10px;
+
+  overflow: hidden;
+
+  border-radius: 99px;
+
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.hero-progress span {
+  display: block;
+
+  width: 82%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7555ff,
+      #4ca8ff
+    );
+
+  box-shadow:
+    0 0 12px rgba(103, 83, 255, 0.45);
+}
+
+.hero-project-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.hero-project-meta span {
+  color: rgba(190, 199, 224, 0.43);
+
+  font-size: 7px;
+}
+
+/* =========================================================
+   RECENT TASKS
+========================================================= */
+
+.hero-recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 9px;
+}
+
+.hero-recent-header strong {
+  color: rgba(255, 255, 255, 0.86);
+
+  font-size: 10px;
+}
+
+.hero-recent-header span {
+  color: #8369ff;
+
+  font-size: 7px;
+
+  cursor: pointer;
+}
+
+.hero-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  margin-bottom: 16px;
+}
+
+.hero-task {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 8px 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.045);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.hero-task-check {
+  width: 22px;
+  height: 22px;
+
+  flex: 0 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  background: rgba(130, 100, 255, 0.1);
+
+  color: #8267ff;
+
+  font-size: 8px;
+}
+
+.hero-task-check.completed {
+  background: rgba(41, 207, 139, 0.12);
+  color: #36d992;
+}
+
+.hero-task-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-task-info strong {
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 8px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-task-info span {
+  color: rgba(186, 197, 223, 0.4);
+
+  font-size: 7px;
+}
+
+.hero-task-avatar {
+  width: 22px;
+  height: 22px;
+
+  flex: 0 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #7657f5;
+
+  color: #ffffff;
+
+  font-size: 6px;
   font-weight: 700;
 }
 
-.hero-workspace-message span {
-  color: rgba(167, 177, 204, 0.55);
-
-  font-size: 9px;
-
-  line-height: 1.3;
+.hero-task-avatar.blue {
+  background: #298fc8;
 }
 
+.hero-task-avatar.green {
+  background: #1cae8b;
+}
 
 /* =========================================================
-   AUTH CARD SLOT
+   MINI AUTH
 ========================================================= */
 
-.hero-auth-card-slot {
-  position: relative;
+.hero-mini-auth {
+  padding: 14px;
 
-  width: 100%;
+  margin-top: 3px;
 
-  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
-  box-sizing: border-box;
+  border-radius: 13px;
 
-  margin-top: 12px;
-
-  padding: 0;
-
-  display: block;
-
-  overflow: visible;
-
-  isolation: isolate;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(118, 89, 255, 0.08),
+      rgba(255, 255, 255, 0.025)
+    );
 }
 
+.hero-mini-auth-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-/* =========================================================
-   AUTH CARD ISOLATION
-========================================================= */
-
-.hero-auth-card-slot > * {
-  position: relative;
-
-  inset: auto;
-
-  transform: none;
-
-  margin-left: auto;
-  margin-right: auto;
-
-  box-sizing: border-box;
-
-  width: 100%;
-
-  max-width: 100%;
+  margin-bottom: 10px;
 }
 
+.hero-mini-auth-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hero-mini-auth-header span {
+  color: #8066ff;
+
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.hero-mini-auth-header strong {
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 10px;
+}
+
+.hero-mini-auth-lock {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  font-size: 10px;
+}
+
+.hero-mini-input {
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 9px;
+
+  margin-bottom: 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  border-radius: 7px;
+
+  background: rgba(0, 0, 0, 0.14);
+
+  color: rgba(196, 205, 230, 0.45);
+
+  font-size: 7px;
+}
+
+.hero-mini-input small {
+  color: rgba(255, 255, 255, 0.25);
+
+  font-size: 6px;
+}
+
+.hero-mini-login {
+  height: 29px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7252fa,
+      #8558f6
+    );
+
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  box-shadow:
+    0 8px 18px rgba(105, 75, 240, 0.22);
+}
+
+.hero-mini-login svg {
+  font-size: 7px;
+}
 
 /* =========================================================
-   AUTH METRICS
+   BOTTOM METRICS
 ========================================================= */
 
 .hero-auth-metrics {
-  width: 100%;
-
   display: grid;
-
   grid-template-columns: 1fr 1fr;
 
-  gap: 10px;
+  gap: 8px;
 
   margin-top: 12px;
 }
@@ -915,43 +1121,39 @@
 
   display: flex;
   align-items: center;
+  gap: 7px;
 
-  gap: 9px;
+  padding: 9px;
 
-  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.055);
 
-  padding: 11px;
-
-  border-radius: 11px;
-
-  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 9px;
 
   background: rgba(255, 255, 255, 0.025);
 }
 
 .hero-auth-metric-icon {
-  width: 28px;
-  height: 28px;
+  width: 23px;
+  height: 23px;
 
-  flex: 0 0 28px;
+  flex: 0 0 23px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 8px;
+  border-radius: 6px;
 
-  background: rgba(105, 82, 255, 0.12);
+  background: rgba(117, 85, 255, 0.1);
 
-  color: #8e79ff;
+  color: #8166ff;
 
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .hero-auth-metric-icon.green {
-  background: rgba(28, 199, 148, 0.1);
-
-  color: #22c79b;
+  background: rgba(32, 192, 143, 0.1);
+  color: #32cf91;
 }
 
 .hero-auth-metric-content {
@@ -959,28 +1161,22 @@
 
   display: flex;
   flex-direction: column;
-
-  gap: 3px;
+  gap: 2px;
 }
 
-.hero-auth-metric strong {
-  color: #ffffff;
+.hero-auth-metric-content strong {
+  color: rgba(255, 255, 255, 0.9);
 
-  font-size: 12px;
-
-  line-height: 1;
+  font-size: 9px;
 }
 
-.hero-auth-metric span {
-  color: rgba(160, 171, 198, 0.55);
+.hero-auth-metric-content span {
+  color: rgba(185, 196, 221, 0.4);
 
-  font-size: 8px;
-
-  line-height: 1.2;
+  font-size: 6px;
 
   white-space: nowrap;
 }
-
 
 /* =========================================================
    SCROLL INDICATOR
@@ -990,216 +1186,114 @@
   position: absolute;
 
   left: 50%;
-  bottom: 20px;
+  bottom: 22px;
 
   transform: translateX(-50%);
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 7px;
 
-  gap: 8px;
+  color: rgba(205, 212, 233, 0.42);
 
   text-decoration: none;
 
-  color: rgba(171, 181, 207, 0.5);
-
-  font-size: 8px;
-
-  font-weight: 700;
-
+  font-size: 7px;
+  font-weight: 600;
   letter-spacing: 0.16em;
-
   text-transform: uppercase;
 
-  z-index: 20;
+  z-index: 5;
 }
 
 .hero-scroll-line {
   width: 1px;
-  height: 28px;
+  height: 18px;
 
   background:
     linear-gradient(
       to bottom,
-      rgba(139, 92, 246, 0.8),
-      transparent
+      rgba(135, 111, 255, 0),
+      rgba(135, 111, 255, 0.75)
     );
 }
-
-
-/* =========================================================
-   LARGE DESKTOP
-========================================================= */
-
-@media (min-width: 1500px) {
-  .hero-container {
-    width: min(1500px, calc(100% - 100px));
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      540px;
-
-    column-gap: 110px;
-  }
-
-  .hero-right {
-    width: 540px;
-    min-width: 540px;
-  }
-
-  .hero-auth-preview {
-    width: 520px;
-  }
-
-  .hero-title {
-    font-size: 80px;
-  }
-
-  .hero-description {
-    font-size: 15px;
-  }
-}
-
-
-/* =========================================================
-   LAPTOP
-========================================================= */
-
-@media (max-width: 1250px) {
-  .hero-container {
-    width: min(1100px, calc(100% - 60px));
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      430px;
-
-    column-gap: 60px;
-  }
-
-  .hero-right {
-    width: 430px;
-    min-width: 430px;
-  }
-
-  .hero-auth-preview {
-    width: 420px;
-  }
-
-  .hero-title {
-    font-size: clamp(50px, 5vw, 68px);
-  }
-
-  .hero-description {
-    font-size: 14px;
-  }
-
-  .hero-primary-btn {
-    width: 225px;
-  }
-}
-
-
-/* =========================================================
-   SMALL LAPTOP
-========================================================= */
-
-@media (max-width: 1050px) {
-  .hero-container {
-    width: min(960px, calc(100% - 44px));
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      370px;
-
-    column-gap: 42px;
-  }
-
-  .hero-right {
-    width: 370px;
-    min-width: 370px;
-  }
-
-  .hero-auth-preview {
-    width: 360px;
-  }
-
-  .hero-title {
-    font-size: 52px;
-  }
-
-  .hero-description {
-    font-size: 13px;
-  }
-
-  .hero-trust {
-    gap: 11px;
-  }
-
-  .hero-mini-stats {
-    gap: 25px;
-  }
-}
-
 
 /* =========================================================
    TABLET
 ========================================================= */
 
-@media (max-width: 850px) {
-  .hero-section {
-    min-height: auto;
+@media (max-width: 1150px) {
+  .hero-container {
+    width: min(1080px, calc(100% - 50px));
 
-    padding:
-      90px 0
-      100px;
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(350px, 0.72fr);
+
+    gap: 45px;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 5.4vw, 66px);
+  }
+
+  .hero-product-preview {
+    max-width: 390px;
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .hero-section {
+    align-items: flex-start;
   }
 
   .hero-container {
-    width: min(680px, calc(100% - 40px));
+    min-height: auto;
 
     grid-template-columns: 1fr;
 
-    row-gap: 60px;
+    padding:
+      130px
+      0
+      90px;
+
+    gap: 55px;
+  }
+
+  .hero-content {
+    max-width: 720px;
+    margin: 0 auto;
 
     text-align: center;
   }
 
-  .hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .hero-badge,
+  .hero-buttons,
+  .hero-trust,
+  .hero-mini-stats {
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .hero-title {
-    align-items: center;
-
-    font-size: clamp(42px, 8vw, 60px);
-  }
-
-  .hero-description {
-    max-width: 590px;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-trust {
-    justify-content: center;
-  }
-
+  .hero-buttons,
+  .hero-trust,
   .hero-mini-stats {
     justify-content: center;
   }
 
-  .hero-right {
-    width: 100%;
-    min-width: 0;
+  .hero-description {
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .hero-auth-preview {
-    width: min(500px, 100%);
+  .hero-right {
+    justify-self: center;
+    max-width: 430px;
   }
 
   .hero-scroll {
@@ -1207,66 +1301,53 @@
   }
 }
 
-
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 560px) {
-  .hero-section {
+@media (max-width: 600px) {
+  .hero-container {
+    width: min(100% - 28px, 500px);
+
     padding:
-      75px 0
-      80px;
+      110px
+      0
+      65px;
+
+    gap: 42px;
   }
 
-  .hero-container {
-    width: calc(100% - 28px);
+  .hero-title {
+    font-size: clamp(38px, 11vw, 54px);
 
-    row-gap: 42px;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-description {
+    font-size: 13px;
+    line-height: 1.65;
+
+    margin-top: 21px;
   }
 
   .hero-badge {
     max-width: 100%;
 
-    min-height: 32px;
-
-    padding: 0 12px;
-
     font-size: 9px;
-  }
-
-  .hero-title {
-    margin-top: 18px;
-
-    font-size: clamp(35px, 10vw, 47px);
-
-    line-height: 1;
-  }
-
-  .hero-description {
-    margin-top: 21px;
-
-    font-size: 12px;
-
-    line-height: 1.7;
   }
 
   .hero-buttons {
     width: 100%;
 
     flex-direction: column;
-
-    gap: 9px;
   }
 
   .hero-primary-btn,
   .hero-secondary-btn {
-    width: min(100%, 300px);
+    width: 100%;
   }
 
   .hero-trust {
-    width: 100%;
-
     gap: 10px 14px;
   }
 
@@ -1275,90 +1356,67 @@
   }
 
   .hero-mini-stats {
-    width: 100%;
+    gap: 18px;
 
     justify-content: space-between;
-
-    gap: 8px;
   }
 
-  .hero-mini-stat {
-    gap: 5px;
-  }
-
-  .hero-mini-stat-icon {
-    width: 25px;
-    height: 25px;
-  }
-
-  .hero-mini-stat strong {
-    font-size: 10px;
-  }
-
-  .hero-mini-stat span {
+  .hero-mini-stat-content span {
     font-size: 7px;
   }
 
-  .hero-auth-preview {
+  .hero-right {
+    width: 100%;
+  }
+
+  .hero-product-preview {
     width: 100%;
 
-    padding: 10px;
+    padding: 17px;
 
-    border-radius: 17px;
+    border-radius: 20px;
   }
 
-  .hero-auth-metrics {
-    gap: 6px;
+  .hero-product-heading h3 {
+    font-size: 16px;
   }
 
-  .hero-auth-metric {
-    padding: 7px;
+  .hero-product-meta {
+    flex-wrap: wrap;
+  }
+
+  .hero-project-meta span {
+    font-size: 6px;
   }
 }
-
 
 /* =========================================================
    VERY SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 400px) {
   .hero-title {
-    font-size: 33px;
+    font-size: 36px;
   }
 
   .hero-mini-stats {
-    flex-direction: column;
-
-    align-items: flex-start;
+    gap: 10px;
   }
 
-  .hero-auth-metrics {
-    grid-template-columns: 1fr;
+  .hero-mini-stat {
+    gap: 6px;
   }
-}
 
+  .hero-mini-stat-icon {
+    width: 26px;
+    height: 26px;
+  }
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
+  .hero-mini-stat-content strong {
+    font-size: 11px;
+  }
 
-.hero-primary-btn:focus-visible,
-.hero-secondary-btn:focus-visible,
-.hero-scroll:focus-visible {
-  outline: 2px solid rgba(139, 92, 246, 0.9);
-
-  outline-offset: 3px;
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-primary-btn,
-  .hero-secondary-btn,
-  .hero-primary-btn svg {
-    transition: none;
+  .hero-product-preview {
+    padding: 14px;
   }
 }
