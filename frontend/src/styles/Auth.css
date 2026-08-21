@@ -1,19 +1,7 @@
 /* =========================================================
    TASKFLOW — PREMIUM AUTH SYSTEM
-   src/components/auth/AuthCard.css
-
-   PURPOSE:
-   - Full login/register page
-   - Compact landing-page auth preview
-   - Strict width containment
-   - No horizontal text/button overflow
-   - Stable responsive behavior
-   ========================================================= */
-
-
-/* =========================================================
-   ROOT VARIABLES
-   ========================================================= */
+   AUTH CARD + LANDING AUTH PREVIEW
+========================================================= */
 
 :root {
   --auth-bg: #070b1c;
@@ -38,10 +26,9 @@
   --auth-radius: 22px;
 }
 
-
 /* =========================================================
-   GLOBAL AUTH BOX MODEL
-   ========================================================= */
+   GLOBAL BOX MODEL
+========================================================= */
 
 .auth-card,
 .auth-card *,
@@ -50,10 +37,9 @@
   box-sizing: border-box;
 }
 
-
 /* =========================================================
-   AUTH PAGE
-   ========================================================= */
+   FULL AUTH PAGE
+========================================================= */
 
 .auth-page {
   position: relative;
@@ -65,7 +51,7 @@
 
   grid-template-columns:
     minmax(0, 1fr)
-    minmax(340px, 430px);
+    minmax(360px, 450px);
 
   align-items: center;
 
@@ -76,10 +62,9 @@
   z-index: 5;
 }
 
-
 /* =========================================================
    NORMAL AUTH CARD
-   ========================================================= */
+========================================================= */
 
 .auth-card {
   position: relative;
@@ -87,7 +72,7 @@
   display: block;
 
   width: 100%;
-  max-width: 430px;
+  max-width: 450px;
   min-width: 0;
 
   margin: 0 auto;
@@ -116,17 +101,17 @@
   z-index: 10;
 }
 
-
 /* =========================================================
-   COMPACT LANDING AUTH CARD
-   ========================================================= */
+   LANDING COMPACT CARD
+   TARGET WIDTH: 320px
+========================================================= */
 
 .auth-card.compact {
   position: relative;
 
   display: block;
 
-  width: 100%;
+  width: 320px;
   max-width: 100%;
   min-width: 0;
 
@@ -136,21 +121,21 @@
   margin: 0;
   padding: 0;
 
-  border-radius: 20px;
+  border-radius: 22px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(22, 30, 61, 0.99),
-      rgba(10, 16, 36, 0.99)
+      rgba(23, 31, 64, 0.99),
+      rgba(10, 16, 37, 0.99)
     );
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.105);
 
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.42),
-    0 0 35px rgba(110, 82, 255, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    0 30px 75px rgba(0, 0, 0, 0.50),
+    0 0 45px rgba(110, 82, 255, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
 
   color: #ffffff;
 
@@ -165,15 +150,14 @@
   contain: layout paint;
 }
 
-
 /* =========================================================
-   LANDING AUTH CARD ROOT
-   ========================================================= */
+   LANDING AUTH ROOT
+========================================================= */
 
 #landing-auth-card {
   position: relative;
 
-  width: 100%;
+  width: 320px;
   max-width: 100%;
   min-width: 0;
 
@@ -192,10 +176,122 @@
   flex: 0 1 auto;
 }
 
+/* =========================================================
+   TOP STATUS BAR
+========================================================= */
+
+.auth-preview-topbar {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 13px 15px 8px;
+
+  gap: 10px;
+
+  overflow: hidden;
+}
+
+.auth-preview-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  min-width: 0;
+
+  color: #a5aec7;
+
+  font-size: 8.5px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.auth-status-dot {
+  width: 6px;
+  height: 6px;
+
+  min-width: 6px;
+
+  border-radius: 50%;
+
+  background: #39d98a;
+
+  box-shadow:
+    0 0 9px rgba(57, 217, 138, 0.8);
+}
+
+.auth-preview-members {
+  display: flex;
+
+  align-items: center;
+
+  flex: 0 0 auto;
+}
+
+.preview-avatar {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 20px;
+
+  margin-left: -4px;
+
+  border-radius: 50%;
+
+  border: 2px solid #111832;
+
+  color: #ffffff;
+
+  font-size: 7px;
+
+  font-weight: 800;
+}
+
+.preview-avatar:first-child {
+  margin-left: 0;
+}
+
+.preview-avatar.purple {
+  background: #7657ff;
+}
+
+.preview-avatar.blue {
+  background: #3295ff;
+}
+
+.preview-avatar.cyan {
+  background: #20c7d8;
+}
+
+.preview-more {
+  margin-left: 5px;
+
+  color: #737d9b;
+
+  font-size: 7px;
+
+  white-space: nowrap;
+}
 
 /* =========================================================
-   COMPACT DIRECT CHILDREN
-   ========================================================= */
+   DIRECT CHILDREN
+========================================================= */
 
 .auth-card.compact > * {
   position: relative;
@@ -212,10 +308,9 @@
   z-index: 2;
 }
 
-
 /* =========================================================
-   AUTH CARD CONTENT
-   ========================================================= */
+   CONTENT
+========================================================= */
 
 .auth-card-content {
   position: relative;
@@ -232,10 +327,9 @@
   overflow: hidden;
 }
 
-
 /* =========================================================
    TOGGLE
-   ========================================================= */
+========================================================= */
 
 .auth-toggle {
   position: relative;
@@ -246,25 +340,27 @@
     minmax(0, 1fr)
     minmax(0, 1fr);
 
-  width: calc(100% - 28px);
-  max-width: calc(100% - 28px);
+  width: calc(100% - 32px);
+  max-width: calc(100% - 32px);
 
   height: 48px;
 
-  margin: 14px auto 18px;
+  margin: 10px auto 25px;
+
   padding: 4px;
 
-  border-radius: 16px;
+  border-radius: 17px;
 
-  background: rgba(255, 255, 255, 0.055);
+  background:
+    rgba(255, 255, 255, 0.055);
 
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border:
+    1px solid rgba(255, 255, 255, 0.065);
 
   overflow: hidden;
 
   min-width: 0;
 }
-
 
 .auth-toggle button {
   position: relative;
@@ -278,40 +374,41 @@
   min-width: 0;
   max-width: 100%;
 
-  padding: 0 6px;
+  padding: 0 8px;
 
   border: none;
   outline: none;
 
   background: transparent;
 
-  color: #8d96b5;
+  color: #858eaa;
 
   font-family: inherit;
 
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
 
-  border-radius: 12px;
+  font-weight: 700;
+
+  border-radius: 13px;
 
   cursor: pointer;
 
   white-space: nowrap;
 
   overflow: hidden;
+
   text-overflow: ellipsis;
 
   transition:
     color 0.25s ease,
     background 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
 }
-
 
 .auth-toggle button:hover {
   color: #ffffff;
 }
-
 
 .auth-toggle button.active {
   color: #ffffff;
@@ -319,18 +416,17 @@
   background:
     linear-gradient(
       135deg,
-      var(--auth-primary),
-      var(--auth-primary-light)
+      #7657ff,
+      #8c67ff
     );
 
   box-shadow:
-    0 7px 20px rgba(118, 87, 255, 0.30);
+    0 7px 20px rgba(118, 87, 255, 0.34);
 }
 
-
 /* =========================================================
-   AUTH HEADER
-   ========================================================= */
+   HEADER
+========================================================= */
 
 .auth-header {
   display: block;
@@ -339,13 +435,12 @@
   max-width: 100%;
   min-width: 0;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
-  margin: 0 0 18px;
+  margin: 0 0 22px;
 
   overflow: hidden;
 }
-
 
 .auth-title {
   display: block;
@@ -357,41 +452,38 @@
 
   color: #ffffff;
 
-  font-size: 24px;
+  font-size: 26px;
 
-  line-height: 1.15;
+  line-height: 1.12;
 
   font-weight: 800;
 
-  letter-spacing: -0.025em;
+  letter-spacing: -0.035em;
 
   overflow-wrap: normal;
   word-break: normal;
 }
 
-
 .auth-subtitle {
   display: block;
 
   width: 100%;
-  max-width: 310px;
+  max-width: 290px;
 
-  margin: 8px 0 0;
+  margin: 9px 0 0;
 
-  color: #8f98b4;
+  color: #858fae;
 
-  font-size: 12px;
+  font-size: 11px;
 
   line-height: 1.55;
 
   overflow-wrap: break-word;
-  word-break: normal;
 }
-
 
 /* =========================================================
    FORM
-   ========================================================= */
+========================================================= */
 
 .auth-form {
   position: relative;
@@ -403,15 +495,14 @@
   min-width: 0;
 
   margin: 0;
-  padding: 0 24px;
+  padding: 0 22px;
 
   overflow: visible;
 }
 
-
 /* =========================================================
    FORM GROUP
-   ========================================================= */
+========================================================= */
 
 .auth-form-group {
   position: relative;
@@ -422,11 +513,10 @@
   max-width: 100%;
   min-width: 0;
 
-  margin: 0 0 13px;
+  margin: 0 0 14px;
 
   overflow: visible;
 }
-
 
 .auth-form-group label {
   display: block;
@@ -436,22 +526,24 @@
 
   margin: 0 0 7px;
 
-  color: #a7afc7;
+  color: #a5aec7;
 
-  font-size: 11px;
+  font-size: 10px;
+
   font-weight: 600;
 
   line-height: 1.3;
 
   overflow: hidden;
+
   text-overflow: ellipsis;
+
   white-space: nowrap;
 }
 
-
 /* =========================================================
    INPUT WRAPPER
-   ========================================================= */
+========================================================= */
 
 .auth-input-wrapper {
   position: relative;
@@ -463,15 +555,14 @@
   min-width: 0;
 }
 
-
 /* =========================================================
    INPUT ICON
-   ========================================================= */
+========================================================= */
 
 .auth-input-icon {
   position: absolute;
 
-  left: 13px;
+  left: 14px;
   top: 50%;
 
   transform: translateY(-50%);
@@ -481,10 +572,10 @@
   align-items: center;
   justify-content: center;
 
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
 
-  color: #717b9c;
+  color: #717b9a;
 
   font-size: 13px;
 
@@ -493,10 +584,9 @@
   z-index: 3;
 }
 
-
 /* =========================================================
    INPUTS
-   ========================================================= */
+========================================================= */
 
 .auth-input,
 .auth-form input,
@@ -507,16 +597,17 @@
   max-width: 100%;
   min-width: 0;
 
-  height: 42px;
+  height: 44px;
 
   margin: 0;
 
   padding:
-    0 40px 0 39px;
+    0 42px 0 40px;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
 
   outline: none;
 
@@ -527,7 +618,7 @@
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 10.5px;
 
   line-height: normal;
 
@@ -537,14 +628,12 @@
     background 0.25s ease;
 }
 
-
 .auth-input::placeholder,
 .auth-form input::placeholder {
   color: #68718f;
 
   opacity: 1;
 }
-
 
 .auth-input:hover,
 .auth-form input:hover,
@@ -553,15 +642,14 @@
     rgba(255, 255, 255, 0.075);
 
   border-color:
-    rgba(255, 255, 255, 0.11);
+    rgba(255, 255, 255, 0.12);
 }
-
 
 .auth-input:focus,
 .auth-form input:focus,
 .auth-form select:focus {
   border-color:
-    rgba(118, 87, 255, 0.65);
+    rgba(118, 87, 255, 0.7);
 
   background:
     rgba(118, 87, 255, 0.065);
@@ -570,10 +658,9 @@
     0 0 0 3px rgba(118, 87, 255, 0.10);
 }
 
-
 /* =========================================================
    SELECT
-   ========================================================= */
+========================================================= */
 
 .auth-form select {
   appearance: none;
@@ -581,10 +668,9 @@
   cursor: pointer;
 }
 
-
 /* =========================================================
-   PASSWORD TOGGLE
-   ========================================================= */
+   PASSWORD BUTTON
+========================================================= */
 
 .password-toggle {
   position: absolute;
@@ -599,8 +685,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 
   padding: 0;
 
@@ -612,7 +698,7 @@
 
   cursor: pointer;
 
-  border-radius: 7px;
+  border-radius: 8px;
 
   z-index: 4;
 
@@ -621,7 +707,6 @@
     background 0.2s ease;
 }
 
-
 .password-toggle:hover {
   color: #ffffff;
 
@@ -629,10 +714,9 @@
     rgba(255, 255, 255, 0.07);
 }
 
-
 /* =========================================================
    OPTIONS
-   ========================================================= */
+========================================================= */
 
 .auth-options {
   display: flex;
@@ -646,13 +730,12 @@
 
   gap: 10px;
 
-  margin: 3px 0 17px;
+  margin: 3px 0 18px;
 
   color: #8c95b0;
 
-  font-size: 10px;
+  font-size: 9px;
 }
-
 
 .auth-options label {
   display: flex;
@@ -667,11 +750,10 @@
 
   color: #8c95b0;
 
-  font-size: 10px;
+  font-size: 9px;
 
   overflow: hidden;
 }
-
 
 .auth-options label span {
   min-width: 0;
@@ -682,7 +764,6 @@
 
   white-space: nowrap;
 }
-
 
 .auth-options input[type="checkbox"] {
   width: 12px;
@@ -698,7 +779,6 @@
   cursor: pointer;
 }
 
-
 .forgot-password,
 .auth-forgot {
   flex: 0 0 auto;
@@ -709,11 +789,11 @@
 
   padding: 0;
 
-  color: #9178ff;
+  color: #927aff;
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 9px;
 
   font-weight: 600;
 
@@ -722,16 +802,14 @@
   white-space: nowrap;
 }
 
-
 .forgot-password:hover,
 .auth-forgot:hover {
-  color: #b2a1ff;
+  color: #b4a5ff;
 }
-
 
 /* =========================================================
    SUBMIT
-   ========================================================= */
+========================================================= */
 
 .auth-submit,
 .auth-form button[type="submit"] {
@@ -744,15 +822,15 @@
   max-width: 100%;
   min-width: 0;
 
-  height: 43px;
+  height: 46px;
 
   margin: 0;
 
-  padding: 0 12px;
+  padding: 0 14px;
 
   border: none;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   outline: none;
 
@@ -774,7 +852,7 @@
   cursor: pointer;
 
   box-shadow:
-    0 10px 25px rgba(111, 79, 246, 0.27);
+    0 12px 28px rgba(111, 79, 246, 0.29);
 
   overflow: hidden;
 
@@ -786,17 +864,20 @@
     filter 0.2s ease;
 }
 
-
 .auth-submit:hover,
 .auth-form button[type="submit"]:hover {
   transform: translateY(-1px);
 
-  filter: brightness(1.06);
+  filter: brightness(1.07);
 
   box-shadow:
-    0 14px 30px rgba(111, 79, 246, 0.36);
+    0 16px 34px rgba(111, 79, 246, 0.38);
 }
 
+.auth-submit:active,
+.auth-form button[type="submit"]:active {
+  transform: translateY(0);
+}
 
 .auth-submit:disabled,
 .auth-form button[type="submit"]:disabled {
@@ -809,40 +890,40 @@
   box-shadow: none;
 }
 
-
 /* =========================================================
    ERROR
-   ========================================================= */
+========================================================= */
 
 .auth-error {
   display: block;
 
-  width: calc(100% - 48px);
-  max-width: calc(100% - 48px);
+  width: calc(100% - 44px);
+  max-width: calc(100% - 44px);
 
-  margin: 0 24px 12px;
+  margin: 0 22px 13px;
 
   padding: 9px 11px;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
-  border: 1px solid rgba(255, 91, 91, 0.18);
+  border:
+    1px solid rgba(255, 91, 91, 0.18);
 
-  background: rgba(255, 91, 91, 0.07);
+  background:
+    rgba(255, 91, 91, 0.07);
 
   color: #ff8585;
 
-  font-size: 10px;
+  font-size: 9px;
 
   line-height: 1.4;
 
   overflow-wrap: anywhere;
 }
 
-
 /* =========================================================
-   SOCIAL WRAPPER
-   ========================================================= */
+   SOCIAL
+========================================================= */
 
 .auth-social-wrapper {
   width: 100%;
@@ -852,33 +933,27 @@
   overflow: hidden;
 }
 
-
-/* =========================================================
-   SOCIAL DIVIDER
-   ========================================================= */
-
 .auth-divider {
   display: flex;
 
   align-items: center;
 
-  width: calc(100% - 48px);
-  max-width: calc(100% - 48px);
+  width: calc(100% - 44px);
+  max-width: calc(100% - 44px);
 
   gap: 10px;
 
   margin:
-    18px 24px 12px;
+    20px 22px 13px;
 
   color: #65708f;
 
-  font-size: 9px;
+  font-size: 8px;
 
   white-space: nowrap;
 
   overflow: hidden;
 }
-
 
 .auth-divider::before,
 .auth-divider::after {
@@ -898,7 +973,6 @@
     );
 }
 
-
 .auth-divider::after {
   background:
     linear-gradient(
@@ -907,11 +981,6 @@
       transparent
     );
 }
-
-
-/* =========================================================
-   SOCIAL BUTTONS
-   ========================================================= */
 
 .social-buttons {
   display: grid;
@@ -924,15 +993,14 @@
   max-width: 100%;
   min-width: 0;
 
-  gap: 9px;
+  gap: 10px;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
   margin: 0;
 
   overflow: hidden;
 }
-
 
 .social-button {
   display: flex;
@@ -944,13 +1012,14 @@
   min-width: 0;
   max-width: 100%;
 
-  min-height: 42px;
+  min-height: 44px;
 
-  padding: 7px 8px;
+  padding: 7px 9px;
 
-  border-radius: 10px;
+  border-radius: 11px;
 
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
 
   background:
     rgba(255, 255, 255, 0.045);
@@ -961,7 +1030,7 @@
 
   font-family: inherit;
 
-  font-size: 9.5px;
+  font-size: 9px;
 
   font-weight: 600;
 
@@ -979,7 +1048,6 @@
     transform 0.2s ease;
 }
 
-
 .social-button span {
   display: block;
 
@@ -993,17 +1061,19 @@
   white-space: nowrap;
 }
 
-
 .social-button:hover {
   background:
-    rgba(255, 255, 255, 0.08);
+    rgba(255, 255, 255, 0.085);
 
   border-color:
-    rgba(255, 255, 255, 0.13);
+    rgba(255, 255, 255, 0.14);
 
   transform: translateY(-1px);
 }
 
+.social-button:active {
+  transform: translateY(0);
+}
 
 .social-button svg {
   font-size: 13px;
@@ -1011,10 +1081,9 @@
   flex: 0 0 auto;
 }
 
-
 /* =========================================================
    FOOTER
-   ========================================================= */
+========================================================= */
 
 .auth-footer {
   display: flex;
@@ -1031,11 +1100,11 @@
   gap: 5px;
 
   padding:
-    17px 24px 21px;
+    18px 22px 19px;
 
   color: #717b99;
 
-  font-size: 10px;
+  font-size: 9px;
 
   line-height: 1.5;
 
@@ -1044,13 +1113,11 @@
   overflow: hidden;
 }
 
-
 .auth-footer span {
   max-width: 100%;
 
   overflow-wrap: break-word;
 }
-
 
 .link-btn {
   flex: 0 0 auto;
@@ -1065,7 +1132,7 @@
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 9px;
 
   font-weight: 700;
 
@@ -1074,426 +1141,13 @@
   white-space: nowrap;
 }
 
-
 .link-btn:hover {
   color: #b19fff;
 }
 
-
 /* =========================================================
-   COMPACT LANDING AUTH CARD
-   ========================================================= */
-
-.auth-card.compact {
-  width: 100%;
-  max-width: 100%;
-
-  overflow: hidden;
-}
-
-
-/* =========================================================
-   COMPACT TOGGLE
-   ========================================================= */
-
-.auth-card.compact .auth-toggle {
-  width: calc(100% - 28px);
-  max-width: calc(100% - 28px);
-
-  height: 38px;
-
-  margin:
-    13px auto 15px;
-
-  padding: 3px;
-
-  border-radius: 13px;
-}
-
-
-.auth-card.compact .auth-toggle button {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-
-  padding: 0 4px;
-
-  font-size: 10px;
-
-  border-radius: 9px;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   COMPACT HEADER
-   ========================================================= */
-
-.auth-card.compact .auth-header {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  padding:
-    0 18px;
-
-  margin:
-    0 0 14px;
-
-  overflow: hidden;
-}
-
-
-.auth-card.compact .auth-title {
-  width: 100%;
-  max-width: 100%;
-
-  margin: 0;
-
-  font-size: 18px;
-
-  line-height: 1.16;
-
-  letter-spacing: -0.02em;
-}
-
-
-.auth-card.compact .auth-subtitle {
-  width: 100%;
-  max-width: 100%;
-
-  margin-top: 6px;
-
-  font-size: 9px;
-
-  line-height: 1.45;
-
-  overflow-wrap: break-word;
-}
-
-
-/* =========================================================
-   COMPACT FORM
-   ========================================================= */
-
-.auth-card.compact .auth-form {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  padding:
-    0 18px;
-
-  overflow: visible;
-}
-
-
-.auth-card.compact .auth-form-group {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  margin-bottom: 9px;
-}
-
-
-.auth-card.compact .auth-form-group label {
-  width: 100%;
-  max-width: 100%;
-
-  margin-bottom: 5px;
-
-  font-size: 8.5px;
-
-  line-height: 1.25;
-}
-
-
-.auth-card.compact .auth-input-wrapper {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-
-.auth-card.compact .auth-input,
-.auth-card.compact .auth-form input,
-.auth-card.compact .auth-form select {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  height: 35px;
-
-  padding:
-    0 32px 0 34px;
-
-  border-radius: 9px;
-
-  font-size: 9px;
-}
-
-
-.auth-card.compact .auth-input-icon {
-  left: 10px;
-
-  width: 13px;
-  height: 13px;
-
-  font-size: 10px;
-}
-
-
-.auth-card.compact .password-toggle {
-  right: 5px;
-
-  width: 24px;
-  height: 24px;
-}
-
-
-/* =========================================================
-   COMPACT OPTIONS
-   ========================================================= */
-
-.auth-card.compact .auth-options {
-  display: flex;
-
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  margin:
-    2px 0 12px;
-
-  gap: 6px;
-
-  font-size: 8px;
-
-  overflow: hidden;
-}
-
-
-.auth-card.compact .auth-options label {
-  flex: 1 1 auto;
-
-  min-width: 0;
-
-  font-size: 8px;
-
-  gap: 4px;
-}
-
-
-.auth-card.compact .auth-options label span {
-  min-width: 0;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-}
-
-
-.auth-card.compact .auth-options input[type="checkbox"] {
-  width: 10px;
-  height: 10px;
-
-  min-width: 10px;
-}
-
-
-.auth-card.compact .forgot-password,
-.auth-card.compact .auth-forgot {
-  flex: 0 0 auto;
-
-  max-width: 45%;
-
-  font-size: 8px;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   COMPACT SUBMIT
-   ========================================================= */
-
-.auth-card.compact .auth-submit,
-.auth-card.compact .auth-form button[type="submit"] {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  height: 36px;
-
-  padding: 0 8px;
-
-  border-radius: 9px;
-
-  font-size: 9px;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   COMPACT ERROR
-   ========================================================= */
-
-.auth-card.compact .auth-error {
-  width: calc(100% - 36px);
-  max-width: calc(100% - 36px);
-
-  margin:
-    0 18px 10px;
-
-  padding:
-    8px 9px;
-
-  font-size: 8px;
-
-  overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   COMPACT SOCIAL DIVIDER
-   ========================================================= */
-
-.auth-card.compact .auth-divider {
-  width: calc(100% - 36px);
-  max-width: calc(100% - 36px);
-
-  margin:
-    13px 18px 9px;
-
-  font-size: 7px;
-
-  gap: 7px;
-}
-
-
-/* =========================================================
-   COMPACT SOCIAL
-   ========================================================= */
-
-.auth-card.compact .social-buttons {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, 1fr);
-
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  gap: 7px;
-
-  padding:
-    0 18px;
-
-  margin: 0;
-
-  overflow: hidden;
-}
-
-
-.auth-card.compact .social-button {
-  display: flex;
-
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  min-height: 34px;
-
-  padding:
-    5px 6px;
-
-  border-radius: 8px;
-
-  font-size: 7.5px;
-
-  gap: 5px;
-
-  overflow: hidden;
-}
-
-
-.auth-card.compact .social-button span {
-  display: block;
-
-  min-width: 0;
-  max-width: 100%;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-}
-
-
-.auth-card.compact .social-button svg {
-  font-size: 10px;
-
-  flex: 0 0 auto;
-}
-
-
-/* =========================================================
-   COMPACT FOOTER
-   ========================================================= */
-
-.auth-card.compact .auth-footer {
-  display: flex;
-
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  padding:
-    11px 18px 14px;
-
-  font-size: 7.5px;
-
-  gap: 3px;
-
-  overflow: hidden;
-}
-
-
-.auth-card.compact .auth-footer span {
-  max-width: 100%;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-}
-
-
-.auth-card.compact .link-btn {
-  flex: 0 0 auto;
-
-  font-size: 7.5px;
-}
-
-
-/* =========================================================
-   LANDING PREVIEW STATS
-   ========================================================= */
+   PREVIEW STATS
+========================================================= */
 
 .auth-preview-stats {
   display: grid;
@@ -1506,16 +1160,15 @@
   max-width: 100%;
   min-width: 0;
 
-  gap: 8px;
+  gap: 9px;
 
   padding:
-    9px 12px 12px;
+    10px 14px 14px;
 
   margin: 0;
 
   overflow: hidden;
 }
-
 
 .auth-preview-stat {
   display: flex;
@@ -1526,15 +1179,16 @@
   max-width: 100%;
   min-width: 0;
 
-  min-height: 48px;
+  min-height: 50px;
 
-  gap: 7px;
+  gap: 8px;
 
-  padding: 8px;
+  padding: 8px 9px;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
 
   background:
     rgba(255, 255, 255, 0.045);
@@ -1542,12 +1196,11 @@
   overflow: hidden;
 }
 
-
 .auth-preview-stat-icon {
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 25px;
 
-  min-width: 24px;
+  min-width: 25px;
 
   display: flex;
 
@@ -1561,11 +1214,20 @@
 
   color: #917aff;
 
-  font-size: 9px;
+  font-size: 10px;
+
+  font-weight: 800;
 
   flex: 0 0 auto;
 }
 
+.auth-preview-stat.success
+  .auth-preview-stat-icon {
+  background:
+    rgba(57, 217, 138, 0.10);
+
+  color: #39d98a;
+}
 
 .auth-preview-stat-content {
   min-width: 0;
@@ -1573,7 +1235,6 @@
 
   overflow: hidden;
 }
-
 
 .auth-preview-stat-value {
   display: block;
@@ -1583,7 +1244,7 @@
 
   color: #ffffff;
 
-  font-size: 9px;
+  font-size: 10px;
 
   font-weight: 700;
 
@@ -1596,18 +1257,17 @@
   text-overflow: ellipsis;
 }
 
-
 .auth-preview-stat-label {
   display: block;
 
   width: 100%;
   max-width: 100%;
 
-  margin-top: 2px;
+  margin-top: 3px;
 
   color: #697390;
 
-  font-size: 6.5px;
+  font-size: 7px;
 
   line-height: 1.2;
 
@@ -1618,10 +1278,9 @@
   text-overflow: ellipsis;
 }
 
-
 /* =========================================================
    LOADING
-   ========================================================= */
+========================================================= */
 
 .auth-loading {
   display: inline-flex;
@@ -1635,7 +1294,6 @@
 
   overflow: hidden;
 }
-
 
 .auth-spinner {
   width: 12px;
@@ -1656,17 +1314,15 @@
     0.7s linear infinite;
 }
 
-
 @keyframes authSpin {
   to {
     transform: rotate(360deg);
   }
 }
 
-
 /* =========================================================
    REGISTER
-   ========================================================= */
+========================================================= */
 
 .register-form {
   width: 100%;
@@ -1676,23 +1332,13 @@
   overflow: visible;
 }
 
-
 .register-form .auth-form {
   padding-bottom: 2px;
 }
 
-
 /* =========================================================
-   HARD COMPACT CONTAINMENT
-   ========================================================= */
-
-/*
-   These rules are intentionally strict.
-
-   The landing preview is a visual mockup and should NEVER
-   allow its internal authentication components to expand
-   beyond the card.
-*/
+   COMPACT HARD CONTAINMENT
+========================================================= */
 
 .auth-card.compact form,
 .auth-card.compact .auth-form,
@@ -1708,29 +1354,21 @@
   min-width: 0;
 }
 
-
 .auth-card.compact input,
 .auth-card.compact select,
 .auth-card.compact button {
   max-width: 100%;
 }
 
-
 .auth-card.compact img,
 .auth-card.compact svg {
   max-width: 100%;
 }
 
-
-/* =========================================================
-   PREVENT GLOBAL STYLES FROM BREAKING PREVIEW
-   ========================================================= */
-
 .auth-card.compact form {
   margin-left: 0;
   margin-right: 0;
 }
-
 
 .auth-card.compact p,
 .auth-card.compact h1,
@@ -1740,11 +1378,9 @@
   max-width: 100%;
 }
 
-
 .auth-card.compact p {
   overflow-wrap: break-word;
 }
-
 
 .auth-card.compact h1,
 .auth-card.compact h2,
@@ -1752,10 +1388,9 @@
   overflow-wrap: normal;
 }
 
-
 /* =========================================================
    FULL AUTH RESPONSIVE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 1100px) {
   .auth-page {
@@ -1768,14 +1403,13 @@
   }
 
   .auth-card {
-    max-width: 430px;
+    max-width: 450px;
   }
 }
 
-
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 768px) {
   .auth-page {
@@ -1786,20 +1420,24 @@
   }
 
   .auth-card {
-    max-width: 410px;
+    max-width: 420px;
 
     padding: 22px;
   }
 
+  #landing-auth-card,
+  .auth-card.compact {
+    width: 310px;
+  }
+
   .auth-title {
-    font-size: 22px;
+    font-size: 24px;
   }
 }
 
-
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 520px) {
   .auth-page {
@@ -1817,12 +1455,17 @@
     border-radius: 20px;
   }
 
+  #landing-auth-card,
+  .auth-card.compact {
+    width: min(320px, calc(100vw - 28px));
+  }
+
   .auth-title {
-    font-size: 21px;
+    font-size: 23px;
   }
 
   .auth-subtitle {
-    font-size: 11px;
+    font-size: 10.5px;
   }
 
   .social-buttons {
@@ -1835,10 +1478,9 @@
   }
 }
 
-
 /* =========================================================
    VERY SMALL MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 360px) {
   .auth-page {
@@ -1850,34 +1492,38 @@
     padding: 16px;
   }
 
+  #landing-auth-card,
+  .auth-card.compact {
+    width: calc(100vw - 20px);
+  }
+
   .auth-form {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .auth-header {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .social-buttons {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .auth-divider {
-    width: 100%;
-    max-width: 100%;
+    width: calc(100% - 36px);
+    max-width: calc(100% - 36px);
 
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 18px;
+    margin-right: 18px;
   }
 }
 
-
 /* =========================================================
    ACCESSIBILITY
-   ========================================================= */
+========================================================= */
 
 .auth-card button:focus-visible,
 .auth-card input:focus-visible,
@@ -1889,18 +1535,12 @@
   outline-offset: 2px;
 }
 
-
 /* =========================================================
    FINAL COMPACT RESET
-   ========================================================= */
+========================================================= */
 
 .auth-card.compact {
   transform: none !important;
   scale: 1 !important;
   zoom: 1 !important;
 }
-
-
-/* =========================================================
-   END
-   ========================================================= */

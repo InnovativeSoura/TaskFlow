@@ -72,21 +72,20 @@ const AuthCard = ({
   useEffect(() => {
     if (compact) return;
 
-    setIsLogin(
-      location.pathname !== "/register"
-    );
+    setIsLogin(location.pathname !== "/register");
   }, [location.pathname, compact]);
 
   /* =========================================================
      LANDING PAGE AUTH TOGGLE EVENT
 
-     LandingNavbar / Hero buttons can dispatch:
+     Landing page buttons can dispatch:
 
      window.dispatchEvent(
        new CustomEvent("taskflow-auth-mode", {
          detail: { mode: "login" }
        })
      );
+
   ========================================================= */
 
   useEffect(() => {
@@ -124,7 +123,7 @@ const AuthCard = ({
   }, [compact]);
 
   /* =========================================================
-     NOTIFY PARENT THAT AUTH CARD IS READY
+     NOTIFY PARENT
   ========================================================= */
 
   useEffect(() => {
@@ -178,16 +177,30 @@ const AuthCard = ({
   ========================================================= */
 
   const switchMode = (loginMode) => {
+    if (loading) return;
+
     if (loginMode === isLogin) {
       return;
     }
 
-    resetForm();
+    setError("");
+
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "Team Member",
+    });
 
     setIsLogin(loginMode);
 
     /* -----------------------------------------
        LANDING PAGE
+
        Stay on "/"
     ----------------------------------------- */
 
@@ -221,6 +234,10 @@ const AuthCard = ({
       confirmPassword,
     } = formData;
 
+    if (!isLogin && !name.trim()) {
+      return "Full Name is required.";
+    }
+
     if (!email.trim()) {
       return "Email is required.";
     }
@@ -241,10 +258,6 @@ const AuthCard = ({
     }
 
     if (!isLogin) {
-      if (!name.trim()) {
-        return "Full Name is required.";
-      }
-
       if (!confirmPassword.trim()) {
         return "Please confirm your password.";
       }
@@ -290,6 +303,21 @@ const AuthCard = ({
           email: formData.email.trim(),
           password: formData.password,
         });
+
+        /* -------------------------------------
+           OPTIONAL REMEMBER ME
+        ------------------------------------- */
+
+        if (rememberMe) {
+          localStorage.setItem(
+            "taskflow_remember_email",
+            formData.email.trim()
+          );
+        } else {
+          localStorage.removeItem(
+            "taskflow_remember_email"
+          );
+        }
       }
 
       /* =====================================
@@ -325,15 +353,15 @@ const AuthCard = ({
       navigate("/dashboard", {
         replace: true,
       });
-    } catch (error) {
+    } catch (authError) {
       console.error(
         "Authentication Error:",
-        error
+        authError
       );
 
       setError(
-        error?.response?.data?.message ||
-          error?.message ||
+        authError?.response?.data?.message ||
+          authError?.message ||
           "Something went wrong. Please try again."
       );
     } finally {
@@ -414,6 +442,37 @@ const AuthCard = ({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
+
+      {/* =====================================================
+          STATUS BAR
+      ===================================================== */}
+
+      {compact && (
+        <div className="auth-preview-topbar">
+          <div className="auth-preview-status">
+            <span className="auth-status-dot" />
+            <span>Workspace is ready</span>
+          </div>
+
+          <div className="auth-preview-members">
+            <span className="preview-avatar purple">
+              S
+            </span>
+
+            <span className="preview-avatar blue">
+              A
+            </span>
+
+            <span className="preview-avatar cyan">
+              R
+            </span>
+
+            <span className="preview-more">
+              +18
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* =====================================================
           LOGIN / REGISTER TOGGLE
@@ -528,14 +587,12 @@ const AuthCard = ({
               onSubmit={handleSubmit}
               onTogglePassword={() =>
                 setShowPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
               onRememberChange={() =>
                 setRememberMe(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
               onForgotPassword={
@@ -565,14 +622,12 @@ const AuthCard = ({
               onSubmit={handleSubmit}
               onTogglePassword={() =>
                 setShowPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
               onToggleConfirmPassword={() =>
                 setShowConfirmPassword(
-                  (previous) =>
-                    !previous
+                  (previous) => !previous
                 )
               }
             />
@@ -637,6 +692,48 @@ const AuthCard = ({
 
         </motion.div>
       </AnimatePresence>
+
+      {/* =====================================================
+          PREVIEW STATS
+      ===================================================== */}
+
+      {compact && (
+        <div className="auth-preview-stats">
+
+          <div className="auth-preview-stat">
+            <div className="auth-preview-stat-icon">
+              ✓
+            </div>
+
+            <div className="auth-preview-stat-content">
+              <span className="auth-preview-stat-value">
+                124
+              </span>
+
+              <span className="auth-preview-stat-label">
+                Tasks Completed
+              </span>
+            </div>
+          </div>
+
+          <div className="auth-preview-stat success">
+            <div className="auth-preview-stat-icon">
+              ↗
+            </div>
+
+            <div className="auth-preview-stat-content">
+              <span className="auth-preview-stat-value">
+                96%
+              </span>
+
+              <span className="auth-preview-stat-label">
+                Project Success
+              </span>
+            </div>
+          </div>
+
+        </div>
+      )}
 
     </motion.div>
   );
