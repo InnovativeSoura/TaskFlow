@@ -11,6 +11,8 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import SocialButtons from "./SocialButtons";
 
+import "../../styles/Auth.css";
+
 const AuthCard = ({
   compact = false,
   onAuthReady,
