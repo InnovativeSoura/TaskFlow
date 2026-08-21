@@ -11,9 +11,9 @@ import {
   FaTasks,
   FaChartLine,
   FaCheck,
-  FaLock,
-  FaEnvelope,
-  FaEye,
+  FaClock,
+  FaRocket,
+  FaLayerGroup,
 } from "react-icons/fa";
 
 import "./Hero.css";
@@ -77,6 +77,7 @@ const Hero = () => {
 
   return (
     <section className="hero-section" id="home">
+
       {/* =====================================================
           BACKGROUND
       ===================================================== */}
@@ -96,6 +97,7 @@ const Hero = () => {
       ===================================================== */}
 
       <div className="hero-container">
+
         {/* ===================================================
             LEFT CONTENT
         =================================================== */}
@@ -115,6 +117,7 @@ const Hero = () => {
             ease: "easeOut",
           }}
         >
+
           {/* BADGE */}
 
           <motion.div
@@ -165,6 +168,7 @@ const Hero = () => {
           {/* BUTTONS */}
 
           <div className="hero-buttons">
+
             <button
               type="button"
               className="hero-primary-btn"
@@ -184,11 +188,13 @@ const Hero = () => {
 
               <span>Explore Features</span>
             </a>
+
           </div>
 
-          {/* TRUST ITEMS */}
+          {/* TRUST */}
 
           <div className="hero-trust">
+
             <div className="hero-trust-item">
               <FaCheckCircle />
               <span>Free Forever Plan</span>
@@ -208,12 +214,15 @@ const Hero = () => {
               <FaCheckCircle />
               <span>Cloud Sync Included</span>
             </div>
+
           </div>
 
           {/* MINI STATS */}
 
           <div className="hero-mini-stats">
+
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
                 <FaTasks />
               </div>
@@ -222,9 +231,11 @@ const Hero = () => {
                 <strong>10K+</strong>
                 <span>Teams</span>
               </div>
+
             </div>
 
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
                 <FaChartLine />
               </div>
@@ -233,9 +244,11 @@ const Hero = () => {
                 <strong>50K+</strong>
                 <span>Tasks Managed</span>
               </div>
+
             </div>
 
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
                 <FaShieldAlt />
               </div>
@@ -244,12 +257,15 @@ const Hero = () => {
                 <strong>99.9%</strong>
                 <span>Secure</span>
               </div>
+
             </div>
+
           </div>
+
         </motion.div>
 
         {/* ===================================================
-            RIGHT PRODUCT PREVIEW
+            RIGHT PREMIUM PRODUCT PREVIEW
         =================================================== */}
 
         <motion.div
@@ -270,175 +286,203 @@ const Hero = () => {
             ease: "easeOut",
           }}
         >
+
           <div className="hero-auth-glow" />
 
           <div className="hero-product-preview">
+
             {/* =================================================
                 TOP BAR
             ================================================= */}
 
-            <div className="preview-topbar">
-              <div className="preview-brand">
-                <div className="preview-brand-icon">
-                  <FaTasks />
+            <div className="hero-product-topbar">
+
+              <div className="hero-product-brand">
+
+                <div className="hero-product-logo">
+                  <FaLayerGroup />
                 </div>
 
                 <div>
                   <strong>TaskFlow</strong>
                   <span>Workspace</span>
                 </div>
+
               </div>
 
-              <div className="preview-status">
+              <div className="hero-product-live">
                 <span />
                 Live
               </div>
+
             </div>
 
             {/* =================================================
-                DASHBOARD HEADER
+                OVERVIEW LABEL
             ================================================= */}
 
-            <div className="preview-heading">
+            <div className="hero-product-label">
+              PROJECT OVERVIEW
+            </div>
+
+            {/* =================================================
+                HEADING
+            ================================================= */}
+
+            <div className="hero-product-heading">
+
               <div>
-                <span className="preview-eyebrow">
-                  PROJECT OVERVIEW
-                </span>
-
                 <h3>Workspace is ready</h3>
-
-                <p>
-                  Your team is working efficiently.
-                </p>
+                <p>Your team is working efficiently.</p>
               </div>
 
-              <div className="preview-avatars">
+              <div className="hero-product-users">
+
                 <span>SP</span>
                 <span>AR</span>
                 <span>MK</span>
-                <b>+18</b>
+
+                <small>+18</small>
+
               </div>
+
             </div>
 
             {/* =================================================
                 PROJECT CARD
             ================================================= */}
 
-            <div className="preview-project-card">
-              <div className="preview-project-top">
-                <div className="preview-project-icon">
-                  <FaChartLine />
+            <div className="hero-project-card">
+
+              <div className="hero-project-card-top">
+
+                <div className="hero-project-icon">
+                  <FaRocket />
                 </div>
 
-                <div className="preview-project-info">
+                <div className="hero-project-name">
                   <strong>Website Redesign</strong>
                   <span>Product Development</span>
                 </div>
 
-                <div className="preview-project-percent">
+                <strong className="hero-project-percent">
                   82%
-                </div>
+                </strong>
+
               </div>
 
-              <div className="preview-progress">
+              <div className="hero-progress">
                 <span />
               </div>
 
-              <div className="preview-project-footer">
+              <div className="hero-project-meta">
                 <span>24 Tasks</span>
                 <span>6 Members</span>
                 <span>Due in 8 days</span>
               </div>
+
             </div>
 
             {/* =================================================
-                TASK LIST
+                RECENT TASKS
             ================================================= */}
 
-            <div className="preview-task-section">
-              <div className="preview-section-heading">
-                <strong>Recent Tasks</strong>
-                <span>View all</span>
-              </div>
+            <div className="hero-recent-header">
 
-              <div className="preview-task">
-                <div className="preview-task-check completed">
+              <strong>Recent Tasks</strong>
+
+              <span>View all</span>
+
+            </div>
+
+            <div className="hero-task-list">
+
+              <div className="hero-task">
+
+                <div className="hero-task-check completed">
                   <FaCheck />
                 </div>
 
-                <div className="preview-task-content">
+                <div className="hero-task-info">
                   <strong>Design landing page</strong>
                   <span>Completed</span>
                 </div>
 
-                <div className="preview-task-user">
+                <div className="hero-task-avatar">
                   SP
                 </div>
+
               </div>
 
-              <div className="preview-task">
-                <div className="preview-task-check progress">
-                  <FaArrowRight />
+              <div className="hero-task">
+
+                <div className="hero-task-check">
+                  <FaClock />
                 </div>
 
-                <div className="preview-task-content">
+                <div className="hero-task-info">
                   <strong>Build authentication</strong>
                   <span>In Progress</span>
                 </div>
 
-                <div className="preview-task-user blue">
+                <div className="hero-task-avatar blue">
                   AR
                 </div>
+
               </div>
 
-              <div className="preview-task">
-                <div className="preview-task-check pending">
-                  <FaTasks />
+              <div className="hero-task">
+
+                <div className="hero-task-check">
+                  <FaArrowRight />
                 </div>
 
-                <div className="preview-task-content">
+                <div className="hero-task-info">
                   <strong>Deploy production build</strong>
                   <span>Upcoming</span>
                 </div>
 
-                <div className="preview-task-user green">
+                <div className="hero-task-avatar green">
                   MK
                 </div>
+
               </div>
+
             </div>
 
             {/* =================================================
                 AUTH MINI PANEL
             ================================================= */}
 
-            <div className="preview-auth-panel">
-              <div className="preview-auth-panel-header">
+            <div className="hero-mini-auth">
+
+              <div className="hero-mini-auth-header">
+
                 <div>
                   <span>SECURE ACCESS</span>
                   <strong>Welcome back 👋</strong>
                 </div>
 
-                <div className="preview-lock">
-                  <FaLock />
+                <div className="hero-mini-auth-lock">
+                  🔒
                 </div>
+
               </div>
 
-              <div className="preview-input">
-                <FaEnvelope />
+              <div className="hero-mini-input">
                 <span>you@example.com</span>
               </div>
 
-              <div className="preview-input">
-                <FaLock />
+              <div className="hero-mini-input">
                 <span>••••••••••••</span>
-
-                <FaEye className="preview-eye" />
+                <small>●</small>
               </div>
 
-              <div className="preview-login-button">
-                Sign in
+              <div className="hero-mini-login">
+                <span>Sign in</span>
                 <FaArrowRight />
               </div>
+
             </div>
 
             {/* =================================================
@@ -446,7 +490,9 @@ const Hero = () => {
             ================================================= */}
 
             <div className="hero-auth-metrics">
+
               <div className="hero-auth-metric">
+
                 <div className="hero-auth-metric-icon">
                   <FaTasks />
                 </div>
@@ -455,9 +501,11 @@ const Hero = () => {
                   <strong>124</strong>
                   <span>Tasks Completed</span>
                 </div>
+
               </div>
 
               <div className="hero-auth-metric">
+
                 <div className="hero-auth-metric-icon green">
                   <FaChartLine />
                 </div>
@@ -466,10 +514,15 @@ const Hero = () => {
                   <strong>96%</strong>
                   <span>Project Success</span>
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </motion.div>
+
       </div>
 
       {/* =====================================================
@@ -494,6 +547,7 @@ const Hero = () => {
 
         <span>Scroll to explore</span>
       </motion.a>
+
     </section>
   );
 };
