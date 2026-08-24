@@ -1,7 +1,7 @@
 /* =========================================================
-   TASKFLOW — PREMIUM AUTH SYSTEM
-   AUTH CARD + LANDING AUTH PREVIEW
-========================================================= */
+   TASKFLOW — AUTH SYSTEM
+   FULL AUTH PAGE + LANDING PAGE AUTH PREVIEW
+   ========================================================= */
 
 :root {
   --auth-bg: #070b1c;
@@ -28,7 +28,7 @@
 
 /* =========================================================
    GLOBAL BOX MODEL
-========================================================= */
+   ========================================================= */
 
 .auth-card,
 .auth-card *,
@@ -39,7 +39,7 @@
 
 /* =========================================================
    FULL AUTH PAGE
-========================================================= */
+   ========================================================= */
 
 .auth-page {
   position: relative;
@@ -51,7 +51,7 @@
 
   grid-template-columns:
     minmax(0, 1fr)
-    minmax(360px, 450px);
+    minmax(400px, 460px);
 
   align-items: center;
 
@@ -64,7 +64,7 @@
 
 /* =========================================================
    NORMAL AUTH CARD
-========================================================= */
+   ========================================================= */
 
 .auth-card {
   position: relative;
@@ -103,25 +103,29 @@
 
 /* =========================================================
    LANDING COMPACT CARD
-   TARGET WIDTH: 320px
-========================================================= */
+   IMPORTANT:
+   This card MUST NOT shrink.
+   ========================================================= */
 
 .auth-card.compact {
   position: relative;
 
   display: block;
 
-  width: 320px;
-  max-width: 100%;
-  min-width: 0;
+  width: 360px !important;
+  min-width: 360px !important;
+  max-width: 360px !important;
 
   height: auto;
   min-height: 0;
 
+  flex: 0 0 360px !important;
+  flex-shrink: 0 !important;
+
   margin: 0;
   padding: 0;
 
-  border-radius: 22px;
+  border-radius: 24px;
 
   background:
     linear-gradient(
@@ -146,23 +150,26 @@
   transform: none !important;
   scale: 1 !important;
   zoom: 1 !important;
-
-  contain: layout paint;
 }
 
 /* =========================================================
    LANDING AUTH ROOT
-========================================================= */
+   ========================================================= */
 
 #landing-auth-card {
   position: relative;
 
-  width: 320px;
-  max-width: 100%;
-  min-width: 0;
+  display: block;
+
+  width: 360px !important;
+  min-width: 360px !important;
+  max-width: 360px !important;
 
   height: auto;
   min-height: 0;
+
+  flex: 0 0 360px !important;
+  flex-shrink: 0 !important;
 
   margin: 0;
   padding: 0;
@@ -172,13 +179,11 @@
   transform: none !important;
   scale: 1 !important;
   zoom: 1 !important;
-
-  flex: 0 1 auto;
 }
 
 /* =========================================================
    TOP STATUS BAR
-========================================================= */
+   ========================================================= */
 
 .auth-preview-topbar {
   display: flex;
@@ -187,12 +192,13 @@
   justify-content: space-between;
 
   width: 100%;
+  min-width: 0;
 
-  min-height: 48px;
+  min-height: 58px;
 
-  padding: 13px 15px 8px;
+  padding: 15px 18px 10px;
 
-  gap: 10px;
+  gap: 14px;
 
   overflow: hidden;
 }
@@ -202,15 +208,18 @@
 
   align-items: center;
 
-  gap: 7px;
+  gap: 8px;
 
   min-width: 0;
+  flex: 1 1 auto;
 
   color: #a5aec7;
 
-  font-size: 8.5px;
+  font-size: 10px;
 
   font-weight: 500;
+
+  line-height: 1.2;
 
   white-space: nowrap;
 
@@ -220,17 +229,17 @@
 }
 
 .auth-status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 
-  min-width: 6px;
+  min-width: 7px;
 
   border-radius: 50%;
 
   background: #39d98a;
 
   box-shadow:
-    0 0 9px rgba(57, 217, 138, 0.8);
+    0 0 10px rgba(57, 217, 138, 0.8);
 }
 
 .auth-preview-members {
@@ -239,6 +248,8 @@
   align-items: center;
 
   flex: 0 0 auto;
+
+  white-space: nowrap;
 }
 
 .preview-avatar {
@@ -247,10 +258,12 @@
   align-items: center;
   justify-content: center;
 
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 
-  margin-left: -4px;
+  min-width: 24px;
+
+  margin-left: -5px;
 
   border-radius: 50%;
 
@@ -258,7 +271,7 @@
 
   color: #ffffff;
 
-  font-size: 7px;
+  font-size: 8px;
 
   font-weight: 800;
 }
@@ -280,18 +293,18 @@
 }
 
 .preview-more {
-  margin-left: 5px;
+  margin-left: 6px;
 
   color: #737d9b;
 
-  font-size: 7px;
+  font-size: 9px;
 
   white-space: nowrap;
 }
 
 /* =========================================================
    DIRECT CHILDREN
-========================================================= */
+   ========================================================= */
 
 .auth-card.compact > * {
   position: relative;
@@ -310,7 +323,7 @@
 
 /* =========================================================
    CONTENT
-========================================================= */
+   ========================================================= */
 
 .auth-card-content {
   position: relative;
@@ -324,12 +337,19 @@
   margin: 0;
   padding: 0;
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* =========================================================
    TOGGLE
-========================================================= */
+   ========================================================= */
+
+.auth-toggle-wrapper {
+  width: 100%;
+  min-width: 0;
+
+  padding: 0 18px;
+}
 
 .auth-toggle {
   position: relative;
@@ -340,12 +360,13 @@
     minmax(0, 1fr)
     minmax(0, 1fr);
 
-  width: calc(100% - 32px);
-  max-width: calc(100% - 32px);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 
-  height: 48px;
+  height: 50px;
 
-  margin: 10px auto 25px;
+  margin: 10px 0 28px;
 
   padding: 4px;
 
@@ -358,8 +379,6 @@
     1px solid rgba(255, 255, 255, 0.065);
 
   overflow: hidden;
-
-  min-width: 0;
 }
 
 .auth-toggle button {
@@ -374,7 +393,7 @@
   min-width: 0;
   max-width: 100%;
 
-  padding: 0 8px;
+  padding: 0 10px;
 
   border: none;
   outline: none;
@@ -426,7 +445,7 @@
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .auth-header {
   display: block;
@@ -435,11 +454,11 @@
   max-width: 100%;
   min-width: 0;
 
-  padding: 0 22px;
+  padding: 0 24px;
 
-  margin: 0 0 22px;
+  margin: 0 0 24px;
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 .auth-title {
@@ -452,7 +471,7 @@
 
   color: #ffffff;
 
-  font-size: 26px;
+  font-size: 28px;
 
   line-height: 1.12;
 
@@ -468,9 +487,9 @@
   display: block;
 
   width: 100%;
-  max-width: 290px;
+  max-width: 100%;
 
-  margin: 9px 0 0;
+  margin: 10px 0 0;
 
   color: #858fae;
 
@@ -478,12 +497,12 @@
 
   line-height: 1.55;
 
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
 }
 
 /* =========================================================
    FORM
-========================================================= */
+   ========================================================= */
 
 .auth-form {
   position: relative;
@@ -495,14 +514,14 @@
   min-width: 0;
 
   margin: 0;
-  padding: 0 22px;
+  padding: 0 24px;
 
   overflow: visible;
 }
 
 /* =========================================================
    FORM GROUP
-========================================================= */
+   ========================================================= */
 
 .auth-form-group {
   position: relative;
@@ -513,7 +532,7 @@
   max-width: 100%;
   min-width: 0;
 
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 
   overflow: visible;
 }
@@ -543,7 +562,7 @@
 
 /* =========================================================
    INPUT WRAPPER
-========================================================= */
+   ========================================================= */
 
 .auth-input-wrapper {
   position: relative;
@@ -557,7 +576,7 @@
 
 /* =========================================================
    INPUT ICON
-========================================================= */
+   ========================================================= */
 
 .auth-input-icon {
   position: absolute;
@@ -572,8 +591,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
 
   color: #717b9a;
 
@@ -586,7 +605,7 @@
 
 /* =========================================================
    INPUTS
-========================================================= */
+   ========================================================= */
 
 .auth-input,
 .auth-form input,
@@ -597,12 +616,12 @@
   max-width: 100%;
   min-width: 0;
 
-  height: 44px;
+  height: 46px;
 
   margin: 0;
 
   padding:
-    0 42px 0 40px;
+    0 44px 0 42px;
 
   border-radius: 12px;
 
@@ -618,7 +637,7 @@
 
   font-family: inherit;
 
-  font-size: 10.5px;
+  font-size: 11px;
 
   line-height: normal;
 
@@ -660,7 +679,7 @@
 
 /* =========================================================
    SELECT
-========================================================= */
+   ========================================================= */
 
 .auth-form select {
   appearance: none;
@@ -670,7 +689,7 @@
 
 /* =========================================================
    PASSWORD BUTTON
-========================================================= */
+   ========================================================= */
 
 .password-toggle {
   position: absolute;
@@ -685,8 +704,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 30px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
 
   padding: 0;
 
@@ -716,7 +735,7 @@
 
 /* =========================================================
    OPTIONS
-========================================================= */
+   ========================================================= */
 
 .auth-options {
   display: flex;
@@ -728,9 +747,9 @@
   max-width: 100%;
   min-width: 0;
 
-  gap: 10px;
+  gap: 12px;
 
-  margin: 3px 0 18px;
+  margin: 4px 0 19px;
 
   color: #8c95b0;
 
@@ -809,7 +828,7 @@
 
 /* =========================================================
    SUBMIT
-========================================================= */
+   ========================================================= */
 
 .auth-submit,
 .auth-form button[type="submit"] {
@@ -822,7 +841,7 @@
   max-width: 100%;
   min-width: 0;
 
-  height: 46px;
+  height: 48px;
 
   margin: 0;
 
@@ -892,15 +911,15 @@
 
 /* =========================================================
    ERROR
-========================================================= */
+   ========================================================= */
 
 .auth-error {
   display: block;
 
-  width: calc(100% - 44px);
-  max-width: calc(100% - 44px);
+  width: calc(100% - 48px);
+  max-width: calc(100% - 48px);
 
-  margin: 0 22px 13px;
+  margin: 0 24px 14px;
 
   padding: 9px 11px;
 
@@ -923,14 +942,14 @@
 
 /* =========================================================
    SOCIAL
-========================================================= */
+   ========================================================= */
 
 .auth-social-wrapper {
   width: 100%;
   max-width: 100%;
   min-width: 0;
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 .auth-divider {
@@ -938,13 +957,13 @@
 
   align-items: center;
 
-  width: calc(100% - 44px);
-  max-width: calc(100% - 44px);
+  width: calc(100% - 48px);
+  max-width: calc(100% - 48px);
 
   gap: 10px;
 
   margin:
-    20px 22px 13px;
+    21px 24px 14px;
 
   color: #65708f;
 
@@ -995,11 +1014,11 @@
 
   gap: 10px;
 
-  padding: 0 22px;
+  padding: 0 24px;
 
   margin: 0;
 
-  overflow: hidden;
+  overflow: visible;
 }
 
 .social-button {
@@ -1083,7 +1102,7 @@
 
 /* =========================================================
    FOOTER
-========================================================= */
+   ========================================================= */
 
 .auth-footer {
   display: flex;
@@ -1100,7 +1119,7 @@
   gap: 5px;
 
   padding:
-    18px 22px 19px;
+    18px 24px 20px;
 
   color: #717b99;
 
@@ -1147,7 +1166,7 @@
 
 /* =========================================================
    PREVIEW STATS
-========================================================= */
+   ========================================================= */
 
 .auth-preview-stats {
   display: grid;
@@ -1160,10 +1179,10 @@
   max-width: 100%;
   min-width: 0;
 
-  gap: 9px;
+  gap: 10px;
 
   padding:
-    10px 14px 14px;
+    10px 16px 16px;
 
   margin: 0;
 
@@ -1179,13 +1198,13 @@
   max-width: 100%;
   min-width: 0;
 
-  min-height: 50px;
+  min-height: 54px;
 
-  gap: 8px;
+  gap: 9px;
 
-  padding: 8px 9px;
+  padding: 9px 10px;
 
-  border-radius: 10px;
+  border-radius: 11px;
 
   border:
     1px solid rgba(255, 255, 255, 0.06);
@@ -1197,32 +1216,31 @@
 }
 
 .auth-preview-stat-icon {
-  width: 25px;
-  height: 25px;
+  width: 27px;
+  height: 27px;
 
-  min-width: 25px;
+  min-width: 27px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 7px;
+  border-radius: 8px;
 
   background:
     rgba(118, 87, 255, 0.13);
 
   color: #917aff;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 800;
 
   flex: 0 0 auto;
 }
 
-.auth-preview-stat.success
-  .auth-preview-stat-icon {
+.auth-preview-stat.success .auth-preview-stat-icon {
   background:
     rgba(57, 217, 138, 0.10);
 
@@ -1244,7 +1262,7 @@
 
   color: #ffffff;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -1267,7 +1285,7 @@
 
   color: #697390;
 
-  font-size: 7px;
+  font-size: 7.5px;
 
   line-height: 1.2;
 
@@ -1280,7 +1298,7 @@
 
 /* =========================================================
    LOADING
-========================================================= */
+   ========================================================= */
 
 .auth-loading {
   display: inline-flex;
@@ -1322,7 +1340,7 @@
 
 /* =========================================================
    REGISTER
-========================================================= */
+   ========================================================= */
 
 .register-form {
   width: 100%;
@@ -1338,7 +1356,7 @@
 
 /* =========================================================
    COMPACT HARD CONTAINMENT
-========================================================= */
+   ========================================================= */
 
 .auth-card.compact form,
 .auth-card.compact .auth-form,
@@ -1379,7 +1397,7 @@
 }
 
 .auth-card.compact p {
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
 }
 
 .auth-card.compact h1,
@@ -1390,7 +1408,7 @@
 
 /* =========================================================
    FULL AUTH RESPONSIVE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 1100px) {
   .auth-page {
@@ -1408,8 +1426,23 @@
 }
 
 /* =========================================================
+   LANDING CARD — TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .auth-card.compact,
+  #landing-auth-card {
+    width: 340px !important;
+    min-width: 340px !important;
+    max-width: 340px !important;
+
+    flex-basis: 340px !important;
+  }
+}
+
+/* =========================================================
    TABLET
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 768px) {
   .auth-page {
@@ -1425,19 +1458,14 @@
     padding: 22px;
   }
 
-  #landing-auth-card,
-  .auth-card.compact {
-    width: 310px;
-  }
-
   .auth-title {
     font-size: 24px;
   }
 }
 
 /* =========================================================
-   MOBILE
-========================================================= */
+   LANDING CARD — MOBILE
+   ========================================================= */
 
 @media (max-width: 520px) {
   .auth-page {
@@ -1455,9 +1483,13 @@
     border-radius: 20px;
   }
 
-  #landing-auth-card,
-  .auth-card.compact {
-    width: min(320px, calc(100vw - 28px));
+  .auth-card.compact,
+  #landing-auth-card {
+    width: min(360px, calc(100vw - 28px)) !important;
+    min-width: min(360px, calc(100vw - 28px)) !important;
+    max-width: min(360px, calc(100vw - 28px)) !important;
+
+    flex-basis: min(360px, calc(100vw - 28px)) !important;
   }
 
   .auth-title {
@@ -1473,14 +1505,14 @@
   }
 
   .auth-footer {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 }
 
 /* =========================================================
    VERY SMALL MOBILE
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 360px) {
   .auth-page {
@@ -1492,9 +1524,13 @@
     padding: 16px;
   }
 
-  #landing-auth-card,
-  .auth-card.compact {
-    width: calc(100vw - 20px);
+  .auth-card.compact,
+  #landing-auth-card {
+    width: calc(100vw - 20px) !important;
+    min-width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+
+    flex-basis: calc(100vw - 20px) !important;
   }
 
   .auth-form {
@@ -1523,7 +1559,7 @@
 
 /* =========================================================
    ACCESSIBILITY
-========================================================= */
+   ========================================================= */
 
 .auth-card button:focus-visible,
 .auth-card input:focus-visible,
@@ -1537,7 +1573,7 @@
 
 /* =========================================================
    FINAL COMPACT RESET
-========================================================= */
+   ========================================================= */
 
 .auth-card.compact {
   transform: none !important;
