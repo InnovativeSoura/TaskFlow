@@ -306,7 +306,7 @@
    DIRECT CHILDREN
    ========================================================= */
 
-.auth-card.compact > * {
+/* .auth-card.compact > * {
   position: relative;
 
   display: block;
@@ -319,7 +319,7 @@
   margin-right: 0;
 
   z-index: 2;
-}
+} */
 
 /* =========================================================
    CONTENT
@@ -1579,4 +1579,580 @@
   transform: none !important;
   scale: 1 !important;
   zoom: 1 !important;
+}
+/* =========================================================
+   TASKFLOW LANDING AUTH CARD
+   FINAL LAYOUT OVERRIDE
+   MUST REMAIN AT THE VERY BOTTOM OF Auth.css
+========================================================= */
+
+/* ---------------------------------------------------------
+   COMPACT CARD ROOT
+--------------------------------------------------------- */
+
+.auth-card.compact,
+#landing-auth-card {
+  position: relative !important;
+
+  width: 340px !important;
+  max-width: 340px !important;
+  min-width: 340px !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  margin: 0 auto !important;
+  padding: 0 !important;
+
+  display: block !important;
+
+  overflow: hidden !important;
+
+  isolation: isolate;
+
+  contain: none !important;
+
+  transform: none !important;
+  scale: 1 !important;
+  zoom: 1 !important;
+}
+
+
+/* ---------------------------------------------------------
+   TOP STATUS BAR
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-preview-topbar {
+  position: relative !important;
+
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  min-height: 52px !important;
+
+  padding: 14px 16px 10px !important;
+
+  margin: 0 !important;
+
+  gap: 12px !important;
+
+  overflow: hidden !important;
+}
+
+
+/* ---------------------------------------------------------
+   STATUS
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-preview-status {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  flex: 1 1 auto !important;
+
+  min-width: 0 !important;
+
+  gap: 7px !important;
+
+  white-space: nowrap !important;
+
+  overflow: hidden !important;
+}
+
+
+.auth-card.compact .auth-preview-status span:last-child {
+  display: block !important;
+
+  min-width: 0 !important;
+
+  overflow: hidden !important;
+
+  text-overflow: ellipsis !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ---------------------------------------------------------
+   MEMBERS / AVATARS
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-preview-members {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: flex-end !important;
+
+  flex: 0 0 auto !important;
+
+  width: auto !important;
+  min-width: max-content !important;
+
+  margin: 0 !important;
+
+  overflow: visible !important;
+}
+
+
+.auth-card.compact .preview-avatar {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 20px !important;
+
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+
+  height: 20px !important;
+
+  margin: 0 0 0 -5px !important;
+
+  border-radius: 50% !important;
+
+  overflow: hidden !important;
+}
+
+
+.auth-card.compact .preview-avatar:first-child {
+  margin-left: 0 !important;
+}
+
+
+.auth-card.compact .preview-more {
+  display: inline-block !important;
+
+  width: auto !important;
+
+  margin-left: 6px !important;
+
+  white-space: nowrap !important;
+
+  flex: 0 0 auto !important;
+}
+
+
+/* ---------------------------------------------------------
+   TOGGLE WRAPPER
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-toggle-wrapper {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+}
+
+
+.auth-card.compact .auth-toggle {
+  position: relative !important;
+
+  display: grid !important;
+
+  grid-template-columns: 1fr 1fr !important;
+
+  width: calc(100% - 32px) !important;
+  max-width: calc(100% - 32px) !important;
+  min-width: 0 !important;
+
+  height: 42px !important;
+
+  margin: 4px 16px 20px !important;
+
+  padding: 4px !important;
+}
+
+
+.auth-card.compact .auth-toggle button {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ---------------------------------------------------------
+   MAIN CONTENT
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-card-content {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: visible !important;
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-header {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 0 0 18px !important;
+
+  padding: 0 22px !important;
+}
+
+
+.auth-card.compact .auth-title {
+  display: block !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  font-size: 24px !important;
+
+  line-height: 1.12 !important;
+
+  white-space: normal !important;
+
+  word-break: normal !important;
+}
+
+
+.auth-card.compact .auth-subtitle {
+  display: block !important;
+
+  width: 100% !important;
+
+  max-width: none !important;
+
+  margin: 8px 0 0 !important;
+
+  white-space: normal !important;
+}
+
+
+/* ---------------------------------------------------------
+   FORM
+--------------------------------------------------------- */
+
+.auth-card.compact form,
+.auth-card.compact .auth-form,
+.auth-card.compact .register-form {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  padding: 0 22px !important;
+}
+
+
+.auth-card.compact .auth-form-group {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 0 0 13px !important;
+}
+
+
+.auth-card.compact .auth-input-wrapper {
+  position: relative !important;
+
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+
+.auth-card.compact input,
+.auth-card.compact select,
+.auth-card.compact .auth-input {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ---------------------------------------------------------
+   OPTIONS
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-options {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100% !important;
+
+  gap: 8px !important;
+}
+
+
+.auth-card.compact .auth-options label {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+}
+
+
+/* ---------------------------------------------------------
+   SOCIAL SECTION
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-social-wrapper {
+  display: block !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  overflow: visible !important;
+}
+
+
+.auth-card.compact .auth-divider {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  width: calc(100% - 44px) !important;
+
+  margin: 18px 22px 13px !important;
+}
+
+
+.auth-card.compact .social-buttons {
+  display: grid !important;
+
+  grid-template-columns: 1fr !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  padding: 0 22px !important;
+
+  margin: 0 !important;
+
+  gap: 9px !important;
+
+  overflow: visible !important;
+}
+
+
+.auth-card.compact .social-button {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  min-width: 0 !important;
+
+  min-height: 40px !important;
+
+  margin: 0 !important;
+
+  overflow: hidden !important;
+}
+
+
+.auth-card.compact .social-button svg {
+  display: block !important;
+
+  flex: 0 0 auto !important;
+
+  width: auto !important;
+  max-width: none !important;
+}
+
+
+.auth-card.compact .social-button span {
+  display: block !important;
+
+  flex: 0 1 auto !important;
+
+  width: auto !important;
+  max-width: none !important;
+
+  white-space: nowrap !important;
+
+  overflow: hidden !important;
+
+  text-overflow: ellipsis !important;
+}
+
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-footer {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+
+  padding: 16px 22px 20px !important;
+
+  margin: 0 !important;
+
+  gap: 5px !important;
+}
+
+
+/* ---------------------------------------------------------
+   PREVIEW STATS
+--------------------------------------------------------- */
+
+.auth-card.compact .auth-preview-stats {
+  display: grid !important;
+
+  grid-template-columns: 1fr 1fr !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  padding: 12px 14px 14px !important;
+
+  margin: 0 !important;
+
+  gap: 9px !important;
+
+  overflow: visible !important;
+}
+
+
+.auth-card.compact .auth-preview-stat {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: center !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  min-height: 52px !important;
+
+  margin: 0 !important;
+
+  gap: 8px !important;
+}
+
+
+.auth-card.compact .auth-preview-stat-icon {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 25px !important;
+
+  width: 25px !important;
+  min-width: 25px !important;
+
+  height: 25px !important;
+}
+
+
+.auth-card.compact .auth-preview-stat-content {
+  display: block !important;
+
+  flex: 1 1 auto !important;
+
+  width: auto !important;
+
+  min-width: 0 !important;
+
+  overflow: hidden !important;
+}
+
+
+.auth-card.compact .auth-preview-stat-value,
+.auth-card.compact .auth-preview-stat-label {
+  display: block !important;
+
+  width: 100% !important;
+
+  white-space: nowrap !important;
+
+  overflow: hidden !important;
+
+  text-overflow: ellipsis !important;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 520px) {
+  .auth-card.compact,
+  #landing-auth-card {
+    width: min(340px, calc(100vw - 28px)) !important;
+    max-width: min(340px, calc(100vw - 28px)) !important;
+    min-width: 0 !important;
+  }
 }
