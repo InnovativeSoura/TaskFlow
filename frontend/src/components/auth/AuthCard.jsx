@@ -22,26 +22,14 @@ const AuthCard = ({
 
   const { login, register } = useAuth();
 
-  /* =========================================================
-     API URL
-  ========================================================= */
-
   const API_URL = (
     import.meta.env.VITE_API_URL ||
     "http://localhost:5000/api"
   ).replace(/\/$/, "");
 
-  /* =========================================================
-     AUTH MODE
-  ========================================================= */
-
   const [isLogin, setIsLogin] = useState(
     location.pathname !== "/register"
   );
-
-  /* =========================================================
-     UI STATE
-  ========================================================= */
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -53,10 +41,6 @@ const AuthCard = ({
   const [showConfirmPassword, setShowConfirmPassword] =
     useState(false);
 
-  /* =========================================================
-     FORM STATE
-  ========================================================= */
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -66,7 +50,7 @@ const AuthCard = ({
   });
 
   /* =========================================================
-     SYNC FULL AUTH PAGE WITH ROUTE
+     FULL AUTH PAGE ROUTE SYNC
   ========================================================= */
 
   useEffect(() => {
@@ -76,33 +60,20 @@ const AuthCard = ({
   }, [location.pathname, compact]);
 
   /* =========================================================
-     LANDING PAGE AUTH TOGGLE EVENT
-
-     Landing page buttons can dispatch:
-
-     window.dispatchEvent(
-       new CustomEvent("taskflow-auth-mode", {
-         detail: { mode: "login" }
-       })
-     );
-
+     LANDING AUTH MODE
   ========================================================= */
 
   useEffect(() => {
     if (!compact) return;
 
     const handleAuthMode = (event) => {
-      const mode = event.detail?.mode;
+      const mode = event?.detail?.mode;
 
-      if (
-        mode !== "login" &&
-        mode !== "register"
-      ) {
+      if (mode !== "login" && mode !== "register") {
         return;
       }
 
       setError("");
-
       setIsLogin(mode === "login");
 
       setShowPassword(false);
@@ -123,7 +94,7 @@ const AuthCard = ({
   }, [compact]);
 
   /* =========================================================
-     NOTIFY PARENT
+     AUTH READY
   ========================================================= */
 
   useEffect(() => {
@@ -141,7 +112,6 @@ const AuthCard = ({
 
   const resetForm = () => {
     setError("");
-
     setShowPassword(false);
     setShowConfirmPassword(false);
 
@@ -159,10 +129,7 @@ const AuthCard = ({
   ========================================================= */
 
   const handleChange = (event) => {
-    const {
-      name,
-      value,
-    } = event.target;
+    const { name, value } = event.target;
 
     setError("");
 
@@ -184,7 +151,6 @@ const AuthCard = ({
     }
 
     setError("");
-
     setShowPassword(false);
     setShowConfirmPassword(false);
 
@@ -198,24 +164,12 @@ const AuthCard = ({
 
     setIsLogin(loginMode);
 
-    /* -----------------------------------------
-       LANDING PAGE
-
-       Stay on "/"
-    ----------------------------------------- */
-
     if (compact) {
       return;
     }
 
-    /* -----------------------------------------
-       FULL AUTH PAGE
-    ----------------------------------------- */
-
     navigate(
-      loginMode
-        ? "/login"
-        : "/register",
+      loginMode ? "/login" : "/register",
       {
         replace: true,
       }
@@ -271,15 +225,13 @@ const AuthCard = ({
   };
 
   /* =========================================================
-     LOGIN / REGISTER SUBMIT
+     SUBMIT
   ========================================================= */
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (loading) {
-      return;
-    }
+    if (loading) return;
 
     const validationError = validate();
 
@@ -294,19 +246,11 @@ const AuthCard = ({
     try {
       let result;
 
-      /* =====================================
-         LOGIN
-      ===================================== */
-
       if (isLogin) {
         result = await login({
           email: formData.email.trim(),
           password: formData.password,
         });
-
-        /* -------------------------------------
-           OPTIONAL REMEMBER ME
-        ------------------------------------- */
 
         if (rememberMe) {
           localStorage.setItem(
@@ -318,13 +262,7 @@ const AuthCard = ({
             "taskflow_remember_email"
           );
         }
-      }
-
-      /* =====================================
-         REGISTER
-      ===================================== */
-
-      else {
+      } else {
         result = await register({
           name: formData.name.trim(),
           email: formData.email.trim(),
@@ -332,10 +270,6 @@ const AuthCard = ({
           role: formData.role,
         });
       }
-
-      /* =====================================
-         FAILED
-      ===================================== */
 
       if (!result?.success) {
         setError(
@@ -345,10 +279,6 @@ const AuthCard = ({
 
         return;
       }
-
-      /* =====================================
-         SUCCESS
-      ===================================== */
 
       navigate("/dashboard", {
         replace: true,
@@ -370,17 +300,13 @@ const AuthCard = ({
   };
 
   /* =========================================================
-     GOOGLE LOGIN
+     SOCIAL LOGIN
   ========================================================= */
 
   const handleGoogleLogin = () => {
     window.location.href =
       `${API_URL}/auth/google`;
   };
-
-  /* =========================================================
-     GITHUB LOGIN
-  ========================================================= */
 
   const handleGithubLogin = () => {
     window.location.href =
@@ -444,17 +370,22 @@ const AuthCard = ({
     >
 
       {/* =====================================================
-          STATUS BAR
+          TOP PREVIEW BAR
       ===================================================== */}
 
       {compact && (
         <div className="auth-preview-topbar">
+
           <div className="auth-preview-status">
             <span className="auth-status-dot" />
-            <span>Workspace is ready</span>
+
+            <span>
+              Workspace is ready
+            </span>
           </div>
 
           <div className="auth-preview-members">
+
             <span className="preview-avatar purple">
               S
             </span>
@@ -464,18 +395,20 @@ const AuthCard = ({
             </span>
 
             <span className="preview-avatar cyan">
-              R
+              K
             </span>
 
             <span className="preview-more">
               +18
             </span>
+
           </div>
+
         </div>
       )}
 
       {/* =====================================================
-          LOGIN / REGISTER TOGGLE
+          TOGGLE
       ===================================================== */}
 
       <div className="auth-toggle-wrapper">
@@ -486,10 +419,11 @@ const AuthCard = ({
       </div>
 
       {/* =====================================================
-          FORM CONTENT
+          CONTENT
       ===================================================== */}
 
       <AnimatePresence mode="wait">
+
         <motion.div
           key={
             isLogin
@@ -511,28 +445,21 @@ const AuthCard = ({
           }}
           transition={{
             duration: 0.25,
-            ease: "easeOut",
           }}
         >
 
-          {/* =================================================
-              HEADER
-          ================================================= */}
+          {/* HEADER */}
 
           <div className="auth-header">
 
             <h2 className="auth-title">
               {isLogin ? (
                 <>
-                  Welcome
-                  <br />
-                  Back 👋
+                  Welcome Back 👋
                 </>
               ) : (
                 <>
-                  Create
-                  <br />
-                  Account
+                  Create Account
                 </>
               )}
             </h2>
@@ -545,9 +472,7 @@ const AuthCard = ({
 
           </div>
 
-          {/* =================================================
-              ERROR
-          ================================================= */}
+          {/* ERROR */}
 
           <AnimatePresence>
             {error && (
@@ -571,9 +496,7 @@ const AuthCard = ({
             )}
           </AnimatePresence>
 
-          {/* =================================================
-              LOGIN
-          ================================================= */}
+          {/* LOGIN */}
 
           {isLogin ? (
             <LoginForm
@@ -600,10 +523,6 @@ const AuthCard = ({
               }
             />
           ) : (
-            /* =================================================
-               REGISTER
-            ================================================= */
-
             <RegisterForm
               name={formData.name}
               email={formData.email}
@@ -633,9 +552,7 @@ const AuthCard = ({
             />
           )}
 
-          {/* =================================================
-              SOCIAL LOGIN
-          ================================================= */}
+          {/* SOCIAL */}
 
           <div className="auth-social-wrapper">
             <SocialButtons
@@ -648,9 +565,7 @@ const AuthCard = ({
             />
           </div>
 
-          {/* =================================================
-              FOOTER
-          ================================================= */}
+          {/* FOOTER */}
 
           <div className="auth-footer">
 
@@ -691,6 +606,7 @@ const AuthCard = ({
           </div>
 
         </motion.div>
+
       </AnimatePresence>
 
       {/* =====================================================
@@ -701,6 +617,7 @@ const AuthCard = ({
         <div className="auth-preview-stats">
 
           <div className="auth-preview-stat">
+
             <div className="auth-preview-stat-icon">
               ✓
             </div>
@@ -714,9 +631,11 @@ const AuthCard = ({
                 Tasks Completed
               </span>
             </div>
+
           </div>
 
           <div className="auth-preview-stat success">
+
             <div className="auth-preview-stat-icon">
               ↗
             </div>
@@ -730,6 +649,7 @@ const AuthCard = ({
                 Project Success
               </span>
             </div>
+
           </div>
 
         </div>
