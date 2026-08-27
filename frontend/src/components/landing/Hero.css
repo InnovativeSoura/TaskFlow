@@ -1,6 +1,6 @@
 /* =========================================================
    TASKFLOW — HERO
-   Premium Landing Page Hero
+   Premium SaaS Landing Page
 ========================================================= */
 
 .hero-section {
@@ -8,33 +8,36 @@
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-
   display: flex;
   align-items: center;
 
-  color: #ffffff;
+  color: #fff;
 
   background:
     radial-gradient(
-      circle at 15% 48%,
-      rgba(88, 67, 255, 0.20),
+      circle at 10% 48%,
+      rgba(88, 63, 255, 0.22),
       transparent 34%
     ),
     radial-gradient(
-      circle at 84% 42%,
-      rgba(42, 157, 255, 0.09),
-      transparent 31%
+      circle at 92% 46%,
+      rgba(24, 135, 255, 0.12),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 48% 100%,
+      rgba(94, 60, 255, 0.1),
+      transparent 35%
     ),
     linear-gradient(
       135deg,
-      #090b25 0%,
+      #080a24 0%,
       #080b1e 48%,
-      #06111e 100%
+      #06111f 100%
     );
 
   isolation: isolate;
 }
-
 
 /* =========================================================
    BACKGROUND
@@ -44,50 +47,46 @@
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
-
   filter: blur(90px);
-
   z-index: -3;
 }
 
 .hero-glow-one {
   width: 520px;
   height: 520px;
+  left: -260px;
+  top: 18%;
 
-  left: -250px;
-  top: 16%;
-
-  background: rgba(86, 61, 255, 0.26);
+  background: rgba(91, 63, 255, 0.26);
+  opacity: 0.75;
 }
 
 .hero-glow-two {
-  width: 440px;
-  height: 440px;
+  width: 430px;
+  height: 430px;
+  right: -210px;
+  top: 22%;
 
-  right: -220px;
-  top: 18%;
-
-  background: rgba(0, 135, 255, 0.13);
+  background: rgba(0, 130, 255, 0.14);
+  opacity: 0.65;
 }
 
 .hero-glow-three {
-  width: 520px;
-  height: 280px;
+  width: 500px;
+  height: 250px;
+  left: 38%;
+  bottom: -170px;
 
-  left: 40%;
-  bottom: -180px;
-
-  background: rgba(105, 63, 255, 0.16);
+  background: rgba(105, 62, 255, 0.18);
+  opacity: 0.65;
 }
-
 
 .hero-grid {
   position: absolute;
   inset: 0;
-
   z-index: -4;
 
-  opacity: 0.30;
+  opacity: 0.26;
 
   background-image:
     linear-gradient(
@@ -100,35 +99,23 @@
       transparent 1px
     );
 
-  background-size: 54px 54px;
+  background-size: 52px 52px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.82),
-    rgba(0, 0, 0, 0.25)
-  );
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.82),
-    rgba(0, 0, 0, 0.25)
-  );
+  mask-image:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.35)
+    );
 }
-
-
-/* =========================================================
-   DECORATIVE ORBS
-========================================================= */
 
 .hero-orb {
   position: absolute;
 
-  border: 1px solid rgba(255, 255, 255, 0.065);
-
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 50%;
 
   pointer-events: none;
-
   z-index: -2;
 }
 
@@ -137,7 +124,7 @@
   height: 74px;
 
   left: 7%;
-  top: 31%;
+  top: 29%;
 }
 
 .hero-orb-two {
@@ -145,17 +132,16 @@
   height: 64px;
 
   right: 9%;
-  bottom: 27%;
+  bottom: 28%;
 }
 
 .hero-orb-three {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
 
   left: 17%;
   bottom: 17%;
 }
-
 
 /* =========================================================
    MAIN HERO CONTAINER
@@ -165,36 +151,29 @@
   position: relative;
   z-index: 2;
 
-  width: min(1320px, calc(100% - 100px));
-
+  width: min(1180px, calc(100% - 60px));
   min-height: 100vh;
 
   margin: 0 auto;
 
   display: grid;
 
-  /*
-    IMPORTANT:
-    Give the right side enough room for the
-    Workspace/Auth preview.
-  */
   grid-template-columns:
-    minmax(0, 1.15fr)
-    minmax(410px, 0.85fr);
+    minmax(0, 1fr)
+    430px;
 
   align-items: center;
 
-  column-gap: 95px;
+  column-gap: 76px;
 
   padding:
-    115px
+    105px
     0
-    90px;
+    75px;
 }
 
-
 /* =========================================================
-   LEFT HERO CONTENT
+   LEFT CONTENT
 ========================================================= */
 
 .hero-content {
@@ -202,11 +181,8 @@
   z-index: 3;
 
   width: 100%;
-  max-width: 720px;
-
-  justify-self: start;
+  max-width: 690px;
 }
-
 
 /* =========================================================
    BADGE
@@ -220,27 +196,25 @@
   gap: 9px;
 
   padding: 9px 14px;
+  margin-bottom: 22px;
 
-  margin-bottom: 25px;
-
-  border: 1px solid rgba(255, 255, 255, 0.10);
-
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.085),
-      rgba(255, 255, 255, 0.025)
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.035)
     );
 
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 35px rgba(0, 0, 0, 0.16);
+    0 12px 35px rgba(0, 0, 0, 0.2);
 
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.75);
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
 
   white-space: nowrap;
@@ -254,18 +228,17 @@
 
   border-radius: 50%;
 
-  background: #8164ff;
+  background: #8464ff;
 
   box-shadow:
-    0 0 0 4px rgba(129, 100, 255, 0.11),
-    0 0 15px rgba(129, 100, 255, 0.75);
+    0 0 0 4px rgba(132, 100, 255, 0.12),
+    0 0 16px rgba(132, 100, 255, 0.8);
 }
 
 .hero-badge svg {
   font-size: 9px;
   opacity: 0.7;
 }
-
 
 /* =========================================================
    HERO TITLE
@@ -277,29 +250,26 @@
   display: flex;
   flex-direction: column;
 
-  max-width: 760px;
-
-  font-size: clamp(58px, 5.15vw, 78px);
+  font-size: clamp(54px, 5vw, 74px);
 
   line-height: 0.98;
 
   font-weight: 800;
 
-  letter-spacing: -0.058em;
+  letter-spacing: -0.055em;
 }
 
 .hero-title span {
   display: block;
-  white-space: nowrap;
 }
 
 .hero-title-gradient {
   background:
     linear-gradient(
       90deg,
-      #8564ff 0%,
-      #7477ff 45%,
-      #4db5ff 100%
+      #8260ff 0%,
+      #756eff 43%,
+      #4eb8ff 100%
     );
 
   -webkit-background-clip: text;
@@ -310,26 +280,26 @@
   color: transparent;
 }
 
-
 /* =========================================================
    DESCRIPTION
 ========================================================= */
 
 .hero-description {
-  width: 100%;
-  max-width: 650px;
+  max-width: 610px;
 
-  margin: 27px 0 27px;
+  margin:
+    27px
+    0
+    25px;
 
-  color: rgba(215, 220, 241, 0.63);
+  color: rgba(214, 220, 241, 0.63);
 
-  font-size: 15px;
+  font-size: 14px;
 
-  line-height: 1.75;
+  line-height: 1.72;
 
   font-weight: 400;
 }
-
 
 /* =========================================================
    BUTTONS
@@ -341,7 +311,7 @@
 
   gap: 10px;
 
-  margin-bottom: 25px;
+  margin-bottom: 23px;
 }
 
 .hero-primary-btn,
@@ -354,11 +324,12 @@
 
   gap: 9px;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -371,23 +342,23 @@
 }
 
 .hero-primary-btn {
-  min-width: 365px;
+  min-width: 166px;
 
-  padding: 0 22px;
+  padding: 0 23px;
 
   border: 1px solid rgba(255, 255, 255, 0.08);
 
   background:
     linear-gradient(
       135deg,
-      #7655ff,
-      #8554f6
+      #7653ff,
+      #8554f7
     );
 
-  color: #ffffff;
+  color: #fff;
 
   box-shadow:
-    0 12px 28px rgba(112, 76, 255, 0.30),
+    0 12px 30px rgba(105, 73, 255, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
@@ -395,24 +366,24 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 18px 38px rgba(112, 76, 255, 0.40),
+    0 18px 38px rgba(105, 73, 255, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .hero-primary-btn svg {
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .hero-secondary-btn {
-  min-width: 90px;
+  min-width: 125px;
 
   padding: 0 14px;
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   background: rgba(255, 255, 255, 0.045);
 
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.85);
 
   text-decoration: none;
 }
@@ -420,14 +391,14 @@
 .hero-secondary-btn:hover {
   transform: translateY(-2px);
 
-  border-color: rgba(130, 99, 255, 0.42);
+  border-color: rgba(130, 100, 255, 0.45);
 
-  background: rgba(130, 99, 255, 0.09);
+  background: rgba(130, 100, 255, 0.09);
 }
 
 .hero-play-icon {
-  width: 23px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
 
   display: inline-flex;
   align-items: center;
@@ -435,14 +406,13 @@
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .hero-play-icon svg {
   font-size: 7px;
   margin-left: 1px;
 }
-
 
 /* =========================================================
    TRUST ITEMS
@@ -453,11 +423,11 @@
   align-items: center;
   flex-wrap: wrap;
 
-  gap: 16px;
+  gap: 15px;
 
-  padding-bottom: 22px;
+  padding-bottom: 21px;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 .hero-trust-item {
@@ -466,19 +436,17 @@
 
   gap: 6px;
 
-  color: rgba(207, 215, 238, 0.53);
+  color: rgba(207, 215, 238, 0.55);
 
-  font-size: 10px;
+  font-size: 9px;
 
   white-space: nowrap;
 }
 
 .hero-trust-item svg {
   color: #27d98b;
-
-  font-size: 9px;
+  font-size: 8px;
 }
-
 
 /* =========================================================
    MINI STATS
@@ -488,7 +456,7 @@
   display: flex;
   align-items: center;
 
-  gap: 38px;
+  gap: 30px;
 
   padding-top: 20px;
 }
@@ -497,41 +465,42 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 }
 
 .hero-mini-stat-icon {
   width: 30px;
   height: 30px;
 
-  flex: 0 0 30px;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid rgba(126, 99, 255, 0.17);
+  border:
+    1px solid
+    rgba(126, 99, 255, 0.18);
 
   border-radius: 8px;
 
-  background: rgba(117, 84, 255, 0.08);
+  background:
+    rgba(117, 84, 255, 0.08);
 
   color: #8067ff;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .hero-mini-stat-content {
   display: flex;
   flex-direction: column;
 
-  gap: 2px;
+  gap: 3px;
 }
 
 .hero-mini-stat-content strong {
-  color: rgba(255, 255, 255, 0.91);
+  color: rgba(255, 255, 255, 0.92);
 
-  font-size: 13px;
+  font-size: 12px;
 
   line-height: 1;
 }
@@ -539,22 +508,18 @@
 .hero-mini-stat-content span {
   color: rgba(191, 199, 224, 0.45);
 
-  font-size: 8px;
+  font-size: 7px;
 }
 
-
 /* =========================================================
-   RIGHT HERO AREA
+   RIGHT SIDE
 ========================================================= */
 
 .hero-right {
   position: relative;
 
   width: 100%;
-
-  min-width: 0;
-
-  max-width: 450px;
+  max-width: 430px;
 
   justify-self: end;
 
@@ -562,89 +527,72 @@
   align-items: center;
   justify-content: center;
 
-  /*
-    Prevent the auth card from being squeezed.
-  */
-  min-height: 560px;
+  z-index: 4;
 }
 
-
 /* =========================================================
-   AUTH GLOW
+   RIGHT SIDE GLOW
 ========================================================= */
 
 .hero-auth-glow {
   position: absolute;
 
   width: 430px;
-  height: 560px;
-
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
+  height: 570px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       ellipse,
-      rgba(105, 75, 255, 0.25),
-      transparent 68%
+      rgba(105, 75, 255, 0.3) 0%,
+      rgba(80, 65, 255, 0.14) 38%,
+      transparent 72%
     );
 
   filter: blur(48px);
 
-  pointer-events: none;
+  z-index: -2;
 
-  z-index: -1;
+  pointer-events: none;
 }
 
-
 /* =========================================================
-   PRODUCT / AUTH PREVIEW CONTAINER
-
-   This is the outer Workspace is ready card.
+   WORKSPACE / AUTH CARD
 ========================================================= */
 
 .hero-product-preview {
   position: relative;
 
   width: 100%;
-
-  /*
-    Do NOT let the card become narrow.
-  */
-  min-width: 400px;
-
   max-width: 430px;
 
-  min-height: 520px;
+  min-height: 650px;
 
-  padding: 24px;
+  padding: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(139, 132, 255, 0.25);
 
   border-radius: 24px;
-
-  border: 1px solid rgba(255, 255, 255, 0.11);
 
   background:
     linear-gradient(
       145deg,
-      rgba(25, 31, 60, 0.96),
-      rgba(10, 15, 35, 0.98)
+      rgba(25, 32, 64, 0.96),
+      rgba(10, 16, 37, 0.98)
     );
 
   box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.48),
-    0 0 60px rgba(93, 72, 255, 0.12),
+    0 40px 100px rgba(0, 0, 0, 0.52),
+    0 0 55px rgba(91, 72, 255, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.075);
 
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-
-  overflow: hidden;
-
-  box-sizing: border-box;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
 }
 
 .hero-product-preview::before {
@@ -658,50 +606,341 @@
 
   background:
     radial-gradient(
-      circle at 88% 0%,
-      rgba(111, 83, 255, 0.13),
-      transparent 34%
+      circle at 100% 0%,
+      rgba(117, 87, 255, 0.14),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025),
+      transparent 30%
     );
 
   z-index: 0;
 }
 
-.hero-product-preview > * {
-  position: relative;
-  z-index: 1;
+.hero-product-preview::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 70px;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(150, 144, 255, 0.2),
+      transparent
+    );
+
+  pointer-events: none;
+
+  z-index: 2;
 }
 
+.hero-product-preview > * {
+  position: relative;
+
+  z-index: 3;
+}
 
 /* =========================================================
-   TOP BAR
+   WORKSPACE STATUS HEADER
 ========================================================= */
 
 .hero-product-topbar {
-  width: 100%;
+  height: 70px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 15px;
+  padding:
+    0
+    24px;
 
-  margin-bottom: 20px;
+  margin: 0;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.065);
 }
 
 .hero-product-brand {
-  min-width: 0;
-
   display: flex;
   align-items: center;
 
   gap: 9px;
 }
 
-.hero-product-logo {
-  width: 31px;
-  height: 31px;
+/*
+   Hide the old product logo here.
+   Workspace status is cleaner without it.
+*/
 
-  flex: 0 0 31px;
+.hero-product-logo {
+  display: none;
+}
+
+.hero-product-brand > div:last-child {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex-direction: row;
+}
+
+.hero-product-brand strong {
+  position: relative;
+
+  padding-left: 16px;
+
+  color: rgba(255, 255, 255, 0.92);
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.hero-product-brand strong::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: #2ce49a;
+
+  box-shadow:
+    0 0 0 4px rgba(44, 228, 154, 0.08),
+    0 0 14px rgba(44, 228, 154, 0.75);
+}
+
+.hero-product-brand span {
+  display: none;
+}
+
+/* =========================================================
+   ACTIVE USERS
+========================================================= */
+
+.hero-product-users {
+  display: flex;
+  align-items: center;
+}
+
+.hero-product-users span {
+  width: 29px;
+  height: 29px;
+
+  margin-left: -7px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    2px solid
+    #10172f;
+
+  border-radius: 50%;
+
+  color: #fff;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hero-product-users span:first-child {
+  margin-left: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #7047e8
+    );
+}
+
+.hero-product-users span:nth-child(2) {
+  background:
+    linear-gradient(
+      135deg,
+      #3b9df8,
+      #267bd2
+    );
+}
+
+.hero-product-users span:nth-child(3) {
+  background:
+    linear-gradient(
+      135deg,
+      #36c9db,
+      #23a9ba
+    );
+}
+
+.hero-product-users small {
+  margin-left: 8px;
+
+  color: rgba(207, 215, 236, 0.55);
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   CONTENT AREA
+========================================================= */
+
+.hero-product-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   AUTH TOGGLE
+========================================================= */
+
+.hero-product-label {
+  display: none;
+}
+
+.hero-product-heading {
+  display: block;
+
+  margin:
+    0
+    24px;
+
+  padding:
+    0;
+
+  order: 2;
+}
+
+/* =========================================================
+   AUTH HEADING
+========================================================= */
+
+.hero-product-heading h3 {
+  margin:
+    0
+    0
+    6px;
+
+  color: #fff;
+
+  font-size: 25px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+}
+
+.hero-product-heading p {
+  margin: 0;
+
+  color: rgba(188, 198, 224, 0.58);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   PROJECT CARD
+   Used as auth toggle wrapper in the current JSX
+========================================================= */
+
+.hero-project-card {
+  position: relative;
+
+  padding: 4px;
+
+  margin:
+    22px
+    24px
+    24px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 13px;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  order: 1;
+}
+
+.hero-project-card-top {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 4px;
+}
+
+.hero-project-icon,
+.hero-project-name,
+.hero-project-percent,
+.hero-progress,
+.hero-project-meta {
+  /* Prevent old dashboard elements from disturbing auth layout */
+}
+
+.hero-project-icon {
+  display: none;
+}
+
+.hero-project-name {
+  min-width: 0;
+}
+
+.hero-project-name strong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 42px;
+
+  color: rgba(255, 255, 255, 0.6);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.hero-project-name span {
+  display: none;
+}
+
+.hero-project-percent {
+  height: 42px;
 
   display: flex;
   align-items: center;
@@ -712,666 +951,232 @@
   background:
     linear-gradient(
       135deg,
-      #7759ff,
-      #6845e8
+      #7450ff,
+      #8758f7
     );
 
-  color: #ffffff;
-
-  box-shadow:
-    0 8px 20px rgba(102, 70, 240, 0.35);
-}
-
-.hero-product-logo svg {
-  font-size: 13px;
-}
-
-.hero-product-brand > div:last-child {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 2px;
-}
-
-.hero-product-brand strong {
-  color: #ffffff;
+  color: #fff;
 
   font-size: 12px;
-}
 
-.hero-product-brand span {
-  color: rgba(185, 194, 220, 0.42);
-
-  font-size: 8px;
-}
-
-.hero-product-live {
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  color: rgba(209, 219, 239, 0.55);
-
-  font-size: 9px;
-
-  white-space: nowrap;
-}
-
-.hero-product-live > span {
-  width: 6px;
-  height: 6px;
-
-  flex: 0 0 6px;
-
-  border-radius: 50%;
-
-  background: #35db92;
+  font-weight: 600;
 
   box-shadow:
-    0 0 10px rgba(53, 219, 146, 0.7);
+    0 6px 18px rgba(111, 76, 255, 0.3);
 }
 
-
-/* =========================================================
-   PREVIEW LABEL
-========================================================= */
-
-.hero-product-label {
-  margin-bottom: 8px;
-
-  color: rgba(160, 170, 202, 0.42);
-
-  font-size: 8px;
-  font-weight: 700;
-
-  letter-spacing: 0.12em;
-}
-
-
-/* =========================================================
-   PREVIEW HEADING
-========================================================= */
-
-.hero-product-heading {
-  width: 100%;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 15px;
-
-  margin-bottom: 18px;
-}
-
-.hero-product-heading h3 {
-  margin: 0 0 5px;
-
-  color: #ffffff;
-
-  font-size: 18px;
-
-  line-height: 1.15;
-
-  font-weight: 700;
-}
-
-.hero-product-heading p {
-  margin: 0;
-
-  color: rgba(188, 198, 224, 0.48);
-
-  font-size: 9px;
-
-  line-height: 1.4;
-}
-
-
-/* =========================================================
-   USERS
-========================================================= */
-
-.hero-product-users {
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-
-  padding-top: 2px;
-}
-
-.hero-product-users span {
-  width: 25px;
-  height: 25px;
-
-  margin-left: -5px;
-
-  flex: 0 0 25px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 2px solid #131933;
-
-  border-radius: 50%;
-
-  background: #7657f6;
-
-  color: #ffffff;
-
-  font-size: 7px;
-
-  font-weight: 700;
-}
-
-.hero-product-users span:first-child {
-  margin-left: 0;
-}
-
-.hero-product-users span:nth-child(2) {
-  background: #2a9cd8;
-}
-
-.hero-product-users span:nth-child(3) {
-  background: #20b895;
-}
-
-.hero-product-users small {
-  margin-left: 5px;
-
-  color: rgba(204, 212, 236, 0.5);
-
-  font-size: 7px;
-
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   PROJECT CARD
-========================================================= */
-
-.hero-project-card {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 15px;
-
-  margin-bottom: 18px;
-
-  border: 1px solid rgba(255, 255, 255, 0.07);
-
-  border-radius: 14px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-.hero-project-card-top {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-}
-
-.hero-project-icon {
-  width: 31px;
-  height: 31px;
-
-  flex: 0 0 31px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 8px;
-
-  background: rgba(121, 87, 255, 0.13);
-
-  color: #866cff;
-
-  font-size: 11px;
-}
-
-.hero-project-name {
-  min-width: 0;
-
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 3px;
-}
-
-.hero-project-name strong {
-  color: rgba(255, 255, 255, 0.9);
-
-  font-size: 10px;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-.hero-project-name span {
-  color: rgba(187, 198, 224, 0.42);
-
-  font-size: 8px;
-}
-
-.hero-project-percent {
-  flex: 0 0 auto;
-
-  color: #ffffff;
-
-  font-size: 11px;
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-.hero-progress {
-  width: 100%;
-
-  height: 5px;
-
-  margin: 13px 0 10px;
-
-  overflow: hidden;
-
-  border-radius: 99px;
-
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.hero-progress span {
-  display: block;
-
-  width: 82%;
-
-  height: 100%;
-
-  border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      #7555ff,
-      #4ca8ff
-    );
-
-  box-shadow:
-    0 0 12px rgba(103, 83, 255, 0.45);
-}
-
+.hero-progress,
 .hero-project-meta {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 8px;
+  display: none;
 }
-
-.hero-project-meta span {
-  color: rgba(190, 199, 224, 0.43);
-
-  font-size: 7px;
-}
-
 
 /* =========================================================
-   RECENT TASKS
+   TASK LIST AREA
 ========================================================= */
 
 .hero-recent-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 9px;
-}
-
-.hero-recent-header strong {
-  color: rgba(255, 255, 255, 0.86);
-
-  font-size: 10px;
-}
-
-.hero-recent-header span {
-  color: #8369ff;
-
-  font-size: 7px;
-
-  cursor: pointer;
+  display: none;
 }
 
 .hero-task-list {
-  display: flex;
-  flex-direction: column;
-
-  gap: 6px;
-
-  margin-bottom: 16px;
+  display: none;
 }
 
 .hero-task {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 8px 9px;
-
-  border: 1px solid rgba(255, 255, 255, 0.045);
-
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.025);
+  display: none;
 }
-
-.hero-task-check {
-  width: 22px;
-  height: 22px;
-
-  flex: 0 0 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 6px;
-
-  background: rgba(130, 100, 255, 0.10);
-
-  color: #8267ff;
-
-  font-size: 8px;
-}
-
-.hero-task-check.completed {
-  background: rgba(41, 207, 139, 0.12);
-
-  color: #36d992;
-}
-
-.hero-task-info {
-  min-width: 0;
-
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 2px;
-}
-
-.hero-task-info strong {
-  color: rgba(255, 255, 255, 0.82);
-
-  font-size: 8px;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-.hero-task-info span {
-  color: rgba(186, 197, 223, 0.4);
-
-  font-size: 7px;
-}
-
-.hero-task-avatar {
-  width: 22px;
-  height: 22px;
-
-  flex: 0 0 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #7657f5;
-
-  color: #ffffff;
-
-  font-size: 6px;
-
-  font-weight: 700;
-}
-
-.hero-task-avatar.blue {
-  background: #298fc8;
-}
-
-.hero-task-avatar.green {
-  background: #1cae8b;
-}
-
 
 /* =========================================================
    MINI AUTH
 ========================================================= */
 
 .hero-mini-auth {
-  width: 100%;
+  position: relative;
 
-  box-sizing: border-box;
+  padding:
+    0
+    24px;
 
-  padding: 14px;
+  margin: 0;
 
-  margin-top: 3px;
+  border: 0;
 
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0;
 
-  border-radius: 13px;
+  background: transparent;
+
+  order: 3;
+}
+
+.hero-mini-auth-header {
+  display: none;
+}
+
+.hero-mini-auth-lock {
+  display: none;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.hero-mini-input {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  padding:
+    0
+    14px;
+
+  margin-bottom: 13px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(118, 89, 255, 0.08),
-      rgba(255, 255, 255, 0.025)
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.035)
     );
-}
 
-.hero-mini-auth-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 10px;
-}
-
-.hero-mini-auth-header > div:first-child {
-  display: flex;
-  flex-direction: column;
-
-  gap: 3px;
-}
-
-.hero-mini-auth-header span {
-  color: #8066ff;
-
-  font-size: 6px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.12em;
-}
-
-.hero-mini-auth-header strong {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(217, 224, 244, 0.72);
 
   font-size: 10px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
-.hero-mini-auth-lock {
-  width: 24px;
-  height: 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 7px;
-
-  background: rgba(255, 255, 255, 0.05);
-
-  font-size: 10px;
+.hero-mini-input:last-of-type {
+  margin-bottom: 14px;
 }
 
-.hero-mini-input {
-  width: 100%;
-
-  height: 27px;
-
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 9px;
-
-  margin-bottom: 6px;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  border-radius: 7px;
-
-  background: rgba(0, 0, 0, 0.14);
-
-  color: rgba(196, 205, 230, 0.45);
+.hero-mini-input small {
+  color: rgba(255, 255, 255, 0.3);
 
   font-size: 7px;
 }
 
-.hero-mini-input small {
-  color: rgba(255, 255, 255, 0.25);
-
-  font-size: 6px;
-}
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
 
 .hero-mini-login {
   width: 100%;
 
-  height: 29px;
+  height: 50px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 8px;
 
-  border-radius: 7px;
+  margin-top: 4px;
+
+  border-radius: 10px;
 
   background:
     linear-gradient(
-      90deg,
-      #7252fa,
-      #8558f6
+      135deg,
+      #704cff,
+      #8554f7
     );
 
-  color: #ffffff;
+  color: #fff;
 
-  font-size: 8px;
+  font-size: 12px;
 
-  font-weight: 600;
+  font-weight: 650;
 
   box-shadow:
-    0 8px 18px rgba(105, 75, 240, 0.22);
+    0 12px 25px rgba(104, 71, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .hero-mini-login svg {
-  font-size: 7px;
+  font-size: 10px;
 }
-
 
 /* =========================================================
    AUTH METRICS
 ========================================================= */
 
 .hero-auth-metrics {
-  width: 100%;
-
   display: grid;
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 8px;
+  gap: 10px;
 
-  margin-top: 12px;
+  padding:
+    20px
+    24px
+    24px;
+
+  margin-top: 20px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  order: 6;
 }
 
 .hero-auth-metric {
   min-width: 0;
 
+  min-height: 62px;
+
   display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 9px;
 
-  padding: 9px;
+  padding:
+    10px;
 
-  border: 1px solid rgba(255, 255, 255, 0.055);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.07);
 
-  border-radius: 9px;
+  border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.025);
+  background:
+    rgba(255, 255, 255, 0.04);
 }
 
 .hero-auth-metric-icon {
-  width: 23px;
-  height: 23px;
+  width: 28px;
+  height: 28px;
 
-  flex: 0 0 23px;
+  flex: 0 0 28px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 6px;
+  border-radius: 7px;
 
-  background: rgba(117, 85, 255, 0.10);
+  background:
+    rgba(116, 82, 255, 0.13);
 
-  color: #8166ff;
+  color: #856aff;
 
-  font-size: 8px;
+  font-size: 10px;
 }
 
 .hero-auth-metric-icon.green {
-  background: rgba(32, 192, 143, 0.10);
+  background:
+    rgba(32, 192, 143, 0.11);
 
-  color: #32cf91;
+  color: #35d695;
 }
 
 .hero-auth-metric-content {
@@ -1380,33 +1185,34 @@
   display: flex;
   flex-direction: column;
 
-  gap: 2px;
+  gap: 3px;
 }
 
 .hero-auth-metric-content strong {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.93);
 
-  font-size: 9px;
+  font-size: 12px;
+
+  line-height: 1;
 }
 
 .hero-auth-metric-content span {
-  color: rgba(185, 196, 221, 0.4);
+  color: rgba(185, 196, 221, 0.48);
 
-  font-size: 6px;
+  font-size: 7px;
 
   white-space: nowrap;
 }
 
-
 /* =========================================================
-   SCROLL INDICATOR
+   SCROLL
 ========================================================= */
 
 .hero-scroll {
   position: absolute;
 
   left: 50%;
-  bottom: 22px;
+  bottom: 18px;
 
   transform: translateX(-50%);
 
@@ -1414,7 +1220,7 @@
   flex-direction: column;
   align-items: center;
 
-  gap: 7px;
+  gap: 6px;
 
   color: rgba(205, 212, 233, 0.42);
 
@@ -1433,7 +1239,7 @@
 
 .hero-scroll-line {
   width: 1px;
-  height: 18px;
+  height: 17px;
 
   background:
     linear-gradient(
@@ -1443,89 +1249,75 @@
     );
 }
 
-
 /* =========================================================
-   LARGE LAPTOP
+   DESKTOP REFINEMENT
 ========================================================= */
 
-@media (max-width: 1250px) {
+@media (min-width: 1400px) {
   .hero-container {
-    width: min(1160px, calc(100% - 70px));
+    width: min(1280px, calc(100% - 80px));
 
     grid-template-columns:
       minmax(0, 1fr)
-      minmax(390px, 0.78fr);
+      450px;
 
-    column-gap: 55px;
+    column-gap: 95px;
   }
 
   .hero-title {
-    font-size: clamp(52px, 5.4vw, 70px);
-  }
-
-  .hero-primary-btn {
-    min-width: 330px;
+    font-size: 78px;
   }
 
   .hero-product-preview {
-    min-width: 390px;
-    max-width: 410px;
+    max-width: 450px;
+
+    min-height: 680px;
   }
 }
-
 
 /* =========================================================
    TABLET
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1150px) {
   .hero-container {
-    width: min(900px, calc(100% - 50px));
+    width: min(1060px, calc(100% - 45px));
 
     grid-template-columns:
       minmax(0, 1fr)
-      minmax(360px, 0.75fr);
+      390px;
 
-    column-gap: 35px;
+    column-gap: 45px;
   }
 
   .hero-title {
-    font-size: clamp(46px, 6vw, 62px);
-  }
-
-  .hero-description {
-    font-size: 14px;
+    font-size: clamp(48px, 5.4vw, 66px);
   }
 
   .hero-product-preview {
-    min-width: 360px;
+    max-width: 390px;
 
-    padding: 21px;
-  }
-
-  .hero-right {
-    min-height: 520px;
+    min-height: 620px;
   }
 }
-
 
 /* =========================================================
    SMALL TABLET
 ========================================================= */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
   .hero-section {
     align-items: flex-start;
   }
 
   .hero-container {
-    width: min(700px, calc(100% - 40px));
-
     min-height: auto;
+
+    width: min(720px, calc(100% - 40px));
 
     grid-template-columns: 1fr;
 
-    gap: 60px;
+    gap: 55px;
 
     padding:
       125px
@@ -1534,7 +1326,7 @@
   }
 
   .hero-content {
-    max-width: 700px;
+    max-width: 720px;
 
     margin: 0 auto;
 
@@ -1546,8 +1338,10 @@
     margin-right: auto;
   }
 
-  .hero-title {
-    font-size: clamp(48px, 8vw, 64px);
+  .hero-buttons,
+  .hero-trust,
+  .hero-mini-stats {
+    justify-content: center;
   }
 
   .hero-description {
@@ -1555,35 +1349,14 @@
     margin-right: auto;
   }
 
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-trust {
-    justify-content: center;
-  }
-
-  .hero-mini-stats {
-    justify-content: center;
-  }
-
   .hero-right {
-    width: 100%;
-
-    min-height: auto;
-
-    max-width: 430px;
-
-    margin: 0 auto;
-
     justify-self: center;
+
+    width: 100%;
+    max-width: 430px;
   }
 
   .hero-product-preview {
-    min-width: 0;
-
-    width: 100%;
-
     max-width: 430px;
   }
 
@@ -1592,64 +1365,51 @@
   }
 }
 
-
 /* =========================================================
    MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
   .hero-container {
-    width: calc(100% - 28px);
+    width: min(100% - 28px, 500px);
 
-    gap: 45px;
+    gap: 42px;
 
     padding:
-      108px
+      105px
       0
       65px;
   }
 
   .hero-title {
-    font-size: clamp(38px, 10.8vw, 54px);
+    font-size: clamp(38px, 11vw, 54px);
 
-    line-height: 1;
-
-    letter-spacing: -0.052em;
-  }
-
-  .hero-title span {
-    white-space: normal;
+    letter-spacing: -0.05em;
   }
 
   .hero-description {
+    margin-top: 20px;
+
     font-size: 13px;
 
     line-height: 1.65;
-
-    margin-top: 21px;
   }
 
   .hero-badge {
     max-width: 100%;
 
     font-size: 9px;
-
-    padding: 8px 12px;
   }
 
   .hero-buttons {
     width: 100%;
 
     flex-direction: column;
-
-    gap: 9px;
   }
 
   .hero-primary-btn,
   .hero-secondary-btn {
     width: 100%;
-
-    min-width: 0;
   }
 
   .hero-trust {
@@ -1661,19 +1421,9 @@
   }
 
   .hero-mini-stats {
-    width: 100%;
-
-    gap: 14px;
+    gap: 18px;
 
     justify-content: space-between;
-  }
-
-  .hero-mini-stat {
-    gap: 7px;
-  }
-
-  .hero-mini-stat-content strong {
-    font-size: 11px;
   }
 
   .hero-mini-stat-content span {
@@ -1687,91 +1437,107 @@
   .hero-product-preview {
     width: 100%;
 
-    min-height: auto;
-
-    padding: 17px;
+    min-height: 600px;
 
     border-radius: 20px;
   }
 
   .hero-product-topbar {
-    margin-bottom: 18px;
+    height: 64px;
+
+    padding:
+      0
+      18px;
   }
 
-  .hero-product-heading h3 {
-    font-size: 16px;
-  }
-
-  .hero-product-heading p {
-    font-size: 8px;
+  .hero-product-brand strong {
+    font-size: 11px;
   }
 
   .hero-product-users span {
-    width: 22px;
-    height: 22px;
-
-    flex-basis: 22px;
+    width: 26px;
+    height: 26px;
   }
 
-  .hero-project-meta {
-    flex-wrap: wrap;
+  .hero-product-users small {
+    font-size: 8px;
   }
 
-  .hero-project-meta span {
-    font-size: 6px;
+  .hero-project-card {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .hero-product-heading {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .hero-product-heading h3 {
+    font-size: 22px;
+  }
+
+  .hero-mini-auth {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-mini-input {
+    height: 46px;
+  }
+
+  .hero-mini-login {
+    height: 48px;
   }
 
   .hero-auth-metrics {
-    gap: 6px;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 }
-
 
 /* =========================================================
    VERY SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 400px) {
-  .hero-container {
-    width: calc(100% - 22px);
-
-    padding-top: 100px;
-  }
-
   .hero-title {
-    font-size: 35px;
+    font-size: 36px;
   }
 
   .hero-mini-stats {
-    gap: 8px;
+    gap: 10px;
   }
 
   .hero-mini-stat {
-    gap: 5px;
+    gap: 6px;
   }
 
   .hero-mini-stat-icon {
     width: 26px;
     height: 26px;
-
-    flex-basis: 26px;
   }
 
   .hero-mini-stat-content strong {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .hero-product-preview {
-    padding: 14px;
-
-    border-radius: 18px;
+    min-height: 570px;
   }
 
-  .hero-product-live {
+  .hero-product-users span {
+    width: 23px;
+    height: 23px;
+
     font-size: 7px;
   }
 
-  .hero-auth-metric {
-    padding: 7px;
+  .hero-product-users small {
+    font-size: 7px;
+  }
+
+  .hero-product-heading h3 {
+    font-size: 20px;
   }
 }
