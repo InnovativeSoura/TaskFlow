@@ -12,7 +12,7 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 
-import AuthCard from "../AuthCard";
+import AuthCard from "../auth/AuthCard";
 
 import "./Hero.css";
 
