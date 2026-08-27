@@ -1,29 +1,92 @@
-/* =========================================================
-   TASKFLOW HERO
-   Premium Landing Page Hero
-========================================================= */
+// src/components/landing/Hero.jsx
 
-import React from "react";
+import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+
 import {
   FaArrowRight,
+  FaCheckCircle,
   FaPlay,
-  FaCheck,
-  FaListAlt,
-  FaChartLine,
   FaShieldAlt,
-  FaEnvelope,
-  FaLock,
-  FaEye,
-  FaGoogle,
-  FaGithub,
-  FaClipboardCheck,
+  FaTasks,
+  FaChartLine,
 } from "react-icons/fa";
+
+import AuthCard from "../auth/AuthCard";
 
 import "./Hero.css";
 
 const Hero = () => {
+  const authRef = useRef(null);
+
+  /* =========================================================
+     SCROLL TO AUTH
+  ========================================================= */
+
+  const scrollToAuth = (mode = "login") => {
+    window.dispatchEvent(
+      new CustomEvent("taskflow-auth-mode", {
+        detail: { mode },
+      })
+    );
+
+    window.setTimeout(() => {
+      authRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 80);
+  };
+
+  /* =========================================================
+     GLOBAL AUTH SCROLL EVENT
+     
+     Used by:
+     - LandingNavbar
+     - Hero
+     - Other landing-page buttons
+  ========================================================= */
+
+  useEffect(() => {
+    const handleAuthScroll = (event) => {
+      const mode = event?.detail?.mode || "login";
+
+      window.dispatchEvent(
+        new CustomEvent("taskflow-auth-mode", {
+          detail: { mode },
+        })
+      );
+
+      window.setTimeout(() => {
+        authRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 80);
+    };
+
+    window.addEventListener(
+      "taskflow-scroll-auth",
+      handleAuthScroll
+    );
+
+    return () => {
+      window.removeEventListener(
+        "taskflow-scroll-auth",
+        handleAuthScroll
+      );
+    };
+  }, []);
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
-    <section className="hero-section" id="home">
+    <section
+      className="hero-section"
+      id="home"
+    >
       {/* =====================================================
           BACKGROUND
       ===================================================== */}
@@ -43,339 +106,294 @@ const Hero = () => {
       ===================================================== */}
 
       <div className="hero-container">
+
         {/* ===================================================
-            LEFT SIDE
+            LEFT CONTENT
         =================================================== */}
 
-        <div className="hero-content">
-          {/* Badge */}
+        <motion.div
+          className="hero-content"
+          initial={{
+            opacity: 0,
+            x: -30,
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+        >
+          {/* =================================================
+              BADGE
+          ================================================= */}
 
-          <div className="hero-badge">
+          <motion.div
+            className="hero-badge"
+            initial={{
+              opacity: 0,
+              y: 12,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.1,
+              duration: 0.45,
+            }}
+          >
             <span className="hero-badge-dot" />
 
-            <span>Next Generation Project Management</span>
+            <span>
+              Next Generation Project Management
+            </span>
 
             <FaArrowRight />
-          </div>
+          </motion.div>
 
-          {/* Main Heading */}
+          {/* =================================================
+              TITLE
+          ================================================= */}
 
           <h1 className="hero-title">
-            <span>Manage Projects.</span>
+            <span>
+              Manage Projects.
+            </span>
 
             <span className="hero-title-gradient">
               Collaborate Faster.
             </span>
 
-            <span>Deliver On Time.</span>
+            <span>
+              Deliver On Time.
+            </span>
           </h1>
 
-          {/* Description */}
+          {/* =================================================
+              DESCRIPTION
+          ================================================= */}
 
           <p className="hero-description">
-            TaskFlow is an all-in-one project management platform built for
-            modern teams. Plan projects, assign tasks, monitor progress and
-            collaborate in real time — all from one intelligent workspace.
+            TaskFlow is an all-in-one project management
+            platform built for modern teams. Plan projects,
+            assign tasks, monitor progress and collaborate
+            in real time — all from one intelligent workspace.
           </p>
 
-          {/* CTA Buttons */}
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
 
           <div className="hero-buttons">
-            <a href="#platform" className="hero-primary-btn">
-              <span>Start Free</span>
-              <FaArrowRight />
-            </a>
 
-            <a href="#features" className="hero-secondary-btn">
+            {/* START FREE */}
+
+            <button
+              type="button"
+              className="hero-primary-btn"
+              onClick={() =>
+                scrollToAuth("register")
+              }
+            >
+              <span>
+                Start Free
+              </span>
+
+              <FaArrowRight />
+            </button>
+
+            {/* EXPLORE FEATURES */}
+
+            <a
+              href="#features"
+              className="hero-secondary-btn"
+            >
               <span className="hero-play-icon">
                 <FaPlay />
               </span>
 
               <span>
-                Explore
-                <br />
-                Features
+                Explore Features
               </span>
             </a>
+
           </div>
 
-          {/* Trust Points */}
+          {/* =================================================
+              TRUST
+          ================================================= */}
 
           <div className="hero-trust">
+
             <div className="hero-trust-item">
-              <FaCheck />
-              <span>Free Forever Plan</span>
+              <FaCheckCircle />
+              <span>
+                Free Forever Plan
+              </span>
             </div>
 
             <div className="hero-trust-item">
-              <FaCheck />
-              <span>No Credit Card</span>
-            </div>
-
-            <div className="hero-trust-item">
-              <FaCheck />
-              <span>2 Minute Setup</span>
-            </div>
-
-            <div className="hero-trust-item">
-              <FaCheck />
-              <span>Cloud Sync Included</span>
+              <FaCheckCircle />
+              <span>
+                2 Minute Setup
+              </span>
             </div>
           </div>
 
-          {/* Mini Stats */}
+          {/* =================================================
+              MINI STATS
+          ================================================= */}
 
           <div className="hero-mini-stats">
+
+            {/* TEAMS */}
+
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
-                <FaListAlt />
+                <FaTasks />
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>10K+</strong>
-                <span>Teams</span>
+                <strong>
+                  10K+
+                </strong>
+
+                <span>
+                  Teams
+                </span>
               </div>
+
             </div>
 
+            {/* TASKS */}
+
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
                 <FaChartLine />
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>50K+</strong>
-                <span>Tasks Managed</span>
+                <strong>
+                  50K+
+                </strong>
+
+                <span>
+                  Tasks Managed
+                </span>
               </div>
+
             </div>
 
+            {/* SECURITY */}
+
             <div className="hero-mini-stat">
+
               <div className="hero-mini-stat-icon">
                 <FaShieldAlt />
               </div>
 
               <div className="hero-mini-stat-content">
-                <strong>99.9%</strong>
-                <span>Uptime</span>
+                <strong>
+                  99.9%
+                </strong>
+
+                <span>
+                  Secure
+                </span>
               </div>
+
             </div>
+
           </div>
-        </div>
+
+        </motion.div>
 
         {/* ===================================================
-            RIGHT SIDE
+            RIGHT AUTH PANEL
         =================================================== */}
 
-        <div className="hero-right">
-          {/* Authentication Glow */}
+        <motion.div
+          ref={authRef}
+          className="hero-right"
+          id="auth-section"
+          initial={{
+            opacity: 0,
+            x: 30,
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          transition={{
+            duration: 0.75,
+            delay: 0.1,
+            ease: "easeOut",
+          }}
+        >
+          {/* =================================================
+              AUTH GLOW
+          ================================================= */}
 
           <div className="hero-auth-glow" />
 
           {/* =================================================
-              WORKSPACE CARD
+              REAL AUTH CARD
+
+              This is NOT a mockup.
+
+              It uses:
+              - AuthContext
+              - LoginForm
+              - RegisterForm
+              - SocialButtons
+              - Forgot Password
+              - Password visibility
+              - Remember Me
+              - Login/Register switching
           ================================================= */}
 
-          <div className="hero-product-preview">
-            {/* ===============================================
-                STATUS HEADER
-            =============================================== */}
-
-            <div className="hero-product-topbar">
-              <div className="hero-product-live">
-                <span />
-                <span>Workspace is ready</span>
-              </div>
-
-              <div className="hero-product-users">
-                <span>S</span>
-                <span>A</span>
-                <span>K</span>
-                <small>+18</small>
-              </div>
-            </div>
-
-            {/* ===============================================
-                AUTH CONTENT
-            =============================================== */}
-
-            <div className="hero-auth-content">
-              {/* Auth Toggle */}
-
-              <div className="hero-auth-toggle">
-                <button type="button" className="hero-auth-tab">
-                  Register
-                </button>
-
-                <button
-                  type="button"
-                  className="hero-auth-tab active"
-                >
-                  Login
-                </button>
-              </div>
-
-              {/* Heading */}
-
-              <div className="hero-auth-heading">
-                <h2>
-                  Welcome Back <span>👋</span>
-                </h2>
-
-                <p>
-                  Sign in to continue managing your projects.
-                </p>
-              </div>
-
-              {/* =============================================
-                  LOGIN FORM
-              ============================================= */}
-
-              <div className="hero-auth-form">
-                {/* Email */}
-
-                <div className="hero-auth-field">
-                  <label htmlFor="hero-email">
-                    Email
-                  </label>
-
-                  <div className="hero-auth-input">
-                    <FaEnvelope />
-
-                    <span id="hero-email">
-                      sourav@gmail.com
-                    </span>
-                  </div>
-                </div>
-
-                {/* Password */}
-
-                <div className="hero-auth-field">
-                  <label htmlFor="hero-password">
-                    Password
-                  </label>
-
-                  <div className="hero-auth-input">
-                    <FaLock />
-
-                    <span id="hero-password">
-                      ••••••••••••
-                    </span>
-
-                    <FaEye className="hero-password-eye" />
-                  </div>
-                </div>
-
-                {/* Remember / Forgot */}
-
-                <div className="hero-auth-options">
-                  <div className="hero-remember">
-                    <span className="hero-checkbox">
-                      <FaCheck />
-                    </span>
-
-                    <span>Remember me</span>
-                  </div>
-
-                  <span className="hero-forgot">
-                    Forgot Password?
-                  </span>
-                </div>
-
-                {/* Sign In */}
-
-                <button
-                  type="button"
-                  className="hero-auth-submit"
-                >
-                  <span>Sign In</span>
-                  <FaArrowRight />
-                </button>
-              </div>
-
-              {/* =============================================
-                  DIVIDER
-              ============================================= */}
-
-              <div className="hero-auth-divider">
-                <span />
-                <p>or continue with</p>
-                <span />
-              </div>
-
-              {/* =============================================
-                  SOCIAL LOGIN
-              ============================================= */}
-
-              <div className="hero-social-login">
-                <button type="button" className="hero-social-btn">
-                  <FaGoogle />
-
-                  <span>Continue with Google</span>
-                </button>
-
-                <button type="button" className="hero-social-btn">
-                  <FaGithub />
-
-                  <span>Continue with GitHub</span>
-                </button>
-              </div>
-
-              {/* =============================================
-                  REGISTER LINK
-              ============================================= */}
-
-              <div className="hero-register-footer">
-                <p>Don’t have an account?</p>
-
-                <button type="button">
-                  Register Now
-                </button>
-              </div>
-            </div>
-
-            {/* ===============================================
-                WORKSPACE STATS
-            =============================================== */}
-
-            <div className="hero-workspace-stats">
-              {/* Tasks Completed */}
-
-              <div className="hero-workspace-stat">
-                <div className="hero-workspace-stat-icon">
-                  <FaClipboardCheck />
-                </div>
-
-                <div className="hero-workspace-stat-content">
-                  <strong>124</strong>
-                  <span>Tasks Completed</span>
-                </div>
-              </div>
-
-              {/* Project Success */}
-
-              <div className="hero-workspace-stat success">
-                <div className="hero-workspace-stat-icon">
-                  <FaChartLine />
-                </div>
-
-                <div className="hero-workspace-stat-content">
-                  <strong>96%</strong>
-                  <span>Project Success</span>
-                </div>
-              </div>
-            </div>
+          <div className="hero-auth-card-wrapper">
+            <AuthCard
+              compact
+              onAuthReady={() => {
+                // AuthCard is mounted and ready.
+              }}
+            />
           </div>
-        </div>
+        </motion.div>
+
       </div>
 
       {/* =====================================================
           SCROLL INDICATOR
       ===================================================== */}
 
-      <a href="#features" className="hero-scroll">
-        <span>Scroll to explore</span>
-
+      <motion.a
+        href="#features"
+        className="hero-scroll"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          delay: 1,
+          duration: 0.5,
+        }}
+      >
         <span className="hero-scroll-line" />
-      </a>
+
+        <span>
+          Scroll to explore
+        </span>
+      </motion.a>
+
     </section>
   );
 };
