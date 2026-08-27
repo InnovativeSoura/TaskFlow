@@ -1,48 +1,89 @@
 /* =========================================================
    TASKFLOW — HERO
-   Exact desktop composition
+   Premium Landing Page / Product Preview
 ========================================================= */
 
 .hero-section {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  overflow: hidden;
+  min-height: calc(100vh - 72px);
+
   display: flex;
   align-items: center;
 
+  overflow: hidden;
+  isolation: isolate;
+
+  color: #ffffff;
+
   background:
     radial-gradient(
-      circle at 12% 52%,
-      rgba(76, 53, 255, 0.24),
-      transparent 34%
+      circle at 8% 48%,
+      rgba(91, 62, 255, 0.25),
+      transparent 30%
     ),
     radial-gradient(
-      circle at 88% 48%,
-      rgba(0, 132, 255, 0.14),
-      transparent 31%
+      circle at 92% 42%,
+      rgba(0, 132, 255, 0.13),
+      transparent 28%
     ),
     linear-gradient(
-      115deg,
-      #0a0b2a 0%,
-      #080b20 47%,
-      #061322 100%
+      135deg,
+      #08091f 0%,
+      #080b1d 48%,
+      #061321 100%
     );
-
-  color: #fff;
-  isolation: isolate;
 }
 
 /* =========================================================
-   BACKGROUND EFFECTS
+   BACKGROUND
 ========================================================= */
+
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: -3;
+}
+
+.hero-glow-one {
+  width: 520px;
+  height: 520px;
+
+  left: -220px;
+  top: 18%;
+
+  background: rgba(80, 54, 255, 0.25);
+}
+
+.hero-glow-two {
+  width: 440px;
+  height: 440px;
+
+  right: -210px;
+  top: 22%;
+
+  background: rgba(0, 126, 255, 0.13);
+}
+
+.hero-glow-three {
+  width: 500px;
+  height: 250px;
+
+  left: 40%;
+  bottom: -180px;
+
+  background: rgba(92, 61, 255, 0.16);
+}
 
 .hero-grid {
   position: absolute;
   inset: 0;
-  z-index: -5;
 
-  opacity: 0.32;
+  z-index: -4;
+
+  opacity: 0.25;
 
   background-image:
     linear-gradient(
@@ -57,117 +98,76 @@
 
   background-size: 52px 52px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.8),
-    rgba(0, 0, 0, 0.25)
-  );
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.8),
-    rgba(0, 0, 0, 0.25)
-  );
-}
-
-.hero-glow {
-  position: absolute;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(90px);
-  z-index: -4;
-}
-
-.hero-glow-one {
-  width: 520px;
-  height: 520px;
-
-  left: -240px;
-  top: 20%;
-
-  background: rgba(73, 49, 255, 0.34);
-}
-
-.hero-glow-two {
-  width: 430px;
-  height: 430px;
-
-  right: -210px;
-  top: 23%;
-
-  background: rgba(0, 128, 255, 0.18);
-}
-
-.hero-glow-three {
-  width: 520px;
-  height: 260px;
-
-  left: 35%;
-  bottom: -180px;
-
-  background: rgba(99, 61, 255, 0.2);
+  mask-image:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.25)
+    );
 }
 
 .hero-orb {
   position: absolute;
 
-  border: 1px solid rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
   border-radius: 50%;
 
   pointer-events: none;
+
   z-index: -2;
 }
 
 .hero-orb-one {
-  width: 64px;
-  height: 64px;
+  width: 78px;
+  height: 78px;
 
   left: 9%;
-  top: 31%;
+  top: 27%;
 }
 
 .hero-orb-two {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
 
   right: 9%;
-  bottom: 25%;
+  bottom: 27%;
 }
 
 .hero-orb-three {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
 
   left: 6%;
-  bottom: 25%;
+  bottom: 20%;
 }
 
 /* =========================================================
-   MAIN HERO CONTAINER
+   HERO CONTAINER
 ========================================================= */
 
 .hero-container {
   position: relative;
   z-index: 2;
 
-  width: min(1065px, calc(100% - 80px));
+  width: min(1460px, calc(100% - 120px));
 
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
 
   margin: 0 auto;
 
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1fr)
-    390px;
+    minmax(0, 1.12fr)
+    minmax(390px, 0.72fr);
 
   align-items: center;
 
-  column-gap: 78px;
+  column-gap: 95px;
 
   padding:
-    115px
+    90px
     0
     80px;
 }
@@ -178,80 +178,74 @@
 
 .hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 5;
 
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
 }
 
-/* =========================================================
-   BADGE
-========================================================= */
-
 .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
   width: fit-content;
 
-  margin-bottom: 27px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
   padding: 8px 14px;
 
+  margin-bottom: 25px;
+
   border: 1px solid rgba(255, 255, 255, 0.11);
+
   border-radius: 999px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.085),
+      rgba(255, 255, 255, 0.08),
       rgba(255, 255, 255, 0.035)
     );
 
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 30px rgba(0, 0, 0, 0.15);
+    0 10px 30px rgba(0, 0, 0, 0.18);
 
   color: rgba(255, 255, 255, 0.72);
 
   font-size: 11px;
   font-weight: 500;
-
-  white-space: nowrap;
 }
 
 .hero-badge-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 
-  flex: 0 0 6px;
+  flex: 0 0 7px;
 
   border-radius: 50%;
 
-  background: #8065ff;
+  background: #8567ff;
 
   box-shadow:
-    0 0 0 4px rgba(128, 101, 255, 0.1),
-    0 0 14px rgba(128, 101, 255, 0.8);
+    0 0 0 4px rgba(133, 103, 255, 0.12),
+    0 0 14px rgba(133, 103, 255, 0.8);
 }
 
 .hero-badge svg {
   font-size: 9px;
-  opacity: 0.7;
 }
 
 /* =========================================================
-   HERO TITLE
+   TITLE
 ========================================================= */
 
 .hero-title {
   margin: 0;
-  padding: 0;
 
   display: flex;
   flex-direction: column;
 
-  font-size: clamp(54px, 4.25vw, 64px);
+  font-size: clamp(58px, 5vw, 76px);
 
   line-height: 0.98;
 
@@ -262,18 +256,15 @@
 
 .hero-title span {
   display: block;
-  white-space: nowrap;
 }
 
 .hero-title-gradient {
-  display: block;
-
   background:
     linear-gradient(
       90deg,
-      #8260ff 0%,
-      #756cff 43%,
-      #48adff 100%
+      #8361ff 0%,
+      #7378ff 45%,
+      #4cb4ff 100%
     );
 
   -webkit-background-clip: text;
@@ -289,13 +280,13 @@
 ========================================================= */
 
 .hero-description {
-  max-width: 570px;
+  max-width: 650px;
 
-  margin: 25px 0 27px;
+  margin: 27px 0 27px;
 
-  color: rgba(208, 216, 240, 0.65);
+  color: rgba(207, 215, 238, 0.62);
 
-  font-size: 13px;
+  font-size: 14px;
 
   line-height: 1.7;
 
@@ -309,7 +300,6 @@
 .hero-buttons {
   display: flex;
   align-items: center;
-
   gap: 12px;
 
   margin-bottom: 25px;
@@ -322,6 +312,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 9px;
 
   border-radius: 9px;
 
@@ -335,52 +326,49 @@
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
 .hero-primary-btn {
-  width: 302px;
+  min-width: 305px;
 
-  padding: 0 22px;
+  padding: 0 25px;
 
   border: 1px solid rgba(255, 255, 255, 0.08);
 
   background:
     linear-gradient(
       135deg,
-      #754cff,
-      #8552f6
+      #704cff,
+      #8454f8
     );
 
-  color: #fff;
+  color: #ffffff;
 
   box-shadow:
-    0 12px 28px rgba(104, 67, 255, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 12px 30px rgba(106, 69, 255, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .hero-primary-btn:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 18px 35px rgba(104, 67, 255, 0.38),
+    0 18px 38px rgba(106, 69, 255, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .hero-primary-btn svg {
-  margin-left: 5px;
   font-size: 10px;
 }
 
 .hero-secondary-btn {
-  width: 135px;
+  min-width: 135px;
 
-  padding: 0 13px;
+  padding: 0 15px;
 
-  gap: 8px;
-
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 
   background: rgba(255, 255, 255, 0.035);
 
@@ -392,16 +380,14 @@
 .hero-secondary-btn:hover {
   transform: translateY(-2px);
 
-  border-color: rgba(125, 95, 255, 0.45);
+  border-color: rgba(126, 94, 255, 0.45);
 
-  background: rgba(125, 95, 255, 0.08);
+  background: rgba(126, 94, 255, 0.09);
 }
 
 .hero-play-icon {
-  width: 21px;
-  height: 21px;
-
-  flex: 0 0 21px;
+  width: 22px;
+  height: 22px;
 
   display: inline-flex;
   align-items: center;
@@ -413,12 +399,11 @@
 }
 
 .hero-play-icon svg {
-  font-size: 6px;
-  margin-left: 1px;
+  font-size: 7px;
 }
 
 /* =========================================================
-   TRUST ITEMS
+   TRUST ROW
 ========================================================= */
 
 .hero-trust {
@@ -428,18 +413,17 @@
 
   gap: 17px;
 
-  padding-bottom: 22px;
+  padding-bottom: 23px;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .hero-trust-item {
   display: inline-flex;
   align-items: center;
-
   gap: 6px;
 
-  color: rgba(207, 215, 238, 0.55);
+  color: rgba(202, 211, 235, 0.56);
 
   font-size: 9px;
 
@@ -447,7 +431,8 @@
 }
 
 .hero-trust-item svg {
-  color: #24d792;
+  color: #27d895;
+
   font-size: 8px;
 }
 
@@ -459,9 +444,9 @@
   display: flex;
   align-items: center;
 
-  gap: 14px;
+  gap: 12px;
 
-  padding-top: 17px;
+  padding-top: 18px;
 }
 
 .hero-mini-stat {
@@ -472,13 +457,17 @@
 
   gap: 9px;
 
-  padding: 8px 10px;
+  padding: 8px 11px;
 
-  border: 1px solid rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: rgba(255, 255, 255, 0.018);
+  background:
+    rgba(255, 255, 255, 0.018);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .hero-mini-stat-icon {
@@ -491,13 +480,13 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid rgba(124, 95, 255, 0.16);
+  border: 1px solid rgba(126, 96, 255, 0.18);
 
   border-radius: 7px;
 
-  background: rgba(115, 81, 255, 0.09);
+  background: rgba(117, 84, 255, 0.08);
 
-  color: #8065ff;
+  color: #8064ff;
 
   font-size: 10px;
 }
@@ -507,20 +496,18 @@
   flex-direction: column;
 
   gap: 2px;
-
-  min-width: 0;
 }
 
 .hero-mini-stat-content strong {
   color: rgba(255, 255, 255, 0.92);
 
-  font-size: 12px;
+  font-size: 11px;
 
   line-height: 1;
 }
 
 .hero-mini-stat-content span {
-  color: rgba(190, 199, 224, 0.45);
+  color: rgba(190, 199, 223, 0.48);
 
   font-size: 7px;
 
@@ -534,8 +521,9 @@
 .hero-right {
   position: relative;
 
-  width: 390px;
-  min-width: 390px;
+  width: 100%;
+
+  max-width: 430px;
 
   justify-self: end;
 
@@ -545,31 +533,26 @@
 }
 
 /* =========================================================
-   RIGHT SIDE GLOW
+   AUTH GLOW
 ========================================================= */
 
 .hero-auth-glow {
   position: absolute;
 
-  width: 410px;
-  height: 620px;
-
-  left: 50%;
-  top: 50%;
-
-  transform: translate(-50%, -50%);
+  width: 440px;
+  height: 560px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       ellipse,
-      rgba(100, 72, 255, 0.28) 0%,
-      rgba(77, 65, 210, 0.12) 38%,
-      transparent 72%
+      rgba(102, 72, 255, 0.3) 0%,
+      rgba(76, 112, 255, 0.08) 45%,
+      transparent 70%
     );
 
-  filter: blur(42px);
+  filter: blur(50px);
 
   pointer-events: none;
 
@@ -577,41 +560,42 @@
 }
 
 /* =========================================================
-   WORKSPACE CARD
+   MAIN PRODUCT CARD
 ========================================================= */
 
 .hero-product-preview {
   position: relative;
 
-  width: 390px;
-  max-width: 390px;
+  width: 100%;
+
+  max-width: 420px;
 
   min-height: 650px;
 
-  box-sizing: border-box;
+  padding: 20px 20px 18px;
 
-  padding: 22px;
+  border: 1px solid rgba(118, 142, 255, 0.32);
 
-  border: 1px solid rgba(121, 144, 255, 0.28);
-
-  border-radius: 25px;
+  border-radius: 23px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(22, 31, 63, 0.97),
-      rgba(9, 16, 39, 0.985)
+      rgba(20, 29, 59, 0.96),
+      rgba(9, 16, 38, 0.98)
     );
 
   box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.48),
-    0 0 55px rgba(81, 69, 255, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 40px 100px rgba(0, 0, 0, 0.52),
+    0 0 70px rgba(89, 69, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
 
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 
   overflow: hidden;
+
+  box-sizing: border-box;
 }
 
 .hero-product-preview::before {
@@ -625,33 +609,25 @@
 
   background:
     radial-gradient(
-      circle at 95% 0%,
-      rgba(113, 91, 255, 0.13),
-      transparent 32%
+      circle at 88% 0%,
+      rgba(105, 82, 255, 0.15),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025),
+      transparent 35%
     );
 
   z-index: 0;
 }
 
-.hero-product-preview::after {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  right: 0;
-  top: 68px;
-
-  height: 1px;
-
-  background: rgba(255, 255, 255, 0.065);
-
-  pointer-events: none;
-}
-
 .hero-product-preview > * {
   position: relative;
+
   z-index: 1;
+
+  box-sizing: border-box;
 }
 
 /* =========================================================
@@ -659,24 +635,31 @@
 ========================================================= */
 
 .hero-product-topbar {
-  height: 31px;
+  width: 100%;
+
+  min-height: 42px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  padding-bottom: 15px;
+
   margin-bottom: 17px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 .hero-product-brand {
   display: flex;
   align-items: center;
+
   gap: 9px;
 }
 
 .hero-product-logo {
-  width: 30px;
-  height: 30px;
+  width: 29px;
+  height: 29px;
 
   display: flex;
   align-items: center;
@@ -687,14 +670,14 @@
   background:
     linear-gradient(
       135deg,
-      #7657ff,
-      #6844e9
+      #7658ff,
+      #6545e9
     );
 
-  color: #fff;
+  color: #ffffff;
 
   box-shadow:
-    0 7px 18px rgba(102, 70, 240, 0.3);
+    0 7px 18px rgba(102, 70, 240, 0.32);
 }
 
 .hero-product-logo svg {
@@ -709,15 +692,14 @@
 }
 
 .hero-product-brand strong {
-  color: #fff;
+  color: #ffffff;
 
   font-size: 11px;
-
-  line-height: 1.1;
+  font-weight: 650;
 }
 
 .hero-product-brand span {
-  color: rgba(185, 194, 220, 0.45);
+  color: rgba(185, 195, 221, 0.42);
 
   font-size: 7px;
 }
@@ -726,9 +708,9 @@
   display: flex;
   align-items: center;
 
-  gap: 5px;
+  gap: 6px;
 
-  color: rgba(209, 219, 239, 0.58);
+  color: rgba(210, 219, 239, 0.64);
 
   font-size: 8px;
 }
@@ -737,35 +719,33 @@
   width: 6px;
   height: 6px;
 
+  flex: 0 0 6px;
+
   border-radius: 50%;
 
-  background: #35dc92;
+  background: #31dc91;
 
   box-shadow:
-    0 0 10px rgba(53, 219, 146, 0.75);
-}
-
-/* =========================================================
-   PRODUCT LABEL
-========================================================= */
-
-.hero-product-label {
-  margin: 0 0 7px;
-
-  color: rgba(160, 170, 202, 0.48);
-
-  font-size: 7px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
+    0 0 10px rgba(49, 220, 145, 0.75);
 }
 
 /* =========================================================
    PRODUCT HEADING
 ========================================================= */
+
+.hero-product-label {
+  margin-bottom: 7px;
+
+  color: rgba(160, 171, 204, 0.45);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
 
 .hero-product-heading {
   display: flex;
@@ -774,13 +754,13 @@
 
   gap: 15px;
 
-  margin-bottom: 17px;
+  margin-bottom: 16px;
 }
 
 .hero-product-heading h3 {
   margin: 0 0 5px;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 17px;
 
@@ -792,45 +772,40 @@
 .hero-product-heading p {
   margin: 0;
 
-  color: rgba(188, 198, 224, 0.5);
+  color: rgba(188, 198, 224, 0.48);
 
   font-size: 8px;
 
-  line-height: 1.45;
+  line-height: 1.4;
 }
-
-/* =========================================================
-   USER AVATARS
-========================================================= */
 
 .hero-product-users {
   display: flex;
   align-items: center;
 
   padding-top: 1px;
-
-  flex-shrink: 0;
 }
 
 .hero-product-users span {
-  width: 25px;
-  height: 25px;
+  width: 23px;
+  height: 23px;
 
-  margin-left: -6px;
+  margin-left: -5px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 2px solid #111933;
+  border: 2px solid #111a39;
 
   border-radius: 50%;
 
-  background: #7657f6;
+  background: #795af6;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 7px;
+
   font-weight: 700;
 }
 
@@ -839,21 +814,19 @@
 }
 
 .hero-product-users span:nth-child(2) {
-  background: #2a9cd8;
+  background: #319fe2;
 }
 
 .hero-product-users span:nth-child(3) {
-  background: #20b895;
+  background: #27b99b;
 }
 
 .hero-product-users small {
-  margin-left: 6px;
+  margin-left: 5px;
 
   color: rgba(204, 212, 236, 0.55);
 
   font-size: 7px;
-
-  white-space: nowrap;
 }
 
 /* =========================================================
@@ -863,11 +836,9 @@
 .hero-project-card {
   width: 100%;
 
-  box-sizing: border-box;
-
   padding: 14px;
 
-  margin-bottom: 17px;
+  margin-bottom: 16px;
 
   border: 1px solid rgba(255, 255, 255, 0.075);
 
@@ -888,7 +859,7 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 }
 
 .hero-project-icon {
@@ -912,6 +883,7 @@
 
 .hero-project-name {
   min-width: 0;
+
   flex: 1;
 
   display: flex;
@@ -921,44 +893,39 @@
 }
 
 .hero-project-name strong {
-  color: rgba(255, 255, 255, 0.92);
+  overflow: hidden;
 
-  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 9px;
 
   white-space: nowrap;
-
-  overflow: hidden;
 
   text-overflow: ellipsis;
 }
 
 .hero-project-name span {
-  color: rgba(187, 198, 224, 0.45);
+  color: rgba(187, 198, 224, 0.42);
 
   font-size: 7px;
 }
 
 .hero-project-percent {
-  flex: 0 0 auto;
+  color: #ffffff;
 
-  color: #fff;
-
-  font-size: 11px;
+  font-size: 10px;
 }
-
-/* =========================================================
-   PROGRESS
-========================================================= */
 
 .hero-progress {
   width: 100%;
+
   height: 5px;
 
-  margin: 13px 0 10px;
+  margin: 12px 0 9px;
 
   overflow: hidden;
 
-  border-radius: 999px;
+  border-radius: 99px;
 
   background: rgba(255, 255, 255, 0.07);
 }
@@ -967,6 +934,7 @@
   display: block;
 
   width: 82%;
+
   height: 100%;
 
   border-radius: inherit;
@@ -974,8 +942,8 @@
   background:
     linear-gradient(
       90deg,
-      #7555ff,
-      #4ca8ff
+      #7655ff,
+      #4daaff
     );
 
   box-shadow:
@@ -991,11 +959,9 @@
 }
 
 .hero-project-meta span {
-  color: rgba(190, 199, 224, 0.45);
+  color: rgba(190, 199, 224, 0.43);
 
   font-size: 7px;
-
-  white-space: nowrap;
 }
 
 /* =========================================================
@@ -1011,9 +977,9 @@
 }
 
 .hero-recent-header strong {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.87);
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .hero-recent-header span {
@@ -1028,28 +994,28 @@
   display: flex;
   flex-direction: column;
 
-  gap: 6px;
+  gap: 5px;
 
-  margin-bottom: 15px;
+  margin-bottom: 13px;
 }
 
 .hero-task {
   width: 100%;
 
-  box-sizing: border-box;
-
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 8px;
 
-  padding: 8px 9px;
+  padding: 7px 8px;
 
   border: 1px solid rgba(255, 255, 255, 0.045);
 
   border-radius: 9px;
 
   background: rgba(255, 255, 255, 0.025);
+
+  box-sizing: border-box;
 }
 
 .hero-task-check {
@@ -1068,7 +1034,7 @@
 
   color: #8267ff;
 
-  font-size: 8px;
+  font-size: 7px;
 }
 
 .hero-task-check.completed {
@@ -1079,6 +1045,7 @@
 
 .hero-task-info {
   min-width: 0;
+
   flex: 1;
 
   display: flex;
@@ -1088,19 +1055,19 @@
 }
 
 .hero-task-info strong {
-  color: rgba(255, 255, 255, 0.84);
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.82);
 
   font-size: 8px;
 
   white-space: nowrap;
 
-  overflow: hidden;
-
   text-overflow: ellipsis;
 }
 
 .hero-task-info span {
-  color: rgba(186, 197, 223, 0.43);
+  color: rgba(186, 197, 223, 0.4);
 
   font-size: 6px;
 }
@@ -1119,9 +1086,10 @@
 
   background: #7657f5;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 6px;
+
   font-weight: 700;
 }
 
@@ -1134,17 +1102,15 @@
 }
 
 /* =========================================================
-   MINI AUTH
+   MINI AUTH PANEL
 ========================================================= */
 
 .hero-mini-auth {
   width: 100%;
 
-  box-sizing: border-box;
-
   padding: 13px;
 
-  margin-top: 3px;
+  margin-top: 2px;
 
   border: 1px solid rgba(255, 255, 255, 0.07);
 
@@ -1156,6 +1122,8 @@
       rgba(118, 89, 255, 0.08),
       rgba(255, 255, 255, 0.025)
     );
+
+  box-sizing: border-box;
 }
 
 .hero-mini-auth-header {
@@ -1186,7 +1154,7 @@
 .hero-mini-auth-header strong {
   color: rgba(255, 255, 255, 0.9);
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .hero-mini-auth-lock {
@@ -1204,22 +1172,16 @@
   font-size: 9px;
 }
 
-/* =========================================================
-   MINI INPUT
-========================================================= */
-
 .hero-mini-input {
   width: 100%;
 
-  box-sizing: border-box;
-
-  height: 28px;
+  height: 27px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 9px;
+  padding: 0 8px;
 
   margin-bottom: 6px;
 
@@ -1229,20 +1191,18 @@
 
   background: rgba(0, 0, 0, 0.14);
 
-  color: rgba(196, 205, 230, 0.48);
+  color: rgba(196, 205, 230, 0.45);
 
   font-size: 7px;
+
+  box-sizing: border-box;
 }
 
 .hero-mini-input small {
-  color: rgba(255, 255, 255, 0.27);
+  color: rgba(255, 255, 255, 0.25);
 
   font-size: 6px;
 }
-
-/* =========================================================
-   LOGIN BUTTON
-========================================================= */
 
 .hero-mini-login {
   width: 100%;
@@ -1253,7 +1213,7 @@
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 6px;
 
   border-radius: 7px;
 
@@ -1264,7 +1224,7 @@
       #8558f6
     );
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 8px;
 
@@ -1279,7 +1239,7 @@
 }
 
 /* =========================================================
-   AUTH METRICS
+   BOTTOM METRICS
 ========================================================= */
 
 .hero-auth-metrics {
@@ -1287,11 +1247,11 @@
 
   display: grid;
 
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
 
   gap: 8px;
 
-  margin-top: 12px;
+  margin-top: 11px;
 }
 
 .hero-auth-metric {
@@ -1302,22 +1262,22 @@
 
   gap: 7px;
 
-  padding: 9px;
-
-  box-sizing: border-box;
+  padding: 8px;
 
   border: 1px solid rgba(255, 255, 255, 0.055);
 
   border-radius: 9px;
 
   background: rgba(255, 255, 255, 0.025);
+
+  box-sizing: border-box;
 }
 
 .hero-auth-metric-icon {
-  width: 23px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
 
-  flex: 0 0 23px;
+  flex: 0 0 22px;
 
   display: flex;
   align-items: center;
@@ -1348,19 +1308,23 @@
 }
 
 .hero-auth-metric-content strong {
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.9);
 
-  font-size: 10px;
+  font-size: 9px;
 
   line-height: 1;
 }
 
 .hero-auth-metric-content span {
-  color: rgba(185, 196, 221, 0.46);
+  overflow: hidden;
+
+  color: rgba(185, 196, 221, 0.4);
 
   font-size: 6px;
 
   white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
 /* =========================================================
@@ -1381,7 +1345,7 @@
 
   gap: 6px;
 
-  color: rgba(205, 212, 233, 0.43);
+  color: rgba(205, 212, 233, 0.4);
 
   text-decoration: none;
 
@@ -1393,7 +1357,7 @@
 
   text-transform: uppercase;
 
-  z-index: 5;
+  z-index: 10;
 }
 
 .hero-scroll-line {
@@ -1403,9 +1367,36 @@
   background:
     linear-gradient(
       to bottom,
-      rgba(135, 111, 255, 0),
+      transparent,
       rgba(135, 111, 255, 0.75)
     );
+}
+
+/* =========================================================
+   IMPORTANT SAFETY RULES
+   Prevent global styles from breaking preview
+========================================================= */
+
+.hero-product-preview input,
+.hero-product-preview button,
+.hero-product-preview a {
+  font-family: inherit;
+}
+
+.hero-product-preview button {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.hero-product-preview p,
+.hero-product-preview h1,
+.hero-product-preview h2,
+.hero-product-preview h3,
+.hero-product-preview h4,
+.hero-product-preview span,
+.hero-product-preview strong,
+.hero-product-preview small {
+  box-sizing: border-box;
 }
 
 /* =========================================================
@@ -1414,95 +1405,68 @@
 
 @media (min-width: 1500px) {
   .hero-container {
-    width: min(1120px, calc(100% - 100px));
+    width: min(1500px, calc(100% - 140px));
 
-    grid-template-columns:
-      minmax(0, 1fr)
-      410px;
-
-    column-gap: 85px;
-  }
-
-  .hero-right {
-    width: 410px;
-    min-width: 410px;
+    column-gap: 110px;
   }
 
   .hero-product-preview {
-    width: 410px;
-    max-width: 410px;
-  }
-
-  .hero-title {
-    font-size: 66px;
+    max-width: 430px;
   }
 }
 
 /* =========================================================
-   TABLET / LAPTOP
+   TABLET / SMALL DESKTOP
 ========================================================= */
 
-@media (max-width: 1150px) {
+@media (max-width: 1200px) {
   .hero-container {
-    width: min(950px, calc(100% - 50px));
+    width: min(1080px, calc(100% - 70px));
 
     grid-template-columns:
       minmax(0, 1fr)
-      350px;
+      minmax(360px, 0.7fr);
 
-    column-gap: 45px;
-  }
-
-  .hero-right {
-    width: 350px;
-    min-width: 350px;
-  }
-
-  .hero-product-preview {
-    width: 350px;
-    max-width: 350px;
-
-    min-height: 610px;
-
-    padding: 19px;
+    column-gap: 55px;
   }
 
   .hero-title {
-    font-size: clamp(46px, 5vw, 58px);
+    font-size: clamp(48px, 5.4vw, 66px);
   }
 
-  .hero-description {
-    max-width: 500px;
+  .hero-product-preview {
+    max-width: 390px;
   }
 }
 
 /* =========================================================
-   SMALL TABLET
+   TABLET
 ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
   .hero-section {
     min-height: auto;
+
     align-items: flex-start;
   }
 
   .hero-container {
-    width: min(700px, calc(100% - 40px));
-
     min-height: auto;
+
+    width: min(720px, calc(100% - 45px));
 
     grid-template-columns: 1fr;
 
     gap: 55px;
 
     padding:
-      130px
+      115px
       0
-      90px;
+      80px;
   }
 
   .hero-content {
-    max-width: 650px;
+    max-width: 720px;
 
     margin: 0 auto;
 
@@ -1514,41 +1478,21 @@
     margin-right: auto;
   }
 
-  .hero-title span {
-    white-space: normal;
-  }
-
   .hero-description {
     margin-left: auto;
     margin-right: auto;
   }
 
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-trust {
-    justify-content: center;
-  }
-
+  .hero-buttons,
+  .hero-trust,
   .hero-mini-stats {
     justify-content: center;
   }
 
   .hero-right {
-    width: 390px;
-    min-width: 390px;
+    max-width: 430px;
 
     justify-self: center;
-  }
-
-  .hero-product-preview {
-    width: 390px;
-    max-width: 390px;
-
-    min-height: 650px;
-
-    padding: 22px;
   }
 
   .hero-scroll {
@@ -1564,16 +1508,16 @@
   .hero-container {
     width: calc(100% - 28px);
 
-    padding:
-      110px
-      0
-      65px;
-
     gap: 42px;
+
+    padding:
+      100px
+      0
+      60px;
   }
 
   .hero-title {
-    font-size: clamp(38px, 11vw, 54px);
+    font-size: clamp(38px, 11vw, 53px);
 
     letter-spacing: -0.05em;
   }
@@ -1595,26 +1539,39 @@
   .hero-primary-btn,
   .hero-secondary-btn {
     width: 100%;
+
+    min-width: 0;
   }
 
   .hero-trust {
-    gap: 10px 14px;
+    gap: 10px 13px;
+  }
+
+  .hero-trust-item {
+    font-size: 8px;
   }
 
   .hero-mini-stats {
     width: 100%;
 
-    gap: 8px;
+    display: grid;
 
-    justify-content: center;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 7px;
   }
 
   .hero-mini-stat {
     min-width: 0;
 
-    flex: 1;
-
     padding: 7px;
+  }
+
+  .hero-mini-stat-icon {
+    width: 25px;
+    height: 25px;
+
+    flex: 0 0 25px;
   }
 
   .hero-mini-stat-content strong {
@@ -1626,13 +1583,11 @@
   }
 
   .hero-right {
-    width: min(100%, 390px);
-    min-width: 0;
+    width: 100%;
   }
 
   .hero-product-preview {
     width: 100%;
-    max-width: 390px;
 
     min-height: 0;
 
@@ -1648,22 +1603,23 @@
 
 @media (max-width: 400px) {
   .hero-title {
-    font-size: 36px;
+    font-size: 35px;
   }
 
   .hero-mini-stats {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .hero-mini-stat {
-    width: 100%;
+    justify-content: flex-start;
   }
 
   .hero-product-preview {
     padding: 14px;
   }
 
-  .hero-product-heading h3 {
-    font-size: 15px;
+  .hero-product-users span {
+    width: 21px;
+    height: 21px;
   }
 }
