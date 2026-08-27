@@ -238,24 +238,9 @@ const Hero = () => {
             <div className="hero-trust-item">
               <FaCheckCircle />
               <span>
-                No Credit Card
-              </span>
-            </div>
-
-            <div className="hero-trust-item">
-              <FaCheckCircle />
-              <span>
                 2 Minute Setup
               </span>
             </div>
-
-            <div className="hero-trust-item">
-              <FaCheckCircle />
-              <span>
-                Cloud Sync Included
-              </span>
-            </div>
-
           </div>
 
           {/* =================================================
