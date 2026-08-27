@@ -23,9 +23,9 @@ const AuthCard = ({
   const { login, register } = useAuth();
 
   const API_URL = (
-    import.meta.env.VITE_API_URL ||
-    "http://localhost:5000/api"
-  ).replace(/\/$/, "");
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
   const [isLogin, setIsLogin] = useState(
     location.pathname !== "/register"
