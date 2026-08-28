@@ -3,6 +3,8 @@
 import LandingNavbar from "../components/LandingNavbar";
 import BackgroundAnimation from "../components/BackgroundAnimation";
 import Hero from "../components/Hero";
+import "../components/landing/Hero.css";
+
 import FeatureSection from "../components/FeatureSection";
 import AboutSection from "../components/AboutSection";
 import ContactSection from "../components/ContactSection";
