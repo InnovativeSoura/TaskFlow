@@ -105,21 +105,11 @@ const Sidebar = () => {
   ======================================================= */
 
   const handleLogout = () => {
-
-    /*
-     * First remove authentication.
-     */
     logout();
 
-    /*
-     * Then return to the PUBLIC LANDING PAGE.
-     *
-     * IMPORTANT:
-     * Do NOT navigate to /login here.
-     */
-    navigate("/", {
-      replace: true,
-    });
+    // Always return to the public Home page after logout
+    navigate("/", { replace: true });
+  };
 
   };
 
