@@ -268,8 +268,24 @@ const AuthCard = ({ compact = false, onAuthReady }) => {
             "Authentication failed. Please try again."
         );
 
-        return;
+      return;
       }
+
+    /*
+    * Login/register succeeded.
+    *
+    * AuthContext has already saved:
+    * - token
+    * - user
+    * - authenticated state
+    *
+    * Now move to the application.
+    */
+    setError("");
+
+    navigate("/dashboard", {
+      replace: true,
+    });
 
       navigate("/dashboard", {
         replace: true,

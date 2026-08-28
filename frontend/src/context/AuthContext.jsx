@@ -1,4 +1,4 @@
-// src/context/AuthContext.jsx
+
 
 import {
   createContext,
@@ -24,7 +24,11 @@ const getStoredUser = () => {
       return null;
     }
 
-    return JSON.parse(storedUser);
+    const parsedUser = JSON.parse(storedUser);
+
+    return parsedUser && typeof parsedUser === "object"
+      ? parsedUser
+      : null;
   } catch (error) {
     console.error("Invalid stored user:", error);
 
@@ -35,16 +39,36 @@ const getStoredUser = () => {
 };
 
 /* =========================================================
+   GET STORED TOKEN
+========================================================= */
+
+const getStoredToken = () => {
+  try {
+    return localStorage.getItem("token");
+  } catch (error) {
+    console.error("Unable to read authentication token:", error);
+    return null;
+  }
+};
+
+/* =========================================================
    AUTH PROVIDER
 ========================================================= */
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token");
-  });
+  /*
+   * IMPORTANT:
+   * Initialize token and user from localStorage immediately.
+   * This prevents the protected dashboard route from seeing
+   * an unauthenticated state during the first render.
+   */
 
+  const [token, setToken] = useState(getStoredToken);
   const [user, setUser] = useState(getStoredUser);
 
+  /*
+   * loading is TRUE while we verify an existing session.
+   */
   const [loading, setLoading] = useState(true);
 
   /* =======================================================
@@ -86,7 +110,12 @@ export const AuthProvider = ({ children }) => {
   const loadCurrentUser = useCallback(async () => {
     const storedToken = localStorage.getItem("token");
 
+    /*
+     * No token = no authenticated session.
+     */
     if (!storedToken) {
+      setToken(null);
+      setUser(null);
       setLoading(false);
       return;
     }
@@ -96,20 +125,35 @@ export const AuthProvider = ({ children }) => {
 
       const response = await api.get("/auth/me");
 
-      if (
-        response.data?.success &&
-        response.data?.user
-      ) {
-        const currentUser = response.data.user;
+      const currentUser = response.data?.user;
 
+      /*
+       * Accept the authenticated user when the API gives us
+       * a valid user object.
+       *
+       * Some backend versions may not include `success`,
+       * therefore don't make the frontend unnecessarily
+       * dependent on that one property.
+       */
+      if (currentUser) {
         setToken(storedToken);
+
         setUser(currentUser);
+
+        localStorage.setItem(
+          "token",
+          storedToken
+        );
 
         localStorage.setItem(
           "user",
           JSON.stringify(currentUser)
         );
       } else {
+        console.warn(
+          "Authentication token exists but /auth/me returned no user."
+        );
+
         clearAuth();
       }
     } catch (error) {
@@ -148,54 +192,105 @@ export const AuthProvider = ({ children }) => {
 
       const data = response.data;
 
-      if (!data?.success) {
+      console.log("LOGIN RESPONSE:", data);
+
+      /*
+       * Backend must provide a token.
+       */
+      if (!data?.token) {
         return {
           success: false,
           message:
-            data?.message || "Login failed.",
+            data?.message ||
+            "Login failed. No authentication token was returned.",
         };
       }
 
       /*
-       * Save token and initial user.
+       * Backend may return success as true.
+       *
+       * We primarily require the token because that is what
+       * establishes the authenticated session.
        */
+      const initialUser = data?.user || null;
+
       saveAuth(
         data.token,
-        data.user
+        initialUser
       );
 
       /*
-       * Verify with database.
+       * Try to retrieve the latest user from the backend.
+       *
+       * The token has already been saved to localStorage,
+       * so the axios interceptor can use it immediately.
        */
-      const meResponse = await api.get(
-        "/auth/me"
-      );
+      try {
+        const meResponse = await api.get("/auth/me");
 
-      if (
-        !meResponse.data?.success ||
-        !meResponse.data?.user
-      ) {
+        const latestUser =
+          meResponse.data?.user || initialUser;
+
+        if (!latestUser) {
+          clearAuth();
+
+          return {
+            success: false,
+            message:
+              "Login succeeded, but the authenticated user could not be loaded.",
+          };
+        }
+
+        saveAuth(
+          data.token,
+          latestUser
+        );
+
+        /*
+         * Explicitly make sure loading is finished.
+         */
+        setLoading(false);
+
+        return {
+          success: true,
+          user: latestUser,
+          token: data.token,
+        };
+      } catch (meError) {
+        /*
+         * If the login endpoint successfully returned a token
+         * and user, don't immediately destroy a valid login
+         * merely because /auth/me failed.
+         *
+         * This also makes the authentication flow more robust
+         * against temporary /me problems.
+         */
+        console.warn(
+          "Could not refresh user through /auth/me:",
+          meError.response?.data || meError.message
+        );
+
+        if (initialUser) {
+          setToken(data.token);
+          setUser(initialUser);
+
+          setLoading(false);
+
+          return {
+            success: true,
+            user: initialUser,
+            token: data.token,
+          };
+        }
+
         clearAuth();
 
         return {
           success: false,
           message:
-            "Authentication verification failed.",
+            "Login succeeded but the user session could not be verified.",
         };
       }
-
-      /*
-       * Save latest database user.
-       */
-      saveAuth(
-        data.token,
-        meResponse.data.user
-      );
-
-      return {
-        success: true,
-        user: meResponse.data.user,
-      };
     } catch (error) {
       console.error(
         "Login Error:",
@@ -236,52 +331,79 @@ export const AuthProvider = ({ children }) => {
 
       const data = response.data;
 
-      if (!data?.success) {
+      console.log("REGISTER RESPONSE:", data);
+
+      if (!data?.token) {
         return {
           success: false,
           message:
             data?.message ||
-            "Registration failed.",
+            "Registration failed. No authentication token was returned.",
         };
       }
 
-      /*
-       * Save authentication.
-       */
+      const initialUser = data?.user || null;
+
       saveAuth(
         data.token,
-        data.user
+        initialUser
       );
 
-      /*
-       * Verify authenticated user.
-       */
-      const meResponse = await api.get(
-        "/auth/me"
-      );
+      try {
+        const meResponse = await api.get("/auth/me");
 
-      if (
-        !meResponse.data?.success ||
-        !meResponse.data?.user
-      ) {
+        const latestUser =
+          meResponse.data?.user || initialUser;
+
+        if (!latestUser) {
+          clearAuth();
+
+          return {
+            success: false,
+            message:
+              "Registration succeeded, but the authenticated user could not be loaded.",
+          };
+        }
+
+        saveAuth(
+          data.token,
+          latestUser
+        );
+
+        setLoading(false);
+
+        return {
+          success: true,
+          user: latestUser,
+          token: data.token,
+        };
+      } catch (meError) {
+        console.warn(
+          "Could not refresh registered user:",
+          meError.response?.data || meError.message
+        );
+
+        if (initialUser) {
+          setToken(data.token);
+          setUser(initialUser);
+
+          setLoading(false);
+
+          return {
+            success: true,
+            user: initialUser,
+            token: data.token,
+          };
+        }
+
         clearAuth();
 
         return {
           success: false,
           message:
-            "Authentication verification failed.",
+            "Registration succeeded but the user session could not be verified.",
         };
       }
-
-      saveAuth(
-        data.token,
-        meResponse.data.user
-      );
-
-      return {
-        success: true,
-        user: meResponse.data.user,
-      };
     } catch (error) {
       console.error(
         "Register Error:",
@@ -304,17 +426,16 @@ export const AuthProvider = ({ children }) => {
   ======================================================= */
 
   const logout = useCallback(() => {
-    /*
-     * Completely remove authentication.
-     */
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    /*
-     * Immediately update React state.
-     */
     setToken(null);
     setUser(null);
+
+    /*
+     * Keep loading false after logout.
+     */
+    setLoading(false);
   }, []);
 
   /* =======================================================
@@ -341,10 +462,20 @@ export const AuthProvider = ({ children }) => {
      AUTHENTICATED STATUS
   ======================================================= */
 
+  /*
+   * IMPORTANT:
+   *
+   * Don't require `user._id` here.
+   *
+   * Depending on your backend serialization, the ID can
+   * temporarily be represented differently.
+   *
+   * A valid token + user object is enough for the frontend
+   * authentication state.
+   */
+
   const isAuthenticated = Boolean(
-    token &&
-    user &&
-    user._id
+    token && user
   );
 
   /* =======================================================

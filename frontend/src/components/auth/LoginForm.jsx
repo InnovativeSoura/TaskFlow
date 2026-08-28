@@ -1,3 +1,5 @@
+// src/components/auth/LoginForm.jsx
+
 import {
   FaEnvelope,
   FaLock,
@@ -23,8 +25,6 @@ const LoginForm = ({
   onTogglePassword,
 
   onRememberChange,
-
-  onForgotPassword,
 }) => {
   return (
     <>
@@ -37,10 +37,11 @@ const LoginForm = ({
       <form
         className="auth-form"
         onSubmit={onSubmit}
+        noValidate
       >
-        {/* ==========================
+        {/* =================================================
             EMAIL
-        ========================== */}
+        ================================================= */}
 
         <FormField
           icon={FaEnvelope}
@@ -53,9 +54,9 @@ const LoginForm = ({
           required
         />
 
-        {/* ==========================
+        {/* =================================================
             PASSWORD
-        ========================== */}
+        ================================================= */}
 
         <FormField
           icon={FaLock}
@@ -70,9 +71,9 @@ const LoginForm = ({
           required
         />
 
-        {/* ==========================
-            OPTIONS
-        ========================== */}
+        {/* =================================================
+            REMEMBER ME
+        ================================================= */}
 
         <div className="auth-options">
           <label className="remember-me">
@@ -86,19 +87,11 @@ const LoginForm = ({
               Remember me
             </span>
           </label>
-
-          <button
-            type="button"
-            className="link-btn"
-            onClick={onForgotPassword}
-          >
-            Forgot Password?
-          </button>
         </div>
 
-        {/* ==========================
+        {/* =================================================
             SUBMIT
-        ========================== */}
+        ================================================= */}
 
         <button
           type="submit"
