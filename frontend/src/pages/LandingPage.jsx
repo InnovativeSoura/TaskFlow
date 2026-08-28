@@ -1,5 +1,3 @@
-// src/pages/LandingPage.jsx
-
 import LandingNavbar from "../components/landing/LandingNavbar";
 import BackgroundAnimation from "../components/landing/BackgroundAnimation";
 
