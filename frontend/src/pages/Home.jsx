@@ -18,7 +18,7 @@ const Home = () => {
 
       {/* =====================================================
           GLOBAL BACKGROUND
-          Rendered once and stays behind the complete landing page
+          Rendered once behind the complete landing page
       ===================================================== */}
       <BackgroundAnimation />
 
@@ -29,22 +29,20 @@ const Home = () => {
 
       {/* =====================================================
           MAIN LANDING CONTENT
+
+          IMPORTANT:
+          Hero owns its own #home section.
+          Do NOT wrap Hero inside another 100vh section.
       ===================================================== */}
       <main className="landing-main">
 
         {/* ===================================================
-            HERO SECTION
+            HERO
         =================================================== */}
-        <section
-          id="home"
-          className="landing-section landing-hero-section"
-        >
-          <Hero />
-        </section>
-
+        <Hero />
 
         {/* ===================================================
-            STATISTICS SECTION
+            STATISTICS
         =================================================== */}
         <section
           id="statistics"
@@ -53,9 +51,8 @@ const Home = () => {
           <Statistics />
         </section>
 
-
         {/* ===================================================
-            FEATURES SECTION
+            FEATURES
         =================================================== */}
         <section
           id="features"
@@ -64,9 +61,8 @@ const Home = () => {
           <Features />
         </section>
 
-
         {/* ===================================================
-            TESTIMONIALS SECTION
+            TESTIMONIALS
         =================================================== */}
         <section
           id="testimonials"
@@ -75,9 +71,8 @@ const Home = () => {
           <Testimonials />
         </section>
 
-
         {/* ===================================================
-            CTA SECTION
+            CTA / CONTACT
         =================================================== */}
         <section
           id="contact"
@@ -87,7 +82,6 @@ const Home = () => {
         </section>
 
       </main>
-
 
       {/* =====================================================
           FOOTER
