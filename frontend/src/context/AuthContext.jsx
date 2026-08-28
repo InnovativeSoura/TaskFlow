@@ -1,4 +1,4 @@
-
+// src/context/AuthContext.jsx
 
 import {
   createContext,
@@ -26,9 +26,7 @@ const getStoredUser = () => {
 
     const parsedUser = JSON.parse(storedUser);
 
-    return parsedUser && typeof parsedUser === "object"
-      ? parsedUser
-      : null;
+    return parsedUser || null;
   } catch (error) {
     console.error("Invalid stored user:", error);
 
@@ -39,36 +37,22 @@ const getStoredUser = () => {
 };
 
 /* =========================================================
-   GET STORED TOKEN
-========================================================= */
-
-const getStoredToken = () => {
-  try {
-    return localStorage.getItem("token");
-  } catch (error) {
-    console.error("Unable to read authentication token:", error);
-    return null;
-  }
-};
-
-/* =========================================================
    AUTH PROVIDER
 ========================================================= */
 
 export const AuthProvider = ({ children }) => {
-  /*
-   * IMPORTANT:
-   * Initialize token and user from localStorage immediately.
-   * This prevents the protected dashboard route from seeing
-   * an unauthenticated state during the first render.
-   */
+  /* =======================================================
+     AUTH STATE
+  ======================================================= */
 
-  const [token, setToken] = useState(getStoredToken);
-  const [user, setUser] = useState(getStoredUser);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token");
+  });
 
-  /*
-   * loading is TRUE while we verify an existing session.
-   */
+  const [user, setUser] = useState(() => {
+    return getStoredUser();
+  });
+
   const [loading, setLoading] = useState(true);
 
   /* =======================================================
@@ -105,17 +89,19 @@ export const AuthProvider = ({ children }) => {
 
   /* =======================================================
      LOAD CURRENT USER
+     
+     This is ONLY used when the application starts
+     and an existing token is already stored.
   ======================================================= */
 
   const loadCurrentUser = useCallback(async () => {
     const storedToken = localStorage.getItem("token");
 
-    /*
-     * No token = no authenticated session.
-     */
+    /* ---------------------------------------------
+       No token = normal logged-out state
+    --------------------------------------------- */
+
     if (!storedToken) {
-      setToken(null);
-      setUser(null);
       setLoading(false);
       return;
     }
@@ -125,25 +111,17 @@ export const AuthProvider = ({ children }) => {
 
       const response = await api.get("/auth/me");
 
-      const currentUser = response.data?.user;
+      const currentUser =
+        response.data?.user ||
+        response.data?.data?.user ||
+        null;
 
-      /*
-       * Accept the authenticated user when the API gives us
-       * a valid user object.
-       *
-       * Some backend versions may not include `success`,
-       * therefore don't make the frontend unnecessarily
-       * dependent on that one property.
-       */
-      if (currentUser) {
+      if (
+        response.data?.success &&
+        currentUser
+      ) {
         setToken(storedToken);
-
         setUser(currentUser);
-
-        localStorage.setItem(
-          "token",
-          storedToken
-        );
 
         localStorage.setItem(
           "user",
@@ -151,7 +129,7 @@ export const AuthProvider = ({ children }) => {
         );
       } else {
         console.warn(
-          "Authentication token exists but /auth/me returned no user."
+          "Auth session could not be restored."
         );
 
         clearAuth();
@@ -162,6 +140,11 @@ export const AuthProvider = ({ children }) => {
         error.response?.data || error.message
       );
 
+      /*
+       * Existing token is invalid.
+       * Clear the session so protected routes
+       * cannot be accessed.
+       */
       clearAuth();
     } finally {
       setLoading(false);
@@ -178,6 +161,13 @@ export const AuthProvider = ({ children }) => {
 
   /* =======================================================
      LOGIN
+     
+     IMPORTANT:
+     Do NOT immediately call /auth/me here.
+     
+     The login endpoint already returned the token
+     and user. Save them and let the application
+     proceed directly to the dashboard.
   ======================================================= */
 
   const login = async ({ email, password }) => {
@@ -192,112 +182,97 @@ export const AuthProvider = ({ children }) => {
 
       const data = response.data;
 
-      console.log("LOGIN RESPONSE:", data);
+      console.log(
+        "🔐 Login Response:",
+        data
+      );
 
-      /*
-       * Backend must provide a token.
-       */
-      if (!data?.token) {
+      /* ---------------------------------------------
+         Check backend response
+      --------------------------------------------- */
+
+      if (!data?.success) {
         return {
           success: false,
           message:
             data?.message ||
-            "Login failed. No authentication token was returned.",
+            "Login failed.",
         };
       }
 
-      /*
-       * Backend may return success as true.
-       *
-       * We primarily require the token because that is what
-       * establishes the authenticated session.
-       */
-      const initialUser = data?.user || null;
+      /* ---------------------------------------------
+         Make sure token exists
+      --------------------------------------------- */
 
-      saveAuth(
-        data.token,
-        initialUser
-      );
-
-      /*
-       * Try to retrieve the latest user from the backend.
-       *
-       * The token has already been saved to localStorage,
-       * so the axios interceptor can use it immediately.
-       */
-      try {
-        const meResponse = await api.get("/auth/me");
-
-        const latestUser =
-          meResponse.data?.user || initialUser;
-
-        if (!latestUser) {
-          clearAuth();
-
-          return {
-            success: false,
-            message:
-              "Login succeeded, but the authenticated user could not be loaded.",
-          };
-        }
-
-        saveAuth(
-          data.token,
-          latestUser
+      if (!data?.token) {
+        console.error(
+          "Login succeeded but no JWT token was returned.",
+          data
         );
-
-        /*
-         * Explicitly make sure loading is finished.
-         */
-        setLoading(false);
-
-        return {
-          success: true,
-          user: latestUser,
-          token: data.token,
-        };
-      } catch (meError) {
-        /*
-         * If the login endpoint successfully returned a token
-         * and user, don't immediately destroy a valid login
-         * merely because /auth/me failed.
-         *
-         * This also makes the authentication flow more robust
-         * against temporary /me problems.
-         */
-        console.warn(
-          "Could not refresh user through /auth/me:",
-          meError.response?.data || meError.message
-        );
-
-        if (initialUser) {
-          setToken(data.token);
-          setUser(initialUser);
-
-          setLoading(false);
-
-          return {
-            success: true,
-            user: initialUser,
-            token: data.token,
-          };
-        }
-
-        clearAuth();
 
         return {
           success: false,
           message:
-            "Login succeeded but the user session could not be verified.",
+            "Login succeeded but authentication token was not returned by the server.",
         };
       }
-    } catch (error) {
-      console.error(
-        "Login Error:",
-        error.response?.data || error.message
+
+      /* ---------------------------------------------
+         Make sure user exists
+      --------------------------------------------- */
+
+      if (!data?.user) {
+        console.error(
+          "Login succeeded but no user was returned.",
+          data
+        );
+
+        return {
+          success: false,
+          message:
+            "Login succeeded but user information was not returned by the server.",
+        };
+      }
+
+      /* ---------------------------------------------
+         SAVE AUTHENTICATION
+      --------------------------------------------- */
+
+      saveAuth(
+        data.token,
+        data.user
       );
 
-      clearAuth();
+      console.log(
+        "✅ Login successful."
+      );
+
+      console.log(
+        "👤 User:",
+        data.user
+      );
+
+      console.log(
+        "🔑 Token saved."
+      );
+
+      /* ---------------------------------------------
+         RETURN SUCCESS IMMEDIATELY
+         
+         AuthCard will navigate to /dashboard.
+      --------------------------------------------- */
+
+      return {
+        success: true,
+        user: data.user,
+        token: data.token,
+      };
+    } catch (error) {
+      console.error(
+        "❌ Login Error:",
+        error.response?.data ||
+          error.message
+      );
 
       return {
         success: false,
@@ -310,6 +285,9 @@ export const AuthProvider = ({ children }) => {
 
   /* =======================================================
      REGISTER
+     
+     Same principle as login:
+     use the token/user returned by registration directly.
   ======================================================= */
 
   const register = async ({
@@ -331,86 +309,86 @@ export const AuthProvider = ({ children }) => {
 
       const data = response.data;
 
-      console.log("REGISTER RESPONSE:", data);
+      console.log(
+        "📝 Register Response:",
+        data
+      );
 
-      if (!data?.token) {
+      /* ---------------------------------------------
+         Check backend response
+      --------------------------------------------- */
+
+      if (!data?.success) {
         return {
           success: false,
           message:
             data?.message ||
-            "Registration failed. No authentication token was returned.",
+            "Registration failed.",
         };
       }
 
-      const initialUser = data?.user || null;
+      /* ---------------------------------------------
+         Token check
+      --------------------------------------------- */
 
-      saveAuth(
-        data.token,
-        initialUser
-      );
-
-      try {
-        const meResponse = await api.get("/auth/me");
-
-        const latestUser =
-          meResponse.data?.user || initialUser;
-
-        if (!latestUser) {
-          clearAuth();
-
-          return {
-            success: false,
-            message:
-              "Registration succeeded, but the authenticated user could not be loaded.",
-          };
-        }
-
-        saveAuth(
-          data.token,
-          latestUser
+      if (!data?.token) {
+        console.error(
+          "Registration succeeded but no JWT token was returned.",
+          data
         );
-
-        setLoading(false);
-
-        return {
-          success: true,
-          user: latestUser,
-          token: data.token,
-        };
-      } catch (meError) {
-        console.warn(
-          "Could not refresh registered user:",
-          meError.response?.data || meError.message
-        );
-
-        if (initialUser) {
-          setToken(data.token);
-          setUser(initialUser);
-
-          setLoading(false);
-
-          return {
-            success: true,
-            user: initialUser,
-            token: data.token,
-          };
-        }
-
-        clearAuth();
 
         return {
           success: false,
           message:
-            "Registration succeeded but the user session could not be verified.",
+            "Registration succeeded but authentication token was not returned by the server.",
         };
       }
-    } catch (error) {
-      console.error(
-        "Register Error:",
-        error.response?.data || error.message
+
+      /* ---------------------------------------------
+         User check
+      --------------------------------------------- */
+
+      if (!data?.user) {
+        console.error(
+          "Registration succeeded but no user was returned.",
+          data
+        );
+
+        return {
+          success: false,
+          message:
+            "Registration succeeded but user information was not returned by the server.",
+        };
+      }
+
+      /* ---------------------------------------------
+         SAVE AUTHENTICATION
+      --------------------------------------------- */
+
+      saveAuth(
+        data.token,
+        data.user
       );
 
-      clearAuth();
+      console.log(
+        "✅ Registration successful."
+      );
+
+      /* ---------------------------------------------
+         RETURN SUCCESS
+      --------------------------------------------- */
+
+      return {
+        success: true,
+        user: data.user,
+        token: data.token,
+      };
+    } catch (error) {
+      console.error(
+        "❌ Register Error:",
+        error.response?.data ||
+          error.message
+      );
 
       return {
         success: false,
@@ -426,16 +404,15 @@ export const AuthProvider = ({ children }) => {
   ======================================================= */
 
   const logout = useCallback(() => {
+    console.log(
+      "🚪 Logging out..."
+    );
+
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
-
-    /*
-     * Keep loading false after logout.
-     */
-    setLoading(false);
   }, []);
 
   /* =======================================================
@@ -462,21 +439,52 @@ export const AuthProvider = ({ children }) => {
      AUTHENTICATED STATUS
   ======================================================= */
 
-  /*
-   * IMPORTANT:
-   *
-   * Don't require `user._id` here.
-   *
-   * Depending on your backend serialization, the ID can
-   * temporarily be represented differently.
-   *
-   * A valid token + user object is enough for the frontend
-   * authentication state.
-   */
+  const isAuthenticated =
+    Boolean(token) &&
+    Boolean(user);
 
-  const isAuthenticated = Boolean(
-    token && user
-  );
+  /* =======================================================
+     DEBUG
+  ======================================================= */
+
+  useEffect(() => {
+    console.log(
+      "===================================="
+    );
+
+    console.log(
+      "🔐 AUTH STATE"
+    );
+
+    console.log(
+      "Token:",
+      token ? "PRESENT" : "MISSING"
+    );
+
+    console.log(
+      "User:",
+      user || "NONE"
+    );
+
+    console.log(
+      "Authenticated:",
+      isAuthenticated
+    );
+
+    console.log(
+      "Loading:",
+      loading
+    );
+
+    console.log(
+      "===================================="
+    );
+  }, [
+    token,
+    user,
+    isAuthenticated,
+    loading,
+  ]);
 
   /* =======================================================
      PROVIDER

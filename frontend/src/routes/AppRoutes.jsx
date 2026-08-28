@@ -84,8 +84,7 @@ import Upgrade from "../pages/Upgrade";
 const AppRoutes = () => {
   const {
     loading,
-    token,
-    user,
+    isAuthenticated,
   } = useAuth();
 
   if (loading) {
@@ -96,8 +95,7 @@ const AppRoutes = () => {
     );
   }
 
-  const authenticated =
-    !!token && !!user;
+  const authenticated = isAuthenticated;
 
   return (
     <Routes>
