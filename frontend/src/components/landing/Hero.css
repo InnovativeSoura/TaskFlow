@@ -1,1240 +1,1678 @@
 /* =========================================================
-   TASKFLOW — HERO SECTION
-   Premium landing hero
-   ========================================================= */
+   TASKFLOW HERO
+   Premium SaaS Hero Section
+========================================================= */
 
-
-/* =========================================================
-   HERO ROOT
-   ========================================================= */
-
-.hero-section {
+.tf-hero {
   position: relative;
 
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 76px);
 
   display: flex;
   align-items: center;
 
+  padding:
+    100px
+    0
+    90px;
+
   overflow: hidden;
+
+  isolation: isolate;
 
   background:
     radial-gradient(
-      circle at 18% 52%,
-      rgba(82, 60, 255, 0.24),
-      transparent 34%
+      circle at 12% 42%,
+      rgba(91, 63, 255, 0.18),
+      transparent 32%
     ),
     radial-gradient(
-      circle at 86% 48%,
-      rgba(0, 153, 255, 0.10),
-      transparent 34%
+      circle at 90% 48%,
+      rgba(0, 130, 255, 0.12),
+      transparent 32%
     ),
     linear-gradient(
       180deg,
       #050816 0%,
-      #070b20 48%,
+      #050718 55%,
       #030511 100%
     );
 
-  color: #f8fafc;
-
-  isolation: isolate;
-}
-
-
-/* =========================================================
-   HERO BACKGROUND GLOW
-   ========================================================= */
-
-.hero-glow {
-  position: absolute;
-
-  pointer-events: none;
-
-  border-radius: 50%;
-
-  filter: blur(20px);
-
-  z-index: -3;
-}
-
-.hero-glow-one {
-  width: 520px;
-  height: 520px;
-
-  left: -190px;
-  top: 180px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(91, 70, 255, 0.30) 0%,
-      rgba(91, 70, 255, 0.12) 38%,
-      transparent 72%
-    );
-}
-
-.hero-glow-two {
-  width: 500px;
-  height: 500px;
-
-  right: -210px;
-  top: 250px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0, 157, 255, 0.16) 0%,
-      rgba(0, 157, 255, 0.06) 42%,
-      transparent 72%
-    );
-}
-
-.hero-glow-three {
-  width: 700px;
-  height: 260px;
-
-  left: 50%;
-  bottom: -170px;
-
-  transform: translateX(-50%);
-
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(99, 72, 255, 0.14),
-      transparent 70%
-    );
-
-  filter: blur(40px);
+  color: #ffffff;
 }
 
 
 /* =========================================================
    GRID
-   ========================================================= */
+========================================================= */
 
-.hero-grid {
+.tf-hero-grid {
   position: absolute;
 
   inset: 0;
 
-  z-index: -4;
+  z-index: -3;
 
   pointer-events: none;
 
+  opacity: 0.38;
+
   background-image:
     linear-gradient(
-      rgba(148, 163, 184, 0.035) 1px,
+      rgba(120, 110, 255, 0.055) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(148, 163, 184, 0.035) 1px,
+      rgba(120, 110, 255, 0.055) 1px,
       transparent 1px
     );
 
-  background-size: 72px 72px;
+  background-size:
+    52px 52px;
 
   mask-image:
     linear-gradient(
       to bottom,
-      transparent 0%,
-      black 14%,
-      black 82%,
-      transparent 100%
+      transparent,
+      black 15%,
+      black 85%,
+      transparent
     );
 }
 
 
 /* =========================================================
-   FLOATING ORBS
-   ========================================================= */
+   GLOW
+========================================================= */
 
-.hero-orb {
+.tf-hero-glow {
   position: absolute;
 
-  border: 1px solid rgba(148, 163, 184, 0.08);
+  width: 520px;
+  height: 520px;
 
   border-radius: 50%;
+
+  filter: blur(100px);
+
+  pointer-events: none;
+
+  z-index: -4;
+}
+
+.tf-hero-glow-left {
+  left: -280px;
+  top: 180px;
+
+  background: rgba(89, 54, 255, 0.22);
+}
+
+.tf-hero-glow-right {
+  right: -260px;
+  top: 230px;
+
+  background: rgba(0, 111, 255, 0.16);
+}
+
+
+/* =========================================================
+   DECORATIVE RINGS
+========================================================= */
+
+.tf-hero-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(109, 93, 252, 0.24);
 
   pointer-events: none;
 
   z-index: -2;
-
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.008) 55%,
-      transparent 72%
-    );
-
-  box-shadow:
-    inset 0 0 30px rgba(255, 255, 255, 0.015),
-    0 0 35px rgba(82, 70, 255, 0.035);
 }
 
-.hero-orb-one {
-  width: 116px;
-  height: 116px;
+.tf-ring-one {
+  width: 420px;
+  height: 420px;
 
-  left: 8%;
-  top: 20%;
+  left: -150px;
+  top: 240px;
 }
 
-.hero-orb-two {
-  width: 152px;
-  height: 152px;
+.tf-ring-two {
+  width: 390px;
+  height: 390px;
 
-  right: 8%;
-  top: 35%;
-}
+  right: -120px;
+  top: 190px;
 
-.hero-orb-three {
-  width: 84px;
-  height: 84px;
-
-  left: 13%;
-  bottom: 12%;
+  border-color: rgba(38, 140, 255, 0.28);
 }
 
 
 /* =========================================================
    MAIN CONTAINER
-   ========================================================= */
+========================================================= */
 
-.hero-container {
+.tf-hero-container {
   position: relative;
 
   width: min(
-    1180px,
-    calc(100% - 56px)
+    1320px,
+    calc(100% - 80px)
   );
 
   margin: 0 auto;
 
-  min-height: 100vh;
-
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.08fr)
-    minmax(340px, 0.72fr);
+    minmax(0, 1.18fr)
+    minmax(400px, 0.82fr);
 
   align-items: center;
 
-  column-gap: 70px;
-
-  padding:
-    100px
-    0
-    70px;
+  gap: 76px;
 }
 
 
 /* =========================================================
    LEFT CONTENT
-   ========================================================= */
+========================================================= */
 
-.hero-content {
+.tf-hero-content {
   position: relative;
 
-  width: 100%;
-
-  max-width: 680px;
-
   z-index: 2;
+
+  min-width: 0;
 }
 
 
 /* =========================================================
    BADGE
-   ========================================================= */
+========================================================= */
 
-.hero-badge {
-  width: fit-content;
+.tf-hero-badge {
+  display: inline-flex;
 
-  min-height: 32px;
-
-  margin-bottom: 20px;
-
-  padding:
-    7px
-    12px
-    7px
-    10px;
-
-  display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 10px;
 
-  border:
-    1px solid
-    rgba(148, 163, 184, 0.18);
+  min-height: 42px;
+
+  padding:
+    0
+    18px;
+
+  margin-bottom: 30px;
+
+  border: 1px solid
+    rgba(145, 125, 255, 0.25);
 
   border-radius: 999px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.075),
+      rgba(108, 82, 255, 0.16),
       rgba(255, 255, 255, 0.035)
     );
 
-  color:
-    rgba(226, 232, 240, 0.78);
-
-  font-size: 11px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.01em;
-
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.06),
+    0 10px 40px
+      rgba(72, 48, 200, 0.08);
+
+  color: #d9d3ff;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
 }
 
-.hero-badge-dot {
-  width: 7px;
-  height: 7px;
+.tf-hero-badge svg:first-child {
+  color: #a98cff;
 
-  flex: 0 0 7px;
-
-  border-radius: 50%;
-
-  background: #8b5cf6;
-
-  box-shadow:
-    0 0 0 3px rgba(139, 92, 246, 0.10),
-    0 0 14px rgba(139, 92, 246, 0.65);
+  font-size: 13px;
 }
 
-.hero-badge svg {
-  margin-left: 2px;
+.tf-hero-badge svg:last-child {
+  color: #8b7cff;
 
-  color: #a78bfa;
-
-  font-size: 9px;
+  font-size: 10px;
 }
 
 
 /* =========================================================
-   HERO TITLE
-   ========================================================= */
+   TITLE
+========================================================= */
 
-.hero-title {
-  margin: 0;
-
-  max-width: 690px;
-
+.tf-hero-title {
   display: flex;
+
   flex-direction: column;
 
-  color: #f8fafc;
+  margin: 0;
+
+  max-width: 760px;
 
   font-size:
     clamp(
-      48px,
+      54px,
       5vw,
-      72px
+      82px
     );
 
-  line-height: 0.99;
+  line-height: 0.98;
+
+  letter-spacing: -3.8px;
 
   font-weight: 800;
 
-  letter-spacing: -0.055em;
+  color: #f8fafc;
 }
 
-.hero-title > span {
-  display: block;
-}
-
-.hero-title-gradient {
-  display: block;
+.tf-gradient-text {
+  display: inline-block;
 
   background:
     linear-gradient(
-      90deg,
-      #8b5cf6 0%,
-      #6d5dfc 38%,
-      #4f9cf9 100%
+      100deg,
+      #8d43ff 0%,
+      #7c5cff 40%,
+      #4e8dff 100%
     );
 
   -webkit-background-clip: text;
   background-clip: text;
 
   -webkit-text-fill-color: transparent;
-
-  color: transparent;
 }
 
 
 /* =========================================================
    DESCRIPTION
-   ========================================================= */
+========================================================= */
 
-.hero-description {
-  width: 100%;
-
-  max-width: 590px;
+.tf-hero-description {
+  max-width: 680px;
 
   margin:
-    24px
+    30px
     0
-    0;
+    32px;
 
-  color:
-    rgba(148, 163, 184, 0.82);
+  color: #9ba6bd;
 
-  font-size: 14px;
+  font-size: 16px;
 
-  line-height: 1.75;
+  line-height: 1.8;
 
   font-weight: 400;
 }
 
 
 /* =========================================================
-   HERO BUTTONS
-   ========================================================= */
+   ACTIONS
+========================================================= */
 
-.hero-buttons {
-  margin-top: 28px;
-
+.tf-hero-actions {
   display: flex;
+
   align-items: center;
 
-  gap: 10px;
+  gap: 28px;
 
-  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.tf-primary-cta {
+  min-width: 310px;
+
+  height: 62px;
+
+  padding:
+    0
+    28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #7033f5,
+      #8650ff
+    );
+
+  box-shadow:
+    0 15px 40px
+      rgba(103, 62, 255, 0.28),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.16);
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tf-primary-cta:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 20px 55px
+      rgba(103, 62, 255, 0.42);
+}
+
+.tf-primary-cta svg {
+  font-size: 12px;
 }
 
 
 /* =========================================================
-   PRIMARY BUTTON
-   ========================================================= */
+   SECONDARY CTA
+========================================================= */
 
-.hero-primary-btn {
+.tf-secondary-cta {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  color: #d4caff;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.tf-play-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid
+    rgba(125, 92, 255, 0.65);
+
+  border-radius: 50%;
+
+  background:
+    rgba(98, 69, 255, 0.08);
+
+  color: #a47cff;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.tf-secondary-cta:hover .tf-play-icon {
+  background:
+    rgba(98, 69, 255, 0.2);
+
+  transform: scale(1.08);
+}
+
+.tf-play-icon svg {
+  font-size: 10px;
+
+  margin-left: 2px;
+}
+
+
+/* =========================================================
+   BENEFITS
+========================================================= */
+
+.tf-hero-benefits {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 22px;
+
+  margin-bottom: 28px;
+}
+
+.tf-benefit {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #aab4c8;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+.tf-benefit svg {
+  width: 15px;
+  height: 15px;
+
+  padding: 3px;
+
+  border-radius: 50%;
+
+  background: #0cc98b;
+
+  color: #03130f;
+
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.tf-hero-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 10px;
+
+  max-width: 700px;
+}
+
+.tf-stat-card {
+  min-height: 88px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    13px;
+
+  border:
+    1px solid
+    rgba(118, 100, 255, 0.22);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17, 23, 50, 0.85),
+      rgba(5, 8, 25, 0.72)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.035);
+}
+
+.tf-stat-icon {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    rgba(106, 67, 255, 0.18);
+
+  color: #9b74ff;
+}
+
+.tf-stat-icon svg {
+  font-size: 15px;
+}
+
+.tf-stat-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.tf-stat-info strong {
+  color: #f5f7ff;
+
+  font-size: 17px;
+
+  line-height: 1.1;
+
+  font-weight: 700;
+}
+
+.tf-stat-info span {
+  margin-top: 5px;
+
+  color: #78849d;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.tf-stars {
+  margin-top: 4px;
+
+  color: #ffc400 !important;
+
+  font-size: 9px !important;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   RIGHT AUTH PREVIEW
+========================================================= */
+
+.tf-auth-preview {
   position: relative;
 
-  min-width: 220px;
-  height: 50px;
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  z-index: 5;
+}
+
+
+/* =========================================================
+   AUTH CARD
+
+   THIS IS THE IMPORTANT FIX
+========================================================= */
+
+.tf-auth-card {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 510px;
+
+  padding:
+    26px;
+
+  border:
+    1px solid
+    rgba(116, 119, 255, 0.38);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(21, 31, 65, 0.94),
+      rgba(6, 12, 31, 0.96)
+    );
+
+  box-shadow:
+    0 35px 100px
+      rgba(0, 0, 0, 0.45),
+    0 0 60px
+      rgba(78, 53, 255, 0.12),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(24px);
+
+  -webkit-backdrop-filter: blur(24px);
+}
+
+
+/* =========================================================
+   CARD TOP HEADER
+========================================================= */
+
+.tf-auth-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 22px;
+}
+
+.tf-workspace-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #dbe4f4;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+.tf-status-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #18d99b;
+
+  box-shadow:
+    0 0 12px
+      rgba(24, 217, 155, 0.7);
+}
+
+
+/* =========================================================
+   TEAM AVATARS
+========================================================= */
+
+.tf-team-avatars {
+  display: flex;
+
+  align-items: center;
+}
+
+.tf-avatar {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-left: -5px;
+
+  border:
+    2px solid
+    #0b1229;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 15px
+      rgba(0, 0, 0, 0.25);
+}
+
+.tf-avatar:first-child {
+  margin-left: 0;
+}
+
+.tf-avatar-purple {
+  background:
+    linear-gradient(
+      135deg,
+      #8c4cff,
+      #6730dc
+    );
+}
+
+.tf-avatar-blue {
+  background:
+    linear-gradient(
+      135deg,
+      #278eff,
+      #1766dc
+    );
+}
+
+.tf-avatar-cyan {
+  background:
+    linear-gradient(
+      135deg,
+      #00bde8,
+      #0875c7
+    );
+}
+
+.tf-avatar-more {
+  margin-left: 8px;
+
+  color: #9da9c0;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tf-auth-tabs {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  min-height: 58px;
+
+  padding: 4px;
+
+  margin-bottom: 27px;
+
+  border:
+    1px solid
+    rgba(135, 147, 185, 0.13);
+
+  border-radius: 12px;
+
+  background:
+    rgba(31, 45, 77, 0.65);
+}
+
+.tf-auth-tabs button {
+  border: 0;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #9ba6bd;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    all 0.25s ease;
+}
+
+.tf-auth-tabs button.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      100deg,
+      #7033f5,
+      #8048ff
+    );
+
+  box-shadow:
+    0 8px 25px
+      rgba(105, 57, 255, 0.32);
+}
+
+
+/* =========================================================
+   AUTH TITLE
+========================================================= */
+
+.tf-auth-title {
+  margin-bottom: 24px;
+}
+
+.tf-auth-title h2 {
+  margin: 0;
+
+  color: #f6f8ff;
+
+  font-size: 27px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+
+  letter-spacing: -0.7px;
+}
+
+.tf-auth-title p {
+  margin:
+    8px
+    0
+    0;
+
+  color: #8290aa;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.tf-auth-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.tf-input-wrapper {
+  position: relative;
+
+  height: 56px;
+
+  display: flex;
+
+  align-items: center;
+
+  border:
+    1px solid
+    rgba(126, 143, 183, 0.22);
+
+  border-radius: 10px;
+
+  background:
+    rgba(25, 38, 67, 0.75);
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.tf-input-wrapper:focus-within {
+  border-color:
+    rgba(129, 91, 255, 0.75);
+
+  background:
+    rgba(30, 43, 76, 0.9);
+
+  box-shadow:
+    0 0 0 3px
+      rgba(109, 74, 255, 0.1);
+}
+
+.tf-input-wrapper > svg {
+  flex-shrink: 0;
+
+  margin-left: 17px;
+
+  color: #a7b2c8;
+
+  font-size: 15px;
+}
+
+.tf-input-wrapper input {
+  width: 100%;
+
+  height: 100%;
 
   padding:
     0
-    18px;
+    14px;
 
-  display: inline-flex;
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: #f5f7ff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+}
+
+.tf-input-wrapper input::placeholder {
+  color: #71809c;
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+.tf-password-toggle {
+  width: 42px;
+  height: 100%;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #71809c;
+
+  cursor: pointer;
+}
+
+.tf-password-toggle:hover {
+  color: #b9c4da;
+}
+
+
+/* =========================================================
+   REMEMBER ME
+========================================================= */
+
+.tf-remember-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  min-height: 26px;
+}
+
+.tf-checkbox-label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #8f9bb1;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.tf-checkbox-label input {
+  position: absolute;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.tf-custom-checkbox {
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 4px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7133f5,
+      #9a57ff
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 4px 12px
+      rgba(112, 51, 245, 0.3);
+}
+
+.tf-custom-checkbox svg {
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   AUTH SUBMIT
+========================================================= */
+
+.tf-auth-submit {
+  width: 100%;
+
+  height: 56px;
+
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
   gap: 12px;
 
+  margin-top: 2px;
+
   border: 0;
-  border-radius: 9px;
+
+  border-radius: 10px;
 
   background:
     linear-gradient(
-      135deg,
-      #6d3df5 0%,
-      #7c3aed 48%,
-      #8b5cf6 100%
+      100deg,
+      #7131f5,
+      #814bff
     );
 
   color: #ffffff;
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 14px;
 
-  font-weight: 700;
+  font-weight: 650;
 
   cursor: pointer;
 
   box-shadow:
-    0 12px 32px rgba(109, 61, 245, 0.30),
-    0 0 30px rgba(124, 58, 237, 0.10);
+    0 12px 30px
+      rgba(108, 54, 255, 0.3);
 
   transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    filter 0.22s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.hero-primary-btn::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 1px;
-
-  border-radius: 8px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.08),
-      transparent 55%
-    );
-
-  pointer-events: none;
-}
-
-.hero-primary-btn span,
-.hero-primary-btn svg {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-primary-btn svg {
-  font-size: 10px;
-
-  transition:
-    transform 0.22s ease;
-}
-
-.hero-primary-btn:hover {
+.tf-auth-submit:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 17px 40px rgba(109, 61, 245, 0.38),
-    0 0 35px rgba(124, 58, 237, 0.16);
-
-  filter: brightness(1.06);
+    0 17px 40px
+      rgba(108, 54, 255, 0.42);
 }
 
-.hero-primary-btn:hover svg {
-  transform: translateX(3px);
-}
-
-.hero-primary-btn:active {
-  transform: translateY(0);
+.tf-auth-submit svg {
+  font-size: 11px;
 }
 
 
 /* =========================================================
-   SECONDARY BUTTON
-   ========================================================= */
+   DIVIDER
+========================================================= */
 
-.hero-secondary-btn {
-  min-width: 148px;
-  height: 50px;
+.tf-divider {
+  display: grid;
 
-  padding:
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin:
+    23px
     0
-    15px;
+    17px;
+}
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 9px;
-
-  border:
-    1px solid
-    rgba(148, 163, 184, 0.17);
-
-  border-radius: 9px;
+.tf-divider span {
+  height: 1px;
 
   background:
-    rgba(255, 255, 255, 0.025);
-
-  color:
-    rgba(226, 232, 240, 0.86);
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  transition:
-    transform 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    rgba(122, 137, 173, 0.18);
 }
 
-.hero-secondary-btn:hover {
-  transform: translateY(-2px);
+.tf-divider p {
+  margin: 0;
 
-  background:
-    rgba(255, 255, 255, 0.055);
-
-  border-color:
-    rgba(167, 139, 250, 0.30);
-
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.16);
-}
-
-.hero-play-icon {
-  width: 24px;
-  height: 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border:
-    1px solid
-    rgba(167, 139, 250, 0.18);
-
-  border-radius: 50%;
-
-  background:
-    rgba(124, 58, 237, 0.10);
-
-  color: #a78bfa;
-
-  font-size: 8px;
-}
-
-.hero-play-icon svg {
-  margin-left: 1px;
-}
-
-
-/* =========================================================
-   TRUST ROW
-   ========================================================= */
-
-.hero-trust {
-  margin-top: 16px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 22px;
-
-  flex-wrap: wrap;
-}
-
-.hero-trust-item {
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  color:
-    rgba(148, 163, 184, 0.64);
-
-  font-size: 9px;
-
-  font-weight: 500;
-}
-
-.hero-trust-item svg {
-  color: #34d399;
-
-  font-size: 9px;
-
-  filter:
-    drop-shadow(
-      0 0 5px
-      rgba(52, 211, 153, 0.35)
-    );
-}
-
-
-/* =========================================================
-   MINI STATS
-   ========================================================= */
-
-.hero-mini-stats {
-  width: fit-content;
-
-  margin-top: 22px;
-
-  padding-top: 16px;
-
-  display: flex;
-  align-items: stretch;
-
-  gap: 8px;
-
-  border-top:
-    1px solid
-    rgba(148, 163, 184, 0.10);
-}
-
-.hero-mini-stat {
-  min-width: 120px;
-
-  padding:
-    9px
-    11px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  border:
-    1px solid
-    rgba(148, 163, 184, 0.10);
-
-  border-radius: 9px;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
-
-  transition:
-    transform 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease;
-}
-
-.hero-mini-stat:hover {
-  transform: translateY(-2px);
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  border-color:
-    rgba(139, 92, 246, 0.18);
-}
-
-.hero-mini-stat-icon {
-  width: 27px;
-  height: 27px;
-
-  flex: 0 0 27px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 7px;
-
-  background:
-    rgba(124, 58, 237, 0.13);
-
-  color: #a78bfa;
-
-  font-size: 10px;
-}
-
-.hero-mini-stat-content {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-mini-stat-content strong {
-  color: #f8fafc;
+  color: #71809a;
 
   font-size: 11px;
-
-  line-height: 1.15;
-
-  font-weight: 750;
-}
-
-.hero-mini-stat-content span {
-  margin-top: 3px;
-
-  color:
-    rgba(148, 163, 184, 0.52);
-
-  font-size: 7px;
-
-  line-height: 1.1;
 
   white-space: nowrap;
 }
 
 
 /* =========================================================
-   RIGHT AUTH AREA
-   ========================================================= */
+   SOCIAL BUTTONS
+========================================================= */
 
-.hero-right {
+.tf-social-buttons {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.tf-social-btn {
   position: relative;
 
   width: 100%;
 
-  min-width: 0;
+  height: 50px;
 
   display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(125, 143, 180, 0.22);
+
+  border-radius: 10px;
+
+  background:
+    rgba(24, 35, 61, 0.75);
+
+  color: #e7ebf5;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.tf-social-btn svg {
+  position: absolute;
+
+  left: 20px;
+
+  font-size: 16px;
+}
+
+.tf-social-btn:first-child svg {
+  color: #ffffff;
+}
+
+.tf-social-btn:last-child svg {
+  color: #ffffff;
+}
+
+.tf-social-btn:hover {
+  transform: translateY(-1px);
+
+  background:
+    rgba(35, 49, 82, 0.95);
+
+  border-color:
+    rgba(130, 107, 255, 0.4);
+}
+
+
+/* =========================================================
+   AUTH METRICS
+========================================================= */
+
+.tf-auth-metrics {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.tf-auth-metric {
+  min-height: 74px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding:
+    11px;
+
+  border:
+    1px solid
+    rgba(119, 137, 178, 0.16);
+
+  border-radius: 11px;
+
+  background:
+    rgba(12, 21, 43, 0.72);
+}
+
+.tf-metric-icon {
+  width: 35px;
+  height: 35px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
-  z-index: 2;
-}
-
-.hero-auth-glow {
-  position: absolute;
-
-  width: 430px;
-  height: 500px;
-
-  left: 50%;
-  top: 50%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
-
-  border-radius: 50%;
+  border-radius: 9px;
 
   background:
-    radial-gradient(
-      ellipse,
-      rgba(94, 69, 255, 0.16) 0%,
-      rgba(94, 69, 255, 0.07) 35%,
-      transparent 70%
-    );
+    rgba(108, 66, 255, 0.18);
 
-  filter: blur(25px);
-
-  pointer-events: none;
-
-  z-index: -1;
+  color: #9c75ff;
 }
 
+.tf-metric-icon svg {
+  font-size: 14px;
+}
 
-/* =========================================================
-   AUTH CARD WRAPPER
-   ========================================================= */
-
-.hero-auth-card-wrapper {
-  position: relative;
-
-  width: 360px;
-
-  max-width: 100%;
+.tf-auth-metric > div:last-child {
+  min-width: 0;
 
   display: flex;
+
+  flex-direction: column;
+}
+
+.tf-auth-metric strong {
+  color: #f3f6ff;
+
+  font-size: 18px;
+
+  line-height: 1.1;
+}
+
+.tf-auth-metric span {
+  margin-top: 4px;
+
+  color: #74829b;
+
+  font-size: 9px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   SUCCESS CIRCLE
+========================================================= */
+
+.tf-success-circle {
+  width: 35px;
+  height: 35px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
   justify-content: center;
 
-  transform:
-    translateY(4px);
+  border:
+    4px solid
+    rgba(11, 213, 157, 0.85);
 
-  filter:
-    drop-shadow(
-      0 35px 70px
-      rgba(0, 0, 0, 0.30)
-    );
-}
-
-
-/* =========================================================
-   AUTH CARD OVERRIDE
-   ========================================================= */
-
-.hero-auth-card-wrapper .auth-card.compact {
-  width: 360px;
-  max-width: 360px;
-
-  min-height: 620px;
-  height: 620px;
-}
-
-
-/* =========================================================
-   SUBTLE CARD LIGHT
-   ========================================================= */
-
-.hero-auth-card-wrapper::before {
-  content: "";
-
-  position: absolute;
-
-  width: 250px;
-  height: 250px;
-
-  left: 50%;
-  top: 42%;
-
-  transform:
-    translate(-50%, -50%);
+  border-left-color:
+    rgba(11, 213, 157, 0.2);
 
   border-radius: 50%;
 
   background:
-    radial-gradient(
-      circle,
-      rgba(124, 58, 237, 0.14),
-      transparent 68%
-    );
+    rgba(5, 40, 37, 0.35);
 
-  filter: blur(28px);
+  color: #19d99d;
 
-  pointer-events: none;
-
-  z-index: -1;
+  font-size: 13px;
 }
 
 
 /* =========================================================
-   SCROLL INDICATOR
-   ========================================================= */
+   SCROLL
+========================================================= */
 
-.hero-scroll {
+.tf-scroll-indicator {
   position: absolute;
 
+  bottom: 24px;
   left: 50%;
-  bottom: 22px;
 
   transform: translateX(-50%);
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 
   gap: 7px;
 
-  color:
-    rgba(148, 163, 184, 0.48);
+  color: #59657d;
 
   font-size: 7px;
 
   font-weight: 600;
 
-  letter-spacing: 0.12em;
+  letter-spacing: 2px;
 
-  text-transform: uppercase;
-
-  white-space: nowrap;
-
-  z-index: 4;
+  z-index: 3;
 }
 
-.hero-scroll-line {
+.tf-scroll-line {
   width: 1px;
-  height: 20px;
+  height: 22px;
 
   background:
     linear-gradient(
-      180deg,
-      rgba(139, 92, 246, 0.10),
-      rgba(139, 92, 246, 0.75)
+      to bottom,
+      rgba(126, 92, 255, 0.8),
+      transparent
     );
-
-  animation:
-    hero-scroll-pulse
-    2s
-    ease-in-out
-    infinite;
-}
-
-@keyframes hero-scroll-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: scaleY(0.75);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scaleY(1);
-  }
 }
 
 
 /* =========================================================
    LARGE DESKTOP
-   ========================================================= */
+========================================================= */
 
-@media (min-width: 1500px) {
-  .hero-container {
-    width: min(
-      1280px,
-      calc(100% - 80px)
-    );
+@media (max-width: 1250px) {
 
-    column-gap: 90px;
-  }
-
-  .hero-title {
-    font-size: 76px;
-  }
-
-  .hero-description {
-    font-size: 15px;
-  }
-
-  .hero-auth-card-wrapper .auth-card.compact {
-    width: 380px;
-    max-width: 380px;
-
-    min-height: 640px;
-    height: 640px;
-  }
-}
-
-
-/* =========================================================
-   TABLET / SMALL DESKTOP
-   ========================================================= */
-
-@media (max-width: 1100px) {
-  .hero-container {
+  .tf-hero-container {
     width:
-      min(
-        100% - 42px,
-        1000px
-      );
+      calc(100% - 56px);
 
     grid-template-columns:
       minmax(0, 1fr)
-      360px;
+      minmax(380px, 0.82fr);
 
-    column-gap: 35px;
+    gap: 45px;
   }
 
-  .hero-title {
-    font-size:
-      clamp(
-        42px,
-        5vw,
-        60px
-      );
+  .tf-hero-title {
+    font-size: 64px;
   }
 
-  .hero-description {
-    font-size: 13px;
+  .tf-auth-card {
+    max-width: 470px;
   }
+
 }
 
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 900px) {
-  .hero-section {
-    min-height: auto;
+@media (max-width: 1000px) {
+
+  .tf-hero {
+    padding:
+      80px
+      0
+      80px;
   }
 
-  .hero-container {
-    min-height: auto;
-
+  .tf-hero-container {
     grid-template-columns: 1fr;
 
-    row-gap: 55px;
+    gap: 60px;
 
-    padding:
-      120px
-      0
-      85px;
-  }
-
-  .hero-content {
-    max-width: 720px;
-
-    margin:
-      0
-      auto;
-
-    text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-title {
-    max-width: 760px;
-
-    font-size:
-      clamp(
-        44px,
-        8vw,
-        64px
+    width:
+      min(
+        720px,
+        calc(100% - 40px)
       );
   }
 
-  .hero-description {
-    max-width: 650px;
+  .tf-hero-content {
+    text-align: center;
   }
 
-  .hero-buttons {
+  .tf-hero-badge,
+  .tf-hero-actions,
+  .tf-hero-benefits {
     justify-content: center;
   }
 
-  .hero-trust {
-    justify-content: center;
+  .tf-hero-title {
+    max-width: 800px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    font-size:
+      clamp(
+        48px,
+        8vw,
+        70px
+      );
   }
 
-  .hero-mini-stats {
+  .tf-hero-description {
     margin-left: auto;
     margin-right: auto;
   }
 
-  .hero-right {
-    width: 100%;
+  .tf-hero-stats {
+    max-width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .hero-scroll {
-    display: none;
+  .tf-auth-preview {
+    max-width: 510px;
+
+    margin:
+      0
+      auto;
   }
+
 }
 
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 600px) {
-  .hero-container {
-    width:
-      min(
-        100% - 28px,
-        680px
-      );
+@media (max-width: 650px) {
 
-    row-gap: 42px;
+  .tf-hero {
+    min-height: auto;
 
     padding:
-      105px
+      55px
       0
-      60px;
+      70px;
   }
 
-  .hero-badge {
-    min-height: 29px;
+  .tf-hero-container {
+    width:
+      calc(100% - 28px);
+
+    gap: 45px;
+  }
+
+  .tf-hero-badge {
+    max-width: 100%;
 
     padding:
-      6px
-      10px;
+      0
+      13px;
 
-    font-size: 9px;
+    font-size: 10px;
   }
 
-  .hero-title {
+  .tf-hero-title {
     font-size:
       clamp(
-        38px,
+        39px,
         11vw,
-        52px
+        54px
       );
 
     line-height: 1;
+
+    letter-spacing: -2px;
   }
 
-  .hero-description {
-    margin-top: 19px;
+  .tf-hero-description {
+    margin-top: 23px;
 
-    font-size: 12px;
+    font-size: 13px;
 
     line-height: 1.7;
   }
 
-  .hero-buttons {
-    width: 100%;
-
-    margin-top: 23px;
-
-    flex-direction: column;
-  }
-
-  .hero-primary-btn,
-  .hero-secondary-btn {
-    width: 100%;
-
-    max-width: 360px;
-  }
-
-  .hero-trust {
-    width: 100%;
-
-    gap: 12px;
-
-    flex-direction: column;
-  }
-
-  .hero-mini-stats {
-    width: 100%;
-
+  .tf-hero-actions {
     flex-direction: column;
 
-    gap: 7px;
+    width: 100%;
+
+    gap: 18px;
   }
 
-  .hero-mini-stat {
+  .tf-primary-cta {
     width: 100%;
 
     min-width: 0;
   }
 
-  .hero-auth-card-wrapper {
-    width: 100%;
+  .tf-hero-benefits {
+    flex-direction: column;
+
+    gap: 12px;
   }
 
-  .hero-auth-card-wrapper .auth-card.compact {
-    width:
-      min(
-        360px,
-        calc(100vw - 28px)
-      );
+  .tf-hero-stats {
+    grid-template-columns:
+      1fr 1fr;
 
-    max-width:
-      min(
-        360px,
-        calc(100vw - 28px)
-      );
+    gap: 8px;
   }
 
-  .hero-glow-one {
-    left: -260px;
+  .tf-stat-card {
+    min-height: 78px;
+
+    padding: 10px;
   }
 
-  .hero-glow-two {
-    right: -280px;
+  .tf-stat-icon {
+    width: 31px;
+    height: 31px;
   }
 
-  .hero-orb-one {
-    left: -40px;
+  .tf-stat-info strong {
+    font-size: 14px;
   }
 
-  .hero-orb-two {
-    right: -60px;
+  .tf-stat-info span {
+    font-size: 8px;
   }
+
+  .tf-auth-card {
+    max-width: 100%;
+
+    padding: 18px;
+
+    border-radius: 17px;
+  }
+
+  .tf-auth-header {
+    margin-bottom: 17px;
+  }
+
+  .tf-workspace-status {
+    font-size: 11px;
+  }
+
+  .tf-avatar {
+    width: 26px;
+    height: 26px;
+
+    font-size: 9px;
+  }
+
+  .tf-auth-title h2 {
+    font-size: 23px;
+  }
+
+  .tf-auth-title p {
+    font-size: 10px;
+  }
+
+  .tf-input-wrapper {
+    height: 52px;
+  }
+
+  .tf-auth-submit {
+    height: 53px;
+  }
+
+  .tf-auth-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-scroll-indicator {
+    display: none;
+  }
+
 }
 
 
 /* =========================================================
    VERY SMALL MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 380px) {
-  .hero-title {
-    font-size: 35px;
+
+  .tf-hero-title {
+    font-size: 36px;
   }
 
-  .hero-description {
-    font-size: 11px;
+  .tf-hero-stats {
+    grid-template-columns: 1fr;
   }
 
-  .hero-badge span:not(.hero-badge-dot) {
-    white-space: nowrap;
-  }
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-scroll-line {
-    animation: none;
+  .tf-auth-card {
+    padding: 15px;
   }
 
-  .hero-primary-btn,
-  .hero-secondary-btn,
-  .hero-mini-stat {
-    transition: none;
+  .tf-auth-tabs {
+    min-height: 52px;
   }
+
 }

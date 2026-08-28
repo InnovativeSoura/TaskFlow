@@ -1,400 +1,476 @@
-// src/components/landing/Hero.jsx
-
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FaArrowRight,
-  FaCheckCircle,
+  FaCheck,
   FaPlay,
-  FaShieldAlt,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaGoogle,
+  FaGithub,
+  FaUsers,
   FaTasks,
+  FaClock,
   FaChartLine,
+  FaRocket,
 } from "react-icons/fa";
-
-import AuthCard from "../auth/AuthCard";
 
 import "./Hero.css";
 
 const Hero = () => {
-  const authRef = useRef(null);
-
-  /* =========================================================
-     SCROLL TO AUTH
-  ========================================================= */
-
-  const scrollToAuth = (mode = "login") => {
-    window.dispatchEvent(
-      new CustomEvent("taskflow-auth-mode", {
-        detail: { mode },
-      })
-    );
-
-    window.setTimeout(() => {
-      authRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 80);
-  };
-
-  /* =========================================================
-     GLOBAL AUTH SCROLL EVENT
-     
-     Used by:
-     - LandingNavbar
-     - Hero
-     - Other landing-page buttons
-  ========================================================= */
-
-  useEffect(() => {
-    const handleAuthScroll = (event) => {
-      const mode = event?.detail?.mode || "login";
-
-      window.dispatchEvent(
-        new CustomEvent("taskflow-auth-mode", {
-          detail: { mode },
-        })
-      );
-
-      window.setTimeout(() => {
-        authRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }, 80);
-    };
-
-    window.addEventListener(
-      "taskflow-scroll-auth",
-      handleAuthScroll
-    );
-
-    return () => {
-      window.removeEventListener(
-        "taskflow-scroll-auth",
-        handleAuthScroll
-      );
-    };
-  }, []);
-
-  /* =========================================================
-     RENDER
-  ========================================================= */
+  const [showPassword, setShowPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState("login");
 
   return (
-    <section
-      className="hero-section"
-      id="home"
-    >
-      {/* =====================================================
-          BACKGROUND
-      ===================================================== */}
-
-      <div className="hero-glow hero-glow-one" />
-      <div className="hero-glow hero-glow-two" />
-      <div className="hero-glow hero-glow-three" />
-
-      <div className="hero-grid" />
-
-      <div className="hero-orb hero-orb-one" />
-      <div className="hero-orb hero-orb-two" />
-      <div className="hero-orb hero-orb-three" />
+    <div className="tf-hero">
 
       {/* =====================================================
-          MAIN CONTAINER
+          BACKGROUND DECORATION
       ===================================================== */}
 
-      <div className="hero-container">
+      <div className="tf-hero-glow tf-hero-glow-left" />
+      <div className="tf-hero-glow tf-hero-glow-right" />
+
+      <div className="tf-hero-ring tf-ring-one" />
+      <div className="tf-hero-ring tf-ring-two" />
+
+      <div className="tf-hero-grid" />
+
+      {/* =====================================================
+          HERO CONTAINER
+      ===================================================== */}
+
+      <div className="tf-hero-container">
 
         {/* ===================================================
             LEFT CONTENT
         =================================================== */}
 
-        <motion.div
-          className="hero-content"
-          initial={{
-            opacity: 0,
-            x: -30,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
-        >
-          {/* =================================================
-              BADGE
-          ================================================= */}
+        <div className="tf-hero-content">
 
-          <motion.div
-            className="hero-badge"
-            initial={{
-              opacity: 0,
-              y: 12,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 0.1,
-              duration: 0.45,
-            }}
-          >
-            <span className="hero-badge-dot" />
+          {/* Badge */}
 
-            <span>
-              Next Generation Project Management
-            </span>
-
+          <div className="tf-hero-badge">
+            <FaRocket />
+            <span>Next Generation Project Management</span>
             <FaArrowRight />
-          </motion.div>
+          </div>
 
-          {/* =================================================
-              TITLE
-          ================================================= */}
 
-          <h1 className="hero-title">
-            <span>
-              Manage Projects.
-            </span>
+          {/* Heading */}
 
-            <span className="hero-title-gradient">
+          <h1 className="tf-hero-title">
+            <span>Manage Projects.</span>
+
+            <span className="tf-gradient-text">
               Collaborate Faster.
             </span>
 
-            <span>
-              Deliver On Time.
-            </span>
+            <span>Deliver On Time.</span>
           </h1>
 
-          {/* =================================================
-              DESCRIPTION
-          ================================================= */}
 
-          <p className="hero-description">
-            TaskFlow is an all-in-one project management
-            platform built for modern teams. Plan projects,
-            assign tasks, monitor progress and collaborate
-            in real time — all from one intelligent workspace.
+          {/* Description */}
+
+          <p className="tf-hero-description">
+            TaskFlow is an all-in-one project management platform built
+            for modern teams. Plan projects, assign tasks, monitor
+            progress and collaborate in real time — all from one
+            intelligent workspace.
           </p>
 
-          {/* =================================================
-              BUTTONS
-          ================================================= */}
 
-          <div className="hero-buttons">
+          {/* Actions */}
 
-            {/* START FREE */}
+          <div className="tf-hero-actions">
 
-            <button
-              type="button"
-              className="hero-primary-btn"
-              onClick={() =>
-                scrollToAuth("register")
-              }
+            <Link
+              to="/register"
+              className="tf-primary-cta"
             >
-              <span>
-                Start Free
-              </span>
-
+              <span>Start Free</span>
               <FaArrowRight />
-            </button>
-
-            {/* EXPLORE FEATURES */}
+            </Link>
 
             <a
               href="#features"
-              className="hero-secondary-btn"
+              className="tf-secondary-cta"
             >
-              <span className="hero-play-icon">
+              <span className="tf-play-icon">
                 <FaPlay />
               </span>
 
-              <span>
-                Explore Features
-              </span>
+              <span>Explore Features</span>
             </a>
 
           </div>
 
-          {/* =================================================
-              TRUST
-          ================================================= */}
 
-          <div className="hero-trust">
+          {/* Benefits */}
 
-            <div className="hero-trust-item">
-              <FaCheckCircle />
-              <span>
-                Free Forever Plan
-              </span>
+          <div className="tf-hero-benefits">
+
+            <div className="tf-benefit">
+              <FaCheck />
+              <span>Free Forever Plan</span>
             </div>
 
-            <div className="hero-trust-item">
-              <FaCheckCircle />
-              <span>
-                2 Minute Setup
-              </span>
+            <div className="tf-benefit">
+              <FaCheck />
+              <span>2 Minute Setup</span>
             </div>
+
+            <div className="tf-benefit">
+              <FaCheck />
+              <span>No Credit Card Required</span>
+            </div>
+
           </div>
 
-          {/* =================================================
-              MINI STATS
-          ================================================= */}
 
-          <div className="hero-mini-stats">
+          {/* Stats */}
 
-            {/* TEAMS */}
+          <div className="tf-hero-stats">
 
-            <div className="hero-mini-stat">
+            <div className="tf-stat-card">
 
-              <div className="hero-mini-stat-icon">
+              <div className="tf-stat-icon">
+                <FaUsers />
+              </div>
+
+              <div className="tf-stat-info">
+                <strong>10K+</strong>
+                <span>Teams</span>
+              </div>
+
+            </div>
+
+
+            <div className="tf-stat-card">
+
+              <div className="tf-stat-icon">
                 <FaTasks />
               </div>
 
-              <div className="hero-mini-stat-content">
-                <strong>
-                  10K+
-                </strong>
-
-                <span>
-                  Teams
-                </span>
+              <div className="tf-stat-info">
+                <strong>500K+</strong>
+                <span>Tasks Managed</span>
               </div>
 
             </div>
 
-            {/* TASKS */}
 
-            <div className="hero-mini-stat">
+            <div className="tf-stat-card">
 
-              <div className="hero-mini-stat-icon">
+              <div className="tf-stat-icon">
+                <FaClock />
+              </div>
+
+              <div className="tf-stat-info">
+                <strong>99.9%</strong>
+                <span>Uptime</span>
+              </div>
+
+            </div>
+
+
+            <div className="tf-stat-card">
+
+              <div className="tf-stat-icon">
                 <FaChartLine />
               </div>
 
-              <div className="hero-mini-stat-content">
-                <strong>
-                  50K+
-                </strong>
+              <div className="tf-stat-info">
+                <strong>4.9/5</strong>
+                <span>User Rating</span>
 
-                <span>
-                  Tasks Managed
-                </span>
-              </div>
-
-            </div>
-
-            {/* SECURITY */}
-
-            <div className="hero-mini-stat">
-
-              <div className="hero-mini-stat-icon">
-                <FaShieldAlt />
-              </div>
-
-              <div className="hero-mini-stat-content">
-                <strong>
-                  99.9%
-                </strong>
-
-                <span>
-                  Secure
-                </span>
+                <div className="tf-stars">
+                  ★ ★ ★ ★ ★
+                </div>
               </div>
 
             </div>
 
           </div>
 
-        </motion.div>
+        </div>
+
 
         {/* ===================================================
-            RIGHT AUTH PANEL
+            RIGHT LOGIN PANEL
         =================================================== */}
 
-        <motion.div
-          ref={authRef}
-          className="hero-right"
-          id="auth-section"
-          initial={{
-            opacity: 0,
-            x: 30,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.75,
-            delay: 0.1,
-            ease: "easeOut",
-          }}
-        >
-          {/* =================================================
-              AUTH GLOW
-          ================================================= */}
+        <div className="tf-auth-preview">
 
-          <div className="hero-auth-glow" />
+          <div className="tf-auth-card">
 
-          {/* =================================================
-              REAL AUTH CARD
+            {/* Top Status */}
 
-              This is NOT a mockup.
+            <div className="tf-auth-header">
 
-              It uses:
-              - AuthContext
-              - LoginForm
-              - RegisterForm
-              - SocialButtons
-              - Forgot Password
-              - Password visibility
-              - Remember Me
-              - Login/Register switching
-          ================================================= */}
+              <div className="tf-workspace-status">
+                <span className="tf-status-dot" />
+                <span>Workspace is ready</span>
+              </div>
 
-          <div className="hero-auth-card-wrapper">
-            <AuthCard
-              compact
-              onAuthReady={() => {
-                // AuthCard is mounted and ready.
-              }}
-            />
+
+              <div className="tf-team-avatars">
+
+                <span className="tf-avatar tf-avatar-purple">
+                  S
+                </span>
+
+                <span className="tf-avatar tf-avatar-blue">
+                  A
+                </span>
+
+                <span className="tf-avatar tf-avatar-cyan">
+                  K
+                </span>
+
+                <span className="tf-avatar-more">
+                  +12
+                </span>
+
+              </div>
+
+            </div>
+
+
+            {/* Login/Register Toggle */}
+
+            <div className="tf-auth-tabs">
+
+              <button
+                type="button"
+                className={
+                  activeTab === "login"
+                    ? "active"
+                    : ""
+                }
+                onClick={() => setActiveTab("login")}
+              >
+                Login
+              </button>
+
+              <button
+                type="button"
+                className={
+                  activeTab === "register"
+                    ? "active"
+                    : ""
+                }
+                onClick={() => setActiveTab("register")}
+              >
+                Register
+              </button>
+
+            </div>
+
+
+            {/* Heading */}
+
+            <div className="tf-auth-title">
+
+              <h2>
+                {activeTab === "login"
+                  ? "Welcome Back 👋"
+                  : "Create Your Account 🚀"}
+              </h2>
+
+              <p>
+                {activeTab === "login"
+                  ? "Sign in to continue managing your projects."
+                  : "Start managing your projects with TaskFlow."}
+              </p>
+
+            </div>
+
+
+            {/* Form */}
+
+            <form className="tf-auth-form">
+
+              {/* Email */}
+
+              <div className="tf-input-wrapper">
+
+                <FaEnvelope />
+
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  autoComplete="email"
+                />
+
+              </div>
+
+
+              {/* Password */}
+
+              <div className="tf-input-wrapper">
+
+                <FaLock />
+
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="••••••••••••"
+                  autoComplete="current-password"
+                />
+
+                <button
+                  type="button"
+                  className="tf-password-toggle"
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
+                  aria-label="Toggle password visibility"
+                >
+                  <FaEye />
+                </button>
+
+              </div>
+
+
+              {/* Remember Me */}
+
+              {activeTab === "login" && (
+                <div className="tf-remember-row">
+
+                  <label className="tf-checkbox-label">
+
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                    />
+
+                    <span className="tf-custom-checkbox">
+                      <FaCheck />
+                    </span>
+
+                    <span>
+                      Remember me
+                    </span>
+
+                  </label>
+
+                </div>
+              )}
+
+
+              {/* Submit */}
+
+              <button
+                type="button"
+                className="tf-auth-submit"
+              >
+                <span>
+                  {activeTab === "login"
+                    ? "Sign In"
+                    : "Create Account"}
+                </span>
+
+                <FaArrowRight />
+
+              </button>
+
+            </form>
+
+
+            {/* Divider */}
+
+            <div className="tf-divider">
+
+              <span />
+
+              <p>or continue with</p>
+
+              <span />
+
+            </div>
+
+
+            {/* Social Buttons */}
+
+            <div className="tf-social-buttons">
+
+              <button
+                type="button"
+                className="tf-social-btn"
+              >
+                <FaGoogle />
+                <span>Continue with Google</span>
+              </button>
+
+              <button
+                type="button"
+                className="tf-social-btn"
+              >
+                <FaGithub />
+                <span>Continue with GitHub</span>
+              </button>
+
+            </div>
+
+
+            {/* Bottom Metrics */}
+
+            <div className="tf-auth-metrics">
+
+              <div className="tf-auth-metric">
+
+                <div className="tf-metric-icon">
+                  <FaRocket />
+                </div>
+
+                <div>
+                  <strong>124</strong>
+                  <span>Projects Completed</span>
+                </div>
+
+              </div>
+
+
+              <div className="tf-auth-metric">
+
+                <div className="tf-success-circle">
+                  <span>✓</span>
+                </div>
+
+                <div>
+                  <strong>96%</strong>
+                  <span>Project Success Rate</span>
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
-        </motion.div>
+
+        </div>
 
       </div>
+
 
       {/* =====================================================
           SCROLL INDICATOR
       ===================================================== */}
 
-      <motion.a
-        href="#features"
-        className="hero-scroll"
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        transition={{
-          delay: 1,
-          duration: 0.5,
-        }}
-      >
-        <span className="hero-scroll-line" />
+      <div className="tf-scroll-indicator">
 
-        <span>
-          Scroll to explore
-        </span>
-      </motion.a>
+        <span>SCROLL TO EXPLORE</span>
 
-    </section>
+        <div className="tf-scroll-line" />
+
+      </div>
+
+    </div>
   );
 };
 
