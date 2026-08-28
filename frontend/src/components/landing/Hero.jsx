@@ -1,5 +1,8 @@
+// src/components/landing/Hero.jsx
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import {
   FaArrowRight,
   FaCheck,
@@ -19,8 +22,43 @@ import {
 import "./Hero.css";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
+
+  /* =========================================================
+     AUTH ACTION
+  ========================================================= */
+
+  const handleAuthSubmit = (event) => {
+    event.preventDefault();
+
+    if (activeTab === "login") {
+      navigate("/login");
+      return;
+    }
+
+    navigate("/register");
+  };
+
+  /* =========================================================
+     SOCIAL AUTH
+     
+     We intentionally route to the normal authentication page
+     instead of inventing backend OAuth endpoints.
+     
+     Your actual Google/GitHub OAuth implementation can later
+     be connected here without changing the landing layout.
+  ========================================================= */
+
+  const handleGoogleLogin = () => {
+    navigate("/login");
+  };
+
+  const handleGithubLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="tf-hero">
@@ -36,6 +74,7 @@ const Hero = () => {
       <div className="tf-hero-ring tf-ring-two" />
 
       <div className="tf-hero-grid" />
+
 
       {/* =====================================================
           HERO CONTAINER
@@ -53,7 +92,11 @@ const Hero = () => {
 
           <div className="tf-hero-badge">
             <FaRocket />
-            <span>Next Generation Project Management</span>
+
+            <span>
+              Next Generation Project Management
+            </span>
+
             <FaArrowRight />
           </div>
 
@@ -61,13 +104,19 @@ const Hero = () => {
           {/* Heading */}
 
           <h1 className="tf-hero-title">
-            <span>Manage Projects.</span>
+
+            <span>
+              Manage Projects.
+            </span>
 
             <span className="tf-gradient-text">
               Collaborate Faster.
             </span>
 
-            <span>Deliver On Time.</span>
+            <span>
+              Deliver On Time.
+            </span>
+
           </h1>
 
 
@@ -81,7 +130,9 @@ const Hero = () => {
           </p>
 
 
-          {/* Actions */}
+          {/* =================================================
+              HERO ACTIONS
+          ================================================= */}
 
           <div className="tf-hero-actions">
 
@@ -89,9 +140,13 @@ const Hero = () => {
               to="/register"
               className="tf-primary-cta"
             >
-              <span>Start Free</span>
+              <span>
+                Start Free
+              </span>
+
               <FaArrowRight />
             </Link>
+
 
             <a
               href="#features"
@@ -101,37 +156,51 @@ const Hero = () => {
                 <FaPlay />
               </span>
 
-              <span>Explore Features</span>
+              <span>
+                Explore Features
+              </span>
             </a>
 
           </div>
 
 
-          {/* Benefits */}
+          {/* =================================================
+              BENEFITS
+          ================================================= */}
 
           <div className="tf-hero-benefits">
 
             <div className="tf-benefit">
               <FaCheck />
-              <span>Free Forever Plan</span>
+              <span>
+                Free Forever Plan
+              </span>
             </div>
 
             <div className="tf-benefit">
               <FaCheck />
-              <span>2 Minute Setup</span>
+              <span>
+                2 Minute Setup
+              </span>
             </div>
 
             <div className="tf-benefit">
               <FaCheck />
-              <span>No Credit Card Required</span>
+              <span>
+                No Credit Card Required
+              </span>
             </div>
 
           </div>
 
 
-          {/* Stats */}
+          {/* =================================================
+              STATS
+          ================================================= */}
 
           <div className="tf-hero-stats">
+
+            {/* Teams */}
 
             <div className="tf-stat-card">
 
@@ -140,12 +209,21 @@ const Hero = () => {
               </div>
 
               <div className="tf-stat-info">
-                <strong>10K+</strong>
-                <span>Teams</span>
+
+                <strong>
+                  10K+
+                </strong>
+
+                <span>
+                  Teams
+                </span>
+
               </div>
 
             </div>
 
+
+            {/* Tasks */}
 
             <div className="tf-stat-card">
 
@@ -154,12 +232,21 @@ const Hero = () => {
               </div>
 
               <div className="tf-stat-info">
-                <strong>500K+</strong>
-                <span>Tasks Managed</span>
+
+                <strong>
+                  500K+
+                </strong>
+
+                <span>
+                  Tasks Managed
+                </span>
+
               </div>
 
             </div>
 
+
+            {/* Uptime */}
 
             <div className="tf-stat-card">
 
@@ -168,12 +255,21 @@ const Hero = () => {
               </div>
 
               <div className="tf-stat-info">
-                <strong>99.9%</strong>
-                <span>Uptime</span>
+
+                <strong>
+                  99.9%
+                </strong>
+
+                <span>
+                  Uptime
+                </span>
+
               </div>
 
             </div>
 
+
+            {/* Rating */}
 
             <div className="tf-stat-card">
 
@@ -182,12 +278,19 @@ const Hero = () => {
               </div>
 
               <div className="tf-stat-info">
-                <strong>4.9/5</strong>
-                <span>User Rating</span>
+
+                <strong>
+                  4.9/5
+                </strong>
+
+                <span>
+                  User Rating
+                </span>
 
                 <div className="tf-stars">
                   ★ ★ ★ ★ ★
                 </div>
+
               </div>
 
             </div>
@@ -198,20 +301,27 @@ const Hero = () => {
 
 
         {/* ===================================================
-            RIGHT LOGIN PANEL
+            RIGHT AUTH PREVIEW
         =================================================== */}
 
         <div className="tf-auth-preview">
 
           <div className="tf-auth-card">
 
-            {/* Top Status */}
+            {/* =================================================
+                TOP STATUS
+            ================================================= */}
 
             <div className="tf-auth-header">
 
               <div className="tf-workspace-status">
+
                 <span className="tf-status-dot" />
-                <span>Workspace is ready</span>
+
+                <span>
+                  Workspace is ready
+                </span>
+
               </div>
 
 
@@ -238,7 +348,9 @@ const Hero = () => {
             </div>
 
 
-            {/* Login/Register Toggle */}
+            {/* =================================================
+                LOGIN / REGISTER TABS
+            ================================================= */}
 
             <div className="tf-auth-tabs">
 
@@ -249,10 +361,14 @@ const Hero = () => {
                     ? "active"
                     : ""
                 }
-                onClick={() => setActiveTab("login")}
+                onClick={() => {
+                  setActiveTab("login");
+                  setShowPassword(false);
+                }}
               >
                 Login
               </button>
+
 
               <button
                 type="button"
@@ -261,7 +377,10 @@ const Hero = () => {
                     ? "active"
                     : ""
                 }
-                onClick={() => setActiveTab("register")}
+                onClick={() => {
+                  setActiveTab("register");
+                  setShowPassword(false);
+                }}
               >
                 Register
               </button>
@@ -269,7 +388,9 @@ const Hero = () => {
             </div>
 
 
-            {/* Heading */}
+            {/* =================================================
+                AUTH TITLE
+            ================================================= */}
 
             <div className="tf-auth-title">
 
@@ -278,6 +399,7 @@ const Hero = () => {
                   ? "Welcome Back 👋"
                   : "Create Your Account 🚀"}
               </h2>
+
 
               <p>
                 {activeTab === "login"
@@ -288,11 +410,18 @@ const Hero = () => {
             </div>
 
 
-            {/* Form */}
+            {/* =================================================
+                AUTH FORM
+            ================================================= */}
 
-            <form className="tf-auth-form">
+            <form
+              className="tf-auth-form"
+              onSubmit={handleAuthSubmit}
+            >
 
-              {/* Email */}
+              {/* =================================================
+                  EMAIL
+              ================================================= */}
 
               <div className="tf-input-wrapper">
 
@@ -302,12 +431,15 @@ const Hero = () => {
                   type="email"
                   placeholder="your@email.com"
                   autoComplete="email"
+                  aria-label="Email address"
                 />
 
               </div>
 
 
-              {/* Password */}
+              {/* =================================================
+                  PASSWORD
+              ================================================= */}
 
               <div className="tf-input-wrapper">
 
@@ -320,16 +452,28 @@ const Hero = () => {
                       : "password"
                   }
                   placeholder="••••••••••••"
-                  autoComplete="current-password"
+                  autoComplete={
+                    activeTab === "login"
+                      ? "current-password"
+                      : "new-password"
+                  }
+                  aria-label="Password"
                 />
+
 
                 <button
                   type="button"
                   className="tf-password-toggle"
                   onClick={() =>
-                    setShowPassword(!showPassword)
+                    setShowPassword(
+                      (previous) => !previous
+                    )
                   }
-                  aria-label="Toggle password visibility"
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
                 >
                   <FaEye />
                 </button>
@@ -337,9 +481,14 @@ const Hero = () => {
               </div>
 
 
-              {/* Remember Me */}
+              {/* =================================================
+                  REMEMBER ME
+                  
+                  Forgot password intentionally removed.
+              ================================================= */}
 
               {activeTab === "login" && (
+
                 <div className="tf-remember-row">
 
                   <label className="tf-checkbox-label">
@@ -360,15 +509,19 @@ const Hero = () => {
                   </label>
 
                 </div>
+
               )}
 
 
-              {/* Submit */}
+              {/* =================================================
+                  SUBMIT BUTTON
+              ================================================= */}
 
               <button
-                type="button"
+                type="submit"
                 className="tf-auth-submit"
               >
+
                 <span>
                   {activeTab === "login"
                     ? "Sign In"
@@ -382,45 +535,68 @@ const Hero = () => {
             </form>
 
 
-            {/* Divider */}
+            {/* =================================================
+                DIVIDER
+            ================================================= */}
 
             <div className="tf-divider">
 
               <span />
 
-              <p>or continue with</p>
+              <p>
+                or continue with
+              </p>
 
               <span />
 
             </div>
 
 
-            {/* Social Buttons */}
+            {/* =================================================
+                SOCIAL BUTTONS
+            ================================================= */}
 
             <div className="tf-social-buttons">
 
               <button
                 type="button"
                 className="tf-social-btn"
+                onClick={handleGoogleLogin}
               >
+
                 <FaGoogle />
-                <span>Continue with Google</span>
+
+                <span>
+                  Continue with Google
+                </span>
+
               </button>
+
 
               <button
                 type="button"
                 className="tf-social-btn"
+                onClick={handleGithubLogin}
               >
+
                 <FaGithub />
-                <span>Continue with GitHub</span>
+
+                <span>
+                  Continue with GitHub
+                </span>
+
               </button>
 
             </div>
 
 
-            {/* Bottom Metrics */}
+            {/* =================================================
+                BOTTOM METRICS
+            ================================================= */}
 
             <div className="tf-auth-metrics">
+
+              {/* Projects */}
 
               <div className="tf-auth-metric">
 
@@ -429,22 +605,40 @@ const Hero = () => {
                 </div>
 
                 <div>
-                  <strong>124</strong>
-                  <span>Projects Completed</span>
+
+                  <strong>
+                    124
+                  </strong>
+
+                  <span>
+                    Projects Completed
+                  </span>
+
                 </div>
 
               </div>
 
 
+              {/* Success Rate */}
+
               <div className="tf-auth-metric">
 
                 <div className="tf-success-circle">
-                  <span>✓</span>
+                  <span>
+                    ✓
+                  </span>
                 </div>
 
                 <div>
-                  <strong>96%</strong>
-                  <span>Project Success Rate</span>
+
+                  <strong>
+                    96%
+                  </strong>
+
+                  <span>
+                    Project Success Rate
+                  </span>
+
                 </div>
 
               </div>
@@ -464,7 +658,9 @@ const Hero = () => {
 
       <div className="tf-scroll-indicator">
 
-        <span>SCROLL TO EXPLORE</span>
+        <span>
+          SCROLL TO EXPLORE
+        </span>
 
         <div className="tf-scroll-line" />
 
