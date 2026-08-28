@@ -1,5 +1,11 @@
 /* =========================================================
    TASKFLOW — GLOBAL LANDING PAGE
+   Premium landing page shell
+   ========================================================= */
+
+
+/* =========================================================
+   DESIGN TOKENS
    ========================================================= */
 
 :root {
@@ -17,27 +23,33 @@
   --tf-border: rgba(255, 255, 255, 0.08);
 
   --tf-nav-height: 76px;
+
+  --tf-container-width: 1180px;
 }
 
 
 /* =========================================================
-   RESET
+   GLOBAL RESET
    ========================================================= */
 
 html {
   margin: 0;
   padding: 0;
 
+  min-width: 320px;
+
   scroll-behavior: smooth;
 
   background: var(--tf-bg-deep);
 }
+
 
 body {
   margin: 0;
   padding: 0;
 
   min-width: 320px;
+  min-height: 100vh;
 
   background:
     radial-gradient(
@@ -59,6 +71,7 @@ body {
   overflow-x: hidden;
 }
 
+
 body,
 button,
 input,
@@ -72,6 +85,7 @@ select {
     sans-serif;
 }
 
+
 *,
 *::before,
 *::after {
@@ -84,6 +98,7 @@ select {
    ========================================================= */
 
 #root {
+  width: 100%;
   min-height: 100vh;
 
   margin: 0;
@@ -92,13 +107,14 @@ select {
 
 
 /* =========================================================
-   LANDING PAGE
+   LANDING PAGE ROOT
    ========================================================= */
 
 .landing-page {
   position: relative;
 
   width: 100%;
+  min-width: 320px;
   min-height: 100vh;
 
   margin: 0;
@@ -107,12 +123,12 @@ select {
   background:
     radial-gradient(
       circle at 15% 15%,
-      rgba(91, 76, 255, 0.10),
+      rgba(91, 76, 255, 0.08),
       transparent 28%
     ),
     radial-gradient(
       circle at 88% 25%,
-      rgba(0, 210, 255, 0.075),
+      rgba(0, 210, 255, 0.06),
       transparent 28%
     ),
     linear-gradient(
@@ -122,28 +138,42 @@ select {
       #030511 100%
     );
 
+  color: var(--tf-text);
+
   overflow-x: clip;
 }
 
 
 /* =========================================================
-   MAIN CONTENT
+   LANDING MAIN
    ========================================================= */
 
 .landing-main {
   position: relative;
 
-  z-index: 2;
-
   width: 100%;
 
   margin: 0;
   padding: 0;
+
+  z-index: 2;
 }
 
 
 /* =========================================================
-   GENERIC SECTION
+   IMPORTANT:
+   DO NOT APPLY FLEX / GRID / MIN-HEIGHT RULES TO
+   .landing-main CHILDREN GLOBALLY.
+
+   Each landing section controls its own layout.
+
+   This prevents the Hero component from being resized
+   unexpectedly during the first render.
+   ========================================================= */
+
+
+/* =========================================================
+   GENERIC LANDING SECTION
    ========================================================= */
 
 .landing-section {
@@ -159,50 +189,15 @@ select {
 
 
 /* =========================================================
-   HERO
+   HERO SECTION SAFETY
    ========================================================= */
 
-.landing-hero-section {
-  min-height: 100vh;
+.landing-main > .hero-section {
+  position: relative;
+
+  width: 100%;
 
   margin: 0;
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-
-  position: relative;
-}
-
-
-/* =========================================================
-   HERO OVERRIDES
-   Prevent tiny/scaled auth preview
-   ========================================================= */
-
-.landing-hero-section .hero-auth-card-wrapper {
-  transform: none !important;
-
-  scale: 1 !important;
-
-  width: auto !important;
-
-  max-width: none !important;
-}
-
-.landing-hero-section .hero-right {
-  transform: none;
-
-  scale: 1;
-}
-
-
-/* =========================================================
-   STATISTICS
-   ========================================================= */
-
-.landing-statistics-section {
-  padding: 50px 0 80px;
 }
 
 
@@ -210,26 +205,38 @@ select {
    FEATURES
    ========================================================= */
 
-.landing-features-section {
-  padding: 80px 0 100px;
+.landing-main > .features-section {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0;
 }
 
 
 /* =========================================================
-   TESTIMONIALS
+   ABOUT / STATISTICS
    ========================================================= */
 
-.landing-testimonials-section {
-  padding: 80px 0 100px;
+.landing-main > .about-section {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0;
 }
 
 
 /* =========================================================
-   CTA
+   CONTACT
    ========================================================= */
 
-.landing-cta-section {
-  padding: 70px 0 100px;
+.landing-main > .contact-section {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0;
 }
 
 
@@ -238,7 +245,11 @@ select {
    ========================================================= */
 
 .landing-page .container {
-  width: min(1240px, calc(100% - 48px));
+  width:
+    min(
+      var(--tf-container-width),
+      calc(100% - 40px)
+    );
 
   margin-left: auto;
   margin-right: auto;
@@ -246,7 +257,16 @@ select {
 
 
 /* =========================================================
-   SECTION ANCHOR OFFSET
+   ANCHOR OFFSET
+   =========================================================
+
+   Hero.jsx owns #home.
+
+   Other sections can use their own IDs:
+   #features
+   #statistics
+   #testimonials
+   #contact
    ========================================================= */
 
 #home,
@@ -275,8 +295,31 @@ select {
 
 .landing-page button {
   border: 0;
-
   outline: none;
+
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   INPUT RESET
+   ========================================================= */
+
+.landing-page input,
+.landing-page textarea,
+.landing-page select {
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   IMAGE RESET
+   ========================================================= */
+
+.landing-page img {
+  max-width: 100%;
+
+  display: block;
 }
 
 
@@ -295,14 +338,30 @@ select {
    SCROLLBAR
    ========================================================= */
 
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+
 .landing-page::-webkit-scrollbar {
   width: 8px;
 }
 
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
 .landing-page::-webkit-scrollbar-track {
   background: #030511;
 }
 
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
 .landing-page::-webkit-scrollbar-thumb {
   background:
     linear-gradient(
@@ -315,68 +374,120 @@ select {
 }
 
 
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+.landing-page::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #8b7cff,
+      #4f9cf9
+    );
+}
+
+
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE CONTAINER
    ========================================================= */
 
 @media (max-width: 1200px) {
   .landing-page .container {
-    width: min(
-      1140px,
-      calc(100% - 42px)
-    );
+    width:
+      min(
+        1120px,
+        calc(100% - 42px)
+      );
   }
 }
 
 
+/* =========================================================
+   TABLET
+   ========================================================= */
+
 @media (max-width: 900px) {
+
   :root {
     --tf-nav-height: 70px;
   }
 
-  .landing-hero-section {
-    min-height: auto;
 
-    padding-top: 100px;
-    padding-bottom: 80px;
+  .landing-page .container {
+    width:
+      min(
+        100% - 36px,
+        900px
+      );
   }
 
-  .landing-statistics-section {
-    padding: 40px 0 70px;
-  }
 
-  .landing-features-section {
-    padding: 70px 0 80px;
-  }
-
-  .landing-testimonials-section {
-    padding: 70px 0 80px;
-  }
-
-  .landing-cta-section {
-    padding: 60px 0 80px;
+  #home,
+  #features,
+  #statistics,
+  #testimonials,
+  #contact {
+    scroll-margin-top: 78px;
   }
 }
 
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 600px) {
+
   .landing-page .container {
-    width: min(
-      100% - 28px,
-      1180px
-    );
+    width:
+      min(
+        100% - 28px,
+        680px
+      );
   }
 
-  .landing-hero-section {
-    padding-top: 90px;
-    padding-bottom: 60px;
+
+  #home,
+  #features,
+  #statistics,
+  #testimonials,
+  #contact {
+    scroll-margin-top: 72px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .landing-page .container {
+    width:
+      calc(100% - 24px);
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
   }
 
-  .landing-statistics-section,
-  .landing-features-section,
-  .landing-testimonials-section,
-  .landing-cta-section {
-    padding-top: 55px;
-    padding-bottom: 65px;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+
+    scroll-behavior: auto !important;
   }
 }
