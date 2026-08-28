@@ -1,0 +1,1031 @@
+/* =========================================================
+   TASKFLOW — LANDING PAGE AUTH CARD
+   Exact compact workspace preview styling
+   ========================================================= */
+
+#landing-auth-card {
+  position: relative;
+
+  width: 390px;
+  min-width: 390px;
+  max-width: 390px;
+
+  min-height: 650px;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(125, 110, 255, 0.42);
+  border-radius: 26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 29, 61, 0.97) 0%,
+      rgba(10, 17, 39, 0.98) 100%
+    );
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.45),
+    0 0 45px rgba(91, 67, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  color: #ffffff;
+
+  transform: none !important;
+  scale: 1 !important;
+
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+/* =========================================================
+   TOP WORKSPACE BAR
+   ========================================================= */
+
+#landing-auth-card .auth-preview-topbar {
+  width: 100%;
+  min-height: 74px;
+
+  padding: 0 24px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025),
+      rgba(255, 255, 255, 0)
+    );
+
+  flex-shrink: 0;
+}
+
+/* Workspace status */
+
+#landing-auth-card .auth-preview-status {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+
+  color: #f5f7ff;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+#landing-auth-card .auth-status-dot {
+  width: 9px;
+  height: 9px;
+
+  display: inline-block;
+
+  flex: 0 0 9px;
+
+  border-radius: 50%;
+
+  background: #20e58a;
+
+  box-shadow:
+    0 0 0 4px rgba(32, 229, 138, 0.08),
+    0 0 14px rgba(32, 229, 138, 0.65);
+
+  animation: workspacePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes workspacePulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow:
+      0 0 0 4px rgba(32, 229, 138, 0.08),
+      0 0 14px rgba(32, 229, 138, 0.65);
+  }
+
+  50% {
+    opacity: 0.7;
+    box-shadow:
+      0 0 0 7px rgba(32, 229, 138, 0.03),
+      0 0 8px rgba(32, 229, 138, 0.35);
+  }
+}
+
+/* =========================================================
+   MEMBER AVATARS
+   ========================================================= */
+
+#landing-auth-card .auth-preview-members {
+  display: flex;
+  align-items: center;
+
+  gap: 0;
+
+  flex-shrink: 0;
+}
+
+#landing-auth-card .preview-avatar {
+  width: 36px;
+  height: 36px;
+
+  margin-left: -7px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #111a39;
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+#landing-auth-card .preview-avatar:first-child {
+  margin-left: 0;
+}
+
+#landing-auth-card .preview-avatar.purple {
+  background: linear-gradient(135deg, #8d5cff, #6339e8);
+}
+
+#landing-auth-card .preview-avatar.blue {
+  background: linear-gradient(135deg, #5c9dff, #2875e8);
+}
+
+#landing-auth-card .preview-avatar.cyan {
+  background: linear-gradient(135deg, #4fd9e8, #20aabd);
+}
+
+#landing-auth-card .preview-more {
+  margin-left: 10px;
+
+  color: rgba(224, 229, 255, 0.65);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   AUTH TOGGLE
+   ========================================================= */
+
+#landing-auth-card .auth-toggle-wrapper {
+  width: calc(100% - 48px);
+
+  margin: 24px auto 0;
+
+  box-sizing: border-box;
+
+  flex-shrink: 0;
+}
+
+/*
+   Handles common AuthToggle class names.
+*/
+
+#landing-auth-card .auth-toggle,
+#landing-auth-card .auth-toggle-container,
+#landing-auth-card .auth-mode-toggle {
+  width: 100%;
+
+  min-height: 62px;
+
+  padding: 5px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 17px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+#landing-auth-card .auth-toggle button,
+#landing-auth-card .auth-toggle-container button,
+#landing-auth-card .auth-mode-toggle button {
+  width: 100%;
+  min-height: 50px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: #aeb6ce;
+
+  font-family: inherit;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* =========================================================
+   CARD CONTENT
+   ========================================================= */
+
+#landing-auth-card .auth-card-content {
+  width: 100%;
+
+  padding: 30px 34px 26px;
+
+  box-sizing: border-box;
+
+  flex: 1 1 auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+#landing-auth-card .auth-header {
+  width: 100%;
+
+  margin-bottom: 26px;
+}
+
+#landing-auth-card .auth-title {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 29px;
+  font-weight: 750;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.7px;
+}
+
+#landing-auth-card .auth-subtitle {
+  max-width: 330px;
+
+  margin: 0;
+
+  color: #9ba5c0;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+#landing-auth-card .auth-error {
+  width: 100%;
+
+  margin-bottom: 16px;
+  padding: 11px 13px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 92, 120, 0.25);
+  border-radius: 10px;
+
+  background: rgba(255, 70, 100, 0.08);
+
+  color: #ff8fa4;
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   GENERIC FORM
+   ========================================================= */
+
+#landing-auth-card form {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   FORM GROUPS
+   ========================================================= */
+
+#landing-auth-card form > div {
+  box-sizing: border-box;
+}
+
+#landing-auth-card .form-group,
+#landing-auth-card .auth-form-group,
+#landing-auth-card .input-group {
+  width: 100%;
+
+  margin-bottom: 18px;
+
+  box-sizing: border-box;
+}
+
+#landing-auth-card label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #eef1ff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+/* =========================================================
+   INPUT WRAPPERS
+   ========================================================= */
+
+#landing-auth-card .input-wrapper,
+#landing-auth-card .auth-input-wrapper,
+#landing-auth-card .input-with-icon {
+  position: relative;
+
+  width: 100%;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#landing-auth-card input[type="text"],
+#landing-auth-card input[type="email"],
+#landing-auth-card input[type="password"],
+#landing-auth-card input[type="name"] {
+  width: 100%;
+  height: 54px;
+
+  padding: 0 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(150, 161, 205, 0.20);
+  border-radius: 13px;
+
+  outline: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.045)
+    );
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+#landing-auth-card input::placeholder {
+  color: #7e88a6;
+}
+
+#landing-auth-card input:focus {
+  border-color: rgba(123, 78, 255, 0.85);
+
+  background: rgba(255, 255, 255, 0.075);
+
+  box-shadow:
+    0 0 0 3px rgba(111, 70, 255, 0.13),
+    0 0 18px rgba(111, 70, 255, 0.08);
+}
+
+/* =========================================================
+   ICONS INSIDE INPUTS
+   ========================================================= */
+
+#landing-auth-card .input-icon,
+#landing-auth-card .auth-input-icon {
+  position: absolute;
+
+  top: 50%;
+  left: 16px;
+
+  transform: translateY(-50%);
+
+  color: #aeb7d0;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+#landing-auth-card .input-icon + input,
+#landing-auth-card .auth-input-icon + input {
+  padding-left: 46px;
+}
+
+/* Password eye */
+
+#landing-auth-card .password-toggle,
+#landing-auth-card .toggle-password,
+#landing-auth-card button[type="button"].password-toggle {
+  position: absolute;
+
+  top: 50%;
+  right: 15px;
+
+  transform: translateY(-50%);
+
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #9da8c2;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   REMEMBER / FORGOT ROW
+   ========================================================= */
+
+#landing-auth-card .auth-options,
+#landing-auth-card .form-options,
+#landing-auth-card .remember-forgot,
+#landing-auth-card .login-options {
+  width: 100%;
+
+  margin: 2px 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+}
+
+#landing-auth-card .remember-me {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #b5bdd2;
+
+  font-size: 13px;
+}
+
+#landing-auth-card input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+
+  margin: 0;
+
+  accent-color: #7650ff;
+
+  cursor: pointer;
+}
+
+#landing-auth-card .forgot-password,
+#landing-auth-card .forgot-link {
+  border: 0;
+
+  background: transparent;
+
+  color: #9b73ff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+#landing-auth-card .forgot-password:hover,
+#landing-auth-card .forgot-link:hover {
+  color: #b99cff;
+}
+
+/* =========================================================
+   PRIMARY SIGN IN BUTTON
+   ========================================================= */
+
+#landing-auth-card .auth-submit,
+#landing-auth-card .submit-btn,
+#landing-auth-card form button[type="submit"] {
+  width: 100%;
+  height: 54px;
+
+  margin-top: 3px;
+
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d42ff 0%,
+      #7946ff 50%,
+      #8654ff 100%
+    );
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 28px rgba(105, 62, 255, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+#landing-auth-card .auth-submit:hover,
+#landing-auth-card .submit-btn:hover,
+#landing-auth-card form button[type="submit"]:hover {
+  transform: translateY(-1px);
+
+  filter: brightness(1.06);
+
+  box-shadow:
+    0 14px 32px rgba(105, 62, 255, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+#landing-auth-card .auth-submit:active,
+#landing-auth-card .submit-btn:active,
+#landing-auth-card form button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   SOCIAL SECTION
+   ========================================================= */
+
+#landing-auth-card .auth-social-wrapper {
+  width: 100%;
+
+  margin-top: 21px;
+
+  box-sizing: border-box;
+}
+
+#landing-auth-card .social-buttons,
+#landing-auth-card .auth-social-buttons {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+}
+
+#landing-auth-card .social-buttons button,
+#landing-auth-card .auth-social-buttons button,
+#landing-auth-card .social-btn {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(156, 166, 207, 0.17);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  color: #edf0ff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+#landing-auth-card .social-buttons button:hover,
+#landing-auth-card .auth-social-buttons button:hover,
+#landing-auth-card .social-btn:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(141, 112, 255, 0.40);
+
+  background: rgba(255, 255, 255, 0.085);
+}
+
+/* Social icons */
+
+#landing-auth-card .social-buttons svg,
+#landing-auth-card .auth-social-buttons svg,
+#landing-auth-card .social-btn svg {
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+#landing-auth-card .auth-divider,
+#landing-auth-card .social-divider {
+  width: 100%;
+
+  margin: 20px 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color: #7f89a5;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+#landing-auth-card .auth-divider::before,
+#landing-auth-card .auth-divider::after,
+#landing-auth-card .social-divider::before,
+#landing-auth-card .social-divider::after {
+  content: "";
+
+  height: 1px;
+
+  flex: 1;
+
+  background: rgba(150, 160, 200, 0.18);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+#landing-auth-card .auth-footer {
+  width: 100%;
+
+  margin-top: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  color: #8f99b4;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+#landing-auth-card .link-btn {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #a174ff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+#landing-auth-card .link-btn:hover {
+  color: #c0a0ff;
+}
+
+/* =========================================================
+   PREVIEW STATS
+   ========================================================= */
+
+#landing-auth-card .auth-preview-stats {
+  width: 100%;
+
+  min-height: 102px;
+
+  padding: 20px 24px;
+
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  flex-shrink: 0;
+}
+
+#landing-auth-card .auth-preview-stat {
+  min-width: 0;
+
+  padding: 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(157, 169, 213, 0.14);
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.045);
+}
+
+#landing-auth-card .auth-preview-stat-icon {
+  width: 39px;
+  height: 39px;
+
+  flex: 0 0 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: rgba(111, 67, 255, 0.17);
+
+  color: #a17aff;
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+#landing-auth-card .auth-preview-stat.success
+  .auth-preview-stat-icon {
+  background: rgba(30, 204, 133, 0.13);
+
+  color: #31e78d;
+}
+
+#landing-auth-card .auth-preview-stat-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+#landing-auth-card .auth-preview-stat-value {
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 750;
+
+  line-height: 1;
+}
+
+#landing-auth-card .auth-preview-stat-label {
+  color: #7f8aa6;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  line-height: 1.25;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   REGISTER MODE
+   ========================================================= */
+
+#landing-auth-card.register-mode {
+  min-height: 730px;
+}
+
+#landing-auth-card.register-mode .auth-card-content {
+  padding-top: 27px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+#landing-auth-card button:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+
+  transform: none !important;
+}
+
+/* =========================================================
+   PREVENT GLOBAL HERO CSS FROM BREAKING CARD
+   ========================================================= */
+
+.hero-auth,
+.hero-auth-card,
+.hero-preview,
+.hero-preview-card,
+.auth-preview {
+  transform-origin: center center;
+}
+
+#landing-auth-card {
+  zoom: 1 !important;
+}
+
+/* =========================================================
+   DESKTOP — REFERENCE DESIGN
+   ========================================================= */
+
+@media (min-width: 1200px) {
+  #landing-auth-card {
+    width: 390px;
+    min-width: 390px;
+    max-width: 390px;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  #landing-auth-card {
+    width: 360px;
+    min-width: 360px;
+    max-width: 360px;
+  }
+
+  #landing-auth-card .auth-card-content {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  #landing-auth-card {
+    width: min(100%, 390px);
+    min-width: 0;
+    max-width: 390px;
+
+    min-height: 0;
+
+    border-radius: 22px;
+  }
+
+  #landing-auth-card .auth-preview-topbar {
+    min-height: 66px;
+
+    padding: 0 18px;
+  }
+
+  #landing-auth-card .auth-preview-status {
+    font-size: 13px;
+  }
+
+  #landing-auth-card .preview-avatar {
+    width: 32px;
+    height: 32px;
+
+    font-size: 12px;
+  }
+
+  #landing-auth-card .auth-toggle-wrapper {
+    width: calc(100% - 36px);
+
+    margin-top: 18px;
+  }
+
+  #landing-auth-card .auth-card-content {
+    padding: 25px 22px 23px;
+  }
+
+  #landing-auth-card .auth-title {
+    font-size: 26px;
+  }
+
+  #landing-auth-card .auth-preview-stats {
+    padding: 16px 18px;
+  }
+}
+
+@media (max-width: 430px) {
+  #landing-auth-card {
+    width: calc(100vw - 28px);
+    max-width: calc(100vw - 28px);
+  }
+
+  #landing-auth-card .auth-preview-stats {
+    grid-template-columns: 1fr;
+  }
+
+  #landing-auth-card .social-buttons,
+  #landing-auth-card .auth-social-buttons {
+    grid-template-columns: 1fr;
+  }
+}

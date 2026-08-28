@@ -12,6 +12,7 @@ import RegisterForm from "./RegisterForm";
 import SocialButtons from "./SocialButtons";
 
 import "../../styles/Auth.css";
+import "../../styles/AuthCard.css";
 
 const AuthCard = ({
   compact = false,
