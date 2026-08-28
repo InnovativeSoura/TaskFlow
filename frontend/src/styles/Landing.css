@@ -27,13 +27,16 @@
 html {
   margin: 0;
   padding: 0;
+
   scroll-behavior: smooth;
+
   background: var(--tf-bg-deep);
 }
 
 body {
   margin: 0;
   padding: 0;
+
   min-width: 320px;
 
   background:
@@ -82,6 +85,7 @@ select {
 
 #root {
   min-height: 100vh;
+
   margin: 0;
   padding: 0;
 }
@@ -103,12 +107,12 @@ select {
   background:
     radial-gradient(
       circle at 15% 15%,
-      rgba(91, 76, 255, 0.08),
+      rgba(91, 76, 255, 0.10),
       transparent 28%
     ),
     radial-gradient(
       circle at 88% 25%,
-      rgba(0, 210, 255, 0.06),
+      rgba(0, 210, 255, 0.075),
       transparent 28%
     ),
     linear-gradient(
@@ -128,6 +132,7 @@ select {
 
 .landing-main {
   position: relative;
+
   z-index: 2;
 
   width: 100%;
@@ -155,10 +160,6 @@ select {
 
 /* =========================================================
    HERO
-   IMPORTANT:
-   No giant top margin.
-   No giant padding.
-   Navbar overlays the hero.
    ========================================================= */
 
 .landing-hero-section {
@@ -171,6 +172,28 @@ select {
   align-items: center;
 
   position: relative;
+}
+
+
+/* =========================================================
+   HERO OVERRIDES
+   Prevent tiny/scaled auth preview
+   ========================================================= */
+
+.landing-hero-section .hero-auth-card-wrapper {
+  transform: none !important;
+
+  scale: 1 !important;
+
+  width: auto !important;
+
+  max-width: none !important;
+}
+
+.landing-hero-section .hero-right {
+  transform: none;
+
+  scale: 1;
 }
 
 
@@ -215,7 +238,7 @@ select {
    ========================================================= */
 
 .landing-page .container {
-  width: min(1180px, calc(100% - 40px));
+  width: min(1240px, calc(100% - 48px));
 
   margin-left: auto;
   margin-right: auto;
@@ -241,6 +264,7 @@ select {
 
 .landing-page a {
   color: inherit;
+
   text-decoration: none;
 }
 
@@ -251,6 +275,7 @@ select {
 
 .landing-page button {
   border: 0;
+
   outline: none;
 }
 
@@ -261,6 +286,7 @@ select {
 
 .landing-page ::selection {
   background: rgba(109, 93, 252, 0.35);
+
   color: #ffffff;
 }
 
@@ -278,11 +304,12 @@ select {
 }
 
 .landing-page::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    #6d5dfc,
-    #3b82f6
-  );
+  background:
+    linear-gradient(
+      180deg,
+      #6d5dfc,
+      #3b82f6
+    );
 
   border-radius: 20px;
 }
@@ -292,6 +319,16 @@ select {
    RESPONSIVE
    ========================================================= */
 
+@media (max-width: 1200px) {
+  .landing-page .container {
+    width: min(
+      1140px,
+      calc(100% - 42px)
+    );
+  }
+}
+
+
 @media (max-width: 900px) {
   :root {
     --tf-nav-height: 70px;
@@ -299,8 +336,9 @@ select {
 
   .landing-hero-section {
     min-height: auto;
+
     padding-top: 100px;
-    padding-bottom: 70px;
+    padding-bottom: 80px;
   }
 
   .landing-statistics-section {
@@ -331,7 +369,7 @@ select {
 
   .landing-hero-section {
     padding-top: 90px;
-    padding-bottom: 55px;
+    padding-bottom: 60px;
   }
 
   .landing-statistics-section,

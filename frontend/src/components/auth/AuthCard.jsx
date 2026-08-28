@@ -14,19 +14,16 @@ import SocialButtons from "./SocialButtons";
 import "../../styles/Auth.css";
 import "../../styles/AuthCard.css";
 
-const AuthCard = ({
-  compact = false,
-  onAuthReady,
-}) => {
+const AuthCard = ({ compact = false, onAuthReady }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { login, register } = useAuth();
 
   const API_URL = (
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api"
-).replace(/\/$/, "");
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api"
+  ).replace(/\/$/, "");
 
   const [isLogin, setIsLogin] = useState(
     location.pathname !== "/register"
@@ -36,9 +33,7 @@ const AuthCard = ({
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [showPassword, setShowPassword] =
-    useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState(false);
 
@@ -76,7 +71,6 @@ const AuthCard = ({
 
       setError("");
       setIsLogin(mode === "login");
-
       setShowPassword(false);
       setShowConfirmPassword(false);
     };
@@ -169,12 +163,9 @@ const AuthCard = ({
       return;
     }
 
-    navigate(
-      loginMode ? "/login" : "/register",
-      {
-        replace: true,
-      }
-    );
+    navigate(loginMode ? "/login" : "/register", {
+      replace: true,
+    });
   };
 
   /* =========================================================
@@ -197,8 +188,7 @@ const AuthCard = ({
       return "Email is required.";
     }
 
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email.trim())) {
       return "Enter a valid email address.";
@@ -305,13 +295,11 @@ const AuthCard = ({
   ========================================================= */
 
   const handleGoogleLogin = () => {
-    window.location.href =
-      `${API_URL}/auth/google`;
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   const handleGithubLogin = () => {
-    window.location.href =
-      `${API_URL}/auth/github`;
+    window.location.href = `${API_URL}/auth/github`;
   };
 
   /* =========================================================
@@ -341,11 +329,7 @@ const AuthCard = ({
   return (
     <motion.div
       className={cardClassName}
-      id={
-        compact
-          ? "landing-auth-card"
-          : undefined
-      }
+      id={compact ? "landing-auth-card" : undefined}
       initial={
         compact
           ? {
@@ -369,24 +353,19 @@ const AuthCard = ({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-
       {/* =====================================================
           TOP PREVIEW BAR
       ===================================================== */}
 
       {compact && (
         <div className="auth-preview-topbar">
-
           <div className="auth-preview-status">
             <span className="auth-status-dot" />
 
-            <span>
-              Workspace is ready
-            </span>
+            <span>Workspace is ready</span>
           </div>
 
           <div className="auth-preview-members">
-
             <span className="preview-avatar purple">
               S
             </span>
@@ -402,9 +381,7 @@ const AuthCard = ({
             <span className="preview-more">
               +18
             </span>
-
           </div>
-
         </div>
       )}
 
@@ -424,7 +401,6 @@ const AuthCard = ({
       ===================================================== */}
 
       <AnimatePresence mode="wait">
-
         <motion.div
           key={
             isLogin
@@ -448,20 +424,14 @@ const AuthCard = ({
             duration: 0.25,
           }}
         >
-
           {/* HEADER */}
 
           <div className="auth-header">
-
             <h2 className="auth-title">
               {isLogin ? (
-                <>
-                  Welcome Back 👋
-                </>
+                <>Welcome Back 👋</>
               ) : (
-                <>
-                  Create Account
-                </>
+                <>Create Account</>
               )}
             </h2>
 
@@ -470,7 +440,6 @@ const AuthCard = ({
                 ? "Sign in to continue managing your projects."
                 : "Join TaskFlow and start collaborating today."}
             </p>
-
           </div>
 
           {/* ERROR */}
@@ -557,19 +526,14 @@ const AuthCard = ({
 
           <div className="auth-social-wrapper">
             <SocialButtons
-              onGoogleLogin={
-                handleGoogleLogin
-              }
-              onGithubLogin={
-                handleGithubLogin
-              }
+              onGoogleLogin={handleGoogleLogin}
+              onGithubLogin={handleGithubLogin}
             />
           </div>
 
           {/* FOOTER */}
 
           <div className="auth-footer">
-
             {isLogin ? (
               <>
                 <span>
@@ -603,11 +567,8 @@ const AuthCard = ({
                 </button>
               </>
             )}
-
           </div>
-
         </motion.div>
-
       </AnimatePresence>
 
       {/* =====================================================
@@ -616,9 +577,7 @@ const AuthCard = ({
 
       {compact && (
         <div className="auth-preview-stats">
-
           <div className="auth-preview-stat">
-
             <div className="auth-preview-stat-icon">
               ✓
             </div>
@@ -632,11 +591,9 @@ const AuthCard = ({
                 Tasks Completed
               </span>
             </div>
-
           </div>
 
           <div className="auth-preview-stat success">
-
             <div className="auth-preview-stat-icon">
               ↗
             </div>
@@ -650,12 +607,9 @@ const AuthCard = ({
                 Project Success
               </span>
             </div>
-
           </div>
-
         </div>
       )}
-
     </motion.div>
   );
 };
