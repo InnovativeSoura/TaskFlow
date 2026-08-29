@@ -1,7 +1,6 @@
 // src/components/landing/Hero.jsx
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import {
   FaArrowRight,
@@ -22,55 +21,183 @@ import {
 import "./Hero.css";
 
 const Hero = () => {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
 
   /* =========================================================
-     AUTH ACTION
+     SCROLL TO AUTH CARD
+  ========================================================= */
+
+  const scrollToAuth = () => {
+    const authCard =
+      document.querySelector(".tf-auth-preview");
+
+    if (authCard) {
+      authCard.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
+  /* =========================================================
+     CHANGE AUTH MODE
+  ========================================================= */
+
+  const openAuth = (mode) => {
+    setActiveTab(mode);
+    setShowPassword(false);
+
+    setTimeout(() => {
+      scrollToAuth();
+    }, 50);
+  };
+
+  /* =========================================================
+     LANDING EVENTS
+     
+     Allows LandingNavbar / other landing components
+     to control this Hero auth preview.
+  ========================================================= */
+
+  useEffect(() => {
+    const handleAuthMode = (event) => {
+      const mode = event?.detail?.mode;
+
+      if (
+        mode !== "login" &&
+        mode !== "register"
+      ) {
+        return;
+      }
+
+      setActiveTab(mode);
+      setShowPassword(false);
+
+      setTimeout(() => {
+        scrollToAuth();
+      }, 50);
+    };
+
+    window.addEventListener(
+      "taskflow-auth-mode",
+      handleAuthMode
+    );
+
+    return () => {
+      window.removeEventListener(
+        "taskflow-auth-mode",
+        handleAuthMode
+      );
+    };
+  }, []);
+
+  /* =========================================================
+     AUTH FORM SUBMIT
+     
+     IMPORTANT:
+     This preview does not perform authentication.
+     It opens the real auth page only when the user
+     actually submits the form.
+     
+     If you want actual login directly inside this card,
+     we can connect AuthContext here later.
   ========================================================= */
 
   const handleAuthSubmit = (event) => {
     event.preventDefault();
 
+    /*
+     * Do NOT use window.location.
+     * Do NOT reload the page.
+     *
+     * The landing preview is only the visual entry point.
+     */
+
     if (activeTab === "login") {
-      navigate("/login");
+      window.dispatchEvent(
+        new CustomEvent(
+          "taskflow-open-auth-page",
+          {
+            detail: {
+              mode: "login",
+            },
+          }
+        )
+      );
+
       return;
     }
 
-    navigate("/register");
+    window.dispatchEvent(
+      new CustomEvent(
+        "taskflow-open-auth-page",
+        {
+          detail: {
+            mode: "register",
+          },
+        }
+      )
+    );
   };
 
   /* =========================================================
-     SOCIAL AUTH
+     SOCIAL LOGIN
      
-     We intentionally route to the normal authentication page
-     instead of inventing backend OAuth endpoints.
+     Keep these as landing actions.
+     They do NOT navigate to /login.
      
-     Your actual Google/GitHub OAuth implementation can later
-     be connected here without changing the landing layout.
+     Actual OAuth can be connected to your backend.
   ========================================================= */
 
   const handleGoogleLogin = () => {
-    navigate("/login");
+    const apiUrl = (
+      import.meta.env.VITE_API_URL ||
+      "http://localhost:5000"
+    ).replace(/\/$/, "");
+
+    const baseUrl = apiUrl.endsWith("/api")
+      ? apiUrl
+      : `${apiUrl}/api`;
+
+    window.location.href =
+      `${baseUrl}/auth/google`;
   };
 
   const handleGithubLogin = () => {
-    navigate("/login");
+    const apiUrl = (
+      import.meta.env.VITE_API_URL ||
+      "http://localhost:5000"
+    ).replace(/\/$/, "");
+
+    const baseUrl = apiUrl.endsWith("/api")
+      ? apiUrl
+      : `${apiUrl}/api`;
+
+    window.location.href =
+      `${baseUrl}/auth/github`;
   };
 
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
-    <div className="tf-hero">
+    <div
+      className="tf-hero"
+      id="home"
+    >
 
       {/* =====================================================
           BACKGROUND DECORATION
       ===================================================== */}
 
       <div className="tf-hero-glow tf-hero-glow-left" />
+
       <div className="tf-hero-glow tf-hero-glow-right" />
 
       <div className="tf-hero-ring tf-ring-one" />
+
       <div className="tf-hero-ring tf-ring-two" />
 
       <div className="tf-hero-grid" />
@@ -91,6 +218,7 @@ const Hero = () => {
           {/* Badge */}
 
           <div className="tf-hero-badge">
+
             <FaRocket />
 
             <span>
@@ -98,6 +226,7 @@ const Hero = () => {
             </span>
 
             <FaArrowRight />
+
           </div>
 
 
@@ -123,10 +252,10 @@ const Hero = () => {
           {/* Description */}
 
           <p className="tf-hero-description">
-            TaskFlow is an all-in-one project management platform built
-            for modern teams. Plan projects, assign tasks, monitor
-            progress and collaborate in real time — all from one
-            intelligent workspace.
+            TaskFlow is an all-in-one project management
+            platform built for modern teams. Plan projects,
+            assign tasks, monitor progress and collaborate
+            in real time — all from one intelligent workspace.
           </p>
 
 
@@ -136,22 +265,27 @@ const Hero = () => {
 
           <div className="tf-hero-actions">
 
-            <Link
-              to="/register"
+            <button
+              type="button"
               className="tf-primary-cta"
+              onClick={() =>
+                openAuth("register")
+              }
             >
               <span>
                 Start Free
               </span>
 
               <FaArrowRight />
-            </Link>
+
+            </button>
 
 
             <a
               href="#features"
               className="tf-secondary-cta"
             >
+
               <span className="tf-play-icon">
                 <FaPlay />
               </span>
@@ -159,6 +293,7 @@ const Hero = () => {
               <span>
                 Explore Features
               </span>
+
             </a>
 
           </div>
@@ -172,6 +307,7 @@ const Hero = () => {
 
             <div className="tf-benefit">
               <FaCheck />
+
               <span>
                 Free Forever Plan
               </span>
@@ -179,6 +315,7 @@ const Hero = () => {
 
             <div className="tf-benefit">
               <FaCheck />
+
               <span>
                 2 Minute Setup
               </span>
@@ -186,6 +323,7 @@ const Hero = () => {
 
             <div className="tf-benefit">
               <FaCheck />
+
               <span>
                 No Credit Card Required
               </span>
@@ -199,8 +337,6 @@ const Hero = () => {
           ================================================= */}
 
           <div className="tf-hero-stats">
-
-            {/* Teams */}
 
             <div className="tf-stat-card">
 
@@ -223,8 +359,6 @@ const Hero = () => {
             </div>
 
 
-            {/* Tasks */}
-
             <div className="tf-stat-card">
 
               <div className="tf-stat-icon">
@@ -246,8 +380,6 @@ const Hero = () => {
             </div>
 
 
-            {/* Uptime */}
-
             <div className="tf-stat-card">
 
               <div className="tf-stat-icon">
@@ -268,8 +400,6 @@ const Hero = () => {
 
             </div>
 
-
-            {/* Rating */}
 
             <div className="tf-stat-card">
 
@@ -400,7 +530,6 @@ const Hero = () => {
                   : "Create Your Account 🚀"}
               </h2>
 
-
               <p>
                 {activeTab === "login"
                   ? "Sign in to continue managing your projects."
@@ -419,9 +548,7 @@ const Hero = () => {
               onSubmit={handleAuthSubmit}
             >
 
-              {/* =================================================
-                  EMAIL
-              ================================================= */}
+              {/* EMAIL */}
 
               <div className="tf-input-wrapper">
 
@@ -437,9 +564,7 @@ const Hero = () => {
               </div>
 
 
-              {/* =================================================
-                  PASSWORD
-              ================================================= */}
+              {/* PASSWORD */}
 
               <div className="tf-input-wrapper">
 
@@ -466,7 +591,8 @@ const Hero = () => {
                   className="tf-password-toggle"
                   onClick={() =>
                     setShowPassword(
-                      (previous) => !previous
+                      (previous) =>
+                        !previous
                     )
                   }
                   aria-label={
@@ -475,17 +601,15 @@ const Hero = () => {
                       : "Show password"
                   }
                 >
+
                   <FaEye />
+
                 </button>
 
               </div>
 
 
-              {/* =================================================
-                  REMEMBER ME
-                  
-                  Forgot password intentionally removed.
-              ================================================= */}
+              {/* REMEMBER */}
 
               {activeTab === "login" && (
 
@@ -513,9 +637,7 @@ const Hero = () => {
               )}
 
 
-              {/* =================================================
-                  SUBMIT BUTTON
-              ================================================= */}
+              {/* SUBMIT */}
 
               <button
                 type="submit"
@@ -596,8 +718,6 @@ const Hero = () => {
 
             <div className="tf-auth-metrics">
 
-              {/* Projects */}
-
               <div className="tf-auth-metric">
 
                 <div className="tf-metric-icon">
@@ -618,8 +738,6 @@ const Hero = () => {
 
               </div>
 
-
-              {/* Success Rate */}
 
               <div className="tf-auth-metric">
 

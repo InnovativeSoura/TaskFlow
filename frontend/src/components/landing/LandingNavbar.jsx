@@ -152,53 +152,25 @@ const LandingNavbar = () => {
   ========================================== */
 
   const handleExplorePlatform = () => {
-    closeMenu();
+  closeMenu();
 
-    /*
-      If already on the landing page,
-      directly request the AuthCard.
-    */
+  window.dispatchEvent(
+    new CustomEvent("taskflow-auth-mode", {
+      detail: {
+        mode: "login",
+      },
+    })
+  );
 
-    if (
-      location.pathname === "/"
-    ) {
-      window.dispatchEvent(
-        new CustomEvent(
-          "taskflow-scroll-auth",
-          {
-            detail: {
-              mode: "login",
-            },
-          }
-        )
-      );
+  const authCard =
+    document.querySelector(".tf-auth-preview");
 
-      return;
-    }
-
-    /*
-      If the user is on another page,
-      return to the landing page first.
-    */
-
-    navigate("/");
-
-    /*
-      Give React time to mount Hero/AuthCard.
-    */
-
-    setTimeout(() => {
-      window.dispatchEvent(
-        new CustomEvent(
-          "taskflow-scroll-auth",
-          {
-            detail: {
-              mode: "login",
-            },
-          }
-        )
-      );
-    }, 350);
+  if (authCard) {
+    authCard.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
   };
 
   /* ==========================================

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 import {
   FaArrowRight,
@@ -27,6 +28,26 @@ const fadeUp = {
     opacity: 1,
     y: 0,
   },
+};
+
+const openAuth = (mode) => {
+  window.dispatchEvent(
+    new CustomEvent("taskflow-auth-mode", {
+      detail: {
+        mode,
+      },
+    })
+  );
+
+  const authCard =
+    document.querySelector(".tf-auth-preview");
+
+  if (authCard) {
+    authCard.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
 };
 
 
@@ -125,28 +146,30 @@ function CTA() {
 
           <div className="cta-buttons">
 
-            <Link
-              to="/login"
+            <button
+              type="button"
               className="cta-primary-btn"
+              onClick={() => openAuth("register")}
             >
               <span>
                 Start Free
               </span>
 
               <FaArrowRight />
-            </Link>
+            </button>
 
 
-            <Link
-              to="/login"
-              className="cta-secondary-btn"
+            <button
+              type="button"
+                className="cta-secondary-btn"
+                  onClick={() => openAuth("login")}
             >
               <FaPlayCircle />
 
               <span>
                 Watch Demo
               </span>
-            </Link>
+            </button>
 
           </div>
 
