@@ -41,11 +41,13 @@
     background:
         linear-gradient(
             180deg,
-            #121B2B,
-            #0E1522
+            #121B2B 0%,
+            #0E1522 55%,
+            #0B1220 100%
         );
 
-    border-right:1px solid rgba(255,255,255,.05);
+    /* REMOVE DARK BORDER */
+    border-right:none;
 
     display:flex;
     flex-direction:column;
@@ -55,24 +57,6 @@
     overflow:hidden;
 
     transition:width .35s ease;
-
-}
-
-.sidebar.collapsed{
-
-    width:var(--sidebar-collapse-width);
-
-}
-
-.sidebar-inner{
-
-    display:flex;
-
-    flex-direction:column;
-
-    height:100%;
-
-    padding:14px 10px;
 
 }
 
@@ -461,6 +445,126 @@
     background:rgba(123,97,255,.15);
 
     color:#ffffff;
+
+}
+/* ==========================================================
+                    PREMIUM TASKFLOW LOGO
+========================================================== */
+
+.workspace-logo{
+
+    width:50px;
+
+    height:50px;
+
+    min-width:50px;
+
+    border-radius:15px;
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    color:#ffffff;
+
+    font-size:17px;
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #9B8AFF 0%,
+            #7B61FF 45%,
+            #5A43E8 100%
+        );
+
+    /* NO BLACK BORDER */
+    border:none;
+
+    box-shadow:
+        0 8px 24px rgba(123,97,255,.32),
+        0 0 30px rgba(123,97,255,.16),
+        inset 0 1px 1px rgba(255,255,255,.35);
+
+    isolation:isolate;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+/* Premium glass highlight */
+
+.workspace-logo::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:1px;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.20),
+            transparent 45%,
+            rgba(255,255,255,.04)
+        );
+
+    pointer-events:none;
+
+}
+
+/* Soft internal glow */
+
+.workspace-logo::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:28px;
+
+    height:28px;
+
+    top:-12px;
+
+    right:-10px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.22);
+
+    filter:blur(10px);
+
+    pointer-events:none;
+
+}
+
+/* Hover */
+
+.workspace-button:hover .workspace-logo{
+
+    transform:
+        translateY(-1px)
+        scale(1.03);
+
+    box-shadow:
+        0 10px 30px rgba(123,97,255,.42),
+        0 0 38px rgba(123,97,255,.22),
+        inset 0 1px 1px rgba(255,255,255,.4);
 
 }
 
