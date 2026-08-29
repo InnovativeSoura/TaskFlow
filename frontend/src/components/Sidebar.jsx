@@ -101,14 +101,28 @@ const Sidebar = () => {
   }, [username]);
 
   /* =======================================================
-     LOGOUT
+   LOGOUT
   ======================================================= */
 
   const handleLogout = () => {
-    logout();
+    try {
+      // Clear authentication state
+      logout();
 
-    // Always return to the public Home page after logout
-    navigate("/", { replace: true });
+      // Remove any remaining authentication data
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout Error:", error);
+    } finally {
+    /*
+     * Force the application to the PUBLIC HOME PAGE.
+     *
+     * Using location.replace guarantees that logout
+     * cannot leave the user on /login or /dashboard.
+     */
+      window.location.replace("/");
+    }
   };
 
   /* =======================================================
