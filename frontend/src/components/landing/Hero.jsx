@@ -1,6 +1,7 @@
 // src/components/landing/Hero.jsx
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 import {
   FaArrowRight,
@@ -21,8 +22,14 @@ import {
 import "./Hero.css";
 
 const Hero = () => {
+  const { login, register } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   /* =========================================================
      SCROLL TO AUTH CARD
@@ -104,41 +111,74 @@ const Hero = () => {
      we can connect AuthContext here later.
   ========================================================= */
 
-  const handleAuthSubmit = (event) => {
+  const handleAuthSubmit = async (event) => {
     event.preventDefault();
 
-    /*
-     * Do NOT use window.location.
-     * Do NOT reload the page.
-     *
-     * The landing preview is only the visual entry point.
-     */
+    if (loading) return;
 
-    if (activeTab === "login") {
-      window.dispatchEvent(
-        new CustomEvent(
-          "taskflow-open-auth-page",
-          {
-            detail: {
-              mode: "login",
-            },
-          }
-        )
-      );
-
+    if (!email.trim()) {
+      setError("Please enter your email.");
       return;
     }
 
-    window.dispatchEvent(
-      new CustomEvent(
-        "taskflow-open-auth-page",
-        {
-          detail: {
-            mode: "register",
-          },
-        }
-      )
-    );
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must contain at least 6 characters.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      let result;
+
+      if (activeTab === "login") {
+        result = await login({
+          email: email.trim(),
+          password,
+        });
+      } else {
+        result = await register({
+          name: email.split("@")[0],
+          email: email.trim(),
+          password,
+          role: "Team Member",
+        });
+      }
+
+      if (!result?.success) {
+        setError(
+          result?.message ||
+            "Authentication failed. Please try again."
+         );
+
+        return;
+      }
+
+    /*
+     * AuthContext should already save:
+     * token + user
+     *
+     * AppRoutes will then allow /dashboard.
+     */
+      window.location.href = "/dashboard";
+
+    } catch (error) {
+      console.error("Landing authentication error:", error);
+
+      setError(
+       error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   /* =========================================================
@@ -542,6 +582,11 @@ const Hero = () => {
             {/* =================================================
                 AUTH FORM
             ================================================= */}
+            {error && (
+              <div className="tf-auth-error">
+                {error}
+              </div>
+            )}
 
             <form
               className="tf-auth-form"
@@ -559,6 +604,12 @@ const Hero = () => {
                   placeholder="your@email.com"
                   autoComplete="email"
                   aria-label="Email address"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setError("");
+                  }}
+                  disabled={loading}
                 />
 
               </div>
@@ -583,6 +634,12 @@ const Hero = () => {
                       : "new-password"
                   }
                   aria-label="Password"
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                    setError("");
+                  }}
+                  disabled={loading}
                 />
 
 
@@ -642,16 +699,17 @@ const Hero = () => {
               <button
                 type="submit"
                 className="tf-auth-submit"
+                disabled={loading}
               >
-
                 <span>
-                  {activeTab === "login"
+                  {loading
+                    ? "Please wait..."
+                    : activeTab === "login"
                     ? "Sign In"
                     : "Create Account"}
                 </span>
 
-                <FaArrowRight />
-
+                  {!loading && <FaArrowRight />}
               </button>
 
             </form>
