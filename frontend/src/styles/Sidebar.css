@@ -1247,6 +1247,77 @@
     color:#fff;
 
 }
+/* ==========================================================
+        REMOVE SIDEBAR / LAYOUT DARK SEPARATOR
+========================================================== */
+
+.sidebar,
+.sidebar.collapsed{
+
+    border-right:none !important;
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+}
+
+/* Remove pseudo-element separator */
+
+.sidebar::before,
+.sidebar::after{
+
+    border:none !important;
+
+    box-shadow:none !important;
+
+}
+
+/* ==========================================================
+        PREMIUM EDGE — NO BLACK BORDER
+========================================================== */
+
+.sidebar{
+
+    background:
+        linear-gradient(
+            180deg,
+            #121B2B 0%,
+            #101827 45%,
+            #0D1523 100%
+        ) !important;
+
+}
+
+/* Prevent child/background effects from creating an edge */
+
+.sidebar-inner{
+
+    border-right:none !important;
+
+}
+
+/* ==========================================================
+        REMOVE ANY ADJACENT DARK BORDER
+========================================================== */
+
+.taskflow-sidebar,
+.taskflow-sidebar *,
+.sidebar{
+
+    border-right:none !important;
+
+}
+
+/* Main layout must not draw a left separator */
+
+.taskflow-main{
+
+    border-left:none !important;
+
+    box-shadow:none !important;
+
+}
 
 /* ==========================================================
                     END
