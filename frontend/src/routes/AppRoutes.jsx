@@ -1,9 +1,14 @@
 // src/routes/AppRoutes.jsx
 
 import {
+  useEffect,
+} from "react";
+
+import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +20,6 @@ import ProtectedRoute from "../components/ProtectedRoute";
 =========================== */
 
 import Home from "../pages/Home";
-import AuthPage from "../pages/AuthPage";
 import Pricing from "../pages/Pricing";
 import OAuthSuccess from "../pages/OAuthSuccess";
 
@@ -81,33 +85,115 @@ import Workspaces from "../pages/Workspaces";
 import Subscription from "../pages/Subscription";
 import Upgrade from "../pages/Upgrade";
 
+
+/* =========================================================
+   AUTH REDIRECT
+
+   /login and /register no longer render AuthPage.
+
+   They return the user to the HOME PAGE and tell the
+   landing AuthCard which mode should be displayed.
+========================================================= */
+
+const AuthRedirect = ({ mode = "login" }) => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+    /*
+     * First return to the public Home page.
+     */
+    navigate("/", {
+      replace: true,
+    });
+
+    /*
+     * Tell the compact AuthCard to switch mode.
+     */
+    const timer = window.setTimeout(() => {
+
+      window.dispatchEvent(
+        new CustomEvent("taskflow-auth-mode", {
+          detail: {
+            mode,
+          },
+        })
+      );
+
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+
+  }, [mode, navigate]);
+
+  return null;
+};
+
+
+/* =========================================================
+   APP ROUTES
+========================================================= */
+
 const AppRoutes = () => {
+
   const {
     loading,
-    isAuthenticated,
+    token,
+    user,
   } = useAuth();
 
+
+  /* =======================================================
+     AUTH LOADING
+  ======================================================= */
+
   if (loading) {
+
     return (
       <div className="page-loader">
-        <div className="spinner"></div>
+        <div className="spinner" />
       </div>
     );
+
   }
 
-  const authenticated = isAuthenticated;
+
+  /* =======================================================
+     AUTHENTICATED
+  ======================================================= */
+
+  const authenticated = Boolean(
+    token &&
+    user &&
+    user._id
+  );
+
 
   return (
     <Routes>
 
-      {/* ===========================
-          PUBLIC ROUTES
-      ============================ */}
+      {/* ===================================================
+          PUBLIC HOME
+      =================================================== */}
 
       <Route
         path="/"
         element={<Home />}
       />
+
+
+      {/* ===================================================
+          LOGIN
+
+          IMPORTANT:
+          No standalone AuthPage anymore.
+
+          Visiting /login returns to Home and opens
+          the Login mode inside the landing AuthCard.
+      =================================================== */}
 
       <Route
         path="/login"
@@ -118,10 +204,18 @@ const AppRoutes = () => {
               replace
             />
           ) : (
-            <AuthPage />
+            <AuthRedirect mode="login" />
           )
         }
       />
+
+
+      {/* ===================================================
+          REGISTER
+
+          Visiting /register returns to Home and opens
+          Register mode inside the landing AuthCard.
+      =================================================== */}
 
       <Route
         path="/register"
@@ -132,15 +226,25 @@ const AppRoutes = () => {
               replace
             />
           ) : (
-            <AuthPage />
+            <AuthRedirect mode="register" />
           )
         }
       />
+
+
+      {/* ===================================================
+          PRICING
+      =================================================== */}
 
       <Route
         path="/pricing"
         element={<Pricing />}
       />
+
+
+      {/* ===================================================
+          HOME ALIAS
+      =================================================== */}
 
       <Route
         path="/home"
@@ -152,18 +256,20 @@ const AppRoutes = () => {
         }
       />
 
-      {/* ===========================
+
+      {/* ===================================================
           OAUTH CALLBACK
-      ============================ */}
+      =================================================== */}
 
       <Route
         path="/oauth-success"
         element={<OAuthSuccess />}
       />
 
-      {/* ===========================
-          PROTECTED ROUTES
-      ============================ */}
+
+      {/* ===================================================
+          DASHBOARD
+      =================================================== */}
 
       <Route
         path="/dashboard"
@@ -174,6 +280,11 @@ const AppRoutes = () => {
         }
       />
 
+
+      {/* ===================================================
+          ADMIN DASHBOARD
+      =================================================== */}
+
       <Route
         path="/admin-dashboard"
         element={
@@ -182,6 +293,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          PROJECTS
+      =================================================== */}
 
       <Route
         path="/projects"
@@ -201,6 +317,11 @@ const AppRoutes = () => {
         }
       />
 
+
+      {/* ===================================================
+          TASKS
+      =================================================== */}
+
       <Route
         path="/tasks"
         element={
@@ -218,6 +339,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          TEAM
+      =================================================== */}
 
       <Route
         path="/users"
@@ -237,6 +363,11 @@ const AppRoutes = () => {
         }
       />
 
+
+      {/* ===================================================
+          PROFILE
+      =================================================== */}
+
       <Route
         path="/profile"
         element={
@@ -245,6 +376,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          REPORTS
+      =================================================== */}
 
       <Route
         path="/reports"
@@ -263,6 +399,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          PRODUCTIVITY
+      =================================================== */}
 
       <Route
         path="/kanban"
@@ -308,6 +449,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          SETTINGS / ACTIVITY
+      =================================================== */}
 
       <Route
         path="/activity"
@@ -363,9 +509,10 @@ const AppRoutes = () => {
         }
       />
 
-      {/* ===========================
+
+      {/* ===================================================
           404
-      ============================ */}
+      =================================================== */}
 
       <Route
         path="*"
