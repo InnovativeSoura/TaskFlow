@@ -25,23 +25,60 @@ const LoginForm = ({
   onTogglePassword,
 
   onRememberChange,
+
+  onForgotPassword,
 }) => {
+
+  /* =========================================================
+     FORM SUBMIT
+  ========================================================= */
+
+  const handleSubmit = (event) => {
+
+    /*
+     * VERY IMPORTANT:
+     * Prevent the browser from performing a normal
+     * HTML form submission, which causes a full page reload.
+     */
+    event.preventDefault();
+
+    event.stopPropagation();
+
+    /*
+     * Pass the event to the parent handler.
+     */
+    if (typeof onSubmit === "function") {
+      onSubmit(event);
+    }
+  };
+
+
   return (
     <>
+      {/* =====================================================
+          ERROR
+      ===================================================== */}
+
       {error && (
         <div className="auth-error">
           {error}
         </div>
       )}
 
+
+      {/* =====================================================
+          LOGIN FORM
+      ===================================================== */}
+
       <form
         className="auth-form"
-        onSubmit={onSubmit}
-        noValidate
+        onSubmit={handleSubmit}
+        noValidate={false}
       >
-        {/* =================================================
+
+        {/* ===================================================
             EMAIL
-        ================================================= */}
+        =================================================== */}
 
         <FormField
           icon={FaEnvelope}
@@ -54,9 +91,10 @@ const LoginForm = ({
           required
         />
 
-        {/* =================================================
+
+        {/* ===================================================
             PASSWORD
-        ================================================= */}
+        =================================================== */}
 
         <FormField
           icon={FaLock}
@@ -71,43 +109,62 @@ const LoginForm = ({
           required
         />
 
-        {/* =================================================
-            REMEMBER ME
-        ================================================= */}
+
+        {/* ===================================================
+            OPTIONS
+        =================================================== */}
 
         <div className="auth-options">
+
           <label className="remember-me">
+
             <input
               type="checkbox"
-              checked={rememberMe}
+              checked={Boolean(rememberMe)}
               onChange={onRememberChange}
             />
 
             <span>
               Remember me
             </span>
+
           </label>
+
+
+          <button
+            type="button"
+            className="link-btn"
+            onClick={onForgotPassword}
+          >
+            Forgot Password?
+          </button>
+
         </div>
 
-        {/* =================================================
-            SUBMIT
-        ================================================= */}
+
+        {/* ===================================================
+            SIGN IN
+        =================================================== */}
 
         <button
           type="submit"
           className="auth-btn"
           disabled={loading}
         >
+
           <span>
             {loading
               ? "Signing In..."
-              : "Sign In"}
+              : "Sign In"
+            }
           </span>
 
           {!loading && (
             <FaArrowRight />
           )}
+
         </button>
+
       </form>
     </>
   );
