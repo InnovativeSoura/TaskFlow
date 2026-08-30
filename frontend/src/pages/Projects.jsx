@@ -38,11 +38,11 @@ import {
 
 import { toast } from "react-toastify";
 
-import MainLayout from "../layouts/MainLayout";
-
 import { useProjects } from "../context/ProjectContext";
 
 import "../styles/Projects.css";
+
+import "../layouts/MainLayout";
 
 
 /* ==========================================================
