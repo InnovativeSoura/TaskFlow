@@ -17,32 +17,41 @@ const MainLayout = ({ children }) => {
   return (
     <div
       className={`taskflow-layout ${
-        sidebarOpen ? "sidebar-expanded" : "sidebar-collapsed"
+        sidebarOpen
+          ? "sidebar-expanded"
+          : "sidebar-collapsed"
       }`}
     >
-      {/* =========================
-          Sidebar
-      ========================== */}
+
+      {/* =====================================================
+                          SIDEBAR
+      ====================================================== */}
 
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
 
-      {/* =========================
-          Main Area
-      ========================== */}
+
+      {/* =====================================================
+                        MAIN APPLICATION
+      ====================================================== */}
 
       <div className="taskflow-main">
 
-        {/* Navbar */}
+        {/* =================================================
+                            NAVBAR
+        ================================================== */}
 
         <Navbar
           sidebarOpen={sidebarOpen}
           onSidebarToggle={toggleSidebar}
         />
 
-        {/* Page */}
+
+        {/* =================================================
+                         PAGE CONTENT
+        ================================================== */}
 
         <main className="taskflow-content">
           {children}
