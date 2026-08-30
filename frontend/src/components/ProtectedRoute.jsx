@@ -7,7 +7,11 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 
+import MainLayout from "../layouts/MainLayout";
+
+
 const ProtectedRoute = ({ children }) => {
+
   const {
     loading,
     user,
@@ -17,26 +21,26 @@ const ProtectedRoute = ({ children }) => {
 
   const location = useLocation();
 
+
   /* =======================================================
      LOADING
   ======================================================= */
 
   if (loading) {
+
     return (
       <div className="page-loader">
+
         <div className="spinner" />
+
       </div>
     );
+
   }
 
+
   /* =======================================================
-     AUTHENTICATION CHECK
-     
-     IMPORTANT:
-     Do NOT require user._id here.
-     
-     AuthContext already determines whether the session
-     is authenticated using token + user.
+     AUTHENTICATION
   ======================================================= */
 
   const authenticated =
@@ -44,52 +48,13 @@ const ProtectedRoute = ({ children }) => {
     Boolean(user) &&
     Boolean(isAuthenticated);
 
-  /* =======================================================
-     DEBUG
-  ======================================================= */
-
-  console.log(
-    "===================================="
-  );
-
-  console.log(
-    "🛡️ PROTECTED ROUTE CHECK"
-  );
-
-  console.log(
-    "Current Path:",
-    location.pathname
-  );
-
-  console.log(
-    "Token:",
-    token ? "PRESENT" : "MISSING"
-  );
-
-  console.log(
-    "User:",
-    user || "NONE"
-  );
-
-  console.log(
-    "isAuthenticated:",
-    isAuthenticated
-  );
-
-  console.log(
-    "Authenticated:",
-    authenticated
-  );
-
-  console.log(
-    "===================================="
-  );
 
   /* =======================================================
      NOT AUTHENTICATED
   ======================================================= */
 
   if (!authenticated) {
+
     return (
       <Navigate
         to="/login"
@@ -99,13 +64,34 @@ const ProtectedRoute = ({ children }) => {
         }}
       />
     );
+
   }
+
 
   /* =======================================================
      AUTHENTICATED
+     
+     IMPORTANT:
+     MainLayout is added HERE.
+     
+     Therefore every protected page automatically receives:
+     
+     Sidebar
+     +
+     Navbar
+     +
+     Page
+     
+     exactly once.
   ======================================================= */
 
-  return children;
+  return (
+    <MainLayout>
+      {children}
+    </MainLayout>
+  );
+
 };
+
 
 export default ProtectedRoute;
