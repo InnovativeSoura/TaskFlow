@@ -14,7 +14,6 @@ import {
 import { useAuth } from "../context/AuthContext";
 
 import ProtectedRoute from "../components/ProtectedRoute";
-import MainLayout from "../layouts/MainLayout";
 
 /* ===========================
    PUBLIC PAGES
@@ -188,6 +187,12 @@ const AppRoutes = () => {
 
       {/* ===================================================
           LOGIN
+
+          IMPORTANT:
+          No standalone AuthPage anymore.
+
+          Visiting /login returns to Home and opens
+          the Login mode inside the landing AuthCard.
       =================================================== */}
 
       <Route
@@ -207,6 +212,9 @@ const AppRoutes = () => {
 
       {/* ===================================================
           REGISTER
+
+          Visiting /register returns to Home and opens
+          Register mode inside the landing AuthCard.
       =================================================== */}
 
       <Route
@@ -267,9 +275,7 @@ const AppRoutes = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Dashboard />
-            </MainLayout>
+            <Dashboard />
           </ProtectedRoute>
         }
       />
@@ -283,9 +289,7 @@ const AppRoutes = () => {
         path="/admin-dashboard"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <AdminDashboard />
-            </MainLayout>
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
@@ -299,25 +303,16 @@ const AppRoutes = () => {
         path="/projects"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Projects />
-            </MainLayout>
+            <Projects />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          PROJECT LIST
-      =================================================== */}
 
       <Route
         path="/project-list"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <ProjectList />
-            </MainLayout>
+            <ProjectList />
           </ProtectedRoute>
         }
       />
@@ -331,41 +326,16 @@ const AppRoutes = () => {
         path="/tasks"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Tasks />
-            </MainLayout>
+            <Tasks />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          TASK LIST
-      =================================================== */}
 
       <Route
         path="/task-list"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <TaskList />
-            </MainLayout>
-          </ProtectedRoute>
-        }
-      />
-
-
-      {/* ===================================================
-          USERS
-      =================================================== */}
-
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <Users />
-            </MainLayout>
+            <TaskList />
           </ProtectedRoute>
         }
       />
@@ -376,12 +346,19 @@ const AppRoutes = () => {
       =================================================== */}
 
       <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/team"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Team />
-            </MainLayout>
+            <Team />
           </ProtectedRoute>
         }
       />
@@ -395,9 +372,7 @@ const AppRoutes = () => {
         path="/profile"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Profile />
-            </MainLayout>
+            <Profile />
           </ProtectedRoute>
         }
       />
@@ -411,201 +386,125 @@ const AppRoutes = () => {
         path="/reports"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Reports />
-            </MainLayout>
+            <Reports />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          ANALYTICS
-      =================================================== */}
 
       <Route
         path="/analytics"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Analytics />
-            </MainLayout>
+            <Analytics />
           </ProtectedRoute>
         }
       />
 
 
       {/* ===================================================
-          KANBAN
+          PRODUCTIVITY
       =================================================== */}
 
       <Route
         path="/kanban"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <KanbanBoard />
-            </MainLayout>
+            <KanbanBoard />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          CALENDAR
-      =================================================== */}
 
       <Route
         path="/calendar"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <CalendarPage />
-            </MainLayout>
+            <CalendarPage />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          TEAM CHAT
-      =================================================== */}
 
       <Route
         path="/chat"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <TeamChat />
-            </MainLayout>
+            <TeamChat />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          AI INSIGHTS
-      =================================================== */}
 
       <Route
         path="/ai"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <AIInsights />
-            </MainLayout>
+            <AIInsights />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          GANTT
-      =================================================== */}
 
       <Route
         path="/gantt"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <GanttPage />
-            </MainLayout>
+            <GanttPage />
           </ProtectedRoute>
         }
       />
 
 
       {/* ===================================================
-          ACTIVITY
+          SETTINGS / ACTIVITY
       =================================================== */}
 
       <Route
         path="/activity"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <ActivityFeed />
-            </MainLayout>
+            <ActivityFeed />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          WORKSPACES
-      =================================================== */}
 
       <Route
         path="/workspaces"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Workspaces />
-            </MainLayout>
+            <Workspaces />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          SUBSCRIPTION
-      =================================================== */}
 
       <Route
         path="/subscription"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Subscription />
-            </MainLayout>
+            <Subscription />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          UPGRADE
-      =================================================== */}
 
       <Route
         path="/upgrade"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Upgrade />
-            </MainLayout>
+            <Upgrade />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          SETTINGS
-      =================================================== */}
 
       <Route
         path="/settings"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Settings />
-            </MainLayout>
+            <Settings />
           </ProtectedRoute>
         }
       />
-
-
-      {/* ===================================================
-          NOTIFICATIONS
-      =================================================== */}
 
       <Route
         path="/notifications"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <Notifications />
-            </MainLayout>
+            <Notifications />
           </ProtectedRoute>
         }
       />
