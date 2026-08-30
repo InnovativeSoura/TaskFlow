@@ -42,7 +42,7 @@ import { useProjects } from "../context/ProjectContext";
 
 import "../styles/Projects.css";
 
-import "../layouts/MainLayout";
+import "../layouts/MainLayout.jsx";
 
 
 /* ==========================================================
