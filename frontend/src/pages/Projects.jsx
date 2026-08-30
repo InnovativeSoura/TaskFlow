@@ -1,519 +1,1384 @@
 // src/pages/Projects.jsx
 
-import { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "react-toastify";
+import React, {
+  useMemo,
+  useState,
+} from "react";
 
 import {
-  FaPlus,
-  FaRocket,
+  motion,
+  AnimatePresence,
+} from "framer-motion";
+
+import {
   FaLayerGroup,
-  FaClock,
+  FaRocket,
+  FaUsers,
   FaCheckCircle,
-  FaArchive,
   FaChartLine,
+  FaArchive,
+  FaClock,
   FaExclamationTriangle,
+  FaSearch,
+  FaFilter,
+  FaFlag,
+  FaSortAmountDown,
+  FaPlus,
+  FaTimes,
   FaThLarge,
   FaList,
+  FaEdit,
+  FaTrash,
+  FaArrowRight,
+  FaCalendarAlt,
+  FaChevronLeft,
+  FaChevronRight,
+  FaFolderOpen,
 } from "react-icons/fa";
 
-import { FaArrowTrendUp } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
-import MainLayout from "../layouts/MainLayout";
-
-import ProjectCard from "../components/projects/ProjectCard";
-import ProjectModal from "../components/projects/ProjectModal";
-import DeleteProjectModal from "../components/projects/DeleteProjectModal";
-import ProjectFilters from "../components/projects/ProjectFilters";
-import StatCard from "../components/StatCard";
-
-import useProjects from "../hooks/useProjects";
-import { useAuth } from "../context/AuthContext";
+import { useProjects } from "../context/ProjectContext";
 
 import "../styles/Projects.css";
 
+
+/* ==========================================================
+                      CONSTANTS
+========================================================== */
+
+const ITEMS_PER_PAGE = 6;
+
+const EMPTY_FORM = {
+  name: "",
+  description: "",
+  status: "Planning",
+  priority: "Medium",
+  startDate: "",
+  dueDate: "",
+};
+
+
+/* ==========================================================
+                      HELPERS
+========================================================== */
+
+const getProgress = (project) => {
+  const value =
+    project?.progress ??
+    project?.completion ??
+    project?.percentage ??
+    0;
+
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return 0;
+  }
+
+  return Math.min(
+    100,
+    Math.max(0, number)
+  );
+};
+
+
+const getProjectStatus = (project) => {
+
+  return (
+    project?.status ||
+    "Planning"
+  );
+
+};
+
+
+const getProjectPriority = (project) => {
+
+  return (
+    project?.priority ||
+    "Medium"
+  );
+
+};
+
+
+const getProjectName = (project) => {
+
+  return (
+    project?.name ||
+    project?.title ||
+    "Untitled Project"
+  );
+
+};
+
+
+const getProjectDescription = (project) => {
+
+  return (
+    project?.description ||
+    "No project description available."
+  );
+
+};
+
+
+const getProjectId = (project) => {
+
+  return (
+    project?._id ||
+    project?.id
+  );
+
+};
+
+
+const formatDate = (date) => {
+
+  if (!date) {
+    return "No due date";
+  }
+
+  const parsed =
+    new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "No due date";
+  }
+
+  return parsed.toLocaleDateString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }
+  );
+
+};
+
+
+const getStatusClass = (status) => {
+
+  const value =
+    String(status)
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+  return `status-${value}`;
+
+};
+
+
+const getPriorityClass = (priority) => {
+
+  const value =
+    String(priority)
+      .toLowerCase();
+
+  return `priority-${value}`;
+
+};
+
+
+/* ==========================================================
+                    PROJECT CARD
+========================================================== */
+
+const ProjectCard = ({
+  project,
+  onEdit,
+  onDelete,
+}) => {
+
+  const progress =
+    getProgress(project);
+
+  const status =
+    getProjectStatus(project);
+
+  const priority =
+    getProjectPriority(project);
+
+  return (
+
+    <motion.article
+      className="project-card"
+      layout
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        scale: 0.96,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
+      whileHover={{
+        y: -5,
+      }}
+    >
+
+      {/* ================================================
+                    CARD TOP
+      ================================================= */}
+
+      <div className="project-card-top">
+
+        <div className="project-icon">
+
+          <FaLayerGroup />
+
+        </div>
+
+        <div className="project-card-actions">
+
+          <button
+            type="button"
+            className="project-action-button"
+            title="Edit project"
+            onClick={() =>
+              onEdit(project)
+            }
+          >
+            <FaEdit />
+          </button>
+
+          <button
+            type="button"
+            className="project-action-button danger"
+            title="Delete project"
+            onClick={() =>
+              onDelete(project)
+            }
+          >
+            <FaTrash />
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {/* ================================================
+                    PROJECT TITLE
+      ================================================= */}
+
+      <div className="project-card-heading">
+
+        <div>
+
+          <h3>
+            {getProjectName(project)}
+          </h3>
+
+          <p>
+            {getProjectDescription(project)}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      {/* ================================================
+                    BADGES
+      ================================================= */}
+
+      <div className="project-badges">
+
+        <span
+          className={`project-status ${getStatusClass(status)}`}
+        >
+          <span className="status-dot" />
+          {status}
+        </span>
+
+        <span
+          className={`project-priority ${getPriorityClass(priority)}`}
+        >
+          {priority}
+        </span>
+
+      </div>
+
+
+      {/* ================================================
+                    PROGRESS
+      ================================================= */}
+
+      <div className="project-progress-section">
+
+        <div className="project-progress-header">
+
+          <span>
+            Progress
+          </span>
+
+          <strong>
+            {progress}%
+          </strong>
+
+        </div>
+
+        <div className="project-progress-track">
+
+          <motion.div
+            className="project-progress-bar"
+            initial={{
+              width: 0,
+            }}
+            animate={{
+              width: `${progress}%`,
+            }}
+            transition={{
+              duration: 0.8,
+              ease: "easeOut",
+            }}
+          />
+
+        </div>
+
+      </div>
+
+
+      {/* ================================================
+                    CARD FOOTER
+      ================================================= */}
+
+      <div className="project-card-footer">
+
+        <div className="project-date">
+
+          <FaCalendarAlt />
+
+          <span>
+            {formatDate(
+              project?.dueDate
+            )}
+          </span>
+
+        </div>
+
+        <div className="project-view-link">
+
+          View
+
+          <FaArrowRight />
+
+        </div>
+
+      </div>
+
+    </motion.article>
+
+  );
+
+};
+
+
+/* ==========================================================
+                    PROJECT ROW
+========================================================== */
+
+const ProjectRow = ({
+  project,
+  onEdit,
+  onDelete,
+}) => {
+
+  const progress =
+    getProgress(project);
+
+  const status =
+    getProjectStatus(project);
+
+  const priority =
+    getProjectPriority(project);
+
+  return (
+
+    <motion.div
+      className="project-row"
+      layout
+      initial={{
+        opacity: 0,
+        y: 10,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+    >
+
+      <div className="project-row-name">
+
+        <div className="project-row-icon">
+          <FaLayerGroup />
+        </div>
+
+        <div>
+
+          <strong>
+            {getProjectName(project)}
+          </strong>
+
+          <span>
+            {getProjectDescription(project)}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <span
+        className={`project-status ${getStatusClass(status)}`}
+      >
+        <span className="status-dot" />
+        {status}
+      </span>
+
+
+      <span
+        className={`project-priority ${getPriorityClass(priority)}`}
+      >
+        {priority}
+      </span>
+
+
+      <div className="row-progress">
+
+        <div className="row-progress-top">
+
+          <span>
+            {progress}%
+          </span>
+
+        </div>
+
+        <div className="row-progress-track">
+
+          <div
+            className="row-progress-bar"
+            style={{
+              width: `${progress}%`,
+            }}
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="project-row-date">
+
+        <FaCalendarAlt />
+
+        {formatDate(
+          project?.dueDate
+        )}
+
+      </div>
+
+
+      <div className="project-row-actions">
+
+        <button
+          type="button"
+          onClick={() =>
+            onEdit(project)
+          }
+          title="Edit"
+        >
+          <FaEdit />
+        </button>
+
+        <button
+          type="button"
+          className="danger"
+          onClick={() =>
+            onDelete(project)
+          }
+          title="Delete"
+        >
+          <FaTrash />
+        </button>
+
+      </div>
+
+    </motion.div>
+
+  );
+
+};
+
+
+/* ==========================================================
+                    PROJECT MODAL
+========================================================== */
+
+const ProjectModal = ({
+  open,
+  editingProject,
+  form,
+  setForm,
+  saving,
+  onClose,
+  onSubmit,
+}) => {
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+
+    <AnimatePresence>
+
+      <motion.div
+        className="project-modal-overlay"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        exit={{
+          opacity: 0,
+        }}
+        onMouseDown={(event) => {
+
+          if (
+            event.target ===
+            event.currentTarget
+          ) {
+            onClose();
+          }
+
+        }}
+      >
+
+        <motion.div
+          className="project-modal"
+          initial={{
+            opacity: 0,
+            scale: 0.94,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            y: 0,
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.94,
+            y: 20,
+          }}
+        >
+
+          {/* Modal Header */}
+
+          <div className="project-modal-header">
+
+            <div>
+
+              <span className="modal-eyebrow">
+
+                <FaLayerGroup />
+
+                PROJECT WORKSPACE
+
+              </span>
+
+              <h2>
+                {editingProject
+                  ? "Edit Project"
+                  : "Create New Project"}
+              </h2>
+
+              <p>
+                {editingProject
+                  ? "Update your project information and progress."
+                  : "Create a project and start managing your team's work."}
+              </p>
+
+            </div>
+
+            <button
+              type="button"
+              className="modal-close"
+              onClick={onClose}
+            >
+              <FaTimes />
+            </button>
+
+          </div>
+
+
+          {/* Form */}
+
+          <form
+            className="project-form"
+            onSubmit={onSubmit}
+          >
+
+            <div className="form-group full">
+
+              <label>
+                Project Name
+              </label>
+
+              <input
+                type="text"
+                placeholder="Enter project name"
+                value={form.name}
+                onChange={(event) =>
+                  setForm({
+                    ...form,
+                    name: event.target.value,
+                  })
+                }
+                required
+              />
+
+            </div>
+
+
+            <div className="form-group full">
+
+              <label>
+                Description
+              </label>
+
+              <textarea
+                placeholder="Describe your project..."
+                rows="4"
+                value={
+                  form.description
+                }
+                onChange={(event) =>
+                  setForm({
+                    ...form,
+                    description:
+                      event.target.value,
+                  })
+                }
+              />
+
+            </div>
+
+
+            <div className="form-grid">
+
+              <div className="form-group">
+
+                <label>
+                  Status
+                </label>
+
+                <select
+                  value={form.status}
+                  onChange={(event) =>
+                    setForm({
+                      ...form,
+                      status:
+                        event.target.value,
+                    })
+                  }
+                >
+
+                  <option value="Planning">
+                    Planning
+                  </option>
+
+                  <option value="Active">
+                    Active
+                  </option>
+
+                  <option value="In Progress">
+                    In Progress
+                  </option>
+
+                  <option value="Completed">
+                    Completed
+                  </option>
+
+                  <option value="Archived">
+                    Archived
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Priority
+                </label>
+
+                <select
+                  value={form.priority}
+                  onChange={(event) =>
+                    setForm({
+                      ...form,
+                      priority:
+                        event.target.value,
+                    })
+                  }
+                >
+
+                  <option value="Low">
+                    Low
+                  </option>
+
+                  <option value="Medium">
+                    Medium
+                  </option>
+
+                  <option value="High">
+                    High
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <div className="form-grid">
+
+              <div className="form-group">
+
+                <label>
+                  Start Date
+                </label>
+
+                <input
+                  type="date"
+                  value={
+                    form.startDate
+                  }
+                  onChange={(event) =>
+                    setForm({
+                      ...form,
+                      startDate:
+                        event.target.value,
+                    })
+                  }
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Due Date
+                </label>
+
+                <input
+                  type="date"
+                  value={
+                    form.dueDate
+                  }
+                  onChange={(event) =>
+                    setForm({
+                      ...form,
+                      dueDate:
+                        event.target.value,
+                    })
+                  }
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* Buttons */}
+
+            <div className="project-modal-footer">
+
+              <button
+                type="button"
+                className="modal-secondary-button"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="modal-primary-button"
+                disabled={saving}
+              >
+
+                {saving ? (
+                  <>
+                    <span className="button-spinner" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <FaPlus />
+                    {editingProject
+                      ? "Save Changes"
+                      : "Create Project"}
+                  </>
+                )}
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </motion.div>
+
+      </motion.div>
+
+    </AnimatePresence>
+
+  );
+
+};
+
+
+/* ==========================================================
+                    MAIN PROJECT PAGE
+========================================================== */
+
 const Projects = () => {
 
-  /* =====================================================
-      AUTH
-  ===================================================== */
-
-  const { user } = useAuth();
-
-  const canManage =
-    user?.role === "Admin" ||
-    user?.role === "Manager";
-
-  /* =====================================================
-      PROJECTS
-  ===================================================== */
+  /* ========================================================
+                        CONTEXT
+  ======================================================== */
 
   const {
-    projects,
-    loading,
+    projects = [],
+    loading = false,
     addProject,
     editProject,
     removeProject,
   } = useProjects();
 
-  /* =====================================================
-      SEARCH
-  ===================================================== */
 
-  const [search, setSearch] = useState("");
+  /* ========================================================
+                        STATE
+  ======================================================== */
 
-  /* =====================================================
-      FILTERS
-  ===================================================== */
+  const [
+    search,
+    setSearch,
+  ] = useState("");
 
-  const [statusFilter, setStatusFilter] =
-    useState("All");
+  const [
+    statusFilter,
+    setStatusFilter,
+  ] = useState("All Status");
 
-  const [priorityFilter, setPriorityFilter] =
-    useState("All");
+  const [
+    priorityFilter,
+    setPriorityFilter,
+  ] = useState("All Priority");
 
-  const [sortBy, setSortBy] =
-    useState("Newest");
+  const [
+    sortBy,
+    setSortBy,
+  ] = useState("Newest");
 
-  /* =====================================================
-      VIEW MODE
-  ===================================================== */
+  const [
+    viewMode,
+    setViewMode,
+  ] = useState("grid");
 
-  const [viewMode, setViewMode] =
-    useState("grid");
+  const [
+    currentPage,
+    setCurrentPage,
+  ] = useState(1);
 
-  /* =====================================================
-      PAGINATION
-  ===================================================== */
+  const [
+    showModal,
+    setShowModal,
+  ] = useState(false);
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
+  const [
+    editingProject,
+    setEditingProject,
+  ] = useState(null);
 
-  const itemsPerPage = 6;
+  const [
+    saving,
+    setSaving,
+  ] = useState(false);
 
-  /* =====================================================
-      MODALS
-  ===================================================== */
+  const [
+    form,
+    setForm,
+  ] = useState(
+    EMPTY_FORM
+  );
 
-  const [showModal, setShowModal] =
-    useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] =
-    useState(false);
+  /* ========================================================
+                  FILTER + SORT
+  ======================================================== */
 
-  const [selectedProject, setSelectedProject] =
-    useState(null);
+  const filteredProjects =
+    useMemo(() => {
 
-  const [actionLoading, setActionLoading] =
-    useState(false);
-      /* =====================================================
-      FILTER + SORT
-  ===================================================== */
+      let result = [
+        ...projects,
+      ];
 
-  const filteredProjects = useMemo(() => {
+      /* Search */
 
-    let data = [...projects];
+      const query =
+        search
+          .trim()
+          .toLowerCase();
 
-    /* -------------------------
-        SEARCH
-    ------------------------- */
+      if (query) {
 
-    if (search.trim()) {
+        result =
+          result.filter(
+            (project) => {
 
-      const query = search
-        .toLowerCase()
-        .trim();
+              const name =
+                getProjectName(
+                  project
+                ).toLowerCase();
 
-      data = data.filter((project) =>
+              const description =
+                getProjectDescription(
+                  project
+                ).toLowerCase();
 
-        project.title
-          ?.toLowerCase()
-          .includes(query)
+              return (
+                name.includes(query) ||
+                description.includes(query)
+              );
 
-        ||
+            }
+          );
 
-        project.description
-          ?.toLowerCase()
-          .includes(query)
-
-      );
-
-    }
-
-    /* -------------------------
-        STATUS
-    ------------------------- */
-
-    if (statusFilter !== "All") {
-
-      data = data.filter(
-        (project) =>
-          project.status === statusFilter
-      );
-
-    }
-
-    /* -------------------------
-        PRIORITY
-    ------------------------- */
-
-    if (priorityFilter !== "All") {
-
-      data = data.filter(
-        (project) =>
-          project.priority === priorityFilter
-      );
-
-    }
-
-    /* -------------------------
-        SORTING
-    ------------------------- */
-
-    switch (sortBy) {
-
-      case "A-Z":
-
-        data.sort((a, b) =>
-          a.title.localeCompare(b.title)
-        );
-
-        break;
-
-      case "Z-A":
-
-        data.sort((a, b) =>
-          b.title.localeCompare(a.title)
-        );
-
-        break;
-
-      case "Oldest":
-
-        data.sort(
-          (a, b) =>
-            new Date(a.createdAt) -
-            new Date(b.createdAt)
-        );
-
-        break;
-
-      case "Priority": {
-
-        const order = {
-          Critical: 4,
-          High: 3,
-          Medium: 2,
-          Low: 1,
-        };
-
-        data.sort(
-          (a, b) =>
-            (order[b.priority] || 0) -
-            (order[a.priority] || 0)
-        );
-
-        break;
       }
 
-      case "Progress":
 
-        data.sort(
-          (a, b) =>
-            (b.progress || 0) -
-            (a.progress || 0)
-        );
+      /* Status */
 
-        break;
+      if (
+        statusFilter !==
+        "All Status"
+      ) {
 
-      default:
+        result =
+          result.filter(
+            (project) =>
+              getProjectStatus(
+                project
+              ) === statusFilter
+          );
 
-        data.sort(
-          (a, b) =>
-            new Date(b.createdAt) -
-            new Date(a.createdAt)
-        );
+      }
 
-    }
 
-    return data;
+      /* Priority */
 
-  }, [
-    projects,
-    search,
-    statusFilter,
-    priorityFilter,
-    sortBy,
-  ]);
+      if (
+        priorityFilter !==
+        "All Priority"
+      ) {
 
-  /* =====================================================
-      PAGINATION
-  ===================================================== */
+        result =
+          result.filter(
+            (project) =>
+              getProjectPriority(
+                project
+              ) === priorityFilter
+          );
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(
-      filteredProjects.length / itemsPerPage
-    )
-  );
+      }
+
+
+      /* Sorting */
+
+      result.sort(
+        (a, b) => {
+
+          if (
+            sortBy ===
+            "Newest"
+          ) {
+
+            return (
+              new Date(
+                b.createdAt ||
+                b.updatedAt ||
+                0
+              ) -
+              new Date(
+                a.createdAt ||
+                a.updatedAt ||
+                0
+              )
+            );
+
+          }
+
+          if (
+            sortBy ===
+            "Oldest"
+          ) {
+
+            return (
+              new Date(
+                a.createdAt ||
+                a.updatedAt ||
+                0
+              ) -
+              new Date(
+                b.createdAt ||
+                b.updatedAt ||
+                0
+              )
+            );
+
+          }
+
+          if (
+            sortBy ===
+            "Name"
+          ) {
+
+            return getProjectName(
+              a
+            ).localeCompare(
+              getProjectName(b)
+            );
+
+          }
+
+          if (
+            sortBy ===
+            "Progress"
+          ) {
+
+            return (
+              getProgress(b) -
+              getProgress(a)
+            );
+
+          }
+
+          return 0;
+
+        }
+      );
+
+      return result;
+
+    }, [
+      projects,
+      search,
+      statusFilter,
+      priorityFilter,
+      sortBy,
+    ]);
+
+
+  /* ========================================================
+                      PAGINATION
+  ======================================================== */
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        filteredProjects.length /
+        ITEMS_PER_PAGE
+      )
+    );
+
+  const safePage =
+    Math.min(
+      currentPage,
+      totalPages
+    );
 
   const paginatedProjects =
     filteredProjects.slice(
-
-      (currentPage - 1) * itemsPerPage,
-
-      currentPage * itemsPerPage
-
+      (safePage - 1) *
+        ITEMS_PER_PAGE,
+      safePage *
+        ITEMS_PER_PAGE
     );
 
-  useEffect(() => {
+
+  /* ========================================================
+                      STATISTICS
+  ======================================================== */
+
+  const statistics =
+    useMemo(() => {
+
+      const total =
+        projects.length;
+
+      const active =
+        projects.filter(
+          (project) => {
+
+            const status =
+              getProjectStatus(
+                project
+              ).toLowerCase();
+
+            return (
+              status === "active" ||
+              status === "in progress"
+            );
+
+          }
+        ).length;
+
+      const completed =
+        projects.filter(
+          (project) =>
+            getProjectStatus(
+              project
+            ).toLowerCase() ===
+            "completed"
+        ).length;
+
+      const archived =
+        projects.filter(
+          (project) =>
+            getProjectStatus(
+              project
+            ).toLowerCase() ===
+            "archived"
+        ).length;
+
+      const highPriority =
+        projects.filter(
+          (project) =>
+            getProjectPriority(
+              project
+            ).toLowerCase() ===
+            "high"
+        ).length;
+
+      const needAttention =
+        projects.filter(
+          (project) =>
+            getProgress(
+              project
+            ) < 30 &&
+            getProjectStatus(
+              project
+            ).toLowerCase() !==
+              "completed"
+        ).length;
+
+      const averageProgress =
+        total
+          ? Math.round(
+              projects.reduce(
+                (
+                  sum,
+                  project
+                ) =>
+                  sum +
+                  getProgress(
+                    project
+                  ),
+                0
+              ) / total
+            )
+          : 0;
+
+      return {
+        total,
+        active,
+        completed,
+        archived,
+        highPriority,
+        needAttention,
+        averageProgress,
+      };
+
+    }, [
+      projects,
+    ]);
+
+
+  /* ========================================================
+                    RESET FILTERS
+  ======================================================== */
+
+  const clearFilters = () => {
+
+    setSearch("");
+
+    setStatusFilter(
+      "All Status"
+    );
+
+    setPriorityFilter(
+      "All Priority"
+    );
+
+    setSortBy(
+      "Newest"
+    );
 
     setCurrentPage(1);
 
-  }, [
-
-    search,
-
-    statusFilter,
-
-    priorityFilter,
-
-    sortBy,
-
-  ]);
-
-  /* =====================================================
-      PROJECT STATISTICS
-  ===================================================== */
-
-  const stats = useMemo(() => {
-
-    const total = projects.length;
-
-    const active = projects.filter(
-      (project) =>
-        project.status === "Active"
-    ).length;
-
-    const planning = projects.filter(
-      (project) =>
-        project.status === "Planning"
-    ).length;
-
-    const completed = projects.filter(
-      (project) =>
-        project.status === "Completed"
-    ).length;
-
-    const archived = projects.filter(
-      (project) =>
-        project.status === "Archived"
-    ).length;
-
-    const avgProgress = total
-      ? Math.round(
-
-          projects.reduce(
-
-            (sum, project) =>
-              sum + (project.progress || 0),
-
-            0
-
-          ) / total
-
-        )
-      : 0;
-
-    return {
-
-      total,
-
-      active,
-
-      planning,
-
-      completed,
-
-      archived,
-
-      avgProgress,
-
-    };
-
-  }, [projects]);
-    /* =====================================================
-      INSIGHTS
-  ===================================================== */
-
-  const highPriorityProjects = useMemo(() => {
-
-    return projects.filter(
-
-      (project) =>
-
-        project.priority === "Critical" ||
-
-        project.priority === "High"
-
-    ).length;
-
-  }, [projects]);
-
-  const delayedProjects = useMemo(() => {
-
-    return projects.filter(
-
-      (project) =>
-
-        project.status !== "Completed" &&
-
-        (project.progress || 0) < 30
-
-    ).length;
-
-  }, [projects]);
-
-  const completedRate = useMemo(() => {
-
-    if (stats.total === 0) return 0;
-
-    return Math.round(
-
-      (stats.completed / stats.total) * 100
-
-    );
-
-  }, [stats]);
-
-  const activeRate = useMemo(() => {
-
-    if (stats.total === 0) return 0;
-
-    return Math.round(
-
-      (stats.active / stats.total) * 100
-
-    );
-
-  }, [stats]);
-
-  const productivityScore = useMemo(() => {
-
-    return Math.min(
-
-      100,
-
-      Math.round(
-
-        (stats.avgProgress * 0.6) +
-
-        (completedRate * 0.4)
-
-      )
-
-    );
-
-  }, [
-
-    stats.avgProgress,
-
-    completedRate,
-
-  ]);
-
-  /* =====================================================
-      PAGE ANIMATION
-  ===================================================== */
-
-  const pageVariants = {
-
-    hidden: {
-
-      opacity: 0,
-
-      y: 25,
-
-    },
-
-    visible: {
-
-      opacity: 1,
-
-      y: 0,
-
-      transition: {
-
-        duration: 0.4,
-
-      },
-
-    },
-
   };
 
-  /* =====================================================
-      STAT ICONS
-  ===================================================== */
 
-  const statIcons = {
-
-    total: <FaLayerGroup />,
-
-    active: <FaRocket />,
-
-    planning: <FaClock />,
-
-    completed: <FaCheckCircle />,
-
-    archived: <FaArchive />,
-
-    progress: <FaChartLine />,
-
-  };
-
-  /* =====================================================
-      HERO ACTIONS
-  ===================================================== */
+  /* ========================================================
+                    OPEN CREATE
+  ======================================================== */
 
   const openCreateModal = () => {
 
-    setSelectedProject(null);
+    setEditingProject(
+      null
+    );
+
+    setForm({
+      ...EMPTY_FORM,
+    });
 
     setShowModal(true);
 
   };
 
-  const openEditModal = (project) => {
 
-    setSelectedProject(project);
+  /* ========================================================
+                    OPEN EDIT
+  ======================================================== */
+
+  const openEditModal = (
+    project
+  ) => {
+
+    setEditingProject(
+      project
+    );
+
+    setForm({
+
+      name:
+        getProjectName(
+          project
+        ),
+
+      description:
+        project?.description ||
+        "",
+
+      status:
+        getProjectStatus(
+          project
+        ),
+
+      priority:
+        getProjectPriority(
+          project
+        ),
+
+      startDate:
+        project?.startDate
+          ? String(
+              project.startDate
+            ).slice(0, 10)
+          : "",
+
+      dueDate:
+        project?.dueDate
+          ? String(
+              project.dueDate
+            ).slice(0, 10)
+          : "",
+
+    });
 
     setShowModal(true);
 
   };
 
-  const openDeleteModal = (project) => {
 
-    setSelectedProject(project);
+  /* ========================================================
+                    CLOSE MODAL
+  ======================================================== */
 
-    setShowDeleteModal(true);
+  const closeModal = () => {
+
+    if (saving) {
+      return;
+    }
+
+    setShowModal(false);
+
+    setEditingProject(
+      null
+    );
+
+    setForm({
+      ...EMPTY_FORM,
+    });
 
   };
-    /* =====================================================
-      SAVE PROJECT
-  ===================================================== */
 
-  const handleSave = async (projectData) => {
+
+  /* ========================================================
+                    SAVE PROJECT
+  ======================================================== */
+
+  const handleSubmit = async (
+    event
+  ) => {
+
+    event.preventDefault();
+
+    if (
+      !form.name.trim()
+    ) {
+
+      toast.error(
+        "Project name is required."
+      );
+
+      return;
+
+    }
 
     try {
 
-      setActionLoading(true);
+      setSaving(true);
 
-      if (selectedProject) {
+      if (editingProject) {
 
         await editProject(
-          selectedProject._id,
-          projectData
+          getProjectId(
+            editingProject
+          ),
+          form
         );
 
         toast.success(
@@ -522,7 +1387,9 @@ const Projects = () => {
 
       } else {
 
-        await addProject(projectData);
+        await addProject(
+          form
+        );
 
         toast.success(
           "Project created successfully."
@@ -530,96 +1397,132 @@ const Projects = () => {
 
       }
 
-      setShowModal(false);
-
-      setSelectedProject(null);
+      closeModal();
 
     } catch (error) {
 
+      console.error(
+        "Project Save Error:",
+        error
+      );
+
       toast.error(
-
         error?.response?.data?.message ||
-
         "Unable to save project."
-
       );
 
     } finally {
 
-      setActionLoading(false);
+      setSaving(false);
 
     }
 
   };
 
-  /* =====================================================
-      DELETE PROJECT
-  ===================================================== */
 
-  const handleDelete = async () => {
+  /* ========================================================
+                    DELETE PROJECT
+  ======================================================== */
 
-    if (!selectedProject) return;
+  const handleDelete = async (
+    project
+  ) => {
+
+    const confirmed =
+      window.confirm(
+        `Delete "${getProjectName(
+          project
+        )}"? This action cannot be undone.`
+      );
+
+    if (!confirmed) {
+      return;
+    }
 
     try {
 
-      setActionLoading(true);
-
-      await removeProject(selectedProject._id);
+      await removeProject(
+        getProjectId(
+          project
+        )
+      );
 
       toast.success(
         "Project deleted successfully."
       );
 
-      setShowDeleteModal(false);
-
-      setSelectedProject(null);
-
     } catch (error) {
 
-      toast.error(
-
-        error?.response?.data?.message ||
-
-        "Unable to delete project."
-
+      console.error(
+        "Project Delete Error:",
+        error
       );
 
-    } finally {
-
-      setActionLoading(false);
+      toast.error(
+        error?.response?.data?.message ||
+        "Unable to delete project."
+      );
 
     }
 
   };
 
-  /* =====================================================
-      JSX
-  ===================================================== */
+
+  /* ========================================================
+                        RENDER
+  ======================================================== */
 
   return (
 
-    <MainLayout>
+    <div className="projects-page">
 
-      <motion.div
-        className="projects-page"
-        variants={pageVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      {/* ==================================================
+                    BACKGROUND EFFECTS
+      ================================================== */}
 
-        {/* ==========================================
-            HERO
-        ========================================== */}
+      <div className="projects-background">
 
-        <section className="projects-hero">
+        <div className="projects-bg-grid" />
 
-          <div className="hero-left">
+        <div className="projects-bg-orb orb-one" />
+
+        <div className="projects-bg-orb orb-two" />
+
+        <div className="projects-bg-glow" />
+
+      </div>
+
+
+      {/* ==================================================
+                    MAIN CONTENT
+      ================================================== */}
+
+      <main className="projects-content">
+
+
+        {/* ==================================================
+                      HERO
+        ================================================== */}
+
+        <motion.section
+          className="projects-hero"
+          initial={{
+            opacity: 0,
+            y: 18,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+        >
+
+          <div className="hero-main">
 
             <span className="hero-badge">
 
               <FaRocket />
 
-              Premium Workspace
+              PREMIUM WORKSPACE
 
             </span>
 
@@ -628,484 +1531,928 @@ const Projects = () => {
               Welcome back,
 
               <span>
-
-                {" "}
-
-                {user?.name || "User"}
-
+                Souradipta Patra
               </span>
 
             </h1>
 
             <p>
 
-              Organize projects,
-
-              collaborate with your team,
-
-              track progress,
-
-              and manage everything
-
-              from one intelligent workspace.
+              Organize projects, collaborate
+              with your team, track progress,
+              and manage everything from one
+              intelligent workspace.
 
             </p>
 
-            {canManage && (
-
-              <motion.button
-                className="create-project-btn"
-                whileHover={{
-                  scale: 1.04,
-                }}
-                whileTap={{
-                  scale: 0.95,
-                }}
-                onClick={openCreateModal}
-              >
-
-                <FaPlus />
-
-                New Project
-
-              </motion.button>
-
-            )}
-
           </div>
 
-          {/* ==========================================
-              HERO RIGHT
-          ========================================== */}
 
-          <div className="hero-right">
+          <div className="workspace-score">
 
-            <div className="workspace-summary">
+            <div className="score-heading">
 
-              <div>
+              <span>
+                Workspace Score
+              </span>
 
-                <small>
-
-                  Workspace Score
-
-                </small>
-
-                <h2>
-
-                  {productivityScore}%
-
-                </h2>
-
-              </div>
-
-              <FaArrowTrendUp />
+              <FaChartLine />
 
             </div>
-
-            <div className="workspace-progress">
-
-              <div className="workspace-progress-bar">
-
-                <motion.div
-                  className="workspace-progress-fill"
-                  initial={{
-                    width: 0,
-                  }}
-                  animate={{
-                    width: `${productivityScore}%`,
-                  }}
-                  transition={{
-                    duration: 1,
-                  }}
-                />
-
-              </div>
-
-            </div>
-
-            <div className="workspace-stats">
-
-              <div>
-
-                <span>
-
-                  Completion
-
-                </span>
-
-                <strong>
-
-                  {completedRate}%
-
-                </strong>
-
-              </div>
-
-              <div>
-
-                <span>
-
-                  Active
-
-                </span>
-
-                <strong>
-
-                  {activeRate}%
-
-                </strong>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-                {/* ==========================================
-            STATISTICS
-        ========================================== */}
-
-        <section className="projects-stats">
-
-          <StatCard
-            title="Projects"
-            value={stats.total}
-            subtitle="Total Projects"
-            icon={statIcons.total}
-            color="blue"
-          />
-
-          <StatCard
-            title="Active"
-            value={stats.active}
-            subtitle="Running"
-            icon={statIcons.active}
-            color="green"
-          />
-
-          <StatCard
-            title="Planning"
-            value={stats.planning}
-            subtitle="Upcoming"
-            icon={statIcons.planning}
-            color="orange"
-          />
-
-          <StatCard
-            title="Completed"
-            value={stats.completed}
-            subtitle="Delivered"
-            icon={statIcons.completed}
-            color="purple"
-          />
-
-          <StatCard
-            title="Archived"
-            value={stats.archived}
-            subtitle="Stored"
-            icon={statIcons.archived}
-            color="dark"
-          />
-
-          <StatCard
-            title="Progress"
-            value={`${stats.avgProgress}%`}
-            subtitle="Average"
-            icon={statIcons.progress}
-            color="cyan"
-          />
-
-        </section>
-
-        {/* ==========================================
-            INSIGHTS
-        ========================================== */}
-
-        <section className="project-insights">
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="insight-card"
-          >
-            <FaChartLine />
-
-            <h2>{stats.avgProgress}%</h2>
-
-            <p>Average Progress</p>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="insight-card"
-          >
-            <FaExclamationTriangle />
-
-            <h2>{highPriorityProjects}</h2>
-
-            <p>High Priority</p>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="insight-card"
-          >
-            <FaClock />
-
-            <h2>{delayedProjects}</h2>
-
-            <p>Need Attention</p>
-          </motion.div>
-
-        </section>
-
-        {/* ==========================================
-            FILTERS
-        ========================================== */}
-
-        <ProjectFilters
-          search={search}
-          setSearch={setSearch}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />
-
-        {/* ==========================================
-            VIEW TOGGLE
-        ========================================== */}
-
-        <div className="projects-toolbar">
-
-          <div className="projects-count">
 
             <strong>
-              {filteredProjects.length}
+              {statistics.averageProgress}%
             </strong>
 
-            {" "}Project{filteredProjects.length !== 1 ? "s" : ""}
+            <div className="score-progress">
+
+              <span
+                style={{
+                  width: `${statistics.averageProgress}%`,
+                }}
+              />
+
+            </div>
+
+            <div className="score-mini-grid">
+
+              <div>
+
+                <strong>
+                  {statistics.completed > 0
+                    ? Math.round(
+                        (statistics.completed /
+                          Math.max(
+                            statistics.total,
+                            1
+                          )) *
+                          100
+                      )
+                    : 0}
+                  %
+                </strong>
+
+                <span>
+                  Completion
+                </span>
+
+              </div>
+
+              <div>
+
+                <strong>
+                  {statistics.active > 0
+                    ? Math.round(
+                        (statistics.active /
+                          Math.max(
+                            statistics.total,
+                            1
+                          )) *
+                          100
+                      )
+                    : 0}
+                  %
+                </strong>
+
+                <span>
+                  Active
+                </span>
+
+              </div>
+
+            </div>
 
           </div>
 
-          <div className="view-toggle">
+        </motion.section>
 
-            <button
-              className={
-                viewMode === "grid"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setViewMode("grid")
-              }
-            >
-              <FaThLarge />
-            </button>
 
-            <button
-              className={
-                viewMode === "list"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setViewMode("list")
-              }
-            >
-              <FaList />
-            </button>
+        {/* ==================================================
+                  QUICK ACTION CARDS
+        ================================================== */}
 
-          </div>
+        <motion.section
+          className="project-shortcuts"
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.08,
+          }}
+        >
 
-        </div>
-                {/* ==========================================
-            PROJECT LIST
-        ========================================== */}
-
-        {loading ? (
-
-          <div className="projects-loading">
-
-            <div className="loader" />
-
-            <p>Loading projects...</p>
-
-          </div>
-
-        ) : filteredProjects.length === 0 ? (
-
-          <motion.div
-            className="projects-empty"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <button
+            type="button"
+            className="shortcut-card"
           >
 
-            <FaRocket className="empty-icon" />
+            <span className="shortcut-icon">
+              <FaLayerGroup />
+            </span>
 
-            <h2>No Projects Yet</h2>
+            <span className="shortcut-text">
 
-            <p>
-              Create your first project to start managing
-              your team's work.
-            </p>
+              <strong>
+                All Projects
+              </strong>
 
-            {canManage && (
+              <small>
+                View and manage all projects
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            className="shortcut-card create"
+            onClick={
+              openCreateModal
+            }
+          >
+
+            <span className="shortcut-icon">
+              <FaRocket />
+            </span>
+
+            <span className="shortcut-text">
+
+              <strong>
+                Create Project
+              </strong>
+
+              <small>
+                Start a new project from scratch
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            className="shortcut-card"
+          >
+
+            <span className="shortcut-icon">
+              <FaUsers />
+            </span>
+
+            <span className="shortcut-text">
+
+              <strong>
+                Team Collaboration
+              </strong>
+
+              <small>
+                Invite team members and collaborate
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            className="shortcut-card"
+          >
+
+            <span className="shortcut-icon">
+              <FaCheckCircle />
+            </span>
+
+            <span className="shortcut-text">
+
+              <strong>
+                Track Progress
+              </strong>
+
+              <small>
+                Monitor project progress and milestones
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            className="shortcut-card"
+          >
+
+            <span className="shortcut-icon">
+              <FaArchive />
+            </span>
+
+            <span className="shortcut-text">
+
+              <strong>
+                Project Templates
+              </strong>
+
+              <small>
+                Use templates for quick setup
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            className="shortcut-card"
+          >
+
+            <span className="shortcut-icon">
+              <FaChartLine />
+            </span>
+
+            <span className="shortcut-text">
+
+              <strong>
+                Analytics
+              </strong>
+
+              <small>
+                View insights and project analytics
+              </small>
+
+            </span>
+
+          </button>
+
+        </motion.section>
+
+
+        {/* ==================================================
+                    STATISTICS
+        ================================================== */}
+
+        <motion.section
+          className="project-statistics"
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.14,
+          }}
+        >
+
+          <div className="project-stat-card">
+
+            <div className="stat-icon purple">
+              <FaChartLine />
+            </div>
+
+            <div className="stat-content">
+
+              <strong>
+                {statistics.averageProgress}%
+              </strong>
+
+              <span>
+                Average Progress
+              </span>
+
+            </div>
+
+            <div className="stat-sparkline">
+              ╱╲_╱╲╱
+            </div>
+
+          </div>
+
+
+          <div className="project-stat-card">
+
+            <div className="stat-icon orange">
+              <FaExclamationTriangle />
+            </div>
+
+            <div className="stat-content">
+
+              <strong>
+                {statistics.highPriority}
+              </strong>
+
+              <span>
+                High Priority
+              </span>
+
+            </div>
+
+            <div className="stat-sparkline">
+              ╱╲_╱╲╱
+            </div>
+
+          </div>
+
+
+          <div className="project-stat-card">
+
+            <div className="stat-icon cyan">
+              <FaClock />
+            </div>
+
+            <div className="stat-content">
+
+              <strong>
+                {statistics.needAttention}
+              </strong>
+
+              <span>
+                Need Attention
+              </span>
+
+            </div>
+
+            <div className="stat-sparkline">
+              ╱╲_╱╲╱
+            </div>
+
+          </div>
+
+        </motion.section>
+
+
+        {/* ==================================================
+                    FILTER TOOLBAR
+        ================================================== */}
+
+        <motion.section
+          className="projects-filter-panel"
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.18,
+          }}
+        >
+
+          <div className="filter-main">
+
+            {/* Search */}
+
+            <div className="project-search">
+
+              <FaSearch />
+
+              <input
+                type="text"
+                placeholder="Search projects..."
+                value={search}
+                onChange={(event) => {
+
+                  setSearch(
+                    event.target.value
+                  );
+
+                  setCurrentPage(1);
+
+                }}
+              />
+
+              {search && (
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSearch("")
+                  }
+                >
+                  <FaTimes />
+                </button>
+
+              )}
+
+            </div>
+
+
+            {/* Status */}
+
+            <div className="filter-control">
+
+              <FaFilter />
+
+              <select
+                value={statusFilter}
+                onChange={(event) => {
+
+                  setStatusFilter(
+                    event.target.value
+                  );
+
+                  setCurrentPage(1);
+
+                }}
+              >
+
+                <option>
+                  All Status
+                </option>
+
+                <option>
+                  Planning
+                </option>
+
+                <option>
+                  Active
+                </option>
+
+                <option>
+                  In Progress
+                </option>
+
+                <option>
+                  Completed
+                </option>
+
+                <option>
+                  Archived
+                </option>
+
+              </select>
+
+            </div>
+
+
+            {/* Priority */}
+
+            <div className="filter-control">
+
+              <FaFlag />
+
+              <select
+                value={priorityFilter}
+                onChange={(event) => {
+
+                  setPriorityFilter(
+                    event.target.value
+                  );
+
+                  setCurrentPage(1);
+
+                }}
+              >
+
+                <option>
+                  All Priority
+                </option>
+
+                <option>
+                  Low
+                </option>
+
+                <option>
+                  Medium
+                </option>
+
+                <option>
+                  High
+                </option>
+
+              </select>
+
+            </div>
+
+
+            {/* Sort */}
+
+            <div className="filter-control">
+
+              <FaSortAmountDown />
+
+              <select
+                value={sortBy}
+                onChange={(event) =>
+                  setSortBy(
+                    event.target.value
+                  )
+                }
+              >
+
+                <option>
+                  Newest
+                </option>
+
+                <option>
+                  Oldest
+                </option>
+
+                <option>
+                  Name
+                </option>
+
+                <option>
+                  Progress
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            className="clear-filters"
+            onClick={
+              clearFilters
+            }
+          >
+
+            <FaTimes />
+
+            Clear Filters
+
+          </button>
+
+        </motion.section>
+
+
+        {/* ==================================================
+                    PROJECTS HEADER
+        ================================================== */}
+
+        <section className="projects-list-section">
+
+          <div className="projects-list-header">
+
+            <div className="projects-count">
+
+              <strong>
+                {filteredProjects.length}
+              </strong>
+
+              <span>
+                Projects
+              </span>
+
+            </div>
+
+
+            <div className="projects-header-actions">
 
               <button
-                className="create-project-btn"
-                onClick={openCreateModal}
+                type="button"
+                className="create-project-button"
+                onClick={
+                  openCreateModal
+                }
               >
 
                 <FaPlus />
 
-                Create First Project
+                Create Project
 
               </button>
 
-            )}
 
-          </motion.div>
+              <div className="view-toggle">
 
-        ) : (
+                <button
+                  type="button"
+                  className={
+                    viewMode ===
+                    "grid"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setViewMode(
+                      "grid"
+                    )
+                  }
+                  title="Grid view"
+                >
+                  <FaThLarge />
+                </button>
 
-          <>
+                <button
+                  type="button"
+                  className={
+                    viewMode ===
+                    "list"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setViewMode(
+                      "list"
+                    )
+                  }
+                  title="List view"
+                >
+                  <FaList />
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* =================================================
+                        PROJECT CONTENT
+          ================================================= */}
+
+          {loading ? (
+
+            <div className="projects-loading">
+
+              <div className="loading-spinner" />
+
+              <p>
+                Loading projects...
+              </p>
+
+            </div>
+
+          ) : paginatedProjects.length === 0 ? (
 
             <motion.div
-              layout
-              className={
-                viewMode === "grid"
-                  ? "projects-grid"
-                  : "projects-list"
-              }
+              className="projects-empty"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
             >
 
-              <AnimatePresence>
+              <div className="empty-project-icon">
 
-                {paginatedProjects.map((project) => (
+                <FaRocket />
 
-                  <ProjectCard
-                    key={project._id}
-                    project={project}
-                    viewMode={viewMode}
-                    onEdit={() =>
-                      openEditModal(project)
-                    }
-                    onDelete={() =>
-                      openDeleteModal(project)
-                    }
-                    canManage={canManage}
-                  />
+              </div>
 
-                ))}
+              <h2>
+                No Projects Yet
+              </h2>
+
+              <p>
+                {projects.length === 0
+                  ? "Create your first project to start managing your team's work."
+                  : "No projects match your current filters."}
+              </p>
+
+              {projects.length === 0 ? (
+
+                <button
+                  type="button"
+                  className="empty-create-button"
+                  onClick={
+                    openCreateModal
+                  }
+                >
+
+                  <FaPlus />
+
+                  Create Project
+
+                </button>
+
+              ) : (
+
+                <button
+                  type="button"
+                  className="empty-create-button secondary"
+                  onClick={
+                    clearFilters
+                  }
+                >
+
+                  <FaTimes />
+
+                  Clear Filters
+
+                </button>
+
+              )}
+
+            </motion.div>
+
+          ) : viewMode === "grid" ? (
+
+            <motion.div
+              className="projects-grid"
+              layout
+            >
+
+              <AnimatePresence mode="popLayout">
+
+                {paginatedProjects.map(
+                  (project) => (
+
+                    <ProjectCard
+                      key={
+                        getProjectId(
+                          project
+                        )
+                      }
+                      project={
+                        project
+                      }
+                      onEdit={
+                        openEditModal
+                      }
+                      onDelete={
+                        handleDelete
+                      }
+                    />
+
+                  )
+                )}
 
               </AnimatePresence>
 
             </motion.div>
 
-            {/* ==========================================
-                PAGINATION
-            ========================================== */}
+          ) : (
 
-            {totalPages > 1 && (
+            <motion.div
+              className="projects-list"
+              layout
+            >
 
-              <div className="pagination">
+              <div className="project-row-heading">
 
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      Math.max(prev - 1, 1)
-                    )
-                  }
-                >
-                  Previous
-                </button>
+                <span>
+                  Project
+                </span>
 
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => (
+                <span>
+                  Status
+                </span>
 
-                    <button
-                      key={index}
-                      className={
-                        currentPage === index + 1
-                          ? "active"
-                          : ""
+                <span>
+                  Priority
+                </span>
+
+                <span>
+                  Progress
+                </span>
+
+                <span>
+                  Due Date
+                </span>
+
+                <span>
+                  Actions
+                </span>
+
+              </div>
+
+              <AnimatePresence>
+
+                {paginatedProjects.map(
+                  (project) => (
+
+                    <ProjectRow
+                      key={
+                        getProjectId(
+                          project
+                        )
                       }
-                      onClick={() =>
-                        setCurrentPage(index + 1)
+                      project={
+                        project
                       }
-                    >
-                      {index + 1}
-                    </button>
+                      onEdit={
+                        openEditModal
+                      }
+                      onDelete={
+                        handleDelete
+                      }
+                    />
 
                   )
                 )}
 
-                <button
-                  disabled={
-                    currentPage === totalPages
-                  }
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      Math.min(
-                        prev + 1,
-                        totalPages
+              </AnimatePresence>
+
+            </motion.div>
+
+          )}
+
+
+          {/* =================================================
+                        PAGINATION
+          ================================================= */}
+
+          {filteredProjects.length >
+            ITEMS_PER_PAGE && (
+
+            <div className="projects-pagination">
+
+              <button
+                type="button"
+                disabled={
+                  safePage === 1
+                }
+                onClick={() =>
+                  setCurrentPage(
+                    (page) =>
+                      Math.max(
+                        1,
+                        page - 1
                       )
-                    )
-                  }
-                >
-                  Next
-                </button>
+                  )
+                }
+              >
+                <FaChevronLeft />
+              </button>
 
-              </div>
 
-            )}
+              <span>
+                Page{" "}
+                <strong>
+                  {safePage}
+                </strong>{" "}
+                of{" "}
+                <strong>
+                  {totalPages}
+                </strong>
+              </span>
 
-          </>
 
-        )}
+              <button
+                type="button"
+                disabled={
+                  safePage ===
+                  totalPages
+                }
+                onClick={() =>
+                  setCurrentPage(
+                    (page) =>
+                      Math.min(
+                        totalPages,
+                        page + 1
+                      )
+                  )
+                }
+              >
+                <FaChevronRight />
+              </button>
 
-        {/* ==========================================
-            CREATE / EDIT PROJECT
-        ========================================== */}
+            </div>
 
-        <ProjectModal
-          open={showModal}
-          project={selectedProject}
-          loading={actionLoading}
-          users={[]}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedProject(null);
-          }}
-          onSave={handleSave}
-        />
+          )}
 
-        {/* ==========================================
-            DELETE PROJECT
-        ========================================== */}
+        </section>
 
-        <DeleteProjectModal
-          open={showDeleteModal}
-          project={selectedProject}
-          loading={actionLoading}
-          onClose={() => {
-            setShowDeleteModal(false);
-            setSelectedProject(null);
-          }}
-          onDelete={handleDelete}
-        />
+      </main>
 
-      </motion.div>
 
-    </MainLayout>
+      {/* ==================================================
+                    PROJECT MODAL
+      ================================================== */}
+
+      <ProjectModal
+        open={showModal}
+        editingProject={
+          editingProject
+        }
+        form={form}
+        setForm={setForm}
+        saving={saving}
+        onClose={
+          closeModal
+        }
+        onSubmit={
+          handleSubmit
+        }
+      />
+
+    </div>
 
   );
 
 };
+
 
 export default Projects;
