@@ -14,6 +14,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+import MainLayout from "../layouts/MainLayout";
 
 /* ===========================
    PUBLIC PAGES
@@ -187,12 +188,6 @@ const AppRoutes = () => {
 
       {/* ===================================================
           LOGIN
-
-          IMPORTANT:
-          No standalone AuthPage anymore.
-
-          Visiting /login returns to Home and opens
-          the Login mode inside the landing AuthCard.
       =================================================== */}
 
       <Route
@@ -212,9 +207,6 @@ const AppRoutes = () => {
 
       {/* ===================================================
           REGISTER
-
-          Visiting /register returns to Home and opens
-          Register mode inside the landing AuthCard.
       =================================================== */}
 
       <Route
@@ -275,7 +267,9 @@ const AppRoutes = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <MainLayout>
+              <Dashboard />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -289,7 +283,9 @@ const AppRoutes = () => {
         path="/admin-dashboard"
         element={
           <ProtectedRoute>
-            <AdminDashboard />
+            <MainLayout>
+              <AdminDashboard />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -303,16 +299,25 @@ const AppRoutes = () => {
         path="/projects"
         element={
           <ProtectedRoute>
-            <Projects />
+            <MainLayout>
+              <Projects />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          PROJECT LIST
+      =================================================== */}
 
       <Route
         path="/project-list"
         element={
           <ProtectedRoute>
-            <ProjectList />
+            <MainLayout>
+              <ProjectList />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -326,16 +331,41 @@ const AppRoutes = () => {
         path="/tasks"
         element={
           <ProtectedRoute>
-            <Tasks />
+            <MainLayout>
+              <Tasks />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          TASK LIST
+      =================================================== */}
 
       <Route
         path="/task-list"
         element={
           <ProtectedRoute>
-            <TaskList />
+            <MainLayout>
+              <TaskList />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          USERS
+      =================================================== */}
+
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Users />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -346,19 +376,12 @@ const AppRoutes = () => {
       =================================================== */}
 
       <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <Users />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
         path="/team"
         element={
           <ProtectedRoute>
-            <Team />
+            <MainLayout>
+              <Team />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -372,7 +395,9 @@ const AppRoutes = () => {
         path="/profile"
         element={
           <ProtectedRoute>
-            <Profile />
+            <MainLayout>
+              <Profile />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -386,125 +411,201 @@ const AppRoutes = () => {
         path="/reports"
         element={
           <ProtectedRoute>
-            <Reports />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/analytics"
-        element={
-          <ProtectedRoute>
-            <Analytics />
+            <MainLayout>
+              <Reports />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
 
 
       {/* ===================================================
-          PRODUCTIVITY
+          ANALYTICS
+      =================================================== */}
+
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Analytics />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          KANBAN
       =================================================== */}
 
       <Route
         path="/kanban"
         element={
           <ProtectedRoute>
-            <KanbanBoard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/calendar"
-        element={
-          <ProtectedRoute>
-            <CalendarPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <TeamChat />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/ai"
-        element={
-          <ProtectedRoute>
-            <AIInsights />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/gantt"
-        element={
-          <ProtectedRoute>
-            <GanttPage />
+            <MainLayout>
+              <KanbanBoard />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
 
 
       {/* ===================================================
-          SETTINGS / ACTIVITY
+          CALENDAR
+      =================================================== */}
+
+      <Route
+        path="/calendar"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <CalendarPage />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          TEAM CHAT
+      =================================================== */}
+
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <TeamChat />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          AI INSIGHTS
+      =================================================== */}
+
+      <Route
+        path="/ai"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <AIInsights />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          GANTT
+      =================================================== */}
+
+      <Route
+        path="/gantt"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <GanttPage />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+
+      {/* ===================================================
+          ACTIVITY
       =================================================== */}
 
       <Route
         path="/activity"
         element={
           <ProtectedRoute>
-            <ActivityFeed />
+            <MainLayout>
+              <ActivityFeed />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          WORKSPACES
+      =================================================== */}
 
       <Route
         path="/workspaces"
         element={
           <ProtectedRoute>
-            <Workspaces />
+            <MainLayout>
+              <Workspaces />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          SUBSCRIPTION
+      =================================================== */}
 
       <Route
         path="/subscription"
         element={
           <ProtectedRoute>
-            <Subscription />
+            <MainLayout>
+              <Subscription />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          UPGRADE
+      =================================================== */}
 
       <Route
         path="/upgrade"
         element={
           <ProtectedRoute>
-            <Upgrade />
+            <MainLayout>
+              <Upgrade />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          SETTINGS
+      =================================================== */}
 
       <Route
         path="/settings"
         element={
           <ProtectedRoute>
-            <Settings />
+            <MainLayout>
+              <Settings />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
+
+
+      {/* ===================================================
+          NOTIFICATIONS
+      =================================================== */}
 
       <Route
         path="/notifications"
         element={
           <ProtectedRoute>
-            <Notifications />
+            <MainLayout>
+              <Notifications />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
