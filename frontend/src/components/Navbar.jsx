@@ -1,5 +1,3 @@
-// src/components/Navbar.jsx
-
 import React, {
   useState,
   useEffect,
@@ -14,11 +12,13 @@ import {
 } from "react-router-dom";
 
 import {
-  FaTasks,
+  FaBars,
+  FaTimes,
   FaCog,
-  FaUserCircle,
-  FaSignOutAlt,
+  FaTasks,
   FaChevronDown,
+  FaUser,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 import {
@@ -33,9 +33,9 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Navbar.css";
 
 
-/* =========================================================
-   NAVIGATION LINKS
-========================================================= */
+/* ==========================================================
+                        NAVIGATION LINKS
+========================================================== */
 
 const links = [
   {
@@ -57,31 +57,16 @@ const links = [
 ];
 
 
-/* =========================================================
-   NAVBAR
-========================================================= */
+/* ==========================================================
+                        NAVBAR
+========================================================== */
 
 const Navbar = () => {
 
-  /* =======================================================
-     ROUTER
-  ======================================================= */
-
   const navigate = useNavigate();
-
   const location = useLocation();
 
-
-  /* =======================================================
-     REFS
-  ======================================================= */
-
   const menuRef = useRef(null);
-
-
-  /* =======================================================
-     AUTH
-  ======================================================= */
 
   const {
     user,
@@ -89,86 +74,43 @@ const Navbar = () => {
   } = useAuth();
 
 
-  /* =======================================================
-     STATE
-  ======================================================= */
+  /* ========================================================
+                            STATE
+  ======================================================== */
 
-  const [profileOpen, setProfileOpen] =
-    useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
-  const [mobileOpen, setMobileOpen] =
-    useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
 
-  /* =======================================================
-     CLOSE PROFILE MENU WHEN CLICKING OUTSIDE
-  ======================================================= */
+  /* ========================================================
+                        USER INFORMATION
+  ======================================================== */
 
-  useEffect(() => {
+  const name = useMemo(() => {
 
-    const closeMenu = (event) => {
-
-      if (
-        !menuRef.current?.contains(
-          event.target
-        )
-      ) {
-
-        setProfileOpen(false);
-
-      }
-
-    };
-
-
-    document.addEventListener(
-      "mousedown",
-      closeMenu
+    return (
+      user?.name ||
+      user?.username ||
+      "User"
     );
 
-
-    return () => {
-
-      document.removeEventListener(
-        "mousedown",
-        closeMenu
-      );
-
-    };
-
-  }, []);
+  }, [user]);
 
 
-  /* =======================================================
-     ROUTE CHANGE
-  ======================================================= */
+  const role = useMemo(() => {
 
-  useEffect(() => {
+    return (
+      user?.role ||
+      "Member"
+    );
 
-    setProfileOpen(false);
-
-    setMobileOpen(false);
-
-  }, [location.pathname]);
+  }, [user]);
 
 
-  /* =======================================================
-     USER INFORMATION
-  ======================================================= */
-
-  const name =
-    user?.name ||
-    user?.username ||
-    "User";
-
-  const role =
-    user?.role ||
-    "Member";
-
-
-  /* =======================================================
-     USER INITIALS
-  ======================================================= */
+  /* ========================================================
+                        AVATAR INITIALS
+  ======================================================== */
 
   const initials = useMemo(() => {
 
@@ -181,51 +123,97 @@ const Navbar = () => {
       .split(/\s+/)
       .filter(Boolean);
 
-
     if (words.length === 1) {
 
-      return words[0][0]
+      return words[0]
+        .charAt(0)
         .toUpperCase();
 
     }
 
-
     return (
-      words[0][0] +
-      words[words.length - 1][0]
-    )
-      .toUpperCase()
-      .slice(0, 2);
+      words[0].charAt(0) +
+      words[words.length - 1].charAt(0)
+    ).toUpperCase();
 
   }, [name]);
 
 
-  /* =======================================================
-     NAVIGATION ACTION
-  ======================================================= */
+  /* ========================================================
+                    CLOSE PROFILE OUTSIDE
+  ======================================================== */
 
-  const goTo = (path) => {
+  useEffect(() => {
 
-    navigate(path);
+    const handleOutsideClick = (event) => {
+
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+
+        setProfileOpen(false);
+
+      }
+
+    };
+
+
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick
+    );
+
+
+    return () => {
+
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+      );
+
+    };
+
+  }, []);
+
+
+  /* ========================================================
+                        ROUTE CHANGE
+  ======================================================== */
+
+  useEffect(() => {
 
     setProfileOpen(false);
 
     setMobileOpen(false);
 
+  }, [location.pathname]);
+
+
+  /* ========================================================
+                            ACTIONS
+  ======================================================== */
+
+  const goTo = (path) => {
+
+    setProfileOpen(false);
+
+    setMobileOpen(false);
+
+    navigate(path);
+
   };
 
 
-  /* =======================================================
-     LOGOUT
-  ======================================================= */
+  /* ========================================================
+                            LOGOUT
+  ======================================================== */
 
   const handleLogout = async () => {
 
     try {
 
-      if (
-        typeof logout === "function"
-      ) {
+      if (typeof logout === "function") {
 
         await logout();
 
@@ -238,31 +226,27 @@ const Navbar = () => {
         error
       );
 
+    } finally {
+
+      localStorage.removeItem("token");
+
+      localStorage.removeItem("user");
+
+      navigate(
+        "/",
+        {
+          replace: true,
+        }
+      );
+
     }
-
-
-    localStorage.removeItem(
-      "token"
-    );
-
-    localStorage.removeItem(
-      "user"
-    );
-
-
-    navigate(
-      "/",
-      {
-        replace: true,
-      }
-    );
 
   };
 
 
-  /* =======================================================
-     AVATAR
-  ======================================================= */
+  /* ========================================================
+                            AVATAR
+  ======================================================== */
 
   const Avatar = ({
     large = false,
@@ -271,135 +255,131 @@ const Navbar = () => {
     if (user?.avatar) {
 
       return (
-
         <img
           src={user.avatar}
           alt={name}
           className={
             large
               ? "dropdown-avatar"
-              : "avatar"
+              : "navbar-avatar"
           }
         />
-
       );
 
     }
 
 
     return (
-
       <div
-        className={`initials ${
+        className={
           large
-            ? "dropdown-avatar"
-            : "avatar"
-        }`}
+            ? "dropdown-avatar initials-avatar"
+            : "navbar-avatar initials-avatar"
+        }
       >
-
         {initials}
-
       </div>
-
     );
 
   };
 
 
-  /* =======================================================
-     RENDER
-  ======================================================= */
+  /* ========================================================
+                            RENDER
+  ======================================================== */
 
   return (
 
     <header className="navbar">
 
-
-      {/* =================================================
-          LEFT NAVIGATION
+      {/* ==================================================
+                            LEFT
       ================================================== */}
 
       <div className="navbar-left">
 
-        <nav className="navbar-links">
+        <nav
+          className="navbar-links"
+          aria-label="Primary navigation"
+        >
 
-          {links.map(
-            (link, index) => (
+          {links.map((link, index) => (
 
-              <React.Fragment
-                key={link.path}
-              >
+            <React.Fragment
+              key={link.path}
+            >
 
-                {index > 0 && (
+              {index > 0 && (
+                <span
+                  className="nav-divider"
+                  aria-hidden="true"
+                >
+                  |
+                </span>
+              )}
 
-                  <span className="nav-divider">
-                    |
-                  </span>
 
-                )}
-
-
-                <NavLink
-                  to={link.path}
-
-                  className={({ isActive }) =>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  `navbar-link ${
                     isActive
                       ? "active"
                       : ""
-                  }
-                >
+                  }`
+                }
+              >
 
-                  {link.label}
+                {link.label}
 
-                </NavLink>
+              </NavLink>
 
-              </React.Fragment>
+            </React.Fragment>
 
-            )
-          )}
+          ))}
 
         </nav>
 
       </div>
 
 
-      {/* =================================================
-          RIGHT ACTIONS
+      {/* ==================================================
+                            RIGHT
       ================================================== */}
 
       <div className="navbar-right">
 
 
         {/* =================================================
-            NOTIFICATIONS
-        ================================================== */}
+                            NOTIFICATIONS
+        ================================================= */}
 
-        <NotificationBell />
+        <div className="navbar-action">
+
+          <NotificationBell />
+
+        </div>
 
 
         {/* =================================================
-            SETTINGS
-        ================================================== */}
+                            SETTINGS
+        ================================================= */}
 
         <motion.button
           type="button"
-
-          className="icon-btn"
-
+          className="navbar-icon-button"
           onClick={() =>
             goTo("/settings")
           }
-
           whileHover={{
-            scale: 1.05,
-            rotate: 8,
+            scale: 1.06,
+            rotate: 7,
           }}
-
           whileTap={{
-            scale: 0.92,
+            scale: 0.94,
           }}
-
           title="Settings"
+          aria-label="Settings"
         >
 
           <FaCog />
@@ -408,65 +388,81 @@ const Navbar = () => {
 
 
         {/* =================================================
-            PROFILE
-        ================================================== */}
+                            PROFILE
+        ================================================= */}
 
         <div
           className="profile-wrapper"
           ref={menuRef}
         >
 
+          {/* ===============================================
+                        PROFILE TRIGGER
+          =============================================== */}
+
           <motion.button
             type="button"
-
-            className="profile-trigger"
-
+            className={`profile-trigger ${
+              profileOpen
+                ? "profile-trigger-open"
+                : ""
+            }`}
             onClick={() =>
               setProfileOpen(
-                (value) => !value
+                (previous) =>
+                  !previous
               )
             }
-
             whileHover={{
               scale: 1.04,
             }}
-
             whileTap={{
               scale: 0.95,
             }}
-
-            aria-label="Open profile menu"
+            aria-expanded={profileOpen}
+            aria-haspopup="menu"
+            title={name}
           >
 
             <Avatar />
 
-            <FaChevronDown
-              className={`profile-arrow ${
-                profileOpen
-                  ? "open"
-                  : ""
-              }`}
-            />
+            <motion.span
+              className="profile-chevron"
+              animate={{
+                rotate: profileOpen
+                  ? 180
+                  : 0,
+              }}
+              transition={{
+                duration: 0.2,
+              }}
+            >
+
+              <FaChevronDown />
+
+            </motion.span>
 
           </motion.button>
 
 
-          {/* =================================================
-              PROFILE DROPDOWN
-          ================================================== */}
+          {/* ===============================================
+                        PROFILE DROPDOWN
+          =============================================== */}
 
           <AnimatePresence>
 
             {profileOpen && (
 
               <motion.div
-
                 className="profile-dropdown"
+                role="menu"
 
                 initial={{
                   opacity: 0,
-                  y: -10,
+                  y: -8,
                   scale: 0.96,
+                  transformOrigin:
+                    "top right",
                 }}
 
                 animate={{
@@ -477,17 +473,19 @@ const Navbar = () => {
 
                 exit={{
                   opacity: 0,
-                  y: -10,
+                  y: -8,
                   scale: 0.96,
                 }}
 
                 transition={{
-                  duration: 0.2,
+                  duration: 0.18,
+                  ease: "easeOut",
                 }}
               >
 
-
-                {/* USER HEADER */}
+                {/* =========================================
+                            DROPDOWN HEADER
+                ========================================= */}
 
                 <div className="dropdown-header">
 
@@ -495,74 +493,103 @@ const Navbar = () => {
 
                   <div className="dropdown-user-info">
 
-                    <h4>
+                    <h4 title={name}>
                       {name}
                     </h4>
 
-                    <small>
+                    <span>
                       {role}
-                    </small>
+                    </span>
 
                   </div>
 
                 </div>
 
 
-                {/* PROFILE */}
+                {/* =========================================
+                            DROPDOWN DIVIDER
+                ========================================= */}
+
+                <div className="dropdown-divider" />
+
+
+                {/* =========================================
+                            PROFILE
+                ========================================= */}
 
                 <button
                   type="button"
+                  className="dropdown-item"
                   onClick={() =>
                     goTo("/profile")
                   }
+                  role="menuitem"
                 >
 
-                  <FaUserCircle />
+                  <span className="dropdown-item-icon">
 
-                  <span>
+                    <FaUser />
+
+                  </span>
+
+                  <span className="dropdown-item-text">
                     Profile
                   </span>
 
                 </button>
 
 
-                {/* SETTINGS */}
+                {/* =========================================
+                            SETTINGS
+                ========================================= */}
 
                 <button
                   type="button"
+                  className="dropdown-item"
                   onClick={() =>
                     goTo("/settings")
                   }
+                  role="menuitem"
                 >
 
-                  <FaCog />
+                  <span className="dropdown-item-icon">
 
-                  <span>
+                    <FaCog />
+
+                  </span>
+
+                  <span className="dropdown-item-text">
                     Settings
                   </span>
 
                 </button>
 
 
-                {/* DIVIDER */}
+                {/* =========================================
+                            LOGOUT DIVIDER
+                ========================================= */}
 
-                <hr />
+                <div className="dropdown-divider logout-divider" />
 
 
-                {/* LOGOUT */}
+                {/* =========================================
+                            LOGOUT
+                ========================================= */}
 
                 <button
                   type="button"
-                  className="logout-menu-btn"
-
-                  onClick={
-                    handleLogout
-                  }
+                  className="dropdown-item logout-item"
+                  onClick={handleLogout}
+                  role="menuitem"
                 >
 
-                  <FaSignOutAlt />
+                  <span className="dropdown-item-icon">
 
-                  <span>
+                    <FaSignOutAlt />
+
+                  </span>
+
+                  <span className="dropdown-item-text">
                     Logout
                   </span>
 
@@ -578,53 +605,89 @@ const Navbar = () => {
 
 
         {/* =================================================
-            MOBILE TOGGLE
-        ================================================== */}
+                            MOBILE BUTTON
+        ================================================= */}
 
         <motion.button
           type="button"
-
           className="mobile-toggle"
-
-          aria-label={
-            mobileOpen
-              ? "Close Menu"
-              : "Open Menu"
-          }
-
           onClick={() =>
             setMobileOpen(
-              (value) => !value
+              (previous) =>
+                !previous
             )
           }
-
           whileTap={{
             scale: 0.9,
           }}
+          aria-label={
+            mobileOpen
+              ? "Close navigation menu"
+              : "Open navigation menu"
+          }
+          aria-expanded={mobileOpen}
         >
 
-          {mobileOpen ? (
+          <AnimatePresence
+            mode="wait"
+            initial={false}
+          >
 
-            <FaChevronDown
-              style={{
-                transform:
-                  "rotate(180deg)",
-              }}
-            />
+            {mobileOpen ? (
 
-          ) : (
+              <motion.span
+                key="close"
+                initial={{
+                  opacity: 0,
+                  rotate: -90,
+                }}
+                animate={{
+                  opacity: 1,
+                  rotate: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  rotate: 90,
+                }}
+              >
 
-            <FaTasks />
+                <FaTimes />
 
-          )}
+              </motion.span>
+
+            ) : (
+
+              <motion.span
+                key="open"
+                initial={{
+                  opacity: 0,
+                  rotate: 90,
+                }}
+                animate={{
+                  opacity: 1,
+                  rotate: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  rotate: -90,
+                }}
+              >
+
+                <FaBars />
+
+              </motion.span>
+
+            )}
+
+          </AnimatePresence>
 
         </motion.button>
 
       </div>
 
 
-      {/* =================================================
-          MOBILE MENU
+      {/* ==================================================
+                        MOBILE MENU
       ================================================== */}
 
       <AnimatePresence>
@@ -652,7 +715,7 @@ const Navbar = () => {
 
               initial={{
                 opacity: 0,
-                y: -15,
+                y: -12,
               }}
 
               animate={{
@@ -662,62 +725,71 @@ const Navbar = () => {
 
               exit={{
                 opacity: 0,
-                y: -15,
+                y: -12,
+              }}
+
+              transition={{
+                duration: 0.2,
               }}
             >
 
-              {/* MOBILE NAV LINKS */}
+              {/* =========================================
+                            MOBILE LINKS
+              ========================================= */}
 
-              {links.map(
-                (link) => (
+              {links.map((link) => (
 
-                  <NavLink
-                    key={link.path}
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `mobile-nav-link ${
+                      isActive
+                        ? "active"
+                        : ""
+                    }`
+                  }
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
+                >
 
-                    to={link.path}
+                  {link.label}
 
-                    onClick={() =>
-                      setMobileOpen(
-                        false
-                      )
-                    }
-                  >
+                </NavLink>
 
-                    {link.label}
-
-                  </NavLink>
-
-                )
-              )}
-
-
-              {/* MOBILE SETTINGS */}
-
-              <NavLink
-                to="/settings"
-
-                onClick={() =>
-                  setMobileOpen(
-                    false
-                  )
-                }
-              >
-
-                Settings
-
-              </NavLink>
+              ))}
 
 
-              {/* MOBILE LOGOUT */}
+              {/* =========================================
+                            MOBILE SETTINGS
+              ========================================= */}
 
               <button
                 type="button"
-
-                className="mobile-logout-btn"
-
-                onClick={
-                  handleLogout
+                className="mobile-nav-link mobile-button"
+                onClick={() =>
+                  goTo("/settings")
                 }
+              >
+
+                <FaCog />
+
+                <span>
+                  Settings
+                </span>
+
+              </button>
+
+
+              {/* =========================================
+                            MOBILE LOGOUT
+              ========================================= */}
+
+              <button
+                type="button"
+                className="mobile-logout-btn"
+                onClick={handleLogout}
               >
 
                 <FaSignOutAlt />
