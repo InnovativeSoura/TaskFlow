@@ -1281,7 +1281,7 @@
     width: 9px;
     height: 9px;
 
-    border-radius: 5%;
+    /* border-radius: 5%; */
 
     /* background: #31d67b !important; */
 
@@ -1290,5 +1290,5 @@
     /* box-shadow:
         0 0 7px rgba(49, 214, 123, 0.65); */
 
-    z-index: 10;
+    /* z-index: 10; */
 }
