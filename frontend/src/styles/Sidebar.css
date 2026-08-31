@@ -36,15 +36,16 @@
 
     width: var(--sidebar-width);
 
-    background:
-        linear-gradient(
-            180deg,
-            #121b2b 0%,
-            #101827 45%,
-            #0d1523 100%
-        );
+    background: linear-gradient(
+        180deg,
+        #121b2b 0%,
+        #101827 48%,
+        #0d1523 100%
+    );
 
     border: none !important;
+    border-right: none !important;
+
     outline: none !important;
     box-shadow: none !important;
 
@@ -60,6 +61,30 @@
 
 
 /* ==========================================================
+                    REMOVE SIDEBAR EFFECTS
+========================================================== */
+
+/*
+   IMPORTANT:
+   No pseudo-element overlays are used on the sidebar.
+   This prevents dark/black spots and unwanted overlays.
+*/
+
+.sidebar::before,
+.sidebar::after {
+    content: none !important;
+
+    display: none !important;
+
+    background: none !important;
+
+    box-shadow: none !important;
+
+    border: none !important;
+}
+
+
+/* ==========================================================
                     SIDEBAR INNER
 ========================================================== */
 
@@ -71,7 +96,7 @@
     display: flex;
     flex-direction: column;
 
-    padding: 10px;
+    padding: 8px 8px 8px 8px;
 
     box-sizing: border-box;
 
@@ -80,21 +105,17 @@
 
 
 /* ==========================================================
-                WORKSPACE CARD
+                    WORKSPACE CARD
 ========================================================== */
 
 .workspace-card {
     width: 100%;
 
-    margin: 0 0 12px;
+    margin-bottom: 12px;
 
     flex-shrink: 0;
 }
 
-
-/* ==========================================================
-                WORKSPACE BUTTON
-========================================================== */
 
 .workspace-button {
     width: 100%;
@@ -103,56 +124,59 @@
 
     display: flex;
 
-    align-items: center;
     justify-content: space-between;
 
-    padding: 7px 8px;
+    align-items: center;
+
+    padding: 8px;
 
     border: none !important;
+
     outline: none;
 
     border-radius: 16px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(123, 97, 255, 0.22),
-            rgba(123, 97, 255, 0.08)
-        );
+    background: linear-gradient(
+        135deg,
+        rgba(123, 97, 255, 0.20),
+        rgba(123, 97, 255, 0.08)
+    );
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
     cursor: pointer;
 
     transition:
-        background 0.3s ease,
         transform 0.3s ease,
+        background 0.3s ease,
         box-shadow 0.3s ease;
 }
 
-.workspace-button:hover {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(123, 97, 255, 0.30),
-            rgba(123, 97, 255, 0.12)
-        );
 
+.workspace-button:hover {
     transform: translateY(-1px);
 
+    background: linear-gradient(
+        135deg,
+        rgba(123, 97, 255, 0.25),
+        rgba(123, 97, 255, 0.10)
+    );
+
     box-shadow:
-        0 8px 24px rgba(123, 97, 255, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        0 8px 25px rgba(123, 97, 255, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.workspace-button:focus {
-    outline: none;
+
+.workspace-button:focus,
+.workspace-button:focus-visible {
+    outline: none !important;
 }
 
 
 /* ==========================================================
-                WORKSPACE LEFT
+                    WORKSPACE LEFT
 ========================================================== */
 
 .workspace-left {
@@ -167,64 +191,61 @@
 
 
 /* ==========================================================
-                CLEAN TASKFLOW LOGO
+                    CLEAN TASKFLOW LOGO
 ========================================================== */
 
 /*
    IMPORTANT:
-   No ::before
-   No ::after
-   No dark overlays
-   No internal pseudo-elements
-
-   This prevents the black/dark spots that were appearing
-   around the TF logo.
+   The logo intentionally has NO ::before or ::after.
+   This removes the black/dark spot problem.
 */
 
 .workspace-logo {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
 
-    min-width: 48px;
+    min-width: 50px;
+
+    position: relative;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    position: relative;
-
-    border-radius: 15px;
+    flex-shrink: 0;
 
     overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            #a494ff 0%,
-            #7b61ff 48%,
-            #6248ed 100%
-        );
-
-    color: #ffffff;
-
-    font-size: 17px;
-    font-weight: 800;
-
-    line-height: 1;
-
-    letter-spacing: -0.6px;
 
     border: none !important;
     outline: none !important;
 
+    border-radius: 15px;
+
+    background: linear-gradient(
+        135deg,
+        #9b8aff 0%,
+        #7b61ff 48%,
+        #6046e8 100%
+    );
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    /*
+       Clean purple shadow only.
+       No black shadow.
+    */
+
     box-shadow:
-        0 7px 20px rgba(123, 97, 255, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.30);
+        0 7px 20px rgba(123, 97, 255, 0.28);
 
     isolation: isolate;
-
-    flex-shrink: 0;
 
     transition:
         transform 0.3s ease,
@@ -232,19 +253,20 @@
 }
 
 
-/* Clean logo hover */
+/* ==========================================================
+                    LOGO HOVER
+========================================================== */
 
 .workspace-button:hover .workspace-logo {
-    transform: scale(1.035);
+    transform: translateY(-1px) scale(1.03);
 
     box-shadow:
-        0 9px 26px rgba(123, 97, 255, 0.38),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        0 10px 28px rgba(123, 97, 255, 0.36);
 }
 
 
 /* ==========================================================
-                WORKSPACE STATUS
+                    WORKSPACE STATUS
 ========================================================== */
 
 .workspace-status {
@@ -260,17 +282,19 @@
 
     background: #31d67b;
 
-    border: 2px solid #684ff2;
+    border: 2px solid #7b61ff;
 
-    z-index: 3;
+    box-sizing: border-box;
+
+    z-index: 5;
 
     box-shadow:
-        0 0 7px rgba(49, 214, 123, 0.55);
+        0 0 8px rgba(49, 214, 123, 0.55);
 }
 
 
 /* ==========================================================
-                WORKSPACE CONTENT
+                    WORKSPACE CONTENT
 ========================================================== */
 
 .workspace-content {
@@ -281,6 +305,7 @@
     min-width: 0;
 }
 
+
 .workspace-content h3 {
     margin: 0;
 
@@ -288,10 +313,13 @@
 
     font-size: 16px;
 
+    line-height: 1.2;
+
     font-weight: 700;
 
-    line-height: 1.15;
+    white-space: nowrap;
 }
+
 
 .workspace-content p {
     margin: 3px 0 0;
@@ -300,17 +328,21 @@
 
     font-size: 11px;
 
-    line-height: 1;
+    line-height: 1.2;
+
+    white-space: nowrap;
 }
 
 
 /* ==========================================================
-                WORKSPACE ARROW
+                    WORKSPACE ARROW
 ========================================================== */
 
 .workspace-arrow {
     width: 32px;
     height: 32px;
+
+    min-width: 32px;
 
     display: flex;
 
@@ -323,12 +355,13 @@
 
     color: #c9beff;
 
-    flex-shrink: 0;
+    font-size: 11px;
 
     transition:
         background 0.25s ease,
         color 0.25s ease;
 }
+
 
 .workspace-arrow:hover {
     background: rgba(123, 97, 255, 0.18);
@@ -338,21 +371,31 @@
 
 
 /* ==========================================================
-                COLLAPSED WORKSPACE
+                    COLLAPSED WORKSPACE
 ========================================================== */
 
 .sidebar.collapsed .workspace-button {
     justify-content: center;
 
-    padding: 7px;
+    padding: 6px;
 }
+
 
 .sidebar.collapsed .workspace-left {
     justify-content: center;
+
+    width: 100%;
 }
+
 
 .sidebar.collapsed .workspace-arrow {
     display: none;
+}
+
+
+.sidebar.collapsed .workspace-logo {
+    width: 50px;
+    height: 50px;
 }
 
 
@@ -368,11 +411,12 @@
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     box-sizing: border-box;
 
-    padding: 10px 11px;
+    padding: 10px 10px;
 
     margin-bottom: 16px;
 
@@ -382,23 +426,26 @@
 
     border: 1px solid rgba(255, 255, 255, 0.055);
 
+    flex-shrink: 0;
+
     transition:
         background 0.3s ease,
         border-color 0.3s ease,
         transform 0.3s ease;
 }
 
-.profile-card:hover {
-    background: rgba(123, 97, 255, 0.08);
 
-    border-color: rgba(123, 97, 255, 0.17);
+.profile-card:hover {
+    background: rgba(123, 97, 255, 0.075);
+
+    border-color: rgba(123, 97, 255, 0.16);
 
     transform: translateY(-1px);
 }
 
 
 /* ==========================================================
-                PROFILE LEFT
+                    PROFILE LEFT
 ========================================================== */
 
 .profile-left {
@@ -417,10 +464,10 @@
 ========================================================== */
 
 .profile-avatar {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
 
-    min-width: 42px;
+    min-width: 44px;
 
     display: flex;
 
@@ -431,12 +478,11 @@
 
     border-radius: 50%;
 
-    background:
-        linear-gradient(
-            135deg,
-            #8d7cff,
-            #684dff
-        );
+    background: linear-gradient(
+        135deg,
+        #8d7cff 0%,
+        #684dff 100%
+    );
 
     color: #ffffff;
 
@@ -445,19 +491,19 @@
     font-weight: 700;
 
     box-shadow:
-        0 6px 18px rgba(123, 97, 255, 0.28);
+        0 6px 18px rgba(123, 97, 255, 0.25);
 }
 
 
 /* ==========================================================
-                ONLINE STATUS
+                    PROFILE ONLINE
 ========================================================== */
 
 .profile-online {
     position: absolute;
 
     right: 0;
-    bottom: 0;
+    bottom: 1px;
 
     width: 9px;
     height: 9px;
@@ -468,13 +514,15 @@
 
     border: 2px solid #1a2233;
 
+    box-sizing: border-box;
+
     box-shadow:
-        0 0 7px rgba(46, 204, 113, 0.55);
+        0 0 7px rgba(46, 204, 113, 0.5);
 }
 
 
 /* ==========================================================
-                PROFILE INFORMATION
+                    PROFILE INFO
 ========================================================== */
 
 .profile-info {
@@ -485,25 +533,27 @@
     min-width: 0;
 }
 
+
 .profile-info h4 {
     margin: 0;
 
     max-width: 130px;
 
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
     color: #ffffff;
 
     font-size: 12px;
 
+    line-height: 1.25;
+
     font-weight: 600;
-
-    line-height: 1.2;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
 }
+
 
 .profile-info p {
     margin: 3px 0 0;
@@ -517,54 +567,38 @@
 
 
 /* ==========================================================
-                PROFILE ARROW
+                    PROFILE ARROW
 ========================================================== */
 
 .profile-arrow {
-    width: 25px;
-    height: 25px;
+    width: 26px;
+    height: 26px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    border-radius: 7px;
+    flex-shrink: 0;
 
-    background: rgba(255, 255, 255, 0.035);
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.04);
 
     color: #a7b3d6;
 
-    flex-shrink: 0;
+    font-size: 9px;
 
     transition:
         background 0.25s ease,
         color 0.25s ease;
 }
 
+
 .profile-card:hover .profile-arrow {
     background: rgba(123, 97, 255, 0.15);
 
     color: #ffffff;
-}
-
-
-/* ==========================================================
-                COLLAPSED PROFILE
-========================================================== */
-
-.sidebar.collapsed .profile-card {
-    justify-content: center;
-
-    padding: 10px;
-}
-
-.sidebar.collapsed .profile-info {
-    display: none;
-}
-
-.sidebar.collapsed .profile-arrow {
-    display: none;
 }
 
 
@@ -575,7 +609,7 @@
 .menu-title {
     margin: 3px 0 9px;
 
-    padding: 0 6px;
+    padding: 0 5px;
 
     color: #7f8baf;
 
@@ -583,12 +617,41 @@
 
     font-weight: 700;
 
-    letter-spacing: 1.8px;
+    letter-spacing: 2px;
 
     text-transform: uppercase;
 
     flex-shrink: 0;
 }
+
+
+/* ==========================================================
+                    COLLAPSED PROFILE
+========================================================== */
+
+.sidebar.collapsed .profile-card {
+    justify-content: center;
+
+    padding: 9px;
+
+    min-height: 64px;
+}
+
+
+.sidebar.collapsed .profile-left {
+    justify-content: center;
+}
+
+
+.sidebar.collapsed .profile-info {
+    display: none;
+}
+
+
+.sidebar.collapsed .profile-arrow {
+    display: none;
+}
+
 
 .sidebar.collapsed .menu-title {
     display: none;
@@ -614,19 +677,29 @@
 
     overflow-x: hidden;
 
-    padding-right: 2px;
+    padding: 0 1px 8px 1px;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255, 255, 255, 0.08)
+        transparent;
 }
 
 
-/* Scrollbar */
+/* ==========================================================
+                    SCROLLBAR
+========================================================== */
 
 .sidebar-navigation::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
 }
+
 
 .sidebar-navigation::-webkit-scrollbar-track {
     background: transparent;
 }
+
 
 .sidebar-navigation::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.08);
@@ -635,8 +708,13 @@
 }
 
 
+.sidebar-navigation::-webkit-scrollbar-thumb:hover {
+    background: rgba(123, 97, 255, 0.35);
+}
+
+
 /* ==========================================================
-                NAVIGATION LINK
+                    NAVIGATION LINK
 ========================================================== */
 
 .sidebar-link {
@@ -648,6 +726,8 @@
 
     min-height: 46px;
 
+    box-sizing: border-box;
+
     display: flex;
 
     align-items: center;
@@ -656,9 +736,9 @@
 
     padding: 0 13px;
 
-    box-sizing: border-box;
-
     border-radius: 13px;
+
+    border: 1px solid transparent;
 
     color: #a9b4cf;
 
@@ -669,20 +749,22 @@
     transition:
         background 0.28s ease,
         color 0.28s ease,
-        transform 0.28s ease;
+        transform 0.28s ease,
+        border-color 0.28s ease;
 }
+
 
 .sidebar-link:hover {
     color: #ffffff;
 
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.045);
 
     transform: translateX(3px);
 }
 
 
 /* ==========================================================
-                    ICON
+                    SIDEBAR ICON
 ========================================================== */
 
 .sidebar-icon {
@@ -695,14 +777,18 @@
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     color: inherit;
 
-    font-size: 15px;
+    font-size: 14px;
 
-    z-index: 2;
+    position: relative;
+
+    z-index: 3;
 }
+
 
 .sidebar-link:hover .sidebar-icon {
     color: #c7bbff;
@@ -710,46 +796,51 @@
 
 
 /* ==========================================================
-                    LABEL
+                    SIDEBAR LABEL
 ========================================================== */
 
 .sidebar-label {
     flex: 1;
 
+    min-width: 0;
+
     color: inherit;
 
-    font-size: 13px;
+    font-size: 12px;
 
     font-weight: 500;
 
     white-space: nowrap;
+
+    position: relative;
+
+    z-index: 3;
 }
 
 
 /* ==========================================================
-                ACTIVE NAVIGATION
+                    ACTIVE LINK
 ========================================================== */
 
 .sidebar-link.active {
     color: #ffffff;
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(123, 97, 255, 0.28),
-            rgba(123, 97, 255, 0.10)
-        );
+    background: linear-gradient(
+        90deg,
+        rgba(123, 97, 255, 0.27),
+        rgba(123, 97, 255, 0.09)
+    );
 
-    border: 1px solid rgba(123, 97, 255, 0.18);
+    border-color: rgba(123, 97, 255, 0.18);
 
     box-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.025),
-        0 7px 20px rgba(123, 97, 255, 0.14);
+        0 6px 20px rgba(123, 97, 255, 0.12);
 }
 
 
 /* ==========================================================
-                LEFT ACTIVE INDICATOR
+                    LEFT ACTIVE INDICATOR
 ========================================================== */
 
 .active-indicator {
@@ -758,6 +849,7 @@
     left: 0;
 
     top: 7px;
+
     bottom: 7px;
 
     width: 3px;
@@ -767,20 +859,23 @@
     background: #8d7cff;
 
     box-shadow:
-        0 0 11px rgba(123, 97, 255, 0.8);
+        0 0 10px rgba(123, 97, 255, 0.75);
+
+    z-index: 4;
 }
 
 
 /* ==========================================================
-                RIGHT ACTIVE GLOW
+                    RIGHT ACTIVE GLOW
 ========================================================== */
 
 .active-glow {
     position: absolute;
 
-    right: 10px;
+    right: 8px;
 
     width: 3px;
+
     height: 20px;
 
     border-radius: 999px;
@@ -788,19 +883,21 @@
     background: #8d7cff;
 
     box-shadow:
-        0 0 10px rgba(123, 97, 255, 0.9);
+        0 0 9px rgba(123, 97, 255, 0.85);
+
+    z-index: 4;
 }
 
 
 /* ==========================================================
-                ACTIVE ICON
+                    ACTIVE ICON
 ========================================================== */
 
 .sidebar-link.active .sidebar-icon {
     color: #ffffff;
 
     text-shadow:
-        0 0 10px rgba(123, 97, 255, 0.85);
+        0 0 10px rgba(123, 97, 255, 0.7);
 }
 
 
@@ -819,18 +916,18 @@
     width: 55%;
     height: 100%;
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.07),
-            transparent
-        );
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.06),
+        transparent
+    );
 
     transition: left 0.6s ease;
 
     pointer-events: none;
 }
+
 
 .sidebar-link:hover::after {
     left: 140%;
@@ -838,49 +935,61 @@
 
 
 /* ==========================================================
-                COLLAPSED NAVIGATION
+                    COLLAPSED NAVIGATION
 ========================================================== */
 
 .sidebar.collapsed .sidebar-navigation {
     align-items: center;
 }
 
+
 .sidebar.collapsed .sidebar-link {
     width: 56px;
 
-    height: 56px;
-    min-height: 56px;
+    min-width: 56px;
+
+    height: 54px;
+
+    min-height: 54px;
 
     padding: 0;
 
     justify-content: center;
 
-    border-radius: 16px;
+    border-radius: 15px;
 }
+
 
 .sidebar.collapsed .sidebar-label {
     display: none;
 }
 
+
 .sidebar.collapsed .sidebar-icon {
     margin: 0;
 
-    font-size: 18px;
+    width: 22px;
+
+    font-size: 17px;
 }
+
 
 .sidebar.collapsed .active-indicator {
     left: 50%;
 
     top: auto;
+
     bottom: 5px;
 
-    width: 24px;
+    width: 22px;
+
     height: 3px;
 
     transform: translateX(-50%);
 
     border-radius: 999px;
 }
+
 
 .sidebar.collapsed .active-glow {
     display: none;
@@ -892,22 +1001,28 @@
 ========================================================== */
 
 /*
-   IMPORTANT:
-   The footer is pushed to the bottom by margin-top:auto.
+   This is the important part for Logout.
+
+   sidebar-inner = flex column
+   navigation   = flex: 1
+   footer       = margin-top: auto
+
+   Therefore Logout remains at the bottom
+   regardless of page content.
 */
 
 .sidebar-footer {
     width: 100%;
 
-    margin-top: auto !important;
+    margin-top: auto;
 
-    padding-top: 12px;
+    padding-top: 10px;
+
+    padding-bottom: 0;
 
     flex-shrink: 0;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.055);
-
-    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, 0.045);
 }
 
 
@@ -930,17 +1045,19 @@
 
     padding: 0 13px;
 
+    box-sizing: border-box;
+
     border: none !important;
 
-    outline: none;
-
-    cursor: pointer;
+    outline: none !important;
 
     border-radius: 13px;
 
     background: rgba(255, 255, 255, 0.025);
 
-    color: #ff9999;
+    color: #ff9a9a;
+
+    cursor: pointer;
 
     overflow: hidden;
 
@@ -951,30 +1068,54 @@
         box-shadow 0.3s ease;
 }
 
+
 .logout-button:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 82, 82, 0.16),
+        rgba(255, 82, 82, 0.06)
+    );
+
     color: #ffffff;
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255, 82, 82, 0.18),
-            rgba(255, 82, 82, 0.07)
-        );
-
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 8px 22px rgba(255, 82, 82, 0.15);
+        0 7px 20px rgba(255, 82, 82, 0.14);
 }
+
+
+.logout-button:focus,
+.logout-button:focus-visible {
+    outline: none !important;
+}
+
+
+/* ==========================================================
+                    LOGOUT ICON
+========================================================== */
 
 .logout-button .sidebar-icon {
-    font-size: 16px;
+    color: inherit;
+
+    font-size: 15px;
+
+    z-index: 3;
 }
 
+
+/* ==========================================================
+                    LOGOUT LABEL
+========================================================== */
+
 .logout-button .sidebar-label {
-    font-size: 13px;
+    color: inherit;
+
+    font-size: 12px;
 
     font-weight: 600;
+
+    z-index: 3;
 }
 
 
@@ -988,23 +1129,25 @@
     position: absolute;
 
     top: 0;
+
     left: -120%;
 
     width: 60%;
+
     height: 100%;
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.10),
-            transparent
-        );
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.08),
+        transparent
+    );
 
     transition: left 0.6s ease;
 
     pointer-events: none;
 }
+
 
 .logout-button:hover::after {
     left: 140%;
@@ -1012,7 +1155,7 @@
 
 
 /* ==========================================================
-                COLLAPSED LOGOUT
+                    COLLAPSED LOGOUT
 ========================================================== */
 
 .sidebar.collapsed .sidebar-footer {
@@ -1021,17 +1164,19 @@
     justify-content: center;
 }
 
+
 .sidebar.collapsed .logout-button {
     width: 56px;
 
-    height: 56px;
+    height: 54px;
 
     padding: 0;
 
     justify-content: center;
 
-    border-radius: 16px;
+    border-radius: 15px;
 }
+
 
 .sidebar.collapsed .logout-button .sidebar-label {
     display: none;
@@ -1039,53 +1184,10 @@
 
 
 /* ==========================================================
-                    SIDEBAR EFFECTS
-========================================================== */
-
-/*
-   Only subtle lighting.
-   No dark pseudo-element is placed over the logo.
-*/
-
-.sidebar::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    z-index: -1;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(123, 97, 255, 0.08),
-            transparent 38%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(123, 97, 255, 0.055),
-            transparent 34%
-        );
-}
-
-
-/* Explicitly remove edge separator */
-
-.sidebar::after {
-    display: none !important;
-
-    content: none !important;
-}
-
-
-/* ==========================================================
                     ANIMATIONS
 ========================================================== */
 
-@keyframes sidebarFadeUp {
+@keyframes fadeUp {
     from {
         opacity: 0;
 
@@ -1099,11 +1201,12 @@
     }
 }
 
+
 .workspace-card,
 .profile-card,
 .sidebar-link,
 .logout-button {
-    animation: sidebarFadeUp 0.4s ease;
+    animation: fadeUp 0.4s ease both;
 }
 
 
@@ -1129,12 +1232,31 @@
         display: none;
     }
 
-    .workspace-button,
-    .profile-card,
+    .workspace-button {
+        justify-content: center;
+    }
+
+    .profile-card {
+        justify-content: center;
+    }
+
     .logout-button {
         justify-content: center;
     }
 
+    .sidebar-navigation {
+        align-items: center;
+    }
+
+    .sidebar-link {
+        width: 56px;
+
+        height: 54px;
+
+        padding: 0;
+
+        justify-content: center;
+    }
 }
 
 
@@ -1147,7 +1269,6 @@
     .sidebar {
         width: 300px;
     }
-
 }
 
 
@@ -1163,82 +1284,32 @@
 
 
 /* ==========================================================
-            REMOVE SIDEBAR / LAYOUT SEPARATORS
+                    FINAL BORDER RESET
 ========================================================== */
 
 .sidebar,
-.sidebar.collapsed,
+.sidebar *,
 .sidebar-inner,
-.taskflow-sidebar {
+.workspace-card,
+.workspace-button,
+.workspace-logo,
+.profile-card,
+.sidebar-link,
+.sidebar-footer,
+.logout-button {
     border-right: none !important;
-
-    outline: none !important;
-
-    box-shadow: none !important;
-}
-
-.taskflow-main {
-    border-left: none !important;
-
-    box-shadow: none !important;
-}
-
-/* ==========================================================
-            CLEAN PREMIUM TASKFLOW LOGO
-            NO DARK SPOTS / NO OVERLAY
-========================================================== */
-
-.workspace-logo {
-    width: 50px;
-    height: 50px;
-    min-width: 50px;
-
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 15px;
-
-    /* Clean purple gradient */
-    background: linear-gradient(
-        135deg,
-        #9b8aff 0%,
-        #7b61ff 50%,
-        #6548ee 100%
-    ) !important;
-
-    color: #ffffff;
-
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-
-    /* Completely remove unwanted layers */
-    border: none !important;
-    outline: none !important;
-
-    /* Clean premium shadow */
-    box-shadow:
-        0 8px 22px rgba(123, 97, 255, 0.30);
-
-    /* Prevent anything from appearing inside */
-    overflow: hidden;
-
-    isolation: isolate;
-
-    z-index: 5;
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
 }
 
 
 /* ==========================================================
-            IMPORTANT — REMOVE ALL LOGO OVERLAYS
+                    FINAL LOGO CLEANUP
 ========================================================== */
+
+/*
+   Explicitly disable any previously defined logo
+   pseudo-elements. This is the key fix for the
+   black/dark spot appearing inside the TaskFlow logo.
+*/
 
 .workspace-logo::before,
 .workspace-logo::after {
@@ -1251,44 +1322,9 @@
     box-shadow: none !important;
 
     filter: none !important;
-
-    opacity: 0 !important;
 }
 
 
 /* ==========================================================
-                    LOGO HOVER
+                    END
 ========================================================== */
-
-.workspace-button:hover .workspace-logo {
-    transform: translateY(-1px) scale(1.03);
-
-    box-shadow:
-        0 10px 28px rgba(123, 97, 255, 0.38);
-}
-
-
-/* ==========================================================
-                LOGO STATUS DOT
-========================================================== */
-
-.workspace-status {
-    position: absolute;
-
-    right: 3px;
-    bottom: 3px;
-
-    width: 9px;
-    height: 9px;
-
-    /* border-radius: 5%; */
-
-    /* background: #31d67b !important; */
-
-    border: 2px solid #7b61ff !important;
-
-    /* box-shadow:
-        0 0 7px rgba(49, 214, 123, 0.65); */
-
-    /* z-index: 10; */
-}
