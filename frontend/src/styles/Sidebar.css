@@ -1283,12 +1283,12 @@
 
     border-radius: 50%;
 
-    background: #31d67b !important;
+    /* background: #31d67b !important; */
 
     border: 2px solid #7b61ff !important;
 
-    box-shadow:
-        0 0 7px rgba(49, 214, 123, 0.65);
+    /* box-shadow:
+        0 0 7px rgba(49, 214, 123, 0.65); */
 
     z-index: 10;
 }
