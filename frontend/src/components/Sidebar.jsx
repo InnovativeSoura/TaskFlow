@@ -7,6 +7,7 @@ import React, {
 
 import {
   NavLink,
+  useNavigate,
   useLocation,
 } from "react-router-dom";
 
@@ -47,6 +48,7 @@ const Sidebar = () => {
      ROUTER
   ======================================================= */
 
+  const navigate = useNavigate();
   const location = useLocation();
 
 
@@ -279,14 +281,6 @@ const Sidebar = () => {
       initial={false}
     >
 
-      {/* =================================================
-          SIDEBAR INNER
-
-          The entire sidebar is a vertical flex layout.
-          Navigation grows to fill the middle.
-          Logout stays at the bottom.
-      ================================================== */}
-
       <div className="sidebar-inner">
 
 
@@ -312,7 +306,7 @@ const Sidebar = () => {
 
             onClick={() =>
               setCollapsed(
-                previous =>
+                (previous) =>
                   !previous
               )
             }
@@ -324,28 +318,29 @@ const Sidebar = () => {
             }
           >
 
-            {/* LEFT SIDE */}
-
             <div className="workspace-left">
 
-              {/* CLEAN TASKFLOW LOGO */}
+              {/* =========================================
+                    CLEAN TASKFLOW LOGO
 
-              <div
-                className="workspace-logo"
-                aria-hidden="true"
-              >
+                    IMPORTANT:
+                    No status dot.
+                    No pseudo-element.
+                    No dark overlay.
+              ========================================== */}
+
+              <div className="workspace-logo">
+
                 <span className="workspace-logo-text">
                   TF
                 </span>
 
-                <span
-                  className="workspace-status"
-                  aria-hidden="true"
-                />
               </div>
 
 
-              {/* WORKSPACE TEXT */}
+              {/* =========================================
+                    WORKSPACE TEXT
+              ========================================== */}
 
               <AnimatePresence mode="wait">
 
@@ -378,7 +373,9 @@ const Sidebar = () => {
             </div>
 
 
-            {/* COLLAPSE BUTTON */}
+            {/* =========================================
+                    COLLAPSE / EXPAND ARROW
+            ========================================== */}
 
             <AnimatePresence mode="wait">
 
@@ -461,24 +458,22 @@ const Sidebar = () => {
 
           <div className="profile-left">
 
-            {/* AVATAR */}
+            {/* =========================================
+                    PROFILE AVATAR
+            ========================================== */}
 
-            <div
-              className="profile-avatar"
-              aria-hidden="true"
-            >
+            <div className="profile-avatar">
 
               {avatarInitials}
 
-              <span
-                className="profile-online"
-                aria-hidden="true"
-              />
+              <span className="profile-online" />
 
             </div>
 
 
-            {/* USER INFORMATION */}
+            {/* =========================================
+                    PROFILE INFORMATION
+            ========================================== */}
 
             <AnimatePresence mode="wait">
 
@@ -513,7 +508,9 @@ const Sidebar = () => {
           </div>
 
 
-          {/* PROFILE ARROW */}
+          {/* =========================================
+                  PROFILE ARROW
+          ========================================== */}
 
           <AnimatePresence>
 
@@ -576,10 +573,7 @@ const Sidebar = () => {
 
 
         {/* =================================================
-            NAVIGATION AREA
-
-            This is the flexible middle section.
-            It takes all available vertical space.
+            NAVIGATION
         ================================================== */}
 
         <nav
@@ -597,6 +591,7 @@ const Sidebar = () => {
 
               <NavLink
                 key={item.name}
+
                 to={item.path}
 
                 className={`sidebar-link ${
@@ -606,7 +601,9 @@ const Sidebar = () => {
                 }`}
               >
 
-                {/* ACTIVE INDICATOR */}
+                {/* =====================================
+                      ACTIVE INDICATOR
+                ====================================== */}
 
                 <AnimatePresence>
 
@@ -629,14 +626,20 @@ const Sidebar = () => {
                 </AnimatePresence>
 
 
-                {/* ICON */}
+                {/* =====================================
+                      ICON
+                ====================================== */}
 
                 <div className="sidebar-icon">
+
                   {item.icon}
+
                 </div>
 
 
-                {/* LABEL */}
+                {/* =====================================
+                      LABEL
+                ====================================== */}
 
                 <AnimatePresence mode="wait">
 
@@ -663,7 +666,9 @@ const Sidebar = () => {
                 </AnimatePresence>
 
 
-                {/* ACTIVE GLOW */}
+                {/* =====================================
+                      ACTIVE RIGHT GLOW
+                ====================================== */}
 
                 <AnimatePresence>
 
@@ -700,11 +705,7 @@ const Sidebar = () => {
 
 
         {/* =================================================
-            BOTTOM LOGOUT SECTION
-
-            IMPORTANT:
-            margin-top:auto forces this section to the
-            absolute bottom of the sidebar.
+            FIXED BOTTOM LOGOUT
         ================================================== */}
 
         <div className="sidebar-footer">
@@ -724,18 +725,14 @@ const Sidebar = () => {
             whileTap={{
               scale: 0.98,
             }}
-
-            aria-label="Logout"
           >
 
-            {/* LOGOUT ICON */}
-
             <span className="sidebar-icon">
+
               <FaSignOutAlt />
+
             </span>
 
-
-            {/* LOGOUT LABEL */}
 
             <AnimatePresence mode="wait">
 
