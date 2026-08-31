@@ -34,22 +34,23 @@ import { useAuth } from "../context/AuthContext";
 
 import "../styles/Sidebar.css";
 
+
 const Sidebar = () => {
 
   /* =======================================================
      STATE
   ======================================================= */
 
-  const [collapsed, setCollapsed] =
-    useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
 
   /* =======================================================
      ROUTER
   ======================================================= */
 
   const navigate = useNavigate();
-
   const location = useLocation();
+
 
   /* =======================================================
      AUTH
@@ -59,6 +60,7 @@ const Sidebar = () => {
     user,
     logout,
   } = useAuth();
+
 
   /* =======================================================
      USER INFORMATION
@@ -72,6 +74,7 @@ const Sidebar = () => {
   const role =
     user?.role ||
     "Administrator";
+
 
   /* =======================================================
      AVATAR INITIALS
@@ -89,8 +92,7 @@ const Sidebar = () => {
       .filter(Boolean);
 
     if (words.length === 1) {
-      return words[0][0]
-        .toUpperCase();
+      return words[0][0].toUpperCase();
     }
 
     return (
@@ -100,36 +102,41 @@ const Sidebar = () => {
 
   }, [username]);
 
+
   /* =======================================================
-   LOGOUT
+     LOGOUT
   ======================================================= */
 
   const handleLogout = () => {
+
     try {
-      // Clear authentication state
+
       logout();
 
-      // Remove any remaining authentication data
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+
     } catch (error) {
-      console.error("Logout Error:", error);
+
+      console.error(
+        "Logout Error:",
+        error
+      );
+
     } finally {
-    /*
-     * Force the application to the PUBLIC HOME PAGE.
-     *
-     * Using location.replace guarantees that logout
-     * cannot leave the user on /login or /dashboard.
-     */
+
       window.location.replace("/");
+
     }
   };
+
 
   /* =======================================================
      SIDEBAR MENU
   ======================================================= */
 
   const menuItems = [
+
     {
       name: "Dashboard",
       path: "/dashboard",
@@ -177,7 +184,9 @@ const Sidebar = () => {
       path: "/notifications",
       icon: <FaBell />,
     },
+
   ];
+
 
   /* =======================================================
      SIDEBAR ANIMATION
@@ -186,24 +195,29 @@ const Sidebar = () => {
   const sidebarVariants = {
 
     expanded: {
+
       width: 280,
 
       transition: {
         duration: 0.35,
         ease: "easeInOut",
       },
+
     },
 
     collapsed: {
+
       width: 90,
 
       transition: {
         duration: 0.35,
         ease: "easeInOut",
       },
+
     },
 
   };
+
 
   /* =======================================================
      TEXT ANIMATION
@@ -212,57 +226,88 @@ const Sidebar = () => {
   const textVariants = {
 
     hidden: {
+
       opacity: 0,
       x: -10,
+
     },
 
     visible: {
+
       opacity: 1,
       x: 0,
 
       transition: {
         duration: 0.2,
       },
+
     },
 
     exit: {
+
       opacity: 0,
       x: -10,
 
       transition: {
         duration: 0.15,
       },
+
     },
 
   };
+
 
   /* =======================================================
      RENDER
   ======================================================= */
 
   return (
+
     <motion.aside
       className={`sidebar ${
         collapsed ? "collapsed" : ""
       }`}
+
       variants={sidebarVariants}
+
       animate={
         collapsed
           ? "collapsed"
           : "expanded"
       }
+
       initial={false}
     >
 
-      <div className="sidebar-inner">
+      {/* =================================================
+          SIDEBAR INNER
+
+          IMPORTANT:
+          Flex column + min-height makes it possible
+          to push Logout to the absolute bottom.
+      ================================================== */}
+
+      <div
+        className="sidebar-inner"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+        }}
+      >
+
 
         {/* =================================================
             WORKSPACE CARD
-        ================================================= */}
+        ================================================== */}
 
         <motion.div
           className="workspace-card"
-          whileHover={{ y: -2 }}
+
+          whileHover={{
+            y: -2,
+          }}
+
           transition={{
             duration: 0.2,
           }}
@@ -271,12 +316,14 @@ const Sidebar = () => {
           <button
             type="button"
             className="workspace-button"
+
             onClick={() =>
               setCollapsed(
                 (previous) =>
                   !previous
               )
             }
+
             aria-label={
               collapsed
                 ? "Expand sidebar"
@@ -287,17 +334,23 @@ const Sidebar = () => {
             <div className="workspace-left">
 
               <div className="workspace-logo">
+
                 TF
 
                 <span className="workspace-status" />
+
               </div>
+
 
               <AnimatePresence mode="wait">
 
                 {!collapsed && (
+
                   <motion.div
                     className="workspace-content"
+
                     variants={textVariants}
+
                     initial="hidden"
                     animate="visible"
                     exit="exit"
@@ -312,52 +365,68 @@ const Sidebar = () => {
                     </p>
 
                   </motion.div>
+
                 )}
 
               </AnimatePresence>
 
             </div>
 
+
             <AnimatePresence mode="wait">
 
               {!collapsed ? (
+
                 <motion.div
                   key="expanded"
                   className="workspace-arrow"
+
                   initial={{
                     opacity: 0,
                     rotate: -90,
                   }}
+
                   animate={{
                     opacity: 1,
                     rotate: 0,
                   }}
+
                   exit={{
                     opacity: 0,
                     rotate: -90,
                   }}
                 >
+
                   <FaChevronLeft />
+
                 </motion.div>
+
               ) : (
+
                 <motion.div
                   key="collapsed"
                   className="workspace-arrow"
+
                   initial={{
                     opacity: 0,
                     rotate: 90,
                   }}
+
                   animate={{
                     opacity: 1,
                     rotate: 0,
                   }}
+
                   exit={{
                     opacity: 0,
                     rotate: 90,
                   }}
                 >
+
                   <FaChevronRight />
+
                 </motion.div>
+
               )}
 
             </AnimatePresence>
@@ -366,13 +435,18 @@ const Sidebar = () => {
 
         </motion.div>
 
+
         {/* =================================================
             PROFILE CARD
-        ================================================= */}
+        ================================================== */}
 
         <motion.div
           className="profile-card"
-          whileHover={{ y: -2 }}
+
+          whileHover={{
+            y: -2,
+          }}
+
           transition={{
             duration: 0.2,
           }}
@@ -388,12 +462,16 @@ const Sidebar = () => {
 
             </div>
 
+
             <AnimatePresence mode="wait">
 
               {!collapsed && (
+
                 <motion.div
                   className="profile-info"
+
                   variants={textVariants}
+
                   initial="hidden"
                   animate="visible"
                   exit="exit"
@@ -408,62 +486,87 @@ const Sidebar = () => {
                   </p>
 
                 </motion.div>
+
               )}
 
             </AnimatePresence>
 
           </div>
 
+
           <AnimatePresence>
 
             {!collapsed && (
+
               <motion.div
                 className="profile-arrow"
+
                 initial={{
                   opacity: 0,
                 }}
+
                 animate={{
                   opacity: 1,
                 }}
+
                 exit={{
                   opacity: 0,
                 }}
               >
+
                 <FaChevronRight />
+
               </motion.div>
+
             )}
 
           </AnimatePresence>
 
         </motion.div>
 
+
         {/* =================================================
             SECTION TITLE
-        ================================================= */}
+        ================================================== */}
 
         <AnimatePresence>
 
           {!collapsed && (
+
             <motion.div
               className="menu-title"
+
               variants={textVariants}
+
               initial="hidden"
               animate="visible"
               exit="exit"
             >
+
               Workspace
+
             </motion.div>
+
           )}
 
         </AnimatePresence>
 
+
         {/* =================================================
             NAVIGATION
-        ================================================= */}
+
+            flex: 1 gives the navigation the available
+            vertical space and pushes the footer down.
+        ================================================== */}
 
         <nav
           className="sidebar-navigation"
+
           aria-label="Main navigation"
+
+          style={{
+            flex: 1,
+          }}
         >
 
           {menuItems.map((item) => {
@@ -472,10 +575,14 @@ const Sidebar = () => {
               location.pathname ===
               item.path;
 
+
             return (
+
               <NavLink
                 key={item.name}
+
                 to={item.path}
+
                 className={`sidebar-link ${
                   isActive
                     ? "active"
@@ -488,42 +595,59 @@ const Sidebar = () => {
                 <AnimatePresence>
 
                   {isActive && (
+
                     <motion.span
                       layoutId="sidebar-active-pill"
+
                       className="active-indicator"
+
                       transition={{
                         type: "spring",
                         stiffness: 350,
                         damping: 30,
                       }}
                     />
+
                   )}
 
                 </AnimatePresence>
 
+
                 {/* Icon */}
 
                 <div className="sidebar-icon">
+
                   {item.icon}
+
                 </div>
+
 
                 {/* Label */}
 
                 <AnimatePresence mode="wait">
 
                   {!collapsed && (
+
                     <motion.span
                       className="sidebar-label"
+
                       variants={textVariants}
+
                       initial="hidden"
+
                       animate="visible"
+
                       exit="exit"
                     >
+
                       {item.name}
+
                     </motion.span>
+
                   )}
 
                 </AnimatePresence>
+
 
                 {/* Active glow */}
 
@@ -531,64 +655,96 @@ const Sidebar = () => {
 
                   {isActive &&
                     !collapsed && (
-                      <motion.span
-                        className="active-glow"
-                        initial={{
-                          opacity: 0,
-                        }}
-                        animate={{
-                          opacity: 1,
-                        }}
-                        exit={{
-                          opacity: 0,
-                        }}
-                      />
-                    )}
+
+                    <motion.span
+                      className="active-glow"
+
+                      initial={{
+                        opacity: 0,
+                      }}
+
+                      animate={{
+                        opacity: 1,
+                      }}
+
+                      exit={{
+                        opacity: 0,
+                      }}
+                    />
+
+                  )}
 
                 </AnimatePresence>
 
               </NavLink>
+
             );
 
           })}
 
         </nav>
 
-        {/* =================================================
-            FOOTER
-        ================================================= */}
 
-        <div className="sidebar-footer">
+        {/* =================================================
+            BOTTOM LOGOUT AREA
+
+            marginTop:auto guarantees that this section
+            stays at the bottom of the sidebar.
+        ================================================== */}
+
+        <div
+          className="sidebar-footer"
+
+          style={{
+            marginTop: "auto",
+            flexShrink: 0,
+          }}
+        >
 
           <motion.button
             type="button"
+
             className="logout-button"
+
             onClick={handleLogout}
+
             whileHover={{
               scale: 1.02,
               y: -2,
             }}
+
             whileTap={{
               scale: 0.98,
             }}
           >
 
             <span className="sidebar-icon">
+
               <FaSignOutAlt />
+
             </span>
+
 
             <AnimatePresence mode="wait">
 
               {!collapsed && (
+
                 <motion.span
                   className="sidebar-label"
+
                   variants={textVariants}
+
                   initial="hidden"
+
                   animate="visible"
+
                   exit="exit"
                 >
+
                   Logout
+
                 </motion.span>
+
               )}
 
             </AnimatePresence>
@@ -600,7 +756,10 @@ const Sidebar = () => {
       </div>
 
     </motion.aside>
+
   );
+
 };
+
 
 export default Sidebar;
