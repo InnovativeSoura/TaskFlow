@@ -58,28 +58,28 @@ const Navbar = () => {
 
   const [darkMode, setDarkMode] = useState(getTheme);
 
-  /* ---------------- THEME ---------------- */
+  // /* ---------------- THEME ---------------- */
 
-  useEffect(() => {
-    const theme = darkMode ? "dark" : "light";
-    const html = document.documentElement;
-    const body = document.body;
+  // useEffect(() => {
+  //   const theme = darkMode ? "dark" : "light";
+  //   const html = document.documentElement;
+  //   const body = document.body;
 
-    html.dataset.theme = theme;
-    html.classList.toggle("dark-theme", darkMode);
-    html.classList.toggle("light-theme", !darkMode);
+  //   html.dataset.theme = theme;
+  //   html.classList.toggle("dark-theme", darkMode);
+  //   html.classList.toggle("light-theme", !darkMode);
 
-    body.classList.toggle("dark-theme", darkMode);
-    body.classList.toggle("light-theme", !darkMode);
+  //   body.classList.toggle("dark-theme", darkMode);
+  //   body.classList.toggle("light-theme", !darkMode);
 
-    localStorage.setItem("theme", theme);
+  //   localStorage.setItem("theme", theme);
 
-    window.dispatchEvent(
-      new CustomEvent("taskflow-theme-change", {
-        detail: { theme, darkMode },
-      })
-    );
-  }, [darkMode]);
+  //   window.dispatchEvent(
+  //     new CustomEvent("taskflow-theme-change", {
+  //       detail: { theme, darkMode },
+  //     })
+  //   );
+  // }, [darkMode]);
 
   /* ---------------- THEME SYNC ---------------- */
 
