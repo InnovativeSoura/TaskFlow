@@ -33,16 +33,15 @@ import {
   FaCalendarAlt,
   FaChevronLeft,
   FaChevronRight,
-  FaFolderOpen,
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
 
 import { useProjects } from "../context/ProjectContext";
 
-import "../styles/Projects.css";
+import MainLayout from "../layouts/MainLayout";
 
-import "../layouts/MainLayout.jsx";
+import "../styles/Projects.css";
 
 
 /* ==========================================================
@@ -86,58 +85,47 @@ const getProgress = (project) => {
 
 
 const getProjectStatus = (project) => {
-
   return (
     project?.status ||
     "Planning"
   );
-
 };
 
 
 const getProjectPriority = (project) => {
-
   return (
     project?.priority ||
     "Medium"
   );
-
 };
 
 
 const getProjectName = (project) => {
-
   return (
     project?.name ||
     project?.title ||
     "Untitled Project"
   );
-
 };
 
 
 const getProjectDescription = (project) => {
-
   return (
     project?.description ||
     "No project description available."
   );
-
 };
 
 
 const getProjectId = (project) => {
-
   return (
     project?._id ||
     project?.id
   );
-
 };
 
 
 const formatDate = (date) => {
-
   if (!date) {
     return "No due date";
   }
@@ -145,7 +133,11 @@ const formatDate = (date) => {
   const parsed =
     new Date(date);
 
-  if (Number.isNaN(parsed.getTime())) {
+  if (
+    Number.isNaN(
+      parsed.getTime()
+    )
+  ) {
     return "No due date";
   }
 
@@ -157,30 +149,25 @@ const formatDate = (date) => {
       year: "numeric",
     }
   );
-
 };
 
 
 const getStatusClass = (status) => {
-
   const value =
     String(status)
       .toLowerCase()
       .replace(/\s+/g, "-");
 
   return `status-${value}`;
-
 };
 
 
 const getPriorityClass = (priority) => {
-
   const value =
     String(priority)
       .toLowerCase();
 
   return `priority-${value}`;
-
 };
 
 
@@ -204,7 +191,6 @@ const ProjectCard = ({
     getProjectPriority(project);
 
   return (
-
     <motion.article
       className="project-card"
       layout
@@ -228,16 +214,12 @@ const ProjectCard = ({
       }}
     >
 
-      {/* ================================================
-                    CARD TOP
-      ================================================= */}
+      {/* CARD TOP */}
 
       <div className="project-card-top">
 
         <div className="project-icon">
-
           <FaLayerGroup />
-
         </div>
 
         <div className="project-card-actions">
@@ -269,9 +251,7 @@ const ProjectCard = ({
       </div>
 
 
-      {/* ================================================
-                    PROJECT TITLE
-      ================================================= */}
+      {/* PROJECT TITLE */}
 
       <div className="project-card-heading">
 
@@ -290,9 +270,7 @@ const ProjectCard = ({
       </div>
 
 
-      {/* ================================================
-                    BADGES
-      ================================================= */}
+      {/* BADGES */}
 
       <div className="project-badges">
 
@@ -312,9 +290,7 @@ const ProjectCard = ({
       </div>
 
 
-      {/* ================================================
-                    PROGRESS
-      ================================================= */}
+      {/* PROGRESS */}
 
       <div className="project-progress-section">
 
@@ -351,9 +327,7 @@ const ProjectCard = ({
       </div>
 
 
-      {/* ================================================
-                    CARD FOOTER
-      ================================================= */}
+      {/* CARD FOOTER */}
 
       <div className="project-card-footer">
 
@@ -380,9 +354,7 @@ const ProjectCard = ({
       </div>
 
     </motion.article>
-
   );
-
 };
 
 
@@ -406,7 +378,6 @@ const ProjectRow = ({
     getProjectPriority(project);
 
   return (
-
     <motion.div
       className="project-row"
       layout
@@ -517,9 +488,7 @@ const ProjectRow = ({
       </div>
 
     </motion.div>
-
   );
-
 };
 
 
@@ -542,7 +511,6 @@ const ProjectModal = ({
   }
 
   return (
-
     <AnimatePresence>
 
       <motion.div
@@ -587,7 +555,7 @@ const ProjectModal = ({
           }}
         >
 
-          {/* Modal Header */}
+          {/* MODAL HEADER */}
 
           <div className="project-modal-header">
 
@@ -626,7 +594,7 @@ const ProjectModal = ({
           </div>
 
 
-          {/* Form */}
+          {/* FORM */}
 
           <form
             className="project-form"
@@ -809,7 +777,7 @@ const ProjectModal = ({
             </div>
 
 
-            {/* Buttons */}
+            {/* BUTTONS */}
 
             <div className="project-modal-footer">
 
@@ -835,6 +803,7 @@ const ProjectModal = ({
                 ) : (
                   <>
                     <FaPlus />
+
                     {editingProject
                       ? "Save Changes"
                       : "Create Project"}
@@ -852,9 +821,7 @@ const ProjectModal = ({
       </motion.div>
 
     </AnimatePresence>
-
   );
-
 };
 
 
@@ -945,8 +912,6 @@ const Projects = () => {
         ...projects,
       ];
 
-      /* Search */
-
       const query =
         search
           .trim()
@@ -972,14 +937,10 @@ const Projects = () => {
                 name.includes(query) ||
                 description.includes(query)
               );
-
             }
           );
-
       }
 
-
-      /* Status */
 
       if (
         statusFilter !==
@@ -993,11 +954,8 @@ const Projects = () => {
                 project
               ) === statusFilter
           );
-
       }
 
-
-      /* Priority */
 
       if (
         priorityFilter !==
@@ -1011,11 +969,8 @@ const Projects = () => {
                 project
               ) === priorityFilter
           );
-
       }
 
-
-      /* Sorting */
 
       result.sort(
         (a, b) => {
@@ -1037,8 +992,8 @@ const Projects = () => {
                 0
               )
             );
-
           }
+
 
           if (
             sortBy ===
@@ -1057,8 +1012,8 @@ const Projects = () => {
                 0
               )
             );
-
           }
+
 
           if (
             sortBy ===
@@ -1070,8 +1025,8 @@ const Projects = () => {
             ).localeCompare(
               getProjectName(b)
             );
-
           }
+
 
           if (
             sortBy ===
@@ -1082,8 +1037,8 @@ const Projects = () => {
               getProgress(b) -
               getProgress(a)
             );
-
           }
+
 
           return 0;
 
@@ -1152,7 +1107,6 @@ const Projects = () => {
               status === "active" ||
               status === "in progress"
             );
-
           }
         ).length;
 
@@ -1248,7 +1202,6 @@ const Projects = () => {
     );
 
     setCurrentPage(1);
-
   };
 
 
@@ -1267,7 +1220,6 @@ const Projects = () => {
     });
 
     setShowModal(true);
-
   };
 
 
@@ -1321,7 +1273,6 @@ const Projects = () => {
     });
 
     setShowModal(true);
-
   };
 
 
@@ -1344,7 +1295,6 @@ const Projects = () => {
     setForm({
       ...EMPTY_FORM,
     });
-
   };
 
 
@@ -1367,7 +1317,6 @@ const Projects = () => {
       );
 
       return;
-
     }
 
     try {
@@ -1396,7 +1345,6 @@ const Projects = () => {
         toast.success(
           "Project created successfully."
         );
-
       }
 
       closeModal();
@@ -1418,7 +1366,6 @@ const Projects = () => {
       setSaving(false);
 
     }
-
   };
 
 
@@ -1464,9 +1411,7 @@ const Projects = () => {
         error?.response?.data?.message ||
         "Unable to delete project."
       );
-
     }
-
   };
 
 
@@ -1476,758 +1421,644 @@ const Projects = () => {
 
   return (
 
-    <div className="projects-page">
+    <MainLayout>
 
-      {/* ==================================================
+      <div className="projects-page">
+
+        {/* ==================================================
                     BACKGROUND EFFECTS
-      ================================================== */}
+        ================================================== */}
 
-      <div className="projects-background">
+        <div className="projects-background">
 
-        <div className="projects-bg-grid" />
+          <div className="projects-bg-grid" />
 
-        <div className="projects-bg-orb orb-one" />
+          <div className="projects-bg-orb orb-one" />
 
-        <div className="projects-bg-orb orb-two" />
+          <div className="projects-bg-orb orb-two" />
 
-        <div className="projects-bg-glow" />
+          <div className="projects-bg-glow" />
 
-      </div>
+        </div>
 
 
-      {/* ==================================================
+        {/* ==================================================
                     MAIN CONTENT
-      ================================================== */}
-
-      <main className="projects-content">
-
-
-        {/* ==================================================
-                      HERO
         ================================================== */}
 
-        <motion.section
-          className="projects-hero"
-          initial={{
-            opacity: 0,
-            y: 18,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-        >
+        <main className="projects-content">
 
-          <div className="hero-main">
 
-            <span className="hero-badge">
+          {/* ==================================================
+                        HERO
+          ================================================== */}
 
-              <FaRocket />
+          <motion.section
+            className="projects-hero"
+            initial={{
+              opacity: 0,
+              y: 18,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+          >
 
-              PREMIUM WORKSPACE
+            <div className="hero-main">
 
-            </span>
+              <span className="hero-badge">
 
-            <h1>
+                <FaRocket />
 
-              Welcome back,
+                PREMIUM WORKSPACE
 
-              <span>
-                Souradipta Patra
               </span>
 
-            </h1>
+              <h1>
 
-            <p>
-
-              Organize projects, collaborate
-              with your team, track progress,
-              and manage everything from one
-              intelligent workspace.
-
-            </p>
-
-          </div>
-
-
-          <div className="workspace-score">
-
-            <div className="score-heading">
-
-              <span>
-                Workspace Score
-              </span>
-
-              <FaChartLine />
-
-            </div>
-
-            <strong>
-              {statistics.averageProgress}%
-            </strong>
-
-            <div className="score-progress">
-
-              <span
-                style={{
-                  width: `${statistics.averageProgress}%`,
-                }}
-              />
-
-            </div>
-
-            <div className="score-mini-grid">
-
-              <div>
-
-                <strong>
-                  {statistics.completed > 0
-                    ? Math.round(
-                        (statistics.completed /
-                          Math.max(
-                            statistics.total,
-                            1
-                          )) *
-                          100
-                      )
-                    : 0}
-                  %
-                </strong>
+                Welcome back,
 
                 <span>
-                  Completion
+                  Souradipta Patra
                 </span>
 
-              </div>
+              </h1>
 
-              <div>
+              <p>
 
-                <strong>
-                  {statistics.active > 0
-                    ? Math.round(
-                        (statistics.active /
-                          Math.max(
-                            statistics.total,
-                            1
-                          )) *
-                          100
-                      )
-                    : 0}
-                  %
-                </strong>
+                Organize projects, collaborate
+                with your team, track progress,
+                and manage everything from one
+                intelligent workspace.
+
+              </p>
+
+            </div>
+
+
+            <div className="workspace-score">
+
+              <div className="score-heading">
 
                 <span>
-                  Active
+                  Workspace Score
                 </span>
 
+                <FaChartLine />
+
               </div>
-
-            </div>
-
-          </div>
-
-        </motion.section>
-
-
-        {/* ==================================================
-                  QUICK ACTION CARDS
-        ================================================== */}
-
-        <motion.section
-          className="project-shortcuts"
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.08,
-          }}
-        >
-
-          <button
-            type="button"
-            className="shortcut-card"
-          >
-
-            <span className="shortcut-icon">
-              <FaLayerGroup />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                All Projects
-              </strong>
-
-              <small>
-                View and manage all projects
-              </small>
-
-            </span>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="shortcut-card create"
-            onClick={
-              openCreateModal
-            }
-          >
-
-            <span className="shortcut-icon">
-              <FaRocket />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                Create Project
-              </strong>
-
-              <small>
-                Start a new project from scratch
-              </small>
-
-            </span>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="shortcut-card"
-          >
-
-            <span className="shortcut-icon">
-              <FaUsers />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                Team Collaboration
-              </strong>
-
-              <small>
-                Invite team members and collaborate
-              </small>
-
-            </span>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="shortcut-card"
-          >
-
-            <span className="shortcut-icon">
-              <FaCheckCircle />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                Track Progress
-              </strong>
-
-              <small>
-                Monitor project progress and milestones
-              </small>
-
-            </span>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="shortcut-card"
-          >
-
-            <span className="shortcut-icon">
-              <FaArchive />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                Project Templates
-              </strong>
-
-              <small>
-                Use templates for quick setup
-              </small>
-
-            </span>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="shortcut-card"
-          >
-
-            <span className="shortcut-icon">
-              <FaChartLine />
-            </span>
-
-            <span className="shortcut-text">
-
-              <strong>
-                Analytics
-              </strong>
-
-              <small>
-                View insights and project analytics
-              </small>
-
-            </span>
-
-          </button>
-
-        </motion.section>
-
-
-        {/* ==================================================
-                    STATISTICS
-        ================================================== */}
-
-        <motion.section
-          className="project-statistics"
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.14,
-          }}
-        >
-
-          <div className="project-stat-card">
-
-            <div className="stat-icon purple">
-              <FaChartLine />
-            </div>
-
-            <div className="stat-content">
 
               <strong>
                 {statistics.averageProgress}%
               </strong>
 
-              <span>
-                Average Progress
-              </span>
+              <div className="score-progress">
+
+                <span
+                  style={{
+                    width: `${statistics.averageProgress}%`,
+                  }}
+                />
+
+              </div>
+
+              <div className="score-mini-grid">
+
+                <div>
+
+                  <strong>
+                    {statistics.completed > 0
+                      ? Math.round(
+                          (statistics.completed /
+                            Math.max(
+                              statistics.total,
+                              1
+                            )) *
+                            100
+                        )
+                      : 0}
+                    %
+                  </strong>
+
+                  <span>
+                    Completion
+                  </span>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {statistics.active > 0
+                      ? Math.round(
+                          (statistics.active /
+                            Math.max(
+                              statistics.total,
+                              1
+                            )) *
+                            100
+                        )
+                      : 0}
+                    %
+                  </strong>
+
+                  <span>
+                    Active
+                  </span>
+
+                </div>
+
+              </div>
 
             </div>
 
-            <div className="stat-sparkline">
-              ╱╲_╱╲╱
-            </div>
-
-          </div>
-
-
-          <div className="project-stat-card">
-
-            <div className="stat-icon orange">
-              <FaExclamationTriangle />
-            </div>
-
-            <div className="stat-content">
-
-              <strong>
-                {statistics.highPriority}
-              </strong>
-
-              <span>
-                High Priority
-              </span>
-
-            </div>
-
-            <div className="stat-sparkline">
-              ╱╲_╱╲╱
-            </div>
-
-          </div>
-
-
-          <div className="project-stat-card">
-
-            <div className="stat-icon cyan">
-              <FaClock />
-            </div>
-
-            <div className="stat-content">
-
-              <strong>
-                {statistics.needAttention}
-              </strong>
-
-              <span>
-                Need Attention
-              </span>
-
-            </div>
-
-            <div className="stat-sparkline">
-              ╱╲_╱╲╱
-            </div>
-
-          </div>
-
-        </motion.section>
-
-
-        {/* ==================================================
-                    FILTER TOOLBAR
-        ================================================== */}
-
-        <motion.section
-          className="projects-filter-panel"
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.18,
-          }}
-        >
-
-          <div className="filter-main">
-
-            {/* Search */}
-
-            <div className="project-search">
-
-              <FaSearch />
-
-              <input
-                type="text"
-                placeholder="Search projects..."
-                value={search}
-                onChange={(event) => {
-
-                  setSearch(
-                    event.target.value
-                  );
-
-                  setCurrentPage(1);
-
-                }}
-              />
-
-              {search && (
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSearch("")
-                  }
-                >
-                  <FaTimes />
-                </button>
-
-              )}
-
-            </div>
-
-
-            {/* Status */}
-
-            <div className="filter-control">
-
-              <FaFilter />
-
-              <select
-                value={statusFilter}
-                onChange={(event) => {
-
-                  setStatusFilter(
-                    event.target.value
-                  );
-
-                  setCurrentPage(1);
-
-                }}
-              >
-
-                <option>
-                  All Status
-                </option>
-
-                <option>
-                  Planning
-                </option>
-
-                <option>
-                  Active
-                </option>
-
-                <option>
-                  In Progress
-                </option>
-
-                <option>
-                  Completed
-                </option>
-
-                <option>
-                  Archived
-                </option>
-
-              </select>
-
-            </div>
-
-
-            {/* Priority */}
-
-            <div className="filter-control">
-
-              <FaFlag />
-
-              <select
-                value={priorityFilter}
-                onChange={(event) => {
-
-                  setPriorityFilter(
-                    event.target.value
-                  );
-
-                  setCurrentPage(1);
-
-                }}
-              >
-
-                <option>
-                  All Priority
-                </option>
-
-                <option>
-                  Low
-                </option>
-
-                <option>
-                  Medium
-                </option>
-
-                <option>
-                  High
-                </option>
-
-              </select>
-
-            </div>
-
-
-            {/* Sort */}
-
-            <div className="filter-control">
-
-              <FaSortAmountDown />
-
-              <select
-                value={sortBy}
-                onChange={(event) =>
-                  setSortBy(
-                    event.target.value
-                  )
-                }
-              >
-
-                <option>
-                  Newest
-                </option>
-
-                <option>
-                  Oldest
-                </option>
-
-                <option>
-                  Name
-                </option>
-
-                <option>
-                  Progress
-                </option>
-
-              </select>
-
-            </div>
-
-          </div>
-
-
-          <button
-            type="button"
-            className="clear-filters"
-            onClick={
-              clearFilters
-            }
+          </motion.section>
+
+
+          {/* ==================================================
+                    QUICK ACTION CARDS
+          ================================================== */}
+
+          <motion.section
+            className="project-shortcuts"
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.08,
+            }}
           >
 
-            <FaTimes />
-
-            Clear Filters
-
-          </button>
-
-        </motion.section>
-
-
-        {/* ==================================================
-                    PROJECTS HEADER
-        ================================================== */}
-
-        <section className="projects-list-section">
-
-          <div className="projects-list-header">
-
-            <div className="projects-count">
-
-              <strong>
-                {filteredProjects.length}
-              </strong>
-
-              <span>
-                Projects
-              </span>
-
-            </div>
-
-
-            <div className="projects-header-actions">
-
-              <button
-                type="button"
-                className="create-project-button"
-                onClick={
-                  openCreateModal
-                }
-              >
-
-                <FaPlus />
-
-                Create Project
-
-              </button>
-
-
-              <div className="view-toggle">
-
-                <button
-                  type="button"
-                  className={
-                    viewMode ===
-                    "grid"
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() =>
-                    setViewMode(
-                      "grid"
-                    )
-                  }
-                  title="Grid view"
-                >
-                  <FaThLarge />
-                </button>
-
-                <button
-                  type="button"
-                  className={
-                    viewMode ===
-                    "list"
-                      ? "active"
-                      : ""
-                  }
-                  onClick={() =>
-                    setViewMode(
-                      "list"
-                    )
-                  }
-                  title="List view"
-                >
-                  <FaList />
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* =================================================
-                        PROJECT CONTENT
-          ================================================= */}
-
-          {loading ? (
-
-            <div className="projects-loading">
-
-              <div className="loading-spinner" />
-
-              <p>
-                Loading projects...
-              </p>
-
-            </div>
-
-          ) : paginatedProjects.length === 0 ? (
-
-            <motion.div
-              className="projects-empty"
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+            <button
+              type="button"
+              className="shortcut-card"
             >
 
-              <div className="empty-project-icon">
+              <span className="shortcut-icon">
+                <FaLayerGroup />
+              </span>
 
+              <span className="shortcut-text">
+
+                <strong>
+                  All Projects
+                </strong>
+
+                <small>
+                  View and manage all projects
+                </small>
+
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              className="shortcut-card create"
+              onClick={
+                openCreateModal
+              }
+            >
+
+              <span className="shortcut-icon">
                 <FaRocket />
+              </span>
+
+              <span className="shortcut-text">
+
+                <strong>
+                  Create Project
+                </strong>
+
+                <small>
+                  Start a new project from scratch
+                </small>
+
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              className="shortcut-card"
+            >
+
+              <span className="shortcut-icon">
+                <FaUsers />
+              </span>
+
+              <span className="shortcut-text">
+
+                <strong>
+                  Team Collaboration
+                </strong>
+
+                <small>
+                  Invite team members and collaborate
+                </small>
+
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              className="shortcut-card"
+            >
+
+              <span className="shortcut-icon">
+                <FaCheckCircle />
+              </span>
+
+              <span className="shortcut-text">
+
+                <strong>
+                  Track Progress
+                </strong>
+
+                <small>
+                  Monitor project progress and milestones
+                </small>
+
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              className="shortcut-card"
+            >
+
+              <span className="shortcut-icon">
+                <FaArchive />
+              </span>
+
+              <span className="shortcut-text">
+
+                <strong>
+                  Project Templates
+                </strong>
+
+                <small>
+                  Use templates for quick setup
+                </small>
+
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              className="shortcut-card"
+            >
+
+              <span className="shortcut-icon">
+                <FaChartLine />
+              </span>
+
+              <span className="shortcut-text">
+
+                <strong>
+                  Analytics
+                </strong>
+
+                <small>
+                  View insights and project analytics
+                </small>
+
+              </span>
+
+            </button>
+
+          </motion.section>
+
+
+          {/* ==================================================
+                    STATISTICS
+          ================================================== */}
+
+          <motion.section
+            className="project-statistics"
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.14,
+            }}
+          >
+
+            <div className="project-stat-card">
+
+              <div className="stat-icon purple">
+                <FaChartLine />
+              </div>
+
+              <div className="stat-content">
+
+                <strong>
+                  {statistics.averageProgress}%
+                </strong>
+
+                <span>
+                  Average Progress
+                </span>
 
               </div>
 
-              <h2>
-                No Projects Yet
-              </h2>
+              <div className="stat-sparkline">
+                ╱╲_╱╲╱
+              </div>
 
-              <p>
-                {projects.length === 0
-                  ? "Create your first project to start managing your team's work."
-                  : "No projects match your current filters."}
-              </p>
+            </div>
 
-              {projects.length === 0 ? (
+
+            <div className="project-stat-card">
+
+              <div className="stat-icon orange">
+                <FaExclamationTriangle />
+              </div>
+
+              <div className="stat-content">
+
+                <strong>
+                  {statistics.highPriority}
+                </strong>
+
+                <span>
+                  High Priority
+                </span>
+
+              </div>
+
+              <div className="stat-sparkline">
+                ╱╲_╱╲╱
+              </div>
+
+            </div>
+
+
+            <div className="project-stat-card">
+
+              <div className="stat-icon cyan">
+                <FaClock />
+              </div>
+
+              <div className="stat-content">
+
+                <strong>
+                  {statistics.needAttention}
+                </strong>
+
+                <span>
+                  Need Attention
+                </span>
+
+              </div>
+
+              <div className="stat-sparkline">
+                ╱╲_╱╲╱
+              </div>
+
+            </div>
+
+          </motion.section>
+
+
+          {/* ==================================================
+                    FILTER TOOLBAR
+          ================================================== */}
+
+          <motion.section
+            className="projects-filter-panel"
+            initial={{
+              opacity: 0,
+              y: 15,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.18,
+            }}
+          >
+
+            <div className="filter-main">
+
+              <div className="project-search">
+
+                <FaSearch />
+
+                <input
+                  type="text"
+                  placeholder="Search projects..."
+                  value={search}
+                  onChange={(event) => {
+
+                    setSearch(
+                      event.target.value
+                    );
+
+                    setCurrentPage(1);
+
+                  }}
+                />
+
+                {search && (
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSearch("")
+                    }
+                  >
+                    <FaTimes />
+                  </button>
+
+                )}
+
+              </div>
+
+
+              <div className="filter-control">
+
+                <FaFilter />
+
+                <select
+                  value={statusFilter}
+                  onChange={(event) => {
+
+                    setStatusFilter(
+                      event.target.value
+                    );
+
+                    setCurrentPage(1);
+
+                  }}
+                >
+
+                  <option>
+                    All Status
+                  </option>
+
+                  <option>
+                    Planning
+                  </option>
+
+                  <option>
+                    Active
+                  </option>
+
+                  <option>
+                    In Progress
+                  </option>
+
+                  <option>
+                    Completed
+                  </option>
+
+                  <option>
+                    Archived
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div className="filter-control">
+
+                <FaFlag />
+
+                <select
+                  value={priorityFilter}
+                  onChange={(event) => {
+
+                    setPriorityFilter(
+                      event.target.value
+                    );
+
+                    setCurrentPage(1);
+
+                  }}
+                >
+
+                  <option>
+                    All Priority
+                  </option>
+
+                  <option>
+                    Low
+                  </option>
+
+                  <option>
+                    Medium
+                  </option>
+
+                  <option>
+                    High
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div className="filter-control">
+
+                <FaSortAmountDown />
+
+                <select
+                  value={sortBy}
+                  onChange={(event) =>
+                    setSortBy(
+                      event.target.value
+                    )
+                  }
+                >
+
+                  <option>
+                    Newest
+                  </option>
+
+                  <option>
+                    Oldest
+                  </option>
+
+                  <option>
+                    Name
+                  </option>
+
+                  <option>
+                    Progress
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <button
+              type="button"
+              className="clear-filters"
+              onClick={
+                clearFilters
+              }
+            >
+
+              <FaTimes />
+
+              Clear Filters
+
+            </button>
+
+          </motion.section>
+
+
+          {/* ==================================================
+                    PROJECTS HEADER
+          ================================================== */}
+
+          <section className="projects-list-section">
+
+            <div className="projects-list-header">
+
+              <div className="projects-count">
+
+                <strong>
+                  {filteredProjects.length}
+                </strong>
+
+                <span>
+                  Projects
+                </span>
+
+              </div>
+
+
+              <div className="projects-header-actions">
 
                 <button
                   type="button"
-                  className="empty-create-button"
+                  className="create-project-button"
                   onClick={
                     openCreateModal
                   }
@@ -2239,221 +2070,332 @@ const Projects = () => {
 
                 </button>
 
-              ) : (
 
-                <button
-                  type="button"
-                  className="empty-create-button secondary"
-                  onClick={
-                    clearFilters
-                  }
-                >
+                <div className="view-toggle">
 
-                  <FaTimes />
+                  <button
+                    type="button"
+                    className={
+                      viewMode ===
+                      "grid"
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      setViewMode(
+                        "grid"
+                      )
+                    }
+                    title="Grid view"
+                  >
+                    <FaThLarge />
+                  </button>
 
-                  Clear Filters
+                  <button
+                    type="button"
+                    className={
+                      viewMode ===
+                      "list"
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      setViewMode(
+                        "list"
+                      )
+                    }
+                    title="List view"
+                  >
+                    <FaList />
+                  </button>
 
-                </button>
-
-              )}
-
-            </motion.div>
-
-          ) : viewMode === "grid" ? (
-
-            <motion.div
-              className="projects-grid"
-              layout
-            >
-
-              <AnimatePresence mode="popLayout">
-
-                {paginatedProjects.map(
-                  (project) => (
-
-                    <ProjectCard
-                      key={
-                        getProjectId(
-                          project
-                        )
-                      }
-                      project={
-                        project
-                      }
-                      onEdit={
-                        openEditModal
-                      }
-                      onDelete={
-                        handleDelete
-                      }
-                    />
-
-                  )
-                )}
-
-              </AnimatePresence>
-
-            </motion.div>
-
-          ) : (
-
-            <motion.div
-              className="projects-list"
-              layout
-            >
-
-              <div className="project-row-heading">
-
-                <span>
-                  Project
-                </span>
-
-                <span>
-                  Status
-                </span>
-
-                <span>
-                  Priority
-                </span>
-
-                <span>
-                  Progress
-                </span>
-
-                <span>
-                  Due Date
-                </span>
-
-                <span>
-                  Actions
-                </span>
+                </div>
 
               </div>
 
-              <AnimatePresence>
-
-                {paginatedProjects.map(
-                  (project) => (
-
-                    <ProjectRow
-                      key={
-                        getProjectId(
-                          project
-                        )
-                      }
-                      project={
-                        project
-                      }
-                      onEdit={
-                        openEditModal
-                      }
-                      onDelete={
-                        handleDelete
-                      }
-                    />
-
-                  )
-                )}
-
-              </AnimatePresence>
-
-            </motion.div>
-
-          )}
-
-
-          {/* =================================================
-                        PAGINATION
-          ================================================= */}
-
-          {filteredProjects.length >
-            ITEMS_PER_PAGE && (
-
-            <div className="projects-pagination">
-
-              <button
-                type="button"
-                disabled={
-                  safePage === 1
-                }
-                onClick={() =>
-                  setCurrentPage(
-                    (page) =>
-                      Math.max(
-                        1,
-                        page - 1
-                      )
-                  )
-                }
-              >
-                <FaChevronLeft />
-              </button>
-
-
-              <span>
-                Page{" "}
-                <strong>
-                  {safePage}
-                </strong>{" "}
-                of{" "}
-                <strong>
-                  {totalPages}
-                </strong>
-              </span>
-
-
-              <button
-                type="button"
-                disabled={
-                  safePage ===
-                  totalPages
-                }
-                onClick={() =>
-                  setCurrentPage(
-                    (page) =>
-                      Math.min(
-                        totalPages,
-                        page + 1
-                      )
-                  )
-                }
-              >
-                <FaChevronRight />
-              </button>
-
             </div>
 
-          )}
 
-        </section>
+            {/* PROJECT CONTENT */}
 
-      </main>
+            {loading ? (
+
+              <div className="projects-loading">
+
+                <div className="loading-spinner" />
+
+                <p>
+                  Loading projects...
+                </p>
+
+              </div>
+
+            ) : paginatedProjects.length === 0 ? (
+
+              <motion.div
+                className="projects-empty"
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+              >
+
+                <div className="empty-project-icon">
+
+                  <FaRocket />
+
+                </div>
+
+                <h2>
+                  No Projects Yet
+                </h2>
+
+                <p>
+
+                  {projects.length === 0
+                    ? "Create your first project to start managing your team's work."
+                    : "No projects match your current filters."}
+
+                </p>
+
+                {projects.length === 0 ? (
+
+                  <button
+                    type="button"
+                    className="empty-create-button"
+                    onClick={
+                      openCreateModal
+                    }
+                  >
+
+                    <FaPlus />
+
+                    Create Project
+
+                  </button>
+
+                ) : (
+
+                  <button
+                    type="button"
+                    className="empty-create-button secondary"
+                    onClick={
+                      clearFilters
+                    }
+                  >
+
+                    <FaTimes />
+
+                    Clear Filters
+
+                  </button>
+
+                )}
+
+              </motion.div>
+
+            ) : viewMode === "grid" ? (
+
+              <motion.div
+                className="projects-grid"
+                layout
+              >
+
+                <AnimatePresence mode="popLayout">
+
+                  {paginatedProjects.map(
+                    (project) => (
+
+                      <ProjectCard
+                        key={
+                          getProjectId(
+                            project
+                          )
+                        }
+                        project={
+                          project
+                        }
+                        onEdit={
+                          openEditModal
+                        }
+                        onDelete={
+                          handleDelete
+                        }
+                      />
+
+                    )
+                  )}
+
+                </AnimatePresence>
+
+              </motion.div>
+
+            ) : (
+
+              <motion.div
+                className="projects-list"
+                layout
+              >
+
+                <div className="project-row-heading">
+
+                  <span>
+                    Project
+                  </span>
+
+                  <span>
+                    Status
+                  </span>
+
+                  <span>
+                    Priority
+                  </span>
+
+                  <span>
+                    Progress
+                  </span>
+
+                  <span>
+                    Due Date
+                  </span>
+
+                  <span>
+                    Actions
+                  </span>
+
+                </div>
+
+                <AnimatePresence>
+
+                  {paginatedProjects.map(
+                    (project) => (
+
+                      <ProjectRow
+                        key={
+                          getProjectId(
+                            project
+                          )
+                        }
+                        project={
+                          project
+                        }
+                        onEdit={
+                          openEditModal
+                        }
+                        onDelete={
+                          handleDelete
+                        }
+                      />
+
+                    )
+                  )}
+
+                </AnimatePresence>
+
+              </motion.div>
+
+            )}
 
 
-      {/* ==================================================
+            {/* PAGINATION */}
+
+            {filteredProjects.length >
+              ITEMS_PER_PAGE && (
+
+              <div className="projects-pagination">
+
+                <button
+                  type="button"
+                  disabled={
+                    safePage === 1
+                  }
+                  onClick={() =>
+                    setCurrentPage(
+                      (page) =>
+                        Math.max(
+                          1,
+                          page - 1
+                        )
+                    )
+                  }
+                >
+                  <FaChevronLeft />
+                </button>
+
+
+                <span>
+
+                  Page{" "}
+
+                  <strong>
+                    {safePage}
+                  </strong>
+
+                  {" "}of{" "}
+
+                  <strong>
+                    {totalPages}
+                  </strong>
+
+                </span>
+
+
+                <button
+                  type="button"
+                  disabled={
+                    safePage ===
+                    totalPages
+                  }
+                  onClick={() =>
+                    setCurrentPage(
+                      (page) =>
+                        Math.min(
+                          totalPages,
+                          page + 1
+                        )
+                    )
+                  }
+                >
+                  <FaChevronRight />
+                </button>
+
+              </div>
+
+            )}
+
+          </section>
+
+        </main>
+
+
+        {/* ==================================================
                     PROJECT MODAL
-      ================================================== */}
+        ================================================== */}
 
-      <ProjectModal
-        open={showModal}
-        editingProject={
-          editingProject
-        }
-        form={form}
-        setForm={setForm}
-        saving={saving}
-        onClose={
-          closeModal
-        }
-        onSubmit={
-          handleSubmit
-        }
-      />
+        <ProjectModal
+          open={showModal}
+          editingProject={
+            editingProject
+          }
+          form={form}
+          setForm={setForm}
+          saving={saving}
+          onClose={
+            closeModal
+          }
+          onSubmit={
+            handleSubmit
+          }
+        />
 
-    </div>
+      </div>
 
+    </MainLayout>
   );
-
 };
 
 
