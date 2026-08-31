@@ -1182,3 +1182,113 @@
 
     box-shadow: none !important;
 }
+
+/* ==========================================================
+            CLEAN PREMIUM TASKFLOW LOGO
+            NO DARK SPOTS / NO OVERLAY
+========================================================== */
+
+.workspace-logo {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    /* Clean purple gradient */
+    background: linear-gradient(
+        135deg,
+        #9b8aff 0%,
+        #7b61ff 50%,
+        #6548ee 100%
+    ) !important;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+
+    /* Completely remove unwanted layers */
+    border: none !important;
+    outline: none !important;
+
+    /* Clean premium shadow */
+    box-shadow:
+        0 8px 22px rgba(123, 97, 255, 0.30);
+
+    /* Prevent anything from appearing inside */
+    overflow: hidden;
+
+    isolation: isolate;
+
+    z-index: 5;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* ==========================================================
+            IMPORTANT — REMOVE ALL LOGO OVERLAYS
+========================================================== */
+
+.workspace-logo::before,
+.workspace-logo::after {
+    content: none !important;
+
+    display: none !important;
+
+    background: none !important;
+
+    box-shadow: none !important;
+
+    filter: none !important;
+
+    opacity: 0 !important;
+}
+
+
+/* ==========================================================
+                    LOGO HOVER
+========================================================== */
+
+.workspace-button:hover .workspace-logo {
+    transform: translateY(-1px) scale(1.03);
+
+    box-shadow:
+        0 10px 28px rgba(123, 97, 255, 0.38);
+}
+
+
+/* ==========================================================
+                LOGO STATUS DOT
+========================================================== */
+
+.workspace-status {
+    position: absolute;
+
+    right: 3px;
+    bottom: 3px;
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #31d67b !important;
+
+    border: 2px solid #7b61ff !important;
+
+    box-shadow:
+        0 0 7px rgba(49, 214, 123, 0.65);
+
+    z-index: 10;
+}
