@@ -2,1323 +2,1183 @@
                     TASKFLOW SIDEBAR
 ========================================================== */
 
-:root{
+:root {
+    --sidebar-width: 280px;
+    --sidebar-collapse-width: 88px;
 
-    --sidebar-width:280px;
-    --sidebar-collapse-width:88px;
+    --sidebar-bg: #0f1724;
+    --sidebar-card: #1a2233;
 
-    --sidebar-bg:#0f1724;
-    --sidebar-card:#1a2233;
+    --primary: #7b61ff;
+    --primary-light: #9c8bff;
 
-    --primary:#7B61FF;
-    --primary-light:#9C8BFF;
+    --border: rgba(255, 255, 255, 0.08);
 
-    --border:rgba(255,255,255,.08);
+    --text: #ffffff;
+    --text-secondary: #96a2c7;
 
-    --text:#ffffff;
-    --text-secondary:#96A2C7;
+    --success: #31d67b;
 
-    --success:#31d67b;
-
-    --transition:.35s ease;
-
+    --transition: 0.35s ease;
 }
+
 
 /* ==========================================================
                     SIDEBAR
 ========================================================== */
 
-.sidebar{
+.sidebar {
+    position: fixed;
 
-    position:fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
 
-    top:0;
-    left:0;
-    bottom:0;
-
-    width:var(--sidebar-width);
+    width: var(--sidebar-width);
 
     background:
         linear-gradient(
             180deg,
-            #121B2B 0%,
-            #0E1522 55%,
-            #0B1220 100%
+            #121b2b 0%,
+            #101827 45%,
+            #0d1523 100%
         );
 
-    /* REMOVE DARK BORDER */
-    border-right:none;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
 
-    z-index:999;
+    z-index: 999;
 
-    overflow:hidden;
+    overflow: hidden;
 
-    transition:width .35s ease;
-
+    transition: width 0.35s ease;
 }
+
+
+/* ==========================================================
+                    SIDEBAR INNER
+========================================================== */
+
+.sidebar-inner {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    border: none !important;
+}
+
 
 /* ==========================================================
                 WORKSPACE CARD
 ========================================================== */
 
-.workspace-card{
+.workspace-card {
+    width: 100%;
 
-    margin-bottom:12px;
+    margin: 0 0 12px;
 
+    flex-shrink: 0;
 }
 
-.workspace-button{
 
-    width:100%;
+/* ==========================================================
+                WORKSPACE BUTTON
+========================================================== */
 
-    display:flex;
+.workspace-button {
+    width: 100%;
 
-    justify-content:space-between;
+    min-height: 62px;
 
-    align-items:center;
+    display: flex;
 
-    padding:14px;
+    align-items: center;
+    justify-content: space-between;
 
-    border:none;
+    padding: 7px 8px;
 
-    border-radius:18px;
+    border: none !important;
+    outline: none;
+
+    border-radius: 16px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(123,97,255,.18),
-            rgba(123,97,255,.08)
+            rgba(123, 97, 255, 0.22),
+            rgba(123, 97, 255, 0.08)
         );
 
-    border:1px solid rgba(123,97,255,.15);
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.workspace-button:hover{
-
-    transform:translateY(-2px);
-
     box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
-        0 8px 25px rgba(123,97,255,.25);
+    cursor: pointer;
 
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-.workspace-left{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-}
-
-.workspace-logo{
-
-    width:50px;
-
-    height:50px;
-
-    border-radius:16px;
-
+.workspace-button:hover {
     background:
         linear-gradient(
             135deg,
-            #8D7CFF,
-            #684DFF
+            rgba(123, 97, 255, 0.30),
+            rgba(123, 97, 255, 0.12)
         );
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:18px;
-
-    font-weight:700;
-
-    position:relative;
-
-    flex-shrink:0;
+    transform: translateY(-1px);
 
     box-shadow:
-
-        0 0 22px rgba(123,97,255,.35);
-
+        0 8px 24px rgba(123, 97, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.workspace-status{
-
-    position:absolute;
-
-    right:3px;
-
-    bottom:3px;
-
-    width:10px;
-
-    height:10px;
-
-    border-radius:50%;
-
-    background:var(--success);
-
-    border:2px solid #1A2233;
-
+.workspace-button:focus {
+    outline: none;
 }
 
-.workspace-content{
 
-    display:flex;
+/* ==========================================================
+                WORKSPACE LEFT
+========================================================== */
 
-    flex-direction:column;
+.workspace-left {
+    display: flex;
 
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 0;
 }
 
-.workspace-content h3{
 
-    font-size:16px;
+/* ==========================================================
+                CLEAN TASKFLOW LOGO
+========================================================== */
 
-    color:#fff;
+/*
+   IMPORTANT:
+   No ::before
+   No ::after
+   No dark overlays
+   No internal pseudo-elements
 
-    margin:0;
+   This prevents the black/dark spots that were appearing
+   around the TF logo.
+*/
 
-    font-weight:700;
+.workspace-logo {
+    width: 48px;
+    height: 48px;
 
+    min-width: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #a494ff 0%,
+            #7b61ff 48%,
+            #6248ed 100%
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -0.6px;
+
+    border: none !important;
+    outline: none !important;
+
+    box-shadow:
+        0 7px 20px rgba(123, 97, 255, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.30);
+
+    isolation: isolate;
+
+    flex-shrink: 0;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-.workspace-content p{
 
-    margin-top:3px;
+/* Clean logo hover */
 
-    color:var(--text-secondary);
+.workspace-button:hover .workspace-logo {
+    transform: scale(1.035);
 
-    font-size:12px;
-
+    box-shadow:
+        0 9px 26px rgba(123, 97, 255, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
-.workspace-arrow{
 
-    width:34px;
+/* ==========================================================
+                WORKSPACE STATUS
+========================================================== */
 
-    height:34px;
+.workspace-status {
+    position: absolute;
 
-    display:flex;
+    right: 2px;
+    bottom: 2px;
 
-    justify-content:center;
+    width: 9px;
+    height: 9px;
 
-    align-items:center;
+    border-radius: 50%;
 
-    border-radius:10px;
+    background: #31d67b;
 
-    background:rgba(255,255,255,.05);
+    border: 2px solid #684ff2;
 
-    color:#C9BEFF;
+    z-index: 3;
 
+    box-shadow:
+        0 0 7px rgba(49, 214, 123, 0.55);
 }
 
-.workspace-arrow:hover{
 
-    background:rgba(123,97,255,.18);
+/* ==========================================================
+                WORKSPACE CONTENT
+========================================================== */
 
+.workspace-content {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
 }
 
-.sidebar.collapsed .workspace-button{
+.workspace-content h3 {
+    margin: 0;
 
-    justify-content:center;
+    color: #ffffff;
 
-    padding:12px;
+    font-size: 16px;
 
+    font-weight: 700;
+
+    line-height: 1.15;
 }
 
-.sidebar.collapsed .workspace-left{
+.workspace-content p {
+    margin: 3px 0 0;
 
-    justify-content:center;
+    color: var(--text-secondary);
 
+    font-size: 11px;
+
+    line-height: 1;
 }
 
-.sidebar.collapsed .workspace-arrow{
 
-    display:none;
+/* ==========================================================
+                WORKSPACE ARROW
+========================================================== */
 
+.workspace-arrow {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    color: #c9beff;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
 }
+
+.workspace-arrow:hover {
+    background: rgba(123, 97, 255, 0.18);
+
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+                COLLAPSED WORKSPACE
+========================================================== */
+
+.sidebar.collapsed .workspace-button {
+    justify-content: center;
+
+    padding: 7px;
+}
+
+.sidebar.collapsed .workspace-left {
+    justify-content: center;
+}
+
+.sidebar.collapsed .workspace-arrow {
+    display: none;
+}
+
 
 /* ==========================================================
                     PROFILE CARD
 ========================================================== */
 
-.profile-card{
+.profile-card {
+    width: 100%;
 
-    display:flex;
+    min-height: 66px;
 
-    align-items:center;
+    display: flex;
 
-    justify-content:space-between;
+    align-items: center;
+    justify-content: space-between;
 
-    padding:10px 12px;
+    box-sizing: border-box;
 
-    margin-bottom:18px;
+    padding: 10px 11px;
 
-    min-height:66px;
+    margin-bottom: 16px;
 
-    border-radius:16px;
+    border-radius: 15px;
 
-    background:rgba(255,255,255,.04);
+    background: rgba(255, 255, 255, 0.035);
 
-    border:1px solid rgba(255,255,255,.07);
-
-    transition:all .30s ease;
-
-}
-
-.profile-card:hover{
-
-    background:rgba(123,97,255,.08);
-
-    border-color:rgba(123,97,255,.18);
-
-    transform:translateY(-2px);
-
-}
-
-.profile-left{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    min-width:0;
-
-}
-
-/* ======================================
-                Avatar
-====================================== */
-
-.profile-avatar{
-
-    width:42px;
-
-    height:42px;
-
-    min-width:42px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:linear-gradient(
-        135deg,
-        #8D7CFF,
-        #684DFF
-    );
-
-    color:#fff;
-
-    font-size:16px;
-
-    font-weight:700;
-
-    position:relative;
-
-    box-shadow:0 6px 18px rgba(123,97,255,.28);
-
-}
-
-/* ======================================
-            Online Status
-====================================== */
-
-.profile-online{
-
-    position:absolute;
-
-    right:1px;
-
-    bottom:1px;
-
-    width:10px;
-
-    height:10px;
-
-    border-radius:50%;
-
-    background:#2ECC71;
-
-    border:2px solid #1A2233;
-
-}
-
-/* ======================================
-            User Info
-====================================== */
-
-.profile-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    min-width:0;
-
-}
-
-.profile-info h4{
-
-    margin:0;
-
-    font-size:13px;
-
-    font-weight:600;
-
-    color:#ffffff;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    max-width:130px;
-
-    line-height:1.2;
-
-}
-
-.profile-info p{
-
-    margin:2px 0 0;
-
-    font-size:11px;
-
-    color:#97A3C7;
-
-    line-height:1.1;
-
-}
-
-/* ======================================
-            Arrow
-====================================== */
-
-.profile-arrow{
-
-    width:26px;
-
-    height:26px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:8px;
-
-    color:#A7B3D6;
-
-    background:rgba(255,255,255,.04);
-
-    transition:.25s;
-
-}
-
-.profile-card:hover .profile-arrow{
-
-    background:rgba(123,97,255,.15);
-
-    color:#ffffff;
-
-}
-/* ==========================================================
-                    PREMIUM TASKFLOW LOGO
-========================================================== */
-
-.workspace-logo{
-
-    width:50px;
-
-    height:50px;
-
-    min-width:50px;
-
-    border-radius:15px;
-
-    position:relative;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    overflow:hidden;
-
-    color:#ffffff;
-
-    font-size:17px;
-
-    font-weight:800;
-
-    letter-spacing:-.5px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #9B8AFF 0%,
-            #7B61FF 45%,
-            #5A43E8 100%
-        );
-
-    /* NO BLACK BORDER */
-    border:none;
-
-    box-shadow:
-        0 8px 24px rgba(123,97,255,.32),
-        0 0 30px rgba(123,97,255,.16),
-        inset 0 1px 1px rgba(255,255,255,.35);
-
-    isolation:isolate;
+    border: 1px solid rgba(255, 255, 255, 0.055);
 
     transition:
-        transform .3s ease,
-        box-shadow .3s ease;
-
+        background 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
 }
 
-/* Premium glass highlight */
+.profile-card:hover {
+    background: rgba(123, 97, 255, 0.08);
 
-.workspace-logo::before{
+    border-color: rgba(123, 97, 255, 0.17);
 
-    content:"";
-
-    position:absolute;
-
-    inset:1px;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.20),
-            transparent 45%,
-            rgba(255,255,255,.04)
-        );
-
-    pointer-events:none;
-
+    transform: translateY(-1px);
 }
 
-/* Soft internal glow */
-
-.workspace-logo::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:28px;
-
-    height:28px;
-
-    top:-12px;
-
-    right:-10px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.22);
-
-    filter:blur(10px);
-
-    pointer-events:none;
-
-}
-
-/* Hover */
-
-.workspace-button:hover .workspace-logo{
-
-    transform:
-        translateY(-1px)
-        scale(1.03);
-
-    box-shadow:
-        0 10px 30px rgba(123,97,255,.42),
-        0 0 38px rgba(123,97,255,.22),
-        inset 0 1px 1px rgba(255,255,255,.4);
-
-}
-
-/* ======================================
-            Workspace Label
-====================================== */
-
-.menu-title{
-
-    margin:4px 0 12px;
-
-    padding:0 6px;
-
-    color:#7F8BAF;
-
-    font-size:10px;
-
-    font-weight:700;
-
-    letter-spacing:2px;
-
-    text-transform:uppercase;
-
-}
-
-/* ======================================
-        Collapsed Profile
-====================================== */
-
-.sidebar.collapsed .profile-card{
-
-    justify-content:center;
-
-    padding:10px;
-
-}
-
-.sidebar.collapsed .profile-info{
-
-    display:none;
-
-}
-
-.sidebar.collapsed .profile-arrow{
-
-    display:none;
-
-}
-
-.sidebar.collapsed .menu-title{
-
-    display:none;
-
-}
 
 /* ==========================================================
-                    NAVIGATION MENU
+                PROFILE LEFT
 ========================================================== */
 
-.sidebar-navigation{
+.profile-left {
+    display: flex;
 
-    flex:1;
+    align-items: center;
 
-    display:flex;
+    gap: 10px;
 
-    flex-direction:column;
-
-    gap:6px;
-
-    overflow-y:auto;
-
-    padding-right:2px;
-
+    min-width: 0;
 }
 
-/* Hide Scrollbar */
 
-.sidebar-navigation::-webkit-scrollbar{
+/* ==========================================================
+                    PROFILE AVATAR
+========================================================== */
 
-    width:4px;
+.profile-avatar {
+    width: 42px;
+    height: 42px;
 
-}
+    min-width: 42px;
 
-.sidebar-navigation::-webkit-scrollbar-thumb{
+    display: flex;
 
-    background:rgba(255,255,255,.08);
+    align-items: center;
+    justify-content: center;
 
-    border-radius:10px;
+    position: relative;
 
-}
-
-/* ==========================================
-                Navigation Link
-========================================== */
-
-.sidebar-link{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    height:48px;
-
-    padding:0 14px;
-
-    border-radius:14px;
-
-    color:#A9B4CF;
-
-    text-decoration:none;
-
-    transition:all .28s ease;
-
-    overflow:hidden;
-
-}
-
-.sidebar-link:hover{
-
-    color:#ffffff;
-
-    background:rgba(255,255,255,.04);
-
-    transform:translateX(4px);
-
-}
-
-/* ==========================================
-                    Icon
-========================================== */
-
-.sidebar-icon{
-
-    width:22px;
-
-    min-width:22px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:16px;
-
-    z-index:2;
-
-}
-
-.sidebar-link:hover .sidebar-icon{
-
-    color:#C7BBFF;
-
-}
-
-/* ==========================================
-                    Label
-========================================== */
-
-.sidebar-label{
-
-    flex:1;
-
-    font-size:14px;
-
-    font-weight:500;
-
-    white-space:nowrap;
-
-}
-
-/* ==========================================
-                Active Navigation
-========================================== */
-
-.sidebar-link.active{
-
-    color:#ffffff;
+    border-radius: 50%;
 
     background:
-
         linear-gradient(
-
-            90deg,
-
-            rgba(123,97,255,.28),
-
-            rgba(123,97,255,.10)
-
+            135deg,
+            #8d7cff,
+            #684dff
         );
 
-    border:1px solid rgba(123,97,255,.18);
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 700;
 
     box-shadow:
-
-        inset 0 0 0 1px rgba(255,255,255,.03),
-
-        0 8px 24px rgba(123,97,255,.16);
-
+        0 6px 18px rgba(123, 97, 255, 0.28);
 }
 
-/* ==========================================
-                Left Active Bar
-========================================== */
 
-.active-indicator{
+/* ==========================================================
+                ONLINE STATUS
+========================================================== */
 
-    position:absolute;
+.profile-online {
+    position: absolute;
 
-    left:0;
+    right: 0;
+    bottom: 0;
 
-    top:8px;
+    width: 9px;
+    height: 9px;
 
-    bottom:8px;
+    border-radius: 50%;
 
-    width:4px;
+    background: #2ecc71;
 
-    border-radius:10px;
-
-    background:#8D7CFF;
+    border: 2px solid #1a2233;
 
     box-shadow:
-
-        0 0 12px rgba(123,97,255,.8);
-
+        0 0 7px rgba(46, 204, 113, 0.55);
 }
 
-/* ==========================================
-            Right Purple Accent
-========================================== */
 
-.active-glow{
+/* ==========================================================
+                PROFILE INFORMATION
+========================================================== */
 
-    position:absolute;
+.profile-info {
+    display: flex;
 
-    right:12px;
+    flex-direction: column;
 
-    width:3px;
+    min-width: 0;
+}
 
-    height:22px;
+.profile-info h4 {
+    margin: 0;
 
-    border-radius:999px;
+    max-width: 130px;
 
-    background:#8D7CFF;
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.profile-info p {
+    margin: 3px 0 0;
+
+    color: #97a3c7;
+
+    font-size: 10px;
+
+    line-height: 1.1;
+}
+
+
+/* ==========================================================
+                PROFILE ARROW
+========================================================== */
+
+.profile-arrow {
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(255, 255, 255, 0.035);
+
+    color: #a7b3d6;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.profile-card:hover .profile-arrow {
+    background: rgba(123, 97, 255, 0.15);
+
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+                COLLAPSED PROFILE
+========================================================== */
+
+.sidebar.collapsed .profile-card {
+    justify-content: center;
+
+    padding: 10px;
+}
+
+.sidebar.collapsed .profile-info {
+    display: none;
+}
+
+.sidebar.collapsed .profile-arrow {
+    display: none;
+}
+
+
+/* ==========================================================
+                    SECTION TITLE
+========================================================== */
+
+.menu-title {
+    margin: 3px 0 9px;
+
+    padding: 0 6px;
+
+    color: #7f8baf;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+
+    flex-shrink: 0;
+}
+
+.sidebar.collapsed .menu-title {
+    display: none;
+}
+
+
+/* ==========================================================
+                    NAVIGATION
+========================================================== */
+
+.sidebar-navigation {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding-right: 2px;
+}
+
+
+/* Scrollbar */
+
+.sidebar-navigation::-webkit-scrollbar {
+    width: 3px;
+}
+
+.sidebar-navigation::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-navigation::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+}
+
+
+/* ==========================================================
+                NAVIGATION LINK
+========================================================== */
+
+.sidebar-link {
+    position: relative;
+
+    width: 100%;
+
+    height: 46px;
+
+    min-height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 0 13px;
+
+    box-sizing: border-box;
+
+    border-radius: 13px;
+
+    color: #a9b4cf;
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    transition:
+        background 0.28s ease,
+        color 0.28s ease,
+        transform 0.28s ease;
+}
+
+.sidebar-link:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    transform: translateX(3px);
+}
+
+
+/* ==========================================================
+                    ICON
+========================================================== */
+
+.sidebar-icon {
+    width: 22px;
+
+    min-width: 22px;
+
+    height: 22px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: inherit;
+
+    font-size: 15px;
+
+    z-index: 2;
+}
+
+.sidebar-link:hover .sidebar-icon {
+    color: #c7bbff;
+}
+
+
+/* ==========================================================
+                    LABEL
+========================================================== */
+
+.sidebar-label {
+    flex: 1;
+
+    color: inherit;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* ==========================================================
+                ACTIVE NAVIGATION
+========================================================== */
+
+.sidebar-link.active {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(123, 97, 255, 0.28),
+            rgba(123, 97, 255, 0.10)
+        );
+
+    border: 1px solid rgba(123, 97, 255, 0.18);
 
     box-shadow:
-
-        0 0 10px rgba(123,97,255,.9);
-
+        inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+        0 7px 20px rgba(123, 97, 255, 0.14);
 }
 
-/* ==========================================
-            Active Icon
-========================================== */
 
-.sidebar-link.active .sidebar-icon{
+/* ==========================================================
+                LEFT ACTIVE INDICATOR
+========================================================== */
 
-    color:#ffffff;
+.active-indicator {
+    position: absolute;
+
+    left: 0;
+
+    top: 7px;
+    bottom: 7px;
+
+    width: 3px;
+
+    border-radius: 0 8px 8px 0;
+
+    background: #8d7cff;
+
+    box-shadow:
+        0 0 11px rgba(123, 97, 255, 0.8);
+}
+
+
+/* ==========================================================
+                RIGHT ACTIVE GLOW
+========================================================== */
+
+.active-glow {
+    position: absolute;
+
+    right: 10px;
+
+    width: 3px;
+    height: 20px;
+
+    border-radius: 999px;
+
+    background: #8d7cff;
+
+    box-shadow:
+        0 0 10px rgba(123, 97, 255, 0.9);
+}
+
+
+/* ==========================================================
+                ACTIVE ICON
+========================================================== */
+
+.sidebar-link.active .sidebar-icon {
+    color: #ffffff;
 
     text-shadow:
-
-        0 0 12px rgba(123,97,255,.9);
-
+        0 0 10px rgba(123, 97, 255, 0.85);
 }
 
-/* ==========================================
-            Hover Shine
-========================================== */
 
-.sidebar-link::after{
+/* ==========================================================
+                    HOVER SHINE
+========================================================== */
 
-    content:"";
+.sidebar-link::after {
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    top:0;
+    top: 0;
+    left: -120%;
 
-    left:-120%;
-
-    width:55%;
-
-    height:100%;
+    width: 55%;
+    height: 100%;
 
     background:
-
         linear-gradient(
-
             90deg,
-
             transparent,
-
-            rgba(255,255,255,.08),
-
+            rgba(255, 255, 255, 0.07),
             transparent
-
         );
 
-    transition:left .6s ease;
+    transition: left 0.6s ease;
 
+    pointer-events: none;
 }
 
-.sidebar-link:hover::after{
-
-    left:140%;
-
+.sidebar-link:hover::after {
+    left: 140%;
 }
 
-/* ==========================================
-        Collapsed Navigation
-========================================== */
 
-.sidebar.collapsed .sidebar-navigation{
+/* ==========================================================
+                COLLAPSED NAVIGATION
+========================================================== */
 
-    align-items:center;
-
+.sidebar.collapsed .sidebar-navigation {
+    align-items: center;
 }
 
-.sidebar.collapsed .sidebar-link{
+.sidebar.collapsed .sidebar-link {
+    width: 56px;
 
-    width:56px;
+    height: 56px;
+    min-height: 56px;
 
-    height:56px;
+    padding: 0;
 
-    padding:0;
+    justify-content: center;
 
-    justify-content:center;
-
-    border-radius:16px;
-
+    border-radius: 16px;
 }
 
-.sidebar.collapsed .sidebar-label{
-
-    display:none;
-
+.sidebar.collapsed .sidebar-label {
+    display: none;
 }
 
-.sidebar.collapsed .sidebar-icon{
+.sidebar.collapsed .sidebar-icon {
+    margin: 0;
 
-    margin:0;
-
-    font-size:18px;
-
+    font-size: 18px;
 }
 
-.sidebar.collapsed .active-indicator{
+.sidebar.collapsed .active-indicator {
+    left: 50%;
 
-    left:50%;
+    top: auto;
+    bottom: 5px;
 
-    top:auto;
+    width: 24px;
+    height: 3px;
 
-    bottom:6px;
+    transform: translateX(-50%);
 
-    width:24px;
-
-    height:3px;
-
-    transform:translateX(-50%);
-
+    border-radius: 999px;
 }
 
-.sidebar.collapsed .active-glow{
-
-    display:none;
-
+.sidebar.collapsed .active-glow {
+    display: none;
 }
+
 
 /* ==========================================================
                     SIDEBAR FOOTER
 ========================================================== */
 
-.sidebar-footer{
+/*
+   IMPORTANT:
+   The footer is pushed to the bottom by margin-top:auto.
+*/
 
-    margin-top:auto;
+.sidebar-footer {
+    width: 100%;
 
-    padding-top:18px;
+    margin-top: auto !important;
 
-    border-top:1px solid rgba(255,255,255,.06);
+    padding-top: 12px;
 
+    flex-shrink: 0;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+
+    box-sizing: border-box;
 }
 
-/* ==========================================
-                Logout Button
-========================================== */
 
-.logout-button{
+/* ==========================================================
+                    LOGOUT BUTTON
+========================================================== */
 
-    position:relative;
+.logout-button {
+    position: relative;
 
-    width:100%;
+    width: 100%;
 
-    height:52px;
+    height: 48px;
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:14px;
+    gap: 13px;
 
-    padding:0 14px;
+    padding: 0 13px;
 
-    border:none;
+    border: none !important;
 
-    outline:none;
+    outline: none;
 
-    cursor:pointer;
+    cursor: pointer;
 
-    border-radius:14px;
+    border-radius: 13px;
 
-    background:rgba(255,255,255,.03);
+    background: rgba(255, 255, 255, 0.025);
 
-    color:#ff9a9a;
+    color: #ff9999;
 
-    transition:all .30s ease;
+    overflow: hidden;
 
-    overflow:hidden;
-
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-.logout-button:hover{
+.logout-button:hover {
+    color: #ffffff;
 
     background:
-
         linear-gradient(
-
             90deg,
-
-            rgba(255,82,82,.18),
-
-            rgba(255,82,82,.08)
-
+            rgba(255, 82, 82, 0.18),
+            rgba(255, 82, 82, 0.07)
         );
 
-    color:#ffffff;
-
-    transform:translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
-
-        0 8px 24px rgba(255,82,82,.18);
-
+        0 8px 22px rgba(255, 82, 82, 0.15);
 }
 
-.logout-button .sidebar-icon{
-
-    font-size:17px;
-
+.logout-button .sidebar-icon {
+    font-size: 16px;
 }
 
-.logout-button .sidebar-label{
+.logout-button .sidebar-label {
+    font-size: 13px;
 
-    font-size:14px;
-
-    font-weight:600;
-
+    font-weight: 600;
 }
 
-/* ==========================================
-                Logout Shine
-========================================== */
 
-.logout-button::after{
+/* ==========================================================
+                    LOGOUT SHINE
+========================================================== */
 
-    content:"";
+.logout-button::after {
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    top:0;
+    top: 0;
+    left: -120%;
 
-    left:-120%;
-
-    width:60%;
-
-    height:100%;
+    width: 60%;
+    height: 100%;
 
     background:
-
         linear-gradient(
-
             90deg,
-
             transparent,
-
-            rgba(255,255,255,.12),
-
+            rgba(255, 255, 255, 0.10),
             transparent
-
         );
 
-    transition:left .6s ease;
+    transition: left 0.6s ease;
 
+    pointer-events: none;
 }
 
-.logout-button:hover::after{
-
-    left:140%;
-
+.logout-button:hover::after {
+    left: 140%;
 }
 
-/* ==========================================
-            Collapsed Logout
-========================================== */
 
-.sidebar.collapsed .logout-button{
+/* ==========================================================
+                COLLAPSED LOGOUT
+========================================================== */
 
-    width:56px;
+.sidebar.collapsed .sidebar-footer {
+    display: flex;
 
-    height:56px;
-
-    justify-content:center;
-
-    padding:0;
-
+    justify-content: center;
 }
 
-.sidebar.collapsed .logout-button .sidebar-label{
+.sidebar.collapsed .logout-button {
+    width: 56px;
 
-    display:none;
+    height: 56px;
 
+    padding: 0;
+
+    justify-content: center;
+
+    border-radius: 16px;
 }
+
+.sidebar.collapsed .logout-button .sidebar-label {
+    display: none;
+}
+
 
 /* ==========================================================
                     SIDEBAR EFFECTS
 ========================================================== */
 
-.sidebar::before{
+/*
+   Only subtle lighting.
+   No dark pseudo-element is placed over the logo.
+*/
 
-    content:"";
+.sidebar::before {
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    inset:0;
+    inset: 0;
 
-    pointer-events:none;
+    pointer-events: none;
+
+    z-index: -1;
 
     background:
-
         radial-gradient(
-
             circle at top left,
-
-            rgba(123,97,255,.12),
-
-            transparent 40%
-
+            rgba(123, 97, 255, 0.08),
+            transparent 38%
         ),
-
         radial-gradient(
-
             circle at bottom right,
-
-            rgba(123,97,255,.08),
-
-            transparent 35%
-
+            rgba(123, 97, 255, 0.055),
+            transparent 34%
         );
-
 }
 
-.sidebar::after{
 
-    content:"";
+/* Explicitly remove edge separator */
 
-    position:absolute;
+.sidebar::after {
+    display: none !important;
 
-    top:0;
-
-    right:0;
-
-    width:1px;
-
-    height:100%;
-
-    background:rgba(255,255,255,.05);
-
+    content: none !important;
 }
+
 
 /* ==========================================================
                     ANIMATIONS
 ========================================================== */
 
-@keyframes fadeUp{
+@keyframes sidebarFadeUp {
+    from {
+        opacity: 0;
 
-    from{
-
-        opacity:0;
-
-        transform:translateY(10px);
-
+        transform: translateY(8px);
     }
 
-    to{
+    to {
+        opacity: 1;
 
-        opacity:1;
-
-        transform:translateY(0);
-
+        transform: translateY(0);
     }
-
 }
 
 .workspace-card,
-
 .profile-card,
-
 .sidebar-link,
-
-.logout-button{
-
-    animation:fadeUp .4s ease;
-
+.logout-button {
+    animation: sidebarFadeUp 0.4s ease;
 }
+
 
 /* ==========================================================
                     RESPONSIVE
 ========================================================== */
 
-@media (max-width:992px){
+@media (max-width: 992px) {
 
-    .sidebar{
-
-        width:88px;
-
+    .sidebar {
+        width: 88px;
     }
 
-    .sidebar.collapsed{
-
-        width:88px;
-
+    .sidebar.collapsed {
+        width: 88px;
     }
 
     .workspace-content,
-
     .profile-info,
-
     .profile-arrow,
-
     .menu-title,
-
-    .sidebar-label{
-
-        display:none;
-
+    .sidebar-label {
+        display: none;
     }
 
     .workspace-button,
-
     .profile-card,
-
-    .logout-button{
-
-        justify-content:center;
-
+    .logout-button {
+        justify-content: center;
     }
 
 }
 
-@media (min-width:1600px){
 
-    .sidebar{
+/* ==========================================================
+                    LARGE SCREENS
+========================================================== */
 
-        width:300px;
+@media (min-width: 1600px) {
 
+    .sidebar {
+        width: 300px;
     }
 
 }
+
 
 /* ==========================================================
                     SELECTION
 ========================================================== */
 
-.sidebar *::selection{
+.sidebar *::selection {
+    background: #7b61ff;
 
-    background:#7B61FF;
-
-    color:#fff;
-
+    color: #ffffff;
 }
+
+
 /* ==========================================================
-        REMOVE SIDEBAR / LAYOUT DARK SEPARATOR
+            REMOVE SIDEBAR / LAYOUT SEPARATORS
 ========================================================== */
 
 .sidebar,
-.sidebar.collapsed{
+.sidebar.collapsed,
+.sidebar-inner,
+.taskflow-sidebar {
+    border-right: none !important;
 
-    border-right:none !important;
+    outline: none !important;
 
-    outline:none !important;
-
-    box-shadow:none !important;
-
+    box-shadow: none !important;
 }
 
-/* Remove pseudo-element separator */
+.taskflow-main {
+    border-left: none !important;
 
-.sidebar::before,
-.sidebar::after{
-
-    border:none !important;
-
-    box-shadow:none !important;
-
+    box-shadow: none !important;
 }
-
-/* ==========================================================
-        PREMIUM EDGE — NO BLACK BORDER
-========================================================== */
-
-.sidebar{
-
-    background:
-        linear-gradient(
-            180deg,
-            #121B2B 0%,
-            #101827 45%,
-            #0D1523 100%
-        ) !important;
-
-}
-
-/* Prevent child/background effects from creating an edge */
-
-.sidebar-inner{
-
-    border-right:none !important;
-
-}
-
-/* ==========================================================
-        REMOVE ANY ADJACENT DARK BORDER
-========================================================== */
-
-.taskflow-sidebar,
-.taskflow-sidebar *,
-.sidebar{
-
-    border-right:none !important;
-
-}
-
-/* Main layout must not draw a left separator */
-
-.taskflow-main{
-
-    border-left:none !important;
-
-    box-shadow:none !important;
-
-}
-
-/* ==========================================================
-                    END
-========================================================== */

@@ -7,7 +7,6 @@ import React, {
 
 import {
   NavLink,
-  useNavigate,
   useLocation,
 } from "react-router-dom";
 
@@ -48,7 +47,6 @@ const Sidebar = () => {
      ROUTER
   ======================================================= */
 
-  const navigate = useNavigate();
   const location = useLocation();
 
 
@@ -107,14 +105,13 @@ const Sidebar = () => {
      LOGOUT
   ======================================================= */
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
 
     try {
 
-      logout();
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      if (typeof logout === "function") {
+        await logout();
+      }
 
     } catch (error) {
 
@@ -124,6 +121,9 @@ const Sidebar = () => {
       );
 
     } finally {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
 
       window.location.replace("/");
 
@@ -282,23 +282,16 @@ const Sidebar = () => {
       {/* =================================================
           SIDEBAR INNER
 
-          IMPORTANT:
-          Flex column + min-height makes it possible
-          to push Logout to the absolute bottom.
+          The entire sidebar is a vertical flex layout.
+          Navigation grows to fill the middle.
+          Logout stays at the bottom.
       ================================================== */}
 
-      <div
-        className="sidebar-inner"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-        }}
-      >
+      <div className="sidebar-inner">
 
 
         {/* =================================================
-            WORKSPACE CARD
+            WORKSPACE / TASKFLOW LOGO
         ================================================== */}
 
         <motion.div
@@ -319,7 +312,7 @@ const Sidebar = () => {
 
             onClick={() =>
               setCollapsed(
-                (previous) =>
+                previous =>
                   !previous
               )
             }
@@ -331,16 +324,28 @@ const Sidebar = () => {
             }
           >
 
+            {/* LEFT SIDE */}
+
             <div className="workspace-left">
 
-              <div className="workspace-logo">
+              {/* CLEAN TASKFLOW LOGO */}
 
-                TF
+              <div
+                className="workspace-logo"
+                aria-hidden="true"
+              >
+                <span className="workspace-logo-text">
+                  TF
+                </span>
 
-                <span className="workspace-status" />
-
+                <span
+                  className="workspace-status"
+                  aria-hidden="true"
+                />
               </div>
 
+
+              {/* WORKSPACE TEXT */}
 
               <AnimatePresence mode="wait">
 
@@ -372,6 +377,8 @@ const Sidebar = () => {
 
             </div>
 
+
+            {/* COLLAPSE BUTTON */}
 
             <AnimatePresence mode="wait">
 
@@ -454,14 +461,24 @@ const Sidebar = () => {
 
           <div className="profile-left">
 
-            <div className="profile-avatar">
+            {/* AVATAR */}
+
+            <div
+              className="profile-avatar"
+              aria-hidden="true"
+            >
 
               {avatarInitials}
 
-              <span className="profile-online" />
+              <span
+                className="profile-online"
+                aria-hidden="true"
+              />
 
             </div>
 
+
+            {/* USER INFORMATION */}
 
             <AnimatePresence mode="wait">
 
@@ -473,7 +490,9 @@ const Sidebar = () => {
                   variants={textVariants}
 
                   initial="hidden"
+
                   animate="visible"
+
                   exit="exit"
                 >
 
@@ -493,6 +512,8 @@ const Sidebar = () => {
 
           </div>
 
+
+          {/* PROFILE ARROW */}
 
           <AnimatePresence>
 
@@ -539,7 +560,9 @@ const Sidebar = () => {
               variants={textVariants}
 
               initial="hidden"
+
               animate="visible"
+
               exit="exit"
             >
 
@@ -553,34 +576,27 @@ const Sidebar = () => {
 
 
         {/* =================================================
-            NAVIGATION
+            NAVIGATION AREA
 
-            flex: 1 gives the navigation the available
-            vertical space and pushes the footer down.
+            This is the flexible middle section.
+            It takes all available vertical space.
         ================================================== */}
 
         <nav
           className="sidebar-navigation"
-
           aria-label="Main navigation"
-
-          style={{
-            flex: 1,
-          }}
         >
 
           {menuItems.map((item) => {
 
             const isActive =
-              location.pathname ===
-              item.path;
+              location.pathname === item.path;
 
 
             return (
 
               <NavLink
                 key={item.name}
-
                 to={item.path}
 
                 className={`sidebar-link ${
@@ -590,7 +606,7 @@ const Sidebar = () => {
                 }`}
               >
 
-                {/* Active indicator */}
+                {/* ACTIVE INDICATOR */}
 
                 <AnimatePresence>
 
@@ -613,16 +629,14 @@ const Sidebar = () => {
                 </AnimatePresence>
 
 
-                {/* Icon */}
+                {/* ICON */}
 
                 <div className="sidebar-icon">
-
                   {item.icon}
-
                 </div>
 
 
-                {/* Label */}
+                {/* LABEL */}
 
                 <AnimatePresence mode="wait">
 
@@ -649,7 +663,7 @@ const Sidebar = () => {
                 </AnimatePresence>
 
 
-                {/* Active glow */}
+                {/* ACTIVE GLOW */}
 
                 <AnimatePresence>
 
@@ -686,20 +700,14 @@ const Sidebar = () => {
 
 
         {/* =================================================
-            BOTTOM LOGOUT AREA
+            BOTTOM LOGOUT SECTION
 
-            marginTop:auto guarantees that this section
-            stays at the bottom of the sidebar.
+            IMPORTANT:
+            margin-top:auto forces this section to the
+            absolute bottom of the sidebar.
         ================================================== */}
 
-        <div
-          className="sidebar-footer"
-
-          style={{
-            marginTop: "auto",
-            flexShrink: 0,
-          }}
-        >
+        <div className="sidebar-footer">
 
           <motion.button
             type="button"
@@ -716,14 +724,18 @@ const Sidebar = () => {
             whileTap={{
               scale: 0.98,
             }}
+
+            aria-label="Logout"
           >
 
+            {/* LOGOUT ICON */}
+
             <span className="sidebar-icon">
-
               <FaSignOutAlt />
-
             </span>
 
+
+            {/* LOGOUT LABEL */}
 
             <AnimatePresence mode="wait">
 
