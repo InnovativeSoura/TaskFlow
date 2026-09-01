@@ -36,11 +36,7 @@ const features = [
     title: "Smart Task Management",
     description:
       "Break projects into manageable tasks and keep every team member aligned.",
-    points: [
-      "Task assignment",
-      "Priority management",
-      "Status tracking",
-    ],
+    points: ["Task assignment", "Priority management", "Status tracking"],
   },
   {
     icon: FaUsers,
@@ -135,11 +131,7 @@ const features = [
     title: "Advanced Protection",
     description:
       "JWT authentication, encrypted data and secure workspaces keep every project protected.",
-    points: [
-      "JWT authentication",
-      "Encrypted data",
-      "Secure workspaces",
-    ],
+    points: ["JWT authentication", "Encrypted data", "Secure workspaces"],
   },
   {
     icon: FaCloud,
@@ -161,30 +153,20 @@ const Features = () => {
         detail: {
           mode: "login",
         },
-      })
+      }),
     );
 
     setTimeout(() => {
-      document
-        .getElementById("auth")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
+      document.getElementById("auth")?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }, 100);
   };
 
   return (
-    <section
-      className="features-section"
-      id="features"
-    >
+    <section className="features-section" id="features">
       <div className="features-container">
-
-        {/* =========================================
-            SECTION HEADER
-        ========================================== */}
-
         <motion.div
           className="features-header"
           initial={{
@@ -203,25 +185,17 @@ const Features = () => {
             duration: 0.7,
           }}
         >
-          <span className="features-eyebrow">
-            POWERFUL WORKSPACE
-          </span>
+          <span className="features-eyebrow">POWERFUL WORKSPACE</span>
 
           <h2>
-            Everything You Need{" "}
-            <span>To Manage Projects Better.</span>
+            Everything You Need <span>To Manage Projects Better.</span>
           </h2>
 
           <p>
-            TaskFlow brings projects, tasks, teams, communication and
-            analytics together in one intelligent workspace designed
-            for modern teams.
+            TaskFlow brings projects, tasks, teams, communication and analytics
+            together in one intelligent workspace designed for modern teams.
           </p>
         </motion.div>
-
-        {/* =========================================
-            FEATURE GRID
-        ========================================== */}
 
         <div className="features-grid">
           {features.map((feature, index) => {
@@ -259,9 +233,7 @@ const Features = () => {
 
                 <h3>{feature.title}</h3>
 
-                <p className="feature-description">
-                  {feature.description}
-                </p>
+                <p className="feature-description">{feature.description}</p>
 
                 <ul>
                   {feature.points.map((point) => (
@@ -275,10 +247,6 @@ const Features = () => {
             );
           })}
         </div>
-
-        {/* =========================================
-            PRODUCTIVITY PLATFORM
-        ========================================== */}
 
         <motion.div
           className="productivity-platform"
@@ -300,8 +268,6 @@ const Features = () => {
         >
           <div className="productivity-background-glow" />
 
-          {/* LEFT CONTENT */}
-
           <div className="productivity-content">
             <span className="productivity-eyebrow">
               <FaLayerGroup />
@@ -310,16 +276,13 @@ const Features = () => {
 
             <h2>
               One intelligent workspace for{" "}
-              <span>
-                every project and every team.
-              </span>
+              <span>every project and every team.</span>
             </h2>
 
             <p>
-              Replace spreadsheets, disconnected tools and endless
-              email chains with one collaborative platform designed
-              to help your organization stay organized, productive
-              and on schedule.
+              Replace spreadsheets, disconnected tools and endless email chains
+              with one collaborative platform designed to help your organization
+              stay organized, productive and on schedule.
             </p>
 
             <div className="productivity-benefits">
@@ -349,8 +312,6 @@ const Features = () => {
             </button>
           </div>
 
-          {/* CENTER VISUAL */}
-
           <div className="productivity-visual">
             <div className="visual-orbit orbit-one" />
             <div className="visual-orbit orbit-two" />
@@ -379,8 +340,6 @@ const Features = () => {
               <FaCloud />
             </div>
           </div>
-
-          {/* RIGHT STATS */}
 
           <div className="productivity-stats">
             <div className="productivity-stat">

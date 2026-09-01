@@ -1,12 +1,4 @@
-/* =========================================================
-   TASKFLOW — PREMIUM LANDING NAVBAR
-========================================================= */
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap");
-
-/* =========================================================
-   ROOT
-========================================================= */
 
 :root {
   --landing-nav-height: 82px;
@@ -27,18 +19,10 @@
   --landing-transition: 0.3s ease;
 }
 
-/* =========================================================
-   RESET
-========================================================= */
-
 .landing-navbar,
 .landing-navbar * {
   box-sizing: border-box;
 }
-
-/* =========================================================
-   NAVBAR
-========================================================= */
 
 .landing-navbar {
   position: fixed !important;
@@ -71,23 +55,13 @@
   isolation: isolate;
 }
 
-/* =========================================================
-   SCROLLED NAVBAR
-========================================================= */
-
 .landing-navbar.scrolled {
   background: rgba(5, 8, 25, 0.88);
 
-  border-bottom-color:
-    rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
 }
-
-/* =========================================================
-   CONTAINER
-========================================================= */
 
 .landing-navbar-container {
   width: 100%;
@@ -97,8 +71,7 @@
 
   margin: 0 auto;
 
-  padding:
-    0 28px;
+  padding: 0 28px;
 
   display: flex;
   align-items: center;
@@ -108,10 +81,6 @@
 
   z-index: 2;
 }
-
-/* =========================================================
-   LOGO
-========================================================= */
 
 .landing-logo {
   display: flex;
@@ -141,15 +110,13 @@
 
   font-size: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--landing-primary),
-      var(--landing-primary-2)
-    );
+  background: linear-gradient(
+    135deg,
+    var(--landing-primary),
+    var(--landing-primary-2)
+  );
 
-  box-shadow:
-    0 8px 25px rgba(99, 102, 241, 0.32);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.32);
 
   transition:
     transform 0.3s ease,
@@ -159,8 +126,7 @@
 .landing-logo:hover .landing-logo-icon {
   transform: rotate(-5deg) scale(1.06);
 
-  box-shadow:
-    0 10px 32px rgba(99, 102, 241, 0.48);
+  box-shadow: 0 10px 32px rgba(99, 102, 241, 0.48);
 }
 
 .landing-logo-text {
@@ -200,10 +166,6 @@
   white-space: nowrap;
 }
 
-/* =========================================================
-   DESKTOP NAVIGATION
-========================================================= */
-
 .landing-nav {
   display: flex;
   align-items: center;
@@ -212,10 +174,6 @@
 
   margin-left: auto;
 }
-
-/* =========================================================
-   NAV LINKS
-========================================================= */
 
 .landing-nav-link {
   position: relative;
@@ -227,8 +185,7 @@
 
   color: #aeb8d0;
 
-  padding:
-    10px 15px;
+  padding: 10px 15px;
 
   border-radius: 10px;
 
@@ -248,36 +205,25 @@
 .landing-nav-link:hover {
   color: #ffffff;
 
-  background:
-    rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.055);
 
   transform: translateY(-1px);
 }
 
 .landing-nav-link:focus-visible {
-  outline:
-    2px solid rgba(99, 102, 241, 0.8);
+  outline: 2px solid rgba(99, 102, 241, 0.8);
 
   outline-offset: 2px;
 }
-
-/* =========================================================
-   EXPLORE BUTTON WRAPPER
-========================================================= */
 
 .landing-auth-buttons {
   margin-left: 14px;
 }
 
-/* =========================================================
-   EXPLORE PLATFORM BUTTON
-========================================================= */
-
 .landing-explore-btn {
   min-height: 42px;
 
-  padding:
-    0 17px;
+  padding: 0 17px;
 
   display: inline-flex;
   align-items: center;
@@ -285,23 +231,15 @@
 
   gap: 10px;
 
-  border: 1px solid
-    rgba(139, 92, 246, 0.4);
+  border: 1px solid rgba(139, 92, 246, 0.4);
 
   border-radius: 11px;
 
   color: #ffffff;
 
-  background:
-    linear-gradient(
-      135deg,
-      #6366f1,
-      #8b5cf6
-    );
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
 
-  box-shadow:
-    0 8px 25px
-    rgba(99, 102, 241, 0.22);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.22);
 
   font-family: "Inter", sans-serif;
 
@@ -316,12 +254,9 @@
 }
 
 .landing-explore-btn:hover {
-  border-color:
-    rgba(167, 139, 250, 0.8);
+  border-color: rgba(167, 139, 250, 0.8);
 
-  box-shadow:
-    0 12px 32px
-    rgba(99, 102, 241, 0.38);
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.38);
 }
 
 .landing-explore-icon {
@@ -332,23 +267,17 @@
   font-size: 11px;
 }
 
-/* =========================================================
-   MOBILE MENU BUTTON
-========================================================= */
-
 .landing-menu-toggle {
   display: none;
 
   width: 43px;
   height: 43px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   border-radius: 11px;
 
-  background:
-    rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.055);
 
   color: #ffffff;
 
@@ -365,29 +294,18 @@
 }
 
 .landing-menu-toggle:hover {
-  background:
-    rgba(99, 102, 241, 0.22);
+  background: rgba(99, 102, 241, 0.22);
 
   transform: translateY(-1px);
 }
-
-/* =========================================================
-   MOBILE OVERLAY
-========================================================= */
 
 .landing-mobile-overlay {
   display: none;
 }
 
-/* =========================================================
-   TABLET
-========================================================= */
-
 @media (max-width: 1100px) {
-
   .landing-navbar-container {
-    padding:
-      0 22px;
+    padding: 0 22px;
   }
 
   .landing-nav {
@@ -395,8 +313,7 @@
   }
 
   .landing-nav-link {
-    padding:
-      9px 11px;
+    padding: 9px 11px;
 
     font-size: 12px;
   }
@@ -406,27 +323,18 @@
   }
 
   .landing-explore-btn {
-    padding:
-      0 13px;
+    padding: 0 13px;
   }
 }
 
-/* =========================================================
-   MOBILE NAVIGATION
-========================================================= */
-
 @media (max-width: 850px) {
-
   .landing-navbar {
     height: 72px;
   }
 
   .landing-navbar-container {
-    padding:
-      0 18px;
+    padding: 0 18px;
   }
-
-  /* Hide desktop nav */
 
   .landing-nav {
     position: fixed;
@@ -448,34 +356,24 @@
 
     gap: 5px;
 
-    border:
-      1px solid
-      rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 
     border-radius: 18px;
 
-    background:
-      rgba(8, 12, 31, 0.97);
+    background: rgba(8, 12, 31, 0.97);
 
-    backdrop-filter:
-      blur(24px);
+    backdrop-filter: blur(24px);
 
-    -webkit-backdrop-filter:
-      blur(24px);
+    -webkit-backdrop-filter: blur(24px);
 
-    box-shadow:
-      0 25px 70px
-      rgba(0, 0, 0, 0.45);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
 
     opacity: 0;
     visibility: hidden;
 
-    transform:
-      translateY(-12px)
-      scale(0.98);
+    transform: translateY(-12px) scale(0.98);
 
-    transform-origin:
-      top center;
+    transform-origin: top center;
 
     transition:
       opacity 0.25s ease,
@@ -490,12 +388,8 @@
 
     visibility: visible;
 
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
-
-  /* Links */
 
   .landing-nav-link {
     width: 100%;
@@ -505,8 +399,7 @@
     display: flex;
     align-items: center;
 
-    padding:
-      0 15px;
+    padding: 0 15px;
 
     border-radius: 11px;
 
@@ -518,26 +411,20 @@
   }
 
   .landing-nav-link:hover {
-    background:
-      rgba(99, 102, 241, 0.12);
+    background: rgba(99, 102, 241, 0.12);
 
     color: #ffffff;
 
     transform: none;
   }
 
-  /* Explore */
-
   .landing-auth-buttons {
     width: 100%;
 
-    margin:
-      7px 0 0;
+    margin: 7px 0 0;
     padding-top: 7px;
 
-    border-top:
-      1px solid
-      rgba(255, 255, 255, 0.07);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .landing-explore-btn {
@@ -546,8 +433,6 @@
     min-height: 47px;
   }
 
-  /* Mobile button */
-
   .landing-menu-toggle {
     display: flex;
 
@@ -555,8 +440,6 @@
 
     z-index: 100002;
   }
-
-  /* Overlay */
 
   .landing-mobile-overlay {
     display: block;
@@ -568,32 +451,23 @@
     right: 0;
     bottom: 0;
 
-    background:
-      rgba(2, 6, 23, 0.42);
+    background: rgba(2, 6, 23, 0.42);
 
-    backdrop-filter:
-      blur(2px);
+    backdrop-filter: blur(2px);
 
-    -webkit-backdrop-filter:
-      blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 
     z-index: 100000;
   }
 }
 
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
 @media (max-width: 480px) {
-
   .landing-navbar {
     height: 68px;
   }
 
   .landing-navbar-container {
-    padding:
-      0 14px;
+    padding: 0 14px;
   }
 
   .landing-logo-icon {
@@ -630,12 +504,7 @@
   }
 }
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-
   .landing-navbar,
   .landing-nav,
   .landing-nav-link,
@@ -645,12 +514,6 @@
     transition: none !important;
   }
 }
-
-/* =========================================================
-   IMPORTANT:
-   Prevent landing navbar from being affected by common
-   parent layout positioning.
-========================================================= */
 
 body {
   margin: 0;

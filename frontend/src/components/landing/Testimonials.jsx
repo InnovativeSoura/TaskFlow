@@ -71,10 +71,6 @@ const metrics = [
 const Testimonials = () => {
   return (
     <section className="testimonials-section">
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
       <motion.div
         className="testimonials-header"
         initial={{ opacity: 0, y: 35 }}
@@ -82,9 +78,7 @@ const Testimonials = () => {
         viewport={{ once: true, amount: 0.25 }}
         transition={{ duration: 0.7 }}
       >
-        <span className="testimonials-eyebrow">
-          TRUSTED BY MODERN TEAMS
-        </span>
+        <span className="testimonials-eyebrow">TRUSTED BY MODERN TEAMS</span>
 
         <h2 className="testimonials-title">
           Loved by teams that
@@ -92,9 +86,8 @@ const Testimonials = () => {
         </h2>
 
         <p className="testimonials-subtitle">
-          Businesses around the world rely on TaskFlow every day
-          to organize projects, improve collaboration and deliver
-          better results.
+          Businesses around the world rely on TaskFlow every day to organize
+          projects, improve collaboration and deliver better results.
         </p>
 
         <div className="testimonials-header-line">
@@ -110,12 +103,7 @@ const Testimonials = () => {
         </div>
       </motion.div>
 
-
-      {/* =====================================================
-          TESTIMONIAL CARDS
-      ===================================================== */}
       <div className="testimonials-grid">
-
         {testimonials.map((testimonial, index) => (
           <motion.article
             key={testimonial.name}
@@ -140,13 +128,9 @@ const Testimonials = () => {
               y: -10,
             }}
           >
-
-            {/* Glow */}
             <div className="testimonial-card-glow" />
 
-            {/* Top */}
             <div className="testimonial-top">
-
               <div className="testimonial-quote-icon">
                 <FaQuoteLeft />
               </div>
@@ -158,56 +142,29 @@ const Testimonials = () => {
                 <FaStar />
                 <FaStar />
               </div>
-
             </div>
 
+            <p className="testimonial-quote">"{testimonial.quote}"</p>
 
-            {/* Quote */}
-            <p className="testimonial-quote">
-              "{testimonial.quote}"
-            </p>
-
-
-            {/* Divider */}
             <div className="testimonial-divider" />
 
-
-            {/* User */}
             <div className="testimonial-user">
-
-              <div className="testimonial-avatar">
-                {testimonial.initials}
-              </div>
+              <div className="testimonial-avatar">{testimonial.initials}</div>
 
               <div className="testimonial-user-info">
                 <strong>{testimonial.name}</strong>
 
-                <span>
-                  {testimonial.role}
-                </span>
+                <span>{testimonial.role}</span>
 
-                <small>
-                  {testimonial.company}
-                </small>
+                <small>{testimonial.company}</small>
               </div>
-
             </div>
 
-
-            {/* Decorative quote */}
-            <div className="testimonial-large-quote">
-              ”
-            </div>
-
+            <div className="testimonial-large-quote">”</div>
           </motion.article>
         ))}
-
       </div>
 
-
-      {/* =====================================================
-          METRICS
-      ===================================================== */}
       <motion.div
         className="testimonial-metrics"
         initial={{
@@ -227,7 +184,6 @@ const Testimonials = () => {
           delay: 0.15,
         }}
       >
-
         {metrics.map((metric, index) => {
           const Icon = metric.icon;
 
@@ -242,17 +198,13 @@ const Testimonials = () => {
                 duration: 0.25,
               }}
             >
-
               <div className="metric-icon">
                 <Icon />
               </div>
 
               <div className="metric-content">
-
                 <div className="metric-value-row">
-                  <strong>
-                    {metric.value}
-                  </strong>
+                  <strong>{metric.value}</strong>
 
                   {metric.stars && (
                     <div className="metric-stars">
@@ -265,26 +217,15 @@ const Testimonials = () => {
                   )}
                 </div>
 
-                <span className="metric-title">
-                  {metric.title}
-                </span>
+                <span className="metric-title">{metric.title}</span>
 
-                <p>
-                  {metric.description}
-                </p>
-
+                <p>{metric.description}</p>
               </div>
-
             </motion.div>
           );
         })}
-
       </motion.div>
 
-
-      {/* =====================================================
-          AWARD BADGE
-      ===================================================== */}
       <motion.div
         className="award-wrapper"
         initial={{
@@ -304,29 +245,20 @@ const Testimonials = () => {
           delay: 0.25,
         }}
       >
-
         <div className="award-card">
-
           <div className="award-icon">
             <FaAward />
           </div>
 
           <div className="award-content">
-            <strong>
-              Award Winning Productivity Platform
-            </strong>
+            <strong>Award Winning Productivity Platform</strong>
 
-            <span>
-              Helping teams deliver projects faster every day.
-            </span>
+            <span>Helping teams deliver projects faster every day.</span>
           </div>
 
           <div className="award-shine" />
-
         </div>
-
       </motion.div>
-
     </section>
   );
 };
