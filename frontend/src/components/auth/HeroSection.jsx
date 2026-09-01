@@ -1,5 +1,3 @@
-// src/components/auth/HeroSection.jsx
-
 import React from "react";
 import {
   FaArrowRight,
@@ -56,58 +54,34 @@ const HeroSection = () => {
 
   return (
     <div className="auth-hero">
-
-      {/* =========================================
-          TOP BADGE
-      ========================================== */}
       <div className="auth-hero-badge">
         <span className="badge-dot"></span>
 
-        <span>
-          Next Generation Project Management
-        </span>
+        <span>Next Generation Project Management</span>
 
         <FaArrowRight />
       </div>
 
-      {/* =========================================
-          MAIN HEADING
-      ========================================== */}
       <h1 className="auth-hero-title">
-        <span className="title-white">
-          Manage Projects.
-        </span>
+        <span className="title-white">Manage Projects.</span>
 
-        <span className="title-gradient">
-          Collaborate Faster.
-        </span>
+        <span className="title-gradient">Collaborate Faster.</span>
 
-        <span className="title-white">
-          Deliver On Time.
-        </span>
+        <span className="title-white">Deliver On Time.</span>
       </h1>
 
-      {/* =========================================
-          DESCRIPTION
-      ========================================== */}
       <p className="auth-hero-description">
-        TaskFlow is an all-in-one project management
-        platform built for modern teams. Plan projects,
-        assign tasks, monitor progress and collaborate
-        in real time — all from one intelligent workspace.
+        TaskFlow is an all-in-one project management platform built for modern
+        teams. Plan projects, assign tasks, monitor progress and collaborate in
+        real time — all from one intelligent workspace.
       </p>
 
-      {/* =========================================
-          ACTION BUTTONS
-      ========================================== */}
       <div className="auth-hero-actions">
-
         <button
           type="button"
           className="hero-primary-button"
           onClick={() => {
-            const authCard =
-              document.querySelector(".auth-card");
+            const authCard = document.querySelector(".auth-card");
 
             if (authCard) {
               authCard.scrollIntoView({
@@ -132,51 +106,29 @@ const HeroSection = () => {
 
           <span>Explore Features</span>
         </button>
-
       </div>
 
-      {/* =========================================
-          BENEFITS
-      ========================================== */}
       <div className="auth-benefits">
-
         {benefits.map((benefit) => (
-          <div
-            className="auth-benefit"
-            key={benefit}
-          >
+          <div className="auth-benefit" key={benefit}>
             <FaCheckCircle />
             <span>{benefit}</span>
           </div>
         ))}
-
       </div>
 
-      {/* =========================================
-          STATS
-      ========================================== */}
       <div className="auth-stats">
-
         {stats.map((stat) => (
-          <div
-            className="auth-stat"
-            key={stat.label}
-          >
-
-            <div className="auth-stat-icon">
-              {stat.icon}
-            </div>
+          <div className="auth-stat" key={stat.label}>
+            <div className="auth-stat-icon">{stat.icon}</div>
 
             <div className="auth-stat-content">
               <strong>{stat.value}</strong>
               <span>{stat.label}</span>
             </div>
-
           </div>
         ))}
-
       </div>
-
     </div>
   );
 };

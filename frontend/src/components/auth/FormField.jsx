@@ -1,7 +1,4 @@
-import {
-  FaEye,
-  FaEyeSlash,
-} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const FormField = ({
   icon: Icon,
@@ -29,16 +26,10 @@ const FormField = ({
 
   ...props
 }) => {
-  /* ==========================
-      SELECT FIELD
-  ========================== */
-
   if (type === "select") {
     return (
       <div className="input-group">
-        {Icon && (
-          <Icon className="input-icon" />
-        )}
+        {Icon && <Icon className="input-icon" />}
 
         <select
           name={name}
@@ -49,10 +40,7 @@ const FormField = ({
           {...props}
         >
           {options.map((option) => (
-            <option
-              key={option}
-              value={option}
-            >
+            <option key={option} value={option}>
               {option}
             </option>
           ))}
@@ -61,54 +49,38 @@ const FormField = ({
     );
   }
 
-  /* ==========================
-      PASSWORD FIELD
-  ========================== */
-
   if (type === "password") {
-  return (
-    <div className="input-group password-group">
-      {Icon && (
-        <Icon className="input-icon" />
-      )}
+    return (
+      <div className="input-group password-group">
+        {Icon && <Icon className="input-icon" />}
 
-      <input
-        type={showPassword ? "text" : "password"}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        disabled={disabled}
-        autoComplete={autoComplete}
-        {...props}
-      />
+        <input
+          type={showPassword ? "text" : "password"}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          autoComplete={autoComplete}
+          {...props}
+        />
 
-      <button
-        type="button"
-        className="password-toggle"
-        onClick={onTogglePassword}
-        aria-label="Toggle password visibility"
-      >
-        {showPassword ? (
-          <FaEyeSlash />
-        ) : (
-          <FaEye />
-        )}
-      </button>
-    </div>
-  );
+        <button
+          type="button"
+          className="password-toggle"
+          onClick={onTogglePassword}
+          aria-label="Toggle password visibility"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+      </div>
+    );
   }
-
-  /* ==========================
-      TEXT / EMAIL FIELD
-  ========================== */
 
   return (
     <div className="input-group">
-      {Icon && (
-        <Icon className="input-icon" />
-      )}
+      {Icon && <Icon className="input-icon" />}
 
       <input
         type={type}

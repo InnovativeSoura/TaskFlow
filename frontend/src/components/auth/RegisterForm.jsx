@@ -29,20 +29,9 @@ const RegisterForm = ({
 }) => {
   return (
     <>
-      {error && (
-        <div className="auth-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="auth-error">{error}</div>}
 
-      <form
-        className="auth-form"
-        onSubmit={onSubmit}
-      >
-        {/* ==========================
-            FULL NAME
-        ========================== */}
-
+      <form className="auth-form" onSubmit={onSubmit}>
         <FormField
           icon={FaUser}
           type="text"
@@ -54,26 +43,14 @@ const RegisterForm = ({
           required
         />
 
-        {/* ==========================
-            ROLE
-        ========================== */}
-
         <FormField
           icon={FaUserTie}
           type="select"
           name="role"
           value={role}
           onChange={onChange}
-          options={[
-            "Team Member",
-            "Project Manager",
-            "Admin",
-          ]}
+          options={["Team Member", "Project Manager", "Admin"]}
         />
-
-        {/* ==========================
-            EMAIL
-        ========================== */}
 
         <FormField
           icon={FaEnvelope}
@@ -85,10 +62,6 @@ const RegisterForm = ({
           autoComplete="email"
           required
         />
-
-        {/* ==========================
-            PASSWORD
-        ========================== */}
 
         <FormField
           icon={FaLock}
@@ -103,10 +76,6 @@ const RegisterForm = ({
           required
         />
 
-        {/* ==========================
-            CONFIRM PASSWORD
-        ========================== */}
-
         <FormField
           icon={FaLock}
           type="password"
@@ -120,24 +89,10 @@ const RegisterForm = ({
           required
         />
 
-        {/* ==========================
-            SUBMIT
-        ========================== */}
+        <button type="submit" className="auth-btn" disabled={loading}>
+          <span>{loading ? "Creating Account..." : "Create Account"}</span>
 
-        <button
-          type="submit"
-          className="auth-btn"
-          disabled={loading}
-        >
-          <span>
-            {loading
-              ? "Creating Account..."
-              : "Create Account"}
-          </span>
-
-          {!loading && (
-            <FaArrowRight />
-          )}
+          {!loading && <FaArrowRight />}
         </button>
       </form>
     </>

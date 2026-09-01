@@ -1,79 +1,42 @@
-import {
-  FaGoogle,
-  FaGithub,
-} from "react-icons/fa";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
-const API =
-  import.meta.env.VITE_API_URL;
-
-/* ==========================================
-   DEFAULT OAUTH HANDLERS
-========================================== */
+const API = import.meta.env.VITE_API_URL;
 
 const googleLogin = () => {
-  window.location.href =
-    `${API}/auth/google`;
+  window.location.href = `${API}/auth/google`;
 };
 
 const githubLogin = () => {
-  window.location.href =
-    `${API}/auth/github`;
+  window.location.href = `${API}/auth/github`;
 };
 
-const SocialButtons = ({
-  onGoogleLogin,
-  onGithubLogin,
-}) => {
+const SocialButtons = ({ onGoogleLogin, onGithubLogin }) => {
   return (
     <>
-      {/* ======================
-          DIVIDER
-      ====================== */}
-
       <div className="divider">
-        <span>
-          or continue with
-        </span>
+        <span>or continue with</span>
       </div>
 
-      {/* ======================
-          SOCIAL BUTTONS
-      ====================== */}
-
       <div className="social-login">
-
         <button
           type="button"
           className="social-btn"
-          onClick={
-            onGoogleLogin ||
-            googleLogin
-          }
+          onClick={onGoogleLogin || googleLogin}
         >
           <FaGoogle />
 
-          <span>
-            Continue with Google
-          </span>
-
+          <span>Continue with Google</span>
         </button>
 
         <button
           type="button"
           className="social-btn"
-          onClick={
-            onGithubLogin ||
-            githubLogin
-          }
+          onClick={onGithubLogin || githubLogin}
         >
           <FaGithub />
 
-          <span>
-            Continue with GitHub
-          </span>
-
+          <span>Continue with GitHub</span>
         </button>
-
       </div>
     </>
   );

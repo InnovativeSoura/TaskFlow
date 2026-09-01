@@ -1,10 +1,4 @@
-// src/components/auth/LoginForm.jsx
-
-import {
-  FaEnvelope,
-  FaLock,
-  FaArrowRight,
-} from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowRight } from "react-icons/fa";
 
 import FormField from "./FormField";
 
@@ -28,58 +22,21 @@ const LoginForm = ({
 
   onForgotPassword,
 }) => {
-
-  /* =========================================================
-     FORM SUBMIT
-  ========================================================= */
-
   const handleSubmit = (event) => {
-
-    /*
-     * VERY IMPORTANT:
-     * Prevent the browser from performing a normal
-     * HTML form submission, which causes a full page reload.
-     */
     event.preventDefault();
 
     event.stopPropagation();
 
-    /*
-     * Pass the event to the parent handler.
-     */
     if (typeof onSubmit === "function") {
       onSubmit(event);
     }
   };
 
-
   return (
     <>
-      {/* =====================================================
-          ERROR
-      ===================================================== */}
+      {error && <div className="auth-error">{error}</div>}
 
-      {error && (
-        <div className="auth-error">
-          {error}
-        </div>
-      )}
-
-
-      {/* =====================================================
-          LOGIN FORM
-      ===================================================== */}
-
-      <form
-        className="auth-form"
-        onSubmit={handleSubmit}
-        noValidate={false}
-      >
-
-        {/* ===================================================
-            EMAIL
-        =================================================== */}
-
+      <form className="auth-form" onSubmit={handleSubmit} noValidate={false}>
         <FormField
           icon={FaEnvelope}
           type="email"
@@ -90,11 +47,6 @@ const LoginForm = ({
           autoComplete="email"
           required
         />
-
-
-        {/* ===================================================
-            PASSWORD
-        =================================================== */}
 
         <FormField
           icon={FaLock}
@@ -109,62 +61,27 @@ const LoginForm = ({
           required
         />
 
-
-        {/* ===================================================
-            OPTIONS
-        =================================================== */}
-
         <div className="auth-options">
-
           <label className="remember-me">
-
             <input
               type="checkbox"
               checked={Boolean(rememberMe)}
               onChange={onRememberChange}
             />
 
-            <span>
-              Remember me
-            </span>
-
+            <span>Remember me</span>
           </label>
 
-
-          <button
-            type="button"
-            className="link-btn"
-            onClick={onForgotPassword}
-          >
+          <button type="button" className="link-btn" onClick={onForgotPassword}>
             Forgot Password?
           </button>
-
         </div>
 
+        <button type="submit" className="auth-btn" disabled={loading}>
+          <span>{loading ? "Signing In..." : "Sign In"}</span>
 
-        {/* ===================================================
-            SIGN IN
-        =================================================== */}
-
-        <button
-          type="submit"
-          className="auth-btn"
-          disabled={loading}
-        >
-
-          <span>
-            {loading
-              ? "Signing In..."
-              : "Sign In"
-            }
-          </span>
-
-          {!loading && (
-            <FaArrowRight />
-          )}
-
+          {!loading && <FaArrowRight />}
         </button>
-
       </form>
     </>
   );
