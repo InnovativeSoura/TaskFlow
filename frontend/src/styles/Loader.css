@@ -1,27 +1,552 @@
-.loader{
-display:flex;
-justify-content:center;
-align-items:center;
-height:300px;
+/* ==========================================================
+                    TASKFLOW PREMIUM LOADER
+========================================================== */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(123, 97, 255, 0.12),
+      transparent 28%
+    ),
+    linear-gradient(
+      145deg,
+      #070b16 0%,
+      #0b1020 45%,
+      #080d18 100%
+    );
+
+  color: #ffffff;
 }
 
-.spinner{
-width:55px;
-height:55px;
-border:5px solid #dbeafe;
-border-top:5px solid #2563eb;
-border-radius:50%;
-animation:spin .8s linear infinite;
+
+/* ==========================================================
+                    BACKGROUND EFFECT
+========================================================== */
+
+.loader-background {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+  overflow: hidden;
 }
 
-@keyframes spin{
 
-from{
-transform:rotate(0deg);
+/* Ambient Orb */
+
+.loader-orb {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  filter: blur(100px);
+
+  opacity: 0.16;
+
+  animation:
+    loaderOrbFloat 7s ease-in-out infinite alternate;
 }
 
-to{
-transform:rotate(360deg);
+.loader-orb-one {
+  top: -180px;
+  left: -140px;
+
+  background: #7b61ff;
 }
+
+.loader-orb-two {
+  right: -180px;
+  bottom: -180px;
+
+  background: #5140d9;
+
+  animation-delay: -3s;
+}
+
+
+/* ==========================================================
+                    CONTENT
+========================================================== */
+
+.loader-content {
+  position: relative;
+  z-index: 5;
+
+  width: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* ==========================================================
+                    TASKFLOW LOGO
+========================================================== */
+
+.loader-logo {
+  position: relative;
+
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #a495ff 0%,
+      #7b61ff 45%,
+      #5b42e7 100%
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  box-shadow:
+    0 20px 50px rgba(123, 97, 255, 0.35),
+    0 0 70px rgba(123, 97, 255, 0.16),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  animation:
+    loaderLogoFloat 2.8s ease-in-out infinite;
+}
+
+
+/* Logo Text */
+
+.loader-logo span {
+  position: relative;
+  z-index: 3;
+
+  color: #ffffff;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  letter-spacing: -1.5px;
+
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+
+/* Logo Highlight */
+
+.loader-logo::before {
+  content: "";
+
+  position: absolute;
+
+  top: -45%;
+  left: -35%;
+
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.24);
+
+  filter: blur(12px);
+
+  pointer-events: none;
+}
+
+
+/* Moving Shine */
+
+.loader-logo-shine {
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 55%;
+  height: 100%;
+
+  transform: skewX(-20deg);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.38),
+      transparent
+    );
+
+  animation:
+    loaderShine 2.2s ease-in-out infinite;
+}
+
+
+/* ==========================================================
+                    ANIMATED RINGS
+========================================================== */
+
+.loader-ring {
+  position: absolute;
+
+  left: 50%;
+  top: 41px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+/* Outer Ring */
+
+.ring-one {
+  width: 120px;
+  height: 120px;
+
+  border: 1px solid rgba(123, 97, 255, 0.20);
+
+  border-top-color: rgba(156, 139, 255, 0.85);
+  border-right-color: rgba(123, 97, 255, 0.45);
+
+  animation:
+    loaderSpin 2.4s linear infinite;
+}
+
+
+/* Second Ring */
+
+.ring-two {
+  width: 104px;
+  height: 104px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-bottom-color: rgba(156, 139, 255, 0.50);
+
+  animation:
+    loaderSpinReverse 3.2s linear infinite;
+}
+
+
+/* ==========================================================
+                    CENTER SPINNER
+========================================================== */
+
+.loader-spinner {
+  position: absolute;
+
+  top: 41px;
+  left: 50%;
+
+  width: 94px;
+  height: 94px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(123, 97, 255, 0.10),
+      transparent 68%
+    );
+
+  pointer-events: none;
+}
+
+
+.loader-spinner::before {
+  content: "";
+
+  position: absolute;
+  inset: 4px;
+
+  border-radius: 50%;
+
+  border: 2px solid transparent;
+
+  border-top-color: #a495ff;
+  border-left-color: rgba(123, 97, 255, 0.45);
+
+  animation:
+    loaderSpin 1.3s linear infinite;
+}
+
+
+.loader-spinner span {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 7px;
+  height: 7px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.9),
+    0 0 24px rgba(123, 97, 255, 0.9);
+
+  animation:
+    loaderPulse 1.2s ease-in-out infinite;
+}
+
+
+/* ==========================================================
+                    BRAND
+========================================================== */
+
+.loader-brand {
+  margin-top: 34px;
+}
+
+
+.loader-brand h2 {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 750;
+
+  letter-spacing: -0.7px;
+
+  color: #ffffff;
+}
+
+
+.loader-brand p {
+  margin: 7px 0 0;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+
+  color: #7f8baa;
+}
+
+
+/* ==========================================================
+                    LOADING DOTS
+========================================================== */
+
+.loader-dots {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 18px;
+}
+
+
+.loader-dots span {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #8d7cff;
+
+  box-shadow:
+    0 0 10px rgba(123, 97, 255, 0.75);
+
+  animation:
+    loaderDot 1.4s ease-in-out infinite;
+}
+
+
+.loader-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+
+.loader-dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+
+.loader-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+
+/* ==========================================================
+                    ANIMATIONS
+========================================================== */
+
+@keyframes loaderSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+
+@keyframes loaderSpinReverse {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+
+@keyframes loaderPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.25);
+    opacity: 1;
+  }
+}
+
+
+@keyframes loaderLogoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+
+@keyframes loaderShine {
+  0% {
+    left: -120%;
+  }
+
+  45%,
+  100% {
+    left: 150%;
+  }
+}
+
+
+@keyframes loaderOrbFloat {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(30px, 25px, 0) scale(1.08);
+  }
+}
+
+
+@keyframes loaderDot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+
+/* ==========================================================
+                    RESPONSIVE
+========================================================== */
+
+@media (max-width: 600px) {
+
+  .loader-content {
+    width: 240px;
+  }
+
+  .loader-logo {
+    width: 74px;
+    height: 74px;
+
+    border-radius: 21px;
+  }
+
+  .loader-logo span {
+    font-size: 24px;
+  }
+
+  .ring-one {
+    width: 108px;
+    height: 108px;
+  }
+
+  .ring-two {
+    width: 94px;
+    height: 94px;
+  }
+
+  .loader-spinner {
+    width: 84px;
+    height: 84px;
+  }
+
+  .loader-brand h2 {
+    font-size: 22px;
+  }
+}
+
+
+/* ==========================================================
+                    ACCESSIBILITY
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .loader-logo,
+  .loader-logo-shine,
+  .loader-ring,
+  .loader-spinner::before,
+  .loader-spinner span,
+  .loader-dots span,
+  .loader-orb {
+    animation: none !important;
+  }
 
 }

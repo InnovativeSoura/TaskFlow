@@ -1,5 +1,3 @@
-// src/components/SearchBar.jsx
-
 import {
   FaSearch,
   FaTimes,

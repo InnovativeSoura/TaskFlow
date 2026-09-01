@@ -1,15 +1,6 @@
-// src/components/StatCard.jsx
-
 import { motion } from "framer-motion";
 
-const StatCard = ({
-  title,
-  value,
-  icon,
-  color = "blue",
-  subtitle,
-  trend,
-}) => {
+const StatCard = ({ title, value, icon, color = "blue", subtitle, trend }) => {
   return (
     <motion.div
       className={`stat-card stat-card-${color}`}
@@ -29,40 +20,20 @@ const StatCard = ({
         duration: 0.3,
       }}
     >
-      {/* Decorative glow */}
       <div className="stat-card-glow" />
 
-      {/* Top row */}
       <div className="stat-card-top">
-        <div className="stat-card-title">
-          {title}
-        </div>
+        <div className="stat-card-title">{title}</div>
 
-        {icon && (
-          <div className="stat-card-icon">
-            {icon}
-          </div>
-        )}
+        {icon && <div className="stat-card-icon">{icon}</div>}
       </div>
 
-      {/* Value */}
-      <div className="stat-card-value">
-        {value}
-      </div>
+      <div className="stat-card-value">{value}</div>
 
-      {/* Bottom information */}
       <div className="stat-card-bottom">
-        {subtitle && (
-          <span className="stat-card-subtitle">
-            {subtitle}
-          </span>
-        )}
+        {subtitle && <span className="stat-card-subtitle">{subtitle}</span>}
 
-        {trend && (
-          <span className="stat-card-trend">
-            {trend}
-          </span>
-        )}
+        {trend && <span className="stat-card-trend">{trend}</span>}
       </div>
     </motion.div>
   );
