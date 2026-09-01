@@ -1,36 +1,12 @@
-// src/api/axios.js
-
 import axios from "axios";
 
-/* =========================================================
-   API URL
-========================================================= */
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000";
-
-/*
- * Support both:
- *
- * VITE_API_URL=http://localhost:5000
- *
- * and:
- *
- * VITE_API_URL=http://localhost:5000/api
- */
-
-const BASE_URL = API_URL.endsWith("/api")
-  ? API_URL
-  : `${API_URL}/api`;
+const BASE_URL = API_URL.endsWith("/api") ? API_URL : `${API_URL}/api`;
 
 console.log("====================================");
 console.log("🌐 TaskFlow API Base URL:", BASE_URL);
 console.log("====================================");
-
-/* =========================================================
-   AXIOS INSTANCE
-========================================================= */
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -41,10 +17,6 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-/* =========================================================
-   REQUEST INTERCEPTOR
-========================================================= */
 
 api.interceptors.request.use(
   (config) => {
@@ -67,21 +39,14 @@ api.interceptors.request.use(
     console.log("====================================");
 
     console.log(
-      `🚀 ${config.method?.toUpperCase()} ${
-        config.baseURL
-      }${config.url}`
+      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`,
     );
 
-    console.log(
-      "🔑 Token:",
-      token ? "PRESENT" : "MISSING"
-    );
+    console.log("🔑 Token:", token ? "PRESENT" : "MISSING");
 
     console.log(
       "🛡 Authorization:",
-      config.headers.Authorization
-        ? "Bearer token attached"
-        : "NOT ATTACHED"
+      config.headers.Authorization ? "Bearer token attached" : "NOT ATTACHED",
     );
 
     console.log("====================================");
@@ -90,18 +55,12 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
-
-/* =========================================================
-   RESPONSE INTERCEPTOR
-========================================================= */
 
 api.interceptors.response.use(
   (response) => {
-    console.log(
-      `✅ ${response.status} ${response.config.url}`
-    );
+    console.log(`✅ ${response.status} ${response.config.url}`);
 
     return response;
   },
@@ -113,34 +72,21 @@ api.interceptors.response.use(
     console.error("❌ API ERROR:", {
       status,
       url,
-      message:
-        error.response?.data?.message ||
-        error.message,
+      message: error.response?.data?.message || error.message,
     });
 
-    /*
-     * Authentication routes should not
-     * trigger automatic session clearing.
-     */
     const isAuthRoute =
-      url.includes("/auth/login") ||
-      url.includes("/auth/register");
+      url.includes("/auth/login") || url.includes("/auth/register");
 
-    /*
-     * Only clear the session when a protected
-     * request actually returns 401.
-     */
     if (status === 401 && !isAuthRoute) {
-      console.warn(
-        "⚠️ Authentication rejected. Clearing session."
-      );
+      console.warn("⚠️ Authentication rejected. Clearing session.");
 
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
