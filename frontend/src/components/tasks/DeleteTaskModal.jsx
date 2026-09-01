@@ -1,9 +1,4 @@
-// src/components/tasks/DeleteTaskModal.jsx
-
-import {
-  motion,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   FaTrashAlt,
@@ -16,30 +11,10 @@ import {
 
 import "../../styles/DeleteTaskModal.css";
 
-/* =========================================================
-   COMPONENT
-========================================================= */
-
-function DeleteTaskModal({
-  open,
-  task,
-  loading = false,
-  onClose,
-  onConfirm,
-}) {
-  /* =======================================================
-     DATE
-  ======================================================= */
-
+function DeleteTaskModal({ open, task, loading = false, onClose, onConfirm }) {
   const dueDate = task?.dueDate
-    ? new Date(
-        task.dueDate
-      ).toLocaleDateString()
+    ? new Date(task.dueDate).toLocaleDateString()
     : null;
-
-  /* =======================================================
-     ANIMATION
-  ======================================================= */
 
   const backdropVariants = {
     hidden: {
@@ -83,10 +58,6 @@ function DeleteTaskModal({
     },
   };
 
-  /* =======================================================
-     RENDER
-  ======================================================= */
-
   return (
     <AnimatePresence>
       {open && (
@@ -104,14 +75,8 @@ function DeleteTaskModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
-            {/* =================================================
-                HEADER
-            ================================================= */}
-
             <div className="delete-modal-header">
               <div className="delete-header-left">
                 <motion.div
@@ -132,14 +97,9 @@ function DeleteTaskModal({
                 </motion.div>
 
                 <div>
-                  <h2>
-                    Delete Task
-                  </h2>
+                  <h2>Delete Task</h2>
 
-                  <p>
-                    This action is permanent
-                    and cannot be undone.
-                  </p>
+                  <p>This action is permanent and cannot be undone.</p>
                 </div>
               </div>
 
@@ -153,10 +113,6 @@ function DeleteTaskModal({
                 <FaTimes />
               </button>
             </div>
-
-            {/* =================================================
-                WARNING
-            ================================================= */}
 
             <motion.div
               className="delete-warning"
@@ -172,22 +128,14 @@ function DeleteTaskModal({
               <FaExclamationTriangle />
 
               <div>
-                <h3>
-                  Are you sure?
-                </h3>
+                <h3>Are you sure?</h3>
 
                 <p>
-                  Deleting this task will
-                  permanently remove all
-                  associated information
-                  from your workspace.
+                  Deleting this task will permanently remove all associated
+                  information from your workspace.
                 </p>
               </div>
             </motion.div>
-
-            {/* =================================================
-                TASK PREVIEW
-            ================================================= */}
 
             <motion.div
               className="delete-task-preview"
@@ -205,10 +153,7 @@ function DeleteTaskModal({
             >
               <div className="preview-top">
                 <div>
-                  <h3>
-                    {task?.title ||
-                      "Untitled Task"}
-                  </h3>
+                  <h3>{task?.title || "Untitled Task"}</h3>
 
                   <p>
                     {task?.description?.trim()
@@ -219,70 +164,44 @@ function DeleteTaskModal({
 
                 <span
                   className={`priority-badge priority-${(
-                    task?.priority ||
-                    "Medium"
+                    task?.priority || "Medium"
                   )
                     .toLowerCase()
-                    .replace(
-                      /\s/g,
-                      "-"
-                    )}`}
+                    .replace(/\s/g, "-")}`}
                 >
-                  {task?.priority ||
-                    "Medium"}
+                  {task?.priority || "Medium"}
                 </span>
               </div>
 
-              {/* =================================================
-                  META INFORMATION
-              ================================================= */}
-
               <div className="preview-meta">
-                {/* Status */}
-
                 <div className="meta-item">
                   <FaFlag />
 
                   <div>
-                    <span className="meta-label">
-                      Status
-                    </span>
+                    <span className="meta-label">Status</span>
 
-                    <strong>
-                      {task?.status ||
-                        "To Do"}
-                    </strong>
+                    <strong>{task?.status || "To Do"}</strong>
                   </div>
                 </div>
-
-                {/* Due Date */}
 
                 {dueDate && (
                   <div className="meta-item">
                     <FaCalendarAlt />
 
                     <div>
-                      <span className="meta-label">
-                        Due Date
-                      </span>
+                      <span className="meta-label">Due Date</span>
 
-                      <strong>
-                        {dueDate}
-                      </strong>
+                      <strong>{dueDate}</strong>
                     </div>
                   </div>
                 )}
-
-                {/* Project */}
 
                 {task?.project && (
                   <div className="meta-item">
                     <FaFolderOpen />
 
                     <div>
-                      <span className="meta-label">
-                        Project
-                      </span>
+                      <span className="meta-label">Project</span>
 
                       <strong>
                         {task.project.title ||
@@ -294,10 +213,6 @@ function DeleteTaskModal({
                 )}
               </div>
             </motion.div>
-
-            {/* =================================================
-                FOOTER
-            ================================================= */}
 
             <div className="delete-modal-footer">
               <button
@@ -313,10 +228,7 @@ function DeleteTaskModal({
                 type="button"
                 className="btn btn-danger"
                 onClick={onConfirm}
-                disabled={
-                  loading ||
-                  !task
-                }
+                disabled={loading || !task}
               >
                 {loading ? (
                   <>

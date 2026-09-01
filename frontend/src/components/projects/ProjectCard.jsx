@@ -1,5 +1,3 @@
-// src/components/projects/ProjectCard.jsx
-
 import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 
@@ -16,17 +14,7 @@ import {
 
 import "../../styles/ProjectCard.css";
 
-const ProjectCard = ({
-  project,
-  onEdit,
-  onDelete,
-  canManage = false,
-}) => {
-
-  /* ==========================================
-      DEFAULT VALUES
-  ========================================== */
-
+const ProjectCard = ({ project, onEdit, onDelete, canManage = false }) => {
   const {
     title = "Untitled Project",
     description = "No description available.",
@@ -39,14 +27,8 @@ const ProjectCard = ({
     color = "#4F46E5",
   } = project || {};
 
-  /* ==========================================
-      STATUS CONFIG
-  ========================================== */
-
   const statusConfig = useMemo(() => {
-
     switch (status) {
-
       case "Completed":
         return {
           icon: <FaCheckCircle />,
@@ -76,19 +58,11 @@ const ProjectCard = ({
           icon: <FaClock />,
           className: "planning",
         };
-
     }
-
   }, [status]);
 
-  /* ==========================================
-      PRIORITY CONFIG
-  ========================================== */
-
   const priorityConfig = useMemo(() => {
-
     switch (priority) {
-
       case "Critical":
         return {
           className: "critical",
@@ -112,35 +86,20 @@ const ProjectCard = ({
           className: "low",
           icon: <FaChartLine />,
         };
-
     }
-
   }, [priority]);
-    /* ==========================================
-      DATE FORMATTER
-  ========================================== */
 
   const formatDate = (date) => {
-
     if (!date) return "--";
 
-    return new Date(date).toLocaleDateString(
-      "en-IN",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }
-    );
-
+    return new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
 
-  /* ==========================================
-      USER INITIALS
-  ========================================== */
-
   const getInitials = (name = "") => {
-
     return name
       .trim()
       .split(" ")
@@ -149,43 +108,23 @@ const ProjectCard = ({
       .join("")
       .substring(0, 2)
       .toUpperCase();
-
   };
-
-  /* ==========================================
-      MEMBERS
-  ========================================== */
 
   const visibleMembers = members.slice(0, 4);
 
-  const remainingMembers =
-    members.length - visibleMembers.length;
-
-  /* ==========================================
-      PROGRESS COLOR
-  ========================================== */
+  const remainingMembers = members.length - visibleMembers.length;
 
   const progressColor = useMemo(() => {
+    if (progress >= 100) return "#22c55e";
 
-    if (progress >= 100)
-      return "#22c55e";
+    if (progress >= 70) return "#3b82f6";
 
-    if (progress >= 70)
-      return "#3b82f6";
-
-    if (progress >= 40)
-      return "#f59e0b";
+    if (progress >= 40) return "#f59e0b";
 
     return "#ef4444";
-
   }, [progress]);
 
-  /* ==========================================
-      CARD ANIMATION
-  ========================================== */
-
   const cardVariants = {
-
     hidden: {
       opacity: 0,
       y: 20,
@@ -198,15 +137,9 @@ const ProjectCard = ({
         duration: 0.35,
       },
     },
-
   };
 
-  /* ==========================================
-      JSX
-  ========================================== */
-
   return (
-
     <motion.article
       className="project-card"
       variants={cardVariants}
@@ -216,63 +149,40 @@ const ProjectCard = ({
         y: -6,
       }}
     >
-
       <div
         className="project-card-top"
         style={{
           borderTop: `4px solid ${color}`,
         }}
       >
-
         <div className="project-title-section">
-
-          <h3 className="project-title">
-            {title}
-          </h3>
+          <h3 className="project-title">{title}</h3>
 
           <div className="project-badges">
-
-            <span
-              className={`status-badge ${statusConfig.className}`}
-            >
+            <span className={`status-badge ${statusConfig.className}`}>
               {statusConfig.icon}
 
               {status}
             </span>
 
-            <span
-              className={`priority-badge ${priorityConfig.className}`}
-            >
+            <span className={`priority-badge ${priorityConfig.className}`}>
               {priorityConfig.icon}
 
               {priority}
             </span>
-
           </div>
-
         </div>
 
-        <p className="project-description">
-
-          {description}
-
-        </p>
-                {/* ==========================================
-            PROGRESS
-        ========================================== */}
+        <p className="project-description">{description}</p>
 
         <div className="project-progress-section">
-
           <div className="progress-header">
-
             <span>Progress</span>
 
             <strong>{progress}%</strong>
-
           </div>
 
           <div className="progress-track">
-
             <motion.div
               className="progress-fill"
               initial={{ width: 0 }}
@@ -285,154 +195,84 @@ const ProjectCard = ({
                 ease: "easeOut",
               }}
             />
-
           </div>
-
         </div>
 
-        {/* ==========================================
-            PROJECT INFO
-        ========================================== */}
-
         <div className="project-meta">
-
           <div className="meta-item">
-
             <FaCalendarAlt />
 
             <div>
-
               <small>Created</small>
 
-              <strong>
-                {formatDate(createdAt)}
-              </strong>
-
+              <strong>{formatDate(createdAt)}</strong>
             </div>
-
           </div>
 
           <div className="meta-item">
-
             <FaClock />
 
             <div>
-
               <small>Deadline</small>
 
-              <strong>
-                {formatDate(endDate)}
-              </strong>
-
+              <strong>{formatDate(endDate)}</strong>
             </div>
-
           </div>
-
         </div>
 
-        {/* ==========================================
-            TEAM MEMBERS
-        ========================================== */}
-
         <div className="project-members">
-
           <div className="members-left">
-
             <FaUsers className="members-icon" />
 
             <span>
-
               Team
-
-              <strong>
-                {" "}
-                ({members.length})
-              </strong>
-
+              <strong> ({members.length})</strong>
             </span>
-
           </div>
 
           <div className="members-avatars">
-
             {visibleMembers.length > 0 ? (
-
               visibleMembers.map((member, index) => (
-
                 <div
                   key={member._id || index}
                   className="member-avatar"
                   title={member.name}
                   style={{
-                    marginLeft:
-                      index === 0 ? 0 : -10,
+                    marginLeft: index === 0 ? 0 : -10,
                   }}
                 >
-
                   {member.avatar ? (
-
-                    <img
-                      src={member.avatar}
-                      alt={member.name}
-                    />
-
+                    <img src={member.avatar} alt={member.name} />
                   ) : (
-
                     getInitials(member.name)
-
                   )}
-
                 </div>
-
               ))
-
             ) : (
-
-              <div className="no-members">
-                No Members
-              </div>
-
+              <div className="no-members">No Members</div>
             )}
 
             {remainingMembers > 0 && (
-
               <div className="member-avatar more-members">
-
                 +{remainingMembers}
-
               </div>
-
             )}
-
           </div>
-
         </div>
-                {/* ==========================================
-            FOOTER
-        ========================================== */}
 
         <div className="project-card-footer">
-
           <div className="footer-left">
+            <small>Project Status</small>
 
-            <small>
-              Project Status
-            </small>
-
-            <span
-              className={`footer-status ${statusConfig.className}`}
-            >
+            <span className={`footer-status ${statusConfig.className}`}>
               {statusConfig.icon}
 
               {status}
             </span>
-
           </div>
 
           <div className="footer-right">
-
             {canManage && (
-
               <motion.button
                 type="button"
                 className="action-btn edit-btn"
@@ -448,11 +288,9 @@ const ProjectCard = ({
               >
                 <FaEdit />
               </motion.button>
-
             )}
 
             {canManage && (
-
               <motion.button
                 type="button"
                 className="action-btn delete-btn"
@@ -468,23 +306,12 @@ const ProjectCard = ({
               >
                 <FaTrash />
               </motion.button>
-
             )}
-
           </div>
-
         </div>
-
       </div>
-
     </motion.article>
-
   );
-
 };
-
-/* ==========================================
-    PERFORMANCE
-========================================== */
 
 export default memo(ProjectCard);

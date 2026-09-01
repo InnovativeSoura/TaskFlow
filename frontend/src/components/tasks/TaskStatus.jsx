@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import "../../styles/TaskStatus.css"
+import "../../styles/TaskStatus.css";
 
 import {
   ResponsiveContainer,
@@ -10,14 +10,7 @@ import {
   Legend,
 } from "recharts";
 
-import {
-  FaChartPie,
-  FaArrowUp,
-} from "react-icons/fa";
-
-/* ==========================================================
-   COLORS
-========================================================== */
+import { FaChartPie, FaArrowUp } from "react-icons/fa";
 
 const COLORS = {
   Pending: "#6366F1",
@@ -26,46 +19,21 @@ const COLORS = {
   Completed: "#10B981",
 };
 
-/* ==========================================================
-   COMPONENT
-========================================================== */
+const TaskStatus = ({ tasks = [] }) => {
+  const pending = tasks.filter((task) => task.status === "Pending").length;
 
-const TaskStatus = ({
-  tasks = [],
-}) => {
+  const progress = tasks.filter((task) => task.status === "In Progress").length;
 
-  const pending =
-    tasks.filter(
-      task => task.status === "Pending"
-    ).length;
+  const review = tasks.filter((task) => task.status === "Review").length;
 
-  const progress =
-    tasks.filter(
-      task => task.status === "In Progress"
-    ).length;
+  const completed = tasks.filter((task) => task.status === "Completed").length;
 
-  const review =
-    tasks.filter(
-      task => task.status === "Review"
-    ).length;
-
-  const completed =
-    tasks.filter(
-      task => task.status === "Completed"
-    ).length;
-
-  const total =
-    tasks.length;
+  const total = tasks.length;
 
   const completionRate =
-    total === 0
-      ? 0
-      : Math.round(
-          (completed / total) * 100
-        );
+    total === 0 ? 0 : Math.round((completed / total) * 100);
 
   const chartData = [
-
     {
       name: "Pending",
       value: pending,
@@ -89,13 +57,7 @@ const TaskStatus = ({
       value: completed,
       color: COLORS.Completed,
     },
-
-  ].filter(
-    item => item.value > 0
-  );
-    /* ==========================================================
-     EMPTY STATE
-  ========================================================== */
+  ].filter((item) => item.value > 0);
 
   if (total === 0) {
     return (
@@ -117,62 +79,37 @@ const TaskStatus = ({
         <h3>No Task Analytics</h3>
 
         <p>
-          Create your first task to see status
-          distribution and productivity insights.
+          Create your first task to see status distribution and productivity
+          insights.
         </p>
       </motion.div>
     );
   }
 
-  /* ==========================================================
-     CUSTOM TOOLTIP
-  ========================================================== */
-
-  const CustomTooltip = ({
-    active,
-    payload,
-  }) => {
-
-    if (
-      !active ||
-      !payload ||
-      !payload.length
-    ) {
+  const CustomTooltip = ({ active, payload }) => {
+    if (!active || !payload || !payload.length) {
       return null;
     }
 
     const item = payload[0];
 
-    const percent = Math.round(
-      (item.value / total) * 100
-    );
+    const percent = Math.round((item.value / total) * 100);
 
     return (
       <div className="task-chart-tooltip">
-
-        <strong>
-          {item.name}
-        </strong>
+        <strong>{item.name}</strong>
 
         <span>
           {item.value} Task
           {item.value !== 1 && "s"}
         </span>
 
-        <small>
-          {percent}% of total
-        </small>
-
+        <small>{percent}% of total</small>
       </div>
     );
   };
 
-  /* ==========================================================
-     RENDER
-  ========================================================== */
-
   return (
-
     <motion.section
       className="task-status-card"
       initial={{
@@ -187,69 +124,34 @@ const TaskStatus = ({
         duration: 0.4,
       }}
     >
-
-      {/* ======================================
-          HEADER
-      ====================================== */}
-
       <div className="task-status-header">
-
         <div>
-
           <span className="section-badge">
-
             <FaChartPie />
-
             Task Analytics
-
           </span>
 
-          <h2>
-            Task Status Overview
-          </h2>
+          <h2>Task Status Overview</h2>
 
-          <p>
-            Monitor task distribution across
-            your workspace.
-          </p>
-
+          <p>Monitor task distribution across your workspace.</p>
         </div>
 
         <div className="completion-box">
-
           <span>
-
             <FaArrowUp />
-
             Productivity
-
           </span>
 
-          <strong>
-
-            {completionRate}%
-
-          </strong>
-
+          <strong>{completionRate}%</strong>
         </div>
-
       </div>
-            {/* ======================================
-          CHART CONTENT
-      ====================================== */}
 
       <div className="task-status-content">
-
         {/* Chart */}
 
         <div className="task-status-chart">
-
-          <ResponsiveContainer
-            width="100%"
-            height={320}
-          >
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
-
               <Pie
                 data={chartData}
                 dataKey="value"
@@ -262,25 +164,14 @@ const TaskStatus = ({
                 stroke="rgba(255,255,255,.08)"
                 strokeWidth={2}
                 animationDuration={900}
-                label={({ percent }) =>
-                  `${(percent * 100).toFixed(0)}%`
-                }
+                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
               >
-
                 {chartData.map((entry) => (
-
-                  <Cell
-                    key={entry.name}
-                    fill={entry.color}
-                  />
-
+                  <Cell key={entry.name} fill={entry.color} />
                 ))}
-
               </Pie>
 
-              <Tooltip
-                content={<CustomTooltip />}
-              />
+              <Tooltip content={<CustomTooltip />} />
 
               <Legend
                 verticalAlign="bottom"
@@ -291,19 +182,12 @@ const TaskStatus = ({
                   fontSize: 13,
                 }}
               />
-
             </PieChart>
-
           </ResponsiveContainer>
-
         </div>
 
-        {/* Summary */}
-
         <div className="task-status-summary">
-
           {chartData.map((item) => (
-
             <motion.div
               key={item.name}
               className="status-summary-card"
@@ -311,7 +195,6 @@ const TaskStatus = ({
                 y: -4,
               }}
             >
-
               <div
                 className="status-dot"
                 style={{
@@ -320,69 +203,33 @@ const TaskStatus = ({
               />
 
               <div className="status-info">
-
-                <h4>
-                  {item.name}
-                </h4>
+                <h4>{item.name}</h4>
 
                 <p>
-
                   {item.value} Task
                   {item.value !== 1 && "s"}
-
                 </p>
-
               </div>
 
-              <strong>
-
-                {Math.round(
-                  (item.value / total) * 100
-                )}
-                %
-
-              </strong>
-
+              <strong>{Math.round((item.value / total) * 100)}%</strong>
             </motion.div>
-
           ))}
-
         </div>
-
       </div>
-
-      {/* ======================================
-          FOOTER
-      ====================================== */}
 
       <div className="task-status-footer">
-
         <span>
-
           Total Tasks
-
-          <strong>
-            {total}
-          </strong>
-
+          <strong>{total}</strong>
         </span>
 
         <span>
-
           Completion Rate
-
-          <strong>
-            {completionRate}%
-          </strong>
-
+          <strong>{completionRate}%</strong>
         </span>
-
       </div>
-
     </motion.section>
-
   );
-
 };
 
 export default TaskStatus;

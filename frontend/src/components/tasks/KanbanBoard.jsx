@@ -56,100 +56,83 @@ export default function KanbanBoard({
   onEdit,
   onDelete,
 }) {
-
   const sensors = useSensors(
-    useSensor(PointerSensor,{
-      activationConstraint:{
-        distance:6,
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 6,
       },
-    })
+    }),
   );
 
   const groupedTasks = useMemo(() => {
-
     const groups = {
-      Pending:[],
-      "In Progress":[],
-      Review:[],
-      Completed:[],
+      Pending: [],
+      "In Progress": [],
+      Review: [],
+      Completed: [],
     };
 
-    tasks.forEach(task=>{
-
+    tasks.forEach((task) => {
       let status = task.status || "Pending";
 
-      if(status==="Todo" || status==="To Do"){
-        status="Pending";
+      if (status === "Todo" || status === "To Do") {
+        status = "Pending";
       }
 
-      if(!groups[status]){
-        status="Pending";
+      if (!groups[status]) {
+        status = "Pending";
       }
 
       groups[status].push(task);
-
     });
 
     return groups;
+  }, [tasks]);
 
-  },[tasks]);
+  const handleDragEnd = ({ active, over }) => {
+    if (!over) return;
 
-  const handleDragEnd = ({active,over})=>{
+    const dragged = tasks.find((t) => t._id === active.id);
 
-    if(!over) return;
-
-    const dragged = tasks.find(
-      t=>t._id===active.id
-    );
-
-    if(!dragged) return;
+    if (!dragged) return;
 
     let newStatus = over.id;
 
-    const overTask = tasks.find(
-      t=>t._id===over.id
-    );
+    const overTask = tasks.find((t) => t._id === over.id);
 
-    if(overTask){
+    if (overTask) {
       newStatus = overTask.status;
     }
 
-    if(newStatus==="Todo"){
-      newStatus="Pending";
+    if (newStatus === "Todo") {
+      newStatus = "Pending";
     }
 
-    if(dragged.status===newStatus){
+    if (dragged.status === newStatus) {
       return;
     }
 
-    onStatusChange(dragged._id,newStatus);
-
+    onStatusChange(dragged._id, newStatus);
   };
 
   return (
-
     <motion.section
       className="kanban-wrapper"
-      initial={{opacity:0,y:25}}
-      animate={{opacity:1,y:0}}
-      transition={{duration:.35}}
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
     >
-
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
       >
-
         <SortableContext
-          items={tasks.map(t=>t._id)}
+          items={tasks.map((t) => t._id)}
           strategy={verticalListSortingStrategy}
         >
-
           <div className="kanban-board">
-
-            {COLUMNS.map(column=>(
-
+            {COLUMNS.map((column) => (
               <KanbanColumn
                 key={column.id}
                 id={column.id}
@@ -160,72 +143,51 @@ export default function KanbanBoard({
                 onEdit={onEdit}
                 onDelete={onDelete}
               />
-
             ))}
-
           </div>
-
         </SortableContext>
-
       </DndContext>
 
       <motion.div
         className="kanban-summary"
-        initial={{opacity:0}}
-        animate={{opacity:1}}
-        transition={{delay:.25}}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.25 }}
       >
-
-        {COLUMNS.map(column=>{
-
+        {COLUMNS.map((column) => {
           const count = groupedTasks[column.id].length;
 
           const percent =
-            tasks.length===0
-              ?0
-              :Math.round(
-                  (count/tasks.length)*100
-                );
+            tasks.length === 0 ? 0 : Math.round((count / tasks.length) * 100);
 
-          return(
-
+          return (
             <motion.div
               whileHover={{
-                y:-5,
+                y: -5,
               }}
               key={column.id}
               className="summary-card"
             >
-
               <div
                 className="summary-icon"
                 style={{
-                  background:column.color,
+                  background: column.color,
                 }}
               >
                 {column.icon}
               </div>
 
               <div className="summary-content">
-
                 <h4>{column.title}</h4>
 
                 <h2>{count}</h2>
 
                 <span>{percent}% of tasks</span>
-
               </div>
-
             </motion.div>
-
           );
-
         })}
-
       </motion.div>
-
     </motion.section>
-
   );
-
 }

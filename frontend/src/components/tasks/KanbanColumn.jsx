@@ -26,9 +26,7 @@ const KanbanColumn = ({
     <motion.section
       layout
       ref={setNodeRef}
-      className={`kanban-column ${
-        isOver ? "drag-over" : ""
-      }`}
+      className={`kanban-column ${isOver ? "drag-over" : ""}`}
       initial={{
         opacity: 0,
         y: 30,
@@ -41,10 +39,6 @@ const KanbanColumn = ({
         duration: 0.35,
       }}
     >
-      {/* ===============================
-          COLUMN HEADER
-      =============================== */}
-
       <div
         className="kanban-column-header"
         style={{
@@ -65,10 +59,7 @@ const KanbanColumn = ({
             <h3>{title}</h3>
 
             <p>
-              {tasks.length}{" "}
-              {tasks.length === 1
-                ? "Task"
-                : "Tasks"}
+              {tasks.length} {tasks.length === 1 ? "Task" : "Tasks"}
             </p>
           </div>
         </div>
@@ -84,17 +75,9 @@ const KanbanColumn = ({
         </div>
       </div>
 
-      {/* ===============================
-          COLUMN BODY
-      =============================== */}
-
       <SortableContext
-        items={tasks.map(
-          (task) => task._id
-        )}
-        strategy={
-          verticalListSortingStrategy
-        }
+        items={tasks.map((task) => task._id)}
+        strategy={verticalListSortingStrategy}
       >
         <div className="kanban-column-body">
           <AnimatePresence mode="popLayout">
@@ -134,12 +117,7 @@ const KanbanColumn = ({
 
                 <h4>No Tasks</h4>
 
-                <p>
-                  Drag tasks here or create
-                  a new one.
-                </p>
-
-                {/* Keep Drop Zone Active */}
+                <p>Drag tasks here or create a new one.</p>
 
                 <div
                   style={{
@@ -153,10 +131,6 @@ const KanbanColumn = ({
         </div>
       </SortableContext>
 
-      {/* ===============================
-          COLUMN FOOTER
-      =============================== */}
-
       <div className="kanban-column-footer">
         <div className="footer-left">
           <span
@@ -167,20 +141,13 @@ const KanbanColumn = ({
           />
 
           <span>
-            {tasks.length}{" "}
-            {tasks.length === 1
-              ? "task"
-              : "tasks"}
+            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
           </span>
         </div>
 
         <div className="footer-right">
           {tasks.length > 0
-            ? `${Math.round(
-                (tasks.length /
-                  Math.max(tasks.length, 1)) *
-                  100
-              )}%`
+            ? `${Math.round((tasks.length / Math.max(tasks.length, 1)) * 100)}%`
             : "0%"}
         </div>
       </div>

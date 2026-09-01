@@ -15,19 +15,9 @@ import {
   FaSave,
 } from "react-icons/fa";
 
-const priorities = [
-  "Low",
-  "Medium",
-  "High",
-  "Critical",
-];
+const priorities = ["Low", "Medium", "High", "Critical"];
 
-const statuses = [
-  "Pending",
-  "In Progress",
-  "Review",
-  "Completed",
-];
+const statuses = ["Pending", "In Progress", "Review", "Completed"];
 
 const defaultForm = {
   title: "",
@@ -67,19 +57,11 @@ function TaskModal({
 
       progress: task.progress ?? 0,
 
-      dueDate: task.dueDate
-        ? task.dueDate.substring(0, 10)
-        : "",
+      dueDate: task.dueDate ? task.dueDate.substring(0, 10) : "",
 
-      project:
-        task.project?._id ||
-        task.project ||
-        "",
+      project: task.project?._id || task.project || "",
 
-      assignee:
-        task.assignee?._id ||
-        task.assignee ||
-        "",
+      assignee: task.assignee?._id || task.assignee || "",
     });
   }, [task, open]);
 
@@ -88,15 +70,9 @@ function TaskModal({
 
     setForm((prev) => ({
       ...prev,
-      [name]:
-        name === "progress"
-          ? Number(value)
-          : value,
+      [name]: name === "progress" ? Number(value) : value,
     }));
   };
-    /* =====================================================
-      SAVE
-  ====================================================== */
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,10 +85,6 @@ function TaskModal({
       description: form.description.trim(),
     });
   };
-
-  /* =====================================================
-      ANIMATION
-  ====================================================== */
 
   const backdropVariants = {
     hidden: {
@@ -152,15 +124,9 @@ function TaskModal({
     },
   };
 
-  /* =====================================================
-      RENDER
-  ====================================================== */
-
   return (
     <AnimatePresence>
-
       {open && (
-
         <motion.div
           className="task-modal-backdrop"
           variants={backdropVariants}
@@ -169,86 +135,41 @@ function TaskModal({
           exit="exit"
           onClick={onClose}
         >
-
           <motion.div
             className="task-modal"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
+            onClick={(e) => e.stopPropagation()}
           >
-
-            {/* =====================================
-                HEADER
-            ===================================== */}
-
             <div className="task-modal-header">
-
               <div className="modal-title">
-
                 <div className="modal-icon">
-
                   <FaTasks />
-
                 </div>
 
                 <div>
-
-                  <h2>
-
-                    {task
-                      ? "Edit Task"
-                      : "Create New Task"}
-
-                  </h2>
+                  <h2>{task ? "Edit Task" : "Create New Task"}</h2>
 
                   <p>
-
                     {task
                       ? "Update your existing task."
                       : "Create and organize your work efficiently."}
-
                   </p>
-
                 </div>
-
               </div>
 
-              <button
-                className="modal-close"
-                type="button"
-                onClick={onClose}
-              >
-
+              <button className="modal-close" type="button" onClick={onClose}>
                 <FaTimes />
-
               </button>
-
             </div>
 
-            {/* =====================================
-                FORM
-            ===================================== */}
-
-            <form
-              className="task-form"
-              onSubmit={handleSubmit}
-            >
-                            {/* =====================================================
-                  TITLE
-              ====================================================== */}
-
+            <form className="task-form" onSubmit={handleSubmit}>
               <div className="form-group">
-
                 <label>
-
                   <FaTasks />
-
                   Task Title
-
                 </label>
 
                 <input
@@ -259,21 +180,12 @@ function TaskModal({
                   onChange={handleChange}
                   required
                 />
-
               </div>
 
-              {/* =====================================================
-                  DESCRIPTION
-              ====================================================== */}
-
               <div className="form-group">
-
                 <label>
-
                   <FaAlignLeft />
-
                   Description
-
                 </label>
 
                 <textarea
@@ -283,25 +195,13 @@ function TaskModal({
                   value={form.description}
                   onChange={handleChange}
                 />
-
               </div>
 
-              {/* =====================================================
-                  PRIORITY & STATUS
-              ====================================================== */}
-
               <div className="form-row">
-
-                {/* Priority */}
-
                 <div className="form-group">
-
                   <label>
-
                     <FaFlag />
-
                     Priority
-
                   </label>
 
                   <select
@@ -309,34 +209,18 @@ function TaskModal({
                     value={form.priority}
                     onChange={handleChange}
                   >
-
                     {priorities.map((priority) => (
-
-                      <option
-                        key={priority}
-                        value={priority}
-                      >
-
+                      <option key={priority} value={priority}>
                         {priority}
-
                       </option>
-
                     ))}
-
                   </select>
-
                 </div>
 
-                {/* Status */}
-
                 <div className="form-group">
-
                   <label>
-
                     <FaLayerGroup />
-
                     Status
-
                   </label>
 
                   <select
@@ -344,41 +228,20 @@ function TaskModal({
                     value={form.status}
                     onChange={handleChange}
                   >
-
                     {statuses.map((status) => (
-
-                      <option
-                        key={status}
-                        value={status}
-                      >
-
+                      <option key={status} value={status}>
                         {status}
-
                       </option>
-
                     ))}
-
                   </select>
-
                 </div>
-
               </div>
-                            {/* =====================================================
-                  DUE DATE & PROGRESS
-              ====================================================== */}
 
               <div className="form-row">
-
-                {/* Due Date */}
-
                 <div className="form-group">
-
                   <label>
-
                     <FaCalendarAlt />
-
                     Due Date
-
                   </label>
 
                   <input
@@ -387,27 +250,16 @@ function TaskModal({
                     value={form.dueDate}
                     onChange={handleChange}
                   />
-
                 </div>
 
-                {/* Progress */}
-
                 <div className="form-group">
-
                   <label className="progress-label">
-
                     <span>
-
                       <FaChartLine />
-
                       Progress
-
                     </span>
 
-                    <strong>
-                      {form.progress}%
-                    </strong>
-
+                    <strong>{form.progress}%</strong>
                   </label>
 
                   <input
@@ -420,27 +272,14 @@ function TaskModal({
                     onChange={handleChange}
                     className="progress-slider"
                   />
-
                 </div>
-
               </div>
 
-              {/* =====================================================
-                  PROJECT & ASSIGNEE
-              ====================================================== */}
-
               <div className="form-row">
-
-                {/* Project */}
-
                 <div className="form-group">
-
                   <label>
-
                     <FaFolderOpen />
-
                     Project
-
                   </label>
 
                   <select
@@ -448,39 +287,20 @@ function TaskModal({
                     value={form.project}
                     onChange={handleChange}
                   >
-
-                    <option value="">
-                      Select Project
-                    </option>
+                    <option value="">Select Project</option>
 
                     {projects.map((project) => (
-
-                      <option
-                        key={project._id}
-                        value={project._id}
-                      >
-
-                        {project.title ||
-                          project.name}
-
+                      <option key={project._id} value={project._id}>
+                        {project.title || project.name}
                       </option>
-
                     ))}
-
                   </select>
-
                 </div>
 
-                {/* Assignee */}
-
                 <div className="form-group">
-
                   <label>
-
                     <FaUser />
-
                     Assignee
-
                   </label>
 
                   <select
@@ -488,33 +308,16 @@ function TaskModal({
                     value={form.assignee}
                     onChange={handleChange}
                   >
-
-                    <option value="">
-                      Unassigned
-                    </option>
+                    <option value="">Unassigned</option>
 
                     {users.map((user) => (
-
-                      <option
-                        key={user._id}
-                        value={user._id}
-                      >
-
+                      <option key={user._id} value={user._id}>
                         {user.name}
-
                       </option>
-
                     ))}
-
                   </select>
-
                 </div>
-
               </div>
-
-              {/* =====================================================
-                  LIVE PREVIEW
-              ====================================================== */}
 
               <motion.div
                 className="task-preview"
@@ -525,54 +328,30 @@ function TaskModal({
                   opacity: 1,
                 }}
               >
-
                 <div className="preview-header">
-
-                  <h4>
-                    Live Preview
-                  </h4>
+                  <h4>Live Preview</h4>
 
                   <span
                     className={`preview-priority priority-${form.priority.toLowerCase()}`}
                   >
                     {form.priority}
                   </span>
-
                 </div>
 
-                <h3>
-
-                  {form.title ||
-                    "Task title"}
-
-                </h3>
+                <h3>{form.title || "Task title"}</h3>
 
                 <p>
-
-                  {form.description ||
-                    "Task description will appear here..."}
-
+                  {form.description || "Task description will appear here..."}
                 </p>
 
                 <div className="preview-footer">
+                  <span>Status: {form.status}</span>
 
-                  <span>
-                    Status: {form.status}
-                  </span>
-
-                  <span>
-                    Progress: {form.progress}%
-                  </span>
-
+                  <span>Progress: {form.progress}%</span>
                 </div>
-
               </motion.div>
-                            {/* =====================================================
-                  FOOTER
-              ====================================================== */}
 
               <div className="task-modal-footer">
-
                 <button
                   type="button"
                   className="btn btn-secondary"
@@ -585,42 +364,25 @@ function TaskModal({
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={
-                    loading ||
-                    !form.title.trim()
-                  }
+                  disabled={loading || !form.title.trim()}
                 >
-
                   {loading ? (
-
                     <>
                       <span className="btn-spinner" />
                       Saving...
                     </>
-
                   ) : (
-
                     <>
                       <FaSave />
-                      {task
-                        ? "Update Task"
-                        : "Create Task"}
+                      {task ? "Update Task" : "Create Task"}
                     </>
-
                   )}
-
                 </button>
-
               </div>
-
             </form>
-
           </motion.div>
-
         </motion.div>
-
       )}
-
     </AnimatePresence>
   );
 }

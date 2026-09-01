@@ -1,5 +1,3 @@
-// src/components/reports/PriorityChart.jsx
-
 import { useMemo } from "react";
 import { FaArrowUp, FaMinus, FaArrowDown } from "react-icons/fa";
 
@@ -13,9 +11,7 @@ const PriorityChart = ({ tasks = [] }) => {
 
     tasks.forEach((task) => {
       const priority = String(
-        task?.priority ||
-        task?.priorityLevel ||
-        "medium"
+        task?.priority || task?.priorityLevel || "medium",
       ).toLowerCase();
 
       if (priority.includes("high")) {
@@ -29,17 +25,11 @@ const PriorityChart = ({ tasks = [] }) => {
 
     const total = counts.high + counts.medium + counts.low;
 
-    const highPercent = total
-      ? Math.round((counts.high / total) * 100)
-      : 0;
+    const highPercent = total ? Math.round((counts.high / total) * 100) : 0;
 
-    const mediumPercent = total
-      ? Math.round((counts.medium / total) * 100)
-      : 0;
+    const mediumPercent = total ? Math.round((counts.medium / total) * 100) : 0;
 
-    const lowPercent = total
-      ? Math.round((counts.low / total) * 100)
-      : 0;
+    const lowPercent = total ? Math.round((counts.low / total) * 100) : 0;
 
     return {
       ...counts,
@@ -50,15 +40,8 @@ const PriorityChart = ({ tasks = [] }) => {
     };
   }, [tasks]);
 
-  const {
-    high,
-    medium,
-    low,
-    total,
-    highPercent,
-    mediumPercent,
-    lowPercent,
-  } = priorityData;
+  const { high, medium, low, total, highPercent, mediumPercent, lowPercent } =
+    priorityData;
 
   if (total === 0) {
     return (
@@ -74,8 +57,8 @@ const PriorityChart = ({ tasks = [] }) => {
           <h4>No priority data yet</h4>
 
           <p>
-            Create tasks with priority levels to generate
-            workspace priority intelligence.
+            Create tasks with priority levels to generate workspace priority
+            intelligence.
           </p>
         </div>
       </div>
@@ -114,10 +97,7 @@ const PriorityChart = ({ tasks = [] }) => {
 
   return (
     <div className="priority-premium">
-
-      {/* DONUT AREA */}
       <div className="priority-donut-zone">
-
         <div
           className="priority-premium-donut"
           style={{
@@ -126,37 +106,28 @@ const PriorityChart = ({ tasks = [] }) => {
           }}
         >
           <div className="priority-donut-hole">
-            <span className="priority-total-label">
-              TOTAL TASKS
-            </span>
+            <span className="priority-total-label">TOTAL TASKS</span>
 
             <strong>{total}</strong>
 
-            <span className="priority-total-subtitle">
-              WORKSPACE
-            </span>
+            <span className="priority-total-subtitle">WORKSPACE</span>
           </div>
         </div>
 
         <div className="priority-donut-glow" />
       </div>
 
-      {/* LEGEND / DETAILS */}
       <div className="priority-details">
-
         <div className="priority-details-heading">
           <div>
             <span>PRIORITY MIX</span>
             <strong>Task distribution</strong>
           </div>
 
-          <div className="priority-total-badge">
-            {total} Tasks
-          </div>
+          <div className="priority-total-badge">{total} Tasks</div>
         </div>
 
         <div className="priority-breakdown">
-
           {priorityItems.map((item) => {
             const Icon = item.icon;
 
@@ -165,11 +136,8 @@ const PriorityChart = ({ tasks = [] }) => {
                 className={`priority-premium-item ${item.key}`}
                 key={item.key}
               >
-
                 <div className="priority-item-top">
-
                   <div className="priority-item-title">
-
                     <div className="priority-item-icon">
                       <Icon />
                     </div>
@@ -178,14 +146,12 @@ const PriorityChart = ({ tasks = [] }) => {
                       <strong>{item.label}</strong>
                       <span>{item.percent}% of tasks</span>
                     </div>
-
                   </div>
 
                   <div className="priority-item-number">
                     <strong>{item.value}</strong>
                     <span>{item.shortLabel}</span>
                   </div>
-
                 </div>
 
                 <div className="priority-item-progress">
@@ -195,11 +161,9 @@ const PriorityChart = ({ tasks = [] }) => {
                     }}
                   />
                 </div>
-
               </div>
             );
           })}
-
         </div>
       </div>
     </div>
