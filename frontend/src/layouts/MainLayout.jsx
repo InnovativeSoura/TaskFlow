@@ -1,5 +1,3 @@
-// src/layouts/MainLayout.jsx
-
 import { useState } from "react";
 
 import Sidebar from "../components/Sidebar";
@@ -20,36 +18,13 @@ const MainLayout = ({ children }) => {
         sidebarOpen ? "sidebar-expanded" : "sidebar-collapsed"
       }`}
     >
-      {/* =========================
-          Sidebar
-      ========================== */}
-
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
-
-      {/* =========================
-          Main Area
-      ========================== */}
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="taskflow-main">
+        <Navbar sidebarOpen={sidebarOpen} onSidebarToggle={toggleSidebar} />
 
-        {/* Navbar */}
-
-        <Navbar
-          sidebarOpen={sidebarOpen}
-          onSidebarToggle={toggleSidebar}
-        />
-
-        {/* Page */}
-
-        <main className="taskflow-content">
-          {children}
-        </main>
-
+        <main className="taskflow-content">{children}</main>
       </div>
-
     </div>
   );
 };

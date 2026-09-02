@@ -1,5 +1,3 @@
-// src/pages/Home.jsx
-
 import LandingNavbar from "../components/landing/LandingNavbar";
 import BackgroundAnimation from "../components/landing/BackgroundAnimation";
 
@@ -15,35 +13,13 @@ import "../styles/Landing.css";
 const Home = () => {
   return (
     <div className="landing-page">
-
-      {/* =====================================================
-          GLOBAL BACKGROUND
-          Rendered once behind the complete landing page
-      ===================================================== */}
       <BackgroundAnimation />
 
-      {/* =====================================================
-          LANDING NAVBAR
-      ===================================================== */}
       <LandingNavbar />
 
-      {/* =====================================================
-          MAIN LANDING CONTENT
-
-          IMPORTANT:
-          Hero owns its own #home section.
-          Do NOT wrap Hero inside another 100vh section.
-      ===================================================== */}
       <main className="landing-main">
-
-        {/* ===================================================
-            HERO
-        =================================================== */}
         <Hero />
 
-        {/* ===================================================
-            STATISTICS
-        =================================================== */}
         <section
           id="statistics"
           className="landing-section landing-statistics-section"
@@ -51,9 +27,6 @@ const Home = () => {
           <Statistics />
         </section>
 
-        {/* ===================================================
-            FEATURES
-        =================================================== */}
         <section
           id="features"
           className="landing-section landing-features-section"
@@ -61,9 +34,6 @@ const Home = () => {
           <Features />
         </section>
 
-        {/* ===================================================
-            TESTIMONIALS
-        =================================================== */}
         <section
           id="testimonials"
           className="landing-section landing-testimonials-section"
@@ -71,23 +41,12 @@ const Home = () => {
           <Testimonials />
         </section>
 
-        {/* ===================================================
-            CTA / CONTACT
-        =================================================== */}
-        <section
-          id="contact"
-          className="landing-section landing-cta-section"
-        >
+        <section id="contact" className="landing-section landing-cta-section">
           <CTA />
         </section>
-
       </main>
 
-      {/* =====================================================
-          FOOTER
-      ===================================================== */}
       <Footer />
-
     </div>
   );
 };

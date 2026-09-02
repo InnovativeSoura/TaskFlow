@@ -1,5 +1,3 @@
-// src/context/AuthContext.jsx
-
 import {
   createContext,
   useContext,
@@ -11,10 +9,6 @@ import {
 import api from "../api/axios";
 
 const AuthContext = createContext(null);
-
-/* =========================================================
-   GET STORED USER
-========================================================= */
 
 const getStoredUser = () => {
   try {
@@ -36,15 +30,7 @@ const getStoredUser = () => {
   }
 };
 
-/* =========================================================
-   AUTH PROVIDER
-========================================================= */
-
 export const AuthProvider = ({ children }) => {
-  /* =======================================================
-     AUTH STATE
-  ======================================================= */
-
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token");
   });
@@ -55,10 +41,6 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
 
-  /* =======================================================
-     SAVE AUTHENTICATION
-  ======================================================= */
-
   const saveAuth = useCallback((jwt, currentUser) => {
     if (jwt) {
       localStorage.setItem("token", jwt);
@@ -66,18 +48,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     if (currentUser) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify(currentUser)
-      );
+      localStorage.setItem("user", JSON.stringify(currentUser));
 
       setUser(currentUser);
     }
   }, []);
-
-  /* =======================================================
-     CLEAR AUTHENTICATION
-  ======================================================= */
 
   const clearAuth = useCallback(() => {
     localStorage.removeItem("token");
@@ -87,19 +62,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   }, []);
 
-  /* =======================================================
-     LOAD CURRENT USER
-     
-     This is ONLY used when the application starts
-     and an existing token is already stored.
-  ======================================================= */
-
   const loadCurrentUser = useCallback(async () => {
     const storedToken = localStorage.getItem("token");
-
-    /* ---------------------------------------------
-       No token = normal logged-out state
-    --------------------------------------------- */
 
     if (!storedToken) {
       setLoading(false);
@@ -112,103 +76,54 @@ export const AuthProvider = ({ children }) => {
       const response = await api.get("/auth/me");
 
       const currentUser =
-        response.data?.user ||
-        response.data?.data?.user ||
-        null;
+        response.data?.user || response.data?.data?.user || null;
 
-      if (
-        response.data?.success &&
-        currentUser
-      ) {
+      if (response.data?.success && currentUser) {
         setToken(storedToken);
         setUser(currentUser);
 
-        localStorage.setItem(
-          "user",
-          JSON.stringify(currentUser)
-        );
+        localStorage.setItem("user", JSON.stringify(currentUser));
       } else {
-        console.warn(
-          "Auth session could not be restored."
-        );
+        console.warn("Auth session could not be restored.");
 
         clearAuth();
       }
     } catch (error) {
       console.error(
         "Load Current User Error:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
 
-      /*
-       * Existing token is invalid.
-       * Clear the session so protected routes
-       * cannot be accessed.
-       */
       clearAuth();
     } finally {
       setLoading(false);
     }
   }, [clearAuth]);
 
-  /* =======================================================
-     INITIAL AUTH CHECK
-  ======================================================= */
-
   useEffect(() => {
     loadCurrentUser();
   }, [loadCurrentUser]);
 
-  /* =======================================================
-     LOGIN
-     
-     IMPORTANT:
-     Do NOT immediately call /auth/me here.
-     
-     The login endpoint already returned the token
-     and user. Save them and let the application
-     proceed directly to the dashboard.
-  ======================================================= */
-
   const login = async ({ email, password }) => {
     try {
-      const response = await api.post(
-        "/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
       const data = response.data;
 
-      console.log(
-        "🔐 Login Response:",
-        data
-      );
-
-      /* ---------------------------------------------
-         Check backend response
-      --------------------------------------------- */
+      console.log("🔐 Login Response:", data);
 
       if (!data?.success) {
         return {
           success: false,
-          message:
-            data?.message ||
-            "Login failed.",
+          message: data?.message || "Login failed.",
         };
       }
 
-      /* ---------------------------------------------
-         Make sure token exists
-      --------------------------------------------- */
-
       if (!data?.token) {
-        console.error(
-          "Login succeeded but no JWT token was returned.",
-          data
-        );
+        console.error("Login succeeded but no JWT token was returned.", data);
 
         return {
           success: false,
@@ -217,15 +132,8 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      /* ---------------------------------------------
-         Make sure user exists
-      --------------------------------------------- */
-
       if (!data?.user) {
-        console.error(
-          "Login succeeded but no user was returned.",
-          data
-        );
+        console.error("Login succeeded but no user was returned.", data);
 
         return {
           success: false,
@@ -234,33 +142,13 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      /* ---------------------------------------------
-         SAVE AUTHENTICATION
-      --------------------------------------------- */
+      saveAuth(data.token, data.user);
 
-      saveAuth(
-        data.token,
-        data.user
-      );
+      console.log("✅ Login successful.");
 
-      console.log(
-        "✅ Login successful."
-      );
+      console.log("👤 User:", data.user);
 
-      console.log(
-        "👤 User:",
-        data.user
-      );
-
-      console.log(
-        "🔑 Token saved."
-      );
-
-      /* ---------------------------------------------
-         RETURN SUCCESS IMMEDIATELY
-         
-         AuthCard will navigate to /dashboard.
-      --------------------------------------------- */
+      console.log("🔑 Token saved.");
 
       return {
         success: true,
@@ -268,11 +156,7 @@ export const AuthProvider = ({ children }) => {
         token: data.token,
       };
     } catch (error) {
-      console.error(
-        "❌ Login Error:",
-        error.response?.data ||
-          error.message
-      );
+      console.error("❌ Login Error:", error.response?.data || error.message);
 
       return {
         success: false,
@@ -283,58 +167,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /* =======================================================
-     REGISTER
-     
-     Same principle as login:
-     use the token/user returned by registration directly.
-  ======================================================= */
-
-  const register = async ({
-    name,
-    email,
-    password,
-    role = "Team Member",
-  }) => {
+  const register = async ({ name, email, password, role = "Team Member" }) => {
     try {
-      const response = await api.post(
-        "/auth/register",
-        {
-          name,
-          email,
-          password,
-          role,
-        }
-      );
+      const response = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+        role,
+      });
 
       const data = response.data;
 
-      console.log(
-        "📝 Register Response:",
-        data
-      );
-
-      /* ---------------------------------------------
-         Check backend response
-      --------------------------------------------- */
+      console.log("📝 Register Response:", data);
 
       if (!data?.success) {
         return {
           success: false,
-          message:
-            data?.message ||
-            "Registration failed.",
+          message: data?.message || "Registration failed.",
         };
       }
-
-      /* ---------------------------------------------
-         Token check
-      --------------------------------------------- */
 
       if (!data?.token) {
         console.error(
           "Registration succeeded but no JWT token was returned.",
-          data
+          data,
         );
 
         return {
@@ -344,15 +200,8 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      /* ---------------------------------------------
-         User check
-      --------------------------------------------- */
-
       if (!data?.user) {
-        console.error(
-          "Registration succeeded but no user was returned.",
-          data
-        );
+        console.error("Registration succeeded but no user was returned.", data);
 
         return {
           success: false,
@@ -361,22 +210,9 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      /* ---------------------------------------------
-         SAVE AUTHENTICATION
-      --------------------------------------------- */
+      saveAuth(data.token, data.user);
 
-      saveAuth(
-        data.token,
-        data.user
-      );
-
-      console.log(
-        "✅ Registration successful."
-      );
-
-      /* ---------------------------------------------
-         RETURN SUCCESS
-      --------------------------------------------- */
+      console.log("✅ Registration successful.");
 
       return {
         success: true,
@@ -386,27 +222,18 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error(
         "❌ Register Error:",
-        error.response?.data ||
-          error.message
+        error.response?.data || error.message,
       );
 
       return {
         success: false,
-        message:
-          error.response?.data?.message ||
-          "Registration failed.",
+        message: error.response?.data?.message || "Registration failed.",
       };
     }
   };
 
-  /* =======================================================
-     LOGOUT
-  ======================================================= */
-
   const logout = useCallback(() => {
-    console.log(
-      "🚪 Logging out..."
-    );
+    console.log("🚪 Logging out...");
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -415,80 +242,33 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   }, []);
 
-  /* =======================================================
-     UPDATE USER
-  ======================================================= */
+  const updateUser = useCallback((updatedUser) => {
+    if (!updatedUser) {
+      return;
+    }
 
-  const updateUser = useCallback(
-    (updatedUser) => {
-      if (!updatedUser) {
-        return;
-      }
+    setUser(updatedUser);
 
-      setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  }, []);
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(updatedUser)
-      );
-    },
-    []
-  );
-
-  /* =======================================================
-     AUTHENTICATED STATUS
-  ======================================================= */
-
-  const isAuthenticated =
-    Boolean(token) &&
-    Boolean(user);
-
-  /* =======================================================
-     DEBUG
-  ======================================================= */
+  const isAuthenticated = Boolean(token) && Boolean(user);
 
   useEffect(() => {
-    console.log(
-      "===================================="
-    );
+    console.log("====================================");
 
-    console.log(
-      "🔐 AUTH STATE"
-    );
+    console.log("🔐 AUTH STATE");
 
-    console.log(
-      "Token:",
-      token ? "PRESENT" : "MISSING"
-    );
+    console.log("Token:", token ? "PRESENT" : "MISSING");
 
-    console.log(
-      "User:",
-      user || "NONE"
-    );
+    console.log("User:", user || "NONE");
 
-    console.log(
-      "Authenticated:",
-      isAuthenticated
-    );
+    console.log("Authenticated:", isAuthenticated);
 
-    console.log(
-      "Loading:",
-      loading
-    );
+    console.log("Loading:", loading);
 
-    console.log(
-      "===================================="
-    );
-  }, [
-    token,
-    user,
-    isAuthenticated,
-    loading,
-  ]);
-
-  /* =======================================================
-     PROVIDER
-  ======================================================= */
+    console.log("====================================");
+  }, [token, user, isAuthenticated, loading]);
 
   return (
     <AuthContext.Provider
@@ -514,17 +294,11 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-/* =========================================================
-   CUSTOM HOOK
-========================================================= */
-
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth must be used inside AuthProvider"
-    );
+    throw new Error("useAuth must be used inside AuthProvider");
   }
 
   return context;

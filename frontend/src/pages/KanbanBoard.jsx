@@ -1,17 +1,6 @@
-// src/pages/KanbanBoard.jsx
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-} from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 import {
   FaArchive,
@@ -54,14 +43,6 @@ import DeleteTaskModal from "../components/tasks/DeleteTaskModal";
 
 import "../styles/KanbanBoard.css";
 
-
-/* =========================================================
-   STATUS CONFIGURATION
-
-   IMPORTANT:
-   These values MUST match Task.js
-========================================================= */
-
 const COLUMNS = [
   {
     id: "To Do",
@@ -100,17 +81,7 @@ const COLUMNS = [
   },
 ];
 
-const PRIORITIES = [
-  "Low",
-  "Medium",
-  "High",
-  "Critical",
-];
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
+const PRIORITIES = ["Low", "Medium", "High", "Critical"];
 
 const normalizeStatus = (status) => {
   if (!status) return "To Do";
@@ -130,11 +101,9 @@ const normalizeStatus = (status) => {
   return status;
 };
 
-
 const getTaskId = (task) => {
   return task?._id || task?.id;
 };
-
 
 const getProjectName = (task) => {
   if (!task?.project) return "No project";
@@ -143,13 +112,8 @@ const getProjectName = (task) => {
     return "Project";
   }
 
-  return (
-    task.project.title ||
-    task.project.name ||
-    "Untitled Project"
-  );
+  return task.project.title || task.project.name || "Untitled Project";
 };
-
 
 const getAssigneeName = (task) => {
   if (!task?.assignedTo) {
@@ -160,19 +124,11 @@ const getAssigneeName = (task) => {
     return "Assigned";
   }
 
-  return (
-    task.assignedTo.name ||
-    task.assignedTo.username ||
-    "User"
-  );
+  return task.assignedTo.name || task.assignedTo.username || "User";
 };
 
-
 const getInitials = (name = "") => {
-  const parts = name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
+  const parts = name.trim().split(/\s+/).filter(Boolean);
 
   if (!parts.length) return "U";
 
@@ -180,12 +136,8 @@ const getInitials = (name = "") => {
     return parts[0].substring(0, 2).toUpperCase();
   }
 
-  return (
-    parts[0][0] +
-    parts[parts.length - 1][0]
-  ).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
-
 
 const formatDate = (date) => {
   if (!date) return null;
@@ -196,15 +148,11 @@ const formatDate = (date) => {
     return null;
   }
 
-  return parsed.toLocaleDateString(
-    "en-US",
-    {
-      month: "short",
-      day: "numeric",
-    }
-  );
+  return parsed.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 };
-
 
 const isOverdue = (date, status) => {
   if (!date || status === "Completed") {
@@ -220,17 +168,7 @@ const isOverdue = (date, status) => {
   return due < today;
 };
 
-
-/* =========================================================
-   COMPONENT
-========================================================= */
-
 function KanbanBoard() {
-
-  /* =======================================================
-     STATE
-  ======================================================= */
-
   const [tasks, setTasks] = useState([]);
 
   const [projects, setProjects] = useState([]);
@@ -243,186 +181,93 @@ function KanbanBoard() {
 
   const [search, setSearch] = useState("");
 
-  const [statusFilter, setStatusFilter] =
-    useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
 
-  const [priorityFilter, setPriorityFilter] =
-    useState("All");
+  const [priorityFilter, setPriorityFilter] = useState("All");
 
-  const [sortBy, setSortBy] =
-    useState("newest");
+  const [sortBy, setSortBy] = useState("newest");
 
-  const [showFilters, setShowFilters] =
-    useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
-  const [viewMode, setViewMode] =
-    useState("board");
+  const [viewMode, setViewMode] = useState("board");
 
-  const [taskModalOpen, setTaskModalOpen] =
-    useState(false);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
 
-  const [deleteModalOpen, setDeleteModalOpen] =
-    useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const [selectedTask, setSelectedTask] =
-    useState(null);
-
-
-  /* =======================================================
-     LOAD TASKS
-  ======================================================= */
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const loadTasks = useCallback(async () => {
-
     try {
-
       setLoading(true);
 
       const response = await api.get("/tasks");
 
-      const incomingTasks =
-        response?.data?.tasks ||
-        response?.data?.data ||
-        [];
+      const incomingTasks = response?.data?.tasks || response?.data?.data || [];
 
-      const normalizedTasks =
-        incomingTasks.map((task) => ({
-          ...task,
-          status: normalizeStatus(task.status),
-        }));
+      const normalizedTasks = incomingTasks.map((task) => ({
+        ...task,
+        status: normalizeStatus(task.status),
+      }));
 
       setTasks(normalizedTasks);
-
     } catch (error) {
+      console.error("Kanban load tasks:", error);
 
-      console.error(
-        "Kanban load tasks:",
-        error
-      );
-
-      toast.error(
-        error?.response?.data?.message ||
-        "Unable to load tasks."
-      );
-
+      toast.error(error?.response?.data?.message || "Unable to load tasks.");
     } finally {
-
       setLoading(false);
-
     }
-
   }, []);
-
-
-  /* =======================================================
-     LOAD PROJECTS
-  ======================================================= */
 
   const loadProjects = useCallback(async () => {
-
     try {
+      const response = await api.get("/projects");
 
-      const response =
-        await api.get("/projects");
-
-      const data =
-        response?.data?.projects ||
-        response?.data?.data ||
-        [];
+      const data = response?.data?.projects || response?.data?.data || [];
 
       setProjects(data);
-
     } catch (error) {
-
-      console.error(
-        "Kanban load projects:",
-        error
-      );
+      console.error("Kanban load projects:", error);
 
       setProjects([]);
-
     }
-
   }, []);
-
-
-  /* =======================================================
-     LOAD USERS
-  ======================================================= */
 
   const loadUsers = useCallback(async () => {
-
     try {
+      const response = await api.get("/users");
 
-      const response =
-        await api.get("/users");
-
-      const data =
-        response?.data?.users ||
-        response?.data?.data ||
-        [];
+      const data = response?.data?.users || response?.data?.data || [];
 
       setUsers(data);
-
     } catch (error) {
-
-      console.error(
-        "Kanban load users:",
-        error
-      );
+      console.error("Kanban load users:", error);
 
       setUsers([]);
-
     }
-
   }, []);
 
-
-  /* =======================================================
-     INITIAL LOAD
-  ======================================================= */
-
   useEffect(() => {
-
     loadTasks();
     loadProjects();
     loadUsers();
-
-  }, [
-    loadTasks,
-    loadProjects,
-    loadUsers,
-  ]);
-
-
-  /* =======================================================
-     FILTERED TASKS
-  ======================================================= */
+  }, [loadTasks, loadProjects, loadUsers]);
 
   const filteredTasks = useMemo(() => {
-
     let result = [...tasks];
 
-    /* SEARCH */
-
-    const searchValue =
-      search.trim().toLowerCase();
+    const searchValue = search.trim().toLowerCase();
 
     if (searchValue) {
-
       result = result.filter((task) => {
+        const title = task.title?.toLowerCase() || "";
 
-        const title =
-          task.title?.toLowerCase() || "";
+        const description = task.description?.toLowerCase() || "";
 
-        const description =
-          task.description?.toLowerCase() || "";
+        const project = getProjectName(task).toLowerCase();
 
-        const project =
-          getProjectName(task).toLowerCase();
-
-        const assignee =
-          getAssigneeName(task).toLowerCase();
+        const assignee = getAssigneeName(task).toLowerCase();
 
         return (
           title.includes(searchValue) ||
@@ -430,69 +275,33 @@ function KanbanBoard() {
           project.includes(searchValue) ||
           assignee.includes(searchValue)
         );
-
       });
-
     }
-
-
-    /* STATUS */
 
     if (statusFilter !== "All") {
-
       result = result.filter(
-        (task) =>
-          normalizeStatus(task.status) ===
-          statusFilter
+        (task) => normalizeStatus(task.status) === statusFilter,
       );
-
     }
-
-
-    /* PRIORITY */
 
     if (priorityFilter !== "All") {
-
-      result = result.filter(
-        (task) =>
-          task.priority ===
-          priorityFilter
-      );
-
+      result = result.filter((task) => task.priority === priorityFilter);
     }
 
-
-    /* SORT */
-
     result.sort((a, b) => {
-
       if (sortBy === "oldest") {
-
-        return (
-          new Date(a.createdAt || 0) -
-          new Date(b.createdAt || 0)
-        );
-
+        return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
       }
 
       if (sortBy === "dueSoon") {
+        const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
 
-        const aDate =
-          a.dueDate
-            ? new Date(a.dueDate).getTime()
-            : Infinity;
-
-        const bDate =
-          b.dueDate
-            ? new Date(b.dueDate).getTime()
-            : Infinity;
+        const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
 
         return aDate - bDate;
-
       }
 
       if (sortBy === "priority") {
-
         const priorityOrder = {
           Critical: 4,
           High: 3,
@@ -501,86 +310,46 @@ function KanbanBoard() {
         };
 
         return (
-          (priorityOrder[b.priority] || 0) -
-          (priorityOrder[a.priority] || 0)
+          (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0)
         );
-
       }
 
-      return (
-        new Date(b.createdAt || 0) -
-        new Date(a.createdAt || 0)
-      );
-
+      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
     });
 
     return result;
-
-  }, [
-    tasks,
-    search,
-    statusFilter,
-    priorityFilter,
-    sortBy,
-  ]);
-
-
-  /* =======================================================
-     COLUMN TASKS
-  ======================================================= */
+  }, [tasks, search, statusFilter, priorityFilter, sortBy]);
 
   const getColumnTasks = useCallback(
     (columnId) => {
-
       return filteredTasks.filter(
-        (task) =>
-          normalizeStatus(task.status) ===
-          columnId
+        (task) => normalizeStatus(task.status) === columnId,
       );
-
     },
-    [filteredTasks]
+    [filteredTasks],
   );
 
-
-  /* =======================================================
-     STATISTICS
-  ======================================================= */
-
   const stats = useMemo(() => {
-
     const total = tasks.length;
 
     const todo = tasks.filter(
-      (task) =>
-        normalizeStatus(task.status) ===
-        "To Do"
+      (task) => normalizeStatus(task.status) === "To Do",
     ).length;
 
     const progress = tasks.filter(
-      (task) =>
-        normalizeStatus(task.status) ===
-        "In Progress"
+      (task) => normalizeStatus(task.status) === "In Progress",
     ).length;
 
     const review = tasks.filter(
-      (task) =>
-        normalizeStatus(task.status) ===
-        "Review"
+      (task) => normalizeStatus(task.status) === "Review",
     ).length;
 
     const completed = tasks.filter(
-      (task) =>
-        normalizeStatus(task.status) ===
-        "Completed"
+      (task) => normalizeStatus(task.status) === "Completed",
     ).length;
 
     const completionRate =
-      total > 0
-        ? Math.round(
-            (completed / total) * 100
-          )
-        : 0;
+      total > 0 ? Math.round((completed / total) * 100) : 0;
 
     return {
       total,
@@ -590,380 +359,201 @@ function KanbanBoard() {
       completed,
       completionRate,
     };
-
   }, [tasks]);
 
-
-  /* =======================================================
-     CREATE TASK
-  ======================================================= */
-
   const handleCreateTask = () => {
-
     setSelectedTask(null);
 
     setTaskModalOpen(true);
-
   };
 
-
-  /* =======================================================
-     EDIT TASK
-  ======================================================= */
-
   const handleEditTask = (task) => {
-
     setSelectedTask(task);
 
     setTaskModalOpen(true);
-
   };
 
-
-  /* =======================================================
-     DELETE TASK
-  ======================================================= */
-
   const handleDeleteTask = (task) => {
-
     setSelectedTask(task);
 
     setDeleteModalOpen(true);
-
   };
 
-
-  /* =======================================================
-     SAVE TASK
-  ======================================================= */
-
   const handleSaveTask = async (form) => {
-
     try {
-
       setSaving(true);
 
       const payload = {
-
         title: form.title,
 
-        description:
-          form.description || "",
+        description: form.description || "",
 
-        project:
-          form.project || null,
+        project: form.project || null,
 
-        assignedTo:
-          form.assignee || null,
+        assignedTo: form.assignee || null,
 
-        priority:
-          form.priority || "Medium",
+        priority: form.priority || "Medium",
 
-        status:
-          normalizeStatus(
-            form.status
-          ),
+        status: normalizeStatus(form.status),
 
-        progress:
-          Number(form.progress || 0),
+        progress: Number(form.progress || 0),
 
-        dueDate:
-          form.dueDate || null,
-
+        dueDate: form.dueDate || null,
       };
 
-
       if (selectedTask) {
-
-        const response =
-          await api.put(
-            `/tasks/${getTaskId(
-              selectedTask
-            )}`,
-            payload
-          );
-
-        const updatedTask =
-          response?.data?.task;
-
-        if (updatedTask) {
-
-          setTasks((prev) =>
-            prev.map((task) =>
-              getTaskId(task) ===
-              getTaskId(selectedTask)
-                ? {
-                    ...updatedTask,
-                    status:
-                      normalizeStatus(
-                        updatedTask.status
-                      ),
-                  }
-                : task
-            )
-          );
-
-        } else {
-
-          await loadTasks();
-
-        }
-
-        toast.success(
-          "Task updated successfully."
+        const response = await api.put(
+          `/tasks/${getTaskId(selectedTask)}`,
+          payload,
         );
 
-      } else {
+        const updatedTask = response?.data?.task;
 
-        const response =
-          await api.post(
-            "/tasks",
-            payload
+        if (updatedTask) {
+          setTasks((prev) =>
+            prev.map((task) =>
+              getTaskId(task) === getTaskId(selectedTask)
+                ? {
+                    ...updatedTask,
+                    status: normalizeStatus(updatedTask.status),
+                  }
+                : task,
+            ),
           );
+        } else {
+          await loadTasks();
+        }
 
-        const createdTask =
-          response?.data?.task;
+        toast.success("Task updated successfully.");
+      } else {
+        const response = await api.post("/tasks", payload);
+
+        const createdTask = response?.data?.task;
 
         if (createdTask) {
-
           setTasks((prev) => [
             {
               ...createdTask,
-              status:
-                normalizeStatus(
-                  createdTask.status
-                ),
+              status: normalizeStatus(createdTask.status),
             },
             ...prev,
           ]);
-
         } else {
-
           await loadTasks();
-
         }
 
-        toast.success(
-          "Task created successfully."
-        );
-
+        toast.success("Task created successfully.");
       }
 
       setTaskModalOpen(false);
       setSelectedTask(null);
-
     } catch (error) {
+      console.error("Save task:", error);
 
-      console.error(
-        "Save task:",
-        error
-      );
-
-      toast.error(
-        error?.response?.data?.message ||
-        "Unable to save task."
-      );
-
+      toast.error(error?.response?.data?.message || "Unable to save task.");
     } finally {
-
       setSaving(false);
-
     }
-
   };
 
-
-  /* =======================================================
-     CONFIRM DELETE
-  ======================================================= */
-
   const handleConfirmDelete = async () => {
-
     if (!selectedTask) return;
 
     try {
-
       setSaving(true);
 
-      await api.delete(
-        `/tasks/${getTaskId(
-          selectedTask
-        )}`
-      );
+      await api.delete(`/tasks/${getTaskId(selectedTask)}`);
 
       setTasks((prev) =>
-        prev.filter(
-          (task) =>
-            getTaskId(task) !==
-            getTaskId(selectedTask)
-        )
+        prev.filter((task) => getTaskId(task) !== getTaskId(selectedTask)),
       );
 
-      toast.success(
-        "Task deleted successfully."
-      );
+      toast.success("Task deleted successfully.");
 
       setDeleteModalOpen(false);
 
       setSelectedTask(null);
-
     } catch (error) {
+      console.error("Delete task:", error);
 
-      console.error(
-        "Delete task:",
-        error
-      );
-
-      toast.error(
-        error?.response?.data?.message ||
-        "Unable to delete task."
-      );
-
+      toast.error(error?.response?.data?.message || "Unable to delete task.");
     } finally {
-
       setSaving(false);
-
     }
-
   };
 
-
-  /* =======================================================
-     DRAG END
-  ======================================================= */
-
   const handleDragEnd = async (result) => {
-
-    const {
-      destination,
-      draggableId,
-    } = result;
+    const { destination, draggableId } = result;
 
     if (!destination) {
       return;
     }
 
-    const newStatus =
-      destination.droppableId;
+    const newStatus = destination.droppableId;
 
-    const task =
-      tasks.find(
-        (item) =>
-          String(
-            getTaskId(item)
-          ) ===
-          String(draggableId)
-      );
+    const task = tasks.find(
+      (item) => String(getTaskId(item)) === String(draggableId),
+    );
 
     if (!task) {
       return;
     }
 
-    const currentStatus =
-      normalizeStatus(task.status);
+    const currentStatus = normalizeStatus(task.status);
 
-    if (
-      currentStatus ===
-      newStatus
-    ) {
+    if (currentStatus === newStatus) {
       return;
     }
 
-
-    /* Optimistic UI */
-
     setTasks((prev) =>
       prev.map((item) =>
-        String(
-          getTaskId(item)
-        ) ===
-        String(draggableId)
+        String(getTaskId(item)) === String(draggableId)
           ? {
               ...item,
               status: newStatus,
             }
-          : item
-      )
+          : item,
+      ),
     );
 
-
     try {
+      await api.patch(`/tasks/${draggableId}/status`, {
+        status: newStatus,
+      });
 
-      await api.patch(
-        `/tasks/${draggableId}/status`,
-        {
-          status: newStatus,
-        }
-      );
-
-      toast.success(
-        `Moved to ${newStatus}.`,
-        {
-          autoClose: 1400,
-        }
-      );
-
+      toast.success(`Moved to ${newStatus}.`, {
+        autoClose: 1400,
+      });
     } catch (error) {
-
-      console.error(
-        "Move task:",
-        error
-      );
+      console.error("Move task:", error);
 
       /* Rollback */
 
       setTasks((prev) =>
         prev.map((item) =>
-          String(
-            getTaskId(item)
-          ) ===
-          String(draggableId)
+          String(getTaskId(item)) === String(draggableId)
             ? {
                 ...item,
-                status:
-                  currentStatus,
+                status: currentStatus,
               }
-            : item
-        )
+            : item,
+        ),
       );
 
-      toast.error(
-        error?.response?.data?.message ||
-        "Unable to move task."
-      );
-
+      toast.error(error?.response?.data?.message || "Unable to move task.");
     }
-
   };
 
-
-  /* =======================================================
-     RESET FILTERS
-  ======================================================= */
-
   const resetFilters = () => {
-
     setSearch("");
     setStatusFilter("All");
     setPriorityFilter("All");
     setSortBy("newest");
-
   };
-
-
-  /* =======================================================
-     RENDER
-  ======================================================= */
 
   return (
     <div className="kanban-page">
-
-      {/* ===================================================
-          PREMIUM BACKGROUND
-      =================================================== */}
-
       <div className="kanban-background">
-
         <div className="kanban-grid" />
 
         <div className="kanban-orb kanban-orb-one" />
@@ -973,35 +563,16 @@ function KanbanBoard() {
         <div className="kanban-orb kanban-orb-three" />
 
         <div className="kanban-stars" />
-
       </div>
-
-
-      {/* ===================================================
-          APP SHELL
-      =================================================== */}
 
       <Sidebar />
 
       <div className="kanban-content-shell">
-
         <Navbar />
 
-
-        {/* =================================================
-            MAIN
-        ================================================= */}
-
         <main className="kanban-main">
-
-          {/* =================================================
-              PAGE HERO
-          ================================================= */}
-
           <section className="kanban-hero">
-
             <div className="kanban-hero-left">
-
               <motion.div
                 className="kanban-hero-icon"
                 initial={{
@@ -1015,42 +586,23 @@ function KanbanBoard() {
                   y: 0,
                 }}
               >
-
                 <FaLayerGroup />
-
               </motion.div>
 
-
               <div className="kanban-hero-copy">
-
                 <div className="kanban-breadcrumb">
-
-                  <span>
-                    WORKSPACE
-                  </span>
+                  <span>WORKSPACE</span>
 
                   <b>›</b>
 
-                  <strong>
-                    TASKS
-                  </strong>
-
+                  <strong>TASKS</strong>
                 </div>
 
+                <h1>Kanban Board</h1>
 
-                <h1>
-                  Kanban Board
-                </h1>
-
-                <p>
-                  Visualize, organize and manage
-                  your project tasks.
-                </p>
-
+                <p>Visualize, organize and manage your project tasks.</p>
               </div>
-
             </div>
-
 
             <motion.button
               className="kanban-create-button"
@@ -1063,26 +615,15 @@ function KanbanBoard() {
                 scale: 0.98,
               }}
             >
-
               <span className="create-button-icon">
                 <FaPlus />
               </span>
 
-              <span>
-                Create Task
-              </span>
-
+              <span>Create Task</span>
             </motion.button>
-
           </section>
 
-
-          {/* =================================================
-              STATS
-          ================================================= */}
-
           <section className="kanban-stats">
-
             <StatCard
               icon={FaTasks}
               title="Total Tasks"
@@ -1114,230 +655,121 @@ function KanbanBoard() {
               description="Successfully completed"
               className="green"
             />
-
           </section>
 
-
-          {/* =================================================
-              TOOLBAR
-          ================================================= */}
-
           <section className="kanban-toolbar">
-
             <div className="toolbar-search">
-
               <FaSearch />
 
               <input
                 type="text"
                 placeholder="Search tasks, projects or assignees..."
                 value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
+                onChange={(e) => setSearch(e.target.value)}
               />
 
               {search && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSearch("")
-                  }
-                >
+                <button type="button" onClick={() => setSearch("")}>
                   <FaTimes />
                 </button>
               )}
-
             </div>
 
-
             <div className="toolbar-control">
-
               <FaFilter />
 
               <select
                 value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setStatusFilter(e.target.value)}
               >
+                <option value="All">All Status</option>
 
-                <option value="All">
-                  All Status
-                </option>
+                <option value="To Do">To Do</option>
 
-                <option value="To Do">
-                  To Do
-                </option>
+                <option value="In Progress">In Progress</option>
 
-                <option value="In Progress">
-                  In Progress
-                </option>
+                <option value="Review">In Review</option>
 
-                <option value="Review">
-                  In Review
-                </option>
-
-                <option value="Completed">
-                  Completed
-                </option>
-
+                <option value="Completed">Completed</option>
               </select>
 
               <FaChevronDown />
-
             </div>
 
-
             <div className="toolbar-control">
-
               <FaFlag />
 
               <select
                 value={priorityFilter}
-                onChange={(e) =>
-                  setPriorityFilter(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setPriorityFilter(e.target.value)}
               >
+                <option value="All">All Priorities</option>
 
-                <option value="All">
-                  All Priorities
-                </option>
-
-                {PRIORITIES.map(
-                  (priority) => (
-                    <option
-                      key={priority}
-                      value={priority}
-                    >
-                      {priority}
-                    </option>
-                  )
-                )}
-
+                {PRIORITIES.map((priority) => (
+                  <option key={priority} value={priority}>
+                    {priority}
+                  </option>
+                ))}
               </select>
 
               <FaChevronDown />
-
             </div>
-
 
             <div className="toolbar-count">
-
               Showing
-
-              <strong>
-                {filteredTasks.length}
-              </strong>
-
+              <strong>{filteredTasks.length}</strong>
               tasks
-
             </div>
 
-
             <div className="toolbar-control sort-control">
-
               <FaSlidersH />
 
               <select
                 value={sortBy}
-                onChange={(e) =>
-                  setSortBy(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setSortBy(e.target.value)}
               >
+                <option value="newest">Sort: Newest</option>
 
-                <option value="newest">
-                  Sort: Newest
-                </option>
+                <option value="oldest">Sort: Oldest</option>
 
-                <option value="oldest">
-                  Sort: Oldest
-                </option>
+                <option value="dueSoon">Sort: Due Date</option>
 
-                <option value="dueSoon">
-                  Sort: Due Date
-                </option>
-
-                <option value="priority">
-                  Sort: Priority
-                </option>
-
+                <option value="priority">Sort: Priority</option>
               </select>
 
               <FaChevronDown />
-
             </div>
-
 
             <button
               type="button"
-              className={`toolbar-icon-button ${
-                showFilters
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() =>
-                setShowFilters(
-                  (prev) => !prev
-                )
-              }
+              className={`toolbar-icon-button ${showFilters ? "active" : ""}`}
+              onClick={() => setShowFilters((prev) => !prev)}
               title="More filters"
             >
-
               <FaSlidersH />
-
             </button>
 
-
             <div className="toolbar-view-toggle">
-
               <button
                 type="button"
-                className={
-                  viewMode === "board"
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setViewMode("board")
-                }
+                className={viewMode === "board" ? "active" : ""}
+                onClick={() => setViewMode("board")}
               >
                 <FaThLarge />
               </button>
 
               <button
                 type="button"
-                className={
-                  viewMode === "list"
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setViewMode("list")
-                }
+                className={viewMode === "list" ? "active" : ""}
+                onClick={() => setViewMode("list")}
               >
                 <FaList />
               </button>
-
             </div>
-
           </section>
 
-
-          {/* =================================================
-              EXTRA FILTER PANEL
-          ================================================= */}
-
           <AnimatePresence>
-
             {showFilters && (
-
               <motion.div
                 className="advanced-filters"
                 initial={{
@@ -1356,119 +788,66 @@ function KanbanBoard() {
                   y: -8,
                 }}
               >
-
                 <div>
-
                   <span>
                     <FaArchive />
                     Completion
                   </span>
 
-                  <strong>
-                    {stats.completionRate}%
-                  </strong>
-
+                  <strong>{stats.completionRate}%</strong>
                 </div>
 
                 <div>
-
                   <span>
                     <FaCalendarAlt />
                     Active tasks
                   </span>
 
-                  <strong>
-                    {stats.todo +
-                      stats.progress +
-                      stats.review}
-                  </strong>
-
+                  <strong>{stats.todo + stats.progress + stats.review}</strong>
                 </div>
 
                 <div>
-
                   <span>
                     <FaCheck />
                     Completed
                   </span>
 
-                  <strong>
-                    {stats.completed}
-                  </strong>
-
+                  <strong>{stats.completed}</strong>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                >
+                <button type="button" onClick={resetFilters}>
                   Reset filters
                 </button>
-
               </motion.div>
-
             )}
-
           </AnimatePresence>
 
-
-          {/* =================================================
-              BOARD
-          ================================================= */}
-
           {viewMode === "board" ? (
-
-            <DragDropContext
-              onDragEnd={handleDragEnd}
-            >
-
+            <DragDropContext onDragEnd={handleDragEnd}>
               <section className="kanban-board">
-
                 {COLUMNS.map((column) => (
-
                   <KanbanColumn
                     key={column.id}
                     column={column}
-                    tasks={getColumnTasks(
-                      column.id
-                    )}
+                    tasks={getColumnTasks(column.id)}
                     loading={loading}
-                    onCreate={
-                      handleCreateTask
-                    }
-                    onEdit={
-                      handleEditTask
-                    }
-                    onDelete={
-                      handleDeleteTask
-                    }
+                    onCreate={handleCreateTask}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
                   />
-
                 ))}
-
               </section>
-
             </DragDropContext>
-
           ) : (
-
             <TaskListView
               tasks={filteredTasks}
               loading={loading}
               onEdit={handleEditTask}
               onDelete={handleDeleteTask}
             />
-
           )}
-
         </main>
-
       </div>
-
-
-      {/* ===================================================
-          TASK MODAL
-      =================================================== */}
 
       <TaskModal
         open={taskModalOpen}
@@ -1477,57 +856,31 @@ function KanbanBoard() {
         users={users}
         loading={saving}
         onClose={() => {
-
           if (!saving) {
-
             setTaskModalOpen(false);
             setSelectedTask(null);
-
           }
-
         }}
         onSave={handleSaveTask}
       />
-
-
-      {/* ===================================================
-          DELETE MODAL
-      =================================================== */}
 
       <DeleteTaskModal
         open={deleteModalOpen}
         task={selectedTask}
         loading={saving}
         onClose={() => {
-
           if (!saving) {
-
             setDeleteModalOpen(false);
             setSelectedTask(null);
-
           }
-
         }}
         onConfirm={handleConfirmDelete}
       />
-
     </div>
   );
 }
 
-
-/* =========================================================
-   STAT CARD
-========================================================= */
-
-function StatCard({
-  icon: Icon,
-  title,
-  value,
-  description,
-  className,
-}) {
-
+function StatCard({ icon: Icon, title, value, description, className }) {
   return (
     <motion.div
       className={`kanban-stat-card ${className}`}
@@ -1535,135 +888,67 @@ function StatCard({
         y: -3,
       }}
     >
-
       <div className="stat-card-icon">
-
         <Icon />
-
       </div>
-
 
       <div className="stat-card-content">
+        <span>{title}</span>
 
-        <span>
-          {title}
-        </span>
+        <strong>{value}</strong>
 
-        <strong>
-          {value}
-        </strong>
-
-        <small>
-          {description}
-        </small>
-
+        <small>{description}</small>
       </div>
 
-
       <div className="stat-card-glow" />
-
     </motion.div>
   );
 }
 
-
-/* =========================================================
-   KANBAN COLUMN
-========================================================= */
-
-function KanbanColumn({
-  column,
-  tasks,
-  loading,
-  onCreate,
-  onEdit,
-  onDelete,
-}) {
-
+function KanbanColumn({ column, tasks, loading, onCreate, onEdit, onDelete }) {
   const Icon = column.icon;
 
   return (
-    <div
-      className={`kanban-column ${column.className}`}
-    >
-
+    <div className={`kanban-column ${column.className}`}>
       <div className="column-top-line" />
-
 
       {/* HEADER */}
 
       <div className="column-header">
-
         <div className="column-title">
-
           <div className="column-icon">
-
             <Icon />
-
           </div>
 
-          <h3>
-            {column.shortTitle}
-          </h3>
+          <h3>{column.shortTitle}</h3>
 
-          <span className="column-count">
-            {tasks.length}
-          </span>
-
+          <span className="column-count">{tasks.length}</span>
         </div>
 
-
-        <button
-          type="button"
-          className="column-menu"
-          title="Column options"
-        >
-
+        <button type="button" className="column-menu" title="Column options">
           <FaEllipsisV />
-
         </button>
-
       </div>
 
-
-      {/* BODY */}
-
-      <Droppable
-        droppableId={column.id}
-      >
-
+      <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
-
           <div
             className={`column-drop-area ${
-              snapshot.isDraggingOver
-                ? "dragging-over"
-                : ""
+              snapshot.isDraggingOver ? "dragging-over" : ""
             }`}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-
             {loading ? (
-
               <ColumnLoading />
-
             ) : tasks.length ? (
-
               tasks.map((task, index) => (
-
                 <Draggable
-                  key={String(
-                    getTaskId(task)
-                  )}
-                  draggableId={String(
-                    getTaskId(task)
-                  )}
+                  key={String(getTaskId(task))}
+                  draggableId={String(getTaskId(task))}
                   index={index}
                 >
-
                   {(provided, snapshot) => (
-
                     <TaskCard
                       task={task}
                       provided={provided}
@@ -1671,276 +956,134 @@ function KanbanColumn({
                       onEdit={onEdit}
                       onDelete={onDelete}
                     />
-
                   )}
-
                 </Draggable>
-
               ))
-
             ) : (
-
-              <EmptyColumn
-                column={column}
-                onCreate={onCreate}
-              />
-
+              <EmptyColumn column={column} onCreate={onCreate} />
             )}
 
             {provided.placeholder}
-
           </div>
-
         )}
-
       </Droppable>
-
     </div>
   );
 }
 
+function TaskCard({ task, provided, snapshot, onEdit, onDelete }) {
+  const priority = task.priority || "Medium";
 
-/* =========================================================
-   TASK CARD
-========================================================= */
+  const status = normalizeStatus(task.status);
 
-function TaskCard({
-  task,
-  provided,
-  snapshot,
-  onEdit,
-  onDelete,
-}) {
+  const assignee = getAssigneeName(task);
 
-  const priority =
-    task.priority || "Medium";
+  const dueDate = formatDate(task.dueDate);
 
-  const status =
-    normalizeStatus(task.status);
-
-  const assignee =
-    getAssigneeName(task);
-
-  const dueDate =
-    formatDate(task.dueDate);
-
-  const overdue =
-    isOverdue(
-      task.dueDate,
-      status
-    );
+  const overdue = isOverdue(task.dueDate, status);
 
   return (
     <motion.article
-      className={`kanban-task-card ${
-        snapshot.isDragging
-          ? "is-dragging"
-          : ""
-      }`}
+      className={`kanban-task-card ${snapshot.isDragging ? "is-dragging" : ""}`}
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       layout
     >
-
-      {/* CARD TOP */}
-
       <div className="task-card-top">
-
-        <span
-          className={`task-priority priority-${priority.toLowerCase()}`}
-        >
-
+        <span className={`task-priority priority-${priority.toLowerCase()}`}>
           <FaFlag />
 
           {priority}
-
         </span>
 
-
         <div className="task-card-actions">
-
           <button
             type="button"
             title="Edit task"
             onClick={(e) => {
-
               e.stopPropagation();
 
               onEdit(task);
-
             }}
           >
-
             <FaCog />
-
           </button>
 
           <button
             type="button"
             title="Delete task"
             onClick={(e) => {
-
               e.stopPropagation();
 
               onDelete(task);
-
             }}
           >
-
             <FaTimes />
-
           </button>
-
         </div>
-
       </div>
 
-
-      {/* TITLE */}
-
-      <h4 className="task-card-title">
-
-        {task.title ||
-          "Untitled Task"}
-
-      </h4>
-
-
-      {/* DESCRIPTION */}
+      <h4 className="task-card-title">{task.title || "Untitled Task"}</h4>
 
       {task.description && (
-
-        <p className="task-card-description">
-
-          {task.description}
-
-        </p>
-
+        <p className="task-card-description">{task.description}</p>
       )}
 
-
-      {/* PROJECT */}
-
       <div className="task-card-project">
-
         <FaFolderOpen />
 
-        <span>
-          {getProjectName(task)}
-        </span>
-
+        <span>{getProjectName(task)}</span>
       </div>
 
-
-      {/* PROGRESS */}
-
       <div className="task-card-progress">
-
         <div className="progress-header">
+          <span>Progress</span>
 
-          <span>
-            Progress
-          </span>
-
-          <strong>
-            {task.progress || 0}%
-          </strong>
-
+          <strong>{task.progress || 0}%</strong>
         </div>
 
-
         <div className="progress-track">
-
           <div
             className="progress-fill"
             style={{
               width: `${Math.min(
                 100,
-                Math.max(
-                  0,
-                  Number(
-                    task.progress || 0
-                  )
-                )
+                Math.max(0, Number(task.progress || 0)),
               )}%`,
             }}
           />
-
         </div>
-
       </div>
 
-
-      {/* FOOTER */}
-
       <div className="task-card-footer">
-
         <div className="task-assignee">
+          <div className="assignee-avatar">{getInitials(assignee)}</div>
 
-          <div className="assignee-avatar">
-
-            {getInitials(
-              assignee
-            )}
-
-          </div>
-
-          <span>
-            {assignee}
-          </span>
-
+          <span>{assignee}</span>
         </div>
 
-
         {dueDate && (
-
-          <div
-            className={`task-due ${
-              overdue
-                ? "overdue"
-                : ""
-            }`}
-          >
-
+          <div className={`task-due ${overdue ? "overdue" : ""}`}>
             <FaCalendarAlt />
 
             {dueDate}
-
           </div>
-
         )}
-
       </div>
-
-
-      {/* DRAG HANDLE */}
 
       <div className="task-drag-handle">
-
         <FaGripVertical />
-
       </div>
-
     </motion.article>
   );
 }
 
-
-/* =========================================================
-   EMPTY COLUMN
-========================================================= */
-
-function EmptyColumn({
-  column,
-  onCreate,
-}) {
-
+function EmptyColumn({ column, onCreate }) {
   const Icon = column.icon;
 
   return (
     <div className="empty-column">
-
       <motion.div
         className="empty-icon"
         animate={{
@@ -1952,275 +1095,138 @@ function EmptyColumn({
           ease: "easeInOut",
         }}
       >
-
         <Icon />
 
         <span />
-
       </motion.div>
 
+      <h4>No tasks yet</h4>
 
-      <h4>
-        No tasks yet
-      </h4>
+      <p>Drag a task here or create a new one.</p>
 
-      <p>
-        Drag a task here or create a new one.
-      </p>
-
-
-      <button
-        type="button"
-        className="empty-add-button"
-        onClick={onCreate}
-      >
-
+      <button type="button" className="empty-add-button" onClick={onCreate}>
         <FaPlus />
-
         Add Task
-
       </button>
-
     </div>
   );
 }
-
-
-/* =========================================================
-   COLUMN LOADING
-========================================================= */
 
 function ColumnLoading() {
-
   return (
     <div className="column-loading">
-
       <span />
       <span />
       <span />
 
-      <p>
-        Loading tasks...
-      </p>
-
+      <p>Loading tasks...</p>
     </div>
   );
 }
 
-
-/* =========================================================
-   LIST VIEW
-========================================================= */
-
-function TaskListView({
-  tasks,
-  loading,
-  onEdit,
-  onDelete,
-}) {
-
+function TaskListView({ tasks, loading, onEdit, onDelete }) {
   if (loading) {
-
     return (
       <div className="task-list-loading">
-
         <FaTasks />
-
         Loading tasks...
-
       </div>
     );
-
   }
-
 
   if (!tasks.length) {
-
     return (
       <div className="task-list-empty">
-
         <div>
-
           <FaTasks />
-
         </div>
 
-        <h3>
-          No tasks found
-        </h3>
+        <h3>No tasks found</h3>
 
-        <p>
-          Try changing your search or filters.
-        </p>
-
+        <p>Try changing your search or filters.</p>
       </div>
     );
-
   }
-
 
   return (
     <div className="task-list-view">
-
       <div className="task-list-header">
+        <span>Task</span>
 
-        <span>
-          Task
-        </span>
+        <span>Status</span>
 
-        <span>
-          Status
-        </span>
+        <span>Priority</span>
 
-        <span>
-          Priority
-        </span>
+        <span>Assignee</span>
 
-        <span>
-          Assignee
-        </span>
+        <span>Due</span>
 
-        <span>
-          Due
-        </span>
-
-        <span>
-          Actions
-        </span>
-
+        <span>Actions</span>
       </div>
 
-
       {tasks.map((task) => {
+        const status = normalizeStatus(task.status);
 
-        const status =
-          normalizeStatus(
-            task.status
-          );
-
-        const assignee =
-          getAssigneeName(task);
+        const assignee = getAssigneeName(task);
 
         return (
-
-          <motion.div
-            className="task-list-row"
-            key={getTaskId(task)}
-            layout
-          >
-
+          <motion.div className="task-list-row" key={getTaskId(task)} layout>
             <div className="list-task-name">
-
               <div className="list-task-icon">
-
                 <FaTasks />
-
               </div>
 
               <div>
+                <strong>{task.title}</strong>
 
-                <strong>
-                  {task.title}
-                </strong>
-
-                <small>
-                  {getProjectName(task)}
-                </small>
-
+                <small>{getProjectName(task)}</small>
               </div>
-
             </div>
 
-
             <div>
-
               <span
                 className={`list-status status-${status
                   .toLowerCase()
                   .replace(/\s/g, "-")}`}
               >
-                {status === "Review"
-                  ? "In Review"
-                  : status}
+                {status === "Review" ? "In Review" : status}
               </span>
-
             </div>
 
-
             <div>
-
               <span
                 className={`task-priority priority-${(
-                  task.priority ||
-                  "Medium"
+                  task.priority || "Medium"
                 ).toLowerCase()}`}
               >
-
                 <FaFlag />
 
-                {task.priority ||
-                  "Medium"}
-
+                {task.priority || "Medium"}
               </span>
-
             </div>
-
 
             <div className="list-assignee">
-
-              <div className="assignee-avatar">
-
-                {getInitials(
-                  assignee
-                )}
-
-              </div>
+              <div className="assignee-avatar">{getInitials(assignee)}</div>
 
               {assignee}
-
             </div>
 
-
-            <div>
-
-              {formatDate(
-                task.dueDate
-              ) || "—"}
-
-            </div>
-
+            <div>{formatDate(task.dueDate) || "—"}</div>
 
             <div className="list-actions">
-
-              <button
-                type="button"
-                onClick={() =>
-                  onEdit(task)
-                }
-              >
+              <button type="button" onClick={() => onEdit(task)}>
                 <FaCog />
               </button>
 
-              <button
-                type="button"
-                onClick={() =>
-                  onDelete(task)
-                }
-              >
+              <button type="button" onClick={() => onDelete(task)}>
                 <FaTimes />
               </button>
-
             </div>
-
           </motion.div>
-
         );
-
       })}
-
     </div>
   );
 }
-
 
 export default KanbanBoard;

@@ -23,10 +23,6 @@ export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* ==========================================
-      FETCH PROJECTS
-  ========================================== */
-
   const fetchProjects = useCallback(async () => {
     if (!token) {
       setProjects([]);
@@ -39,11 +35,7 @@ export const ProjectProvider = ({ children }) => {
 
       const res = await getProjects();
 
-      const data =
-        res.data.projects ||
-        res.data.data ||
-        res.data ||
-        [];
+      const data = res.data.projects || res.data.data || res.data || [];
 
       setProjects(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -55,73 +47,39 @@ export const ProjectProvider = ({ children }) => {
     }
   }, [token]);
 
-  /* ==========================================
-      LOAD PROJECTS
-  ========================================== */
-
   useEffect(() => {
     if (!authLoading) {
       fetchProjects();
     }
   }, [fetchProjects, authLoading]);
 
-  /* ==========================================
-      CREATE PROJECT
-  ========================================== */
-
   const addProject = async (projectData) => {
     const res = await createProject(projectData);
 
-    const project =
-      res.data.project ||
-      res.data.data ||
-      res.data;
+    const project = res.data.project || res.data.data || res.data;
 
     setProjects((prev) => [project, ...prev]);
 
     return project;
   };
 
-  /* ==========================================
-      UPDATE PROJECT
-  ========================================== */
-
   const editProject = async (id, projectData) => {
     const res = await updateProject(id, projectData);
 
-    const updatedProject =
-      res.data.project ||
-      res.data.data ||
-      res.data;
+    const updatedProject = res.data.project || res.data.data || res.data;
 
     setProjects((prev) =>
-      prev.map((project) =>
-        project._id === id
-          ? updatedProject
-          : project
-      )
+      prev.map((project) => (project._id === id ? updatedProject : project)),
     );
 
     return updatedProject;
   };
 
-  /* ==========================================
-      DELETE PROJECT
-  ========================================== */
-
   const removeProject = async (id) => {
     await deleteProject(id);
 
-    setProjects((prev) =>
-      prev.filter(
-        (project) => project._id !== id
-      )
-    );
+    setProjects((prev) => prev.filter((project) => project._id !== id));
   };
-
-  /* ==========================================
-      REFRESH
-  ========================================== */
 
   const refreshProjects = async () => {
     await fetchProjects();
@@ -144,7 +102,6 @@ export const ProjectProvider = ({ children }) => {
   );
 };
 
-export const useProjects = () =>
-  useContext(ProjectContext);
+export const useProjects = () => useContext(ProjectContext);
 
 export default ProjectContext;

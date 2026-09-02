@@ -10,38 +10,17 @@ import "../styles/Auth.css";
 const AuthPage = () => {
   return (
     <div className="auth-page-wrapper">
-
-      {/* =====================================================
-          GLOBAL AUTH BACKGROUND
-      ===================================================== */}
-
       <BackgroundAnimation />
 
-      {/* =====================================================
-          AUTH PAGE
-      ===================================================== */}
-
       <main className="auth-page">
-
-        {/* ===================================================
-            LEFT HERO
-        =================================================== */}
-
         <section className="auth-hero-area">
           <HeroSection />
         </section>
 
-
-        {/* ===================================================
-            RIGHT AUTH CARD
-        =================================================== */}
-
         <section className="auth-card-area">
           <AuthCard />
         </section>
-
       </main>
-
     </div>
   );
 };

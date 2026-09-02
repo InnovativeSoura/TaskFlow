@@ -15,10 +15,6 @@ const useTasks = () => {
 
   const [error, setError] = useState(null);
 
-  /* ==========================================
-      FETCH TASKS
-  ========================================== */
-
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
@@ -26,20 +22,13 @@ const useTasks = () => {
 
       const res = await getTasks();
 
-      const data =
-        res?.data?.tasks ||
-        res?.data?.data ||
-        res?.data ||
-        [];
+      const data = res?.data?.tasks || res?.data?.data || res?.data || [];
 
       setTasks(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Fetch Tasks Error:", err);
 
-      setError(
-        err.response?.data?.message ||
-          "Unable to load tasks."
-      );
+      setError(err.response?.data?.message || "Unable to load tasks.");
 
       setTasks([]);
     } finally {
@@ -47,25 +36,14 @@ const useTasks = () => {
     }
   }, []);
 
-  /* ==========================================
-      INITIAL LOAD
-  ========================================== */
-
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
-  /* ==========================================
-      CREATE TASK
-  ========================================== */
-
   const addTask = async (taskData) => {
     const res = await createTask(taskData);
 
-    const task =
-      res?.data?.task ||
-      res?.data?.data ||
-      res?.data;
+    const task = res?.data?.task || res?.data?.data || res?.data;
 
     if (task) {
       setTasks((prev) => [task, ...prev]);
@@ -74,37 +52,21 @@ const useTasks = () => {
     return task;
   };
 
-  /* ==========================================
-      UPDATE TASK
-  ========================================== */
-
   const editTask = async (id, taskData) => {
     const res = await updateTask(id, taskData);
 
-    const updated =
-      res?.data?.task ||
-      res?.data?.data ||
-      res?.data;
+    const updated = res?.data?.task || res?.data?.data || res?.data;
 
     if (updated) {
       setTasks((prev) =>
-        prev.map((task) =>
-          task._id === id ? updated : task
-        )
+        prev.map((task) => (task._id === id ? updated : task)),
       );
     }
 
     return updated;
   };
 
-  /* ==========================================
-      UPDATE STATUS
-  ========================================== */
-
-  const changeTaskStatus = async (
-    id,
-    status
-  ) => {
+  const changeTaskStatus = async (id, status) => {
     const previousTasks = [...tasks];
 
     setTasks((prev) =>
@@ -114,28 +76,18 @@ const useTasks = () => {
               ...task,
               status,
             }
-          : task
-      )
+          : task,
+      ),
     );
 
     try {
-      const res = await updateTaskStatus(
-        id,
-        status
-      );
+      const res = await updateTaskStatus(id, status);
 
-      const updated =
-        res?.data?.task ||
-        res?.data?.data ||
-        res?.data;
+      const updated = res?.data?.task || res?.data?.data || res?.data;
 
       if (updated) {
         setTasks((prev) =>
-          prev.map((task) =>
-            task._id === id
-              ? updated
-              : task
-          )
+          prev.map((task) => (task._id === id ? updated : task)),
         );
       }
 
@@ -147,23 +99,11 @@ const useTasks = () => {
     }
   };
 
-  /* ==========================================
-      DELETE TASK
-  ========================================== */
-
   const removeTask = async (id) => {
     await deleteTask(id);
 
-    setTasks((prev) =>
-      prev.filter(
-        (task) => task._id !== id
-      )
-    );
+    setTasks((prev) => prev.filter((task) => task._id !== id));
   };
-
-  /* ==========================================
-      REFRESH
-  ========================================== */
 
   const refreshTasks = () => fetchTasks();
 

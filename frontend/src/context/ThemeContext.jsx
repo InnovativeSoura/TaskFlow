@@ -1,22 +1,6 @@
-// src/context/ThemeContext.jsx
-
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-/* =========================================================
-   THEME CONTEXT
-========================================================= */
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const ThemeContext = createContext(null);
-
-/* =========================================================
-   GET INITIAL THEME
-========================================================= */
 
 const getInitialTheme = () => {
   try {
@@ -30,21 +14,13 @@ const getInitialTheme = () => {
       return "light";
     }
   } catch (error) {
-    console.warn(
-      "Unable to read saved theme:",
-      error
-    );
+    console.warn("Unable to read saved theme:", error);
   }
 
   /* System preference */
 
-  if (
-    typeof window !== "undefined" &&
-    window.matchMedia
-  ) {
-    return window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches
+  if (typeof window !== "undefined" && window.matchMedia) {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
   }
@@ -52,131 +28,69 @@ const getInitialTheme = () => {
   return "light";
 };
 
-/* =========================================================
-   THEME PROVIDER
-========================================================= */
-
-export const ThemeProvider = ({
-  children,
-}) => {
-  const [theme, setTheme] = useState(
-    getInitialTheme
-  );
-
-  /* =======================================================
-     APPLY THEME
-  ======================================================= */
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
-    const root =
-      document.documentElement;
+    const root = document.documentElement;
 
-    const body =
-      document.body;
+    const body = document.body;
 
-    const isDark =
-      theme === "dark";
+    const isDark = theme === "dark";
 
     /* Root */
 
-    root.classList.toggle(
-      "dark-theme",
-      isDark
-    );
+    root.classList.toggle("dark-theme", isDark);
 
-    root.classList.toggle(
-      "light-theme",
-      !isDark
-    );
+    root.classList.toggle("light-theme", !isDark);
 
-    root.setAttribute(
-      "data-theme",
-      theme
-    );
+    root.setAttribute("data-theme", theme);
 
     /* Body */
 
-    body.classList.toggle(
-      "dark-theme",
-      isDark
-    );
+    body.classList.toggle("dark-theme", isDark);
 
-    body.classList.toggle(
-      "light-theme",
-      !isDark
-    );
+    body.classList.toggle("light-theme", !isDark);
 
     /* Persist */
 
     try {
-      localStorage.setItem(
-        "theme",
-        theme
-      );
+      localStorage.setItem("theme", theme);
     } catch (error) {
-      console.warn(
-        "Unable to save theme:",
-        error
-      );
+      console.warn("Unable to save theme:", error);
     }
 
     /* Notify components */
 
     window.dispatchEvent(
-      new CustomEvent(
-        "taskflow-theme-change",
-        {
-          detail: {
-            theme,
-          },
-        }
-      )
+      new CustomEvent("taskflow-theme-change", {
+        detail: {
+          theme,
+        },
+      }),
     );
   }, [theme]);
 
-  /* =======================================================
-     SYNC BETWEEN TABS
-  ======================================================= */
-
   useEffect(() => {
-    const handleStorage = (
-      event
-    ) => {
+    const handleStorage = (event) => {
       if (event.key !== "theme") {
         return;
       }
 
-      if (
-        event.newValue === "dark" ||
-        event.newValue === "light"
-      ) {
+      if (event.newValue === "dark" || event.newValue === "light") {
         setTheme(event.newValue);
       }
     };
 
-    window.addEventListener(
-      "storage",
-      handleStorage
-    );
+    window.addEventListener("storage", handleStorage);
 
     return () => {
-      window.removeEventListener(
-        "storage",
-        handleStorage
-      );
+      window.removeEventListener("storage", handleStorage);
     };
   }, []);
 
-  /* =======================================================
-     THEME FUNCTIONS
-  ======================================================= */
-
   const toggleTheme = () => {
-    setTheme((currentTheme) =>
-      currentTheme === "dark"
-        ? "light"
-        : "dark"
-    );
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
   };
 
   const setLightTheme = () => {
@@ -187,22 +101,15 @@ export const ThemeProvider = ({
     setTheme("dark");
   };
 
-  /* =======================================================
-     MEMOIZED VALUE
-  ======================================================= */
-
   const value = useMemo(
     () => ({
       theme,
 
-      darkMode:
-        theme === "dark",
+      darkMode: theme === "dark",
 
-      isDark:
-        theme === "dark",
+      isDark: theme === "dark",
 
-      isLight:
-        theme === "light",
+      isLight: theme === "light",
 
       toggleTheme,
 
@@ -212,30 +119,19 @@ export const ThemeProvider = ({
 
       setDarkTheme,
     }),
-    [theme]
+    [theme],
   );
 
   return (
-    <ThemeContext.Provider
-      value={value}
-    >
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };
 
-/* =========================================================
-   USE THEME
-========================================================= */
-
 export const useTheme = () => {
-  const context =
-    useContext(ThemeContext);
+  const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error(
-      "useTheme must be used inside ThemeProvider"
-    );
+    throw new Error("useTheme must be used inside ThemeProvider");
   }
 
   return context;

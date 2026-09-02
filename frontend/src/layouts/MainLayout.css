@@ -1,198 +1,126 @@
-/* ==========================================================
-   TASKFLOW — MAIN LAYOUT
-   ========================================================== */
+:root {
+  --sidebar-expanded-width: 260px;
+  --sidebar-collapsed-width: 84px;
 
-:root{
-  --sidebar-expanded-width:260px;
-  --sidebar-collapsed-width:84px;
+  --navbar-height: 72px;
 
-  --navbar-height:72px;
+  --layout-bg: #070d19;
 
-  --layout-bg:#070d19;
+  --surface: #0f172a;
+  --surface-2: #111c30;
 
-  --surface:#0f172a;
-  --surface-2:#111c30;
+  --border: rgba(255, 255, 255, 0.06);
 
-  --border:rgba(255,255,255,.06);
-
-  --transition:280ms cubic-bezier(.4,0,.2,1);
+  --transition: 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================
-   ROOT LAYOUT
-   ========================================================== */
+.taskflow-layout {
+  --sidebar-width: var(--sidebar-expanded-width);
 
-.taskflow-layout{
-
-  --sidebar-width:var(--sidebar-expanded-width);
-
-  display:grid;
+  display: grid;
 
   grid-template-columns:
-      var(--sidebar-width)
-      minmax(0,1fr);
+    var(--sidebar-width)
+    minmax(0, 1fr);
 
-  width:100%;
-  height:100vh;
+  width: 100%;
+  height: 100vh;
 
-  overflow:hidden;
+  overflow: hidden;
 
-  background:var(--layout-bg);
+  background: var(--layout-bg);
 
-  transition:grid-template-columns var(--transition);
+  transition: grid-template-columns var(--transition);
 }
 
-/* ==========================================================
-   SIDEBAR STATES
-   ========================================================== */
-
-.taskflow-layout.sidebar-expanded{
-  --sidebar-width:var(--sidebar-expanded-width);
+.taskflow-layout.sidebar-expanded {
+  --sidebar-width: var(--sidebar-expanded-width);
 }
 
-.taskflow-layout.sidebar-collapsed{
-  --sidebar-width:var(--sidebar-collapsed-width);
+.taskflow-layout.sidebar-collapsed {
+  --sidebar-width: var(--sidebar-collapsed-width);
 }
 
-/* ==========================================================
-   MAIN
-   ========================================================== */
-
-.taskflow-main{
-
-  display:grid;
+.taskflow-main {
+  display: grid;
 
   grid-template-rows:
-      var(--navbar-height)
-      minmax(0,1fr);
+    var(--navbar-height)
+    minmax(0, 1fr);
 
-  width:100%;
-  height:100vh;
+  width: 100%;
+  height: 100vh;
 
-  min-width:0;
+  min-width: 0;
 
-  overflow:hidden;
+  overflow: hidden;
 
-  background:
-      linear-gradient(
-          180deg,
-          #09111d 0%,
-          #070d19 100%
-      );
+  background: linear-gradient(180deg, #09111d 0%, #070d19 100%);
 }
 
-/* ==========================================================
-   PAGE CONTENT
-   ========================================================== */
+.taskflow-content {
+  overflow-y: auto;
+  overflow-x: hidden;
 
-.taskflow-content{
+  min-width: 0;
 
-  overflow-y:auto;
-  overflow-x:hidden;
+  padding: 24px;
 
-  min-width:0;
-
-  padding:24px;
-
-  scroll-behavior:smooth;
+  scroll-behavior: smooth;
 }
 
-/* ==========================================================
-   CHILDREN
-   ========================================================== */
-
-.taskflow-content>*{
-  width:100%;
-  min-width:0;
+.taskflow-content > * {
+  width: 100%;
+  min-width: 0;
 }
 
-/* ==========================================================
-   SCROLLBAR
-   ========================================================== */
-
-.taskflow-content::-webkit-scrollbar{
-  width:8px;
+.taskflow-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-.taskflow-content::-webkit-scrollbar-track{
-  background:transparent;
+.taskflow-content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.taskflow-content::-webkit-scrollbar-thumb{
-  background:#2b3952;
-  border-radius:999px;
+.taskflow-content::-webkit-scrollbar-thumb {
+  background: #2b3952;
+  border-radius: 999px;
 }
 
-.taskflow-content::-webkit-scrollbar-thumb:hover{
-  background:#42506c;
+.taskflow-content::-webkit-scrollbar-thumb:hover {
+  background: #42506c;
 }
 
-/* ==========================================================
-   TABLETS
-   ========================================================== */
+@media (max-width: 992px) {
+  :root {
+    --sidebar-expanded-width: 220px;
+  }
+}
 
-@media(max-width:992px){
-
-  :root{
-
-    --sidebar-expanded-width:220px;
-
+@media (max-width: 768px) {
+  .taskflow-layout {
+    grid-template-columns: 1fr;
   }
 
+  .taskflow-main {
+    width: 100%;
+  }
 }
 
-/* ==========================================================
-   MOBILE
-   ========================================================== */
-
-@media(max-width:768px){
-
-  .taskflow-layout{
-
-    grid-template-columns:1fr;
-
+@media (max-width: 576px) {
+  .taskflow-content {
+    padding: 16px;
   }
-
-  .taskflow-main{
-
-    width:100%;
-
-  }
-
 }
 
-/* ==========================================================
-   SMALL MOBILE
-   ========================================================== */
-
-@media(max-width:576px){
-
-  .taskflow-content{
-
-    padding:16px;
-
-  }
-
-}
-
-/* ==========================================================
-   REDUCED MOTION
-   ========================================================== */
-
-@media(prefers-reduced-motion:reduce){
-
+@media (prefers-reduced-motion: reduce) {
   .taskflow-layout,
-  .taskflow-main{
-
-    transition:none !important;
-
+  .taskflow-main {
+    transition: none !important;
   }
 
-  *{
-
-    animation:none !important;
-    transition:none !important;
-
+  * {
+    animation: none !important;
+    transition: none !important;
   }
-
 }

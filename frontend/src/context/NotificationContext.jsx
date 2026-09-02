@@ -31,11 +31,7 @@ export const NotificationProvider = ({ children }) => {
       await api.put(`/notifications/${id}/read`);
 
       setNotifications((prev) =>
-        prev.map((n) =>
-          n._id === id
-            ? { ...n, isRead: true }
-            : n
-        )
+        prev.map((n) => (n._id === id ? { ...n, isRead: true } : n)),
       );
     } catch (err) {
       console.error(err);
@@ -46,9 +42,7 @@ export const NotificationProvider = ({ children }) => {
     try {
       await api.delete(`/notifications/${id}`);
 
-      setNotifications((prev) =>
-        prev.filter((n) => n._id !== id)
-      );
+      setNotifications((prev) => prev.filter((n) => n._id !== id));
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +67,6 @@ export const NotificationProvider = ({ children }) => {
   );
 };
 
-export const useNotifications = () =>
-  useContext(NotificationContext);
+export const useNotifications = () => useContext(NotificationContext);
 
 export default NotificationContext;

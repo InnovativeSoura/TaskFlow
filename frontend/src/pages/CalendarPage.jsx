@@ -36,20 +36,13 @@ const CalendarPage = () => {
   return (
     <MainLayout>
       <div className="calendar-page">
-
         <div className="calendar-header">
-
           <h1>Calendar</h1>
 
-          <p>
-            View project deadlines, milestones and
-            scheduled work.
-          </p>
-
+          <p>View project deadlines, milestones and scheduled work.</p>
         </div>
 
         <div className="calendar-container">
-
           <Calendar
             localizer={localizer}
             events={events}
@@ -60,22 +53,16 @@ const CalendarPage = () => {
             style={{
               height: "80vh",
             }}
-            onSelectEvent={(event) =>
-              setSelectedEvent(event)
-            }
+            onSelectEvent={(event) => setSelectedEvent(event)}
           />
-
         </div>
 
         {selectedEvent && (
           <EventModal
             event={selectedEvent}
-            onClose={() =>
-              setSelectedEvent(null)
-            }
+            onClose={() => setSelectedEvent(null)}
           />
         )}
-
       </div>
     </MainLayout>
   );

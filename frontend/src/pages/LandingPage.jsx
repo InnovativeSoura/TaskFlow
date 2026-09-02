@@ -14,22 +14,16 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
 
-      {/* =========================================
-          BACKGROUND
-      ========================================= */}
+      
       <BackgroundAnimation />
 
-      {/* =========================================
-          NAVBAR
-      ========================================= */}
+      
       <LandingNavbar />
 
-      {/* =========================================
-          MAIN
-      ========================================= */}
+      
       <main className="landing-main">
 
-        {/* HERO */}
+        
         <section
           id="home"
           className="landing-section landing-hero-section"
@@ -37,7 +31,7 @@ const LandingPage = () => {
           <Hero />
         </section>
 
-        {/* STATISTICS */}
+        
         <section
           id="statistics"
           className="landing-section landing-statistics-section"
@@ -45,7 +39,7 @@ const LandingPage = () => {
           <Statistics />
         </section>
 
-        {/* FEATURES */}
+        
         <section
           id="features"
           className="landing-section landing-features-section"
@@ -53,7 +47,7 @@ const LandingPage = () => {
           <Features />
         </section>
 
-        {/* TESTIMONIALS */}
+        
         <section
           id="testimonials"
           className="landing-section landing-testimonials-section"
@@ -61,7 +55,7 @@ const LandingPage = () => {
           <Testimonials />
         </section>
 
-        {/* CTA */}
+        
         <section
           id="contact"
           className="landing-section landing-cta-section"
@@ -71,9 +65,6 @@ const LandingPage = () => {
 
       </main>
 
-      {/* =========================================
-          FOOTER
-      ========================================= */}
       <Footer />
 
     </div>

@@ -36,11 +36,7 @@ export const TaskProvider = ({ children }) => {
 
       const res = await getTasks();
 
-      const data =
-        res.data.tasks ||
-        res.data.data ||
-        res.data ||
-        [];
+      const data = res.data.tasks || res.data.data || res.data || [];
 
       setTasks(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -60,10 +56,7 @@ export const TaskProvider = ({ children }) => {
   const addTask = async (task) => {
     const res = await createTask(task);
 
-    const newTask =
-      res.data.task ||
-      res.data.data ||
-      res.data;
+    const newTask = res.data.task || res.data.data || res.data;
 
     setTasks((prev) => [newTask, ...prev]);
 
@@ -73,16 +66,9 @@ export const TaskProvider = ({ children }) => {
   const editTask = async (id, task) => {
     const res = await updateTask(id, task);
 
-    const updated =
-      res.data.task ||
-      res.data.data ||
-      res.data;
+    const updated = res.data.task || res.data.data || res.data;
 
-    setTasks((prev) =>
-      prev.map((t) =>
-        t._id === id ? updated : t
-      )
-    );
+    setTasks((prev) => prev.map((t) => (t._id === id ? updated : t)));
 
     return updated;
   };
@@ -90,9 +76,7 @@ export const TaskProvider = ({ children }) => {
   const removeTask = async (id) => {
     await deleteTask(id);
 
-    setTasks((prev) =>
-      prev.filter((t) => t._id !== id)
-    );
+    setTasks((prev) => prev.filter((t) => t._id !== id));
   };
 
   return (
