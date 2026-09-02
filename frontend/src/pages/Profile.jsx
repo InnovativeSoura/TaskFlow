@@ -113,9 +113,7 @@ function Profile() {
   const [success, setSuccess] =
     useState("");
 
-  /* ==========================================
-     FETCH PROFILE
-  ========================================== */
+  
 
   const fetchProfile = async () => {
     try {
@@ -170,10 +168,7 @@ function Profile() {
     fetchProfile();
   }, []);
 
-  /* ==========================================
-     FORM HANDLER
-  ========================================== */
-
+  
   const handleChange = (event) => {
     const {
       name,
@@ -191,9 +186,7 @@ function Profile() {
     setSuccess("");
   };
 
-  /* ==========================================
-     SAVE PROFILE
-  ========================================== */
+ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -254,9 +247,7 @@ function Profile() {
     }
   };
 
-  /* ==========================================
-     CANCEL
-  ========================================== */
+  
 
   const handleCancel = () => {
     if (!profile) return;
@@ -278,10 +269,7 @@ function Profile() {
     setSuccess("");
   };
 
-  /* ==========================================
-     INITIALS
-  ========================================== */
-
+  
   const initials = useMemo(() => {
     const name =
       profile?.name ||
@@ -299,9 +287,7 @@ function Profile() {
       .join("");
   }, [profile, user]);
 
-  /* ==========================================
-     LOADING
-  ========================================== */
+  
 
   if (loading) {
     return (
@@ -327,9 +313,7 @@ function Profile() {
     );
   }
 
-  /* ==========================================
-     ERROR
-  ========================================== */
+  
 
   if (!profile) {
     return (
@@ -380,9 +364,7 @@ function Profile() {
 
         <div className="profile-content">
 
-          {/* =====================================
-              PAGE HEADER
-          ===================================== */}
+          
 
           <section className="profile-page-header">
 
@@ -443,9 +425,7 @@ function Profile() {
 
           </section>
 
-          {/* =====================================
-              FEEDBACK
-          ===================================== */}
+          
 
           {success && (
             <div className="profile-alert success">
@@ -469,19 +449,15 @@ function Profile() {
             </div>
           )}
 
-          {/* =====================================
-              MAIN GRID
-          ===================================== */}
+          
 
           <div className="profile-grid">
 
-            {/* =================================
-                LEFT COLUMN
-            ================================= */}
+            
 
             <aside className="profile-sidebar">
 
-              {/* PROFILE CARD */}
+              
 
               <div className="profile-identity-card">
 
@@ -625,7 +601,7 @@ function Profile() {
 
               </div>
 
-              {/* SECURITY CARD */}
+              
 
               <div className="profile-security-card">
 
@@ -683,9 +659,7 @@ function Profile() {
 
             </aside>
 
-            {/* =================================
-                RIGHT COLUMN
-            ================================= */}
+            
 
             <section className="profile-form-column">
 
@@ -717,11 +691,11 @@ function Profile() {
 
                 <div className="form-divider" />
 
-                {/* FORM GRID */}
+                
 
                 <div className="form-grid">
 
-                  {/* NAME */}
+                  
 
                   <div className="field-group">
 
@@ -747,8 +721,7 @@ function Profile() {
 
                   </div>
 
-                  {/* EMAIL */}
-
+                  
                   <div className="field-group">
 
                     <label htmlFor="email">
@@ -775,7 +748,7 @@ function Profile() {
 
                   </div>
 
-                  {/* PHONE */}
+                  
 
                   <div className="field-group">
 
@@ -800,7 +773,7 @@ function Profile() {
 
                   </div>
 
-                  {/* DESIGNATION */}
+                  
 
                   <div className="field-group">
 
@@ -827,7 +800,7 @@ function Profile() {
 
                   </div>
 
-                  {/* DEPARTMENT */}
+                  
 
                   <div className="field-group">
 
@@ -854,7 +827,7 @@ function Profile() {
 
                   </div>
 
-                  {/* ROLE */}
+                  
 
                   <div className="field-group">
 
@@ -885,8 +858,7 @@ function Profile() {
 
                 </div>
 
-                {/* BIO */}
-
+                
                 <div className="bio-field">
 
                   <div className="bio-label-row">
@@ -919,7 +891,7 @@ function Profile() {
 
                 </div>
 
-                {/* FORM ACTIONS */}
+                
 
                 <div className="form-actions">
 
@@ -949,9 +921,7 @@ function Profile() {
 
               </form>
 
-              {/* =================================
-                  BOTTOM INFO
-              ================================= */}
+             
 
               <div className="profile-bottom-card">
 

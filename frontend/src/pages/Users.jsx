@@ -27,14 +27,6 @@ import Navbar from "../components/Navbar";
 
 import "../styles/Users.css";
 
-/* =========================================================
-   FALLBACK DATA
-   ---------------------------------------------------------
-   Used only when the users API cannot be reached.
-   Replace/retain your existing API logic if your project
-   already has a dedicated users context/service.
-========================================================= */
-
 const FALLBACK_USERS = [
   {
     _id: "fallback-1",
@@ -70,10 +62,6 @@ const FALLBACK_USERS = [
     joinedAt: "2026-07-24T00:00:00.000Z",
   },
 ];
-
-/* =========================================================
-   HELPERS
-========================================================= */
 
 const getInitials = (name = "") => {
   const words = String(name).trim().split(/\s+/).filter(Boolean);
@@ -120,11 +108,7 @@ const normalizeRole = (role) => {
 const normalizeStatus = (status) => {
   const value = String(status || "Active").toLowerCase();
 
-  if (
-    value === "inactive" ||
-    value === "disabled" ||
-    value === "deactivated"
-  ) {
+  if (value === "inactive" || value === "disabled" || value === "deactivated") {
     return "Inactive";
   }
 
@@ -222,10 +206,6 @@ const extractUsers = (responseData) => {
   return [];
 };
 
-/* =========================================================
-   ANIMATION
-========================================================= */
-
 const containerVariants = {
   hidden: {
     opacity: 0,
@@ -257,18 +237,7 @@ const itemVariants = {
   },
 };
 
-/* =========================================================
-   STAT CARD
-========================================================= */
-
-function StatCard({
-  icon,
-  label,
-  value,
-  description,
-  accent,
-  delay = 0,
-}) {
+function StatCard({ icon, label, value, description, accent, delay = 0 }) {
   return (
     <motion.div
       className={`users-stat-card ${accent}`}
@@ -286,19 +255,13 @@ function StatCard({
 
         <strong className="users-stat-value">{value}</strong>
 
-        <span className="users-stat-description">
-          {description}
-        </span>
+        <span className="users-stat-description">{description}</span>
       </div>
 
       <div className="users-stat-accent-line" />
     </motion.div>
   );
 }
-
-/* =========================================================
-   MEMBER CARD
-========================================================= */
 
 function MemberCard({ user, index, onMenu }) {
   const initials = getInitials(user.name);
@@ -343,13 +306,9 @@ function MemberCard({ user, index, onMenu }) {
           <i />
         </motion.div>
 
-        <h3 className="users-member-name">
-          {user.name}
-        </h3>
+        <h3 className="users-member-name">{user.name}</h3>
 
-        <p className="users-member-email">
-          {user.email}
-        </p>
+        <p className="users-member-email">{user.email}</p>
       </div>
 
       <div className="users-member-divider" />
@@ -363,9 +322,7 @@ function MemberCard({ user, index, onMenu }) {
 
           <span
             className={`users-role-badge ${
-              user.role === "Admin"
-                ? "admin"
-                : "member"
+              user.role === "Admin" ? "admin" : "member"
             }`}
           >
             {user.role === "Admin" && <FaUserShield />}
@@ -379,11 +336,7 @@ function MemberCard({ user, index, onMenu }) {
             <span>Status</span>
           </div>
 
-          <span
-            className={`users-status-badge ${
-              user.status.toLowerCase()
-            }`}
-          >
+          <span className={`users-status-badge ${user.status.toLowerCase()}`}>
             <i />
             {user.status}
           </span>
@@ -395,18 +348,12 @@ function MemberCard({ user, index, onMenu }) {
             <span>Joined</span>
           </div>
 
-          <span className="users-joined-date">
-            {formatJoinedDate(user)}
-          </span>
+          <span className="users-joined-date">{formatJoinedDate(user)}</span>
         </div>
       </div>
     </motion.article>
   );
 }
-
-/* =========================================================
-   MAIN PAGE
-========================================================= */
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -422,16 +369,11 @@ export default function Users() {
 
   const [selectedUser, setSelectedUser] = useState(null);
 
-  /* =======================================================
-     FETCH USERS
-  ======================================================= */
-
   const fetchUsers = async () => {
     setLoading(true);
 
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_URL || "";
+      const baseUrl = import.meta.env.VITE_API_URL || "";
 
       const token = getStoredToken();
 
@@ -441,32 +383,22 @@ export default function Users() {
           }
         : {};
 
-      const response = await axios.get(
-        `${baseUrl}/api/users`,
-        {
-          headers,
-          timeout: 12000,
-        }
-      );
+      const response = await axios.get(`${baseUrl}/api/users`, {
+        headers,
+        timeout: 12000,
+      });
 
-      const extractedUsers = extractUsers(
-        response?.data
-      );
+      const extractedUsers = extractUsers(response?.data);
 
       if (extractedUsers.length > 0) {
-        setUsers(
-          extractedUsers.map(normalizeUser)
-        );
+        setUsers(extractedUsers.map(normalizeUser));
         setUsingFallback(false);
       } else {
         setUsers(FALLBACK_USERS);
         setUsingFallback(true);
       }
     } catch (error) {
-      console.warn(
-        "Users API could not be loaded:",
-        error
-      );
+      console.warn("Users API could not be loaded:", error);
 
       setUsers(FALLBACK_USERS);
       setUsingFallback(true);
@@ -479,24 +411,17 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-  /* =======================================================
-     STATS
-  ======================================================= */
-
   const stats = useMemo(() => {
     const total = users.length;
 
     const active = users.filter(
-      (user) =>
-        user.status.toLowerCase() === "active"
+      (user) => user.status.toLowerCase() === "active",
     ).length;
 
-    const administrators = users.filter(
-      (user) => user.role === "Admin"
-    ).length;
+    const administrators = users.filter((user) => user.role === "Admin").length;
 
     const teamMembers = users.filter(
-      (user) => user.role === "Team Member"
+      (user) => user.role === "Team Member",
     ).length;
 
     return {
@@ -506,10 +431,6 @@ export default function Users() {
       teamMembers,
     };
   }, [users]);
-
-  /* =======================================================
-     FILTER + SORT
-  ======================================================= */
 
   const filteredUsers = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -522,28 +443,18 @@ export default function Users() {
         user.role.toLowerCase().includes(query);
 
       const matchesRole =
-        roleFilter === "All Roles" ||
-        user.role === roleFilter;
+        roleFilter === "All Roles" || user.role === roleFilter;
 
       const matchesStatus =
-        statusFilter === "All Status" ||
-        user.status === statusFilter;
+        statusFilter === "All Status" || user.status === statusFilter;
 
-      return (
-        matchesSearch &&
-        matchesRole &&
-        matchesStatus
-      );
+      return matchesSearch && matchesRole && matchesStatus;
     });
 
     result = [...result].sort((a, b) => {
-      const dateA = new Date(
-        getDateValue(a) || 0
-      ).getTime();
+      const dateA = new Date(getDateValue(a) || 0).getTime();
 
-      const dateB = new Date(
-        getDateValue(b) || 0
-      ).getTime();
+      const dateB = new Date(getDateValue(b) || 0).getTime();
 
       if (sortBy === "Newest") {
         return dateB - dateA;
@@ -565,17 +476,7 @@ export default function Users() {
     });
 
     return result;
-  }, [
-    users,
-    search,
-    roleFilter,
-    statusFilter,
-    sortBy,
-  ]);
-
-  /* =======================================================
-     FILTER HANDLERS
-  ======================================================= */
+  }, [users, search, roleFilter, statusFilter, sortBy]);
 
   const handleRoleChange = (role) => {
     setRoleFilter(role);
@@ -599,27 +500,15 @@ export default function Users() {
     setSortBy("Newest");
   };
 
-  /* =======================================================
-     MEMBER MENU
-  ======================================================= */
-
   const handleMemberMenu = (user) => {
     setSelectedUser(user);
   };
 
-  /* =======================================================
-     INVITE
-  ======================================================= */
-
   const handleInvite = () => {
     toast.info(
-      "Invite Member functionality is ready to connect to your invitation flow."
+      "Invite Member functionality is ready to connect to your invitation flow.",
     );
   };
-
-  /* =======================================================
-     CLOSE FILTERS WHEN CLICKING OUTSIDE
-  ======================================================= */
 
   useEffect(() => {
     const handleDocumentClick = () => {
@@ -627,17 +516,11 @@ export default function Users() {
     };
 
     if (openFilter) {
-      document.addEventListener(
-        "click",
-        handleDocumentClick
-      );
+      document.addEventListener("click", handleDocumentClick);
     }
 
     return () => {
-      document.removeEventListener(
-        "click",
-        handleDocumentClick
-      );
+      document.removeEventListener("click", handleDocumentClick);
     };
   }, [openFilter]);
 
@@ -663,14 +546,7 @@ export default function Users() {
             initial="hidden"
             animate="visible"
           >
-            {/* =================================================
-                HERO
-            ================================================= */}
-
-            <motion.section
-              className="users-hero"
-              variants={itemVariants}
-            >
+            <motion.section className="users-hero" variants={itemVariants}>
               <div className="users-hero-decoration" />
 
               <div className="users-hero-content">
@@ -683,13 +559,12 @@ export default function Users() {
                 </div>
 
                 <h1 className="users-hero-title">
-                  Team{" "}
-                  <span>Members</span>
+                  Team <span>Members</span>
                 </h1>
 
                 <p className="users-hero-description">
-                  Manage and collaborate with everyone in
-                  your TaskFlow workspace.
+                  Manage and collaborate with everyone in your TaskFlow
+                  workspace.
                 </p>
 
                 <button
@@ -707,41 +582,28 @@ export default function Users() {
 
               <div className="users-hero-members">
                 <div className="users-avatar-stack">
-                  {users.slice(0, 4).map(
-                    (user, index) => (
-                      <div
-                        className="users-stack-avatar"
-                        key={
-                          user._id ||
-                          user.id ||
-                          index
-                        }
-                        style={{
-                          zIndex: 10 - index,
-                        }}
-                      >
-                        {getInitials(user.name)}
-                      </div>
-                    )
-                  )}
+                  {users.slice(0, 4).map((user, index) => (
+                    <div
+                      className="users-stack-avatar"
+                      key={user._id || user.id || index}
+                      style={{
+                        zIndex: 10 - index,
+                      }}
+                    >
+                      {getInitials(user.name)}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="users-hero-member-count">
                   <strong>
-                    {stats.total}{" "}
-                    {stats.total === 1
-                      ? "member"
-                      : "members"}
+                    {stats.total} {stats.total === 1 ? "member" : "members"}
                   </strong>
 
                   <span>Workspace</span>
                 </div>
               </div>
             </motion.section>
-
-            {/* =================================================
-                STATS
-            ================================================= */}
 
             <section className="users-stats-grid">
               <StatCard
@@ -777,26 +639,17 @@ export default function Users() {
               />
             </section>
 
-            {/* =================================================
-                MEMBERS HEADER
-            ================================================= */}
-
             <motion.section
               className="users-members-section"
               variants={itemVariants}
             >
               <div className="users-section-header">
                 <div>
-                  <div className="users-section-eyebrow">
-                    WORKSPACE MEMBERS
-                  </div>
+                  <div className="users-section-eyebrow">WORKSPACE MEMBERS</div>
 
                   <h2>Your Team</h2>
 
-                  <p>
-                    View and manage everyone in your
-                    TaskFlow workspace.
-                  </p>
+                  <p>View and manage everyone in your TaskFlow workspace.</p>
                 </div>
 
                 <div className="users-result-count">
@@ -804,16 +657,10 @@ export default function Users() {
 
                   <span>
                     {filteredUsers.length}{" "}
-                    {filteredUsers.length === 1
-                      ? "member"
-                      : "members"}
+                    {filteredUsers.length === 1 ? "member" : "members"}
                   </span>
                 </div>
               </div>
-
-              {/* =================================================
-                  TOOLBAR
-              ================================================= */}
 
               <div className="users-toolbar">
                 <div className="users-search">
@@ -823,18 +670,14 @@ export default function Users() {
                     type="text"
                     placeholder="Search members..."
                     value={search}
-                    onChange={(event) =>
-                      setSearch(event.target.value)
-                    }
+                    onChange={(event) => setSearch(event.target.value)}
                   />
 
                   {search && (
                     <button
                       type="button"
                       className="users-search-clear"
-                      onClick={() =>
-                        setSearch("")
-                      }
+                      onClick={() => setSearch("")}
                       aria-label="Clear search"
                     >
                       <FaTimes />
@@ -846,23 +689,15 @@ export default function Users() {
 
                 <div
                   className={`users-filter-dropdown ${
-                    openFilter === "role"
-                      ? "open"
-                      : ""
+                    openFilter === "role" ? "open" : ""
                   }`}
-                  onClick={(event) =>
-                    event.stopPropagation()
-                  }
+                  onClick={(event) => event.stopPropagation()}
                 >
                   <button
                     type="button"
                     className="users-filter-btn"
                     onClick={() =>
-                      setOpenFilter(
-                        openFilter === "role"
-                          ? null
-                          : "role"
-                      )
+                      setOpenFilter(openFilter === "role" ? null : "role")
                     }
                   >
                     <FaFilter />
@@ -889,24 +724,12 @@ export default function Users() {
                           y: -6,
                         }}
                       >
-                        {[
-                          "All Roles",
-                          "Admin",
-                          "Team Member",
-                        ].map((role) => (
+                        {["All Roles", "Admin", "Team Member"].map((role) => (
                           <button
                             type="button"
                             key={role}
-                            className={
-                              roleFilter === role
-                                ? "active"
-                                : ""
-                            }
-                            onClick={() =>
-                              handleRoleChange(
-                                role
-                              )
-                            }
+                            className={roleFilter === role ? "active" : ""}
+                            onClick={() => handleRoleChange(role)}
                           >
                             {role}
                           </button>
@@ -916,27 +739,17 @@ export default function Users() {
                   </AnimatePresence>
                 </div>
 
-                {/* STATUS */}
-
                 <div
                   className={`users-filter-dropdown ${
-                    openFilter === "status"
-                      ? "open"
-                      : ""
+                    openFilter === "status" ? "open" : ""
                   }`}
-                  onClick={(event) =>
-                    event.stopPropagation()
-                  }
+                  onClick={(event) => event.stopPropagation()}
                 >
                   <button
                     type="button"
                     className="users-filter-btn"
                     onClick={() =>
-                      setOpenFilter(
-                        openFilter === "status"
-                          ? null
-                          : "status"
-                      )
+                      setOpenFilter(openFilter === "status" ? null : "status")
                     }
                   >
                     <FaCircle />
@@ -963,30 +776,20 @@ export default function Users() {
                           y: -6,
                         }}
                       >
-                        {[
-                          "All Status",
-                          "Active",
-                          "Inactive",
-                          "Pending",
-                        ].map((status) => (
-                          <button
-                            type="button"
-                            key={status}
-                            className={
-                              statusFilter ===
-                              status
-                                ? "active"
-                                : ""
-                            }
-                            onClick={() =>
-                              handleStatusChange(
-                                status
-                              )
-                            }
-                          >
-                            {status}
-                          </button>
-                        ))}
+                        {["All Status", "Active", "Inactive", "Pending"].map(
+                          (status) => (
+                            <button
+                              type="button"
+                              key={status}
+                              className={
+                                statusFilter === status ? "active" : ""
+                              }
+                              onClick={() => handleStatusChange(status)}
+                            >
+                              {status}
+                            </button>
+                          ),
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -996,23 +799,15 @@ export default function Users() {
 
                 <div
                   className={`users-filter-dropdown ${
-                    openFilter === "sort"
-                      ? "open"
-                      : ""
+                    openFilter === "sort" ? "open" : ""
                   }`}
-                  onClick={(event) =>
-                    event.stopPropagation()
-                  }
+                  onClick={(event) => event.stopPropagation()}
                 >
                   <button
                     type="button"
                     className="users-filter-btn"
                     onClick={() =>
-                      setOpenFilter(
-                        openFilter === "sort"
-                          ? null
-                          : "sort"
-                      )
+                      setOpenFilter(openFilter === "sort" ? null : "sort")
                     }
                   >
                     <FaSortAmountDown />
@@ -1039,29 +834,18 @@ export default function Users() {
                           y: -6,
                         }}
                       >
-                        {[
-                          "Newest",
-                          "Oldest",
-                          "Name A-Z",
-                          "Name Z-A",
-                        ].map((sort) => (
-                          <button
-                            type="button"
-                            key={sort}
-                            className={
-                              sortBy === sort
-                                ? "active"
-                                : ""
-                            }
-                            onClick={() =>
-                              handleSortChange(
-                                sort
-                              )
-                            }
-                          >
-                            {sort}
-                          </button>
-                        ))}
+                        {["Newest", "Oldest", "Name A-Z", "Name Z-A"].map(
+                          (sort) => (
+                            <button
+                              type="button"
+                              key={sort}
+                              className={sortBy === sort ? "active" : ""}
+                              onClick={() => handleSortChange(sort)}
+                            >
+                              {sort}
+                            </button>
+                          ),
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -1088,27 +872,14 @@ export default function Users() {
                   aria-label="Refresh users"
                   title="Refresh users"
                 >
-                  <FaSyncAlt
-                    className={
-                      loading
-                        ? "users-spin"
-                        : ""
-                    }
-                  />
+                  <FaSyncAlt className={loading ? "users-spin" : ""} />
                 </button>
               </div>
-
-              {/* =================================================
-                  MEMBER GRID
-              ================================================= */}
 
               {loading ? (
                 <div className="users-loading-grid">
                   {[1, 2, 3].map((item) => (
-                    <div
-                      className="users-loading-card"
-                      key={item}
-                    >
+                    <div className="users-loading-card" key={item}>
                       <div className="users-skeleton users-skeleton-small" />
                       <div className="users-skeleton users-skeleton-avatar" />
                       <div className="users-skeleton users-skeleton-name" />
@@ -1121,22 +892,14 @@ export default function Users() {
                 </div>
               ) : filteredUsers.length > 0 ? (
                 <div className="users-members-grid">
-                  {filteredUsers.map(
-                    (user, index) => (
-                      <MemberCard
-                        key={
-                          user._id ||
-                          user.id ||
-                          `${user.email}-${index}`
-                        }
-                        user={user}
-                        index={index}
-                        onMenu={
-                          handleMemberMenu
-                        }
-                      />
-                    )
-                  )}
+                  {filteredUsers.map((user, index) => (
+                    <MemberCard
+                      key={user._id || user.id || `${user.email}-${index}`}
+                      user={user}
+                      index={index}
+                      onMenu={handleMemberMenu}
+                    />
+                  ))}
                 </div>
               ) : (
                 <motion.div
@@ -1156,81 +919,47 @@ export default function Users() {
 
                   <h3>No members found</h3>
 
-                  <p>
-                    Try changing your search or
-                    filters.
-                  </p>
+                  <p>Try changing your search or filters.</p>
 
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                  >
+                  <button type="button" onClick={clearFilters}>
                     Reset Filters
                   </button>
                 </motion.div>
               )}
 
-              {/* =================================================
-                  FOOTER
-              ================================================= */}
+              {!loading && filteredUsers.length > 0 && (
+                <div className="users-footer">
+                  <span>
+                    Showing <strong>1 to {filteredUsers.length}</strong> of{" "}
+                    <strong>{filteredUsers.length}</strong> members
+                  </span>
 
-              {!loading &&
-                filteredUsers.length > 0 && (
-                  <div className="users-footer">
-                    <span>
-                      Showing{" "}
-                      <strong>
-                        1 to {filteredUsers.length}
-                      </strong>{" "}
-                      of{" "}
-                      <strong>
-                        {filteredUsers.length}
-                      </strong>{" "}
-                      members
-                    </span>
+                  <div className="users-pagination">
+                    <button type="button" disabled aria-label="Previous page">
+                      ‹
+                    </button>
 
-                    <div className="users-pagination">
-                      <button
-                        type="button"
-                        disabled
-                        aria-label="Previous page"
-                      >
-                        ‹
-                      </button>
+                    <button type="button" className="active">
+                      1
+                    </button>
 
-                      <button
-                        type="button"
-                        className="active"
-                      >
-                        1
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled
-                        aria-label="Next page"
-                      >
-                        ›
-                      </button>
-                    </div>
+                    <button type="button" disabled aria-label="Next page">
+                      ›
+                    </button>
                   </div>
-                )}
+                </div>
+              )}
 
               {usingFallback && !loading && (
                 <div className="users-api-notice">
-                  Showing workspace members from the
-                  available local fallback because the
-                  users API could not be loaded.
+                  Showing workspace members from the available local fallback
+                  because the users API could not be loaded.
                 </div>
               )}
             </motion.section>
           </motion.div>
         </main>
       </div>
-
-      {/* =====================================================
-          MEMBER MENU MODAL
-      ===================================================== */}
 
       <AnimatePresence>
         {selectedUser && (
@@ -1239,9 +968,7 @@ export default function Users() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() =>
-              setSelectedUser(null)
-            }
+            onClick={() => setSelectedUser(null)}
           >
             <motion.div
               className="users-member-modal"
@@ -1260,25 +987,19 @@ export default function Users() {
                 scale: 0.94,
                 y: 20,
               }}
-              onClick={(event) =>
-                event.stopPropagation()
-              }
+              onClick={(event) => event.stopPropagation()}
             >
               <button
                 type="button"
                 className="users-modal-close"
-                onClick={() =>
-                  setSelectedUser(null)
-                }
+                onClick={() => setSelectedUser(null)}
                 aria-label="Close"
               >
                 <FaTimes />
               </button>
 
               <div className="users-modal-avatar">
-                {getInitials(
-                  selectedUser.name
-                )}
+                {getInitials(selectedUser.name)}
               </div>
 
               <h3>{selectedUser.name}</h3>
@@ -1288,25 +1009,19 @@ export default function Users() {
               <div className="users-modal-info">
                 <span>
                   Role
-                  <strong>
-                    {selectedUser.role}
-                  </strong>
+                  <strong>{selectedUser.role}</strong>
                 </span>
 
                 <span>
                   Status
-                  <strong>
-                    {selectedUser.status}
-                  </strong>
+                  <strong>{selectedUser.status}</strong>
                 </span>
               </div>
 
               <button
                 type="button"
                 className="users-modal-action"
-                onClick={() =>
-                  setSelectedUser(null)
-                }
+                onClick={() => setSelectedUser(null)}
               >
                 Close
               </button>
