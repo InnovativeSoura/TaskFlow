@@ -1,5 +1,5 @@
 import api from "../api/axios";
-// import API from "../utils/axiosConfig";
+
 
 export const loginUser = (data) =>
   api.post("/auth/login", data);

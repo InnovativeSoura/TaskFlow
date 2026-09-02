@@ -1,21 +1,10 @@
-// src/services/api.js
-
 import axios from "axios";
 
-/* ==========================================
-   API BASE URL
-========================================== */
-
-const BASE_URL =
-  `${import.meta.env.VITE_API_URL}/api`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 console.log("====================================");
 console.log("🌐 API Base URL:", BASE_URL);
 console.log("====================================");
-
-/* ==========================================
-   AXIOS INSTANCE
-========================================== */
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -29,52 +18,34 @@ const api = axios.create({
   timeout: 30000,
 });
 
-/* ==========================================
-   REQUEST INTERCEPTOR
-========================================== */
-
 api.interceptors.request.use(
   (config) => {
     // Support both old and new token keys
     const token =
-      localStorage.getItem("token") ||
-      localStorage.getItem("taskflow_token");
+      localStorage.getItem("token") || localStorage.getItem("taskflow_token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     console.log(
-      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`
+      `🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`,
     );
 
-    console.log(
-      "🔑 Token:",
-      token ? "Present" : "Missing"
-    );
+    console.log("🔑 Token:", token ? "Present" : "Missing");
 
     if (config.data) {
-      console.log(
-        "📤 Request Body:",
-        config.data
-      );
+      console.log("📤 Request Body:", config.data);
     }
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
-
-/* ==========================================
-   RESPONSE INTERCEPTOR
-========================================== */
 
 api.interceptors.response.use(
   (response) => {
-    console.log(
-      `✅ ${response.status}`,
-      response.config.url
-    );
+    console.log(`✅ ${response.status}`, response.config.url);
 
     return response;
   },
@@ -83,7 +54,7 @@ api.interceptors.response.use(
     console.error(
       "❌ API Error:",
       error.response?.status,
-      error.response?.data
+      error.response?.data,
     );
 
     if (error.response?.status === 401) {
@@ -91,7 +62,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
