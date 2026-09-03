@@ -1,31 +1,13 @@
-const express = require(
-  "express"
-);
+const express = require("express");
 
-const upload =
-  require(
-    "../middleware/uploadMiddleware"
-  );
+const upload = require("../middleware/uploadMiddleware");
 
-const {
-  uploadFile,
-  getTaskFiles,
-} = require(
-  "../controllers/fileController"
-);
+const { uploadFile, getTaskFiles } = require("../controllers/fileController");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router.post(
-  "/upload",
-  upload.single("file"),
-  uploadFile
-);
+router.post("/upload", upload.single("file"), uploadFile);
 
-router.get(
-  "/:taskId",
-  getTaskFiles
-);
+router.get("/:taskId", getTaskFiles);
 
 module.exports = router;

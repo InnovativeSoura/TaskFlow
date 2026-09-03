@@ -8,38 +8,20 @@ import {
   generateToken,
 } from "../controllers/authController.js";
 
-import {
-  protect,
-} from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-/* ======================================================
-   REGISTER
-====================================================== */
-
 router.post("/register", register);
 
-/* ======================================================
-   LOGIN
-====================================================== */
-
 router.post("/login", login);
-
-/* ======================================================
-   GOOGLE LOGIN
-====================================================== */
 
 router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-  })
+  }),
 );
-
-/* ======================================================
-   GOOGLE CALLBACK
-====================================================== */
 
 router.get(
   "/google/callback",
@@ -50,27 +32,17 @@ router.get(
   (req, res) => {
     const token = generateToken(req.user._id);
 
-    res.redirect(
-      `${process.env.CLIENT_URL}/oauth-success?token=${token}`
-    );
-  }
+    res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
+  },
 );
-
-/* ======================================================
-   GITHUB LOGIN
-====================================================== */
 
 router.get(
   "/github",
   passport.authenticate("github", {
     scope: ["user:email"],
     session: false,
-  })
+  }),
 );
-
-/* ======================================================
-   GITHUB CALLBACK
-====================================================== */
 
 router.get(
   "/github/callback",
@@ -81,21 +53,11 @@ router.get(
   (req, res) => {
     const token = generateToken(req.user._id);
 
-    res.redirect(
-      `${process.env.CLIENT_URL}/oauth-success?token=${token}`
-    );
-  }
+    res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
+  },
 );
 
-/* ======================================================
-   CURRENT USER
-====================================================== */
-
 router.get("/me", protect, getMe);
-
-/* ======================================================
-   VERIFY TOKEN
-====================================================== */
 
 router.get("/verify", protect, (req, res) => {
   res.json({
@@ -105,10 +67,6 @@ router.get("/verify", protect, (req, res) => {
   });
 });
 
-/* ======================================================
-   LOGOUT
-====================================================== */
-
 router.post("/logout", protect, (req, res) => {
   res.clearCookie("token");
 
@@ -117,10 +75,6 @@ router.post("/logout", protect, (req, res) => {
     message: "Logout successful.",
   });
 });
-
-/* ======================================================
-   STATUS
-====================================================== */
 
 router.get("/status", (req, res) => {
   res.json({

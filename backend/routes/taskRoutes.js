@@ -1,5 +1,3 @@
-// backend/routes/taskRoutes.js
-
 import express from "express";
 
 import {
@@ -13,95 +11,22 @@ import {
 
 import { protect } from "../middleware/authMiddleware.js";
 
-import {
-  isAdmin,
-  isAdminOrManager,
-} from "../middleware/permissions.js";
+import { isAdmin, isAdminOrManager } from "../middleware/permissions.js";
 
 const router = express.Router();
 
-/* =========================================================
-   GLOBAL PROTECTION
-
-   Every task route requires authentication.
-========================================================= */
-
 router.use(protect);
 
-/* =========================================================
-   GET ALL TASKS
+router.get("/", getTasks);
 
-   All authenticated users.
-========================================================= */
+router.get("/:id", getTaskById);
 
-router.get(
-  "/",
-  getTasks
-);
+router.post("/", isAdminOrManager, createTask);
 
-/* =========================================================
-   GET SINGLE TASK
+router.put("/:id", isAdminOrManager, updateTask);
 
-   All authenticated users.
-========================================================= */
+router.patch("/:id/status", updateTaskStatus);
 
-router.get(
-  "/:id",
-  getTaskById
-);
-
-/* =========================================================
-   CREATE TASK
-
-   Admin + Manager.
-========================================================= */
-
-router.post(
-  "/",
-  isAdminOrManager,
-  createTask
-);
-
-/* =========================================================
-   UPDATE ENTIRE TASK
-
-   Admin + Manager.
-========================================================= */
-
-router.put(
-  "/:id",
-  isAdminOrManager,
-  updateTask
-);
-
-/* =========================================================
-   UPDATE TASK STATUS
-
-   All authenticated users.
-
-   Team Members are restricted inside the controller
-   to their own assigned tasks.
-========================================================= */
-
-router.patch(
-  "/:id/status",
-  updateTaskStatus
-);
-
-/* =========================================================
-   DELETE TASK
-
-   Admin only.
-========================================================= */
-
-router.delete(
-  "/:id",
-  isAdmin,
-  deleteTask
-);
-
-/* =========================================================
-   EXPORT
-========================================================= */
+router.delete("/:id", isAdmin, deleteTask);
 
 export default router;

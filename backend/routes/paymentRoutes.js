@@ -6,10 +6,8 @@ const {
   verifyPayment,
 } = require("../controllers/paymentController");
 
-// Create Razorpay order
 router.post("/create-order", createOrder);
 
-// Verify payment after success
 router.post("/verify", verifyPayment);
 
 module.exports = router;

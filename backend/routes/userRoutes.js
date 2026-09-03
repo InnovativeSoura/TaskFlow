@@ -1,5 +1,3 @@
-// backend/routes/userRoutes.js
-
 import express from "express";
 
 import {
@@ -17,97 +15,30 @@ import {
 
 import { protect } from "../middleware/authMiddleware.js";
 
-import {
-  isAdmin,
-  isAdminOrManager,
-} from "../middleware/permissions.js";
+import { isAdmin, isAdminOrManager } from "../middleware/permissions.js";
 
 const router = express.Router();
 
-/* ==========================================
-   AUTHENTICATION
-========================================== */
-
 router.use(protect);
 
-/* ==========================================
-   CURRENT USER PROFILE
-   IMPORTANT:
-   These MUST be before /:id
-========================================== */
+router.get("/profile", getProfile);
 
-router.get(
-  "/profile",
-  getProfile
-);
+router.put("/profile", updateProfile);
 
-router.put(
-  "/profile",
-  updateProfile
-);
+router.get("/", getUsers);
 
-/* ==========================================
-   USERS
-========================================== */
+router.get("/search", searchUsers);
 
-/*
-   All authenticated users
-*/
+router.get("/:id", getUserById);
 
-router.get(
-  "/",
-  getUsers
-);
+router.get("/:id/summary", getUserSummary);
 
-router.get(
-  "/search",
-  searchUsers
-);
+router.put("/:id", isAdminOrManager, updateUser);
 
-/* ==========================================
-   USER DETAILS
-========================================== */
+router.patch("/:id/role", isAdmin, changeUserRole);
 
-router.get(
-  "/:id",
-  getUserById
-);
+router.patch("/:id/status", isAdmin, toggleUserStatus);
 
-router.get(
-  "/:id/summary",
-  getUserSummary
-);
-
-/* ==========================================
-   ADMIN / MANAGER
-========================================== */
-
-router.put(
-  "/:id",
-  isAdminOrManager,
-  updateUser
-);
-
-/* ==========================================
-   ADMIN
-========================================== */
-
-router.patch(
-  "/:id/role",
-  isAdmin,
-  changeUserRole
-);
-
-router.patch(
-  "/:id/status",
-  isAdmin,
-  toggleUserStatus
-);
-
-router.delete(
-  "/:id",
-  isAdmin,
-  deleteUser
-);
+router.delete("/:id", isAdmin, deleteUser);
 
 export default router;

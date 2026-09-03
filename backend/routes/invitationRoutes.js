@@ -1,6 +1,4 @@
-const express = require(
-  "express"
-);
+const express = require("express");
 
 const {
   sendInvitation,
@@ -9,71 +7,20 @@ const {
   acceptInvitation,
   rejectInvitation,
   deleteInvitation,
-} = require(
-  "../controllers/invitationController"
-);
+} = require("../controllers/invitationController");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-/*
-==========================
-SEND INVITATION
-==========================
-*/
-router.post(
-  "/send",
-  sendInvitation
-);
+router.post("/send", sendInvitation);
 
-/*
-==========================
-GET ALL INVITATIONS
-==========================
-*/
-router.get(
-  "/",
-  getInvitations
-);
+router.get("/", getInvitations);
 
-/*
-==========================
-GET USER INVITATIONS
-==========================
-*/
-router.get(
-  "/user/:email",
-  getUserInvitations
-);
+router.get("/user/:email", getUserInvitations);
 
-/*
-==========================
-ACCEPT INVITATION
-==========================
-*/
-router.put(
-  "/accept/:id",
-  acceptInvitation
-);
+router.put("/accept/:id", acceptInvitation);
 
-/*
-==========================
-REJECT INVITATION
-==========================
-*/
-router.put(
-  "/reject/:id",
-  rejectInvitation
-);
+router.put("/reject/:id", rejectInvitation);
 
-/*
-==========================
-DELETE INVITATION
-==========================
-*/
-router.delete(
-  "/:id",
-  deleteInvitation
-);
+router.delete("/:id", deleteInvitation);
 
 module.exports = router;
