@@ -22,13 +22,10 @@ const generateTasksExcel = async (tasks, res) => {
 
   res.setHeader(
     "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   );
 
-  res.setHeader(
-    "Content-Disposition",
-    "attachment; filename=task-report.xlsx"
-  );
+  res.setHeader("Content-Disposition", "attachment; filename=task-report.xlsx");
 
   await workbook.xlsx.write(res);
   res.end();

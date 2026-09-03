@@ -1,37 +1,22 @@
-const nodemailer =
-  require(
-    "nodemailer"
-  );
+const nodemailer = require("nodemailer");
 
-const transporter =
-  nodemailer.createTransport(
-    {
-      service: "gmail",
+const transporter = nodemailer.createTransport({
+  service: "gmail",
 
-      auth: {
-        user:
-          process.env.EMAIL,
+  auth: {
+    user: process.env.EMAIL,
 
-        pass:
-          process.env.EMAIL_PASS,
-      },
-    }
-  );
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-const sendEmail =
-  async (
+const sendEmail = async (to, subject, html) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL,
     to,
     subject,
-    html
-  ) => {
-    await transporter.sendMail({
-      from:
-        process.env.EMAIL,
-      to,
-      subject,
-      html,
-    });
-  };
+    html,
+  });
+};
 
-module.exports =
-  sendEmail;
+module.exports = sendEmail;

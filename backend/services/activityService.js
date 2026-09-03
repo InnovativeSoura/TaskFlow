@@ -1,10 +1,5 @@
 const Activity = require("../models/Activity");
 
-/*
-=====================================
-LOG ACTIVITY
-=====================================
-*/
 const logActivity = async ({
   user,
   project = null,
