@@ -1,7 +1,3 @@
-/* =========================================================
-   TASKFLOW — PREMIUM KANBAN BOARD
-   ========================================================= */
-
 :root {
   --kanban-bg: #070b1d;
   --kanban-bg-2: #0b1028;
@@ -26,17 +22,10 @@
 
   --kanban-radius: 16px;
 
-  --kanban-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.35);
+  --kanban-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
 
-  --kanban-glow:
-    0 0 40px rgba(124, 77, 255, 0.12);
+  --kanban-glow: 0 0 40px rgba(124, 77, 255, 0.12);
 }
-
-
-/* =========================================================
-   PAGE
-========================================================= */
 
 .kanban-page {
   position: relative;
@@ -54,22 +43,12 @@
       rgba(43, 102, 255, 0.08),
       transparent 28%
     ),
-    linear-gradient(
-      135deg,
-      #06091a 0%,
-      #090e24 48%,
-      #07102b 100%
-    );
+    linear-gradient(135deg, #06091a 0%, #090e24 48%, #07102b 100%);
 
   color: var(--kanban-text);
 
   overflow-x: hidden;
 }
-
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
 
 .kanban-background {
   position: fixed;
@@ -83,7 +62,6 @@
   z-index: 0;
 }
 
-
 .kanban-grid {
   position: absolute;
 
@@ -92,26 +70,13 @@
   opacity: 0.15;
 
   background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
 
   background-size: 42px 42px;
 
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 85%
-    );
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
-
 
 .kanban-orb {
   position: absolute;
@@ -123,7 +88,6 @@
   opacity: 0.18;
 }
 
-
 .kanban-orb-one {
   width: 420px;
   height: 420px;
@@ -133,7 +97,6 @@
 
   background: #713dff;
 }
-
 
 .kanban-orb-two {
   width: 330px;
@@ -147,7 +110,6 @@
   opacity: 0.08;
 }
 
-
 .kanban-orb-three {
   width: 300px;
   height: 300px;
@@ -160,7 +122,6 @@
   opacity: 0.1;
 }
 
-
 .kanban-stars {
   position: absolute;
 
@@ -172,27 +133,16 @@
 
   opacity: 0.22;
 
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(143, 105, 255, 0.55) 1px,
-      transparent 1px
-    );
+  background-image: radial-gradient(
+    circle,
+    rgba(143, 105, 255, 0.55) 1px,
+    transparent 1px
+  );
 
   background-size: 18px 18px;
 
-  mask-image:
-    radial-gradient(
-      ellipse,
-      black,
-      transparent 70%
-    );
+  mask-image: radial-gradient(ellipse, black, transparent 70%);
 }
-
-
-/* =========================================================
-   CONTENT SHELL
-========================================================= */
 
 .kanban-content-shell {
   position: relative;
@@ -204,25 +154,13 @@
   margin-left: 180px;
 }
 
-
 .kanban-main {
-  width: min(
-    100%,
-    1500px
-  );
+  width: min(100%, 1500px);
 
   margin: 0 auto;
 
-  padding:
-    32px
-    34px
-    70px;
+  padding: 32px 34px 70px;
 }
-
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .kanban-hero {
   display: flex;
@@ -236,7 +174,6 @@
   margin-bottom: 30px;
 }
 
-
 .kanban-hero-left {
   display: flex;
 
@@ -244,7 +181,6 @@
 
   gap: 18px;
 }
-
 
 .kanban-hero-icon {
   display: flex;
@@ -264,25 +200,16 @@
 
   font-size: 22px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #8b5cff,
-      #6334f0
-    );
+  background: linear-gradient(145deg, #8b5cff, #6334f0);
 
   box-shadow:
-    0 15px 35px
-      rgba(109, 63, 255, 0.32),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.25);
+    0 15px 35px rgba(109, 63, 255, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-
 
 .kanban-hero-copy {
   min-width: 0;
 }
-
 
 .kanban-breadcrumb {
   display: flex;
@@ -302,18 +229,15 @@
   letter-spacing: 0.13em;
 }
 
-
 .kanban-breadcrumb strong {
   color: #a0a8bf;
 }
-
 
 .kanban-breadcrumb b {
   color: #535c78;
 
   font-size: 13px;
 }
-
 
 .kanban-hero h1 {
   margin: 0;
@@ -329,7 +253,6 @@
   color: #f6f7ff;
 }
 
-
 .kanban-hero p {
   margin: 7px 0 0;
 
@@ -337,7 +260,6 @@
 
   font-size: 12px;
 }
-
 
 .kanban-create-button {
   display: flex;
@@ -366,36 +288,23 @@
 
   cursor: pointer;
 
-  background:
-    linear-gradient(
-      100deg,
-      #7546f8,
-      #7140ef 48%,
-      #6231dd
-    );
+  background: linear-gradient(100deg, #7546f8, #7140ef 48%, #6231dd);
 
   box-shadow:
-    0 13px 30px
-      rgba(109, 61, 247, 0.3),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.18);
+    0 13px 30px rgba(109, 61, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .kanban-create-button:hover {
   box-shadow:
-    0 18px 40px
-      rgba(109, 61, 247, 0.42),
-    0 0 30px
-      rgba(124, 77, 255, 0.18),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.22);
+    0 18px 40px rgba(109, 61, 247, 0.42),
+    0 0 30px rgba(124, 77, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
-
 
 .create-button-icon {
   display: flex;
@@ -409,28 +318,20 @@
 
   border-radius: 6px;
 
-  background:
-    rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.14);
 
   font-size: 10px;
 }
 
-
-/* =========================================================
-   STATS
-========================================================= */
-
 .kanban-stats {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 16px;
 
   margin-bottom: 22px;
 }
-
 
 .kanban-stat-card {
   position: relative;
@@ -447,23 +348,19 @@
 
   overflow: hidden;
 
-  border: 1px solid
-    var(--kanban-border);
+  border: 1px solid var(--kanban-border);
 
   border-radius: 14px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(26, 33, 70, 0.9),
-      rgba(14, 20, 47, 0.75)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(26, 33, 70, 0.9),
+    rgba(14, 20, 47, 0.75)
+  );
 
   box-shadow:
-    0 14px 38px
-      rgba(0, 0, 0, 0.2),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.035);
+    0 14px 38px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
   backdrop-filter: blur(18px);
 
@@ -472,12 +369,9 @@
     transform 0.25s ease;
 }
 
-
 .kanban-stat-card:hover {
-  border-color:
-    rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.14);
 }
-
 
 .stat-card-icon {
   position: relative;
@@ -499,43 +393,30 @@
 
   font-size: 17px;
 
-  background:
-    rgba(124, 77, 255, 0.16);
+  background: rgba(124, 77, 255, 0.16);
 
   color: #a27cff;
 
-  box-shadow:
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-
-.kanban-stat-card.blue
-.stat-card-icon {
+.kanban-stat-card.blue .stat-card-icon {
   color: #55a2ff;
 
-  background:
-    rgba(38, 133, 255, 0.14);
+  background: rgba(38, 133, 255, 0.14);
 }
 
-
-.kanban-stat-card.orange
-.stat-card-icon {
+.kanban-stat-card.orange .stat-card-icon {
   color: #ff9a37;
 
-  background:
-    rgba(255, 138, 31, 0.14);
+  background: rgba(255, 138, 31, 0.14);
 }
 
-
-.kanban-stat-card.green
-.stat-card-icon {
+.kanban-stat-card.green .stat-card-icon {
   color: #45dca2;
 
-  background:
-    rgba(40, 201, 138, 0.14);
+  background: rgba(40, 201, 138, 0.14);
 }
-
 
 .stat-card-content {
   position: relative;
@@ -547,7 +428,6 @@
   flex-direction: column;
 }
 
-
 .stat-card-content span {
   color: #a0a8c0;
 
@@ -555,7 +435,6 @@
 
   font-weight: 500;
 }
-
 
 .stat-card-content strong {
   margin-top: 2px;
@@ -569,7 +448,6 @@
   font-weight: 750;
 }
 
-
 .stat-card-content small {
   margin-top: 3px;
 
@@ -577,7 +455,6 @@
 
   font-size: 9px;
 }
-
 
 .stat-card-glow {
   position: absolute;
@@ -590,37 +467,22 @@
 
   border-radius: 50%;
 
-  background:
-    rgba(124, 77, 255, 0.12);
+  background: rgba(124, 77, 255, 0.12);
 
   filter: blur(10px);
 }
 
-
-.kanban-stat-card.blue
-.stat-card-glow {
-  background:
-    rgba(38, 133, 255, 0.11);
+.kanban-stat-card.blue .stat-card-glow {
+  background: rgba(38, 133, 255, 0.11);
 }
 
-
-.kanban-stat-card.orange
-.stat-card-glow {
-  background:
-    rgba(255, 138, 31, 0.1);
+.kanban-stat-card.orange .stat-card-glow {
+  background: rgba(255, 138, 31, 0.1);
 }
 
-
-.kanban-stat-card.green
-.stat-card-glow {
-  background:
-    rgba(40, 201, 138, 0.1);
+.kanban-stat-card.green .stat-card-glow {
+  background: rgba(40, 201, 138, 0.1);
 }
-
-
-/* =========================================================
-   TOOLBAR
-========================================================= */
 
 .kanban-toolbar {
   display: flex;
@@ -635,21 +497,16 @@
 
   margin-bottom: 20px;
 
-  border: 1px solid
-    var(--kanban-border);
+  border: 1px solid var(--kanban-border);
 
   border-radius: 14px;
 
-  background:
-    rgba(13, 19, 45, 0.72);
+  background: rgba(13, 19, 45, 0.72);
 
-  box-shadow:
-    0 16px 40px
-      rgba(0, 0, 0, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 
   backdrop-filter: blur(18px);
 }
-
 
 .toolbar-search {
   display: flex;
@@ -664,34 +521,26 @@
 
   padding: 0 12px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   border-radius: 9px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
   color: #68718d;
 }
 
-
 .toolbar-search:focus-within {
-  border-color:
-    rgba(124, 77, 255, 0.45);
+  border-color: rgba(124, 77, 255, 0.45);
 
-  box-shadow:
-    0 0 0 3px
-      rgba(124, 77, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.08);
 }
-
 
 .toolbar-search > svg {
   flex: 0 0 auto;
 
   font-size: 12px;
 }
-
 
 .toolbar-search input {
   width: 100%;
@@ -710,11 +559,9 @@
   font-size: 11px;
 }
 
-
 .toolbar-search input::placeholder {
   color: #616a86;
 }
-
 
 .toolbar-search button {
   display: flex;
@@ -732,7 +579,6 @@
   cursor: pointer;
 }
 
-
 .toolbar-control {
   position: relative;
 
@@ -746,24 +592,20 @@
 
   padding: 0 10px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   border-radius: 9px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
   color: #7e87a1;
 }
-
 
 .toolbar-control > svg:first-child {
   font-size: 10px;
 
   color: #78819e;
 }
-
 
 .toolbar-control > svg:last-child {
   font-size: 8px;
@@ -772,7 +614,6 @@
 
   pointer-events: none;
 }
-
 
 .toolbar-control select {
   appearance: none;
@@ -798,18 +639,15 @@
   cursor: pointer;
 }
 
-
 .toolbar-control select option {
   color: #171b2c;
 
   background: #ffffff;
 }
 
-
 .sort-control select {
   min-width: 98px;
 }
-
 
 .toolbar-count {
   display: flex;
@@ -826,7 +664,6 @@
 
   font-size: 9px;
 }
-
 
 .toolbar-count strong {
   display: inline-flex;
@@ -845,12 +682,10 @@
 
   color: #b8a4ff;
 
-  background:
-    rgba(124, 77, 255, 0.13);
+  background: rgba(124, 77, 255, 0.13);
 
   font-size: 9px;
 }
-
 
 .toolbar-icon-button {
   display: flex;
@@ -862,13 +697,11 @@
   width: 40px;
   height: 40px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   border-radius: 9px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
   color: #7b84a0;
 
@@ -877,18 +710,14 @@
   transition: 0.2s ease;
 }
 
-
 .toolbar-icon-button:hover,
 .toolbar-icon-button.active {
   color: #a986ff;
 
-  border-color:
-    rgba(124, 77, 255, 0.42);
+  border-color: rgba(124, 77, 255, 0.42);
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 }
-
 
 .toolbar-view-toggle {
   display: flex;
@@ -899,15 +728,12 @@
 
   padding: 3px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   border-radius: 9px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
-
 
 .toolbar-view-toggle button {
   display: flex;
@@ -932,27 +758,17 @@
   transition: 0.2s ease;
 }
 
-
 .toolbar-view-toggle button:hover {
   color: #a78bff;
 }
 
-
 .toolbar-view-toggle button.active {
   color: #b79cff;
 
-  background:
-    rgba(124, 77, 255, 0.14);
+  background: rgba(124, 77, 255, 0.14);
 
-  box-shadow:
-    inset 0 0 0 1px
-      rgba(124, 77, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(124, 77, 255, 0.18);
 }
-
-
-/* =========================================================
-   ADVANCED FILTERS
-========================================================= */
 
 .advanced-filters {
   display: flex;
@@ -969,15 +785,12 @@
 
   padding: 12px;
 
-  border: 1px solid
-    rgba(124, 77, 255, 0.12);
+  border: 1px solid rgba(124, 77, 255, 0.12);
 
   border-radius: 12px;
 
-  background:
-    rgba(124, 77, 255, 0.045);
+  background: rgba(124, 77, 255, 0.045);
 }
-
 
 .advanced-filters > div {
   display: flex;
@@ -992,15 +805,12 @@
 
   padding: 8px 12px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.055);
 
   border-radius: 8px;
 
-  background:
-    rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.02);
 }
-
 
 .advanced-filters span {
   display: flex;
@@ -1014,26 +824,22 @@
   font-size: 9px;
 }
 
-
 .advanced-filters strong {
   color: #d8dcf0;
 
   font-size: 11px;
 }
 
-
 .advanced-filters > button {
   height: 34px;
 
   padding: 0 13px;
 
-  border: 1px solid
-    rgba(255, 93, 117, 0.2);
+  border: 1px solid rgba(255, 93, 117, 0.2);
 
   border-radius: 8px;
 
-  background:
-    rgba(255, 93, 117, 0.06);
+  background: rgba(255, 93, 117, 0.06);
 
   color: #ff8397;
 
@@ -1044,26 +850,15 @@
   cursor: pointer;
 }
 
-
-/* =========================================================
-   BOARD
-========================================================= */
-
 .kanban-board {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 14px;
 
   align-items: stretch;
 }
-
-
-/* =========================================================
-   COLUMN
-========================================================= */
 
 .kanban-column {
   position: relative;
@@ -1074,27 +869,22 @@
 
   overflow: hidden;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.075);
 
   border-radius: 14px;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(20, 27, 58, 0.9),
-      rgba(11, 17, 40, 0.72)
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(20, 27, 58, 0.9),
+    rgba(11, 17, 40, 0.72)
+  );
 
   box-shadow:
-    0 20px 55px
-      rgba(0, 0, 0, 0.23),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.035);
+    0 20px 55px rgba(0, 0, 0, 0.23),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
   backdrop-filter: blur(18px);
 }
-
 
 .column-top-line {
   position: absolute;
@@ -1107,45 +897,26 @@
 
   background: #8354ff;
 
-  box-shadow:
-    0 0 18px
-      rgba(124, 77, 255, 0.55);
+  box-shadow: 0 0 18px rgba(124, 77, 255, 0.55);
 }
 
-
-.kanban-column.progress
-.column-top-line {
+.kanban-column.progress .column-top-line {
   background: #2685ff;
 
-  box-shadow:
-    0 0 18px
-      rgba(38, 133, 255, 0.55);
+  box-shadow: 0 0 18px rgba(38, 133, 255, 0.55);
 }
 
-
-.kanban-column.review
-.column-top-line {
+.kanban-column.review .column-top-line {
   background: #ff8a1f;
 
-  box-shadow:
-    0 0 18px
-      rgba(255, 138, 31, 0.55);
+  box-shadow: 0 0 18px rgba(255, 138, 31, 0.55);
 }
 
-
-.kanban-column.completed
-.column-top-line {
+.kanban-column.completed .column-top-line {
   background: #28c98a;
 
-  box-shadow:
-    0 0 18px
-      rgba(40, 201, 138, 0.55);
+  box-shadow: 0 0 18px rgba(40, 201, 138, 0.55);
 }
-
-
-/* =========================================================
-   COLUMN HEADER
-========================================================= */
 
 .column-header {
   display: flex;
@@ -1158,10 +929,8 @@
 
   padding: 0 14px;
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-
 
 .column-title {
   display: flex;
@@ -1172,7 +941,6 @@
 
   min-width: 0;
 }
-
 
 .column-icon {
   display: flex;
@@ -1188,39 +956,28 @@
 
   color: #a786ff;
 
-  background:
-    rgba(124, 77, 255, 0.12);
+  background: rgba(124, 77, 255, 0.12);
 
   font-size: 10px;
 }
 
-
-.kanban-column.progress
-.column-icon {
+.kanban-column.progress .column-icon {
   color: #4c9aff;
 
-  background:
-    rgba(38, 133, 255, 0.12);
+  background: rgba(38, 133, 255, 0.12);
 }
 
-
-.kanban-column.review
-.column-icon {
+.kanban-column.review .column-icon {
   color: #ff9b3b;
 
-  background:
-    rgba(255, 138, 31, 0.12);
+  background: rgba(255, 138, 31, 0.12);
 }
 
-
-.kanban-column.completed
-.column-icon {
+.kanban-column.completed .column-icon {
   color: #45dba1;
 
-  background:
-    rgba(40, 201, 138, 0.12);
+  background: rgba(40, 201, 138, 0.12);
 }
-
 
 .column-title h3 {
   margin: 0;
@@ -1233,7 +990,6 @@
 
   white-space: nowrap;
 }
-
 
 .column-count {
   display: inline-flex;
@@ -1251,38 +1007,30 @@
 
   color: #a991ff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 
   font-size: 9px;
 
   font-weight: 700;
 }
 
-
 .progress .column-count {
   color: #58a6ff;
 
-  background:
-    rgba(38, 133, 255, 0.1);
+  background: rgba(38, 133, 255, 0.1);
 }
-
 
 .review .column-count {
   color: #ff9b3e;
 
-  background:
-    rgba(255, 138, 31, 0.1);
+  background: rgba(255, 138, 31, 0.1);
 }
-
 
 .completed .column-count {
   color: #43d9a0;
 
-  background:
-    rgba(40, 201, 138, 0.1);
+  background: rgba(40, 201, 138, 0.1);
 }
-
 
 .column-menu {
   display: flex;
@@ -1303,15 +1051,9 @@
   cursor: pointer;
 }
 
-
 .column-menu:hover {
   color: #adb5cd;
 }
-
-
-/* =========================================================
-   DROP AREA
-========================================================= */
 
 .column-drop-area {
   min-height: 408px;
@@ -1323,20 +1065,11 @@
     box-shadow 0.2s ease;
 }
 
-
 .column-drop-area.dragging-over {
-  background:
-    rgba(124, 77, 255, 0.055);
+  background: rgba(124, 77, 255, 0.055);
 
-  box-shadow:
-    inset 0 0 30px
-      rgba(124, 77, 255, 0.06);
+  box-shadow: inset 0 0 30px rgba(124, 77, 255, 0.06);
 }
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
 
 .empty-column {
   display: flex;
@@ -1351,7 +1084,6 @@
 
   text-align: center;
 }
-
 
 .empty-icon {
   position: relative;
@@ -1371,22 +1103,18 @@
 
   color: #9b78ff;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(124, 77, 255, 0.18),
-      rgba(124, 77, 255, 0.035)
-    );
+  background: radial-gradient(
+    circle,
+    rgba(124, 77, 255, 0.18),
+    rgba(124, 77, 255, 0.035)
+  );
 
   box-shadow:
-    0 0 0 1px
-      rgba(124, 77, 255, 0.05),
-    0 0 35px
-      rgba(124, 77, 255, 0.06);
+    0 0 0 1px rgba(124, 77, 255, 0.05),
+    0 0 35px rgba(124, 77, 255, 0.06);
 
   font-size: 26px;
 }
-
 
 .empty-icon::before {
   content: "";
@@ -1397,10 +1125,8 @@
 
   border-radius: 50%;
 
-  border: 1px solid
-    rgba(124, 77, 255, 0.08);
+  border: 1px solid rgba(124, 77, 255, 0.08);
 }
-
 
 .empty-icon span {
   position: absolute;
@@ -1415,74 +1141,56 @@
 
   background: #8a5cff;
 
-  box-shadow:
-    0 0 15px
-      rgba(124, 77, 255, 0.65);
+  box-shadow: 0 0 15px rgba(124, 77, 255, 0.65);
 }
-
 
 .progress .empty-icon {
   color: #559dff;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(38, 133, 255, 0.17),
-      rgba(38, 133, 255, 0.03)
-    );
+  background: radial-gradient(
+    circle,
+    rgba(38, 133, 255, 0.17),
+    rgba(38, 133, 255, 0.03)
+  );
 }
-
 
 .progress .empty-icon span {
   background: #2685ff;
 
-  box-shadow:
-    0 0 15px
-      rgba(38, 133, 255, 0.55);
+  box-shadow: 0 0 15px rgba(38, 133, 255, 0.55);
 }
-
 
 .review .empty-icon {
   color: #ff9d40;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 138, 31, 0.17),
-      rgba(255, 138, 31, 0.03)
-    );
+  background: radial-gradient(
+    circle,
+    rgba(255, 138, 31, 0.17),
+    rgba(255, 138, 31, 0.03)
+  );
 }
-
 
 .review .empty-icon span {
   background: #ff8a1f;
 
-  box-shadow:
-    0 0 15px
-      rgba(255, 138, 31, 0.55);
+  box-shadow: 0 0 15px rgba(255, 138, 31, 0.55);
 }
-
 
 .completed .empty-icon {
   color: #48dba2;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(40, 201, 138, 0.17),
-      rgba(40, 201, 138, 0.03)
-    );
+  background: radial-gradient(
+    circle,
+    rgba(40, 201, 138, 0.17),
+    rgba(40, 201, 138, 0.03)
+  );
 }
-
 
 .completed .empty-icon span {
   background: #28c98a;
 
-  box-shadow:
-    0 0 15px
-      rgba(40, 201, 138, 0.55);
+  box-shadow: 0 0 15px rgba(40, 201, 138, 0.55);
 }
-
 
 .empty-column h4 {
   margin: 0;
@@ -1494,7 +1202,6 @@
   font-weight: 700;
 }
 
-
 .empty-column p {
   margin: 7px 0 22px;
 
@@ -1502,7 +1209,6 @@
 
   font-size: 9px;
 }
-
 
 .empty-add-button {
   display: flex;
@@ -1517,13 +1223,11 @@
 
   height: 34px;
 
-  border: 1px dashed
-    rgba(124, 77, 255, 0.32);
+  border: 1px dashed rgba(124, 77, 255, 0.32);
 
   border-radius: 7px;
 
-  background:
-    rgba(124, 77, 255, 0.035);
+  background: rgba(124, 77, 255, 0.035);
 
   color: #a27eff;
 
@@ -1538,83 +1242,55 @@
   transition: 0.2s ease;
 }
 
-
 .empty-add-button:hover {
-  border-color:
-    rgba(124, 77, 255, 0.7);
+  border-color: rgba(124, 77, 255, 0.7);
 
-  background:
-    rgba(124, 77, 255, 0.09);
+  background: rgba(124, 77, 255, 0.09);
 
-  box-shadow:
-    0 0 25px
-      rgba(124, 77, 255, 0.08);
+  box-shadow: 0 0 25px rgba(124, 77, 255, 0.08);
 }
 
-
 .progress .empty-add-button {
-  border-color:
-    rgba(38, 133, 255, 0.32);
+  border-color: rgba(38, 133, 255, 0.32);
 
   color: #529bff;
 
-  background:
-    rgba(38, 133, 255, 0.025);
+  background: rgba(38, 133, 255, 0.025);
 }
-
 
 .progress .empty-add-button:hover {
-  border-color:
-    rgba(38, 133, 255, 0.7);
+  border-color: rgba(38, 133, 255, 0.7);
 
-  background:
-    rgba(38, 133, 255, 0.08);
+  background: rgba(38, 133, 255, 0.08);
 }
 
-
 .review .empty-add-button {
-  border-color:
-    rgba(255, 138, 31, 0.32);
+  border-color: rgba(255, 138, 31, 0.32);
 
   color: #ff9b40;
 
-  background:
-    rgba(255, 138, 31, 0.025);
+  background: rgba(255, 138, 31, 0.025);
 }
-
 
 .review .empty-add-button:hover {
-  border-color:
-    rgba(255, 138, 31, 0.7);
+  border-color: rgba(255, 138, 31, 0.7);
 
-  background:
-    rgba(255, 138, 31, 0.08);
+  background: rgba(255, 138, 31, 0.08);
 }
 
-
 .completed .empty-add-button {
-  border-color:
-    rgba(40, 201, 138, 0.32);
+  border-color: rgba(40, 201, 138, 0.32);
 
   color: #46d9a0;
 
-  background:
-    rgba(40, 201, 138, 0.025);
+  background: rgba(40, 201, 138, 0.025);
 }
-
 
 .completed .empty-add-button:hover {
-  border-color:
-    rgba(40, 201, 138, 0.7);
+  border-color: rgba(40, 201, 138, 0.7);
 
-  background:
-    rgba(40, 201, 138, 0.08);
+  background: rgba(40, 201, 138, 0.08);
 }
-
-
-/* =========================================================
-   TASK CARD
-========================================================= */
 
 .kanban-task-card {
   position: relative;
@@ -1625,21 +1301,17 @@
 
   overflow: hidden;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.075);
 
   border-radius: 11px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(31, 38, 76, 0.9),
-      rgba(17, 23, 52, 0.9)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(31, 38, 76, 0.9),
+    rgba(17, 23, 52, 0.9)
+  );
 
-  box-shadow:
-    0 10px 28px
-      rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
 
   cursor: grab;
 
@@ -1648,32 +1320,23 @@
     box-shadow 0.2s ease;
 }
 
-
 .kanban-task-card:hover {
-  border-color:
-    rgba(124, 77, 255, 0.24);
+  border-color: rgba(124, 77, 255, 0.24);
 
   box-shadow:
-    0 15px 35px
-      rgba(0, 0, 0, 0.28),
-    0 0 22px
-      rgba(124, 77, 255, 0.045);
+    0 15px 35px rgba(0, 0, 0, 0.28),
+    0 0 22px rgba(124, 77, 255, 0.045);
 }
 
-
 .kanban-task-card.is-dragging {
-  border-color:
-    rgba(124, 77, 255, 0.55);
+  border-color: rgba(124, 77, 255, 0.55);
 
   box-shadow:
-    0 25px 55px
-      rgba(0, 0, 0, 0.4),
-    0 0 35px
-      rgba(124, 77, 255, 0.13);
+    0 25px 55px rgba(0, 0, 0, 0.4),
+    0 0 35px rgba(124, 77, 255, 0.13);
 
   cursor: grabbing;
 }
-
 
 .task-card-top {
   display: flex;
@@ -1686,7 +1349,6 @@
 
   margin-bottom: 9px;
 }
-
 
 .task-priority {
   display: inline-flex;
@@ -1704,50 +1366,39 @@
   font-weight: 700;
 }
 
-
 .task-priority svg {
   font-size: 7px;
 }
 
-
 .priority-low {
   color: #64caff;
 
-  background:
-    rgba(65, 174, 255, 0.09);
+  background: rgba(65, 174, 255, 0.09);
 }
-
 
 .priority-medium {
   color: #b89cff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 }
-
 
 .priority-high {
   color: #ffad5e;
 
-  background:
-    rgba(255, 138, 31, 0.1);
+  background: rgba(255, 138, 31, 0.1);
 }
-
 
 .priority-critical {
   color: #ff7087;
 
-  background:
-    rgba(255, 93, 117, 0.1);
+  background: rgba(255, 93, 117, 0.1);
 }
-
 
 .task-card-actions {
   display: flex;
 
   gap: 3px;
 }
-
 
 .task-card-actions button {
   display: flex;
@@ -1772,14 +1423,11 @@
   transition: 0.2s ease;
 }
 
-
 .task-card-actions button:hover {
   color: #b2b9cf;
 
-  background:
-    rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.055);
 }
-
 
 .task-card-title {
   margin: 0;
@@ -1794,7 +1442,6 @@
 
   font-weight: 700;
 }
-
 
 .task-card-description {
   display: -webkit-box;
@@ -1813,7 +1460,6 @@
   -webkit-box-orient: vertical;
 }
 
-
 .task-card-project {
   display: flex;
 
@@ -1828,18 +1474,15 @@
   font-size: 8px;
 }
 
-
 .task-card-project svg {
   color: #8d6aff;
 
   font-size: 9px;
 }
 
-
 .task-card-progress {
   margin-top: 11px;
 }
-
 
 .progress-header {
   display: flex;
@@ -1853,13 +1496,11 @@
   font-size: 7px;
 }
 
-
 .progress-header strong {
   color: #a8b0c6;
 
   font-size: 7px;
 }
-
 
 .progress-track {
   width: 100%;
@@ -1870,30 +1511,20 @@
 
   border-radius: 99px;
 
-  background:
-    rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
-
 
 .progress-fill {
   height: 100%;
 
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      90deg,
-      #7140ef,
-      #a079ff
-    );
+  background: linear-gradient(90deg, #7140ef, #a079ff);
 
-  box-shadow:
-    0 0 10px
-      rgba(124, 77, 255, 0.35);
+  box-shadow: 0 0 10px rgba(124, 77, 255, 0.35);
 
   transition: width 0.3s ease;
 }
-
 
 .task-card-footer {
   display: flex;
@@ -1908,10 +1539,8 @@
 
   padding-top: 10px;
 
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 
 .task-assignee {
   display: flex;
@@ -1926,7 +1555,6 @@
 
   font-size: 8px;
 }
-
 
 .assignee-avatar {
   display: flex;
@@ -1944,22 +1572,14 @@
 
   color: #ffffff;
 
-  background:
-    linear-gradient(
-      145deg,
-      #8357ff,
-      #6134d9
-    );
+  background: linear-gradient(145deg, #8357ff, #6134d9);
 
   font-size: 7px;
 
   font-weight: 800;
 
-  box-shadow:
-    0 4px 10px
-      rgba(102, 57, 220, 0.28);
+  box-shadow: 0 4px 10px rgba(102, 57, 220, 0.28);
 }
-
 
 .task-assignee span {
   max-width: 85px;
@@ -1970,7 +1590,6 @@
 
   white-space: nowrap;
 }
-
 
 .task-due {
   display: flex;
@@ -1986,16 +1605,13 @@
   white-space: nowrap;
 }
 
-
 .task-due svg {
   font-size: 8px;
 }
 
-
 .task-due.overdue {
   color: #ff7087;
 }
-
 
 .task-drag-handle {
   position: absolute;
@@ -2013,16 +1629,9 @@
   pointer-events: none;
 }
 
-
-.kanban-task-card:hover
-.task-drag-handle {
+.kanban-task-card:hover .task-drag-handle {
   opacity: 1;
 }
-
-
-/* =========================================================
-   COLUMN LOADING
-========================================================= */
 
 .column-loading {
   display: flex;
@@ -2038,7 +1647,6 @@
   gap: 5px;
 }
 
-
 .column-loading span {
   display: block;
 
@@ -2049,21 +1657,16 @@
 
   background: #835bff;
 
-  animation:
-    kanbanLoading 1s
-    infinite ease-in-out;
+  animation: kanbanLoading 1s infinite ease-in-out;
 }
-
 
 .column-loading span:nth-child(2) {
   animation-delay: 0.12s;
 }
 
-
 .column-loading span:nth-child(3) {
   animation-delay: 0.24s;
 }
-
 
 .column-loading p {
   margin-top: 8px;
@@ -2073,9 +1676,7 @@
   font-size: 8px;
 }
 
-
 @keyframes kanbanLoading {
-
   0%,
   80%,
   100% {
@@ -2089,32 +1690,21 @@
 
     opacity: 1;
   }
-
 }
-
-
-/* =========================================================
-   LIST VIEW
-========================================================= */
 
 .task-list-view {
   overflow: hidden;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.075);
 
   border-radius: 14px;
 
-  background:
-    rgba(15, 21, 48, 0.78);
+  background: rgba(15, 21, 48, 0.78);
 
-  box-shadow:
-    0 20px 55px
-      rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.2);
 
   backdrop-filter: blur(18px);
 }
-
 
 .task-list-header,
 .task-list-row {
@@ -2133,14 +1723,12 @@
   gap: 15px;
 }
 
-
 .task-list-header {
   min-height: 48px;
 
   padding: 0 17px;
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
   color: #69738f;
 
@@ -2153,14 +1741,12 @@
   letter-spacing: 0.08em;
 }
 
-
 .task-list-row {
   min-height: 70px;
 
   padding: 0 17px;
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.045);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
 
   color: #8b94ad;
 
@@ -2169,17 +1755,13 @@
   transition: 0.2s ease;
 }
 
-
 .task-list-row:last-child {
   border-bottom: 0;
 }
 
-
 .task-list-row:hover {
-  background:
-    rgba(124, 77, 255, 0.035);
+  background: rgba(124, 77, 255, 0.035);
 }
-
 
 .list-task-name {
   display: flex;
@@ -2190,7 +1772,6 @@
 
   min-width: 0;
 }
-
 
 .list-task-icon {
   display: flex;
@@ -2208,15 +1789,12 @@
 
   color: #a47fff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 }
-
 
 .list-task-name > div:last-child {
   min-width: 0;
 }
-
 
 .list-task-name strong {
   display: block;
@@ -2231,7 +1809,6 @@
 
   white-space: nowrap;
 }
-
 
 .list-task-name small {
   display: block;
@@ -2249,7 +1826,6 @@
   white-space: nowrap;
 }
 
-
 .list-status {
   display: inline-flex;
 
@@ -2264,38 +1840,29 @@
   font-weight: 700;
 }
 
-
 .status-to-do {
   color: #a88aff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 }
-
 
 .status-in-progress {
   color: #5aa4ff;
 
-  background:
-    rgba(38, 133, 255, 0.1);
+  background: rgba(38, 133, 255, 0.1);
 }
-
 
 .status-review {
   color: #ffa047;
 
-  background:
-    rgba(255, 138, 31, 0.1);
+  background: rgba(255, 138, 31, 0.1);
 }
-
 
 .status-completed {
   color: #48d9a0;
 
-  background:
-    rgba(40, 201, 138, 0.1);
+  background: rgba(40, 201, 138, 0.1);
 }
-
 
 .list-assignee {
   display: flex;
@@ -2307,13 +1874,11 @@
   min-width: 0;
 }
 
-
 .list-actions {
   display: flex;
 
   gap: 4px;
 }
-
 
 .list-actions button {
   display: flex;
@@ -2329,22 +1894,18 @@
 
   border-radius: 7px;
 
-  background:
-    rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.03);
 
   color: #68728d;
 
   cursor: pointer;
 }
 
-
 .list-actions button:hover {
   color: #aa8cff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 }
-
 
 .task-list-loading,
 .task-list-empty {
@@ -2358,19 +1919,16 @@
 
   min-height: 350px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   border-radius: 14px;
 
-  background:
-    rgba(15, 21, 48, 0.78);
+  background: rgba(15, 21, 48, 0.78);
 
   color: #737d99;
 
   font-size: 10px;
 }
-
 
 .task-list-loading svg {
   margin-bottom: 10px;
@@ -2379,20 +1937,14 @@
 
   font-size: 24px;
 
-  animation:
-    kanbanSpin 1.2s
-    linear infinite;
+  animation: kanbanSpin 1.2s linear infinite;
 }
 
-
 @keyframes kanbanSpin {
-
   to {
     transform: rotate(360deg);
   }
-
 }
-
 
 .task-list-empty > div {
   display: flex;
@@ -2410,12 +1962,10 @@
 
   color: #9674ff;
 
-  background:
-    rgba(124, 77, 255, 0.1);
+  background: rgba(124, 77, 255, 0.1);
 
   font-size: 20px;
 }
-
 
 .task-list-empty h3 {
   margin: 0;
@@ -2425,7 +1975,6 @@
   font-size: 13px;
 }
 
-
 .task-list-empty p {
   margin: 7px 0 0;
 
@@ -2434,71 +1983,47 @@
   font-size: 9px;
 }
 
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
 @media (max-width: 1250px) {
-
   .kanban-main {
     padding-left: 24px;
     padding-right: 24px;
   }
 
-
   .kanban-toolbar {
     flex-wrap: wrap;
   }
-
 
   .toolbar-search {
     width: 250px;
   }
 
-
   .toolbar-count {
     margin-left: 0;
   }
-
 }
 
-
 @media (max-width: 1050px) {
-
   .kanban-content-shell {
     margin-left: 90px;
   }
 
-
   .kanban-stats {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 
   .kanban-board {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-
 @media (max-width: 760px) {
-
   .kanban-content-shell {
     margin-left: 0;
   }
 
-
   .kanban-main {
-    padding:
-      22px
-      15px
-      50px;
+    padding: 22px 15px 50px;
   }
-
 
   .kanban-hero {
     flex-direction: column;
@@ -2506,17 +2031,13 @@
     align-items: stretch;
   }
 
-
   .kanban-create-button {
     width: 100%;
   }
 
-
   .kanban-stats {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .kanban-toolbar {
     align-items: stretch;
@@ -2524,68 +2045,54 @@
     flex-direction: column;
   }
 
-
   .toolbar-search {
     width: 100%;
   }
-
 
   .toolbar-control {
     width: 100%;
   }
 
-
   .toolbar-control select {
     width: 100%;
   }
-
 
   .toolbar-count {
     justify-content: center;
   }
 
-
   .toolbar-icon-button {
     width: 100%;
   }
-
 
   .toolbar-view-toggle {
     width: 100%;
   }
 
-
   .toolbar-view-toggle button {
     width: 50%;
   }
 
-
   .kanban-board {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .kanban-column {
     min-height: 430px;
   }
 
-
   .column-drop-area {
     min-height: 360px;
   }
-
 
   .task-list-view {
     overflow-x: auto;
   }
 
-
   .task-list-header,
   .task-list-row {
     min-width: 850px;
   }
-
 
   .advanced-filters {
     flex-direction: column;
@@ -2593,25 +2100,19 @@
     align-items: stretch;
   }
 
-
   .advanced-filters > div {
     width: 100%;
   }
 
-
   .advanced-filters > button {
     width: 100%;
   }
-
 }
 
-
 @media (max-width: 450px) {
-
   .kanban-hero-left {
     align-items: flex-start;
   }
-
 
   .kanban-hero-icon {
     width: 48px;
@@ -2620,19 +2121,15 @@
     flex-basis: 48px;
   }
 
-
   .kanban-hero h1 {
     font-size: 23px;
   }
-
 
   .kanban-hero p {
     font-size: 10px;
   }
 
-
   .kanban-stat-card {
     min-height: 90px;
   }
-
 }

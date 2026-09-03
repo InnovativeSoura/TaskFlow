@@ -1,13 +1,3 @@
-/* =========================================================
-   TASKFLOW — GLOBAL LANDING PAGE
-   Premium landing page shell
-   ========================================================= */
-
-
-/* =========================================================
-   DESIGN TOKENS
-   ========================================================= */
-
 :root {
   --tf-bg: #050816;
   --tf-bg-deep: #030511;
@@ -27,11 +17,6 @@
   --tf-container-width: 1180px;
 }
 
-
-/* =========================================================
-   GLOBAL RESET
-   ========================================================= */
-
 html {
   margin: 0;
   padding: 0;
@@ -43,7 +28,6 @@ html {
   background: var(--tf-bg-deep);
 }
 
-
 body {
   margin: 0;
   padding: 0;
@@ -52,50 +36,29 @@ body {
   min-height: 100vh;
 
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(92, 77, 255, 0.08),
-      transparent 35%
-    ),
+    radial-gradient(circle at 50% 0%, rgba(92, 77, 255, 0.08), transparent 35%),
     var(--tf-bg-deep);
 
   color: var(--tf-text);
 
-  font-family:
-    Inter,
-    "Poppins",
-    "Segoe UI",
-    Arial,
-    sans-serif;
+  font-family: Inter, "Poppins", "Segoe UI", Arial, sans-serif;
 
   overflow-x: hidden;
 }
-
 
 body,
 button,
 input,
 textarea,
 select {
-  font-family:
-    Inter,
-    "Poppins",
-    "Segoe UI",
-    Arial,
-    sans-serif;
+  font-family: Inter, "Poppins", "Segoe UI", Arial, sans-serif;
 }
-
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-   ROOT
-   ========================================================= */
 
 #root {
   width: 100%;
@@ -104,11 +67,6 @@ select {
   margin: 0;
   padding: 0;
 }
-
-
-/* =========================================================
-   LANDING PAGE ROOT
-   ========================================================= */
 
 .landing-page {
   position: relative;
@@ -131,22 +89,12 @@ select {
       rgba(0, 210, 255, 0.06),
       transparent 28%
     ),
-    linear-gradient(
-      180deg,
-      #050816 0%,
-      #06091a 45%,
-      #030511 100%
-    );
+    linear-gradient(180deg, #050816 0%, #06091a 45%, #030511 100%);
 
   color: var(--tf-text);
 
   overflow-x: clip;
 }
-
-
-/* =========================================================
-   LANDING MAIN
-   ========================================================= */
 
 .landing-main {
   position: relative;
@@ -159,23 +107,6 @@ select {
   z-index: 2;
 }
 
-
-/* =========================================================
-   IMPORTANT:
-   DO NOT APPLY FLEX / GRID / MIN-HEIGHT RULES TO
-   .landing-main CHILDREN GLOBALLY.
-
-   Each landing section controls its own layout.
-
-   This prevents the Hero component from being resized
-   unexpectedly during the first render.
-   ========================================================= */
-
-
-/* =========================================================
-   GENERIC LANDING SECTION
-   ========================================================= */
-
 .landing-section {
   position: relative;
 
@@ -187,11 +118,6 @@ select {
   isolation: isolate;
 }
 
-
-/* =========================================================
-   HERO SECTION SAFETY
-   ========================================================= */
-
 .landing-main > .hero-section {
   position: relative;
 
@@ -199,11 +125,6 @@ select {
 
   margin: 0;
 }
-
-
-/* =========================================================
-   FEATURES
-   ========================================================= */
 
 .landing-main > .features-section {
   position: relative;
@@ -213,11 +134,6 @@ select {
   margin: 0;
 }
 
-
-/* =========================================================
-   ABOUT / STATISTICS
-   ========================================================= */
-
 .landing-main > .about-section {
   position: relative;
 
@@ -225,11 +141,6 @@ select {
 
   margin: 0;
 }
-
-
-/* =========================================================
-   CONTACT
-   ========================================================= */
 
 .landing-main > .contact-section {
   position: relative;
@@ -239,35 +150,12 @@ select {
   margin: 0;
 }
 
-
-/* =========================================================
-   GLOBAL CONTAINER
-   ========================================================= */
-
 .landing-page .container {
-  width:
-    min(
-      var(--tf-container-width),
-      calc(100% - 40px)
-    );
+  width: min(var(--tf-container-width), calc(100% - 40px));
 
   margin-left: auto;
   margin-right: auto;
 }
-
-
-/* =========================================================
-   ANCHOR OFFSET
-   =========================================================
-
-   Hero.jsx owns #home.
-
-   Other sections can use their own IDs:
-   #features
-   #statistics
-   #testimonials
-   #contact
-   ========================================================= */
 
 #home,
 #features,
@@ -277,21 +165,11 @@ select {
   scroll-margin-top: 90px;
 }
 
-
-/* =========================================================
-   LINKS
-   ========================================================= */
-
 .landing-page a {
   color: inherit;
 
   text-decoration: none;
 }
-
-
-/* =========================================================
-   BUTTON RESET
-   ========================================================= */
 
 .landing-page button {
   border: 0;
@@ -300,21 +178,11 @@ select {
   font-family: inherit;
 }
 
-
-/* =========================================================
-   INPUT RESET
-   ========================================================= */
-
 .landing-page input,
 .landing-page textarea,
 .landing-page select {
   font-family: inherit;
 }
-
-
-/* =========================================================
-   IMAGE RESET
-   ========================================================= */
 
 .landing-page img {
   max-width: 100%;
@@ -322,36 +190,23 @@ select {
   display: block;
 }
 
-
-/* =========================================================
-   SELECTION
-   ========================================================= */
-
 .landing-page ::selection {
   background: rgba(109, 93, 252, 0.35);
 
   color: #ffffff;
 }
 
-
-/* =========================================================
-   SCROLLBAR
-   ========================================================= */
-
 html::-webkit-scrollbar {
   width: 8px;
 }
-
 
 body::-webkit-scrollbar {
   width: 8px;
 }
 
-
 .landing-page::-webkit-scrollbar {
   width: 8px;
 }
-
 
 html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track,
@@ -359,67 +214,34 @@ body::-webkit-scrollbar-track,
   background: #030511;
 }
 
-
 html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb,
 .landing-page::-webkit-scrollbar-thumb {
-  background:
-    linear-gradient(
-      180deg,
-      #6d5dfc,
-      #3b82f6
-    );
+  background: linear-gradient(180deg, #6d5dfc, #3b82f6);
 
   border-radius: 20px;
 }
 
-
 html::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover,
 .landing-page::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(
-      180deg,
-      #8b7cff,
-      #4f9cf9
-    );
+  background: linear-gradient(180deg, #8b7cff, #4f9cf9);
 }
-
-
-/* =========================================================
-   RESPONSIVE CONTAINER
-   ========================================================= */
 
 @media (max-width: 1200px) {
   .landing-page .container {
-    width:
-      min(
-        1120px,
-        calc(100% - 42px)
-      );
+    width: min(1120px, calc(100% - 42px));
   }
 }
 
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
 @media (max-width: 900px) {
-
   :root {
     --tf-nav-height: 70px;
   }
 
-
   .landing-page .container {
-    width:
-      min(
-        100% - 36px,
-        900px
-      );
+    width: min(100% - 36px, 900px);
   }
-
 
   #home,
   #features,
@@ -430,21 +252,10 @@ body::-webkit-scrollbar-thumb:hover,
   }
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
 @media (max-width: 600px) {
-
   .landing-page .container {
-    width:
-      min(
-        100% - 28px,
-        680px
-      );
+    width: min(100% - 28px, 680px);
   }
-
 
   #home,
   #features,
@@ -455,26 +266,13 @@ body::-webkit-scrollbar-thumb:hover,
   }
 }
 
-
-/* =========================================================
-   VERY SMALL MOBILE
-   ========================================================= */
-
 @media (max-width: 380px) {
-
   .landing-page .container {
-    width:
-      calc(100% - 24px);
+    width: calc(100% - 24px);
   }
 }
 
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-
   html {
     scroll-behavior: auto;
   }

@@ -1,8 +1,3 @@
-/* =========================================================
-   TASKFLOW SETTINGS
-   PREMIUM LIGHT / DARK SYSTEM
-========================================================= */
-
 .tf-settings-root {
   --tf-primary: #6d42ff;
   --tf-primary-dark: #5630e8;
@@ -34,10 +29,6 @@
     color 0.35s ease;
 }
 
-/* =========================================================
-   DARK THEME
-========================================================= */
-
 .tf-settings-root.theme-dark {
   --tf-page: #080d1c;
   --tf-page-secondary: #0c1224;
@@ -58,10 +49,6 @@
   background: var(--tf-page);
   color: var(--tf-text);
 }
-
-/* =========================================================
-   LIGHT THEME
-========================================================= */
 
 .tf-settings-root.theme-light {
   --tf-page: #f5f7fc;
@@ -84,10 +71,6 @@
   color: var(--tf-text);
 }
 
-/* =========================================================
-   PAGE
-========================================================= */
-
 .tf-settings-page {
   position: relative;
   min-height: calc(100vh - 70px);
@@ -109,10 +92,6 @@
     background 0.35s ease,
     color 0.35s ease;
 }
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
 
 .tf-settings-bg {
   position: absolute;
@@ -155,22 +134,11 @@
   opacity: 0.35;
 
   background-image:
-    linear-gradient(
-      rgba(109, 66, 255, 0.035) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(109, 66, 255, 0.035) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(109, 66, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(109, 66, 255, 0.035) 1px, transparent 1px);
 
   background-size: 34px 34px;
 }
-
-/* =========================================================
-   CONTAINER
-========================================================= */
 
 .tf-settings-container {
   position: relative;
@@ -180,15 +148,8 @@
 
   margin: 0 auto;
 
-  padding:
-    42px
-    0
-    60px;
+  padding: 42px 0 60px;
 }
-
-/* =========================================================
-   HEADER
-========================================================= */
 
 .tf-settings-header {
   display: flex;
@@ -266,10 +227,6 @@
   font-size: 13px;
 }
 
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
-
 .tf-settings-layout {
   display: grid;
 
@@ -279,10 +236,6 @@
 
   align-items: start;
 }
-
-/* =========================================================
-   SETTINGS SIDEBAR
-========================================================= */
 
 .tf-settings-sidebar {
   position: sticky;
@@ -295,8 +248,7 @@
 
   background: var(--tf-card);
 
-  box-shadow:
-    0 18px 50px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 
   backdrop-filter: blur(20px);
 }
@@ -354,15 +306,13 @@
 .tf-settings-nav-btn.active {
   border-color: rgba(109, 66, 255, 0.35);
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(109, 66, 255, 0.14),
-      rgba(109, 66, 255, 0.04)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(109, 66, 255, 0.14),
+    rgba(109, 66, 255, 0.04)
+  );
 
-  box-shadow:
-    0 8px 24px rgba(109, 66, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(109, 66, 255, 0.08);
 }
 
 .tf-settings-nav-icon {
@@ -382,13 +332,11 @@
   font-size: 14px;
 }
 
-.tf-settings-nav-btn.active
-.tf-settings-nav-icon {
+.tf-settings-nav-btn.active .tf-settings-nav-icon {
   background: var(--tf-primary);
   color: #ffffff;
 
-  box-shadow:
-    0 8px 18px rgba(109, 66, 255, 0.3);
+  box-shadow: 0 8px 18px rgba(109, 66, 255, 0.3);
 }
 
 .tf-settings-nav-copy {
@@ -421,10 +369,6 @@
   font-size: 10px;
   color: var(--tf-text-muted);
 }
-
-/* =========================================================
-   SIDEBAR PROTECTED
-========================================================= */
 
 .tf-sidebar-protected {
   display: grid;
@@ -482,10 +426,6 @@
   font-size: 12px;
 }
 
-/* =========================================================
-   MAIN CONTENT
-========================================================= */
-
 .tf-settings-main {
   min-width: 0;
 }
@@ -505,8 +445,7 @@
 
   background: var(--tf-card);
 
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
 .tf-active-section-bar > div {
@@ -530,10 +469,6 @@
   color: var(--tf-text-muted);
 }
 
-/* =========================================================
-   PANEL
-========================================================= */
-
 .tf-settings-panel {
   padding: 28px;
 
@@ -542,8 +477,7 @@
 
   background: var(--tf-card);
 
-  box-shadow:
-    0 20px 60px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.07);
 
   backdrop-filter: blur(20px);
 }
@@ -612,10 +546,6 @@
   color: var(--tf-primary);
 }
 
-/* =========================================================
-   PROFILE CARD
-========================================================= */
-
 .tf-settings-profile-card {
   display: grid;
 
@@ -646,20 +576,14 @@
 
   border-radius: 20px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7852ff,
-      #6334ed
-    );
+  background: linear-gradient(135deg, #7852ff, #6334ed);
 
   color: #ffffff;
 
   font-size: 22px;
   font-weight: 900;
 
-  box-shadow:
-    0 15px 30px rgba(109, 66, 255, 0.25);
+  box-shadow: 0 15px 30px rgba(109, 66, 255, 0.25);
 }
 
 .tf-settings-avatar-large > span {
@@ -755,10 +679,6 @@
   color: var(--tf-success);
 }
 
-/* =========================================================
-   EDIT PROFILE BUTTON
-========================================================= */
-
 .tf-settings-edit-btn {
   min-width: 130px;
   height: 44px;
@@ -774,12 +694,7 @@
   border: 0;
   border-radius: 10px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7852ff,
-      #6536eb
-    );
+  background: linear-gradient(135deg, #7852ff, #6536eb);
 
   color: #ffffff;
 
@@ -788,8 +703,7 @@
 
   cursor: pointer;
 
-  box-shadow:
-    0 10px 24px rgba(109, 66, 255, 0.25);
+  box-shadow: 0 10px 24px rgba(109, 66, 255, 0.25);
 
   transition:
     transform 0.2s ease,
@@ -799,8 +713,7 @@
 .tf-settings-edit-btn:hover {
   transform: translateY(-2px);
 
-  box-shadow:
-    0 14px 30px rgba(109, 66, 255, 0.35);
+  box-shadow: 0 14px 30px rgba(109, 66, 255, 0.35);
 }
 
 .tf-settings-edit-btn:active {
@@ -811,10 +724,6 @@
   font-size: 11px;
 }
 
-/* =========================================================
-   EDIT PROFILE BOX
-========================================================= */
-
 .tf-settings-edit-box {
   margin-top: 18px;
   padding: 22px;
@@ -822,12 +731,7 @@
   border: 1px solid rgba(109, 66, 255, 0.25);
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(109, 66, 255, 0.07),
-      transparent
-    );
+  background: linear-gradient(135deg, rgba(109, 66, 255, 0.07), transparent);
 }
 
 .tf-settings-edit-header {
@@ -891,10 +795,6 @@
   border-color: rgba(239, 91, 104, 0.25);
 }
 
-/* =========================================================
-   FORM
-========================================================= */
-
 .tf-settings-form-grid {
   display: grid;
 
@@ -938,8 +838,7 @@
 .tf-settings-password-box:focus-within {
   border-color: rgba(109, 66, 255, 0.6);
 
-  box-shadow:
-    0 0 0 3px rgba(109, 66, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(109, 66, 255, 0.08);
 }
 
 .tf-settings-input-box svg {
@@ -1013,10 +912,6 @@
   border-color: var(--tf-primary);
   color: var(--tf-primary);
 }
-
-/* =========================================================
-   INFO GRID
-========================================================= */
 
 .tf-settings-info-grid {
   display: grid;
@@ -1108,10 +1003,6 @@
   color: var(--tf-success);
 }
 
-/* =========================================================
-   PROTECTED
-========================================================= */
-
 .tf-settings-protected {
   min-height: 72px;
 
@@ -1171,10 +1062,6 @@
   color: var(--tf-success);
   font-size: 15px;
 }
-
-/* =========================================================
-   APPEARANCE PREVIEW
-========================================================= */
 
 .tf-settings-theme-preview {
   margin-top: 22px;
@@ -1299,8 +1186,7 @@
   background: rgba(255, 255, 255, 0.045);
 }
 
-.tf-preview-window.light
-.tf-preview-content div {
+.tf-preview-window.light .tf-preview-content div {
   border-color: rgba(25, 35, 55, 0.07);
   background: rgba(255, 255, 255, 0.85);
 }
@@ -1326,10 +1212,6 @@
   font-size: 10px;
   color: var(--tf-text-muted);
 }
-
-/* =========================================================
-   THEME OPTIONS
-========================================================= */
 
 .tf-theme-options {
   display: grid;
@@ -1414,10 +1296,6 @@
   color: var(--tf-primary);
 }
 
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
 .tf-notification-list {
   display: flex;
   flex-direction: column;
@@ -1478,10 +1356,6 @@
   color: var(--tf-text-muted);
 }
 
-/* =========================================================
-   SWITCH
-========================================================= */
-
 .tf-switch {
   width: 48px;
   height: 27px;
@@ -1513,8 +1387,7 @@
 
   background: #ffffff;
 
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
   transition: 0.2s ease;
 }
@@ -1526,10 +1399,6 @@
 .tf-switch.on span {
   transform: translateX(21px);
 }
-
-/* =========================================================
-   SECURITY
-========================================================= */
 
 .tf-security-banner {
   min-height: 82px;
@@ -1641,10 +1510,6 @@
   font-weight: 700;
 }
 
-/* =========================================================
-   APPLICATION
-========================================================= */
-
 .tf-app-brand {
   display: grid;
 
@@ -1673,20 +1538,14 @@
 
   border-radius: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7852ff,
-      #6334ed
-    );
+  background: linear-gradient(135deg, #7852ff, #6334ed);
 
   color: #ffffff;
 
   font-size: 20px;
   font-weight: 900;
 
-  box-shadow:
-    0 15px 30px rgba(109, 66, 255, 0.2);
+  box-shadow: 0 15px 30px rgba(109, 66, 255, 0.2);
 }
 
 .tf-app-brand-copy span {
@@ -1854,11 +1713,6 @@
   color: var(--tf-success);
 }
 
-/* =========================================================
-   SAVE ACTIONS
-   IMPORTANT: LARGE + CLEAR
-========================================================= */
-
 .tf-settings-actions {
   min-height: 104px;
 
@@ -1876,8 +1730,7 @@
 
   background: var(--tf-card);
 
-  box-shadow:
-    0 15px 40px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.07);
 }
 
 .tf-save-status {
@@ -1904,12 +1757,11 @@
   border: 1px solid rgba(109, 66, 255, 0.2);
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(109, 66, 255, 0.14),
-      rgba(109, 66, 255, 0.05)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(109, 66, 255, 0.14),
+    rgba(109, 66, 255, 0.05)
+  );
 
   color: var(--tf-primary);
 
@@ -1983,12 +1835,7 @@
   border: 0;
   border-radius: 10px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7852ff,
-      #6334ed
-    );
+  background: linear-gradient(135deg, #7852ff, #6334ed);
 
   color: #ffffff;
 
@@ -1997,8 +1844,7 @@
 
   cursor: pointer;
 
-  box-shadow:
-    0 10px 25px rgba(109, 66, 255, 0.25);
+  box-shadow: 0 10px 25px rgba(109, 66, 255, 0.25);
 
   transition:
     transform 0.2s ease,
@@ -2008,14 +1854,8 @@
 .tf-settings-save-btn:hover {
   transform: translateY(-2px);
 
-  box-shadow:
-    0 14px 30px rgba(109, 66, 255, 0.35);
+  box-shadow: 0 14px 30px rgba(109, 66, 255, 0.35);
 }
-
-/* =========================================================
-   BOTTOM SECURITY
-   IMPORTANT: LARGE + CLEAR
-========================================================= */
 
 .tf-settings-bottom {
   min-height: 96px;
@@ -2031,15 +1871,13 @@
   border: 1px solid rgba(109, 66, 255, 0.2);
   border-radius: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--tf-card),
-      rgba(109, 66, 255, 0.035)
-    );
+  background: linear-gradient(
+    135deg,
+    var(--tf-card),
+    rgba(109, 66, 255, 0.035)
+  );
 
-  box-shadow:
-    0 15px 40px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06);
 }
 
 .tf-bottom-icon {
@@ -2056,12 +1894,11 @@
 
   border-radius: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(109, 66, 255, 0.14),
-      rgba(109, 66, 255, 0.05)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(109, 66, 255, 0.14),
+    rgba(109, 66, 255, 0.05)
+  );
 
   color: var(--tf-primary);
 
@@ -2129,10 +1966,6 @@
   font-weight: 900;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
 @media (max-width: 1200px) {
   .tf-settings-page {
     margin-left: 180px;
@@ -2159,8 +1992,7 @@
   .tf-settings-nav {
     display: grid;
 
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .tf-sidebar-protected {

@@ -1,8 +1,3 @@
-/* =========================================================
-   TASKFLOW — PREMIUM USERS / TEAM MEMBERS
-   Full-width SaaS dashboard
-========================================================= */
-
 :root {
   --users-bg: #030816;
   --users-bg-soft: #071126;
@@ -25,16 +20,10 @@
   --users-radius-lg: 17px;
   --users-radius-md: 13px;
 
-  --users-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.32);
+  --users-shadow: 0 25px 70px rgba(0, 0, 0, 0.32);
 
-  --users-glow:
-    0 0 45px rgba(109, 74, 255, 0.12);
+  --users-glow: 0 0 45px rgba(109, 74, 255, 0.12);
 }
-
-/* =========================================================
-   PAGE SHELL
-========================================================= */
 
 .users-layout {
   width: 100%;
@@ -64,10 +53,6 @@
   flex-direction: column;
 }
 
-/* =========================================================
-   MAIN PAGE
-========================================================= */
-
 .users-page {
   position: relative;
   width: 100%;
@@ -86,10 +71,6 @@
   margin: 0;
 }
 
-/* =========================================================
-   BACKGROUND
-========================================================= */
-
 .users-background {
   position: fixed;
   inset: 0;
@@ -103,21 +84,10 @@
   inset: 0;
   opacity: 0.18;
   background-image:
-    linear-gradient(
-      rgba(104, 123, 177, 0.055) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(104, 123, 177, 0.055) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(104, 123, 177, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(104, 123, 177, 0.055) 1px, transparent 1px);
   background-size: 42px 42px;
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.7),
-    transparent 85%
-  );
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 85%);
 }
 
 .users-bg-orb {
@@ -164,10 +134,6 @@
   background: #286bff;
 }
 
-/* =========================================================
-   HERO
-========================================================= */
-
 .users-hero {
   position: relative;
   width: 100%;
@@ -195,11 +161,7 @@
       rgba(42, 71, 191, 0.17),
       transparent 42%
     ),
-    linear-gradient(
-      115deg,
-      rgba(8, 19, 42, 0.97),
-      rgba(15, 22, 59, 0.96)
-    );
+    linear-gradient(115deg, rgba(8, 19, 42, 0.97), rgba(15, 22, 59, 0.96));
 
   box-shadow:
     var(--users-shadow),
@@ -286,13 +248,7 @@
 }
 
 .users-hero-title span {
-  background:
-    linear-gradient(
-      100deg,
-      #ffffff 0%,
-      #b9a5ff 48%,
-      #8061ff 100%
-    );
+  background: linear-gradient(100deg, #ffffff 0%, #b9a5ff 48%, #8061ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -321,12 +277,7 @@
   border-radius: 10px;
 
   color: #ffffff;
-  background:
-    linear-gradient(
-      135deg,
-      #8354ff,
-      #6337e9
-    );
+  background: linear-gradient(135deg, #8354ff, #6337e9);
 
   box-shadow:
     0 10px 28px rgba(103, 57, 245, 0.3),
@@ -387,19 +338,13 @@
   border: 3px solid #141849;
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      #8b59ff,
-      #5c35dd
-    );
+  background: linear-gradient(145deg, #8b59ff, #5c35dd);
 
   color: white;
   font-size: 12px;
   font-weight: 800;
 
-  box-shadow:
-    0 8px 22px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
 }
 
 .users-hero-member-count {
@@ -419,15 +364,10 @@
   font-size: 11px;
 }
 
-/* =========================================================
-   STATS
-========================================================= */
-
 .users-stats-grid {
   width: 100%;
   display: grid;
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 27px;
 }
@@ -448,12 +388,11 @@
   border: 1px solid var(--users-border);
   border-radius: var(--users-radius-lg);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(12, 28, 56, 0.96),
-      rgba(6, 17, 36, 0.96)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(12, 28, 56, 0.96),
+    rgba(6, 17, 36, 0.96)
+  );
 
   box-shadow:
     0 15px 38px rgba(0, 0, 0, 0.2),
@@ -483,39 +422,35 @@
 
   font-size: 22px;
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .users-stat-card.purple .users-stat-icon,
 .users-stat-card.violet .users-stat-icon {
   color: #a685ff;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(123, 72, 255, 0.3),
-      rgba(94, 48, 217, 0.13)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(123, 72, 255, 0.3),
+    rgba(94, 48, 217, 0.13)
+  );
 }
 
 .users-stat-card.green .users-stat-icon {
   color: #00e3ad;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(0, 213, 165, 0.23),
-      rgba(0, 121, 97, 0.1)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(0, 213, 165, 0.23),
+    rgba(0, 121, 97, 0.1)
+  );
 }
 
 .users-stat-card.blue .users-stat-icon {
   color: #5a9eff;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(51, 124, 255, 0.24),
-      rgba(31, 72, 175, 0.1)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(51, 124, 255, 0.24),
+    rgba(31, 72, 175, 0.1)
+  );
 }
 
 .users-stat-content {
@@ -573,10 +508,6 @@
 .users-stat-card.blue .users-stat-accent-line {
   background: #3989ff;
 }
-
-/* =========================================================
-   MEMBERS SECTION
-========================================================= */
 
 .users-members-section {
   width: 100%;
@@ -641,10 +572,6 @@
   font-size: 10px;
 }
 
-/* =========================================================
-   TOOLBAR
-========================================================= */
-
 .users-toolbar {
   position: relative;
   z-index: 20;
@@ -670,11 +597,9 @@
   border: 1px solid rgba(91, 118, 178, 0.16);
   border-radius: 11px;
 
-  background:
-    rgba(7, 19, 40, 0.9);
+  background: rgba(7, 19, 40, 0.9);
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 
   transition:
     border-color 0.2s ease,
@@ -683,8 +608,7 @@
 
 .users-search:focus-within {
   border-color: rgba(125, 86, 255, 0.46);
-  box-shadow:
-    0 0 0 3px rgba(115, 76, 255, 0.07);
+  box-shadow: 0 0 0 3px rgba(115, 76, 255, 0.07);
 }
 
 .users-search > svg {
@@ -751,8 +675,7 @@
   border: 1px solid rgba(91, 118, 178, 0.16);
   border-radius: 11px;
 
-  background:
-    rgba(7, 19, 40, 0.9);
+  background: rgba(7, 19, 40, 0.9);
 
   color: #9ca8c3;
 
@@ -796,11 +719,9 @@
   border: 1px solid rgba(112, 134, 195, 0.2);
   border-radius: 12px;
 
-  background:
-    rgba(9, 21, 43, 0.98);
+  background: rgba(9, 21, 43, 0.98);
 
-  box-shadow:
-    0 20px 45px rgba(0, 0, 0, 0.38);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.38);
 
   backdrop-filter: blur(20px);
 }
@@ -904,16 +825,11 @@
   }
 }
 
-/* =========================================================
-   MEMBER GRID
-========================================================= */
-
 .users-members-grid {
   width: 100%;
 
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 17px;
 }
@@ -931,16 +847,8 @@
   border-radius: var(--users-radius-lg);
 
   background:
-    radial-gradient(
-      circle at 50% 5%,
-      rgba(74, 66, 172, 0.11),
-      transparent 42%
-    ),
-    linear-gradient(
-      145deg,
-      rgba(12, 28, 57, 0.98),
-      rgba(5, 17, 36, 0.98)
-    );
+    radial-gradient(circle at 50% 5%, rgba(74, 66, 172, 0.11), transparent 42%),
+    linear-gradient(145deg, rgba(12, 28, 57, 0.98), rgba(5, 17, 36, 0.98));
 
   box-shadow:
     0 18px 42px rgba(0, 0, 0, 0.24),
@@ -1047,13 +955,7 @@
   border: 3px solid rgba(157, 119, 255, 0.42);
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      #8754ff 0%,
-      #6334e5 65%,
-      #4724b3 100%
-    );
+  background: linear-gradient(145deg, #8754ff 0%, #6334e5 65%, #4724b3 100%);
 
   color: #ffffff;
 
@@ -1130,13 +1032,12 @@
   height: 1px;
   margin-bottom: 12px;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(104, 130, 190, 0.2),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(104, 130, 190, 0.2),
+    transparent
+  );
 }
 
 .users-member-details {
@@ -1171,9 +1072,7 @@
   color: #8694b1;
 }
 
-.users-member-detail-row:nth-child(2)
-  .users-detail-label
-  svg {
+.users-member-detail-row:nth-child(2) .users-detail-label svg {
   color: #00cfa0;
   font-size: 6px;
 }
@@ -1244,16 +1143,11 @@
   font-weight: 650;
 }
 
-/* =========================================================
-   LOADING
-========================================================= */
-
 .users-loading-grid {
   width: 100%;
 
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 17px;
 }
@@ -1276,13 +1170,12 @@
 
   border-radius: 8px;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.08),
-      rgba(255, 255, 255, 0.035)
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.035)
+  );
 
   background-size: 200% 100%;
   animation: usersSkeleton 1.4s infinite;
@@ -1293,13 +1186,12 @@
   position: absolute;
   inset: 0;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.07),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
 
   transform: translateX(-100%);
   animation: usersSkeletonShine 1.4s infinite;
@@ -1351,10 +1243,6 @@
     transform: translateX(100%);
   }
 }
-
-/* =========================================================
-   EMPTY
-========================================================= */
 
 .users-empty-state {
   min-height: 300px;
@@ -1426,10 +1314,6 @@
   cursor: pointer;
 }
 
-/* =========================================================
-   FOOTER
-========================================================= */
-
 .users-footer {
   display: flex;
   align-items: center;
@@ -1481,25 +1365,15 @@
 
 .users-pagination button.active {
   border-color: rgba(124, 77, 255, 0.5);
-  background:
-    linear-gradient(
-      135deg,
-      #8050ff,
-      #6336e3
-    );
+  background: linear-gradient(135deg, #8050ff, #6336e3);
   color: #ffffff;
-  box-shadow:
-    0 8px 20px rgba(104, 57, 237, 0.25);
+  box-shadow: 0 8px 20px rgba(104, 57, 237, 0.25);
 }
 
 .users-pagination button:disabled {
   opacity: 0.35;
   cursor: default;
 }
-
-/* =========================================================
-   API NOTICE
-========================================================= */
 
 .users-api-notice {
   margin-top: 15px;
@@ -1515,10 +1389,6 @@
   font-size: 9px;
   text-align: center;
 }
-
-/* =========================================================
-   MODAL
-========================================================= */
 
 .users-modal-overlay {
   position: fixed;
@@ -1553,8 +1423,7 @@
     ),
     #09152c;
 
-  box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.5);
 
   text-align: center;
 }
@@ -1597,20 +1466,14 @@
   border: 3px solid rgba(139, 95, 255, 0.38);
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      145deg,
-      #8c59ff,
-      #5d34df
-    );
+  background: linear-gradient(145deg, #8c59ff, #5d34df);
 
   color: white;
 
   font-size: 21px;
   font-weight: 850;
 
-  box-shadow:
-    0 15px 35px rgba(94, 49, 221, 0.25);
+  box-shadow: 0 15px 35px rgba(94, 49, 221, 0.25);
 }
 
 .users-member-modal h3 {
@@ -1672,12 +1535,7 @@
   border: 0;
   border-radius: 9px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #8051ff,
-      #6134df
-    );
+  background: linear-gradient(135deg, #8051ff, #6134df);
 
   color: #ffffff;
 
@@ -1687,10 +1545,6 @@
 
   cursor: pointer;
 }
-
-/* =========================================================
-   RESPONSIVE — LARGE DESKTOP
-========================================================= */
 
 @media (min-width: 1500px) {
   .users-page {
@@ -1729,10 +1583,6 @@
   }
 }
 
-/* =========================================================
-   RESPONSIVE — TABLET
-========================================================= */
-
 @media (max-width: 1150px) {
   .users-page {
     padding: 24px 24px 50px;
@@ -1747,24 +1597,17 @@
   }
 
   .users-stats-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .users-members-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .users-loading-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-/* =========================================================
-   RESPONSIVE — SMALL TABLET
-========================================================= */
 
 @media (max-width: 850px) {
   .users-hero {
@@ -1799,10 +1642,6 @@
     flex: 0 0 auto;
   }
 }
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-========================================================= */
 
 @media (max-width: 640px) {
   .users-page {
@@ -1922,10 +1761,6 @@
   }
 }
 
-/* =========================================================
-   RESPONSIVE — VERY SMALL MOBILE
-========================================================= */
-
 @media (max-width: 390px) {
   .users-page {
     padding-left: 11px;
@@ -1950,19 +1785,11 @@
   }
 }
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
 .users-layout button:focus-visible,
 .users-layout input:focus-visible {
   outline: 2px solid rgba(137, 103, 255, 0.75);
   outline-offset: 2px;
 }
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .users-layout *,

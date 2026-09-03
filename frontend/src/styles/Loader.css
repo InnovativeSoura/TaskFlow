@@ -28,8 +28,6 @@
   overflow: hidden;
 }
 
-
-
 .loader-orb {
   position: absolute;
 
@@ -100,8 +98,6 @@
   animation: loaderLogoFloat 2.8s ease-in-out infinite;
 }
 
-
-
 .loader-logo span {
   position: relative;
   z-index: 3;
@@ -115,8 +111,6 @@
 
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
-
-
 
 .loader-logo::before {
   content: "";
@@ -137,8 +131,6 @@
 
   pointer-events: none;
 }
-
-
 
 .loader-logo-shine {
   position: absolute;
@@ -174,8 +166,6 @@
   pointer-events: none;
 }
 
-
-
 .ring-one {
   width: 120px;
   height: 120px;
@@ -187,8 +177,6 @@
 
   animation: loaderSpin 2.4s linear infinite;
 }
-
-
 
 .ring-two {
   width: 104px;

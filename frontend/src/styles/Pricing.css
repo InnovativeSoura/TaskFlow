@@ -6,7 +6,6 @@
   text-align: center;
 }
 
-/* TITLE */
 .title {
   font-size: 42px;
   font-weight: bold;
@@ -17,7 +16,6 @@
   margin-bottom: 30px;
 }
 
-/* TOGGLE */
 .toggle {
   display: flex;
   justify-content: center;
@@ -32,7 +30,6 @@
   font-weight: bold;
 }
 
-/* SWITCH */
 .switch {
   position: relative;
   display: inline-block;
@@ -72,7 +69,6 @@ input:checked + .slider:before {
   transform: translateX(24px);
 }
 
-/* CARDS */
 .pricing-cards {
   display: flex;
   justify-content: center;
@@ -80,7 +76,6 @@ input:checked + .slider:before {
   flex-wrap: wrap;
 }
 
-/* CARD */
 .card {
   width: 300px;
   padding: 30px;
@@ -95,13 +90,11 @@ input:checked + .slider:before {
   transform: translateY(-8px);
 }
 
-/* HIGHLIGHT */
 .highlight {
   border: 2px solid #38bdf8;
   box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
 }
 
-/* PRICE */
 h3 {
   font-size: 28px;
 }
@@ -111,7 +104,6 @@ h3 span {
   color: #94a3b8;
 }
 
-/* FEATURES */
 ul {
   text-align: left;
   margin-top: 20px;
@@ -120,7 +112,6 @@ ul {
   line-height: 1.8;
 }
 
-/* BUTTONS */
 button {
   margin-top: 20px;
   width: 100%;

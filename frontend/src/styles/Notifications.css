@@ -1,8 +1,3 @@
-/* ============================================================
-   TASKFLOW — PREMIUM NOTIFICATIONS
-   Large / Clear / Premium / Responsive
-   ============================================================ */
-
 .tf-notifications-page {
   position: relative;
   min-height: calc(100vh - 70px);
@@ -25,18 +20,8 @@
       rgba(63, 105, 255, 0.08),
       transparent 32%
     ),
-    linear-gradient(
-      135deg,
-      #070b18 0%,
-      #090d1d 48%,
-      #080b18 100%
-    );
+    linear-gradient(135deg, #070b18 0%, #090d1d 48%, #080b18 100%);
 }
-
-
-/* ============================================================
-   BACKGROUND
-   ============================================================ */
 
 .tf-notifications-background {
   position: fixed;
@@ -86,24 +71,12 @@
   opacity: 0.035;
 
   background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.3) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.3) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
 
   background-size: 44px 44px;
 
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 85%
-    );
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
 
 .tf-notifications-glow {
@@ -117,38 +90,24 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(113, 70, 255, 0.12),
-      transparent 68%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(113, 70, 255, 0.12),
+    transparent 68%
+  );
 
   filter: blur(25px);
 }
-
-
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
 
 .tf-notifications-container {
   position: relative;
 
   z-index: 2;
 
-  width: min(
-    calc(100% - 60px),
-    1500px
-  );
+  width: min(calc(100% - 60px), 1500px);
 
   margin: 0 auto;
 }
-
-
-/* ============================================================
-   HEADER
-   ============================================================ */
 
 .tf-notifications-header {
   position: relative;
@@ -167,8 +126,7 @@
 
   border-radius: 22px;
 
-  border: 1px solid
-    rgba(126, 101, 255, 0.3);
+  border: 1px solid rgba(126, 101, 255, 0.3);
 
   background:
     radial-gradient(
@@ -176,16 +134,11 @@
       rgba(109, 72, 255, 0.16),
       transparent 36%
     ),
-    linear-gradient(
-      135deg,
-      rgba(22, 29, 57, 0.96),
-      rgba(12, 17, 35, 0.96)
-    );
+    linear-gradient(135deg, rgba(22, 29, 57, 0.96), rgba(12, 17, 35, 0.96));
 
   box-shadow:
     0 24px 70px rgba(0, 0, 0, 0.24),
-    inset 0 1px 0
-      rgba(255, 255, 255, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .tf-notifications-header::after {
@@ -201,8 +154,7 @@
 
   border-radius: 50%;
 
-  background:
-    rgba(107, 70, 255, 0.13);
+  background: rgba(107, 70, 255, 0.13);
 
   filter: blur(35px);
 
@@ -240,16 +192,9 @@
 
   font-size: 31px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7547ff,
-      #4b2fdb
-    );
+  background: linear-gradient(135deg, #7547ff, #4b2fdb);
 
-  box-shadow:
-    0 15px 38px
-      rgba(103, 65, 255, 0.38);
+  box-shadow: 0 15px 38px rgba(103, 65, 255, 0.38);
 }
 
 .tf-notifications-header-icon span {
@@ -267,9 +212,7 @@
 
   border: 2px solid #603bea;
 
-  box-shadow:
-    0 0 14px
-      rgba(56, 228, 156, 0.65);
+  box-shadow: 0 0 14px rgba(56, 228, 156, 0.65);
 }
 
 .tf-notifications-kicker {
@@ -336,28 +279,20 @@
 
   gap: 10px;
 
-  border: 1px solid
-    rgba(151, 126, 255, 0.2);
+  border: 1px solid rgba(151, 126, 255, 0.2);
 
   border-radius: 12px;
 
   color: #ffffff;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7045ff,
-      #5130e7
-    );
+  background: linear-gradient(135deg, #7045ff, #5130e7);
 
   font-size: 14px;
   font-weight: 750;
 
   cursor: pointer;
 
-  box-shadow:
-    0 12px 30px
-      rgba(94, 57, 255, 0.32);
+  box-shadow: 0 12px 30px rgba(94, 57, 255, 0.32);
 
   transition:
     transform 0.2s ease,
@@ -370,9 +305,7 @@
 
   filter: brightness(1.08);
 
-  box-shadow:
-    0 17px 38px
-      rgba(94, 57, 255, 0.44);
+  box-shadow: 0 17px 38px rgba(94, 57, 255, 0.44);
 }
 
 .tf-notifications-refresh:disabled {
@@ -383,14 +316,8 @@
   transform: none;
 }
 
-
-/* ============================================================
-   REFRESH ANIMATION
-   ============================================================ */
-
 .tf-refresh-spinning {
-  animation:
-    tf-refresh-spin 0.8s linear infinite;
+  animation: tf-refresh-spin 0.8s linear infinite;
 }
 
 @keyframes tf-refresh-spin {
@@ -402,11 +329,6 @@
     transform: rotate(360deg);
   }
 }
-
-
-/* ============================================================
-   TOOLBAR
-   ============================================================ */
 
 .tf-notifications-toolbar {
   margin-top: 18px;
@@ -421,17 +343,13 @@
 
   gap: 20px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.17);
+  border: 1px solid rgba(126, 138, 183, 0.17);
 
   border-radius: 18px;
 
-  background:
-    rgba(13, 18, 38, 0.86);
+  background: rgba(13, 18, 38, 0.86);
 
-  box-shadow:
-    0 15px 45px
-      rgba(0, 0, 0, 0.18);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
 
   backdrop-filter: blur(18px);
 }
@@ -461,13 +379,11 @@
 
   padding: 0 17px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.18);
+  border: 1px solid rgba(126, 138, 183, 0.18);
 
   border-radius: 11px;
 
-  background:
-    rgba(24, 30, 54, 0.72);
+  background: rgba(24, 30, 54, 0.72);
 
   color: #9ca6be;
 
@@ -476,18 +392,15 @@
 
   cursor: pointer;
 
-  transition:
-    all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .tf-notification-filter:hover {
   color: #ffffff;
 
-  border-color:
-    rgba(127, 94, 255, 0.45);
+  border-color: rgba(127, 94, 255, 0.45);
 
-  background:
-    rgba(54, 43, 107, 0.55);
+  background: rgba(54, 43, 107, 0.55);
 }
 
 .tf-notification-filter.active {
@@ -495,16 +408,9 @@
 
   border-color: transparent;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7146ff,
-      #5130e7
-    );
+  background: linear-gradient(135deg, #7146ff, #5130e7);
 
-  box-shadow:
-    0 8px 22px
-      rgba(102, 62, 255, 0.28);
+  box-shadow: 0 8px 22px rgba(102, 62, 255, 0.28);
 }
 
 .tf-notification-filter svg {
@@ -525,14 +431,8 @@
 
   font-size: 10px;
 
-  background:
-    rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.16);
 }
-
-
-/* ============================================================
-   SEARCH
-   ============================================================ */
 
 .tf-notification-toolbar-right {
   display: flex;
@@ -550,13 +450,11 @@
 
   padding: 0 14px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.18);
+  border: 1px solid rgba(126, 138, 183, 0.18);
 
   border-radius: 11px;
 
-  background:
-    rgba(20, 26, 48, 0.82);
+  background: rgba(20, 26, 48, 0.82);
 
   color: #747f9a;
 
@@ -566,12 +464,9 @@
 }
 
 .tf-notification-search:focus-within {
-  border-color:
-    rgba(127, 94, 255, 0.55);
+  border-color: rgba(127, 94, 255, 0.55);
 
-  box-shadow:
-    0 0 0 3px
-      rgba(111, 70, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(111, 70, 255, 0.08);
 }
 
 .tf-notification-search svg {
@@ -597,11 +492,6 @@
   color: #69748e;
 }
 
-
-/* ============================================================
-   CONTENT
-   ============================================================ */
-
 .tf-notifications-content {
   margin-top: 18px;
 
@@ -609,27 +499,18 @@
 
   padding: 14px;
 
-  border: 1px solid
-    rgba(125, 138, 185, 0.18);
+  border: 1px solid rgba(125, 138, 185, 0.18);
 
   border-radius: 21px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(16, 22, 45, 0.92),
-      rgba(10, 15, 32, 0.97)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(16, 22, 45, 0.92),
+    rgba(10, 15, 32, 0.97)
+  );
 
-  box-shadow:
-    0 25px 80px
-      rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
 }
-
-
-/* ============================================================
-   EMPTY STATE
-   ============================================================ */
 
 .tf-notifications-empty {
   position: relative;
@@ -645,8 +526,7 @@
 
   border-radius: 16px;
 
-  border: 1px solid
-    rgba(118, 99, 211, 0.22);
+  border: 1px solid rgba(118, 99, 211, 0.22);
 
   background:
     radial-gradient(
@@ -659,11 +539,7 @@
       rgba(100, 57, 255, 0.1),
       transparent 35%
     ),
-    linear-gradient(
-      135deg,
-      #10162c,
-      #11162d
-    );
+    linear-gradient(135deg, #10162c, #11162d);
 }
 
 .tf-notifications-empty::before {
@@ -698,21 +574,14 @@
   left: 50%;
   top: 50%;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
-  border: 1px solid
-    rgba(132, 100, 255, 0.06);
+  border: 1px solid rgba(132, 100, 255, 0.06);
 
   pointer-events: none;
 }
-
-
-/* ============================================================
-   PARTICLES
-   ============================================================ */
 
 .tf-empty-particle {
   position: absolute;
@@ -725,12 +594,9 @@
 
   opacity: 0.65;
 
-  box-shadow:
-    0 0 15px
-      rgba(128, 93, 255, 0.7);
+  box-shadow: 0 0 15px rgba(128, 93, 255, 0.7);
 
-  animation:
-    tf-particle-float 4s ease-in-out infinite;
+  animation: tf-particle-float 4s ease-in-out infinite;
 }
 
 .particle-1 {
@@ -804,11 +670,6 @@
   }
 }
 
-
-/* ============================================================
-   EMPTY ILLUSTRATION
-   ============================================================ */
-
 .tf-empty-illustration {
   position: relative;
 
@@ -833,17 +694,14 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(106, 64, 255, 0.55),
-      rgba(57, 31, 139, 0.15) 65%,
-      transparent 72%
-    );
+  background: radial-gradient(
+    ellipse,
+    rgba(106, 64, 255, 0.55),
+    rgba(57, 31, 139, 0.15) 65%,
+    transparent 72%
+  );
 
-  box-shadow:
-    0 0 50px
-      rgba(103, 63, 255, 0.3);
+  box-shadow: 0 0 50px rgba(103, 63, 255, 0.3);
 }
 
 .tf-empty-platform::before {
@@ -857,13 +715,11 @@
   width: 105px;
   height: 24px;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
-  border: 2px solid
-    rgba(115, 77, 255, 0.6);
+  border: 2px solid rgba(115, 77, 255, 0.6);
 }
 
 .tf-empty-platform::after {
@@ -877,17 +733,13 @@
   width: 72px;
   height: 15px;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
-  background:
-    rgba(105, 65, 255, 0.25);
+  background: rgba(105, 65, 255, 0.25);
 
-  box-shadow:
-    inset 0 0 20px
-      rgba(118, 80, 255, 0.4);
+  box-shadow: inset 0 0 20px rgba(118, 80, 255, 0.4);
 }
 
 .tf-empty-bell {
@@ -909,11 +761,7 @@
 
   font-size: 64px;
 
-  filter:
-    drop-shadow(
-      0 0 18px
-      rgba(142, 117, 255, 0.5)
-    );
+  filter: drop-shadow(0 0 18px rgba(142, 117, 255, 0.5));
 }
 
 .tf-empty-bell-shadow {
@@ -929,8 +777,7 @@
 
   border-radius: 50%;
 
-  background:
-    rgba(108, 69, 255, 0.45);
+  background: rgba(108, 69, 255, 0.45);
 
   filter: blur(5px);
 }
@@ -940,8 +787,7 @@
 
   left: 50%;
 
-  border: 1px solid
-    rgba(116, 79, 255, 0.45);
+  border: 1px solid rgba(116, 79, 255, 0.45);
 
   border-radius: 50%;
 
@@ -980,9 +826,7 @@
 
   font-size: 17px;
 
-  text-shadow:
-    0 0 15px
-      rgba(142, 109, 255, 0.8);
+  text-shadow: 0 0 15px rgba(142, 109, 255, 0.8);
 }
 
 .spark-1 {
@@ -1021,17 +865,8 @@
 
   transform: rotate(-35deg);
 
-  filter:
-    drop-shadow(
-      0 0 10px
-      rgba(124, 88, 255, 0.7)
-    );
+  filter: drop-shadow(0 0 10px rgba(124, 88, 255, 0.7));
 }
-
-
-/* ============================================================
-   EMPTY COPY
-   ============================================================ */
 
 .tf-empty-copy {
   position: relative;
@@ -1078,11 +913,6 @@
   color: #9da8c5;
 }
 
-
-/* ============================================================
-   NOTIFICATION LIST
-   ============================================================ */
-
 .tf-notifications-list {
   display: flex;
   flex-direction: column;
@@ -1104,13 +934,11 @@
 
   padding: 19px 20px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.15);
+  border: 1px solid rgba(126, 138, 183, 0.15);
 
   border-radius: 15px;
 
-  background:
-    rgba(20, 27, 49, 0.82);
+  background: rgba(20, 27, 49, 0.82);
 
   transition:
     transform 0.2s ease,
@@ -1122,27 +950,21 @@
 .tf-notification-card:hover {
   transform: translateY(-2px);
 
-  border-color:
-    rgba(129, 97, 255, 0.38);
+  border-color: rgba(129, 97, 255, 0.38);
 
-  background:
-    rgba(27, 34, 61, 0.96);
+  background: rgba(27, 34, 61, 0.96);
 
-  box-shadow:
-    0 12px 30px
-      rgba(0, 0, 0, 0.16);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
 }
 
 .tf-notification-card.unread {
-  border-color:
-    rgba(118, 83, 255, 0.38);
+  border-color: rgba(118, 83, 255, 0.38);
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(35, 29, 69, 0.84),
-      rgba(25, 27, 54, 0.84)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(35, 29, 69, 0.84),
+    rgba(25, 27, 54, 0.84)
+  );
 }
 
 .tf-notification-card-icon {
@@ -1159,29 +981,23 @@
 
   color: #a58aff;
 
-  background:
-    rgba(104, 67, 255, 0.14);
+  background: rgba(104, 67, 255, 0.14);
 
-  border: 1px solid
-    rgba(122, 89, 255, 0.2);
+  border: 1px solid rgba(122, 89, 255, 0.2);
 
   font-size: 18px;
 }
 
-.tf-notification-card.unread
-  .tf-notification-card-icon {
+.tf-notification-card.unread .tf-notification-card-icon {
   color: #ffffff;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(112, 70, 255, 0.3),
-      rgba(78, 45, 178, 0.22)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(112, 70, 255, 0.3),
+    rgba(78, 45, 178, 0.22)
+  );
 
-  box-shadow:
-    0 0 22px
-      rgba(103, 63, 255, 0.12);
+  box-shadow: 0 0 22px rgba(103, 63, 255, 0.12);
 }
 
 .tf-notification-card-content {
@@ -1216,9 +1032,7 @@
 
   background: #7951ff;
 
-  box-shadow:
-    0 0 10px
-      rgba(121, 81, 255, 0.7);
+  box-shadow: 0 0 10px rgba(121, 81, 255, 0.7);
 }
 
 .tf-notification-card-content p {
@@ -1260,11 +1074,6 @@
   color: #7753ff;
 }
 
-
-/* ============================================================
-   ACTIONS
-   ============================================================ */
-
 .tf-notification-actions {
   display: flex;
   align-items: center;
@@ -1293,48 +1102,39 @@
 
   cursor: pointer;
 
-  transition:
-    all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .tf-notification-read-btn {
-  border: 1px solid
-    rgba(103, 219, 168, 0.2);
+  border: 1px solid rgba(103, 219, 168, 0.2);
 
   color: #64dda7;
 
-  background:
-    rgba(49, 197, 137, 0.08);
+  background: rgba(49, 197, 137, 0.08);
 }
 
 .tf-notification-read-btn:hover {
   color: #ffffff;
 
-  border-color:
-    rgba(73, 223, 161, 0.5);
+  border-color: rgba(73, 223, 161, 0.5);
 
-  background:
-    rgba(49, 197, 137, 0.18);
+  background: rgba(49, 197, 137, 0.18);
 }
 
 .tf-notification-delete-btn {
-  border: 1px solid
-    rgba(255, 104, 126, 0.18);
+  border: 1px solid rgba(255, 104, 126, 0.18);
 
   color: #ed8296;
 
-  background:
-    rgba(255, 75, 105, 0.07);
+  background: rgba(255, 75, 105, 0.07);
 }
 
 .tf-notification-delete-btn:hover {
   color: #ffffff;
 
-  border-color:
-    rgba(255, 104, 126, 0.45);
+  border-color: rgba(255, 104, 126, 0.45);
 
-  background:
-    rgba(255, 75, 105, 0.16);
+  background: rgba(255, 75, 105, 0.16);
 }
 
 .tf-notification-arrow {
@@ -1344,11 +1144,6 @@
 
   font-size: 11px;
 }
-
-
-/* ============================================================
-   PREFERENCE CARD
-   ============================================================ */
 
 .tf-notification-preferences {
   margin-top: 18px;
@@ -1363,21 +1158,17 @@
 
   gap: 24px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.18);
+  border: 1px solid rgba(126, 138, 183, 0.18);
 
   border-radius: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(19, 26, 51, 0.95),
-      rgba(14, 19, 39, 0.95)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(19, 26, 51, 0.95),
+    rgba(14, 19, 39, 0.95)
+  );
 
-  box-shadow:
-    0 18px 50px
-      rgba(0, 0, 0, 0.16);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.16);
 }
 
 .tf-preference-left {
@@ -1403,19 +1194,15 @@
 
   font-size: 22px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(112, 70, 255, 0.34),
-      rgba(75, 43, 177, 0.16)
-    );
+  background: radial-gradient(
+    circle,
+    rgba(112, 70, 255, 0.34),
+    rgba(75, 43, 177, 0.16)
+  );
 
-  border: 1px solid
-    rgba(123, 89, 255, 0.25);
+  border: 1px solid rgba(123, 89, 255, 0.25);
 
-  box-shadow:
-    0 0 30px
-      rgba(103, 63, 255, 0.15);
+  box-shadow: 0 0 30px rgba(103, 63, 255, 0.15);
 }
 
 .tf-preference-copy > span {
@@ -1462,11 +1249,9 @@
 
   border-radius: 10px;
 
-  border: 1px solid
-    rgba(54, 219, 151, 0.16);
+  border: 1px solid rgba(54, 219, 151, 0.16);
 
-  background:
-    rgba(47, 209, 145, 0.07);
+  background: rgba(47, 209, 145, 0.07);
 
   color: #50dca1;
 
@@ -1477,11 +1262,6 @@
 .tf-preference-status svg {
   font-size: 12px;
 }
-
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
 
 .tf-notifications-footer {
   margin-top: 18px;
@@ -1495,13 +1275,11 @@
 
   gap: 15px;
 
-  border: 1px solid
-    rgba(126, 138, 183, 0.13);
+  border: 1px solid rgba(126, 138, 183, 0.13);
 
   border-radius: 15px;
 
-  background:
-    rgba(12, 17, 34, 0.75);
+  background: rgba(12, 17, 34, 0.75);
 }
 
 .tf-notifications-footer-icon {
@@ -1518,8 +1296,7 @@
 
   color: #9d83ff;
 
-  background:
-    rgba(103, 67, 255, 0.13);
+  background: rgba(103, 67, 255, 0.13);
 }
 
 .tf-notifications-footer > div:nth-child(2) {
@@ -1555,11 +1332,9 @@
 
   color: #50dca1 !important;
 
-  background:
-    rgba(47, 209, 145, 0.08);
+  background: rgba(47, 209, 145, 0.08);
 
-  border: 1px solid
-    rgba(47, 209, 145, 0.15);
+  border: 1px solid rgba(47, 209, 145, 0.15);
 
   font-size: 10px !important;
   font-weight: 750;
@@ -1568,11 +1343,6 @@
 .tf-notifications-secure svg {
   font-size: 9px;
 }
-
-
-/* ============================================================
-   RESPONSIVE — 1200px
-   ============================================================ */
 
 @media (max-width: 1200px) {
   .tf-notifications-container {
@@ -1587,11 +1357,6 @@
     width: 250px;
   }
 }
-
-
-/* ============================================================
-   RESPONSIVE — 900px
-   ============================================================ */
 
 @media (max-width: 900px) {
   .tf-notifications-container {
@@ -1649,11 +1414,6 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 640px
-   ============================================================ */
-
 @media (max-width: 640px) {
   .tf-notifications-page {
     padding-top: 20px;
@@ -1701,8 +1461,7 @@
   .tf-notification-filters {
     display: grid;
 
-    grid-template-columns:
-      repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 7px;
   }
@@ -1810,11 +1569,6 @@
     display: none;
   }
 }
-
-
-/* ============================================================
-   RESPONSIVE — 420px
-   ============================================================ */
 
 @media (max-width: 420px) {
   .tf-notifications-header-left {

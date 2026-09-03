@@ -1,6 +1,4 @@
-/* ==========================================================
-   TASKFLOW PREMIUM TASK MODAL
-========================================================== */
+
 
 .task-modal-backdrop {
   position: fixed;
@@ -22,9 +20,7 @@
   overflow-y: auto;
 }
 
-/* ==========================================================
-   MODAL CONTAINER
-========================================================== */
+
 
 .task-modal {
   position: relative;
@@ -57,9 +53,7 @@
   animation: modalAppear .35s ease;
 }
 
-/* ==========================================================
-   TOP GLOW
-========================================================== */
+
 
 .task-modal::before{
   content:"";
@@ -82,9 +76,7 @@
   );
 }
 
-/* ==========================================================
-   SCROLL
-========================================================== */
+
 
 .task-modal::-webkit-scrollbar{
     width:8px;
@@ -98,9 +90,7 @@
 .task-modal::-webkit-scrollbar-track{
     background:transparent;
 }
-/* ==========================================================
-   HEADER
-========================================================== */
+
 
 .task-modal-header{
 
@@ -124,7 +114,7 @@
         );
 }
 
-/* Decorative Glow */
+
 
 .task-modal-header::after{
 
@@ -149,9 +139,7 @@
     pointer-events:none;
 }
 
-/* ==========================================================
-   TITLE AREA
-========================================================== */
+
 
 .modal-title{
 
@@ -214,9 +202,7 @@
     line-height:1.6;
 }
 
-/* ==========================================================
-   CLOSE BUTTON
-========================================================== */
+
 
 .modal-close{
 
@@ -260,9 +246,7 @@
 
     font-size:1rem;
 }
-/* ==========================================================
-   FORM
-========================================================== */
+
 
 .task-form{
 
@@ -276,9 +260,7 @@
     overflow-y:auto;
 }
 
-/* ==========================================================
-   ROW
-========================================================== */
+
 
 .form-row{
 
@@ -289,9 +271,7 @@
     gap:24px;
 }
 
-/* ==========================================================
-   GROUP
-========================================================== */
+
 
 .form-group{
 
@@ -301,9 +281,7 @@
     gap:10px;
 }
 
-/* ==========================================================
-   LABEL
-========================================================== */
+
 
 .form-group label{
 
@@ -328,9 +306,7 @@
     font-size:.9rem;
 }
 
-/* ==========================================================
-   INPUTS
-========================================================== */
+
 
 .form-group input,
 .form-group textarea,
@@ -359,9 +335,7 @@
         all .28s ease;
 }
 
-/* ==========================================================
-   PLACEHOLDER
-========================================================== */
+
 
 .form-group input::placeholder,
 .form-group textarea::placeholder{
@@ -369,9 +343,7 @@
     color:#7f8aa6;
 }
 
-/* ==========================================================
-   FOCUS
-========================================================== */
+
 
 .form-group input:focus,
 .form-group textarea:focus,
@@ -388,9 +360,7 @@
     transform:translateY(-1px);
 }
 
-/* ==========================================================
-   TEXTAREA
-========================================================== */
+
 
 .form-group textarea{
 
@@ -401,9 +371,7 @@
     line-height:1.7;
 }
 
-/* ==========================================================
-   SELECT
-========================================================== */
+
 
 .form-group select{
 
@@ -431,9 +399,7 @@
     color:#ffffff;
 }
 
-/* ==========================================================
-   DATE INPUT
-========================================================== */
+
 
 input[type="date"]{
 
@@ -453,9 +419,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
     opacity:1;
 }
-/* ==========================================================
-   PROGRESS
-========================================================== */
+
 
 .progress-label{
 
@@ -482,9 +446,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     font-weight:700;
 }
 
-/* ==========================================================
-   RANGE SLIDER
-========================================================== */
+
 
 .progress-slider{
 
@@ -506,7 +468,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
         );
 }
 
-/* Chrome */
+
 
 .progress-slider::-webkit-slider-thumb{
 
@@ -534,7 +496,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     transform:scale(1.18);
 }
 
-/* Firefox */
+
 
 .progress-slider::-moz-range-thumb{
 
@@ -553,9 +515,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     cursor:pointer;
 }
 
-/* ==========================================================
-   LIVE PREVIEW
-========================================================== */
+
 
 .task-preview{
 
@@ -589,7 +549,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     border-color:rgba(99,102,241,.35);
 }
 
-/* Glow */
+
 
 .task-preview::before{
 
@@ -614,9 +574,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     pointer-events:none;
 }
 
-/* ==========================================================
-   PREVIEW HEADER
-========================================================== */
+
 
 .preview-header{
 
@@ -640,9 +598,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     font-weight:700;
 }
 
-/* ==========================================================
-   PRIORITY BADGE
-========================================================== */
+
 
 .preview-priority{
 
@@ -687,9 +643,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     background:rgba(236,72,153,.16);
 }
 
-/* ==========================================================
-   PREVIEW BODY
-========================================================== */
+
 
 .task-preview h3{
 
@@ -713,9 +667,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     font-size:.94rem;
 }
 
-/* ==========================================================
-   PREVIEW FOOTER
-========================================================== */
+
 
 .preview-footer{
 
@@ -744,9 +696,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
     gap:6px;
 }
-/* ==========================================================
-   MODAL FOOTER
-========================================================== */
+
 
 .task-modal-footer{
 
@@ -763,9 +713,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     border-top:1px solid rgba(255,255,255,.08);
 }
 
-/* ==========================================================
-   BUTTON BASE
-========================================================== */
+ 
 
 .task-modal-footer .btn{
 
@@ -791,9 +739,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     transition:all .28s ease;
 }
 
-/* ==========================================================
-   SECONDARY BUTTON
-========================================================== */
+
 
 .task-modal-footer .btn-secondary{
 
@@ -813,9 +759,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     transform:translateY(-2px);
 }
 
-/* ==========================================================
-   PRIMARY BUTTON
-========================================================== */
+
 
 .task-modal-footer .btn-primary{
 
@@ -846,9 +790,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     transform:scale(.98);
 }
 
-/* ==========================================================
-   DISABLED
-========================================================== */
+
 
 .task-modal-footer .btn:disabled{
 
@@ -861,18 +803,14 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     box-shadow:none;
 }
 
-/* ==========================================================
-   BUTTON ICON
-========================================================== */
+
 
 .task-modal-footer .btn svg{
 
     font-size:1rem;
 }
 
-/* ==========================================================
-   LOADING SPINNER
-========================================================== */
+
 
 .btn-spinner{
 
@@ -904,9 +842,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
 }
 
-/* ==========================================================
-   MODAL ANIMATION
-========================================================== */
+
 
 @keyframes modalAppear{
 
@@ -932,9 +868,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
 }
 
-/* ==========================================================
-   RESPONSIVE
-========================================================== */
+
 
 @media (max-width:992px){
 

@@ -1,13 +1,3 @@
-/* ============================================================
-   TASKFLOW — REPORTS & ANALYTICS
-   PREMIUM DESKTOP DASHBOARD
-   ============================================================ */
-
-
-/* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
-
 .reports-page {
   --reports-bg: #050914;
   --reports-bg-deep: #03060d;
@@ -57,18 +47,8 @@
       rgba(72, 216, 239, 0.035),
       transparent 28%
     ),
-    linear-gradient(
-      145deg,
-      #040811 0%,
-      #070d19 48%,
-      #090f1d 100%
-    );
+    linear-gradient(145deg, #040811 0%, #070d19 48%, #090f1d 100%);
 }
-
-
-/* ============================================================
-   BOX SIZING
-   ============================================================ */
 
 .reports-page,
 .reports-page *,
@@ -76,11 +56,6 @@
 .reports-page *::after {
   box-sizing: border-box;
 }
-
-
-/* ============================================================
-   BACKGROUND
-   ============================================================ */
 
 .reports-background {
   position: fixed;
@@ -94,7 +69,6 @@
   pointer-events: none;
 }
 
-
 .reports-grid-overlay {
   position: absolute;
 
@@ -103,27 +77,13 @@
   opacity: 0.5;
 
   background-image:
-    linear-gradient(
-      rgba(118, 95, 255, 0.035) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(118, 95, 255, 0.035) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(118, 95, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(118, 95, 255, 0.035) 1px, transparent 1px);
 
   background-size: 52px 52px;
 
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black 0%,
-      black 65%,
-      transparent 100%
-    );
+  mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
 }
-
 
 .reports-glow {
   position: absolute;
@@ -133,7 +93,6 @@
   filter: blur(45px);
 }
 
-
 .reports-glow-one {
   width: 700px;
   height: 700px;
@@ -141,14 +100,8 @@
   top: -380px;
   right: -180px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(110, 83, 255, 0.2),
-      transparent 68%
-    );
+  background: radial-gradient(circle, rgba(110, 83, 255, 0.2), transparent 68%);
 }
-
 
 .reports-glow-two {
   width: 560px;
@@ -157,14 +110,12 @@
   left: -220px;
   bottom: -300px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(56, 150, 205, 0.07),
-      transparent 68%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(56, 150, 205, 0.07),
+    transparent 68%
+  );
 }
-
 
 .reports-glow-three {
   width: 420px;
@@ -173,18 +124,12 @@
   right: 22%;
   top: 40%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(109, 78, 255, 0.045),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(109, 78, 255, 0.045),
+    transparent 70%
+  );
 }
-
-
-/* ============================================================
-   MAIN CONTAINER
-   ============================================================ */
 
 .reports-container {
   position: relative;
@@ -197,16 +142,8 @@
 
   margin: 0 auto;
 
-  padding:
-    42px
-    42px
-    90px;
+  padding: 42px 42px 90px;
 }
-
-
-/* ============================================================
-   HERO
-   ============================================================ */
 
 .reports-hero {
   position: relative;
@@ -217,24 +154,20 @@
 
   overflow: hidden;
 
-  border:
-    1px solid
-    rgba(145, 158, 191, 0.17);
+  border: 1px solid rgba(145, 158, 191, 0.17);
 
   border-radius: 28px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(22, 33, 57, 0.98),
-      rgba(9, 16, 31, 0.98)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(22, 33, 57, 0.98),
+    rgba(9, 16, 31, 0.98)
+  );
 
   box-shadow:
     0 32px 90px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
-
 
 .reports-hero::before {
   content: "";
@@ -247,20 +180,17 @@
 
   height: 3px;
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #765cff 20%,
-      #9b86ff 45%,
-      #4bd8ef 75%,
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #765cff 20%,
+    #9b86ff 45%,
+    #4bd8ef 75%,
+    transparent
+  );
 
-  box-shadow:
-    0 0 22px rgba(118, 92, 255, 0.35);
+  box-shadow: 0 0 22px rgba(118, 92, 255, 0.35);
 }
-
 
 .reports-hero::after {
   content: "";
@@ -275,32 +205,18 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(113, 87, 255, 0.2),
-      transparent 68%
-    );
+  background: radial-gradient(circle, rgba(113, 87, 255, 0.2), transparent 68%);
 
   pointer-events: none;
 }
-
 
 .reports-hero-content {
   position: relative;
 
   z-index: 3;
 
-  padding:
-    48px
-    50px
-    42px;
+  padding: 48px 50px 42px;
 }
-
-
-/* ============================================================
-   HERO ORBS
-   ============================================================ */
 
 .reports-hero-orb {
   position: absolute;
@@ -310,7 +226,6 @@
   pointer-events: none;
 }
 
-
 .reports-hero-orb-one {
   width: 240px;
   height: 240px;
@@ -318,14 +233,12 @@
   right: 9%;
   bottom: -160px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(72, 216, 239, 0.05),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(72, 216, 239, 0.05),
+    transparent 70%
+  );
 }
-
 
 .reports-hero-orb-two {
   width: 180px;
@@ -334,18 +247,12 @@
   left: 48%;
   top: -120px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(118, 92, 255, 0.06),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(118, 92, 255, 0.06),
+    transparent 70%
+  );
 }
-
-
-/* ============================================================
-   HERO BADGE
-   ============================================================ */
 
 .reports-hero-badge {
   display: inline-flex;
@@ -367,7 +274,6 @@
   text-transform: uppercase;
 }
 
-
 .reports-hero-dot {
   width: 8px;
   height: 8px;
@@ -380,14 +286,8 @@
     0 0 0 5px rgba(89, 227, 156, 0.055),
     0 0 18px rgba(89, 227, 156, 0.55);
 
-  animation:
-    reportsPulse 2.4s ease-in-out infinite;
+  animation: reportsPulse 2.4s ease-in-out infinite;
 }
-
-
-/* ============================================================
-   HERO TITLE
-   ============================================================ */
 
 .reports-hero-title-row {
   display: flex;
@@ -399,19 +299,16 @@
   gap: 40px;
 }
 
-
 .reports-hero-copy {
   min-width: 0;
 }
-
 
 .reports-hero h1 {
   margin: 0;
 
   color: #fafbff;
 
-  font-size:
-    clamp(44px, 4vw, 64px);
+  font-size: clamp(44px, 4vw, 64px);
 
   font-weight: 850;
 
@@ -419,10 +316,8 @@
 
   letter-spacing: -0.055em;
 
-  text-shadow:
-    0 8px 35px rgba(0, 0, 0, 0.24);
+  text-shadow: 0 8px 35px rgba(0, 0, 0, 0.24);
 }
-
 
 .reports-hero p {
   max-width: 760px;
@@ -436,11 +331,6 @@
   line-height: 1.75;
 }
 
-
-/* ============================================================
-   HERO STATUS
-   ============================================================ */
-
 .reports-hero-status {
   display: flex;
 
@@ -452,24 +342,18 @@
 
   min-width: 190px;
 
-  padding:
-    15px
-    18px;
+  padding: 15px 18px;
 
-  border:
-    1px solid
-    rgba(89, 227, 156, 0.16);
+  border: 1px solid rgba(89, 227, 156, 0.16);
 
   border-radius: 15px;
 
-  background:
-    rgba(5, 13, 24, 0.55);
+  background: rgba(5, 13, 24, 0.55);
 
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.025),
     0 12px 28px rgba(0, 0, 0, 0.16);
 }
-
 
 .status-pulse {
   width: 9px;
@@ -485,10 +369,8 @@
     0 0 0 5px rgba(89, 227, 156, 0.06),
     0 0 18px rgba(89, 227, 156, 0.52);
 
-  animation:
-    reportsPulse 2.4s ease-in-out infinite;
+  animation: reportsPulse 2.4s ease-in-out infinite;
 }
-
 
 .reports-hero-status div {
   display: flex;
@@ -498,7 +380,6 @@
   gap: 4px;
 }
 
-
 .reports-hero-status strong {
   color: #e3e9f4;
 
@@ -507,41 +388,26 @@
   font-weight: 750;
 }
 
-
 .reports-hero-status span:last-child {
   color: #68768e;
 
   font-size: 10px;
 }
 
-
-/* ============================================================
-   HERO DIVIDER
-   ============================================================ */
-
 .reports-hero-divider {
   width: 100%;
 
   height: 1px;
 
-  margin:
-    35px
-    0
-    23px;
+  margin: 35px 0 23px;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(118, 92, 255, 0.35),
-      rgba(118, 92, 255, 0.08),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(118, 92, 255, 0.35),
+    rgba(118, 92, 255, 0.08),
+    transparent
+  );
 }
-
-
-/* ============================================================
-   HERO META
-   ============================================================ */
 
 .reports-hero-meta {
   display: flex;
@@ -563,7 +429,6 @@
   text-transform: uppercase;
 }
 
-
 .reports-hero-meta > span {
   display: inline-flex;
 
@@ -571,7 +436,6 @@
 
   gap: 8px;
 }
-
 
 .meta-number {
   color: #9385ff;
@@ -581,7 +445,6 @@
   font-weight: 850;
 }
 
-
 .meta-divider {
   width: 4px;
   height: 4px;
@@ -590,12 +453,6 @@
 
   background: #3a465d;
 }
-
-
-/* ============================================================
-   SECTION HEADINGS
-   UPDATED — LARGER PREMIUM TYPOGRAPHY
-   ============================================================ */
 
 .reports-section-heading,
 .reports-analytics-heading {
@@ -610,16 +467,9 @@
   margin-bottom: 30px;
 }
 
-
 .section-heading-copy {
   min-width: 0;
 }
-
-
-/* ============================================================
-   SECTION KICKER
-   01 / PERFORMANCE OVERVIEW
-   ============================================================ */
 
 .section-kicker {
   display: flex;
@@ -642,10 +492,8 @@
 
   text-transform: uppercase;
 
-  text-shadow:
-    0 0 18px rgba(118, 92, 255, 0.16);
+  text-shadow: 0 0 18px rgba(118, 92, 255, 0.16);
 }
-
 
 .kicker-line {
   width: 42px;
@@ -655,29 +503,17 @@
 
   border-radius: 999px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #765cff,
-      #4bd8ef
-    );
+  background: linear-gradient(90deg, #765cff, #4bd8ef);
 
-  box-shadow:
-    0 0 14px rgba(118, 92, 255, 0.3);
+  box-shadow: 0 0 14px rgba(118, 92, 255, 0.3);
 }
-
-
-/* ============================================================
-   SECTION HEADING
-   ============================================================ */
 
 .section-heading-copy h2 {
   margin: 0;
 
   color: #f7f8fd;
 
-  font-size:
-    clamp(32px, 3vw, 42px);
+  font-size: clamp(32px, 3vw, 42px);
 
   font-weight: 850;
 
@@ -685,18 +521,13 @@
 
   letter-spacing: -0.045em;
 
-  text-shadow:
-    0 5px 24px rgba(0, 0, 0, 0.18);
+  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.18);
 }
-
 
 .section-heading-copy p {
   max-width: 720px;
 
-  margin:
-    13px
-    0
-    0;
+  margin: 13px 0 0;
 
   color: #808da3;
 
@@ -704,11 +535,6 @@
 
   line-height: 1.7;
 }
-
-
-/* ============================================================
-   LIVE INDICATORS
-   ============================================================ */
 
 .section-live-indicator,
 .analytics-live-badge {
@@ -720,18 +546,13 @@
 
   flex-shrink: 0;
 
-  padding:
-    11px
-    16px;
+  padding: 11px 16px;
 
-  border:
-    1px solid
-    rgba(89, 227, 156, 0.16);
+  border: 1px solid rgba(89, 227, 156, 0.16);
 
   border-radius: 999px;
 
-  background:
-    rgba(8, 18, 29, 0.58);
+  background: rgba(8, 18, 29, 0.58);
 
   color: #7f8da1;
 
@@ -739,10 +560,8 @@
 
   font-weight: 650;
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
-
 
 .section-live-indicator span,
 .analytics-live-dot {
@@ -757,14 +576,8 @@
     0 0 0 4px rgba(89, 227, 156, 0.055),
     0 0 14px rgba(89, 227, 156, 0.5);
 
-  animation:
-    reportsPulse 2.4s ease-in-out infinite;
+  animation: reportsPulse 2.4s ease-in-out infinite;
 }
-
-
-/* ============================================================
-   PERFORMANCE OVERVIEW
-   ============================================================ */
 
 .reports-overview {
   position: relative;
@@ -774,20 +587,13 @@
   margin-bottom: 72px;
 }
 
-
 .reports-overview .reports-section-heading {
-  padding:
-    0
-    4px
-    23px;
+  padding: 0 4px 23px;
 
-  border-bottom:
-    1px solid
-    rgba(132, 145, 180, 0.11);
+  border-bottom: 1px solid rgba(132, 145, 180, 0.11);
 
   position: relative;
 }
-
 
 .reports-overview .reports-section-heading::after {
   content: "";
@@ -802,21 +608,10 @@
 
   border-radius: 999px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #765cff,
-      #4bd8ef
-    );
+  background: linear-gradient(90deg, #765cff, #4bd8ef);
 
-  box-shadow:
-    0 0 18px rgba(118, 92, 255, 0.28);
+  box-shadow: 0 0 18px rgba(118, 92, 255, 0.28);
 }
-
-
-/* ============================================================
-   STAT SHELL
-   ============================================================ */
 
 .reports-stats-shell {
   position: relative;
@@ -827,18 +622,15 @@
 
   border-radius: 24px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(118, 92, 255, 0.12),
-      rgba(72, 215, 239, 0.04),
-      transparent 60%
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(118, 92, 255, 0.12),
+    rgba(72, 215, 239, 0.04),
+    transparent 60%
+  );
 
-  box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
 }
-
 
 .reports-stats-shell::before {
   content: "";
@@ -849,44 +641,31 @@
 
   border-radius: 25px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(118, 92, 255, 0.12),
-      transparent 35%,
-      rgba(72, 215, 239, 0.05)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(118, 92, 255, 0.12),
+    transparent 35%,
+    rgba(72, 215, 239, 0.05)
+  );
 
   pointer-events: none;
 }
 
-
 .reports-stats-shell > div {
   width: 100%;
 }
-
-
-/* ============================================================
-   REPORT CARD GRID
-   ============================================================ */
 
 .reports-stats-shell [class*="grid"] {
   position: relative;
 
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 16px;
 
   width: 100%;
 }
-
-
-/* ============================================================
-   REPORT STAT CARDS
-   ============================================================ */
 
 .reports-stats-shell [class*="card"] {
   position: relative;
@@ -899,18 +678,15 @@
 
   overflow: hidden;
 
-  border:
-    1px solid
-    rgba(139, 153, 187, 0.16);
+  border: 1px solid rgba(139, 153, 187, 0.16);
 
   border-radius: 21px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(27, 40, 64, 0.99),
-      rgba(15, 26, 45, 0.99)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(27, 40, 64, 0.99),
+    rgba(15, 26, 45, 0.99)
+  );
 
   box-shadow:
     0 20px 45px rgba(0, 0, 0, 0.22),
@@ -921,7 +697,6 @@
     border-color 0.28s ease,
     box-shadow 0.28s ease;
 }
-
 
 .reports-stats-shell [class*="card"]::before {
   content: "";
@@ -934,17 +709,10 @@
 
   height: 3px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #765cff,
-      #4bd8ef,
-      transparent
-    );
+  background: linear-gradient(90deg, #765cff, #4bd8ef, transparent);
 
   opacity: 0.8;
 }
-
 
 .reports-stats-shell [class*="card"]::after {
   content: "";
@@ -959,22 +727,19 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(118, 92, 255, 0.14),
-      transparent 68%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(118, 92, 255, 0.14),
+    transparent 68%
+  );
 
   pointer-events: none;
 }
 
-
 .reports-stats-shell [class*="card"]:hover {
   transform: translateY(-6px);
 
-  border-color:
-    rgba(121, 101, 255, 0.36);
+  border-color: rgba(121, 101, 255, 0.36);
 
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.3),
@@ -982,37 +747,21 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
-
-/* ============================================================
-   ANALYTICS
-   ============================================================ */
-
 .reports-analytics {
   width: 100%;
 
   margin-bottom: 34px;
 }
 
-
-/* ============================================================
-   CHART GRID
-   ============================================================ */
-
 .reports-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 18px;
 
   width: 100%;
 }
-
-
-/* ============================================================
-   CHART CARD
-   ============================================================ */
 
 .report-chart-card {
   position: relative;
@@ -1025,18 +774,15 @@
 
   overflow: hidden;
 
-  border:
-    1px solid
-    rgba(132, 147, 182, 0.15);
+  border: 1px solid rgba(132, 147, 182, 0.15);
 
   border-radius: 22px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(23, 36, 59, 0.99),
-      rgba(13, 23, 41, 0.99)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(23, 36, 59, 0.99),
+    rgba(13, 23, 41, 0.99)
+  );
 
   box-shadow:
     0 22px 55px rgba(0, 0, 0, 0.23),
@@ -1048,12 +794,10 @@
     box-shadow 0.28s ease;
 }
 
-
 .report-chart-card:hover {
   transform: translateY(-4px);
 
-  border-color:
-    rgba(119, 99, 255, 0.33);
+  border-color: rgba(119, 99, 255, 0.33);
 
   box-shadow:
     0 30px 68px rgba(0, 0, 0, 0.3),
@@ -1061,17 +805,11 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-
 .report-chart-wide {
   grid-column: 1 / -1;
 
   min-height: 455px;
 }
-
-
-/* ============================================================
-   CARD TOP LINE
-   ============================================================ */
 
 .chart-card-top-line {
   position: absolute;
@@ -1082,22 +820,10 @@
 
   height: 3px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #7055ff,
-      #4dd9ee 62%,
-      transparent
-    );
+  background: linear-gradient(90deg, #7055ff, #4dd9ee 62%, transparent);
 
-  box-shadow:
-    0 0 18px rgba(112, 85, 255, 0.14);
+  box-shadow: 0 0 18px rgba(112, 85, 255, 0.14);
 }
-
-
-/* ============================================================
-   CHART HEADER
-   ============================================================ */
 
 .report-chart-card-header {
   position: relative;
@@ -1113,11 +839,9 @@
   gap: 25px;
 }
 
-
 .chart-heading-copy {
   min-width: 0;
 }
-
 
 .chart-kicker {
   display: block;
@@ -1135,7 +859,6 @@
   text-transform: uppercase;
 }
 
-
 .report-chart-card h3 {
   margin: 0;
 
@@ -1150,14 +873,10 @@
   letter-spacing: -0.025em;
 }
 
-
 .report-chart-card-header p {
   max-width: 620px;
 
-  margin:
-    8px
-    0
-    0;
+  margin: 8px 0 0;
 
   color: #728099;
 
@@ -1165,11 +884,6 @@
 
   line-height: 1.6;
 }
-
-
-/* ============================================================
-   CHART ICON
-   ============================================================ */
 
 .chart-header-icon {
   width: 43px;
@@ -1183,18 +897,15 @@
 
   flex-shrink: 0;
 
-  border:
-    1px solid
-    rgba(125, 104, 255, 0.23);
+  border: 1px solid rgba(125, 104, 255, 0.23);
 
   border-radius: 13px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(104, 82, 255, 0.22),
-      rgba(65, 59, 143, 0.12)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(104, 82, 255, 0.22),
+    rgba(65, 59, 143, 0.12)
+  );
 
   color: #9a8cff;
 
@@ -1210,63 +921,44 @@
     background 0.25s ease;
 }
 
-
 .report-chart-card:hover .chart-header-icon {
   transform: translateY(-2px);
 
-  border-color:
-    rgba(136, 118, 255, 0.35);
+  border-color: rgba(136, 118, 255, 0.35);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(112, 89, 255, 0.27),
-      rgba(70, 60, 155, 0.17)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(112, 89, 255, 0.27),
+    rgba(70, 60, 155, 0.17)
+  );
 }
-
 
 .chart-icon-success {
   color: #64e6a2;
 
-  border-color:
-    rgba(89, 227, 156, 0.18);
+  border-color: rgba(89, 227, 156, 0.18);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(55, 177, 115, 0.15),
-      rgba(31, 88, 67, 0.1)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(55, 177, 115, 0.15),
+    rgba(31, 88, 67, 0.1)
+  );
 }
-
-
-/* ============================================================
-   DIVIDER
-   ============================================================ */
 
 .chart-divider {
   width: 100%;
 
   height: 1px;
 
-  margin:
-    21px
-    0;
+  margin: 21px 0;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(126, 142, 179, 0.15),
-      rgba(126, 142, 179, 0.035),
-      transparent
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(126, 142, 179, 0.15),
+    rgba(126, 142, 179, 0.035),
+    transparent
+  );
 }
-
-
-/* ============================================================
-   CHART BODY
-   ============================================================ */
 
 .report-chart-body {
   position: relative;
@@ -1286,33 +978,17 @@
   overflow: hidden;
 }
 
-
 .report-chart-body > * {
   max-width: 100%;
 }
-
-
-/* ============================================================
-   TASK STATUS
-   ============================================================ */
 
 .task-status-body {
   min-height: 315px;
 }
 
-
-/* ============================================================
-   PROJECT PROGRESS
-   ============================================================ */
-
 .project-progress-body {
   min-height: 295px;
 }
-
-
-/* ============================================================
-   PRIORITY CARD
-   ============================================================ */
 
 .priority-card {
   background:
@@ -1321,13 +997,8 @@
       rgba(118, 92, 255, 0.11),
       transparent 32%
     ),
-    linear-gradient(
-      145deg,
-      rgba(24, 37, 61, 0.99),
-      rgba(13, 23, 41, 0.99)
-    );
+    linear-gradient(145deg, rgba(24, 37, 61, 0.99), rgba(13, 23, 41, 0.99));
 }
-
 
 .priority-card::before {
   content: "";
@@ -1340,13 +1011,12 @@
 
   padding: 1px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(120, 96, 255, 0.34),
-      rgba(75, 216, 239, 0.12),
-      transparent 65%
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(120, 96, 255, 0.34),
+    rgba(75, 216, 239, 0.12),
+    transparent 65%
+  );
 
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -1359,7 +1029,6 @@
   pointer-events: none;
 }
 
-
 .priority-card::after {
   content: "";
 
@@ -1371,37 +1040,26 @@
   left: 50%;
   top: 57%;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(112, 87, 255, 0.07),
-      transparent 68%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(112, 87, 255, 0.07),
+    transparent 68%
+  );
 
   filter: blur(10px);
 
   pointer-events: none;
 }
 
-
-/* ============================================================
-   PRIORITY BODY
-   ============================================================ */
-
 .priority-chart-body {
   min-height: 305px;
 
-  padding:
-    10px
-    8px
-    0;
+  padding: 10px 8px 0;
 }
-
 
 .priority-chart-body .recharts-wrapper {
   position: relative;
@@ -1409,93 +1067,56 @@
   z-index: 3;
 }
 
-
 .priority-chart-body .recharts-surface {
   overflow: visible;
 }
 
-
-/* ============================================================
-   RECHARTS
-   ============================================================ */
-
 .report-chart-body .recharts-cartesian-grid-horizontal line,
 .report-chart-body .recharts-cartesian-grid-vertical line {
-  stroke:
-    rgba(133, 148, 181, 0.08);
+  stroke: rgba(133, 148, 181, 0.08);
 }
-
 
 .report-chart-body .recharts-text {
   fill: #738099;
 }
 
-
 .report-chart-body .recharts-cartesian-axis-line {
-  stroke:
-    rgba(133, 148, 181, 0.1);
+  stroke: rgba(133, 148, 181, 0.1);
 }
-
 
 .report-chart-body .recharts-cartesian-axis-tick-line {
-  stroke:
-    rgba(133, 148, 181, 0.08);
+  stroke: rgba(133, 148, 181, 0.08);
 }
 
-
-/* ============================================================
-   PRIORITY PIE
-   ============================================================ */
-
 .priority-chart-body .recharts-pie-sector {
-  filter:
-    drop-shadow(
-      0 5px 10px rgba(0, 0, 0, 0.25)
-    );
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.25));
 
   transition:
     opacity 0.2s ease,
     filter 0.2s ease;
 }
 
-
 .priority-chart-body .recharts-pie-sector:hover {
-  filter:
-    drop-shadow(
-      0 7px 15px rgba(0, 0, 0, 0.4)
-    );
+  filter: drop-shadow(0 7px 15px rgba(0, 0, 0, 0.4));
 }
-
-
-/* ============================================================
-   TOOLTIP
-   ============================================================ */
 
 .priority-chart-body .recharts-tooltip-wrapper {
   z-index: 30;
 }
 
-
 .priority-chart-body .recharts-default-tooltip {
-  padding:
-    12px
-    14px !important;
+  padding: 12px 14px !important;
 
-  border:
-    1px solid
-    rgba(140, 124, 255, 0.25) !important;
+  border: 1px solid rgba(140, 124, 255, 0.25) !important;
 
   border-radius: 12px !important;
 
-  background:
-    rgba(8, 14, 27, 0.97) !important;
+  background: rgba(8, 14, 27, 0.97) !important;
 
-  box-shadow:
-    0 20px 42px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.4) !important;
 
   backdrop-filter: blur(16px);
 }
-
 
 .priority-chart-body .recharts-tooltip-label {
   margin-bottom: 6px !important;
@@ -1507,24 +1128,17 @@
   font-weight: 750 !important;
 }
 
-
 .priority-chart-body .recharts-tooltip-item {
   color: #aeb8cb !important;
 
   font-size: 11px !important;
 }
 
-
-/* ============================================================
-   LEGEND
-   ============================================================ */
-
 .priority-chart-body .recharts-legend-wrapper {
   bottom: 0 !important;
 
   width: 100% !important;
 }
-
 
 .priority-chart-body .recharts-default-legend {
   display: flex !important;
@@ -1535,13 +1149,10 @@
 
   gap: 9px;
 
-  padding:
-    0
-    8px;
+  padding: 0 8px;
 
   list-style: none;
 }
-
 
 .priority-chart-body .recharts-legend-item {
   display: inline-flex !important;
@@ -1552,21 +1163,15 @@
 
   margin: 0 !important;
 
-  padding:
-    7px
-    12px;
+  padding: 7px 12px;
 
-  border:
-    1px solid
-    rgba(132, 147, 180, 0.12);
+  border: 1px solid rgba(132, 147, 180, 0.12);
 
   border-radius: 999px;
 
-  background:
-    rgba(8, 14, 26, 0.42);
+  background: rgba(8, 14, 26, 0.42);
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 
   transition:
     transform 0.2s ease,
@@ -1574,17 +1179,13 @@
     background 0.2s ease;
 }
 
-
 .priority-chart-body .recharts-legend-item:hover {
   transform: translateY(-1px);
 
-  border-color:
-    rgba(130, 110, 255, 0.3);
+  border-color: rgba(130, 110, 255, 0.3);
 
-  background:
-    rgba(97, 78, 205, 0.11);
+  background: rgba(97, 78, 205, 0.11);
 }
-
 
 .priority-chart-body .recharts-legend-item-text {
   color: #adb8cb !important;
@@ -1594,7 +1195,6 @@
   font-weight: 650;
 }
 
-
 .priority-chart-body .recharts-legend-icon {
   width: 8px !important;
   height: 8px !important;
@@ -1603,11 +1203,6 @@
 
   border-radius: 50% !important;
 }
-
-
-/* ============================================================
-   EMPTY STATES
-   ============================================================ */
 
 .report-chart-body [class*="empty"],
 .report-chart-body [class*="Empty"] {
@@ -1625,9 +1220,7 @@
 
   padding: 30px;
 
-  border:
-    1px dashed
-    rgba(113, 129, 165, 0.18);
+  border: 1px dashed rgba(113, 129, 165, 0.18);
 
   border-radius: 17px;
 
@@ -1641,11 +1234,6 @@
 
   text-align: center;
 }
-
-
-/* ============================================================
-   ANALYTICS WAITING
-   ============================================================ */
 
 .analytics-waiting {
   position: relative;
@@ -1662,24 +1250,19 @@
 
   margin-bottom: 25px;
 
-  padding:
-    28px
-    32px;
+  padding: 28px 32px;
 
   overflow: hidden;
 
-  border:
-    1px solid
-    rgba(115, 91, 255, 0.23);
+  border: 1px solid rgba(115, 91, 255, 0.23);
 
   border-radius: 22px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(39, 31, 80, 0.88),
-      rgba(18, 26, 49, 0.98)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(39, 31, 80, 0.88),
+    rgba(18, 26, 49, 0.98)
+  );
 
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.24),
@@ -1690,14 +1273,11 @@
     border-color 0.25s ease;
 }
 
-
 .analytics-waiting:hover {
   transform: translateY(-3px);
 
-  border-color:
-    rgba(127, 104, 255, 0.34);
+  border-color: rgba(127, 104, 255, 0.34);
 }
-
 
 .analytics-waiting::before {
   content: "";
@@ -1710,17 +1290,10 @@
 
   width: 4px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #7356ff,
-      #a181ff
-    );
+  background: linear-gradient(180deg, #7356ff, #a181ff);
 
-  box-shadow:
-    0 0 18px rgba(113, 86, 255, 0.25);
+  box-shadow: 0 0 18px rgba(113, 86, 255, 0.25);
 }
-
 
 .waiting-glow {
   position: absolute;
@@ -1733,18 +1306,12 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(116, 88, 255, 0.17),
-      transparent 68%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(116, 88, 255, 0.17),
+    transparent 68%
+  );
 }
-
-
-/* ============================================================
-   WAITING ICON
-   ============================================================ */
 
 .analytics-waiting-icon {
   position: relative;
@@ -1762,18 +1329,15 @@
 
   flex-shrink: 0;
 
-  border:
-    1px solid
-    rgba(125, 104, 255, 0.25);
+  border: 1px solid rgba(125, 104, 255, 0.25);
 
   border-radius: 17px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(106, 82, 255, 0.23),
-      rgba(70, 61, 142, 0.15)
-    );
+  background: linear-gradient(
+    145deg,
+    rgba(106, 82, 255, 0.23),
+    rgba(70, 61, 142, 0.15)
+  );
 
   color: #a295ff;
 
@@ -1784,11 +1348,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
-
-/* ============================================================
-   WAITING CONTENT
-   ============================================================ */
-
 .analytics-waiting-main {
   position: relative;
 
@@ -1798,7 +1357,6 @@
 
   min-width: 0;
 }
-
 
 .waiting-kicker {
   margin-bottom: 7px;
@@ -1814,7 +1372,6 @@
   text-transform: uppercase;
 }
 
-
 .analytics-waiting-main h3 {
   margin: 0;
 
@@ -1827,14 +1384,10 @@
   letter-spacing: -0.025em;
 }
 
-
 .analytics-waiting-main p {
   max-width: 760px;
 
-  margin:
-    9px
-    0
-    0;
+  margin: 9px 0 0;
 
   color: #78859d;
 
@@ -1842,11 +1395,6 @@
 
   line-height: 1.65;
 }
-
-
-/* ============================================================
-   ANALYTICS ENGINE
-   ============================================================ */
 
 .analytics-engine {
   position: relative;
@@ -1861,23 +1409,16 @@
 
   flex-shrink: 0;
 
-  padding:
-    13px
-    16px;
+  padding: 13px 16px;
 
-  border:
-    1px solid
-    rgba(99, 213, 157, 0.13);
+  border: 1px solid rgba(99, 213, 157, 0.13);
 
   border-radius: 13px;
 
-  background:
-    rgba(7, 14, 24, 0.46);
+  background: rgba(7, 14, 24, 0.46);
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
-
 
 .engine-pulse {
   width: 7px;
@@ -1889,13 +1430,10 @@
 
   background: var(--green);
 
-  box-shadow:
-    0 0 12px rgba(92, 224, 155, 0.55);
+  box-shadow: 0 0 12px rgba(92, 224, 155, 0.55);
 
-  animation:
-    reportsPulse 2.4s ease-in-out infinite;
+  animation: reportsPulse 2.4s ease-in-out infinite;
 }
-
 
 .analytics-engine div {
   display: flex;
@@ -1905,7 +1443,6 @@
   gap: 3px;
 }
 
-
 .analytics-engine strong {
   color: #c1ccdc;
 
@@ -1914,17 +1451,11 @@
   font-weight: 700;
 }
 
-
 .analytics-engine div span {
   color: #637087;
 
   font-size: 9px;
 }
-
-
-/* ============================================================
-   EXPORT CENTER
-   ============================================================ */
 
 .reports-export {
   position: relative;
@@ -1944,30 +1475,24 @@
 
   margin-bottom: 24px;
 
-  padding:
-    30px
-    32px;
+  padding: 30px 32px;
 
   overflow: hidden;
 
-  border:
-    1px solid
-    rgba(125, 140, 174, 0.16);
+  border: 1px solid rgba(125, 140, 174, 0.16);
 
   border-radius: 21px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(18, 29, 49, 0.98),
-      rgba(12, 21, 37, 0.98)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(18, 29, 49, 0.98),
+    rgba(12, 21, 37, 0.98)
+  );
 
   box-shadow:
     0 20px 48px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.028);
 }
-
 
 .reports-export::before {
   content: "";
@@ -1980,14 +1505,8 @@
 
   width: 3px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #7358ff,
-      #4bd8ef
-    );
+  background: linear-gradient(180deg, #7358ff, #4bd8ef);
 }
-
 
 .reports-export-glow {
   position: absolute;
@@ -2000,16 +1519,10 @@
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(118, 92, 255, 0.1),
-      transparent 68%
-    );
+  background: radial-gradient(circle, rgba(118, 92, 255, 0.1), transparent 68%);
 
   pointer-events: none;
 }
-
 
 .reports-export-content {
   position: relative;
@@ -2019,11 +1532,9 @@
   min-width: 0;
 }
 
-
 .reports-export-content .section-kicker {
   margin-bottom: 9px;
 }
-
 
 .reports-export-content h3 {
   margin: 0;
@@ -2037,14 +1548,10 @@
   letter-spacing: -0.025em;
 }
 
-
 .reports-export-content p {
   max-width: 680px;
 
-  margin:
-    8px
-    0
-    0;
+  margin: 8px 0 0;
 
   color: #707e95;
 
@@ -2052,11 +1559,6 @@
 
   line-height: 1.6;
 }
-
-
-/* ============================================================
-   EXPORT READY
-   ============================================================ */
 
 .reports-export-ready {
   position: relative;
@@ -2069,20 +1571,14 @@
 
   gap: 10px;
 
-  padding:
-    11px
-    14px;
+  padding: 11px 14px;
 
-  border:
-    1px solid
-    rgba(99, 213, 157, 0.13);
+  border: 1px solid rgba(99, 213, 157, 0.13);
 
   border-radius: 12px;
 
-  background:
-    rgba(7, 14, 24, 0.42);
+  background: rgba(7, 14, 24, 0.42);
 }
-
 
 .export-ready-dot {
   width: 7px;
@@ -2094,10 +1590,8 @@
 
   background: var(--green);
 
-  box-shadow:
-    0 0 11px rgba(92, 224, 155, 0.55);
+  box-shadow: 0 0 11px rgba(92, 224, 155, 0.55);
 }
-
 
 .reports-export-ready div {
   display: flex;
@@ -2107,24 +1601,17 @@
   gap: 3px;
 }
 
-
 .reports-export-ready strong {
   color: #bfc9d9;
 
   font-size: 9px;
 }
 
-
 .reports-export-ready span {
   color: #59667d;
 
   font-size: 8px;
 }
-
-
-/* ============================================================
-   EXPORT BUTTONS
-   ============================================================ */
 
 .reports-export-actions {
   position: relative;
@@ -2138,7 +1625,6 @@
   justify-content: flex-end;
 }
 
-
 .reports-export-actions > div {
   display: flex;
 
@@ -2151,22 +1637,16 @@
   justify-content: flex-end;
 }
 
-
 .reports-export-actions button {
   min-height: 42px;
 
-  padding:
-    10px
-    17px;
+  padding: 10px 17px;
 
-  border:
-    1px solid
-    rgba(129, 145, 180, 0.17);
+  border: 1px solid rgba(129, 145, 180, 0.17);
 
   border-radius: 11px;
 
-  background:
-    rgba(27, 39, 61, 0.82);
+  background: rgba(27, 39, 61, 0.82);
 
   color: #c4ccdc;
 
@@ -2178,8 +1658,7 @@
 
   cursor: pointer;
 
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 
   transition:
     transform 0.2s ease,
@@ -2189,31 +1668,21 @@
     box-shadow 0.2s ease;
 }
 
-
 .reports-export-actions button:hover {
   transform: translateY(-2px);
 
-  border-color:
-    rgba(120, 98, 255, 0.4);
+  border-color: rgba(120, 98, 255, 0.4);
 
-  background:
-    rgba(95, 76, 205, 0.2);
+  background: rgba(95, 76, 205, 0.2);
 
   color: #f2f4fb;
 
-  box-shadow:
-    0 9px 22px rgba(74, 56, 176, 0.13);
+  box-shadow: 0 9px 22px rgba(74, 56, 176, 0.13);
 }
-
 
 .reports-export-actions button:active {
   transform: translateY(0);
 }
-
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
 
 .reports-footer {
   width: 100%;
@@ -2226,15 +1695,12 @@
 
   gap: 25px;
 
-  padding:
-    4px
-    4px;
+  padding: 4px 4px;
 
   color: #56637a;
 
   font-size: 10px;
 }
-
 
 .reports-footer-left {
   display: flex;
@@ -2244,7 +1710,6 @@
   gap: 8px;
 }
 
-
 .footer-status-dot {
   width: 6px;
   height: 6px;
@@ -2253,17 +1718,10 @@
 
   background: var(--green);
 
-  box-shadow:
-    0 0 9px rgba(86, 217, 147, 0.45);
+  box-shadow: 0 0 9px rgba(86, 217, 147, 0.45);
 
-  animation:
-    reportsPulse 2.4s ease-in-out infinite;
+  animation: reportsPulse 2.4s ease-in-out infinite;
 }
-
-
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
 
 @keyframes reportsPulse {
   0%,
@@ -2280,26 +1738,15 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 1250px
-   ============================================================ */
-
 @media (max-width: 1250px) {
   .reports-container {
     max-width: 100%;
 
-    padding:
-      36px
-      32px
-      80px;
+    padding: 36px 32px 80px;
   }
 
   .reports-hero-content {
-    padding:
-      42px
-      44px
-      38px;
+    padding: 42px 44px 38px;
   }
 
   .reports-export {
@@ -2313,15 +1760,9 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 1050px
-   ============================================================ */
-
 @media (max-width: 1050px) {
   .reports-stats-shell [class*="grid"] {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .reports-hero h1 {
@@ -2359,17 +1800,9 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 850px
-   ============================================================ */
-
 @media (max-width: 850px) {
   .reports-container {
-    padding:
-      28px
-      24px
-      70px;
+    padding: 28px 24px 70px;
   }
 
   .reports-hero {
@@ -2379,9 +1812,7 @@
   }
 
   .reports-hero-content {
-    padding:
-      34px
-      32px;
+    padding: 34px 32px;
   }
 
   .reports-hero h1 {
@@ -2446,17 +1877,9 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 650px
-   ============================================================ */
-
 @media (max-width: 650px) {
   .reports-container {
-    padding:
-      22px
-      17px
-      55px;
+    padding: 22px 17px 55px;
   }
 
   .reports-hero {
@@ -2464,9 +1887,7 @@
   }
 
   .reports-hero-content {
-    padding:
-      28px
-      24px;
+    padding: 28px 24px;
   }
 
   .reports-hero-badge {
@@ -2552,8 +1973,7 @@
   }
 
   .analytics-waiting {
-    padding:
-      23px;
+    padding: 23px;
   }
 
   .analytics-waiting-icon {
@@ -2576,8 +1996,7 @@
   }
 
   .reports-export {
-    padding:
-      24px;
+    padding: 24px;
   }
 
   .reports-export-content h3 {
@@ -2593,23 +2012,13 @@
   }
 }
 
-
-/* ============================================================
-   RESPONSIVE — 430px
-   ============================================================ */
-
 @media (max-width: 430px) {
   .reports-container {
-    padding:
-      17px
-      12px
-      45px;
+    padding: 17px 12px 45px;
   }
 
   .reports-hero-content {
-    padding:
-      25px
-      19px;
+    padding: 25px 19px;
   }
 
   .reports-hero h1 {
@@ -2687,9 +2096,7 @@
   }
 
   .priority-chart-body .recharts-legend-item {
-    padding:
-      5px
-      8px;
+    padding: 5px 8px;
   }
 
   .priority-chart-body .recharts-legend-item-text {
@@ -2705,11 +2112,6 @@
   }
 }
 
-
-/* ============================================================
-   TYPOGRAPHY SAFETY
-   ============================================================ */
-
 .reports-page h1,
 .reports-page h2,
 .reports-page h3,
@@ -2718,22 +2120,15 @@
   overflow-wrap: break-word;
 }
 
-
 .reports-page button,
 .reports-page input,
 .reports-page select {
   font-family: inherit;
 }
 
-
 .reports-page svg {
   flex-shrink: 0;
 }
-
-
-/* ============================================================
-   ACCESSIBILITY
-   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   .reports-page *,

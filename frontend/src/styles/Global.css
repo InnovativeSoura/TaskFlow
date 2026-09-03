@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ==========================================
-   GLOBAL RESET
-========================================== */
-
 *,
 *::before,
 *::after {
@@ -13,10 +9,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-/* ==========================================
-   ROOT
-========================================== */
 
 html {
   scroll-behavior: smooth;
@@ -34,27 +26,15 @@ body {
   min-height: 100vh;
 }
 
-/* ==========================================
-   LINKS
-========================================== */
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* ==========================================
-   BUTTONS
-========================================== */
-
 button {
   font-family: inherit;
   cursor: pointer;
 }
-
-/* ==========================================
-   INPUTS
-========================================== */
 
 input,
 select,
@@ -64,27 +44,15 @@ button {
   outline: none;
 }
 
-/* ==========================================
-   IMAGES
-========================================== */
-
 img {
   max-width: 100%;
   display: block;
 }
 
-/* ==========================================
-   LISTS
-========================================== */
-
 ul,
 ol {
   list-style: none;
 }
-
-/* ==========================================
-   MENU BUTTON
-========================================== */
 
 .menu-btn {
   display: flex;
@@ -98,10 +66,6 @@ ol {
 .menu-btn:hover {
   background: #1e293b;
 }
-
-/* ==========================================
-   SCROLLBAR
-========================================== */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -120,18 +84,10 @@ ol {
   background: #5f36ff;
 }
 
-/* ==========================================
-   TEXT SELECTION
-========================================== */
-
 ::selection {
   background: #7c4dff;
   color: #ffffff;
 }
-
-/* ==========================================
-   REMOVE AUTOFILL BACKGROUND
-========================================== */
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -142,18 +98,10 @@ textarea:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset;
 }
 
-/* ==========================================
-   PLACEHOLDER
-========================================== */
-
 ::placeholder {
   color: #94a3b8;
   opacity: 1;
 }
-
-/* ==========================================
-   SMOOTH TRANSITIONS
-========================================== */
 
 button,
 input,
@@ -161,10 +109,6 @@ select,
 textarea {
   transition: all 0.3s ease;
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 768px) {
   body {

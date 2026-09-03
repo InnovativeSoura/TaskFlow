@@ -1,356 +1,260 @@
-/* ==========================================
-   FEATURES SECTION
-========================================== */
+.features-section {
+  position: relative;
 
-.features-section{
-    position:relative;
+  padding: 120px 8%;
 
-    padding:120px 8%;
-
-    overflow:hidden;
+  overflow: hidden;
 }
 
-/* ==========================================
-   TITLE
-========================================== */
+.section-title {
+  text-align: center;
 
-.section-title{
-
-    text-align:center;
-
-    margin-bottom:70px;
-
+  margin-bottom: 70px;
 }
 
-.section-title h2{
+.section-title h2 {
+  color: #ffffff;
 
-    color:#ffffff;
+  font-size: 46px;
 
-    font-size:46px;
+  font-weight: 700;
 
-    font-weight:700;
-
-    margin-bottom:18px;
-
+  margin-bottom: 18px;
 }
 
-.section-title p{
+.section-title p {
+  color: #9ca3af;
 
-    color:#9ca3af;
+  max-width: 720px;
 
-    max-width:720px;
+  margin: auto;
 
-    margin:auto;
+  font-size: 18px;
 
-    font-size:18px;
-
-    line-height:1.8;
-
+  line-height: 1.8;
 }
 
-/* ==========================================
-   GRID
-========================================== */
+.features-grid {
+  display: grid;
 
-.features-grid{
+  grid-template-columns: repeat(3, 1fr);
 
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:35px;
-
+  gap: 35px;
 }
 
-/* ==========================================
-   CARD
-========================================== */
+.feature-card {
+  position: relative;
 
-.feature-card{
+  padding: 40px 35px;
 
-    position:relative;
+  border-radius: 28px;
 
-    padding:40px 35px;
+  background: rgba(255, 255, 255, 0.05);
 
-    border-radius:28px;
+  backdrop-filter: blur(18px);
 
-    background:rgba(255,255,255,.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
-    backdrop-filter:blur(18px);
+  transition: 0.4s;
 
-    border:1px solid rgba(255,255,255,.08);
+  overflow: hidden;
 
-    transition:.4s;
-
-    overflow:hidden;
-
-    cursor:pointer;
-
+  cursor: pointer;
 }
 
-/* glowing border */
+.feature-card::before {
+  content: "";
 
-.feature-card::before{
+  position: absolute;
 
-    content:"";
+  inset: -2px;
 
-    position:absolute;
+  border-radius: 28px;
 
-    inset:-2px;
+  padding: 2px;
 
-    border-radius:28px;
+  background: linear-gradient(135deg, #7c4dff, #3b82f6, #00d4ff);
 
-    padding:2px;
+  opacity: 0;
 
-    background:linear-gradient(
-        135deg,
-        #7c4dff,
-        #3b82f6,
-        #00d4ff
-    );
+  transition: 0.4s;
 
-    opacity:0;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
 
-    transition:.4s;
+  -webkit-mask-composite: xor;
 
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-
-    -webkit-mask-composite:xor;
-
-    mask-composite:exclude;
-
+  mask-composite: exclude;
 }
 
-.feature-card:hover::before{
-
-    opacity:1;
-
+.feature-card:hover::before {
+  opacity: 1;
 }
 
-.feature-card:hover{
+.feature-card:hover {
+  transform: translateY(-12px);
 
-    transform:translateY(-12px);
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.45),
-        0 0 40px rgba(124,77,255,.25);
-
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(124, 77, 255, 0.25);
 }
 
-/* ==========================================
-   ICON
-========================================== */
+.feature-icon {
+  width: 75px;
 
-.feature-icon{
+  height: 75px;
 
-    width:75px;
+  border-radius: 20px;
 
-    height:75px;
+  display: flex;
 
-    border-radius:20px;
+  justify-content: center;
 
-    display:flex;
+  align-items: center;
 
-    justify-content:center;
+  font-size: 32px;
 
-    align-items:center;
+  color: white;
 
-    font-size:32px;
+  background: linear-gradient(135deg, #7c4dff, #3b82f6);
 
-    color:white;
+  margin-bottom: 25px;
 
-    background:linear-gradient(
-        135deg,
-        #7c4dff,
-        #3b82f6
-    );
-
-    margin-bottom:25px;
-
-    transition:.35s;
-
+  transition: 0.35s;
 }
 
-.feature-card:hover .feature-icon{
-
-    transform:rotate(-12deg) scale(1.1);
-
+.feature-card:hover .feature-icon {
+  transform: rotate(-12deg) scale(1.1);
 }
 
-/* ==========================================
-   TEXT
-========================================== */
+.feature-card h3 {
+  color: white;
 
-.feature-card h3{
+  font-size: 24px;
 
-    color:white;
-
-    font-size:24px;
-
-    margin-bottom:15px;
-
+  margin-bottom: 15px;
 }
 
-.feature-card p{
+.feature-card p {
+  color: #aab4c8;
 
-    color:#aab4c8;
+  line-height: 1.8;
 
-    line-height:1.8;
-
-    font-size:15px;
-
+  font-size: 15px;
 }
 
-/* ==========================================
-   HOVER GLOW
-========================================== */
+.feature-card::after {
+  content: "";
 
-.feature-card::after{
+  position: absolute;
 
-    content:"";
+  width: 220px;
+  height: 220px;
 
-    position:absolute;
+  background: radial-gradient(rgba(124, 77, 255, 0.25), transparent);
 
-    width:220px;
-    height:220px;
+  top: -120px;
+  right: -120px;
 
-    background:radial-gradient(
-        rgba(124,77,255,.25),
-        transparent
-    );
+  opacity: 0;
 
-    top:-120px;
-    right:-120px;
-
-    opacity:0;
-
-    transition:.4s;
-
+  transition: 0.4s;
 }
 
-.feature-card:hover::after{
-
-    opacity:1;
-
+.feature-card:hover::after {
+  opacity: 1;
 }
 
-/* ==========================================
-   FLOATING ANIMATION
-========================================== */
-
-.feature-card:nth-child(2){
-
-    animation:float1 6s ease-in-out infinite;
-
+.feature-card:nth-child(2) {
+  animation: float1 6s ease-in-out infinite;
 }
 
-.feature-card:nth-child(4){
-
-    animation:float2 7s ease-in-out infinite;
-
+.feature-card:nth-child(4) {
+  animation: float2 7s ease-in-out infinite;
 }
 
-.feature-card:nth-child(6){
-
-    animation:float3 8s ease-in-out infinite;
-
+.feature-card:nth-child(6) {
+  animation: float3 8s ease-in-out infinite;
 }
 
-@keyframes float1{
-
-0%{transform:translateY(0);}
-50%{transform:translateY(-6px);}
-100%{transform:translateY(0);}
-
+@keyframes float1 {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-@keyframes float2{
-
-0%{transform:translateY(0);}
-50%{transform:translateY(8px);}
-100%{transform:translateY(0);}
-
+@keyframes float2 {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-@keyframes float3{
-
-0%{transform:translateY(0);}
-50%{transform:translateY(-8px);}
-100%{transform:translateY(0);}
-
+@keyframes float3 {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media(max-width:1100px){
-
-.features-grid{
-
-grid-template-columns:repeat(2,1fr);
-
+@media (max-width: 1100px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+@media (max-width: 768px) {
+  .features-section {
+    padding: 90px 25px;
+  }
+
+  .section-title h2 {
+    font-size: 38px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: 35px 28px;
+  }
 }
 
-@media(max-width:768px){
+@media (max-width: 480px) {
+  .section-title h2 {
+    font-size: 30px;
+  }
 
-.features-section{
+  .section-title p {
+    font-size: 15px;
+  }
 
-padding:90px 25px;
+  .feature-icon {
+    width: 65px;
+    height: 65px;
 
-}
+    font-size: 28px;
+  }
 
-.section-title h2{
-
-font-size:38px;
-
-}
-
-.features-grid{
-
-grid-template-columns:1fr;
-
-}
-
-.feature-card{
-
-padding:35px 28px;
-
-}
-
-}
-
-@media(max-width:480px){
-
-.section-title h2{
-
-font-size:30px;
-
-}
-
-.section-title p{
-
-font-size:15px;
-
-}
-
-.feature-icon{
-
-width:65px;
-height:65px;
-
-font-size:28px;
-
-}
-
-.feature-card h3{
-
-font-size:20px;
-
-}
-
+  .feature-card h3 {
+    font-size: 20px;
+  }
 }

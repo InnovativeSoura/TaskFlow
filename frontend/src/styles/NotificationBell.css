@@ -1,7 +1,3 @@
-/* ==========================================
-   NOTIFICATION BELL
-========================================== */
-
 .notification-wrapper {
   position: relative;
   display: flex;
@@ -58,7 +54,7 @@
   border-radius: 12px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
   z-index: 9999;
-  animation: fadeDown .25s ease;
+  animation: fadeDown 0.25s ease;
 }
 
 .notification-dropdown h4 {
@@ -80,7 +76,7 @@
 .notification-item {
   padding: 14px 16px;
   border-bottom: 1px solid #f0f0f0;
-  transition: background .25s;
+  transition: background 0.25s;
 }
 
 .notification-item:hover {
@@ -119,7 +115,7 @@
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .notification-actions button:first-child {
@@ -164,10 +160,6 @@
     transform: translateY(0);
   }
 }
-
-/* ==========================================
-   DARK MODE
-========================================== */
 
 .dark-theme .notification-btn {
   background: #1f2937;
