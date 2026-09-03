@@ -1,14 +1,6 @@
-const Activity = require(
-  "../models/Activity"
-);
+const Activity = require("../models/Activity");
 
-const logActivity = async ({
-  user,
-  action,
-  entityType,
-  entityId,
-  details,
-}) => {
+const logActivity = async ({ user, action, entityType, entityId, details }) => {
   try {
     await Activity.create({
       user,
@@ -18,10 +10,7 @@ const logActivity = async ({
       details,
     });
   } catch (error) {
-    console.log(
-      "Activity Log Error:",
-      error.message
-    );
+    console.log("Activity Log Error:", error.message);
   }
 };
 

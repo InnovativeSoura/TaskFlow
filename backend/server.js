@@ -1,18 +1,9 @@
-// backend/server.js
-
 import dns from "dns";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-/* ======================================================
-   FIX MONGODB DNS
-====================================================== */
-
-dns.setServers([
-  "8.8.8.8",
-  "8.8.4.4",
-]);
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 import http from "http";
 import { Server } from "socket.io";
@@ -20,21 +11,9 @@ import { Server } from "socket.io";
 import connectDB from "./config/db.js";
 import app from "./app.js";
 
-/* ======================================================
-   PORT
-====================================================== */
-
 const PORT = process.env.PORT || 5000;
 
-/* ======================================================
-   HTTP SERVER
-====================================================== */
-
 const server = http.createServer(app);
-
-/* ======================================================
-   ALLOWED CLIENTS
-====================================================== */
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -44,10 +23,6 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.CLIENT_API_URL,
 ].filter(Boolean);
-
-/* ======================================================
-   SOCKET.IO
-====================================================== */
 
 export const io = new Server(server, {
   cors: {
@@ -65,19 +40,9 @@ export const io = new Server(server, {
 
     credentials: true,
 
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "PATCH",
-      "DELETE",
-    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   },
 });
-
-/* ======================================================
-   SOCKET EVENTS
-====================================================== */
 
 io.on("connection", (socket) => {
   console.log(`✅ Socket Connected : ${socket.id}`);
@@ -93,10 +58,6 @@ io.on("connection", (socket) => {
   });
 });
 
-/* ======================================================
-   START SERVER
-====================================================== */
-
 const startServer = async () => {
   try {
     console.log("");
@@ -111,21 +72,12 @@ const startServer = async () => {
       console.log("=======================================");
       console.log("✅ TaskFlow Backend Running");
       console.log("=======================================");
-      console.log(
-        "🌍 Environment :",
-        process.env.NODE_ENV || "development"
-      );
-      console.log(
-        "📡 Port        :",
-        PORT
-      );
-      console.log(
-        "🖥 Client URL  :",
-        process.env.CLIENT_URL
-      );
+      console.log("🌍 Environment :", process.env.NODE_ENV || "development");
+      console.log("📡 Port        :", PORT);
+      console.log("🖥 Client URL  :", process.env.CLIENT_URL);
       console.log(
         "🌐 API URL     :",
-        process.env.API_URL || `http://localhost:${PORT}`
+        process.env.API_URL || `http://localhost:${PORT}`,
       );
       console.log("=======================================");
       console.log("");

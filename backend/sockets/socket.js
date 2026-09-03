@@ -5,18 +5,13 @@ let io;
 export const initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: [
-        "http://localhost:5173",
-        "https://taskflow-1-73qh.onrender.com",
-      ],
+      origin: ["http://localhost:5173", "https://taskflow-1-73qh.onrender.com"],
       methods: ["GET", "POST"],
       credentials: true,
     },
 
-    // Support both polling and websocket
     transports: ["polling", "websocket"],
 
-    // Helps keep Render connections alive
     pingInterval: 25000,
     pingTimeout: 60000,
   });
@@ -24,7 +19,6 @@ export const initializeSocket = (server) => {
   io.on("connection", (socket) => {
     console.log(`✅ User Connected: ${socket.id}`);
 
-    // Join user's private room
     socket.on("join-user", (userId) => {
       if (!userId) return;
 
@@ -32,7 +26,6 @@ export const initializeSocket = (server) => {
       console.log(`👤 User ${userId} joined room`);
     });
 
-    // Optional: Log socket errors
     socket.on("error", (err) => {
       console.error("❌ Socket Error:", err);
     });
@@ -43,7 +36,6 @@ export const initializeSocket = (server) => {
     });
   });
 
-  // Log server-level connection errors
   io.engine.on("connection_error", (err) => {
     console.error("Socket.IO Connection Error:");
     console.error("Code:", err.code);

@@ -1,5 +1,3 @@
-// backend/app.js
-
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -20,29 +18,13 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 
 const app = express();
 
-/* ==========================================
-   TRUST PROXY
-   Required for Render
-========================================== */
-
-app.set(
-  "trust proxy",
-  1
-);
-
-/* ==========================================
-   SECURITY
-========================================== */
+app.set("trust proxy", 1);
 
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
-  })
+  }),
 );
-
-/* ==========================================
-   ALLOWED ORIGINS
-========================================== */
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -54,341 +36,138 @@ const allowedOrigins = [
   process.env.CLIENT_API_URL,
 ].filter(Boolean);
 
-/* ==========================================
-   CORS
-========================================== */
-
 const corsOptions = {
-  origin: (
-    origin,
-    callback
-  ) => {
-    /*
-      Allow requests without
-      an Origin header, such as
-      server-to-server requests.
-    */
-
+  origin: (origin, callback) => {
     if (!origin) {
-      return callback(
-        null,
-        true
-      );
+      return callback(null, true);
     }
 
-    if (
-      allowedOrigins.includes(
-        origin
-      )
-    ) {
-      return callback(
-        null,
-        true
-      );
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
 
-    console.log(
-      "Blocked Origin:",
-      origin
-    );
+    console.log("Blocked Origin:", origin);
 
-    return callback(
-      new Error(
-        "Not allowed by CORS"
-      )
-    );
+    return callback(new Error("Not allowed by CORS"));
   },
 
   credentials: true,
 
-  methods: [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
-  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-  ],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(
-  cors(corsOptions)
-);
+app.use(cors(corsOptions));
 
-app.options(
-  "*",
-  cors(corsOptions)
-);
-
-/* ==========================================
-   BODY PARSER
-========================================== */
+app.options("*", cors(corsOptions));
 
 app.use(
   express.json({
     limit: "2mb",
-  })
+  }),
 );
 
 app.use(
   express.urlencoded({
     extended: true,
     limit: "2mb",
-  })
+  }),
 );
 
-/* ==========================================
-   COOKIE PARSER
-========================================== */
-
-app.use(
-  cookieParser()
-);
-
-/* ==========================================
-   EXPRESS SESSION
-========================================== */
+app.use(cookieParser());
 
 app.use(
   session({
-    secret:
-      process.env.JWT_SECRET ||
-      "taskflow-session-secret",
+    secret: process.env.JWT_SECRET || "taskflow-session-secret",
 
     resave: false,
 
     saveUninitialized: false,
 
     cookie: {
-      secure:
-        process.env.NODE_ENV ===
-        "production",
+      secure: process.env.NODE_ENV === "production",
 
       httpOnly: true,
 
-      sameSite:
-        process.env.NODE_ENV ===
-        "production"
-          ? "none"
-          : "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 
-      maxAge:
-        1000 *
-        60 *
-        60 *
-        24 *
-        7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     },
-  })
+  }),
 );
 
-/* ==========================================
-   PASSPORT
-========================================== */
+app.use(passport.initialize());
 
-app.use(
-  passport.initialize()
-);
+app.use(passport.session());
 
-app.use(
-  passport.session()
-);
+app.use(compression());
 
-/* ==========================================
-   OTHER MIDDLEWARE
-========================================== */
+app.use(morgan("dev"));
 
-app.use(
-  compression()
-);
+app.get("/", (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "TaskFlow Backend Running 🚀",
+  });
+});
 
-app.use(
-  morgan("dev")
-);
+app.get("/api/health", (req, res) => {
+  return res.status(200).json({
+    success: true,
+    status: "OK",
+    environment: process.env.NODE_ENV || "development",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
 
-/* ==========================================
-   ROOT
-========================================== */
+app.use("/api/auth", authRoutes);
 
-app.get(
-  "/",
-  (req, res) => {
-    return res.status(200).json({
-      success: true,
-      message:
-        "TaskFlow Backend Running 🚀",
-    });
-  }
-);
+app.use("/api/auth", oauthRoutes);
 
-/* ==========================================
-   HEALTH CHECK
-========================================== */
+app.use("/api/users", userRoutes);
 
-app.get(
-  "/api/health",
-  (req, res) => {
-    return res.status(200).json({
-      success: true,
-      status: "OK",
-      environment:
-        process.env.NODE_ENV ||
-        "development",
-      uptime:
-        process.uptime(),
-      timestamp:
-        new Date().toISOString(),
-    });
-  }
-);
+app.use("/api/dashboard", dashboardRoutes);
 
-/* ==========================================
-   AUTH
-========================================== */
+app.use("/api/projects", projectRoutes);
 
-app.use(
-  "/api/auth",
-  authRoutes
-);
+app.use("/api/tasks", taskRoutes);
 
-/* ==========================================
-   OAUTH
-========================================== */
+app.use("/api/settings", settingsRoutes);
 
-app.use(
-  "/api/auth",
-  oauthRoutes
-);
+app.use("/api/notifications", notificationRoutes);
 
-/* ==========================================
-   USERS
-========================================== */
+app.use("*", (req, res) => {
+  return res.status(404).json({
+    success: false,
+    message: `Route Not Found : ${req.method} ${req.originalUrl}`,
+  });
+});
 
-app.use(
-  "/api/users",
-  userRoutes
-);
+app.use((err, req, res, next) => {
+  console.error("Server Error:");
 
-/* ==========================================
-   DASHBOARD
-========================================== */
+  console.error(err);
 
-app.use(
-  "/api/dashboard",
-  dashboardRoutes
-);
+  return res.status(err.status || 500).json({
+    success: false,
 
-/* ==========================================
-   PROJECTS
-========================================== */
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Internal Server Error"
+        : err.message,
+  });
+});
 
-app.use(
-  "/api/projects",
-  projectRoutes
-);
+console.log("========================================");
 
-/* ==========================================
-   TASKS
-========================================== */
+console.log("TaskFlow Express Initialized");
 
-app.use(
-  "/api/tasks",
-  taskRoutes
-);
+console.log("Allowed Origins:");
 
-/* ==========================================
-   SETTINGS
-========================================== */
+console.log(allowedOrigins);
 
-app.use(
-  "/api/settings",
-  settingsRoutes
-);
-
-/* ==========================================
-   NOTIFICATIONS
-========================================== */
-
-app.use(
-  "/api/notifications",
-  notificationRoutes
-);
-
-/* ==========================================
-   404
-========================================== */
-
-app.use(
-  "*",
-  (req, res) => {
-    return res.status(404).json({
-      success: false,
-      message:
-        `Route Not Found : ${req.method} ${req.originalUrl}`,
-    });
-  }
-);
-
-/* ==========================================
-   GLOBAL ERROR HANDLER
-========================================== */
-
-app.use(
-  (
-    err,
-    req,
-    res,
-    next
-  ) => {
-    console.error(
-      "Server Error:"
-    );
-
-    console.error(err);
-
-    return res
-      .status(
-        err.status || 500
-      )
-      .json({
-        success: false,
-
-        message:
-          process.env.NODE_ENV ===
-          "production"
-            ? "Internal Server Error"
-            : err.message,
-      });
-  }
-);
-
-/* ==========================================
-   STARTUP LOG
-========================================== */
-
-console.log(
-  "========================================"
-);
-
-console.log(
-  "TaskFlow Express Initialized"
-);
-
-console.log(
-  "Allowed Origins:"
-);
-
-console.log(
-  allowedOrigins
-);
-
-console.log(
-  "========================================"
-);
+console.log("========================================");
 
 export default app;
