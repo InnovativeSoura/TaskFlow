@@ -10,10 +10,6 @@ const settingsSchema = new mongoose.Schema(
       index: true,
     },
 
-    // ==========================
-    // APPEARANCE
-    // ==========================
-
     darkMode: {
       type: Boolean,
       default: false,
@@ -23,10 +19,6 @@ const settingsSchema = new mongoose.Schema(
       type: String,
       default: "#2563eb",
     },
-
-    // ==========================
-    // NOTIFICATIONS
-    // ==========================
 
     emailNotifications: {
       type: Boolean,
@@ -43,23 +35,11 @@ const settingsSchema = new mongoose.Schema(
       default: false,
     },
 
-    // ==========================
-    // PRIVACY
-    // ==========================
-
     profileVisibility: {
       type: String,
-      enum: [
-        "Public",
-        "Private",
-        "Team Only",
-      ],
+      enum: ["Public", "Private", "Team Only"],
       default: "Team Only",
     },
-
-    // ==========================
-    // REGIONAL
-    // ==========================
 
     language: {
       type: String,
@@ -78,16 +58,9 @@ const settingsSchema = new mongoose.Schema(
 
     timeFormat: {
       type: String,
-      enum: [
-        "12 Hour",
-        "24 Hour",
-      ],
+      enum: ["12 Hour", "24 Hour"],
       default: "12 Hour",
     },
-
-    // ==========================
-    // APPLICATION
-    // ==========================
 
     autoSave: {
       type: Boolean,
@@ -103,20 +76,13 @@ const settingsSchema = new mongoose.Schema(
 
     defaultProjectView: {
       type: String,
-      enum: [
-        "List",
-        "Kanban",
-        "Calendar",
-      ],
+      enum: ["List", "Kanban", "Calendar"],
       default: "Kanban",
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.model(
-  "Settings",
-  settingsSchema
-);
+export default mongoose.model("Settings", settingsSchema);

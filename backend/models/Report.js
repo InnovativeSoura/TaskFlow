@@ -51,11 +51,7 @@ const reportSchema = new mongoose.Schema(
 
     exportFormat: {
       type: String,
-      enum: [
-        "PDF",
-        "Excel",
-        "CSV",
-      ],
+      enum: ["PDF", "Excel", "CSV"],
       default: "PDF",
     },
 
@@ -85,35 +81,35 @@ const reportSchema = new mongoose.Schema(
       totalTasks: {
         type: Number,
         default: 0,
-    },
+      },
 
-    completedTasks: {
-      type: Number,
-      default: 0,
-    },
+      completedTasks: {
+        type: Number,
+        default: 0,
+      },
 
-    pendingTasks: {
-      type: Number,
-      default: 0,
-    },
+      pendingTasks: {
+        type: Number,
+        default: 0,
+      },
 
-    overdueTasks: {
-      type: Number,
-      default: 0,
-    },
+      overdueTasks: {
+        type: Number,
+        default: 0,
+      },
 
-    activeUsers: {
-      type: Number,
-      default: 0,
-    },
+      activeUsers: {
+        type: Number,
+        default: 0,
+      },
 
-    productivity: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 100,
+      productivity: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+      },
     },
-  },
 
     charts: [
       {
@@ -130,22 +126,14 @@ const reportSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "Generating",
-        "Completed",
-        "Failed",
-      ],
+      enum: ["Generating", "Completed", "Failed"],
       default: "Completed",
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
-
-/* ==============================
-   INDEXES
-============================== */
 
 reportSchema.index({
   generatedBy: 1,
@@ -159,7 +147,4 @@ reportSchema.index({
   createdAt: -1,
 });
 
-export default mongoose.model(
-  "Report",
-  reportSchema
-);
+export default mongoose.model("Report", reportSchema);

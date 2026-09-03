@@ -1,230 +1,142 @@
-// backend/models/User.js
-
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-/* ======================================================
-   USER SCHEMA
-====================================================== */
-
-const userSchema =
-  new mongoose.Schema(
-    {
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true,
-      },
-
-      /* ==========================================
-         PASSWORD
-      ========================================== */
-
-      password: {
-        type: String,
-        default: "",
-        minlength: 6,
-        select: false,
-      },
-
-      /* ==========================================
-         PROFILE
-      ========================================== */
-
-      avatar: {
-        type: String,
-        default: "",
-      },
-
-      provider: {
-        type: String,
-        enum: [
-          "local",
-          "google",
-          "github",
-        ],
-        default: "local",
-      },
-
-      googleId: {
-        type: String,
-        default: "",
-      },
-
-      githubId: {
-        type: String,
-        default: "",
-      },
-
-      phone: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      designation: {
-        type: String,
-        default: "Team Member",
-        trim: true,
-      },
-
-      department: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      bio: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      /* ==========================================
-         ROLE
-      ========================================== */
-
-      role: {
-        type: String,
-        enum: [
-          "Admin",
-          "Project Manager",
-          "Team Member",
-        ],
-        default: "Team Member",
-      },
-
-      /* ==========================================
-         STATUS
-      ========================================== */
-
-      status: {
-        type: String,
-        enum: [
-          "Active",
-          "Inactive",
-        ],
-        default: "Active",
-      },
-
-      /* ==========================================
-         VERIFICATION
-      ========================================== */
-
-      isVerified: {
-        type: Boolean,
-        default: false,
-      },
-
-      /* ==========================================
-         LOGIN
-      ========================================== */
-
-      lastLogin: {
-        type: Date,
-        default: null,
-      },
-
-      /* ==========================================
-         PASSWORD RESET
-      ========================================== */
-
-      resetPasswordToken: {
-        type: String,
-        default: "",
-      },
-
-      resetPasswordExpire: {
-        type: Date,
-        default: null,
-      },
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
 
-    {
-      timestamps: true,
-    }
-  );
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
 
-/* ======================================================
-   HASH PASSWORD
-====================================================== */
+    password: {
+      type: String,
+      default: "",
+      minlength: 6,
+      select: false,
+    },
 
-userSchema.pre(
-  "save",
-  async function () {
-    if (
-      !this.isModified(
-        "password"
-      )
-    ) {
-      return;
-    }
+    avatar: {
+      type: String,
+      default: "",
+    },
 
-    if (
-      !this.password ||
-      this.password.trim() === ""
-    ) {
-      return;
-    }
+    provider: {
+      type: String,
+      enum: ["local", "google", "github"],
+      default: "local",
+    },
 
-    const salt =
-      await bcrypt.genSalt(10);
+    googleId: {
+      type: String,
+      default: "",
+    },
 
-    this.password =
-      await bcrypt.hash(
-        this.password,
-        salt
-      );
-  }
+    githubId: {
+      type: String,
+      default: "",
+    },
+
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    designation: {
+      type: String,
+      default: "Team Member",
+      trim: true,
+    },
+
+    department: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    bio: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    role: {
+      type: String,
+      enum: ["Admin", "Project Manager", "Team Member"],
+      default: "Team Member",
+    },
+
+    status: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active",
+    },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+
+    resetPasswordToken: {
+      type: String,
+      default: "",
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+      default: null,
+    },
+  },
+
+  {
+    timestamps: true,
+  },
 );
 
-/* ======================================================
-   MATCH PASSWORD
-====================================================== */
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
 
-userSchema.methods.matchPassword =
-  async function (
-    enteredPassword
-  ) {
-    if (
-      !enteredPassword ||
-      !this.password
-    ) {
-      return false;
-    }
+  if (!this.password || this.password.trim() === "") {
+    return;
+  }
 
-    return bcrypt.compare(
-      enteredPassword,
-      this.password
-    );
-  };
+  const salt = await bcrypt.genSalt(10);
 
-/* ======================================================
-   REMOVE PASSWORD FROM JSON
-====================================================== */
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-userSchema.methods.toJSON =
-  function () {
-    const obj =
-      this.toObject();
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!enteredPassword || !this.password) {
+    return false;
+  }
 
-    delete obj.password;
+  return bcrypt.compare(enteredPassword, this.password);
+};
 
-    return obj;
-  };
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
 
-const User =
-  mongoose.model(
-    "User",
-    userSchema
-  );
+  delete obj.password;
+
+  return obj;
+};
+
+const User = mongoose.model("User", userSchema);
 
 export default User;

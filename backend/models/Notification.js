@@ -76,9 +76,7 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
-/* ================================
-   INDEXES
-================================ */
+
 
 notificationSchema.index({
   user: 1,
