@@ -1,5 +1,3 @@
-// backend/config/db.js
-
 import mongoose from "mongoose";
 
 const connectDB = async () => {
@@ -15,18 +13,15 @@ const connectDB = async () => {
       "Mongo URI:",
       process.env.MONGODB_URL.replace(
         /\/\/([^:]+):([^@]+)@/,
-        "//<username>:<password>@"
-      )
+        "//<username>:<password>@",
+      ),
     );
     console.log("======================================");
 
-    const conn = await mongoose.connect(
-      process.env.MONGODB_URL,
-      {
-        dbName: "Taskflow",
-        autoIndex: true,
-      }
-    );
+    const conn = await mongoose.connect(process.env.MONGODB_URL, {
+      dbName: "Taskflow",
+      autoIndex: true,
+    });
 
     console.log("");
     console.log("======================================");
