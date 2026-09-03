@@ -2,22 +2,20 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const User = require("../models/User");
 
-// Initialize Razorpay instance
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
-console.log("SECRET_EXISTS:",!!process.env.RAZORPAY_KEY_SECRET);
+console.log("SECRET_EXISTS:", !!process.env.RAZORPAY_KEY_SECRET);
 
-// Create Order (Checkout Session equivalent)
 const createOrder = async (req, res) => {
   try {
     console.log("Payment Request:", req.body);
     const { amount, currency = "INR", plan, userId } = req.body;
 
     const options = {
-      amount: amount * 100, // Razorpay uses paise
+      amount: amount * 100, 
       currency,
       receipt: `receipt_order_${Date.now()}`,
       payment_capture: 1,
@@ -28,7 +26,7 @@ const createOrder = async (req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
-    
+
     res.status(200).json({
       success: true,
       order,
@@ -43,7 +41,6 @@ const createOrder = async (req, res) => {
   }
 };
 
-// Verify Payment Signature
 const verifyPayment = async (req, res) => {
   try {
     const {
@@ -53,59 +50,43 @@ const verifyPayment = async (req, res) => {
       userId,
     } = req.body;
 
-    const body =
-      razorpay_order_id +
-      "|" +
-      razorpay_payment_id;
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
-      .createHmac(
-        "sha256",
-        process.env.RAZORPAY_KEY_SECRET
-      )
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
-    const isValid =
-      expectedSignature ===
-      razorpay_signature;
+    const isValid = expectedSignature === razorpay_signature;
 
     if (!isValid) {
       return res.status(400).json({
         success: false,
-        message:
-          "Invalid payment signature",
+        message: "Invalid payment signature",
       });
     }
 
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        isPro: true,
-        subscriptionPlan: "PRO",
-      }
-    );
+    await User.findByIdAndUpdate(userId, {
+      isPro: true,
+      subscriptionPlan: "PRO",
+    });
 
     res.status(200).json({
       success: true,
-      message:
-        "Payment verified successfully",
+      message: "Payment verified successfully",
     });
-
-
   } catch (error) {
-  console.error("Create Order Error:", error);
+    console.error("Create Order Error:", error);
 
-  if (error.error) {
-    console.error("Razorpay Error:", error.error);
+    if (error.error) {
+      console.error("Razorpay Error:", error.error);
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.error?.description || error.message,
+    });
   }
-
-  res.status(500).json({
-    success: false,
-    message: error.error?.description || error.message,
-  });
-  }
-
 };
 
 module.exports = {

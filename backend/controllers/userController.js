@@ -1,12 +1,6 @@
-// backend/controllers/userController.js
-
 import User from "../models/User.js";
 import Project from "../models/Project.js";
 import Task from "../models/Task.js";
-
-/* ==========================================
-   GET ALL USERS
-========================================== */
 
 export const getUsers = async (req, res) => {
   try {
@@ -30,10 +24,7 @@ export const getUsers = async (req, res) => {
       users,
     });
   } catch (error) {
-    console.error(
-      "Get Users Error:",
-      error
-    );
+    console.error("Get Users Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -42,19 +33,9 @@ export const getUsers = async (req, res) => {
   }
 };
 
-/* ==========================================
-   GET USER BY ID
-========================================== */
-
-export const getUserById = async (
-  req,
-  res
-) => {
+export const getUserById = async (req, res) => {
   try {
-    const user =
-      await User.findById(
-        req.params.id
-      ).select("-password");
+    const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -63,11 +44,7 @@ export const getUserById = async (
       });
     }
 
-    const [
-      projectCount,
-      assignedTasks,
-      completedTasks,
-    ] = await Promise.all([
+    const [projectCount, assignedTasks, completedTasks] = await Promise.all([
       Project.countDocuments({
         members: user._id,
       }),
@@ -92,10 +69,7 @@ export const getUserById = async (
       },
     });
   } catch (error) {
-    console.error(
-      "Get User Error:",
-      error
-    );
+    console.error("Get User Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -104,19 +78,9 @@ export const getUserById = async (
   }
 };
 
-/* ==========================================
-   UPDATE USER
-========================================== */
-
-export const updateUser = async (
-  req,
-  res
-) => {
+export const updateUser = async (req, res) => {
   try {
-    const user =
-      await User.findById(
-        req.params.id
-      );
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
@@ -135,33 +99,22 @@ export const updateUser = async (
     ];
 
     fields.forEach((field) => {
-      if (
-        req.body[field] !==
-        undefined
-      ) {
-        user[field] =
-          req.body[field];
+      if (req.body[field] !== undefined) {
+        user[field] = req.body[field];
       }
     });
 
     await user.save();
 
-    const safeUser =
-      await User.findById(
-        user._id
-      ).select("-password");
+    const safeUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
-      message:
-        "User updated successfully",
+      message: "User updated successfully",
       user: safeUser,
     });
   } catch (error) {
-    console.error(
-      "Update User Error:",
-      error
-    );
+    console.error("Update User Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -170,19 +123,9 @@ export const updateUser = async (
   }
 };
 
-/* ==========================================
-   DELETE USER
-========================================== */
-
-export const deleteUser = async (
-  req,
-  res
-) => {
+export const deleteUser = async (req, res) => {
   try {
-    const user =
-      await User.findById(
-        req.params.id
-      );
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
@@ -195,14 +138,10 @@ export const deleteUser = async (
 
     return res.status(200).json({
       success: true,
-      message:
-        "User deleted successfully",
+      message: "User deleted successfully",
     });
   } catch (error) {
-    console.error(
-      "Delete User Error:",
-      error
-    );
+    console.error("Delete User Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -211,22 +150,11 @@ export const deleteUser = async (
   }
 };
 
-/* ==========================================
-   CHANGE USER ROLE
-========================================== */
-
-export const changeUserRole = async (
-  req,
-  res
-) => {
+export const changeUserRole = async (req, res) => {
   try {
     const { role } = req.body;
 
-    const allowedRoles = [
-      "Admin",
-      "Project Manager",
-      "Team Member",
-    ];
+    const allowedRoles = ["Admin", "Project Manager", "Team Member"];
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({
@@ -235,10 +163,7 @@ export const changeUserRole = async (
       });
     }
 
-    const user =
-      await User.findById(
-        req.params.id
-      );
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
@@ -251,22 +176,15 @@ export const changeUserRole = async (
 
     await user.save();
 
-    const safeUser =
-      await User.findById(
-        user._id
-      ).select("-password");
+    const safeUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
-      message:
-        "Role updated successfully",
+      message: "Role updated successfully",
       user: safeUser,
     });
   } catch (error) {
-    console.error(
-      "Change Role Error:",
-      error
-    );
+    console.error("Change Role Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -275,19 +193,9 @@ export const changeUserRole = async (
   }
 };
 
-/* ==========================================
-   TOGGLE USER STATUS
-========================================== */
-
-export const toggleUserStatus = async (
-  req,
-  res
-) => {
+export const toggleUserStatus = async (req, res) => {
   try {
-    const user =
-      await User.findById(
-        req.params.id
-      );
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
@@ -296,29 +204,19 @@ export const toggleUserStatus = async (
       });
     }
 
-    user.status =
-      user.status === "Active"
-        ? "Inactive"
-        : "Active";
+    user.status = user.status === "Active" ? "Inactive" : "Active";
 
     await user.save();
 
-    const safeUser =
-      await User.findById(
-        user._id
-      ).select("-password");
+    const safeUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
-      message:
-        "User status updated successfully",
+      message: "User status updated successfully",
       user: safeUser,
     });
   } catch (error) {
-    console.error(
-      "Toggle Status Error:",
-      error
-    );
+    console.error("Toggle Status Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -327,48 +225,39 @@ export const toggleUserStatus = async (
   }
 };
 
-/* ==========================================
-   SEARCH USERS
-========================================== */
-
-export const searchUsers = async (
-  req,
-  res
-) => {
+export const searchUsers = async (req, res) => {
   try {
     const { query } = req.query;
 
     if (!query) {
       return res.status(400).json({
         success: false,
-        message:
-          "Search query is required",
+        message: "Search query is required",
       });
     }
 
-    const users =
-      await User.find({
-        $or: [
-          {
-            name: {
-              $regex: query,
-              $options: "i",
-            },
+    const users = await User.find({
+      $or: [
+        {
+          name: {
+            $regex: query,
+            $options: "i",
           },
-          {
-            email: {
-              $regex: query,
-              $options: "i",
-            },
+        },
+        {
+          email: {
+            $regex: query,
+            $options: "i",
           },
-          {
-            designation: {
-              $regex: query,
-              $options: "i",
-            },
+        },
+        {
+          designation: {
+            $regex: query,
+            $options: "i",
           },
-        ],
-      }).select("-password");
+        },
+      ],
+    }).select("-password");
 
     return res.status(200).json({
       success: true,
@@ -376,10 +265,7 @@ export const searchUsers = async (
       users,
     });
   } catch (error) {
-    console.error(
-      "Search Users Error:",
-      error
-    );
+    console.error("Search Users Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -388,21 +274,11 @@ export const searchUsers = async (
   }
 };
 
-/* ==========================================
-   USER SUMMARY
-========================================== */
-
-export const getUserSummary = async (
-  req,
-  res
-) => {
+export const getUserSummary = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const user =
-      await User.findById(
-        userId
-      ).select("-password");
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -454,10 +330,7 @@ export const getUserSummary = async (
       },
     });
   } catch (error) {
-    console.error(
-      "User Summary Error:",
-      error
-    );
+    console.error("User Summary Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -466,27 +339,16 @@ export const getUserSummary = async (
   }
 };
 
-/* ==========================================
-   GET LOGGED-IN USER PROFILE
-========================================== */
-
-export const getProfile = async (
-  req,
-  res
-) => {
+export const getProfile = async (req, res) => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({
         success: false,
-        message:
-          "Authentication required",
+        message: "Authentication required",
       });
     }
 
-    const user =
-      await User.findById(
-        req.user.id
-      ).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -500,10 +362,7 @@ export const getProfile = async (
       user,
     });
   } catch (error) {
-    console.error(
-      "Get Profile Error:",
-      error
-    );
+    console.error("Get Profile Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -512,27 +371,16 @@ export const getProfile = async (
   }
 };
 
-/* ==========================================
-   UPDATE LOGGED-IN USER PROFILE
-========================================== */
-
-export const updateProfile = async (
-  req,
-  res
-) => {
+export const updateProfile = async (req, res) => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({
         success: false,
-        message:
-          "Authentication required",
+        message: "Authentication required",
       });
     }
 
-    const user =
-      await User.findById(
-        req.user.id
-      );
+    const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(404).json({
@@ -550,36 +398,23 @@ export const updateProfile = async (
       "avatar",
     ];
 
-    allowedFields.forEach(
-      (field) => {
-        if (
-          req.body[field] !==
-          undefined
-        ) {
-          user[field] =
-            req.body[field];
-        }
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        user[field] = req.body[field];
       }
-    );
+    });
 
     await user.save();
 
-    const updatedUser =
-      await User.findById(
-        user._id
-      ).select("-password");
+    const updatedUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
-      message:
-        "Profile updated successfully",
+      message: "Profile updated successfully",
       user: updatedUser,
     });
   } catch (error) {
-    console.error(
-      "Update Profile Error:",
-      error
-    );
+    console.error("Update Profile Error:", error);
 
     return res.status(500).json({
       success: false,

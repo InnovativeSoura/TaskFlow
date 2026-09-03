@@ -1,18 +1,9 @@
 const Task = require("../models/Task");
 
-const {
-  generateTasksPDF,
-} = require("../services/pdfService");
+const { generateTasksPDF } = require("../services/pdfService");
 
-const {
-  generateTasksExcel,
-} = require("../services/excelService");
+const { generateTasksExcel } = require("../services/excelService");
 
-/*
-================================
-GET FILTERED TASKS
-================================
-*/
 const getFilteredTasks = async (query) => {
   const filter = {};
 
@@ -34,11 +25,6 @@ const getFilteredTasks = async (query) => {
   return await Task.find(filter).populate("project");
 };
 
-/*
-================================
-EXPORT PDF
-================================
-*/
 const exportTasksPDF = async (req, res) => {
   try {
     const tasks = await getFilteredTasks(req.query);
@@ -52,11 +38,6 @@ const exportTasksPDF = async (req, res) => {
   }
 };
 
-/*
-================================
-EXPORT EXCEL
-================================
-*/
 const exportTasksExcel = async (req, res) => {
   try {
     const tasks = await getFilteredTasks(req.query);

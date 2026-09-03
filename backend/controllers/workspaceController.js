@@ -1,10 +1,5 @@
 const Workspace = require("../models/Workspace");
 
-/*
-=====================================
-CREATE WORKSPACE
-=====================================
-*/
 const createWorkspace = async (req, res) => {
   try {
     const workspace = await Workspace.create({
@@ -25,11 +20,6 @@ const createWorkspace = async (req, res) => {
   }
 };
 
-/*
-=====================================
-GET USER WORKSPACES
-=====================================
-*/
 const getWorkspaces = async (req, res) => {
   try {
     const workspaces = await Workspace.find({
@@ -48,11 +38,6 @@ const getWorkspaces = async (req, res) => {
   }
 };
 
-/*
-=====================================
-ADD MEMBER TO WORKSPACE
-=====================================
-*/
 const addMember = async (req, res) => {
   try {
     const { workspaceId, userId } = req.body;

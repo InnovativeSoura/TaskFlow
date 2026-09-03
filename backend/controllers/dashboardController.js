@@ -3,7 +3,6 @@ const Task = require("../models/Task");
 
 exports.getDashboardStats = async (req, res) => {
   try {
-    // Project Stats
     const totalProjects = await Project.countDocuments();
 
     const activeProjects = await Project.countDocuments({
@@ -14,7 +13,6 @@ exports.getDashboardStats = async (req, res) => {
       status: "Completed",
     });
 
-    // Task Stats
     const totalTasks = await Task.countDocuments();
 
     const completedTasks = await Task.countDocuments({
@@ -30,22 +28,17 @@ exports.getDashboardStats = async (req, res) => {
     });
 
     const completionRate =
-      totalTasks === 0
-        ? 0
-        : Math.round((completedTasks / totalTasks) * 100);
+      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
-    // Recent Projects
     const recentProjects = await Project.find()
       .sort({ createdAt: -1 })
       .limit(5);
 
-    // Recent Tasks
     const recentTasks = await Task.find()
       .populate("project", "title")
       .sort({ createdAt: -1 })
       .limit(5);
 
-    // Upcoming Deadlines
     const upcomingTasks = await Task.find({
       dueDate: {
         $gte: new Date(),

@@ -1,40 +1,16 @@
-// backend/controllers/taskController.js
-
 import mongoose from "mongoose";
 
 import Task from "../models/Task.js";
 import Project from "../models/Project.js";
 import User from "../models/User.js";
 
-/* =========================================================
-   CONSTANTS
-========================================================= */
+const TASK_STATUSES = ["To Do", "In Progress", "Review", "Completed"];
 
-const TASK_STATUSES = [
-  "To Do",
-  "In Progress",
-  "Review",
-  "Completed",
-];
-
-const TASK_PRIORITIES = [
-  "Low",
-  "Medium",
-  "High",
-  "Critical",
-];
-
-/* =========================================================
-   HELPER
-========================================================= */
+const TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"];
 
 const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
-
-/* =========================================================
-   CREATE TASK
-========================================================= */
 
 export const createTask = async (req, res) => {
   try {
@@ -50,10 +26,6 @@ export const createTask = async (req, res) => {
       estimatedHours,
       labels,
     } = req.body;
-
-    /* =====================================================
-       BASIC VALIDATION
-    ===================================================== */
 
     if (!title || !title.trim()) {
       return res.status(400).json({
@@ -76,10 +48,6 @@ export const createTask = async (req, res) => {
       });
     }
 
-    /* =====================================================
-       OBJECT ID VALIDATION
-    ===================================================== */
-
     if (!isValidObjectId(project)) {
       return res.status(400).json({
         success: false,
@@ -94,12 +62,7 @@ export const createTask = async (req, res) => {
       });
     }
 
-    /* =====================================================
-       VALIDATE PROJECT
-    ===================================================== */
-
-    const projectExists =
-      await Project.findById(project);
+    const projectExists = await Project.findById(project);
 
     if (!projectExists) {
       return res.status(404).json({
@@ -108,12 +71,7 @@ export const createTask = async (req, res) => {
       });
     }
 
-    /* =====================================================
-       VALIDATE USER
-    ===================================================== */
-
-    const userExists =
-      await User.findById(assignedTo);
+    const userExists = await User.findById(assignedTo);
 
     if (!userExists) {
       return res.status(404).json({
@@ -122,68 +80,42 @@ export const createTask = async (req, res) => {
       });
     }
 
-    /* =====================================================
-       STATUS VALIDATION
-    ===================================================== */
-
     const taskStatus = status || "To Do";
 
     if (!TASK_STATUSES.includes(taskStatus)) {
       return res.status(400).json({
         success: false,
         message: `Invalid task status. Allowed values: ${TASK_STATUSES.join(
-          ", "
+          ", ",
         )}`,
       });
     }
 
-    /* =====================================================
-       PRIORITY VALIDATION
-    ===================================================== */
-
-    const taskPriority =
-      priority || "Medium";
+    const taskPriority = priority || "Medium";
 
     if (!TASK_PRIORITIES.includes(taskPriority)) {
       return res.status(400).json({
         success: false,
         message: `Invalid task priority. Allowed values: ${TASK_PRIORITIES.join(
-          ", "
+          ", ",
         )}`,
       });
     }
 
-    /* =====================================================
-       PROGRESS
-    ===================================================== */
-
     const taskProgress =
-      progress === undefined ||
-      progress === null
-        ? 0
-        : Number(progress);
+      progress === undefined || progress === null ? 0 : Number(progress);
 
-    if (
-      Number.isNaN(taskProgress) ||
-      taskProgress < 0 ||
-      taskProgress > 100
-    ) {
+    if (Number.isNaN(taskProgress) || taskProgress < 0 || taskProgress > 100) {
       return res.status(400).json({
         success: false,
-        message:
-          "Progress must be a number between 0 and 100.",
+        message: "Progress must be a number between 0 and 100.",
       });
     }
-
-    /* =====================================================
-       CREATE TASK
-    ===================================================== */
 
     const task = await Task.create({
       title: title.trim(),
 
-      description:
-        description?.trim() || "",
+      description: description?.trim() || "",
 
       project,
 
@@ -193,27 +125,16 @@ export const createTask = async (req, res) => {
 
       status: taskStatus,
 
-      dueDate:
-        dueDate || null,
+      dueDate: dueDate || null,
 
       progress: taskProgress,
 
-      estimatedHours:
-        estimatedHours !== undefined
-          ? Number(estimatedHours)
-          : 0,
+      estimatedHours: estimatedHours !== undefined ? Number(estimatedHours) : 0,
 
-      labels:
-        Array.isArray(labels)
-          ? labels
-          : [],
+      labels: Array.isArray(labels) ? labels : [],
 
       createdBy: req.user._id,
     });
-
-    /* =====================================================
-       POPULATE RESPONSE
-    ===================================================== */
 
     await task.populate([
       {
@@ -230,20 +151,13 @@ export const createTask = async (req, res) => {
       },
     ]);
 
-    /* =====================================================
-       RESPONSE
-    ===================================================== */
-
     return res.status(201).json({
       success: true,
       message: "Task created successfully.",
       task,
     });
   } catch (error) {
-    console.error(
-      "Create Task:",
-      error
-    );
+    console.error("Create Task:", error);
 
     return res.status(500).json({
       success: false,
@@ -252,101 +166,47 @@ export const createTask = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET ALL TASKS
-========================================================= */
-
 export const getTasks = async (req, res) => {
   try {
     const filter = {};
 
-    /* =====================================================
-       TEAM MEMBER VISIBILITY
-    ===================================================== */
-
-    if (
-      req.user.role === "Team Member"
-    ) {
-      filter.assignedTo =
-        req.user._id;
+    if (req.user.role === "Team Member") {
+      filter.assignedTo = req.user._id;
     }
 
-    /* =====================================================
-       PROJECT FILTER
-    ===================================================== */
-
     if (req.query.project) {
-      if (
-        !isValidObjectId(
-          req.query.project
-        )
-      ) {
+      if (!isValidObjectId(req.query.project)) {
         return res.status(400).json({
           success: false,
           message: "Invalid project ID.",
         });
       }
 
-      filter.project =
-        req.query.project;
+      filter.project = req.query.project;
     }
 
-    /* =====================================================
-       STATUS FILTER
-    ===================================================== */
-
     if (req.query.status) {
-      if (
-        !TASK_STATUSES.includes(
-          req.query.status
-        )
-      ) {
+      if (!TASK_STATUSES.includes(req.query.status)) {
         return res.status(400).json({
           success: false,
           message: "Invalid task status.",
         });
       }
 
-      filter.status =
-        req.query.status;
+      filter.status = req.query.status;
     }
 
-    /* =====================================================
-       ARCHIVED FILTER
-    ===================================================== */
-
-    if (
-      req.query.archived !== undefined
-    ) {
-      filter.isArchived =
-        req.query.archived === "true";
+    if (req.query.archived !== undefined) {
+      filter.isArchived = req.query.archived === "true";
     }
 
-    /* =====================================================
-       FETCH TASKS
-    ===================================================== */
-
-    const tasks =
-      await Task.find(filter)
-        .populate(
-          "project",
-          "title status"
-        )
-        .populate(
-          "assignedTo",
-          "name email role"
-        )
-        .populate(
-          "createdBy",
-          "name email"
-        )
-        .sort({
-          createdAt: -1,
-        });
-
-    /* =====================================================
-       RESPONSE
-    ===================================================== */
+    const tasks = await Task.find(filter)
+      .populate("project", "title status")
+      .populate("assignedTo", "name email role")
+      .populate("createdBy", "name email")
+      .sort({
+        createdAt: -1,
+      });
 
     return res.status(200).json({
       success: true,
@@ -354,10 +214,7 @@ export const getTasks = async (req, res) => {
       tasks,
     });
   } catch (error) {
-    console.error(
-      "Get Tasks:",
-      error
-    );
+    console.error("Get Tasks:", error);
 
     return res.status(500).json({
       success: false,
@@ -366,14 +223,7 @@ export const getTasks = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET TASK BY ID
-========================================================= */
-
-export const getTaskById = async (
-  req,
-  res
-) => {
+export const getTaskById = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -384,20 +234,10 @@ export const getTaskById = async (
       });
     }
 
-    const task =
-      await Task.findById(id)
-        .populate(
-          "project",
-          "title status"
-        )
-        .populate(
-          "assignedTo",
-          "name email role"
-        )
-        .populate(
-          "createdBy",
-          "name email"
-        );
+    const task = await Task.findById(id)
+      .populate("project", "title status")
+      .populate("assignedTo", "name email role")
+      .populate("createdBy", "name email");
 
     if (!task) {
       return res.status(404).json({
@@ -406,19 +246,13 @@ export const getTaskById = async (
       });
     }
 
-    /* =====================================================
-       TEAM MEMBER ACCESS
-    ===================================================== */
-
     if (
       req.user.role === "Team Member" &&
-      String(task.assignedTo?._id) !==
-        String(req.user._id)
+      String(task.assignedTo?._id) !== String(req.user._id)
     ) {
       return res.status(403).json({
         success: false,
-        message:
-          "You are not authorized to view this task.",
+        message: "You are not authorized to view this task.",
       });
     }
 
@@ -427,10 +261,7 @@ export const getTaskById = async (
       task,
     });
   } catch (error) {
-    console.error(
-      "Get Task:",
-      error
-    );
+    console.error("Get Task:", error);
 
     return res.status(500).json({
       success: false,
@@ -439,14 +270,7 @@ export const getTaskById = async (
   }
 };
 
-/* =========================================================
-   UPDATE TASK
-========================================================= */
-
-export const updateTask = async (
-  req,
-  res
-) => {
+export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -457,8 +281,7 @@ export const updateTask = async (
       });
     }
 
-    const existingTask =
-      await Task.findById(id);
+    const existingTask = await Task.findById(id);
 
     if (!existingTask) {
       return res.status(404).json({
@@ -482,33 +305,22 @@ export const updateTask = async (
       isArchived,
     } = req.body;
 
-    /* =====================================================
-       BUILD SAFE UPDATE OBJECT
-    ===================================================== */
-
     const updateData = {};
 
     if (title !== undefined) {
       if (!String(title).trim()) {
         return res.status(400).json({
           success: false,
-          message:
-            "Task title cannot be empty.",
+          message: "Task title cannot be empty.",
         });
       }
 
-      updateData.title =
-        String(title).trim();
+      updateData.title = String(title).trim();
     }
 
     if (description !== undefined) {
-      updateData.description =
-        String(description).trim();
+      updateData.description = String(description).trim();
     }
-
-    /* =====================================================
-       PROJECT
-    ===================================================== */
 
     if (project !== undefined) {
       if (!isValidObjectId(project)) {
@@ -518,8 +330,7 @@ export const updateTask = async (
         });
       }
 
-      const projectExists =
-        await Project.findById(project);
+      const projectExists = await Project.findById(project);
 
       if (!projectExists) {
         return res.status(404).json({
@@ -528,97 +339,57 @@ export const updateTask = async (
         });
       }
 
-      updateData.project =
-        project;
+      updateData.project = project;
     }
-
-    /* =====================================================
-       ASSIGNEE
-
-       IMPORTANT:
-       Frontend and backend both use assignedTo.
-    ===================================================== */
 
     if (assignedTo !== undefined) {
       if (!isValidObjectId(assignedTo)) {
         return res.status(400).json({
           success: false,
-          message:
-            "Invalid assigned user ID.",
+          message: "Invalid assigned user ID.",
         });
       }
 
-      const userExists =
-        await User.findById(assignedTo);
+      const userExists = await User.findById(assignedTo);
 
       if (!userExists) {
         return res.status(404).json({
           success: false,
-          message:
-            "Assigned user not found.",
+          message: "Assigned user not found.",
         });
       }
 
-      updateData.assignedTo =
-        assignedTo;
+      updateData.assignedTo = assignedTo;
     }
 
-    /* =====================================================
-       PRIORITY
-    ===================================================== */
-
     if (priority !== undefined) {
-      if (
-        !TASK_PRIORITIES.includes(
-          priority
-        )
-      ) {
+      if (!TASK_PRIORITIES.includes(priority)) {
         return res.status(400).json({
           success: false,
           message: "Invalid task priority.",
         });
       }
 
-      updateData.priority =
-        priority;
+      updateData.priority = priority;
     }
 
-    /* =====================================================
-       STATUS
-    ===================================================== */
-
     if (status !== undefined) {
-      if (
-        !TASK_STATUSES.includes(
-          status
-        )
-      ) {
+      if (!TASK_STATUSES.includes(status)) {
         return res.status(400).json({
           success: false,
           message: "Invalid task status.",
         });
       }
 
-      updateData.status =
-        status;
+      updateData.status = status;
     }
-
-    /* =====================================================
-       DUE DATE
-    ===================================================== */
 
     if (dueDate !== undefined) {
-      updateData.dueDate =
-        dueDate || null;
+      updateData.dueDate = dueDate || null;
     }
 
-    /* =====================================================
-       PROGRESS
-    ===================================================== */
-
     if (progress !== undefined) {
-      const numericProgress =
-        Number(progress);
+      const numericProgress = Number(progress);
 
       if (
         Number.isNaN(numericProgress) ||
@@ -627,126 +398,69 @@ export const updateTask = async (
       ) {
         return res.status(400).json({
           success: false,
-          message:
-            "Progress must be between 0 and 100.",
+          message: "Progress must be between 0 and 100.",
         });
       }
 
-      updateData.progress =
-        numericProgress;
+      updateData.progress = numericProgress;
     }
 
-    /* =====================================================
-       HOURS
-    ===================================================== */
+    if (estimatedHours !== undefined) {
+      const value = Number(estimatedHours);
 
-    if (
-      estimatedHours !== undefined
-    ) {
-      const value =
-        Number(estimatedHours);
-
-      if (
-        Number.isNaN(value) ||
-        value < 0
-      ) {
+      if (Number.isNaN(value) || value < 0) {
         return res.status(400).json({
           success: false,
-          message:
-            "Estimated hours must be a positive number.",
+          message: "Estimated hours must be a positive number.",
         });
       }
 
-      updateData.estimatedHours =
-        value;
+      updateData.estimatedHours = value;
     }
 
-    if (
-      actualHours !== undefined
-    ) {
-      const value =
-        Number(actualHours);
+    if (actualHours !== undefined) {
+      const value = Number(actualHours);
 
-      if (
-        Number.isNaN(value) ||
-        value < 0
-      ) {
+      if (Number.isNaN(value) || value < 0) {
         return res.status(400).json({
           success: false,
-          message:
-            "Actual hours must be a positive number.",
+          message: "Actual hours must be a positive number.",
         });
       }
 
-      updateData.actualHours =
-        value;
+      updateData.actualHours = value;
     }
-
-    /* =====================================================
-       LABELS
-    ===================================================== */
 
     if (labels !== undefined) {
       if (!Array.isArray(labels)) {
         return res.status(400).json({
           success: false,
-          message:
-            "Labels must be an array.",
+          message: "Labels must be an array.",
         });
       }
 
-      updateData.labels =
-        labels;
+      updateData.labels = labels;
     }
 
-    /* =====================================================
-       ARCHIVE
-    ===================================================== */
-
-    if (
-      isArchived !== undefined
-    ) {
-      updateData.isArchived =
-        Boolean(isArchived);
+    if (isArchived !== undefined) {
+      updateData.isArchived = Boolean(isArchived);
     }
 
-    /* =====================================================
-       UPDATE
-    ===================================================== */
-
-    const task =
-      await Task.findByIdAndUpdate(
-        id,
-        updateData,
-        {
-          new: true,
-          runValidators: true,
-        }
-      )
-        .populate(
-          "project",
-          "title status"
-        )
-        .populate(
-          "assignedTo",
-          "name email role"
-        )
-        .populate(
-          "createdBy",
-          "name email"
-        );
+    const task = await Task.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    })
+      .populate("project", "title status")
+      .populate("assignedTo", "name email role")
+      .populate("createdBy", "name email");
 
     return res.status(200).json({
       success: true,
-      message:
-        "Task updated successfully.",
+      message: "Task updated successfully.",
       task,
     });
   } catch (error) {
-    console.error(
-      "Update Task:",
-      error
-    );
+    console.error("Update Task:", error);
 
     return res.status(500).json({
       success: false,
@@ -755,14 +469,7 @@ export const updateTask = async (
   }
 };
 
-/* =========================================================
-   DELETE TASK
-========================================================= */
-
-export const deleteTask = async (
-  req,
-  res
-) => {
+export const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -773,8 +480,7 @@ export const deleteTask = async (
       });
     }
 
-    const task =
-      await Task.findById(id);
+    const task = await Task.findById(id);
 
     if (!task) {
       return res.status(404).json({
@@ -787,14 +493,10 @@ export const deleteTask = async (
 
     return res.status(200).json({
       success: true,
-      message:
-        "Task deleted successfully.",
+      message: "Task deleted successfully.",
     });
   } catch (error) {
-    console.error(
-      "Delete Task:",
-      error
-    );
+    console.error("Delete Task:", error);
 
     return res.status(500).json({
       success: false,
@@ -803,21 +505,10 @@ export const deleteTask = async (
   }
 };
 
-/* =========================================================
-   UPDATE TASK STATUS
-========================================================= */
-
-export const updateTaskStatus = async (
-  req,
-  res
-) => {
+export const updateTaskStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-
-    /* =====================================================
-       VALIDATE TASK ID
-    ===================================================== */
 
     if (!isValidObjectId(id)) {
       return res.status(400).json({
@@ -826,30 +517,16 @@ export const updateTaskStatus = async (
       });
     }
 
-    /* =====================================================
-       VALIDATE STATUS
-
-       IMPORTANT:
-       "Pending" is intentionally NOT accepted.
-    ===================================================== */
-
-    if (
-      !TASK_STATUSES.includes(status)
-    ) {
+    if (!TASK_STATUSES.includes(status)) {
       return res.status(400).json({
         success: false,
         message: `Invalid task status. Allowed values: ${TASK_STATUSES.join(
-          ", "
+          ", ",
         )}`,
       });
     }
 
-    /* =====================================================
-       FIND TASK
-    ===================================================== */
-
-    const task =
-      await Task.findById(id);
+    const task = await Task.findById(id);
 
     if (!task) {
       return res.status(404).json({
@@ -858,52 +535,27 @@ export const updateTaskStatus = async (
       });
     }
 
-    /* =====================================================
-       TEAM MEMBER PERMISSION
-
-       Team members can update status only
-       for tasks assigned to themselves.
-    ===================================================== */
-
     if (
       req.user.role === "Team Member" &&
-      String(task.assignedTo) !==
-        String(req.user._id)
+      String(task.assignedTo) !== String(req.user._id)
     ) {
       return res.status(403).json({
         success: false,
-        message:
-          "You are not authorized to update this task.",
+        message: "You are not authorized to update this task.",
       });
     }
 
-    /* =====================================================
-       UPDATE STATUS
-    ===================================================== */
-
     task.status = status;
-
-    /*
-     * Automatically synchronize progress
-     * with completed status.
-     */
 
     if (status === "Completed") {
       task.progress = 100;
     }
 
-    if (
-      status === "To Do" &&
-      task.progress === 100
-    ) {
+    if (status === "To Do" && task.progress === 100) {
       task.progress = 0;
     }
 
     await task.save();
-
-    /* =====================================================
-       POPULATE RESPONSE
-    ===================================================== */
 
     await task.populate([
       {
@@ -922,15 +574,11 @@ export const updateTaskStatus = async (
 
     return res.status(200).json({
       success: true,
-      message:
-        "Task status updated successfully.",
+      message: "Task status updated successfully.",
       task,
     });
   } catch (error) {
-    console.error(
-      "Update Task Status:",
-      error
-    );
+    console.error("Update Task Status:", error);
 
     return res.status(500).json({
       success: false,

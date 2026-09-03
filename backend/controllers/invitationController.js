@@ -1,278 +1,181 @@
-const Invitation = require(
-  "../models/Invitation"
-);
+const Invitation = require("../models/Invitation");
 
-const Project = require(
-  "../models/Project"
-);
+const Project = require("../models/Project");
 
-/*
-==================================
-SEND INVITATION
-==================================
-*/
-const sendInvitation =
-  async (req, res) => {
-    try {
-      const {
-        email,
-        project,
-        invitedBy,
-      } = req.body;
+const sendInvitation = async (req, res) => {
+  try {
+    const { email, project, invitedBy } = req.body;
 
-      if (
-        !email ||
-        !project ||
-        !invitedBy
-      ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Please provide all fields",
-        });
-      }
-
-      const projectExists =
-        await Project.findById(
-          project
-        );
-
-      if (!projectExists) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "Project not found",
-        });
-      }
-
-      const existingInvitation =
-        await Invitation.findOne({
-          email,
-          project,
-          status: "Pending",
-        });
-
-      if (existingInvitation) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Invitation already sent",
-        });
-      }
-
-      const invitation =
-        await Invitation.create({
-          email,
-          project,
-          invitedBy,
-        });
-
-      res.status(201).json({
-        success: true,
-        message:
-          "Invitation sent successfully",
-        invitation,
-      });
-    } catch (error) {
-      res.status(500).json({
+    if (!email || !project || !invitedBy) {
+      return res.status(400).json({
         success: false,
-        message:
-          error.message,
+        message: "Please provide all fields",
       });
     }
-  };
 
-/*
-==================================
-GET ALL INVITATIONS
-==================================
-*/
-const getInvitations =
-  async (req, res) => {
-    try {
-      const invitations =
-        await Invitation.find()
-          .populate(
-            "project",
-            "name"
-          )
-          .populate(
-            "invitedBy",
-            "name email"
-          )
-          .sort({
-            createdAt: -1,
-          });
+    const projectExists = await Project.findById(project);
 
-      res.status(200).json({
-        success: true,
-        count:
-          invitations.length,
-        invitations,
-      });
-    } catch (error) {
-      res.status(500).json({
+    if (!projectExists) {
+      return res.status(404).json({
         success: false,
-        message:
-          error.message,
+        message: "Project not found",
       });
     }
-  };
 
-/*
-==================================
-GET USER INVITATIONS
-==================================
-*/
-const getUserInvitations =
-  async (req, res) => {
-    try {
-      const invitations =
-        await Invitation.find({
-          email:
-            req.params.email,
-        })
-          .populate(
-            "project"
-          )
-          .populate(
-            "invitedBy",
-            "name email"
-          );
+    const existingInvitation = await Invitation.findOne({
+      email,
+      project,
+      status: "Pending",
+    });
 
-      res.status(200).json({
-        success: true,
-        invitations,
-      });
-    } catch (error) {
-      res.status(500).json({
+    if (existingInvitation) {
+      return res.status(400).json({
         success: false,
-        message:
-          error.message,
+        message: "Invitation already sent",
       });
     }
-  };
 
-/*
-==================================
-ACCEPT INVITATION
-==================================
-*/
-const acceptInvitation =
-  async (req, res) => {
-    try {
-      const invitation =
-        await Invitation.findById(
-          req.params.id
-        );
+    const invitation = await Invitation.create({
+      email,
+      project,
+      invitedBy,
+    });
 
-      if (!invitation) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "Invitation not found",
-        });
-      }
+    res.status(201).json({
+      success: true,
+      message: "Invitation sent successfully",
+      invitation,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-      invitation.status =
-        "Accepted";
-
-      await invitation.save();
-
-      res.status(200).json({
-        success: true,
-        message:
-          "Invitation accepted",
-        invitation,
+const getInvitations = async (req, res) => {
+  try {
+    const invitations = await Invitation.find()
+      .populate("project", "name")
+      .populate("invitedBy", "name email")
+      .sort({
+        createdAt: -1,
       });
-    } catch (error) {
-      res.status(500).json({
+
+    res.status(200).json({
+      success: true,
+      count: invitations.length,
+      invitations,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getUserInvitations = async (req, res) => {
+  try {
+    const invitations = await Invitation.find({
+      email: req.params.email,
+    })
+      .populate("project")
+      .populate("invitedBy", "name email");
+
+    res.status(200).json({
+      success: true,
+      invitations,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const acceptInvitation = async (req, res) => {
+  try {
+    const invitation = await Invitation.findById(req.params.id);
+
+    if (!invitation) {
+      return res.status(404).json({
         success: false,
-        message:
-          error.message,
+        message: "Invitation not found",
       });
     }
-  };
 
-/*
-==================================
-REJECT INVITATION
-==================================
-*/
-const rejectInvitation =
-  async (req, res) => {
-    try {
-      const invitation =
-        await Invitation.findById(
-          req.params.id
-        );
+    invitation.status = "Accepted";
 
-      if (!invitation) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "Invitation not found",
-        });
-      }
+    await invitation.save();
 
-      invitation.status =
-        "Rejected";
+    res.status(200).json({
+      success: true,
+      message: "Invitation accepted",
+      invitation,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-      await invitation.save();
+const rejectInvitation = async (req, res) => {
+  try {
+    const invitation = await Invitation.findById(req.params.id);
 
-      res.status(200).json({
-        success: true,
-        message:
-          "Invitation rejected",
-        invitation,
-      });
-    } catch (error) {
-      res.status(500).json({
+    if (!invitation) {
+      return res.status(404).json({
         success: false,
-        message:
-          error.message,
+        message: "Invitation not found",
       });
     }
-  };
 
-/*
-==================================
-DELETE INVITATION
-==================================
-*/
-const deleteInvitation =
-  async (req, res) => {
-    try {
-      const invitation =
-        await Invitation.findById(
-          req.params.id
-        );
+    invitation.status = "Rejected";
 
-      if (!invitation) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "Invitation not found",
-        });
-      }
+    await invitation.save();
 
-      await Invitation.findByIdAndDelete(
-        req.params.id
-      );
+    res.status(200).json({
+      success: true,
+      message: "Invitation rejected",
+      invitation,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-      res.status(200).json({
-        success: true,
-        message:
-          "Invitation deleted",
-      });
-    } catch (error) {
-      res.status(500).json({
+const deleteInvitation = async (req, res) => {
+  try {
+    const invitation = await Invitation.findById(req.params.id);
+
+    if (!invitation) {
+      return res.status(404).json({
         success: false,
-        message:
-          error.message,
+        message: "Invitation not found",
       });
     }
-  };
+
+    await Invitation.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Invitation deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   sendInvitation,

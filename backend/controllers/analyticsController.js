@@ -1,11 +1,6 @@
 const Task = require("../models/Task");
 const Project = require("../models/Project");
 
-/*
-=====================================
-PROJECT DASHBOARD ANALYTICS
-=====================================
-*/
 const getDashboardAnalytics = async (req, res) => {
   try {
     const totalTasks = await Task.countDocuments();
@@ -25,11 +20,7 @@ const getDashboardAnalytics = async (req, res) => {
     const totalProjects = await Project.countDocuments();
 
     const completionRate =
-      totalTasks === 0
-        ? 0
-        : Math.round(
-            (completedTasks / totalTasks) * 100
-          );
+      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
     res.status(200).json({
       success: true,

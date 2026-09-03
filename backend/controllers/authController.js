@@ -2,10 +2,6 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-/* ======================================================
-   FORMAT USER RESPONSE
-====================================================== */
-
 const formatUser = (user) => ({
   _id: user._id,
   id: user._id,
@@ -24,27 +20,15 @@ const formatUser = (user) => ({
   updatedAt: user.updatedAt,
 });
 
-/* ======================================================
-   GENERATE JWT TOKEN
-====================================================== */
-
 export const generateToken = (userId) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is missing.");
   }
 
-  return jwt.sign(
-    { id: userId },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 };
-
-/* ======================================================
-   AUTHENTICATION MIDDLEWARE
-====================================================== */
 
 export const protect = async (req, res, next) => {
   try {
@@ -55,23 +39,12 @@ export const protect = async (req, res, next) => {
     console.log("Authorization Header:", authHeader ? "Present" : "Missing");
     console.log("================================");
 
-    /* ==========================================
-       CHECK AUTHORIZATION HEADER
-    ========================================== */
-
-    if (
-      !authHeader ||
-      !authHeader.startsWith("Bearer ")
-    ) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
         message: "Not authorized. No token provided.",
       });
     }
-
-    /* ==========================================
-       EXTRACT TOKEN
-    ========================================== */
 
     const token = authHeader.split(" ")[1];
 
@@ -82,10 +55,6 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ==========================================
-       VERIFY TOKEN
-    ========================================== */
-
     if (!process.env.JWT_SECRET) {
       console.error("❌ JWT_SECRET is missing.");
 
@@ -95,20 +64,12 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     console.log("✅ JWT Verified");
     console.log("Decoded JWT:", decoded);
 
-    /* ==========================================
-       FIND USER
-    ========================================== */
-
-    const user = await User.findById(decoded.id)
-      .select("-password");
+    const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
       console.log("❌ User associated with token not found.");
@@ -119,10 +80,6 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ==========================================
-       CHECK USER STATUS
-    ========================================== */
-
     if (user.status === "Inactive") {
       return res.status(403).json({
         success: false,
@@ -130,16 +87,11 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ==========================================
-       ATTACH USER TO REQUEST
-    ========================================== */
-
     req.user = user;
 
     console.log("✅ Authenticated User:", user.email);
 
     next();
-
   } catch (error) {
     console.error("❌ AUTH MIDDLEWARE ERROR:");
     console.error(error);
@@ -165,18 +117,9 @@ export const protect = async (req, res, next) => {
   }
 };
 
-/* ======================================================
-   REGISTER
-====================================================== */
-
 export const register = async (req, res) => {
   try {
-    let {
-      name,
-      email,
-      password,
-      role = "Team Member",
-    } = req.body;
+    let { name, email, password, role = "Team Member" } = req.body;
 
     name = name?.trim();
     email = email?.trim().toLowerCase();
@@ -223,7 +166,6 @@ export const register = async (req, res) => {
       token,
       user: formatUser(createdUser),
     });
-
   } catch (error) {
     console.error("REGISTER ERROR:", error);
 
@@ -233,10 +175,6 @@ export const register = async (req, res) => {
     });
   }
 };
-
-/* ======================================================
-   LOGIN
-====================================================== */
 
 export const login = async (req, res) => {
   try {
@@ -257,27 +195,17 @@ export const login = async (req, res) => {
       });
     }
 
-    /* ==========================================
-       DEBUG DATABASE
-    ========================================== */
-
     console.log("Database:", User.db.name);
 
     const totalUsers = await User.countDocuments();
 
     console.log("Total Users:", totalUsers);
 
-    const allUsers = await User.find({})
-      .select("name email")
-      .lean();
+    const allUsers = await User.find({}).select("name email").lean();
 
     console.log("========== USERS ==========");
     console.table(allUsers);
     console.log("===========================");
-
-    /* ==========================================
-       FIND USER
-    ========================================== */
 
     const user = await User.findOne({
       email,
@@ -298,14 +226,7 @@ export const login = async (req, res) => {
     console.log("Mongo Email:", user.email);
     console.log("Stored Hash:", user.password);
 
-    /* ==========================================
-       PASSWORD CHECK
-    ========================================== */
-
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     console.log("Password Match:", isMatch);
 
@@ -329,8 +250,7 @@ export const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    const loggedInUser = await User.findById(user._id)
-      .select("-password");
+    const loggedInUser = await User.findById(user._id).select("-password");
 
     return res.status(200).json({
       success: true,
@@ -338,7 +258,6 @@ export const login = async (req, res) => {
       token,
       user: formatUser(loggedInUser),
     });
-
   } catch (error) {
     console.error("LOGIN ERROR:");
     console.error(error);
@@ -350,10 +269,6 @@ export const login = async (req, res) => {
   }
 };
 
-/* ======================================================
-   GET CURRENT USER
-====================================================== */
-
 export const getMe = async (req, res) => {
   try {
     if (!req.user) {
@@ -363,8 +278,7 @@ export const getMe = async (req, res) => {
       });
     }
 
-    const user = await User.findById(req.user._id)
-      .select("-password");
+    const user = await User.findById(req.user._id).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -377,7 +291,6 @@ export const getMe = async (req, res) => {
       success: true,
       user: formatUser(user),
     });
-
   } catch (error) {
     console.error("GET ME ERROR:", error);
 

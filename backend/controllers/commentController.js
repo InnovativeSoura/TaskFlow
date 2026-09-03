@@ -2,11 +2,6 @@ const Comment = require("../models/Comment");
 const Notification = require("../models/Notification");
 const { getIO } = require("../sockets/socket.js");
 
-/*
-=====================================
-ADD COMMENT
-=====================================
-*/
 const addComment = async (req, res) => {
   try {
     const { taskId, userId, text } = req.body;
@@ -18,25 +13,22 @@ const addComment = async (req, res) => {
       });
     }
 
-    // Create comment
     const comment = await Comment.create({
       task: taskId,
       user: userId,
       text,
     });
 
-    // Populate user details
-    const populatedComment = await Comment.findById(
-      comment._id
-    ).populate("user", "name email profileImage");
+    const populatedComment = await Comment.findById(comment._id).populate(
+      "user",
+      "name email profileImage",
+    );
 
-    // Create notification
     await Notification.create({
       user: userId,
       message: `New comment added: ${text}`,
     });
 
-    // Real-time socket event
     try {
       const io = getIO();
 
@@ -48,10 +40,7 @@ const addComment = async (req, res) => {
         createdAt: comment.createdAt,
       });
     } catch (socketError) {
-      console.log(
-        "Socket not initialized:",
-        socketError.message
-      );
+      console.log("Socket not initialized:", socketError.message);
     }
 
     res.status(201).json({
@@ -69,11 +58,6 @@ const addComment = async (req, res) => {
   }
 };
 
-/*
-=====================================
-GET COMMENTS BY TASK
-=====================================
-*/
 const getComments = async (req, res) => {
   try {
     const { taskId } = req.params;
@@ -81,10 +65,7 @@ const getComments = async (req, res) => {
     const comments = await Comment.find({
       task: taskId,
     })
-      .populate(
-        "user",
-        "name email profileImage"
-      )
+      .populate("user", "name email profileImage")
       .sort({
         createdAt: -1,
       });
@@ -104,18 +85,12 @@ const getComments = async (req, res) => {
   }
 };
 
-/*
-=====================================
-UPDATE COMMENT
-=====================================
-*/
 const updateComment = async (req, res) => {
   try {
     const { id } = req.params;
     const { text } = req.body;
 
-    const comment =
-      await Comment.findById(id);
+    const comment = await Comment.findById(id);
 
     if (!comment) {
       return res.status(404).json({
@@ -136,10 +111,7 @@ const updateComment = async (req, res) => {
         text,
       });
     } catch (socketError) {
-      console.log(
-        "Socket not initialized:",
-        socketError.message
-      );
+      console.log("Socket not initialized:", socketError.message);
     }
 
     res.status(200).json({
@@ -157,17 +129,11 @@ const updateComment = async (req, res) => {
   }
 };
 
-/*
-=====================================
-DELETE COMMENT
-=====================================
-*/
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const comment =
-      await Comment.findById(id);
+    const comment = await Comment.findById(id);
 
     if (!comment) {
       return res.status(404).json({
@@ -185,10 +151,7 @@ const deleteComment = async (req, res) => {
         commentId: id,
       });
     } catch (socketError) {
-      console.log(
-        "Socket not initialized:",
-        socketError.message
-      );
+      console.log("Socket not initialized:", socketError.message);
     }
 
     res.status(200).json({

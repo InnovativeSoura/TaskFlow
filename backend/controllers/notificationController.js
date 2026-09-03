@@ -1,10 +1,5 @@
 import Notification from "../models/Notification.js";
 
-/*
-=====================================
-GET USER NOTIFICATIONS
-=====================================
-*/
 export const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({
@@ -23,11 +18,6 @@ export const getNotifications = async (req, res) => {
   }
 };
 
-/*
-=====================================
-MARK AS READ
-=====================================
-*/
 export const markAsRead = async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);
@@ -55,11 +45,6 @@ export const markAsRead = async (req, res) => {
   }
 };
 
-/*
-=====================================
-DELETE NOTIFICATION
-=====================================
-*/
 export const deleteNotification = async (req, res) => {
   try {
     const notification = await Notification.findById(req.params.id);

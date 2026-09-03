@@ -1,11 +1,5 @@
-// backend/controllers/oauthController.js
-
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-
-/* ==========================================
-   GENERATE JWT
-========================================== */
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -18,53 +12,32 @@ const generateToken = (user) => {
     process.env.JWT_SECRET,
     {
       expiresIn: "7d",
-    }
+    },
   );
 };
 
-/* ==========================================
-   OAUTH SUCCESS
-========================================== */
-
-export const oauthSuccess = async (
-  req,
-  res
-) => {
+export const oauthSuccess = async (req, res) => {
   try {
     if (!req.user) {
-      return res.redirect(
-        `${process.env.CLIENT_URL}/login?error=oauth_failed`
-      );
+      return res.redirect(`${process.env.CLIENT_URL}/login?error=oauth_failed`);
     }
 
     /* Update Last Login */
 
-    await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        lastLogin: new Date(),
-      }
-    );
-
-    /* Create JWT */
+    await User.findByIdAndUpdate(req.user._id, {
+      lastLogin: new Date(),
+    });
 
     const token = generateToken(req.user);
 
-    /* Redirect to Frontend */
-
     return res.redirect(
       `${process.env.CLIENT_URL}/oauth-success?token=${encodeURIComponent(
-        token
-      )}`
+        token,
+      )}`,
     );
   } catch (error) {
-    console.error(
-      "OAuth Error:",
-      error
-    );
+    console.error("OAuth Error:", error);
 
-    return res.redirect(
-      `${process.env.CLIENT_URL}/login?error=server_error`
-    );
+    return res.redirect(`${process.env.CLIENT_URL}/login?error=server_error`);
   }
 };

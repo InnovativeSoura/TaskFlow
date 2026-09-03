@@ -1,175 +1,93 @@
-const User = require(
-  "../models/User"
-);
+const User = require("../models/User");
 
-const Project = require(
-  "../models/Project"
-);
+const Project = require("../models/Project");
 
-const Task = require(
-  "../models/Task"
-);
+const Task = require("../models/Task");
 
-/*
-=========================
-GET DASHBOARD STATS
-=========================
-*/
-const getAdminStats =
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const users =
-        await User.countDocuments();
+const getAdminStats = async (req, res) => {
+  try {
+    const users = await User.countDocuments();
 
-      const projects =
-        await Project.countDocuments();
+    const projects = await Project.countDocuments();
 
-      const tasks =
-        await Task.countDocuments();
+    const tasks = await Task.countDocuments();
 
-      res.json({
-        success: true,
-        users,
-        projects,
-        tasks,
+    res.json({
+      success: true,
+      users,
+      projects,
+      tasks,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+
+    res.json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateRole = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
       });
-    } catch (
-      error
-    ) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message:
-            error.message,
-        });
     }
-  };
 
-/*
-=========================
-GET ALL USERS
-=========================
-*/
-const getUsers =
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const users =
-        await User.find()
-          .select(
-            "-password"
-          );
+    user.role = req.body.role;
 
-      res.json({
-        success: true,
-        users,
-      });
-    } catch (
-      error
-    ) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message:
-            error.message,
-        });
-    }
-  };
+    await user.save();
 
-/*
-=========================
-CHANGE ROLE
-=========================
-*/
-const updateRole =
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const user =
-        await User.findById(
-          req.params.id
-        );
+    res.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-      if (
-        !user
-      ) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message:
-              "User not found",
-          });
-      }
+const toggleUserStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
 
-      user.role =
-        req.body.role;
+    user.isActive = !user.isActive;
 
-      await user.save();
+    await user.save();
 
-      res.json({
-        success: true,
-        user,
-      });
-    } catch (
-      error
-    ) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message:
-            error.message,
-        });
-    }
-  };
-
-/*
-=========================
-TOGGLE ACTIVE STATUS
-=========================
-*/
-const toggleUserStatus =
-  async (
-    req,
-    res
-  ) => {
-    try {
-      const user =
-        await User.findById(
-          req.params.id
-        );
-
-      user.isActive =
-        !user.isActive;
-
-      await user.save();
-
-      res.json({
-        success: true,
-        user,
-      });
-    } catch (
-      error
-    ) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message:
-            error.message,
-        });
-    }
-  };
+    res.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getAdminStats,
