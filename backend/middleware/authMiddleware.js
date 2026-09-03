@@ -1,19 +1,9 @@
-// backend/middleware/authMiddleware.js
-
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-
-/* ======================================================
-   PROTECT ROUTE
-====================================================== */
 
 export const protect = async (req, res, next) => {
   try {
     let token;
-
-    /* ------------------------------------------
-       Authorization Header
-    ------------------------------------------ */
 
     if (
       req.headers.authorization &&
@@ -22,17 +12,9 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    /* ------------------------------------------
-       Cookie Fallback
-    ------------------------------------------ */
-
     if (!token && req.cookies?.token) {
       token = req.cookies.token;
     }
-
-    /* ------------------------------------------
-       No Token
-    ------------------------------------------ */
 
     if (!token) {
       return res.status(401).json({
@@ -41,18 +23,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    /* ------------------------------------------
-       Verify JWT
-    ------------------------------------------ */
-
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
-
-    /* ------------------------------------------
-       Find User
-    ------------------------------------------ */
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded.id).select("-password");
 
@@ -84,10 +55,6 @@ export const protect = async (req, res, next) => {
   }
 };
 
-/* ======================================================
-   ADMIN ONLY
-====================================================== */
-
 export const adminOnly = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({
@@ -106,10 +73,6 @@ export const adminOnly = (req, res, next) => {
   return next();
 };
 
-/* ======================================================
-   PROJECT MANAGER / ADMIN
-====================================================== */
-
 export const managerOnly = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({
@@ -118,10 +81,7 @@ export const managerOnly = (req, res, next) => {
     });
   }
 
-  const allowedRoles = [
-    "Admin",
-    "Project Manager",
-  ];
+  const allowedRoles = ["Admin", "Project Manager"];
 
   if (!allowedRoles.includes(req.user.role)) {
     return res.status(403).json({

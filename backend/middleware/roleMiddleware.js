@@ -1,7 +1,3 @@
-/* ==========================================
-   ROLE AUTHORIZATION MIDDLEWARE
-========================================== */
-
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     try {
