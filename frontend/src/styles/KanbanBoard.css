@@ -1,29 +1,21 @@
 :root {
   --kanban-bg: #070b1d;
   --kanban-bg-2: #0b1028;
-
   --kanban-panel: rgba(17, 23, 52, 0.82);
   --kanban-panel-soft: rgba(20, 27, 61, 0.62);
-
   --kanban-border: rgba(255, 255, 255, 0.085);
   --kanban-border-strong: rgba(255, 255, 255, 0.13);
-
   --kanban-text: #f5f7ff;
   --kanban-text-soft: #a9b1ca;
   --kanban-text-muted: #6f7897;
-
   --kanban-purple: #7c4dff;
   --kanban-purple-light: #a178ff;
-
   --kanban-blue: #2685ff;
   --kanban-orange: #ff8a1f;
   --kanban-green: #28c98a;
   --kanban-red: #ff5d75;
-
   --kanban-radius: 16px;
-
   --kanban-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
-
   --kanban-glow: 0 0 40px rgba(124, 77, 255, 0.12);
 }
 
@@ -124,7 +116,7 @@
 .kanban-main {
   width: min(100%, 1500px);
   margin: 0 auto;
-  padding: 58px 34px 70px;
+  padding: 52px 34px 70px;
 }
 
 .kanban-hero {
@@ -831,7 +823,7 @@
   background: radial-gradient(
     circle,
     rgba(40, 201, 138, 0.17),
-    rgba(40, 201, 138, 0.03
+    rgba(40, 201, 138, 0.03)
   );
 }
 
@@ -1401,7 +1393,6 @@
 
 @media (max-width: 1250px) {
   .kanban-main {
-    padding-top: 52px;
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -1424,10 +1415,6 @@
     margin-left: 90px;
   }
 
-  .kanban-main {
-    padding-top: 46px;
-  }
-
   .kanban-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1443,7 +1430,7 @@
   }
 
   .kanban-main {
-    padding: 34px 15px 50px;
+    padding: 22px 15px 50px;
   }
 
   .kanban-hero {
